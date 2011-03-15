@@ -1,0 +1,43 @@
+***** Rendering Overview *****
+
+* HgGame has a _screen (Sprite) and a buffer (Bitmap)
+* HgGame adds _screen to its children
+* _screen adds buffer to its children
+* buffers bitmap data is assigned to HgGraphics.buffer, objects draw to this
+* On update, buffer is wiped, and objects use copyPixels to render onto buffer
+
+***** DONE *****
+
+
+***** TODO *****
+* try to solve flicker of water in zoomed-in mode
+
+* precalc & cache sprite flips (one horizontal for movement & one vertical for super-mario style death animations)
+
+* walking bob
+
+* put small sprites at the bottom and center of tile
+
+* AStar
+
+* enemies
+
+* Implement display of update, render, flixel and flash times from console
+
+* Implement toggle which auto sets active to false if sprite is off screen
+
+* Add base alpha min and max property and helper function to emitter
+
+* markFieldOfView should probably not directly manipulate tiles
+
+* 'Bar' ui widget, works like a jquery progress bar
+
+* 'Menu' ui widget
+	- Contains MenuItem widgets
+	- When active, takes focus and displays on top of everything else
+	- Can optionally 'pause'
+	- Allows keyboard selection (arrows keys and enter)
+	- Allows mouse selection
+	- MenuItems have callbacks for 'clicked'/'selected'
+
+***** BUGS *****

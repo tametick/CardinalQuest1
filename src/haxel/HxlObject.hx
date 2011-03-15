@@ -1,0 +1,360 @@
+package haxel;
+
+import flash.geom.Point;
+
+/**
+ * Base class for which most display objects.
+ **/
+class HxlObject extends HxlRect {
+
+	public var solid(getSolid, setSolid) : Bool;
+
+	/**
+	 * A point that can store numbers from 0 to 1 (for X and Y independently)
+	 * that governs how much this object is affected by the camera subsystem.
+	 * 0 means it never moves, like a HUD element or far background graphic.
+	 * 1 means it scrolls along a the same speed as the foreground layer.
+	 * scrollFactor is initialized as (1,1) by default.
+	 */
+	public var scrollFactor:HxlPoint;
+
+	/**
+	 * WARNING: The origin of the sprite will default to its center.
+	 * If you change this, the visuals and the collisions will likely be
+	 * pretty out-of-sync if you do any rotation.
+	 */
+	public var origin:HxlPoint;
+
+	/**
+	 * Dedicated internal flag for whether or not this class is a FlxGroup.
+	 */
+	public var _group:Bool;
+
+	/**
+	 * If an object is not visible, the game loop will not automatically call <code>render()</code> on it.
+	 */
+	public var visible:Bool;
+
+	/**
+	 * If true, object is not affected by autoVisible.
+	 */
+	public var alwaysVisible:Bool;
+	
+	/**
+	 * If an object is not alive, the game loop will not automatically call <code>update()</code> on it.
+	 */
+	public var active:Bool;
+
+	/**
+	 * Kind of a global on/off switch for any objects descended from <code>FlxObject</code>.
+	 */
+	public var exists:Bool;
+	/**
+	 * Internal tracker for whether or not the object collides (see <code>solid</code>).
+	 */
+	var _solid:Bool;
+
+	/**
+	 * Handy for tracking gameplay or animations.
+	 */
+	public var dead:Bool;
+
+	/**
+	 * The basic speed of this object.
+	 */
+	public var velocity:HxlPoint;
+	/**
+	 * How fast the speed of this object is changing.
+	 * Useful for smooth movement and gravity.
+	 */
+	public var acceleration:HxlPoint;
+	/**
+	 * This isn't drag exactly, more like deceleration that is only applied
+	 * when acceleration is not affecting the sprite.
+	 */
+	public var drag:HxlPoint;
+	/**
+	 * If you are using <code>acceleration</code>, you can use <code>maxVelocity</code> with it
+	 * to cap the speed automatically (very useful!).
+	 */
+	public var maxVelocity:HxlPoint;
+
+	/**
+	 * Set the angle of a sprite to rotate it.
+	 * WARNING: rotating sprites decreases rendering
+	 * performance for this sprite by a factor of 10x!
+	 */
+	public var angle:Float;
+
+	/**
+	 * This is how fast you want this sprite to spin.
+	 */
+	public var angularVelocity:Float;
+	/**
+	 * How fast the spin speed should change.
+	 */
+	public var angularAcceleration:Float;
+	/**
+	 * Like <code>drag</code> but for spinning.
+	 */
+	public var angularDrag:Float;
+	/**
+	 * Use in conjunction with <code>angularAcceleration</code> for fluid spin speed control.
+	 */
+	public var maxAngular:Float;
+
+	/**
+	 * If you want to do Asteroids style stuff, check out thrust,
+	 * instead of directly accessing the object's velocity or acceleration.
+	 */
+	public var thrust:Float;
+	/**
+	 * Used to cap <code>thrust</code>, helpful and easy!
+	 */
+	public var maxThrust:Float;
+	/**
+	 * A handy "empty point" object
+	 */
+	static var _pZero:HxlPoint = new HxlPoint();
+
+	/**
+	 * Flag for whether the bounding box visuals need to be refreshed.
+	 */
+	public static var _refreshBounds:Bool;
+
+	/**
+	 * This is a pre-allocated Flash Point object, which is useful for certain Flash graphics API calls
+	 */
+	var _flashPoint:Point;
+
+	/**
+	 * The z-index of this object. Objects are rendered in order of z-index, lowest to highest.
+	 **/
+	public var zIndex:Int;
+
+	var _point:HxlPoint;
+
+	/**
+	 * Set this to false if you want to skip the automatic motion/movement stuff (see <code>updateMotion()</code>).
+	 * FlxObject and FlxSprite default to true.
+	 * FlxText, FlxTileblock, FlxTilemap and FlxSound default to false.
+	 */
+	public var moves:Bool;
+
+	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0) {
+		super(X, Y, Width, Height);
+		scrollFactor = new HxlPoint(1,1);
+		exists = true;
+		active = true;
+		visible = true;
+		alwaysVisible = false;
+		_solid = true;
+		moves = true;
+
+		velocity = new HxlPoint();
+		acceleration = new HxlPoint();
+		drag = new HxlPoint();
+		maxVelocity = new HxlPoint(10000,10000);
+		
+		angle = 0;
+		angularVelocity = 0;
+		angularAcceleration = 0;
+		angularDrag = 0;
+		maxAngular = 10000;
+		
+		thrust = 0;
+
+		_point = new HxlPoint();
+		origin = new HxlPoint();
+		_flashPoint = new Point();
+		_group = false;
+
+		zIndex = 0;
+	}
+
+	/**
+	 * Call this function to figure out the on-screen position of the object.
+	 * 
+	 * @param	P	Takes a <code>Point</code> object and assigns the post-scrolled X and Y values of this object to it.
+	 * 
+	 * @return	The <code>Point</code> you passed in, or a new <code>Point</code> if you didn't pass one, containing the screen X and Y position of this object.
+	 */
+	public function getScreenXY(?Point:HxlPoint=null):HxlPoint {
+		if (Point == null) Point = new HxlPoint();
+		Point.x = HxlUtil.floor(x + HxlUtil.roundingError)+HxlUtil.floor(HxlGraphics.scroll.x*scrollFactor.x);
+		Point.y = HxlUtil.floor(y + HxlUtil.roundingError)+HxlUtil.floor(HxlGraphics.scroll.y*scrollFactor.y);
+		return Point;
+	}
+
+	/**
+	 * Check and see if this object is currently on screen.
+	 * 
+	 * @return	Whether the object is on screen or not.
+	 */
+	public function onScreen():Bool
+	{
+		getScreenXY(_point);
+		if ((_point.x + width < 0) || (_point.x > HxlGraphics.width) || (_point.y + height < 0) || (_point.y > HxlGraphics.height)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	/**
+	 * Call this function to "kill" a sprite so that it no longer 'exists'.
+	 */
+	public function kill():Void {
+		exists = false;
+		dead = true;
+	}
+
+	/**
+	 * Handy function for reviving game objects.
+	 * Resets their existence flags and position, including LAST position.
+	 * 
+	 * @param	X	The new X position of this object.
+	 * @param	Y	The new Y position of this object.
+	 */
+	public function reset(X:Float,Y:Float):Void {
+		x = X;
+		y = Y;
+		exists = true;
+		dead = false;
+	}
+
+	/**
+	 * Called by <code>FlxGroup</code>, commonly when game states are changed.
+	 */
+	public function destroy():Void {
+		//Nothing to destroy yet
+	}
+
+	/**
+	 * Set <code>solid</code> to true if you want to collide this object.
+	 */
+	public function getSolid():Bool {
+		return _solid;
+	}
+	
+	/**
+	 * @private
+	 */
+	public function setSolid(Solid:Bool):Bool {
+		_solid = Solid;
+		return Solid;
+	}
+
+	/**
+	 * Internal function for updating the position and speed of this object.
+	 * Useful for cases when you need to update this but are buried down in too many supers.
+	 */
+	function updateMotion():Void {
+		if (!moves) {
+			return;
+		}
+		
+		/*
+		if (_solid) {
+			refreshHulls();
+		}
+		onFloor = false;
+		*/
+		var vc:Float;
+
+		vc = (HxlUtil.computeVelocity(angularVelocity,Math.floor(angularAcceleration),Math.floor(angularDrag),Math.floor(maxAngular)) - angularVelocity)/2;
+		angularVelocity += vc; 
+		angle += angularVelocity*HxlGraphics.elapsed;
+		angularVelocity += vc;
+		
+		var thrustComponents:HxlPoint;
+		if (thrust != 0) {
+			thrustComponents = HxlUtil.rotatePoint(-thrust,0,0,0,angle);
+			var maxComponents:HxlPoint = HxlUtil.rotatePoint(-maxThrust,0,0,0,angle);
+			var max:Float = ((maxComponents.x>0)?maxComponents.x:-maxComponents.x);
+			if (max > ((maxComponents.y>0)?maxComponents.y:-maxComponents.y)) {
+				maxComponents.y = max;
+			} else {
+				max = Math.floor(((maxComponents.y>0)?maxComponents.y:-maxComponents.y));
+			}
+			maxVelocity.x = maxVelocity.y = ((max>0)?max:-max);
+		} else {
+			thrustComponents = _pZero;
+		}
+		
+		vc = (HxlUtil.computeVelocity(velocity.x,acceleration.x+thrustComponents.x,drag.x,maxVelocity.x) - velocity.x)/2;
+		velocity.x += vc;
+		var xd:Float = velocity.x*HxlGraphics.elapsed;
+		velocity.x += vc;
+		vc = (HxlUtil.computeVelocity(velocity.y,Math.floor(acceleration.y+thrustComponents.y),Math.floor(drag.y),Math.floor(maxVelocity.y)) - velocity.y)/2;
+		velocity.y += vc;
+		var yd:Float = velocity.y*HxlGraphics.elapsed;
+		velocity.y += vc;
+		
+		x += xd;
+		y += yd;
+		
+		//Update collision data with new movement results
+		/*
+		if (!_solid)
+			return;
+		colVector.x = xd;
+		colVector.y = yd;
+		colHullX.width += ((colVector.x>0)?colVector.x:-colVector.x);
+		if(colVector.x < 0)
+			colHullX.x += colVector.x;
+		colHullY.x = x;
+		colHullY.height += ((colVector.y>0)?colVector.y:-colVector.y);
+		if(colVector.y < 0)
+			colHullY.y += colVector.y;
+		*/
+	}
+
+	/**
+	 * Called by the main game loop, handles motion/physics and game logic
+	 */
+	public function update():Void {
+		updateMotion();
+		//updateFlickering();
+	}
+
+	/**
+	 * Override this function to draw graphics (see <code>HxlSprite</code>).
+	 */
+	public function render():Void {
+		//Objects don't have any visual logic/display of their own.
+	}
+
+	/**
+	 * Returns the appropriate color for the bounding box depending on object state.
+	 */
+	public function getBoundingColor():Int {
+		if (solid) {
+			//if (fixed) {
+				return 0x7f00f225;
+			//else
+			//	return 0x7fff0012;
+		}
+		else return 0x7fff0112;
+	}
+
+	/**
+	 * Checks to see if a point in 2D space overlaps this <code>HxlObject</code> object.
+	 * 
+	 * @param	X			The X coordinate of the point.
+	 * @param	Y			The Y coordinate of the point.
+	 * @param	PerPixel	Whether or not to use per pixel collision checking (only available in <code>HxlSprite</code> subclass).
+	 * 
+	 * @return	Whether or not the point overlaps this object.
+	 */
+	public function overlapsPoint(X:Float,Y:Float,?PerPixel:Bool = false):Bool {
+		X += HxlUtil.floor(HxlGraphics.scroll.x);
+		Y += HxlUtil.floor(HxlGraphics.scroll.y);
+		getScreenXY(_point);
+		if ((X <= _point.x) || (X >= _point.x+width) || (Y <= _point.y) || (Y >= _point.y+height)) {
+			return false;
+		}
+		return true;
+	}
+
+}

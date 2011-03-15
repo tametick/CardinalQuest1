@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!--<swf width="800" height="600" fps="60">-->
+<swf>
+
+	<FileAttributes/>
+
+	<DefineFont id="1" file="rsrc/VT323.ttf" />
+	<SymbolClass id="1" class="System" />
+
+	<DefineABC file="Main.swf" />
+	<SymbolClass id="0" class="flash.Boot" />
+
+	<ShowFrame/>
+
+</swf>

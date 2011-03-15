@@ -1,0 +1,7 @@
+-main Main
+-swf-lib rsrc/resources.swf
+-swf-version 10
+-swf-header 800:600:60:ffffff
+-swf Main.swf
+-cp src
+
