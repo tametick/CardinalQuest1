@@ -52,6 +52,7 @@ class HxlGroup extends HxlObject {
 			return null;
 		}
 		members[index] = NewObject;
+		if ( HxlGraphics.autoZSort ) sortMembersByZIndex();
 		return NewObject;
 	}
 
