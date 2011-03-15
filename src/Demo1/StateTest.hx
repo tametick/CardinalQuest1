@@ -3,6 +3,7 @@ import haxel.HxlGraphics;
 import haxel.HxlState;
 import haxel.HxlText;
 import haxel.HxlSprite;
+import haxel.HxlDialog;
 import Resources;
 
 import flash.system.System;
@@ -13,14 +14,20 @@ class StateTest extends HxlState
 	public override function create():Void {
 			super.create();
 
-			var test:HxlText = new HxlText(10, 10, 100, "Test", true);
+			var myDialog:HxlDialog = new HxlDialog(10, 10, 100, 100);
+			add(myDialog);
+
+			var test:HxlText = new HxlText(0, 0, 100, "Test", true);
 			test.setFormat("VT323", 36, 0xff0000, "left");
-			add(test);
+			//add(test);
 	
-			var test2:HxlText = new HxlText(10, 50, 100, "Test", true);
-			test2.scale.x = test2.scale.y = 1.0;
+			var test2:HxlText = new HxlText(0, 40, 100, "Test", true);
 			test2.setFormat("VT323", 36, 0xff0000, "left");
-			add(test2);		
+			//add(test2);
+
+			myDialog.add(test);
+			myDialog.add(test2);
+			myDialog.velocity.x = 50;
 
 			var spr1:HxlSprite = new HxlSprite( 75, 75);
 			spr1.createGraphic(50, 50, 0xffff0000);

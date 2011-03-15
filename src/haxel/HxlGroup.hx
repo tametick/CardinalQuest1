@@ -365,7 +365,7 @@ class HxlGroup extends HxlObject {
 	 */
 	public override function update():Void {
 		saveOldPosition();
-		//updateMotion();
+		updateMotion();
 		updateMembers();
 		//updateFlickering();
 	}
