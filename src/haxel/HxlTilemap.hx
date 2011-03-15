@@ -346,6 +346,7 @@ class HxlTilemap extends HxlObject {
 						HxlGraphics.buffer.copyPixels(tileBitmap, tile.bitmapRect, _flashPoint, null, null, true);
 						#end
 					}
+					HxlGraphics.numRenders++;
 				}
 				_flashPoint.x += _tileWidth;
 			}
