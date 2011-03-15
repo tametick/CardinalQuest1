@@ -10,7 +10,7 @@
 -swf-version 10
 -swf-header 720:480:60:ffffff
 -swf movie.swf
--cp src
+-cp ../
 
 -cmd hxswfml xml2swf movie.xml movie.swf
 -cmd hxswfml xml2swf index.xml index.swf
