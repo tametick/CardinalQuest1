@@ -4,7 +4,7 @@
 
 	<FileAttributes/>
 
-	<DefineFont id="1" file="rsrc/VT323.ttf" />
+	<DefineFont id="1" file="../../rsrc/Demo1/VT323.ttf" />
 	<SymbolClass id="1" class="System" />
 
 	<DefineABC file="Main.swf" />
