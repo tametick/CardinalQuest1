@@ -5,10 +5,10 @@
 	<FileAttributes/>
 
 	<DefineFont id="1" file="../../rsrc/Demo1/VT323.ttf" />
-	<SymbolClass id="1" class="System" />
+	<SymbolClass id="1" class="FontSystem" />
 
-	<DefineABC file="Main.swf" />
-	<SymbolClass id="0" class="flash.Boot" />
+	<DefineABC file="Main.swf" isBoot="true" />
+	<!--<SymbolClass id="0" class="flash.Boot" />-->
 
 	<ShowFrame/>
 

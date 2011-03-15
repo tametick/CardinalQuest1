@@ -3,7 +3,7 @@ package haxel;
 class HxlDialog extends HxlGroup
 {
 
-	public function new(X:Int, Y:Int, Width:Int, Height:Int) {
+	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100) {
 		super();
 		x = X;
 		y = Y;
@@ -28,7 +28,7 @@ class HxlDialog extends HxlGroup
 	public override function update():Void
 	{
 	    super.update();
-	    //this.reset(x, y);
+	    this.reset(x, y);
 	}
 
 }

@@ -36,9 +36,10 @@ class HxlText extends HxlSprite {
 	 * @param	Y				The Y position of the text.
 	 * @param	Width			The width of the text object (height is determined automatically).
 	 * @param	Text			The actual text you would like to display initially.
-	 * @param	EmbeddedFont	Whether this text field uses embedded fonts or nto
+	 * @param	EmbeddedFont	Whether this text field uses embedded fonts or not
+	 * @param 	FontName 		Name of the font to use
 	 */
-	public function new(X:Float, Y:Float, Width:Int, ?Text:String=null, ?EmbeddedFont:Bool=true) {
+	public function new(X:Float, Y:Float, Width:Int, ?Text:String=null, ?EmbeddedFont:Bool=true, ?FontName:String="system") {
 		super(Math.floor(X),Math.floor(Y));
 		createGraphic(Width,1,0);
 		//antialiasing = false;	
@@ -49,7 +50,7 @@ class HxlText extends HxlSprite {
 		_tf.width = Width;
 		#if flash9
 		_tf.embedFonts = EmbeddedFont;
-		//_tf.antiAliasType = AntiAliasType.ADVANCED;
+		_tf.antiAliasType = AntiAliasType.NORMAL;
 		_tf.sharpness = 100;
 		#else
 		#end
@@ -57,7 +58,7 @@ class HxlText extends HxlSprite {
 		_tf.multiline = true;
 		_tf.wordWrap = true;
 		_tf.text = Text;
-		var tf:TextFormat = new TextFormat("system",8,0xffffff);
+		var tf:TextFormat = new TextFormat(FontName,8,0xffffff);
 		_tf.defaultTextFormat = tf;
 		_tf.setTextFormat(tf);
 		if (Text.length <= 0) {

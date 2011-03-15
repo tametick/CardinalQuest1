@@ -4,6 +4,8 @@ import haxel.HxlState;
 import haxel.HxlText;
 import haxel.HxlSprite;
 import haxel.HxlDialog;
+import haxel.HxlMenu;
+import haxel.HxlMenuItem;
 import Resources;
 
 import flash.system.System;
@@ -44,12 +46,14 @@ class StateTest extends HxlState
 			spr3.zIndex = 1;
 			add(spr3);
 
-			//remove(spr2);
+			var myMenu:HxlMenu = new HxlMenu(150, 225, 500, 300);
+			myMenu.setBackgroundColor(0x99ffaaaa);
+			add(myMenu);
 
-			//defaultGroup.sortMembersByZIndex();
-			HxlGraphics.log(System.totalMemory);
-			var memoryUsedInKb = (System.totalMemory/1024);
-			HxlGraphics.log(memoryUsedInKb+"KB");
+			var item1:HxlMenuItem = new HxlMenuItem(5, 5, 490, "Menu Item 1", true, "VT323");
+			item1.setNormalFormat("VT323", 24, 0x5555dd, "center", 0xff010101);
+			item1.setHoverFormat("VT323", 24, 0xdddd55, "center", 0xff010101);
+			myMenu.addItem(item1);	
 	}
 
 }
