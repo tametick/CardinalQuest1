@@ -25,6 +25,7 @@ class HxlConsole extends Sprite {
 	var _lines : Array<String>;
 	var _text : TextField;
 	var _fpsDisplay:TextField;
+	var _extraDisplay:TextField;
 	var _memDisplay:TextField;
 	var _curFPS:Int;
 	var _rendersDisplay:TextField;
@@ -123,6 +124,25 @@ class HxlConsole extends Sprite {
 		_memDisplay.defaultTextFormat = new TextFormat(DefaultFont,18,0xffffff,true,null,null,null,null,TextFormatAlign.RIGHT);
 		addChild(_memDisplay);
 
+		_extraDisplay = new TextField();
+		_extraDisplay.width = 100;
+		_extraDisplay.x = tmp.width-100;
+		_extraDisplay.height = 128;
+		_extraDisplay.y = 60;
+		_extraDisplay.alpha = 0.5;
+		_extraDisplay.multiline = true;
+		_extraDisplay.wordWrap = true;
+		_extraDisplay.selectable = false;
+		#if flash9
+		_extraDisplay.embedFonts = true;
+		_extraDisplay.antiAliasType = AntiAliasType.NORMAL;
+		_extraDisplay.gridFitType = GridFitType.PIXEL;
+		#else
+		#end
+		_extraDisplay.defaultTextFormat = new TextFormat(DefaultFont,16,0xffffff,true,null,null,null,null,TextFormatAlign.RIGHT);
+		addChild(_extraDisplay);
+
+
 		_lines = new Array();
 	}
 
@@ -163,13 +183,12 @@ class HxlConsole extends Sprite {
 	public function update():Void {
 		var total:Int = Math.floor(mtrTotal.average());
 		_fpsDisplay.text = Math.floor(1000/total) + " fps";
-		/*
+		
 		var up:Int = Math.floor(mtrUpdate.average());
 		var rn:Int = Math.floor(mtrRender.average());
 		var fx:Int = up+rn;
 		var tt:Int = Math.floor(total);
 		_extraDisplay.text = up + "ms update\n" + rn + "ms render\n" + fx + "ms flixel\n" + (tt-fx) + "ms flash\n" + tt + "ms total";
-		*/
 
 		_rendersDisplay.text = "Renders: "+HxlGraphics.numRenders;
 

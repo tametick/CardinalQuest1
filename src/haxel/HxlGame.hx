@@ -411,6 +411,9 @@ class HxlGame extends Sprite {
 			_screen.x = HxlGraphics.quake.x;
 			_screen.y = HxlGraphics.quake.y;
 		}
+		//Keep track of how long it took to update everything
+		var updateMark:Int = Lib.getTimer();
+		_console.mtrUpdate.add(updateMark-mark);
 
 		HxlGraphics.buffer.lock();
 		_state.preProcess();
@@ -427,15 +430,7 @@ class HxlGame extends Sprite {
 			pause.render();
 		}
 		HxlGraphics.buffer.unlock();
-
-		counter++;
-		if ( counter > 60 ) {
-			counter = 0;
-			//_console.log("Total: "+_total);
-			//trace("On Screen: "+_state.defaultGroup.countOnScreen()+", Visible: "+_state.defaultGroup.countVisible());
-			//_console.log("Delta: "+mytimer.delta());
-		} //else trace(counter);
+		_console.mtrRender.add(Lib.getTimer()-updateMark);
 	}
 
-	var counter:Int;
 }
