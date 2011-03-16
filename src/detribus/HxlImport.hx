@@ -1,3 +1,5 @@
+package detribus;
+
 import haxel.HxlGame;
 import haxel.HxlState;
 import haxel.HxlGraphics;

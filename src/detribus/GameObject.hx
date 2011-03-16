@@ -1,3 +1,5 @@
+package detribus;
+
 import haxel.HxlSprite;
 import haxel.HxlPoint;
 

@@ -1,7 +1,9 @@
-import Resources;
-import Perks;
-import Loot;
-import StateGame;
+package detribus;
+
+import detribus.Resources;
+import detribus.Perks;
+import detribus.Loot;
+import detribus.StateGame;
 
 import haxel.HxlGraphics;
 import haxel.HxlSprite;
@@ -9,7 +11,7 @@ import haxel.HxlState;
 import haxel.HxlSound;
 import com.eclecticdesignstudio.motion.Actuate;
 
-import Sdrl;
+import detribus.Sdrl;
 
 class Player extends Actor
 {

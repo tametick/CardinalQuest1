@@ -1,3 +1,5 @@
+package detribus;
+
 import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;

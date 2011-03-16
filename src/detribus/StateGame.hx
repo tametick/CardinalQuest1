@@ -1,3 +1,5 @@
+package detribus;
+
 import haxel.HxlGraphics;
 import haxel.HxlPoint;
 import haxel.HxlState;
@@ -5,12 +7,12 @@ import haxel.HxlUtil;
 import haxel.HxlTilemap;
 import haxel.HxlSprite;
 import haxel.HxlSound;
-import Resources;
-import Sdrl.SdrlGame;
-import StatsDialog;
-import LevelUpDialog;
-import GameOverDialog;
-import HealthBar;
+import detribus.Resources;
+import detribus.Sdrl.SdrlGame;
+import detribus.StatsDialog;
+import detribus.LevelUpDialog;
+import detribus.GameOverDialog;
+import detribus.HealthBar;
 import flash.events.KeyboardEvent;
 
 class StateGame extends haxel.HxlState {

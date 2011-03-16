@@ -1,3 +1,5 @@
+package detribus;
+
 import flash.events.KeyboardEvent;
 import haxel.HxlGraphics;
 import haxel.HxlState;

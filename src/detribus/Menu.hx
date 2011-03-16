@@ -1,6 +1,8 @@
+package detribus;
+
 import haxel.HxlGroup;
 import haxel.HxlGraphics;
-import BaseMenuState;
+import detribus.BaseMenuState;
 
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;

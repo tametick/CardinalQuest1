@@ -1,4 +1,4 @@
-package generators;
+package detribus.generators;
 import flash.display.BitmapData;
 
 class Perlin 

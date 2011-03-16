@@ -1,8 +1,10 @@
+package detribus;
+
 import haxel.HxlSprite;
 import haxel.HxlPoint;
 import haxel.HxlGraphics;
 import haxel.HxlSound;
-import Resources;
+import detribus.Resources;
 
 import com.eclecticdesignstudio.motion.Actuate;
 

@@ -1,8 +1,10 @@
+package detribus;
+
 import flash.media.SoundChannel;
 import haxel.HxlGraphics;
 import haxel.HxlState;
 import haxel.HxlText;
-import Resources;
+import detribus.Resources;
 import haxel.HxlSound;
 import haxel.HxlGraphics;
 

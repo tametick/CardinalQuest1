@@ -1,10 +1,12 @@
+package detribus;
+
 import haxel.HxlUtil;
 import haxel.HxlState;
 import haxel.HxlSound;
 import haxel.HxlObject;
-import Resources;
-import LevelGenerator;
-import Loot;
+import detribus.Resources;
+import detribus.LevelGenerator;
+import detribus.Loot;
 
 class World 
 {
@@ -40,7 +42,7 @@ class World
 		levels[0].startingLocation = HxlUtil.getRandomTile(Resources.wildernessWidth, Resources.wildernessHeight, mapData, walkableAndSeeThroughTiles);
 		gen.addReachableFeature(Resources.wildernessWidth, Resources.wildernessHeight, mapData, levels[0].startingLocation, MapFeatures.CAVE_ENTRY);
 		levels[0].loadMap(mapData, Tileset, Resources.tileSize, Resources.tileSize);
-		levels[0].createMobs("MobAlpha",16);
+		levels[0].createMobs("detribus.MobAlpha",16);
 
 	}
 	
@@ -60,19 +62,19 @@ class World
 				
 			switch(nextLevel) {
 				case 1:
-					currentLevel.createMobs("MobAlpha", 8);
-					currentLevel.createMobs("MobBravo", 8);
+					currentLevel.createMobs("detribus.MobAlpha", 8);
+					currentLevel.createMobs("detribus.MobBravo", 8);
 				case 2:
-					currentLevel.createMobs("MobBravo", 8);
-					currentLevel.createMobs("MobCharlie", 8);
+					currentLevel.createMobs("detribus.MobBravo", 8);
+					currentLevel.createMobs("detribus.MobCharlie", 8);
 				case 3:
-					currentLevel.createMobs("MobCharlie", 8);
-					currentLevel.createMobs("MobDelta", 8);
+					currentLevel.createMobs("detribus.MobCharlie", 8);
+					currentLevel.createMobs("detribus.MobDelta", 8);
 				case 4:
-					currentLevel.createMobs("MobDelta", 8);
-					currentLevel.createMobs("MobEcho", 8);
+					currentLevel.createMobs("detribus.MobDelta", 8);
+					currentLevel.createMobs("detribus.MobEcho", 8);
 				case 5:
-					currentLevel.createMobs("MobEcho", 16);
+					currentLevel.createMobs("detribus.MobEcho", 16);
 			}
 			
 			for (pu in 0...10) {
