@@ -3,11 +3,11 @@
 
 	<FileAttributes/>
 
-	<DefineABC file="preloader.swf" isBoot="true"/>
+	<DefineABC file="detribus-preloader.swf" isBoot="true"/>
 
 	<ShowFrame/>
 	
-	<DefineBinaryData id="1" file="movie.swf" />
+	<DefineBinaryData id="1" file="detribus-movie.swf" />
 	<SymbolClass id="1" class="MovieBytes" />
 
 	<ShowFrame/>

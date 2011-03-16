@@ -4,54 +4,54 @@
 	<FileAttributes/>
 	
 	<DefineBitsJPEG id="1" file="../rsrc/detribus/sprites_small_1bit.png" />
-	<SymbolClass id="1" class="SpritesSmall" />
+	<SymbolClass id="1" class="detribus.SpritesSmall" />
 	
 	<DefineBitsJPEG id="2" file="../rsrc/detribus/sprites_big_1bit.png" />
-	<SymbolClass id="2" class="SpritesBig" />
+	<SymbolClass id="2" class="detribus.SpritesBig" />
 
 	<DefineBitsJPEG id="3" file="../rsrc/detribus/tileset_1bit.png" />
-	<SymbolClass id="3" class="Tileset" />
+	<SymbolClass id="3" class="detribus.Tileset" />
 
 	<DefineFont id="4" file="../rsrc/detribus/Geo-Regular.ttf" />
-	<SymbolClass id="4" class="Geo" />
+	<SymbolClass id="4" class="detribus.Geo" />
 
 	<DefineSound id="5" file="../rsrc/detribus/rain.mp3" />
-	<SymbolClass id="5" class="Rain" />
+	<SymbolClass id="5" class="detribus.Rain" />
 	
 	<DefineSound id="6" file="../rsrc/detribus/nohighscore.mp3" />
-	<SymbolClass id="6" class="Nohighscore" />
+	<SymbolClass id="6" class="detribus.Nohighscore" />
 
 	<DefineSound id="7" file="../rsrc/detribus/innerfight.mp3" />
-	<SymbolClass id="7" class="Innerfight" />
+	<SymbolClass id="7" class="detribus.Innerfight" />
 
 	<DefineSound id="8" file="../rsrc/detribus/victory.mp3" />
-	<SymbolClass id="8" class="Victory" />
+	<SymbolClass id="8" class="detribus.Victory" />
 
 	<DefineSound id="9" file="../rsrc/detribus/death.mp3" />
-	<SymbolClass id="9" class="Death" />
+	<SymbolClass id="9" class="detribus.Death" />
 
 	<DefineSound id="10" file="../rsrc/detribus/powerdown.mp3" />
-	<SymbolClass id="10" class="Powerdown" />
+	<SymbolClass id="10" class="detribus.Powerdown" />
 
 	<DefineSound id="11" file="../rsrc/detribus/powerup.mp3" />
-	<SymbolClass id="11" class="Powerup" />
+	<SymbolClass id="11" class="detribus.Powerup" />
 
 	<DefineSound id="12" file="../rsrc/detribus/shot.mp3" />
-	<SymbolClass id="12" class="Shot" />
+	<SymbolClass id="12" class="detribus.Shot" />
 
 	<DefineSound id="13" file="../rsrc/detribus/shot2.mp3" />
-	<SymbolClass id="13" class="Shot2" />
+	<SymbolClass id="13" class="detribus.Shot2" />
 
 	<DefineSound id="14" file="../rsrc/detribus/dodge.mp3" />
-	<SymbolClass id="14" class="Dodge" />
+	<SymbolClass id="14" class="detribus.Dodge" />
 	
 	<DefineSound id="15" file="../rsrc/detribus/select.mp3" />
-	<SymbolClass id="15" class="Select" />
+	<SymbolClass id="15" class="detribus.Select" />
 
 	<DefineSound id="16" file="../rsrc/detribus/scroll.mp3" />
-	<SymbolClass id="16" class="Scroll" />
+	<SymbolClass id="16" class="detribus.Scroll" />
 	
-	<DefineABC file="movie.swf" isBoot="true" />
+	<DefineABC file="detribus-movie.swf" isBoot="true" />
 	<SymbolClass id="0" class="flash.Boot"/>
 	
 	<ShowFrame/>

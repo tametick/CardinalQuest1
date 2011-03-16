@@ -1,0 +1,16 @@
+-main DetribusPreloader
+--flash-use-stage
+-swf-version 10
+-swf-header 720:480:60:ffffff
+-swf detribus-preloader.swf
+
+--next
+-main DetribusMovie
+--flash-use-stage
+-swf-version 10
+-swf-header 720:480:60:ffffff
+-swf detribus-movie.swf
+-cp ../
+
+-cmd hxswfml xml2swf detribus-movie.xml detribus-movie.swf
+-cmd hxswfml xml2swf detribus-index.xml detribus-index.swf

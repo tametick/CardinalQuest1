@@ -15,14 +15,14 @@ import flash.Lib;
 
 import detribus.Sdrl;
 
-class Movie extends MovieClip
+class DetribusMovie extends MovieClip
 {
 	var loader:Loader;
 	var ctx : LoaderContext;
 
 	public static function main()
 	{
-		Lib.current.addChild(new Movie());
+		Lib.current.addChild(new DetribusMovie());
 	}
 	public function new()
 	{

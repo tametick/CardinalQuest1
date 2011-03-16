@@ -12,9 +12,11 @@ import flash.utils.ByteArray;
 
 import flash.Lib;
 
+import detribus.Sdrl;
+
 class MovieBytes extends ByteArray{}
 
-class Preloader extends MovieClip
+class DetribusPreloader extends MovieClip
 {
 	var tf:TextField;
 	var loader:Loader;
@@ -24,7 +26,7 @@ class Preloader extends MovieClip
 
 	public static function main()
 	{
-		Lib.current.addChild(new Preloader());
+		Lib.current.addChild(new DetribusPreloader());
 	}
 	public function new()
 	{
