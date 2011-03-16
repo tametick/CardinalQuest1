@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<movie width="360" height="240" framerate="12" as3="1">
+	<library>
+		<font id="cq.Geo" import="Geo-Regular.ttf" name="Geo" /> 
+		<bitmap id="cq.Corpses" import="corpses.png"/>
+		<bitmap id="cq.Effects" import="effects.png"/>
+		<bitmap id="cq.Items" import="items.png"/>
+		<bitmap id="cq.Monsters" import="monsters.png"/>
+		<bitmap id="cq.Player" import="player.png"/>
+		<bitmap id="cq.Tiles" import="tiles-small.png"/>
+	</library>
+</movie>
