@@ -54,7 +54,10 @@ class HxlMenu extends HxlDialog
 	function onKeyDown(event:KeyboardEvent):Void {
 		var c:Int = event.keyCode;
 		if ( c == 13 ) { // Enter
-			// TODO
+			if ( currentItem >= 0 ) {
+				items[currentItem].doCallback();
+				if ( _selectSound != null ) _selectSound.play();
+			}
 		} else if ( c == 38 ) { // Up
 			if ( currentItem >= 0 ) items[currentItem].setHover(false);
 			currentItem--;

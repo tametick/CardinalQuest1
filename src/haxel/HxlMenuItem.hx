@@ -24,6 +24,7 @@ class HxlMenuItem extends HxlText
 		normalFormat = dtfCopy();
 		hoverFormat = dtfCopy();
 		showHover = false;
+		_itemCallback = function() {};
 	}
 
 	public function setHover(Hover:Bool=false):Void {
@@ -53,6 +54,10 @@ class HxlMenuItem extends HxlText
 		Reflect.setField(hoverFormat, "align", Alignment);
 		_shadow = ShadowColor;
 		setHover(showHover);
+	}
+
+	public function doCallback():Void {
+		_itemCallback();
 	}
 
 	public function getCallback():Dynamic {
