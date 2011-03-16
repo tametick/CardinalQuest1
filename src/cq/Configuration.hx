@@ -1,0 +1,6 @@
+package cq;
+
+class Configuration 
+{
+
+}
