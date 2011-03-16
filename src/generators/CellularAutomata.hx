@@ -1,4 +1,4 @@
-package detribus.generators;
+package generators;
 
 /**
  * Based on AS3 code by Eddie Lee:

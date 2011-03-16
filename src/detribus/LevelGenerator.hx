@@ -4,13 +4,13 @@ import com.baseoneonline.haxe.astar.AStar;
 import com.baseoneonline.haxe.astar.PathMap;
 import com.baseoneonline.haxe.geom.IntPoint;
 import flash.display.BitmapData;
-import detribus.generators.CellularAutomata;
-import detribus.generators.MapGenerator;
+import generators.CellularAutomata;
+import generators.MapGenerator;
+import generators.Perlin;
 
 import haxel.HxlUtil;
 import haxel.HxlPoint;
 
-import detribus.generators.Perlin;
 
 class LevelGenerator extends MapGenerator
 {	

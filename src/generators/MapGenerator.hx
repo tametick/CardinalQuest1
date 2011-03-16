@@ -1,4 +1,4 @@
-package detribus.generators;
+package generators;
 
 import haxel.HxlPoint;
 import haxel.HxlUtil;
