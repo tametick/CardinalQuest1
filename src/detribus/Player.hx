@@ -36,7 +36,7 @@ class Player extends Actor
 		dodge = 0;
 		damage = 15;
 		super(world, X, Y, armor, dodge, damage);
-		_maxHp = _hp = 6000;
+		_maxHp = _hp = 90;
 		
 		loadGraphic(SpritesSmall, true, false, 8, 8);
 		addAnimation("idleE", [271], 0);
@@ -186,7 +186,8 @@ class Player extends Actor
 				case Buff.DODGE:
 					dodge += loot.value;
 				case Buff.HP:
-					damage += loot.value;
+					_hp = _maxHp;
+ 					StateGame.healthBar.setWidth( (_hp / _maxHp) );
 				case Buff.NONE:
 			}
 			

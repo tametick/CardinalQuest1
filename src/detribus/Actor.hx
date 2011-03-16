@@ -49,7 +49,7 @@ class Actor extends GameObject
 	public function takeHit(src:Actor, damage:Int) {
 		
 		if (Math.random() <  dodge / 10.0) {
-			trace(this + " dodged attack");
+			//trace(this + " dodged attack");
 			var sfx = new HxlSound();
 			sfx.loadEmbedded(Dodge, false);
 			sfx.play();
