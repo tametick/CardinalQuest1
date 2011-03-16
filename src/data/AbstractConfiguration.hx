@@ -1,0 +1,6 @@
+package data;
+
+class AbstractConfiguration 
+{
+	
+}

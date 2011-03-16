@@ -1,6 +1,7 @@
 package cq;
+import data.AbstractConfiguration;
 
-class Configuration 
+class Configuration extends AbstractConfiguration
 {
 
 }
