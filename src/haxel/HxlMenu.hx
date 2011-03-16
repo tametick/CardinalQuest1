@@ -7,11 +7,13 @@ import flash.events.MouseEvent;
 class HxlMenu extends HxlDialog
 {
 
-	public var scrollSound(getScrolSound, setScrollSound):HxlSound;
+	public var scrollSound(getScrollSound, setScrollSound):HxlSound;
+	public var selectSound(getSelectSound, setSelectSound):HxlSound;
 	
 	var background:HxlSprite;
 	var items:Array<HxlMenuItem>;
 	var _scrollSound:HxlSound;
+	var _selectSound:HxlSound;
 	var inputEnabled:Bool;
 	var currentItem:Int;
 	
@@ -79,13 +81,22 @@ class HxlMenu extends HxlDialog
 		background.loadGraphic(Graphic);
 	}
 	
-	public function getScrolSound():HxlSound {
+	public function getScrollSound():HxlSound {
 		return _scrollSound;
 	}
 	
 	public function setScrollSound(ScrollSound:HxlSound):HxlSound {
 		_scrollSound = ScrollSound;
 		return _scrollSound;
+	}
+	
+	public function getSelectSound():HxlSound {
+		return _selectSound;
+	}
+	
+	public function setSelectSound(SelectSound:HxlSound):HxlSound {
+		_selectSound = SelectSound;
+		return _selectSound;
 	}
 	
 	public override function update():Void {
