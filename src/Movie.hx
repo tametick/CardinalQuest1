@@ -1,5 +1,3 @@
-package detribus;
-
 import flash.display.Loader;
 import flash.display.MovieClip;
 import flash.display.Bitmap;
@@ -15,7 +13,7 @@ import flash.Lib;
 
 //class MySprites extends Bitmap{ public function new() { super(); } }
 
-import Sdrl;
+import detribus.Sdrl;
 
 class Movie extends MovieClip
 {

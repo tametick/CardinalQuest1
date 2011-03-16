@@ -1,5 +1,3 @@
-package detribus;
-
 import flash.display.Loader;
 import flash.display.MovieClip;
 import flash.display.StageAlign;
