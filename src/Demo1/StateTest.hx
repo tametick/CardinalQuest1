@@ -57,7 +57,7 @@ class StateTest extends HxlState
 			item1.setHoverFormat("VT323", 24, 0xdd5555, "center", 0xff010101);
 			myMenu.addItem(item1);	
 			
-			var item2:HxlMenuItem = new HxlMenuItem(5, 30, 490, "Menu Item 2", true, "VT323");
+			var item2:HxlMenuItem = new HxlMenuItem(5, 35, 490, "Menu Item 2", true, "VT323");
 			item2.setNormalFormat("VT323", 24, 0x5555dd, "center", 0xff010101);
 			item2.setHoverFormat("VT323", 24, 0xdd5555, "center", 0xff010101);
 			myMenu.addItem(item2);				

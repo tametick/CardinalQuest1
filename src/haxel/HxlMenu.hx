@@ -72,11 +72,13 @@ class HxlMenu extends HxlDialog
 			if ( _scrollSound != null ) _scrollSound.play();
 		}
 	}
-	
+
 	function onMouseUp(event:MouseEvent):Void {
-		var mX = HxlGraphics.mouse.x;
-		var mY = HxlGraphics.mouse.y;
-		// TODO
+		if ( !inputEnabled || !exists || !visible || !active || !HxlGraphics.mouse.justReleased() || (currentItem == -1)) return;
+		if ( items[currentItem].overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y) ) {
+			items[currentItem].doCallback();
+			if ( _selectSound != null ) _selectSound.play();
+		}
 	}
 	
 	public function setBackgroundColor(Color:Int):Void {
@@ -101,6 +103,18 @@ class HxlMenu extends HxlDialog
 	
 	public override function update():Void {
 		if ( inputEnabled == true && !visible ) toggleInput(false);
+		if ( inputEnabled ) {
+			for ( i in 0...items.length ) {
+				if ( currentItem != i && items[i].overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y) ) {
+					items[currentItem].setHover(false);
+					currentItem = i;
+					items[currentItem].setHover(true);
+					if ( _scrollSound != null ) _scrollSound.play();
+					break;
+				}
+			}
+		}
+
 		super.update();
 	}
 	
