@@ -1,4 +1,4 @@
-
+package detribus;
 
 class Perks {
 

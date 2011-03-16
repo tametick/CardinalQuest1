@@ -1,3 +1,5 @@
+package detribus;
+
 import haxel.HxlGroup;
 import haxel.HxlText;
 import haxel.HxlSprite;
@@ -6,8 +8,8 @@ import haxel.HxlObject;
 import flash.media.SoundChannel;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
-import Perks;
-import StateCreateChar;
+import detribus.Perks;
+import detribus.StateCreateChar;
 
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;

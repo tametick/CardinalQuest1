@@ -1,3 +1,5 @@
+package detribus;
+
 import flash.filters.BlurFilter;
 import flash.media.SoundChannel;
 import flash.events.KeyboardEvent;
@@ -7,10 +9,10 @@ import haxel.HxlState;
 import haxel.HxlText;
 import haxel.HxlTextInput;
 import Sdrl.SdrlGame;
-import StateGame;
-import Resources;
-import Perks;
-import Player;
+import detribus.StateGame;
+import detribus.Resources;
+import detribus.Perks;
+import detribus.Player;
 import flash.filters.GlowFilter;
 
 class PerkSprite extends HxlText {

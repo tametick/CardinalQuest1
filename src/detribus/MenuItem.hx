@@ -1,3 +1,5 @@
+package detribus;
+
 import haxel.HxlText;
 
 class MenuItem extends HxlText

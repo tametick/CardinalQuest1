@@ -1,4 +1,6 @@
-import Resources;
+package detribus;
+
+import detribus.Resources;
 
 import haxel.HxlSprite;
 import haxel.HxlPoint;

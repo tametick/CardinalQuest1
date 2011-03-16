@@ -1,3 +1,5 @@
+package detribus;
+
 import haxel.HxlGraphics;
 import haxel.HxlObject;
 import haxel.HxlText;

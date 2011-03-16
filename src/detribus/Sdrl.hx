@@ -1,8 +1,10 @@
+package detribus;
+
 import haxel.HxlPreloader;
 import haxel.HxlGame;
 import haxel.HxlState;
-import Resources;
-import Player;
+import detribus.Resources;
+import detribus.Player;
 
 import flash.Lib;
 

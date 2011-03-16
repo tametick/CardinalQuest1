@@ -1,4 +1,4 @@
-package;
+package detribus;
 
 import flash.display.Loader;
 import flash.display.MovieClip;

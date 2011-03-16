@@ -1,3 +1,5 @@
+package detribus;
+
 import flash.display.Bitmap;
 import haxel.HxlTilemap;
 import haxel.HxlUtil;
@@ -7,7 +9,7 @@ import com.baseoneonline.haxe.astar.AStar;
 import com.baseoneonline.haxe.astar.AStarNode;
 import com.baseoneonline.haxe.geom.IntPoint;
 
-import Loot;
+import detribus.Loot;
 
 class Level extends HxlTilemap
 {

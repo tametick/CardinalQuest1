@@ -1,6 +1,8 @@
+package detribus;
+
 import haxel.HxlState;
 import haxel.HxlSound;
-import Resources;
+import detribus.Resources;
 
 class BaseMenuState extends HxlState
 {

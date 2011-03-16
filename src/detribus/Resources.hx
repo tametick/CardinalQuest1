@@ -1,3 +1,5 @@
+package detribus;
+
 import flash.text.Font;
 import flash.display.Bitmap;
 import flash.media.Sound;

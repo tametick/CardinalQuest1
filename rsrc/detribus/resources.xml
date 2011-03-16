@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="iso-8859-1" ?>
 <movie width="360" height="240" framerate="12" as3="1">
 	<library>
-		<font id="Geo" import="Geo-Regular.ttf" name="Geo" /> 
-		<bitmap id="SpritesSmall" import="sprites_small_1bit.png"/>
-		<bitmap id="SpritesBig" import="sprites_big_1bit.png"/>
-		<bitmap id="Tileset" import="tileset_1bit.png"/>
-		<sound id="Rain" name="Rain" import="rain.mp3"/>
-		<sound id="Nohighscore" name="Nohighscore" import="nohighscore.mp3"/>
-		<sound id="Innerfight" name="Innerfight" import="innerfight.mp3"/>
-		<sound id="Victory" name="Victory" import="victory.mp3"/>
-		<sound id="Death" name="Death" import="death.mp3"/>
-		<sound id="Powerdown" name="Powerdown" import="powerdown.mp3"/>
-		<sound id="Powerup" name="Powerup" import="powerup.mp3"/>
-		<sound id="Shot" name="Shot" import="shot.mp3"/>
-		<sound id="Shot2" name="Shot2" import="shot2.mp3"/>
-		<sound id="Dodge" name="Dodge" import="dodge.mp3"/>
-		<sound id="Select" name="Select" import="select.mp3"/>
-		<sound id="Scroll" name="Scroll" import="scroll.mp3"/>		
+		<font id="detribus.Geo" import="Geo-Regular.ttf" name="Geo" /> 
+		<bitmap id="detribus.SpritesSmall" import="sprites_small_1bit.png"/>
+		<bitmap id="detribus.SpritesBig" import="sprites_big_1bit.png"/>
+		<bitmap id="detribus.Tileset" import="tileset_1bit.png"/>
+		<sound id="detribus.Rain" name="Rain" import="rain.mp3"/>
+		<sound id="detribus.Nohighscore" name="Nohighscore" import="nohighscore.mp3"/>
+		<sound id="detribus.Innerfight" name="Innerfight" import="innerfight.mp3"/>
+		<sound id="detribus.Victory" name="Victory" import="victory.mp3"/>
+		<sound id="detribus.Death" name="Death" import="death.mp3"/>
+		<sound id="detribus.Powerdown" name="Powerdown" import="powerdown.mp3"/>
+		<sound id="detribus.Powerup" name="Powerup" import="powerup.mp3"/>
+		<sound id="detribus.Shot" name="Shot" import="shot.mp3"/>
+		<sound id="detribus.Shot2" name="Shot2" import="shot2.mp3"/>
+		<sound id="detribus.Dodge" name="Dodge" import="dodge.mp3"/>
+		<sound id="detribus.Select" name="Select" import="select.mp3"/>
+		<sound id="detribus.Scroll" name="Scroll" import="scroll.mp3"/>		
 	</library>
 </movie>
 

@@ -15,7 +15,7 @@ import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 import flash.media.Sound;
 import flash.Lib;
-import Resources;
+import detribus.Resources;
 
 import haxel.HxlConsole;
 import haxel.HxlPause;

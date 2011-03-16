@@ -1,3 +1,5 @@
+package detribus;
+
 import flash.geom.Rectangle;
 
 import haxel.HxlUtil;
