@@ -6,6 +6,7 @@ import haxel.HxlSprite;
 import haxel.HxlDialog;
 import haxel.HxlMenu;
 import haxel.HxlMenuItem;
+import haxel.HxlUIBar;
 import Resources;
 
 import flash.system.System;
@@ -61,6 +62,14 @@ class StateTest extends HxlState
 			item2.setNormalFormat("VT323", 24, 0x5555dd, "center", 0xff010101);
 			item2.setHoverFormat("VT323", 24, 0xdd5555, "center", 0xff010101);
 			myMenu.addItem(item2);				
+
+			var bar:HxlUIBar = new HxlUIBar(200, 10, 50, 10);
+			add(bar);
+
+			bar.setPercent(0.6);
+			bar.setFrameColor(0xff0000ff);
+			bar.setInteriorColor(0xff666666);
+			bar.setBarColor(0xff00ff00);
 	}
 
 }
