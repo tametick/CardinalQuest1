@@ -1,6 +1,7 @@
 package cq;
+import data.AbstractRegistery;
 
-class Registry 
+class Registry extends AbstractRegistery
 {
 	
 }
