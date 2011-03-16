@@ -19,7 +19,7 @@ class HxlMenuItem extends HxlText
 	public var itemCallback(getCallback, setCallback):Dynamic;
 	var _itemCallback:Dynamic;
 
-	public function new(X:Float, Y:Float, Width:Int, ?Text:String=null, ?EmbeddedFont:Bool=true, ?FontName:String="system") {
+	public function new(X:Float, Y:Float, Width:Int, ?Text:String=null, ?EmbeddedFont:Bool=true, ?FontName:String=null) {
 		super(X, Y, Width, Text, EmbeddedFont, FontName);
 		normalFormat = dtfCopy();
 		hoverFormat = dtfCopy();

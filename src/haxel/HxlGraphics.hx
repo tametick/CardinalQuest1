@@ -176,6 +176,8 @@ class HxlGraphics {
 	 * will sort its members according to zIndex, lowest to highest.
 	 **/
 	public static var autoZSort:Bool = true;
+	
+	public static var defaultFont:String = "system";
 
 	public function new() { }
 

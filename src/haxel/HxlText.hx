@@ -39,7 +39,7 @@ class HxlText extends HxlSprite {
 	 * @param	EmbeddedFont	Whether this text field uses embedded fonts or not
 	 * @param 	FontName 		Name of the font to use
 	 */
-	public function new(X:Float, Y:Float, Width:Int, ?Text:String=null, ?EmbeddedFont:Bool=true, ?FontName:String="system") {
+	public function new(X:Float, Y:Float, Width:Int, ?Text:String=null, ?EmbeddedFont:Bool=true, ?FontName:String=null) {
 		super(Math.floor(X),Math.floor(Y));
 		createGraphic(Width,1,0);
 		//antialiasing = false;	
@@ -58,6 +58,7 @@ class HxlText extends HxlSprite {
 		_tf.multiline = true;
 		_tf.wordWrap = true;
 		_tf.text = Text;
+		if ( FontName == null ) FontName = HxlGraphics.defaultFont;
 		var tf:TextFormat = new TextFormat(FontName,8,0xffffff);
 		_tf.defaultTextFormat = tf;
 		_tf.setTextFormat(tf);

@@ -42,10 +42,12 @@ class HxlConsole extends Sprite {
 	 * @param	X	X position of the console
 	 * @param	Y	Y position of the console
 	 */
-	public function new(X:Int, Y:Int, Zoom:Int, DefaultFont:String="system" ) {
+	public function new(X:Int, Y:Int, Zoom:Int, DefaultFont:String=null ) {
 		_max_lines = 256; 
 		super();
-
+		
+		if ( DefaultFont == null ) DefaultFont = HxlGraphics.defaultFont;
+		
 		visible = false;
 		x = X*Zoom;
 		_by = Y*Zoom;

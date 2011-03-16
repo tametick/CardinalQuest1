@@ -89,6 +89,7 @@ class HxlGame extends Sprite {
 		HxlGraphics.setGameData(this, GameSizeX, GameSizeY, Zoom);
 		HxlTimer.setGameData(this);
 		defaultFont = DefaultFont;
+		HxlGraphics.defaultFont = DefaultFont;
 		_elapsed = 0;
 		_total = 0;
 		pause = new HxlPause();
