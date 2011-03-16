@@ -1,6 +1,7 @@
 package world;
+import haxel.HxlTilemap;
 
-class AbstractLevel 
+class AbstractLevel extends HxlTilemap
 {
 
 	public function new() 
