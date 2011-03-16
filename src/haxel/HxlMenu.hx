@@ -1,15 +1,13 @@
 package haxel;
 
 import flash.display.Bitmap;
+import flash.media.Sound;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 
 class HxlMenu extends HxlDialog
 {
 
-	public var scrollSound(getScrollSound, setScrollSound):HxlSound;
-	public var selectSound(getSelectSound, setSelectSound):HxlSound;
-	
 	var background:HxlSprite;
 	var items:Array<HxlMenuItem>;
 	var _scrollSound:HxlSound;
@@ -23,6 +21,9 @@ class HxlMenu extends HxlDialog
 		background = new HxlSprite(0, 0);
 		background.zIndex = 0;
 		add(background);
+
+		_scrollSound = null;
+		_selectSound = null;
 
 		items = new Array();
 		toggleInput(true);
@@ -59,11 +60,13 @@ class HxlMenu extends HxlDialog
 			currentItem--;
 			if ( currentItem < 0 ) currentItem = items.length - 1;
 			items[currentItem].setHover(true);
+			if ( _scrollSound != null ) _scrollSound.play();
 		} else if ( c == 40 ) { // Down
 			if ( currentItem >= 0 ) items[currentItem].setHover(false);
 			currentItem++;
 			if ( currentItem >= items.length ) currentItem = 0;
 			items[currentItem].setHover(true);
+			if ( _scrollSound != null ) _scrollSound.play();
 		}
 	}
 	
@@ -80,22 +83,16 @@ class HxlMenu extends HxlDialog
 	public function setBackgroundGraphic(Graphic:Class<Bitmap>):Void {
 		background.loadGraphic(Graphic);
 	}
-	
-	public function getScrollSound():HxlSound {
+		
+	public function setScrollSound(ScrollSound:Class<Sound>):HxlSound {
+		if ( _scrollSound == null ) _scrollSound = new HxlSound();
+		_scrollSound.loadEmbedded(ScrollSound, false);
 		return _scrollSound;
 	}
-	
-	public function setScrollSound(ScrollSound:HxlSound):HxlSound {
-		_scrollSound = ScrollSound;
-		return _scrollSound;
-	}
-	
-	public function getSelectSound():HxlSound {
-		return _selectSound;
-	}
-	
-	public function setSelectSound(SelectSound:HxlSound):HxlSound {
-		_selectSound = SelectSound;
+		
+	public function setSelectSound(SelectSound:Class<Sound>):HxlSound {
+		if ( _selectSound == null ) _selectSound = new HxlSound();
+		_selectSound.loadEmbedded(SelectSound, false);
 		return _selectSound;
 	}
 	
