@@ -1,8 +1,0 @@
--main Sdrl
--swf-lib rsrc/resources.swf
--swf-version 10
--swf-header 720:480:60:ffffff
---flash-strict
--swf Sdrl.swf
--cp src
-
