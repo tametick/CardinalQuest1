@@ -49,6 +49,7 @@ class StateTest extends HxlState
 			var myMenu:HxlMenu = new HxlMenu(150, 225, 500, 300);
 			myMenu.setBackgroundColor(0x99ffaaaa);
 			add(myMenu);
+			myMenu.setScrollSound(SoundScroll);
 
 			var item1:HxlMenuItem = new HxlMenuItem(5, 5, 490, "Menu Item 1", true, "VT323");
 			item1.setNormalFormat("VT323", 24, 0x5555dd, "center", 0xff010101);

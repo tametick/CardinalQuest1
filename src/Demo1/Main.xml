@@ -7,6 +7,12 @@
 	<DefineFont id="1" file="../../rsrc/Demo1/VT323.ttf" />
 	<SymbolClass id="1" class="FontSystem" />
 
+	<DefineSound id="2" file="../../rsrc/Demo1/select.mp3" />
+	<SymbolClass id="2" class="SoundSelect" />
+
+	<DefineSound id="3" file="../../rsrc/Demo1/scroll.mp3" />
+	<SymbolClass id="3" class="SoundScroll" />
+
 	<DefineABC file="Main.swf" isBoot="true" />
 	<!--<SymbolClass id="0" class="flash.Boot" />-->
 
