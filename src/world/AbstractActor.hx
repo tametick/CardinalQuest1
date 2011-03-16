@@ -1,6 +1,6 @@
 package world;
 
-class AbstractActor 
+class AbstractActor extends GameObject
 {
 
 	public function new() 

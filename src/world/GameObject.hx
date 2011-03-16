@@ -1,6 +1,6 @@
 package world;
 
-class AbstractGameObject 
+class GameObject 
 {
 
 	public function new() 
