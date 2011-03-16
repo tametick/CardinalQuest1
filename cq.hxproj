@@ -6,10 +6,10 @@
     <movie input="" />
     <movie path="bin\cq.swf" />
     <movie fps="30" />
-    <movie width="800" />
-    <movie height="600" />
+    <movie width="640" />
+    <movie height="480" />
     <movie version="9" />
-    <movie background="#FFFFFF" />
+    <movie background="#000000" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
@@ -19,7 +19,7 @@
   <build>
     <option directives="" />
     <option flashStrict="True" />
-    <option mainClass="cq.GameState" />
+    <option mainClass="cq.CqGame" />
     <option enabledebug="True" />
     <option additional="" />
   </build>

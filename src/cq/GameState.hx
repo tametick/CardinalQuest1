@@ -1,11 +1,8 @@
 package cq;
+import haxel.HxlState;
 
-class GameState 
+class GameState extends HxlState
 {
 	
-	static function main() 
-	{
-		
-	}
 	
 }
