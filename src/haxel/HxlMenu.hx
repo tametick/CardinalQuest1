@@ -13,6 +13,7 @@ class HxlMenu extends HxlDialog
 	var items:Array<HxlMenuItem>;
 	var _scrollSound:HxlSound;
 	var inputEnabled:Bool;
+	var currentItem:Int;
 	
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0) {
 		super(X, Y, Width, Height);
@@ -23,12 +24,17 @@ class HxlMenu extends HxlDialog
 
 		items = new Array();
 		toggleInput(true);
+		currentItem = -1;
 	}
 
 	public function addItem(Item:HxlMenuItem):Void {
 		Item.zIndex = 2;
 		add(Item);
 		items.push(Item);
+		if ( currentItem == -1 ) {
+			currentItem = 0;
+			items[0].setHover(true);
+		}
 	}
 
 	public function toggleInput(Toggle:Bool):Void {
@@ -43,7 +49,20 @@ class HxlMenu extends HxlDialog
 	}
 	
 	function onKeyDown(event:KeyboardEvent):Void {
-		// TODO
+		var c:Int = event.keyCode;
+		if ( c == 13 ) { // Enter
+			// TODO
+		} else if ( c == 38 ) { // Up
+			if ( currentItem >= 0 ) items[currentItem].setHover(false);
+			currentItem--;
+			if ( currentItem < 0 ) currentItem = items.length - 1;
+			items[currentItem].setHover(true);
+		} else if ( c == 40 ) { // Down
+			if ( currentItem >= 0 ) items[currentItem].setHover(false);
+			currentItem++;
+			if ( currentItem >= items.length ) currentItem = 0;
+			items[currentItem].setHover(true);
+		}
 	}
 	
 	function onMouseUp(event:MouseEvent):Void {
