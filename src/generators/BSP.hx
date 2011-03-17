@@ -1,15 +1,40 @@
 package generators;
 import haxel.HxlUtil;
 
+class Room {
+	var x0:Int;
+	var x1:Int; 
+	var y0:Int;
+	var y1:Int;
+	public function new(x0:Int, y0:Int, x1:Int, y1:Int) {
+		this.x0 = x0;
+		this.x1 = x1;
+		this.y0 = y0;
+		this.y1 = y1;
+	}
+}
+
 class BSP 
 {
 	public static var minWidth = 5;
-	public static var minHeight = 5;	
+	public static var minHeight = 5;
 	
-	static function insertSubMap(map:Array<Array<Int>>, subMap:Array<Array<Int>>, subWidth:Int, subHeight:Int, xShift:Int, yShift:Int) {
-		for (y in 0...subHeight)
-			for (x in 0...subWidth)
-				map[y + yShift][x + xShift] = subMap[y][x];
+	static function createRandomRoomInRect(x0:Int, y0:Int, x1:Int, y1:Int):Room {
+		return new Room(x0, y0, x1, y1);
+	}
+	
+	static function insertRoom(map:Array<Array<Int>>, room:Room, wallIndex:Int, floorIndex:Int) {
+	
+	}
+	
+	static function createCorridor(map:Array<Array<Int>>, room1:Room, room2:Room, wallIndex:Int, floorIndex:Int, doorIndex:Int) {
+	
+	}
+	
+	static function getRoomsInArea(x0:Int, y0:Int, x1:Int, y1:Int):Array<Room> {
+		var rooms = new Array<Room>();
+		
+		return rooms;
 	}
 	
 	public static function getBSPMap(width:Int, height:Int, wallIndex:Int, floorIndex:Int, doorIndex:Int):Array<Array<Int>> {
@@ -20,32 +45,15 @@ class BSP
 				map[y].push(wallIndex);
 		}
 		
-		var horizontal=true;
-		if (Math.random() < 0.5)
-			horizontal = false;
-			
-			
-		var submap1, submap2:Array<Array<Int>>;
-		var tooSmall = true;
-		if (horizontal) {
-			if (tooSmall)
-				return map;
-			
-			var splitX = HxlUtil.randomInt(Math.round(width / 2)) + Math.round(width / 4);
-			submap1 = getBSPMap(splitX, height, wallIndex, floorIndex, doorIndex);
-			submap2 = getBSPMap(width - splitX, height, wallIndex, floorIndex, doorIndex);
-			insertSubMap(map, submap1, splitX, height, 0, 0);
-			insertSubMap(map, submap2, width - splitX, height, splitX, 0);
-		} else {
-			if (tooSmall)
-				return map;
-				
-			var splitY = HxlUtil.randomInt(Math.round(height / 2)) + Math.round(height / 4);
-			submap1 = getBSPMap(width, splitY, wallIndex, floorIndex, doorIndex);
-			submap2 = getBSPMap(width, height - splitY, wallIndex, floorIndex, doorIndex);
-			insertSubMap(map, submap1, width, splitY, 0, 0);
-			insertSubMap(map, submap2, width, height-splitY, 0, splitY);
-		}
+		var rooms = getRoomsInArea(0, 0, width - 1, height - 1);
+
+		// insert rooms into map
+		for (room in rooms)
+			insertRoom(map, room, wallIndex, floorIndex);
+		
+		// create corridors between rooms
+		for (r in 0...rooms.length-2)
+			createCorridor(map, rooms[r], rooms[r + 1], wallIndex, floorIndex, doorIndex);
 		
 		return map;
 	}
