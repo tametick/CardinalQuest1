@@ -1,4 +1,4 @@
-package Demo1;
+package demo;
 
 import flash.media.SoundChannel;
 import haxel.HxlGraphics;
@@ -9,7 +9,7 @@ import haxel.HxlDialog;
 import haxel.HxlMenu;
 import haxel.HxlMenuItem;
 import haxel.HxlUIBar;
-import Resources;
+import demo.Resources;
 
 import flash.system.System;
 

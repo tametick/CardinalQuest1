@@ -1,9 +1,9 @@
-package Demo1;
+package demo;
 
 //import haxel.HxlPreloader;
 import haxel.HxlGame;
 import haxel.HxlState;
-import Resources;
+import demo.Resources;
 
 import flash.Lib;
 

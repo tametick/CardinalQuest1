@@ -1,0 +1,16 @@
+#-main Preloader
+#--flash-use-stage
+#-swf-version 10
+#-swf-header 720:480:60:ffffff
+#-swf preloader.swf
+
+#--next
+-main Main
+--flash-use-stage
+-swf-version 10
+-swf-header 800:600:60:ffffff
+-swf Main.swf
+-xml myproject.xml
+-cp ../
+
+-cmd hxswfml xml2swf Main.xml Main.swf

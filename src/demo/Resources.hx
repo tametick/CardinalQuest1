@@ -1,4 +1,4 @@
-package Demo1;
+package demo;
 
 import flash.text.Font;
 import flash.display.Bitmap;
