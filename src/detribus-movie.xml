@@ -51,7 +51,7 @@
 	<DefineSound id="16" file="../rsrc/detribus/scroll.mp3" />
 	<SymbolClass id="16" class="detribus.Scroll" />
 	
-	<DefineABC file="detribus-movie.swf" isBoot="true" />
+	<DefineABC file="../bin/detribus-movie.swf" isBoot="true" />
 	<SymbolClass id="0" class="flash.Boot"/>
 	
 	<ShowFrame/>
