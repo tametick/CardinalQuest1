@@ -6,7 +6,7 @@ import flash.Lib;
 
 class CqGame extends HxlGame
 {
-	static function main() 
+	public static function main() 
 	{
 		Lib.current.addChild(new CqGame());
 	}

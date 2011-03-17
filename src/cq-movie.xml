@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<swf width="640" height="480" fps="60">
+
+	<FileAttributes/>
+
+	<DefineBitsJPEG id="1" file="../rsrc/cq/corpses.png" />
+	<SymbolClass id="1" class="cq.SpriteCorpses" />
+
+	<DefineBitsJPEG id="2" file="../rsrc/cq/effects.png" />
+	<SymbolClass id="2" class="cq.SpriteEffects" />
+
+	<DefineBitsJPEG id="3" file="../rsrc/cq/items.png" />
+	<SymbolClass id="3" class="cq.SpriteItems" />
+
+	<DefineBitsJPEG id="4" file="../rsrc/cq/monsters.png" />
+	<SymbolClass id="4" class="cq.SpriteMonsters" />
+
+	<DefineBitsJPEG id="5" file="../rsrc/cq/player.png" />
+	<SymbolClass id="5" class="cq.SpritePlayer" />
+
+	<DefineBitsJPEG id="6" file="../rsrc/cq/tiles-small.png" />
+	<SymbolClass id="6" class="cq.SpriteTilesSmall" />
+
+	<DefineFont id="7" file="../rsrc/cq/Geo-Regular.ttf" />
+	<SymbolClass id="7" class="cq.FontGeo" />
+
+</swf>

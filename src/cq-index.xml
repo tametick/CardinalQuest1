@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<swf width="640" height="480" fps="60" version="10" compressed="true" frameCount="2" >
+
+	<FileAttributes/>
+
+	<DefineABC file="../bin/cq-preloader.swf" isBoot="true"/>
+
+	<ShowFrame/>
+	
+	<DefineBinaryData id="1" file="../bin/cq-movie.swf" />
+	<SymbolClass id="1" class="MovieBytes" />
+
+	<ShowFrame/>
+	
+</swf>
+
