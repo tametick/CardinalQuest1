@@ -30,6 +30,15 @@
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
     <compile path="src\cq\GameState.hx" />
+    <compile path="src\world\Actor.hx" />
+    <compile path="src\world\GameObject.hx" />
+    <compile path="src\world\Level.hx" />
+    <compile path="src\world\Mob.hx" />
+    <compile path="src\world\Player.hx" />
+    <compile path="src\world\Tile.hx" />
+    <compile path="src\world\World.hx" />
+    <compile path="src\data\AbstractConfiguration.hx" />
+    <compile path="src\data\AbstractRegistery.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>
