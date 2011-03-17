@@ -1,5 +1,7 @@
 package haxel;
 
+import flash.display.Bitmap;
+
 class HxlDialog extends HxlGroup
 {
 

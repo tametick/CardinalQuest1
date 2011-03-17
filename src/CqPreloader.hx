@@ -11,7 +11,7 @@ import flash.system.ApplicationDomain;
 import flash.utils.ByteArray;
 import flash.Lib;
 
-import cq.CqGame;
+import cq.CqMain;
 
 class MovieBytes extends ByteArray{}
 
@@ -20,8 +20,8 @@ class CqPreloader extends MovieClip
 	var tf:TextField;
 	var loader:Loader;
 	var ctx : LoaderContext;
-	//var progressBarBG:Shape;
-	//var progressBar:Shape;
+	var progressBarBG:Shape;
+	var progressBar:Shape;
 
 	public static function main()
 	{
@@ -38,7 +38,7 @@ class CqPreloader extends MovieClip
 		tf.height=20;
 		addChild(tf);
 
-		/*
+		
 		progressBarBG = new Shape();
 		var g = progressBarBG.graphics;
 		g.lineStyle(2.0, 0xff000000);
@@ -54,7 +54,7 @@ class CqPreloader extends MovieClip
 		Lib.current.addChild(progressBar);
 		progressBar.x = 260;
 		progressBar.y = 230;
-		*/
+		
 
 		addEventListener(Event.ENTER_FRAME, onEnterFrame);
 	}
@@ -62,7 +62,7 @@ class CqPreloader extends MovieClip
 	{
 		var percent = Math.floor((root.loaderInfo.bytesLoaded / root.loaderInfo.bytesTotal)*100);
 		tf.text= percent +' %';
-		//progressBar.scaleX = 1.0 * (percent/100);
+		progressBar.scaleX = 1.0 * (percent/100);
 		if(percent==100)
 		{
 			removeChild(tf);
@@ -76,6 +76,7 @@ class CqPreloader extends MovieClip
 			tf.x=400;
 			tf.y=50; */
 			cast(this.parent,MovieClip).stop();
+
 		}
 	}
 }

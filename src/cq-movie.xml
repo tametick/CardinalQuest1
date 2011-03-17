@@ -23,5 +23,10 @@
 
 	<DefineFont id="7" file="../rsrc/cq/Geo-Regular.ttf" />
 	<SymbolClass id="7" class="cq.FontGeo" />
+	
+	<DefineABC file="../bin/cq-movie.swf" isBoot="true" />
+	<SymbolClass id="0" class="flash.Boot"/>
+
+	<ShowFrame/>
 
 </swf>
