@@ -3,22 +3,28 @@ package world;
 import haxel.HxlSprite;
 import haxel.HxlPoint;
 
-class GameObject extends HxlSprite
-{
-	public var tilePos(getTilePos, setTilePos) : HxlPoint;
 
+interface GameObject {
+	var world:World;
+	var hp:Int;
+	var maxHp:Int;
+	
+	var tilePos(getTilePos, setTilePos) : HxlPoint;
+	function getTilePos():HxlPoint;
+	function setTilePos(TilePos:HxlPoint):HxlPoint
+}
+
+class GameObjectImpl extends HxlSprite
+{
 	var _tilePos:HxlPoint;
-	var _world:AbstractWorld;
-	var _hp:Int;
-	var _maxHp:Int;
 	
 	public function new(world:AbstractWorld, x:Float, y:Float, ?hp:Int=1) 
 	{
 		super(x, y);
-		_world = world;
+		world = world;
 		_tilePos = new HxlPoint();
-		_hp = hp;
-		_maxHp = hp;
+		hp = hp;
+		maxHp = hp;
 		zIndex = 1;
 	}
 
@@ -27,18 +33,18 @@ class GameObject extends HxlSprite
 	}
 	
 	public function setTilePos(TilePos:HxlPoint):HxlPoint {
+		// todo - multiple actors & loots
+		
 		// remove from old tile
 		if (_tilePos != null) {
-			var tile = _world.currentLevel.getTile(_tilePos.x, _tilePos.y);
+			var tile = world.currentLevel.getTile(_tilePos.x, _tilePos.y);
 			if(tile!=null)
 				tile.actor = null;
 		}
 		
 		// add to new tile
 		_tilePos = TilePos;
-		_world.currentLevel.getTile(_tilePos.x, _tilePos.y).actor = this;
+		world.currentLevel.getTile(_tilePos.x, _tilePos.y).actor = this;
 		return TilePos;
 	}
-}
-	
 }
