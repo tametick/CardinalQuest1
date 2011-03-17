@@ -8,7 +8,6 @@ import flash.events.MouseEvent;
 class HxlMenu extends HxlDialog
 {
 
-	var background:HxlSprite;
 	var items:Array<HxlMenuItem>;
 	var _scrollSound:HxlSound;
 	var _selectSound:HxlSound;
@@ -17,10 +16,6 @@ class HxlMenu extends HxlDialog
 	
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0) {
 		super(X, Y, Width, Height);
-
-		background = new HxlSprite(0, 0);
-		background.zIndex = 0;
-		add(background);
 
 		_scrollSound = null;
 		_selectSound = null;
