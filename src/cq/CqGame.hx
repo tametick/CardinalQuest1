@@ -16,5 +16,5 @@ class CqGame extends HxlGame
 		super(640, 480, GameState, 1, "Geo");
 
 		HxlState.bgColor = 0x00000000;
-	}	
+	}
 }
