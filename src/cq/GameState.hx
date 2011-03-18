@@ -6,6 +6,9 @@ import haxel.HxlTextContainer;
 
 class GameState extends HxlState
 {
+
+	var textcon:HxlTextContainer;
+
 	public override function create():Void {
 		super.create();
 
@@ -20,13 +23,23 @@ class GameState extends HxlState
 		add(butcon);
 		butcon.setBackgroundColor(0xff333333);
 
-		var textcon:HxlTextContainer = new HxlTextContainer( 170, 0, 300, 80 );
+		textcon:HxlTextContainer = new HxlTextContainer( 170, 0, 300, 80 );
 		textcon.setBackgroundColor(0xff333333);
 		textcon.setFormat("Geo", 18, 0xffffff, "left", 0x000000);
 		add(textcon);
 		textcon.addText("Uh oh, whats that sound?");
 		textcon.addText("Tick tock, tick tock");
 		textcon.addText("Boom goes the dynamite!");
+		textcon.addText("test?");
+
+		var self = this;
+		but3.setCallback(function() {
+			self.testfunc();
+		});
 	}
-	
+
+	public function testfunc() {
+		textcon.addText("Button 3..");
+	}
+
 }
