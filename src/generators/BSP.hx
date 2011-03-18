@@ -115,7 +115,7 @@ class BSP
 				map[y].push(wallIndex);
 		}
 		
-		var rooms = getRoomsInArea(0, 0, width - 1, height - 1);
+		var rooms = getRoomsInArea(1, 1, width - 2, height - 2);
 
 		// insert rooms into map
 		for (room in rooms)
@@ -129,7 +129,7 @@ class BSP
 	}
 	
 	public static function main() {
-		var mapSize = 32;
+		var mapSize = 30;
 		var map = getBSPMap(mapSize, mapSize, 0, 1, 5);
 		for (y in 0...mapSize)
 			trace(map[y]);
