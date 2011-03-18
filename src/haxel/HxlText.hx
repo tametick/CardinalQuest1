@@ -74,15 +74,9 @@ class HxlText extends HxlSprite {
 	}
 	
 	public function setProperties(?Multiline:Bool=true, ?Wordwrap:Bool=true, ?Selectable:Bool=false) {
-		var tf:TextFormat = dtfCopy();
-		tf.selectable = Multiline;
-		tf.multiline = Wordwrap;
-		tf.wordWrap = Selectable;
-		_tf.defaultTextFormat = tf;
-		_tf.setTextFormat(tf);
-		_regen = true;
-		calcFrame();
-		return this;
+		_tf.selectable = Multiline;
+		_tf.multiline = Wordwrap;
+		_tf.wordWrap = Selectable;
 	}
 
 	/**
