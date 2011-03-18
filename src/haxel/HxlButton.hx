@@ -49,7 +49,7 @@ class HxlButton extends HxlGroup {
 	 * @param	Y			The Y position of the button.
 	 * @param	Callback	The function to call whenever the button is clicked.
 	 */
-	public function new(X:Int,Y:Int,?Callback:Dynamic) {
+	public function new(X:Int,Y:Int,?Callback:Dynamic=null) {
 		super();
 		x = X;
 		y = Y;
@@ -68,6 +68,10 @@ class HxlButton extends HxlGroup {
 		_pressed = false;
 		_initialized = false;
 		_sf = null;
+	}
+
+	public function setCallback(?Callback:Dynamic=null) {
+		_callback = Callback;
 	}
 
 	/**
