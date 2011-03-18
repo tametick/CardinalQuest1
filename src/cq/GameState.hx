@@ -23,7 +23,7 @@ class GameState extends HxlState
 		add(butcon);
 		butcon.setBackgroundColor(0xff333333);
 
-		textcon:HxlTextContainer = new HxlTextContainer( 170, 0, 300, 80 );
+		textcon = new HxlTextContainer( 170, 0, 300, 80 );
 		textcon.setBackgroundColor(0xff333333);
 		textcon.setFormat("Geo", 18, 0xffffff, "left", 0x000000);
 		add(textcon);
