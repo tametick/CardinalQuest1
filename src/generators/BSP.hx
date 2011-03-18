@@ -90,7 +90,7 @@ class BSP
 			var splitYShift = HxlUtil.randomIntInRange(minRoomHeight, height - minRoomHeight);
 			
 			// add rooms in upper submap
-			for (room in getRoomsInArea(x0, y0, x0, y0+splitYShift))
+			for (room in getRoomsInArea(x0, y0, x1, y0+splitYShift))
 				rooms.push(room);
 			
 			// add rooms in lower submap
