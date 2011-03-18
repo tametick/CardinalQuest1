@@ -50,7 +50,7 @@ class HxlDialog extends HxlGroup
 	public override function update():Void
 	{
 	    super.update();
-	    this.reset(x, y);
+	    reset(x, y);
 	}
 
 }

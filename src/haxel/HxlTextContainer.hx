@@ -56,9 +56,12 @@ class HxlTextContainer extends HxlDialog {
 	}
 
 	public function addText(Text:String):Void {
-		var line = new HxlText(0, 0, Std.int(width - (_padding * 2)), Text, true, fontName);
+		var line:HxlText = new HxlText(0, 0, Std.int(width - (_padding * 2)), Text, true, fontName);
 		line.setFormat(fontName, fontSize, fontColor, fontAlignment, shadowColor);
-		if ( lines.length == maxLines ) lines.pop();
+		if ( lines.length == maxLines ) {
+			var oldLine:HxlText = lines.pop();
+			remove(oldLine);
+		}
 		lines.add(line);
 		line.zIndex = 1;
 		add(line);
@@ -66,13 +69,14 @@ class HxlTextContainer extends HxlDialog {
 	}
 
 	public function scrollText():Void {
-
+		if ( lines.length > 0 ) {
+			var line:HxlText = lines.first();
+		}
 	}
 
 	function updateLayout():Void {
-		var Y:Float = 0 + _padding;
-		var X:Float = 0 + _padding;
-		HxlGraphics.log("updateLayout: X is" + X);
+		var Y:Float = y + _padding;
+		var X:Float = x + _padding;
 		var count:Int = 0;
 		for( line in lines ) {
 			if ( count > 0 ) Y += fontSize + lineSpacing;
@@ -80,5 +84,6 @@ class HxlTextContainer extends HxlDialog {
 			line.y = Y;
 			count++;
 		}
+		reset(x, y);
 	}
 }

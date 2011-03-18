@@ -119,6 +119,56 @@ class HxlGroup extends HxlObject {
 	}
 
 	/**
+	 * If the group's position is reset, we want to reset all its members too.
+	 * 
+	 * @param	X	The new X position of this object.
+	 * @param	Y	The new Y position of this object.
+	 */
+	public override function reset(X:Float,Y:Float):Void
+	{
+		saveOldPosition();
+		super.reset(X,Y);
+		var mx:Float = Math.NaN;
+		var my:Float = Math.NaN;
+		var moved:Bool = false;
+		if((x != _last.x) || (y != _last.y))
+		{
+			moved = true;
+			mx = x - _last.x;
+			my = y - _last.y;
+		}
+		var o:HxlObject;
+		var l:Int = members.length;
+		for(i in 0...l)	{
+			o = cast( members[i], HxlObject);
+			if ((o != null) && o.exists) {
+				if (moved) {
+					if (o._group) {
+						o.reset(o.x+mx,o.y+my);
+					} else {
+						o.x += mx;
+						o.y += my;
+						/*
+						if(solid)
+						{
+							o.colHullX.width += ((mx>0)?mx:-mx);
+							if(mx < 0)
+								o.colHullX.x += mx;
+							o.colHullY.x = x;
+							o.colHullY.height += ((my>0)?my:-my);
+							if(my < 0)
+								o.colHullY.y += my;
+							o.colVector.x += mx;
+							o.colVector.y += my;
+						}
+						*/
+					}
+				}
+			}
+		}
+	}
+
+	/**
 	 * Finds the first object with exists == false and calls reset on it.
 	 * 
 	 * @param	X	The new X position of this object.

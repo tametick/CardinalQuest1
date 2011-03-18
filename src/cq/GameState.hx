@@ -31,6 +31,7 @@ class GameState extends HxlState
 		textcon.addText("Tick tock, tick tock");
 		textcon.addText("Boom goes the dynamite!");
 		textcon.addText("test?");
+		textcon.addText("Button 3..");
 
 		var self = this;
 		but3.setCallback(function() {
