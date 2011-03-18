@@ -1,5 +1,7 @@
 package haxel;
 
+import com.eclecticdesignstudio.motion.Actuate;
+
 class HxlTextContainer extends HxlDialog {
 
 	var lines:List<HxlText>;
@@ -12,6 +14,8 @@ class HxlTextContainer extends HxlDialog {
 	var scrollTimer:HxlTimer;
 	public var scrollRate:Float;
 	public var maxLines:Int;
+	var fadeEffect:Bool;
+	var isFading:Bool;
 
 	/**
 	 * Amount of space (in pixels) between edges of container and text.
@@ -34,6 +38,8 @@ class HxlTextContainer extends HxlDialog {
 		lines = new List();
 		scrollRate = 1.0;
 		scrollTimer = new HxlTimer(scrollRate);
+		fadeEffect = true;
+		isFading = false;
 	}
 
 	public override function update():Void {
@@ -60,17 +66,31 @@ class HxlTextContainer extends HxlDialog {
 		line.setFormat(fontName, fontSize, fontColor, fontAlignment, shadowColor);
 		if ( lines.length == maxLines ) {
 			var oldLine:HxlText = lines.pop();
+			Actuate.stop(this, {}, false);
 			remove(oldLine);
+			isFading = false;
 		}
 		lines.add(line);
 		line.zIndex = 1;
 		add(line);
 		updateLayout();
+		if ( lines.length == 1 ) scrollTimer.reset(scrollRate);
 	}
 
 	public function scrollText():Void {
 		if ( lines.length > 0 ) {
-			var line:HxlText = lines.first();
+			if ( fadeEffect && !isFading ) {
+				var line:HxlText = lines.first();
+				Actuate.update(function(params:Dynamic) {
+					line.alpha = params.Alpha;
+				}, scrollRate, {Alpha: 1.0}, {Alpha: 0.0});
+				isFading = true;
+			} else {
+				var line:HxlText = lines.pop();
+				remove(line);
+				updateLayout();
+				isFading = false;
+			}
 		}
 	}
 
