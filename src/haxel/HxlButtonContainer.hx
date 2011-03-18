@@ -48,23 +48,50 @@ class HxlButtonContainer extends HxlDialog {
 	private function updateLayout():Void {
 		var X:Float = 0;
 		var Y:Float = 0;
-		var offset:HxlPoint = new HxlPoint(0, 0);
-		X += padding;
-		Y += padding;
+		if ( alignment == VERTICAL && order == BOTTOM_TO_TOP ) {
+			Y = height;
+		} else if ( alignment == HORIZONTAL && order == RIGHT_TO_LEFT ) {
+			X = width;
+		}
+		if ( order == TOP_TO_BOTTOM || order == LEFT_TO_RIGHT ) {
+			X += padding;
+			Y += padding;
+		} else {
+			X -= padding;
+			Y -= padding;
+		}
 		var count:Int = 0;
 		for ( Button in buttons ) {
 			if ( alignment == HORIZONTAL ) {
-				if ( count > 0 ) X += spacing;
+
+				if ( order == LEFT_TO_RIGHT && count > 0 ) {
+					X += spacing;
+				} else {
+					X -= Button.width;
+				}
+
 				Y = (height / 2) - (Button.height / 2);
 				Button.x = X;
 				Button.y = Y;
-				X += Button.width;
+				if ( order == LEFT_TO_RIGHT ) {
+					X += Button.width;
+				} else {
+					X -= spacing;
+				}
 			} else {
-				if ( count > 0 ) Y += spacing;
+				if ( order == TOP_TO_BOTTOM && count > 0 ) {
+					Y += spacing;
+				} else {
+					Y -= Button.height;
+				}
 				X = (width / 2) - (Button.width / 2);
 				Button.y = Y;
 				Button.x = X;
-				Y += Button.height;
+				if ( order == TOP_TO_BOTTOM ) {
+					Y += Button.height;
+				} else {
+					Y -= spacing;
+				}
 			}
 			count++;
 		}
