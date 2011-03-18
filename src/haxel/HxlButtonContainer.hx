@@ -34,6 +34,7 @@ class HxlButtonContainer extends HxlDialog {
 
 	public function addButton(Button:HxlButton):Void {
 		buttons.add(Button);
+		Button.zIndex = 1;
 		add(Button);
 		updateLayout();
 	}
@@ -54,13 +55,13 @@ class HxlButtonContainer extends HxlDialog {
 		for ( Button in buttons ) {
 			if ( alignment == HORIZONTAL ) {
 				if ( count > 0 ) X += spacing;
-				Y = (height / 2);
+				Y = (height / 2) - (Button.height / 2);
 				Button.x = X;
 				Button.y = Y;
 				X += Button.width;
 			} else {
 				if ( count > 0 ) Y += spacing;
-				X = (width / 2);
+				X = (width / 2) - (Button.width / 2);
 				Button.y = Y;
 				Button.x = X;
 				Y += Button.height;

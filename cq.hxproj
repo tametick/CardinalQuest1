@@ -5,11 +5,11 @@
     <movie disabled="False" />
     <movie input="" />
     <movie path="bin\cq.swf" />
-    <movie fps="30" />
+    <movie fps="60" />
     <movie width="640" />
     <movie height="480" />
-    <movie version="9" />
-    <movie background="#FFFFFF" />
+    <movie version="10" />
+    <movie background="#000000" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
@@ -19,7 +19,7 @@
   <build>
     <option directives="" />
     <option flashStrict="True" />
-    <option mainClass="generators.BSP" />
+    <option mainClass="cq.CqMain" />
     <option enabledebug="True" />
     <option additional="" />
   </build>
@@ -42,7 +42,7 @@
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>
-    <!-- example: <asset path="..." id="..." update="..." glyphs="..." mode="..." place="..." sharepoint="..." /> -->
+    <asset path="rsrc\cq\resources.swf" />
   </library>
   <!-- Paths to exclude from the Project Explorer tree -->
   <hiddenPaths>
