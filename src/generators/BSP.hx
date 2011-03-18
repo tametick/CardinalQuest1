@@ -35,7 +35,13 @@ class BSP
 		var maxHeight = y1 - y0;
 		
 		var width = HxlUtil.randomIntInRange(Math.floor(maxWidth/3), maxWidth);
-		var height = HxlUtil.randomIntInRange(Math.floor(maxWidth/3), maxHeight);
+		var height = HxlUtil.randomIntInRange(Math.floor(maxWidth / 3), maxHeight);
+		
+		if (width < minRoomWidth)
+			width = minRoomWidth;
+		
+		if (height < minRoomHeight)
+			height = minRoomHeight;
 				
 		return new Room(x0, y0, x0+width, y0+height);
 	}
@@ -83,7 +89,7 @@ class BSP
 				rooms.push(room);
 			
 			// add rooms in right submap
-			for (room in getRoomsInArea(x0 + splitXShift, y0, x1, y1))
+			for (room in getRoomsInArea(x0 + splitXShift+1, y0, x1, y1))
 				rooms.push(room);				
 		} else {
 			// split vertically
@@ -94,7 +100,7 @@ class BSP
 				rooms.push(room);
 			
 			// add rooms in lower submap
-			for (room in getRoomsInArea(x0, y0+splitYShift, x1, y1))
+			for (room in getRoomsInArea(x0, y0+splitYShift+1, x1, y1))
 				rooms.push(room);
 		}
 		
