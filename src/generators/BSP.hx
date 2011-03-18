@@ -89,29 +89,40 @@ class BSP
 			// choose randomly if both are big
 			horizontalSplit = Math.random() < 0.5;
 		
-			
 		if(horizontalSplit){
 			// split horizontaly
 			var splitXShift = HxlUtil.randomIntInRange(minRoomWidth, width - minRoomWidth);
+			var leftSubMap = createRoomsInArea(x0, y0, x0 + splitXShift, y1, corridors);
+			var rightSubMap = createRoomsInArea(x0 + splitXShift + 1, y0, x1, y1, corridors);
 			
 			// add rooms in left submap
-			for (room in createRoomsInArea(x0, y0, x0 + splitXShift, y1, corridors))
+			for (room in leftSubMap)
 				rooms.push(room);
 			
 			// add rooms in right submap
-			for (room in createRoomsInArea(x0 + splitXShift+1, y0, x1, y1, corridors))
-				rooms.push(room);				
+			for (room in rightSubMap)
+				rooms.push(room);
+				
+			// add corridors when possible
+			if(rightSubMap.length>0 && leftSubMap.length>0)
+				corridors.push(new Corridor(leftSubMap[0], rightSubMap[0]));
 		} else {
 			// split vertically
 			var splitYShift = HxlUtil.randomIntInRange(minRoomHeight, height - minRoomHeight);
+			var upperSubMap = createRoomsInArea(x0, y0, x1, y0 + splitYShift, corridors);
+			var lowerSubMap = createRoomsInArea(x0, y0 + splitYShift + 1, x1, y1, corridors);
 			
 			// add rooms in upper submap
-			for (room in createRoomsInArea(x0, y0, x1, y0+splitYShift, corridors))
+			for (room in upperSubMap)
 				rooms.push(room);
 			
 			// add rooms in lower submap
-			for (room in createRoomsInArea(x0, y0+splitYShift+1, x1, y1, corridors))
+			for (room in lowerSubMap)
 				rooms.push(room);
+
+			// add corridors when possible
+			if(upperSubMap.length>0 && lowerSubMap.length>0)
+				corridors.push(new Corridor(upperSubMap[0], lowerSubMap[0]));
 		}
 		
 		return rooms;
@@ -136,6 +147,8 @@ class BSP
 		for (corridor in corridors)
 			drawCorridor(map, corridor, wallIndex, floorIndex, doorIndex);
 		
+		trace(corridors.length);
+			
 		return map;
 	}
 	
