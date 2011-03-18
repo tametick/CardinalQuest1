@@ -1,7 +1,16 @@
 package generators;
 import haxel.HxlUtil;
 
-class Room {
+private class Point {
+	public var x:Int;
+	public var y:Int;
+	public function new(x:Int, y:Int) {
+		this.x = x;
+		this.y = y;
+	}
+}
+
+private class Room {
 	public var x0:Int;
 	public var x1:Int; 
 	public var y0:Int;
@@ -20,9 +29,13 @@ class Room {
 	public function getHeight():Int {
 		return y1 - y0;
 	}
+	
+	public function getCenter():Point {
+		return new Point(Math.round(x0 + getWidth() / 2), Math.round(y0 + getHeight() / 2));
+	}
 }
 
-class Corridor {
+private class Corridor {
 	public var r0:Room;
 	public var r1:Room;
 	
