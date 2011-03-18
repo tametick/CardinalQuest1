@@ -24,8 +24,11 @@ class Room {
 
 class BSP 
 {
-	public static var minWidth = 5;
-	public static var minHeight = 5;
+	public static var minRoomWidth = 3;
+	public static var minRoomHeight = 3;
+	// needs to be >=2*min
+	public static var maxRoomWidth = 8;
+	public static var maxRoomHeight = 8;
 	
 	static function createRandomRoomInRect(x0:Int, y0:Int, x1:Int, y1:Int):Room {
 		var maxWidth = x1 - x0;
@@ -49,10 +52,51 @@ class BSP
 	
 	static function getRoomsInArea(x0:Int, y0:Int, x1:Int, y1:Int):Array<Room> {
 		var rooms = new Array<Room>();
+		var width = x1 - x0;
+		var height = y1 - y0;
 		
-		// todo
-		rooms.push(createRandomRoomInRect(10, 10, 20, 20));
-		rooms.push(createRandomRoomInRect(20, 20, 29, 29));
+		if (width <= maxRoomWidth && height <= maxRoomHeight) {
+			if (width >= minRoomHeight && height >= minRoomHeight)
+				// add 1 room if possible, 0 if not
+				rooms.push(createRandomRoomInRect(x0, y0, x1, y1));
+			return rooms;
+		}
+			
+		
+		var horizontalSplit:Bool;
+		// if one axis is already small automatically split it on the other one
+		if (width < maxRoomWidth)
+			horizontalSplit = false;
+		else if (height < maxRoomHeight)
+			horizontalSplit = true;
+		else 
+			// choose randomly if both are big
+			horizontalSplit = Math.random() < 0.5;
+		
+			
+		if(horizontalSplit){
+			// split horizontaly
+			var splitXShift = HxlUtil.randomIntInRange(minRoomWidth, width - minRoomWidth);
+			
+			// add rooms in left submap
+			for (room in getRoomsInArea(x0, y0, x0 + splitXShift, y1))
+				rooms.push(room);
+			
+			// add rooms in right submap
+			for (room in getRoomsInArea(x0 + splitXShift, y0, x1, y1))
+				rooms.push(room);				
+		} else {
+			// split vertically
+			var splitYShift = HxlUtil.randomIntInRange(minRoomHeight, height - minRoomHeight);
+			
+			// add rooms in upper submap
+			for (room in getRoomsInArea(x0, y0, x0, y0+splitYShift))
+				rooms.push(room);
+			
+			// add rooms in lower submap
+			for (room in getRoomsInArea(x0, y0+splitYShift, x1, y1))
+				rooms.push(room);
+		}
 		
 		return rooms;
 	}
@@ -79,8 +123,9 @@ class BSP
 	}
 	
 	public static function main() {
-		var map = getBSPMap(30, 30, 0, 1, 5);
-		for (y in 0...30)
+		var mapSize = 32;
+		var map = getBSPMap(mapSize, mapSize, 0, 1, 5);
+		for (y in 0...mapSize)
 			trace(map[y]);
 	}
 }
