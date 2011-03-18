@@ -72,7 +72,19 @@ class HxlText extends HxlSprite {
 		//solid = false;
 		calcFrame();
 	}
-		
+	
+	public function setProperties(?Multiline:Bool=true, ?Wordwrap:Bool=true, ?Selectable:Bool=false) {
+		var tf:TextFormat = dtfCopy();
+		tf.selectable = Multiline;
+		tf.multiline = Wordwrap;
+		tf.wordWrap = Selectable;
+		_tf.defaultTextFormat = tf;
+		_tf.setTextFormat(tf);
+		_regen = true;
+		calcFrame();
+		return this;
+	}
+
 	/**
 	 * You can use this if you have a lot of text parameters
 	 * to set instead of the individual properties.
