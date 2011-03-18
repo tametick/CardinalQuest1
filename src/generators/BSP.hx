@@ -22,13 +22,23 @@ class Room {
 	}
 }
 
+class Corridor {
+	public var r0:Room;
+	public var r1:Room;
+	
+	public function new(r0:Room, r1:Room) {
+		this.r0 = r0;
+		this.r1 = r1;
+	}
+}
+
 class BSP 
 {
 	public static var minRoomWidth = 3;
 	public static var minRoomHeight = 3;
 	// needs to be >=2*min
-	public static var maxRoomWidth = 8;
-	public static var maxRoomHeight = 8;
+	public static var maxRoomWidth = 9;
+	public static var maxRoomHeight = 9;
 	
 	static function createRandomRoomInRect(x0:Int, y0:Int, x1:Int, y1:Int):Room {
 		var maxWidth = x1 - x0;
@@ -46,17 +56,17 @@ class BSP
 		return new Room(x0, y0, x0+width, y0+height);
 	}
 	
-	static function insertRoom(map:Array<Array<Int>>, room:Room, wallIndex:Int, floorIndex:Int) {
+	static function drawRoom(map:Array<Array<Int>>, room:Room, wallIndex:Int, floorIndex:Int) {
 		for (y in room.y0...room.y1)
 			for (x in room.x0...room.x1)
 				map[y][x] = floorIndex;
 	}
 	
-	static function createCorridor(map:Array<Array<Int>>, room1:Room, room2:Room, wallIndex:Int, floorIndex:Int, doorIndex:Int) {
+	static function drawCorridor(map:Array<Array<Int>>, corridor:Corridor, wallIndex:Int, floorIndex:Int, doorIndex:Int) {
 		
 	}
 	
-	static function getRoomsInArea(x0:Int, y0:Int, x1:Int, y1:Int):Array<Room> {
+	static function createRoomsInArea(x0:Int, y0:Int, x1:Int, y1:Int, corridors:Array<Corridor>):Array<Room> {
 		var rooms = new Array<Room>();
 		var width = x1 - x0;
 		var height = y1 - y0;
@@ -85,22 +95,22 @@ class BSP
 			var splitXShift = HxlUtil.randomIntInRange(minRoomWidth, width - minRoomWidth);
 			
 			// add rooms in left submap
-			for (room in getRoomsInArea(x0, y0, x0 + splitXShift, y1))
+			for (room in createRoomsInArea(x0, y0, x0 + splitXShift, y1, corridors))
 				rooms.push(room);
 			
 			// add rooms in right submap
-			for (room in getRoomsInArea(x0 + splitXShift+1, y0, x1, y1))
+			for (room in createRoomsInArea(x0 + splitXShift+1, y0, x1, y1, corridors))
 				rooms.push(room);				
 		} else {
 			// split vertically
 			var splitYShift = HxlUtil.randomIntInRange(minRoomHeight, height - minRoomHeight);
 			
 			// add rooms in upper submap
-			for (room in getRoomsInArea(x0, y0, x1, y0+splitYShift))
+			for (room in createRoomsInArea(x0, y0, x1, y0+splitYShift, corridors))
 				rooms.push(room);
 			
 			// add rooms in lower submap
-			for (room in getRoomsInArea(x0, y0+splitYShift+1, x1, y1))
+			for (room in createRoomsInArea(x0, y0+splitYShift+1, x1, y1, corridors))
 				rooms.push(room);
 		}
 		
@@ -115,15 +125,16 @@ class BSP
 				map[y].push(wallIndex);
 		}
 		
-		var rooms = getRoomsInArea(1, 1, width - 2, height - 2);
+		var corridors = new Array<Corridor>();
+		var rooms = createRoomsInArea(1, 1, width - 2, height - 2, corridors);
 
 		// insert rooms into map
 		for (room in rooms)
-			insertRoom(map, room, wallIndex, floorIndex);
+			drawRoom(map, room, wallIndex, floorIndex);
 		
-		// create corridors between rooms
-		for (r in 0...rooms.length-2)
-			createCorridor(map, rooms[r], rooms[r + 1], wallIndex, floorIndex, doorIndex);
+		// insert corridors into map
+		for (corridor in corridors)
+			drawCorridor(map, corridor, wallIndex, floorIndex, doorIndex);
 		
 		return map;
 	}
