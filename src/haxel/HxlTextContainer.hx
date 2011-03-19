@@ -16,6 +16,7 @@ class HxlTextContainer extends HxlDialog {
 	public var maxLines:Int;
 	var fadeEffect:Bool;
 	var isFading:Bool;
+	var reverseOrder:Bool;
 
 	/**
 	 * Amount of space (in pixels) between edges of container and text.
@@ -40,6 +41,7 @@ class HxlTextContainer extends HxlDialog {
 		scrollTimer = new HxlTimer(scrollRate);
 		fadeEffect = true;
 		isFading = false;
+		reverseOrder = true;
 	}
 
 	public override function update():Void {
@@ -95,14 +97,27 @@ class HxlTextContainer extends HxlDialog {
 	}
 
 	function updateLayout():Void {
-		var Y:Float = y + _padding;
-		var X:Float = x + _padding;
-		var count:Int = 0;
-		for( line in lines ) {
-			if ( count > 0 ) Y += fontSize + lineSpacing;
-			line.x = X;
-			line.y = Y;
-			count++;
+		if ( !reverseOrder  ) {
+			var Y:Float = y + _padding;
+			var X:Float = x + _padding;
+			var count:Int = 0;
+			for( line in lines ) {
+				if ( count > 0 ) Y += fontSize + lineSpacing;
+				line.x = X;
+				line.y = Y;
+				count++;
+			}
+		} else {
+			var Y:Float = y + _padding;
+			var X:Float = x + _padding;
+			var count:Int = 0 ;
+			var lineNum:Int = lines.length - 1;
+			for ( line in lines ) {
+				line.x = X;
+				line.y = Y + (lineNum * fontSize);
+				count++;
+				lineNum--;
+			}
 		}
 		reset(x, y);
 	}
