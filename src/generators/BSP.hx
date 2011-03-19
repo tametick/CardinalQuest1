@@ -118,9 +118,9 @@ class BSP
 			while (x < end.x) {
 				var neighbours = numberOfNeighbours(map, x, start.y - 1, floorIndex);
 				if (neighbours == 1 || neighbours == 2)
-					map[start.y - 1][x] = 7;
+					map[start.y - 1][x] = doorIndex;
 				else if(map[start.y-1][x]==wallIndex)
-					map[start.y-1][x]= 8;
+					map[start.y-1][x]= -1;
 				x += step;
 			}
 		} else {
@@ -129,9 +129,9 @@ class BSP
 			while (y < end.y) {
 				var neighbours = numberOfNeighbours(map, start.x - 1, y, floorIndex);
 				if (neighbours == 1 || neighbours == 2)
-					map[y][start.x-1] = 7;
+					map[y][start.x-1] = doorIndex;
 				else if(map[y][start.x-1]==wallIndex)
-					map[y][start.x-1] = 8;
+					map[y][start.x-1] = -1;
 				y += step;
 			}
 		}
@@ -217,6 +217,12 @@ class BSP
 		// insert corridors into map
 		for (corridor in corridors)
 			drawCorridor(map, corridor, wallIndex, floorIndex, doorIndex);
+			
+		// mark corridors as floor
+		for (y in 0...map.length)
+			for (x in 0...map[0].length)
+				if ( map[y][x] == -1 )
+					map[y][x] = floorIndex;
 					
 		return map;
 	}
