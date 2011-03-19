@@ -3,12 +3,14 @@ import haxel.HxlState;
 import haxel.HxlButton;
 import haxel.HxlButtonContainer;
 import haxel.HxlTextContainer;
+import haxel.HxlSlidingDialog;
 
 class GameState extends HxlState
 {
 
 	var textcon:HxlTextContainer;
-
+	var sliding:HxlSlidingDialog;
+	
 	public override function create():Void {
 		super.create();
 
@@ -32,11 +34,19 @@ class GameState extends HxlState
 		textcon.addText("Boom goes the dynamite!");
 		textcon.addText("test?");
 		textcon.addText("Button 3..");
-
+		
+		sliding = new HxlSlidingDialog( 175, 0, 290, 400);
+		sliding.setBackgroundColor(0xffddbcbc);
+		add(sliding);
+		//sliding.show();
+		
 		var self = this;
 		but3.setCallback(function() {
 			self.testfunc();
 		});
+		
+		but2.setCallback(sliding.show);
+		but1.setCallback(sliding.hide);
 	}
 
 	public function testfunc() {
