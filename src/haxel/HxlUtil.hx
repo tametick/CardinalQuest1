@@ -334,6 +334,10 @@ class HxlUtil {
 				destMap[y][x] = srcMap[y][x];
 	}
 	
+	public static function getRandomElement<T>(arr:Array<T>):T {
+		return arr[randomInt(arr.length)];
+	}
+	
 	public static function countTiles(width:Int, height:Int, map:Array<Array<Int>>, tilesToCount:Array<Int>):Int {
 		var n = 0;
 		for (y in 1...height-1)

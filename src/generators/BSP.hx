@@ -232,6 +232,41 @@ class BSP
 		return rooms;
 	}
 	
+	static function isValidCorridor(r0:Room, r1:Room):Bool {
+		if (r0 == r1){ 
+			return false;
+		}
+		
+		if (r0.getCenter().x <= r1.getCenter().x && r0.getCenter().y <= r1.getCenter().y) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	static function getRandomCorridors(rooms:Array<Room>, numberOfCorridors):Array<Corridor> {
+		var corridors = new Array<Corridor>();
+		
+		var r = 0;
+		while (r < numberOfCorridors) {
+			var r0 = HxlUtil.getRandomElement(rooms);
+			var r1 = r0;
+			
+			var roomsTried = 0;
+			while (!isValidCorridor(r0,r1) && roomsTried<rooms.length) {
+				r1 = HxlUtil.getRandomElement(rooms);
+				roomsTried++;
+			}
+
+			if(roomsTried<rooms.length) {
+				corridors.push(new Corridor(r0, r1));
+				r++;
+			}
+		}
+		
+		return corridors;
+	}
+	
 	public static function getBSPMap(width:Int, height:Int, wallIndex:Int, floorIndex:Int, doorIndex:Int):Array<Array<Int>> {
 		var map = new Array<Array<Int>>();
 		for (y in 0...height) {
@@ -247,10 +282,13 @@ class BSP
 		for (room in rooms)
 			drawRoom(map, room, wallIndex, floorIndex);
 		
+		// add random loops
+		corridors = corridors.concat(getRandomCorridors(rooms, Math.round(rooms.length/2)));
+			
 		// insert corridors into map
 		for (corridor in corridors)
 			drawCorridor(map, corridor, wallIndex, floorIndex, doorIndex);
-			
+						
 		// mark corridors as floor
 		for (y in 0...map.length)
 			for (x in 0...map[0].length)
