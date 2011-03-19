@@ -104,35 +104,68 @@ class BSP
 	}
 	
 	static function drawCorridor(map:Array<Array<Int>>, corridor:Corridor, wallIndex:Int, floorIndex:Int, doorIndex:Int) {
-		// only draws 
-		
 		var start = corridor.r0.getCenter();
 		var end = corridor.r1.getCenter();
 		
-		var dx = Math.abs(end.x - start.x);
-		var dy = Math.abs(end.y - start.y);
+		var dx = end.x - start.x;
+		var dy = end.y - start.y;
+		var isZ = false;
 		
-		if (dx > dy) {
+		if (Math.abs(dx) > Math.abs(dy)) {
+			if (dy != 0)
+				isZ = true;
+			
 			var step = dx < 0? -1:1;
 			var x = start.x;
+			var y = start.y - 1;
+			
+			var stepsTaken = 0;
 			while (x < end.x) {
-				var neighbours = numberOfNeighbours(map, x, start.y - 1, floorIndex);
+				var neighbours = numberOfNeighbours(map, x, y - 1, floorIndex);
 				if (neighbours == 1 || neighbours == 2)
-					map[start.y - 1][x] = doorIndex;
-				else if(map[start.y-1][x]==wallIndex)
-					map[start.y-1][x]= -1;
+					map[y][x] = doorIndex;
+				else if(map[y][x]==wallIndex)
+					map[y][x] = -1;
+					
+				if (isZ && stepsTaken >= dx / 2 - 1) {
+					var stepY = dy < 0? -1:1;
+					while (y != end.y) {
+						y += stepY;
+						if(map[y][x]==wallIndex)
+							map[y][x] = -1;
+					}
+				}
+					
 				x += step;
+				stepsTaken++;
 			}
 		} else {
+			if (dx != 0)
+				isZ = true;
+				
 			var step = dy < 0? -1:1;
 			var y = start.y;
+			var x = start.x - 1;
+			
+			var stepsTaken = 0;
 			while (y < end.y) {
-				var neighbours = numberOfNeighbours(map, start.x - 1, y, floorIndex);
+				var neighbours = numberOfNeighbours(map, x, y, floorIndex);
 				if (neighbours == 1 || neighbours == 2)
-					map[y][start.x-1] = doorIndex;
-				else if(map[y][start.x-1]==wallIndex)
-					map[y][start.x-1] = -1;
+					map[y][x] = doorIndex;
+				else if(map[y][x]==wallIndex)
+					map[y][x] = -1;
+				
+				if (isZ && stepsTaken >= dy / 2 -1) {
+					var stepX = dx < 0? -1:1;
+					while (x != end.x) {
+						x += stepX;
+						if(map[y][x]==wallIndex)
+							map[y][x] = -1;
+					}
+				}	
+					
 				y += step;
+				stepsTaken++;
 			}
 		}
 	}
