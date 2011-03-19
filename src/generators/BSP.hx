@@ -79,13 +79,35 @@ class BSP
 				map[y][x] = floorIndex;
 	}
 	
+	private static function inBounds(width:Int, height:Int, x:Int, y:Int) {
+		return x < width && y < height && x >= 0 && y >= 0;
+	}
+	
+	private static function numberOfNeighbours(map:Array<Array<Int>>, x:Int, y:Int, neighbourIndex:Int):Int {
+		var neighbours = 0;
+		var height = map.length;
+		var width = map[0].length;
+		
+		if (map[y][x] == neighbourIndex)
+			neighbours++;
+			
+		if (inBounds(width, height, x + 1, y) && map[y][x + 1] == neighbourIndex)
+			neighbours++;
+		if (inBounds(width, height, x , y+1) && map[y+1][x] == neighbourIndex)
+			neighbours++;
+		if (inBounds(width, height, x - 1, y) && map[y][x - 1] == neighbourIndex)
+			neighbours++;
+		if (inBounds(width, height, x , y-1) && map[y-1][x] == neighbourIndex)
+			neighbours++;
+			
+		return neighbours;
+	}
+	
 	static function drawCorridor(map:Array<Array<Int>>, corridor:Corridor, wallIndex:Int, floorIndex:Int, doorIndex:Int) {
 		// only draws 
 		
 		var start = corridor.r0.getCenter();
 		var end = corridor.r1.getCenter();
-		
-		trace("start: " + start + ", end: " + end);
 		
 		var dx = Math.abs(end.x - start.x);
 		var dy = Math.abs(end.y - start.y);
@@ -94,14 +116,22 @@ class BSP
 			var step = dx < 0? -1:1;
 			var x = start.x;
 			while (x < end.x) {
-				map[start.y-1][x]= floorIndex;
+				var neighbours = numberOfNeighbours(map, x, start.y - 1, floorIndex);
+				if (neighbours == 1 || neighbours == 2)
+					map[start.y - 1][x] = 7;
+				else if(map[start.y-1][x]==wallIndex)
+					map[start.y-1][x]= 8;
 				x += step;
 			}
 		} else {
 			var step = dy < 0? -1:1;
 			var y = start.y;
 			while (y < end.y) {
-				map[y][start.x-1] = floorIndex;
+				var neighbours = numberOfNeighbours(map, start.x - 1, y, floorIndex);
+				if (neighbours == 1 || neighbours == 2)
+					map[y][start.x-1] = 7;
+				else if(map[y][start.x-1]==wallIndex)
+					map[y][start.x-1] = 8;
 				y += step;
 			}
 		}
@@ -187,9 +217,7 @@ class BSP
 		// insert corridors into map
 		for (corridor in corridors)
 			drawCorridor(map, corridor, wallIndex, floorIndex, doorIndex);
-		
-		trace(corridors.length);
-			
+					
 		return map;
 	}
 	
