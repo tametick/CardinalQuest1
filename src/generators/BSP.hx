@@ -8,6 +8,10 @@ private class Point {
 		this.x = x;
 		this.y = y;
 	}
+	
+	public function toString() {
+		return "<" + x + "," + y + ">";
+	}
 }
 
 private class Room {
@@ -76,7 +80,31 @@ class BSP
 	}
 	
 	static function drawCorridor(map:Array<Array<Int>>, corridor:Corridor, wallIndex:Int, floorIndex:Int, doorIndex:Int) {
+		// only draws 
 		
+		var start = corridor.r0.getCenter();
+		var end = corridor.r1.getCenter();
+		
+		trace("start: " + start + ", end: " + end);
+		
+		var dx = Math.abs(end.x - start.x);
+		var dy = Math.abs(end.y - start.y);
+		
+		if (dx > dy) {
+			var step = dx < 0? -1:1;
+			var x = start.x;
+			while (x < end.x) {
+				map[start.y-1][x]= floorIndex;
+				x += step;
+			}
+		} else {
+			var step = dy < 0? -1:1;
+			var y = start.y;
+			while (y < end.y) {
+				map[y][start.x-1] = floorIndex;
+				y += step;
+			}
+		}
 	}
 	
 	static function createRoomsInArea(x0:Int, y0:Int, x1:Int, y1:Int, corridors:Array<Corridor>):Array<Room> {
@@ -90,7 +118,7 @@ class BSP
 				rooms.push(createRandomRoomInRect(x0, y0, x1, y1));
 			return rooms;
 		}
-			
+
 		
 		var horizontalSplit:Bool;
 		// if one axis is already small automatically split it on the other one
