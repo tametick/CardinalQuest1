@@ -1,7 +1,7 @@
 package cq;
 import data.AbstractConfiguration;
 
-class Configuration extends AbstractConfiguration
+class CqConfiguration extends Configuration
 {
 
 	public static function getLevelWidth(level:Int) { 

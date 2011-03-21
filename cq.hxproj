@@ -19,7 +19,7 @@
   <build>
     <option directives="" />
     <option flashStrict="True" />
-    <option mainClass="cq.CqMain" />
+    <option mainClass="cq.Main" />
     <option enabledebug="True" />
     <option additional="" />
   </build>
@@ -37,8 +37,8 @@
     <compile path="src\world\Player.hx" />
     <compile path="src\world\Tile.hx" />
     <compile path="src\world\World.hx" />
-    <compile path="src\data\AbstractConfiguration.hx" />
-    <compile path="src\data\AbstractRegistery.hx" />
+    <compile path="src\data\Configuration.hx" />
+    <compile path="src\data\Registery.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

@@ -9,7 +9,7 @@ class SpriteEffects extends Bitmap { public function new(){super();} }
 class SpriteItems extends Bitmap { public function new(){super();} }
 class SpriteMonsters extends Bitmap { public function new(){super();} }
 class SpritePlayer extends Bitmap { public function new(){super();} }
-class SpriteTilesSmall extends Bitmap { public function new(){super();} }
+class SpriteTiles extends Bitmap { public function new(){super();} }
 class SpriteCorpses extends Bitmap { public function new(){super();} }
 
 class Resources 

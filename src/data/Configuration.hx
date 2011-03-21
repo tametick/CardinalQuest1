@@ -1,6 +1,6 @@
 package data;
 
-class AbstractConfiguration 
+class Configuration 
 {
 	public static var tileSize;
 	public static function getLevelWidth(level:Int):Int { return -1; }

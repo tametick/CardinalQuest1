@@ -3,27 +3,30 @@ package world;
 import haxel.HxlSprite;
 import haxel.HxlPoint;
 
+import data.Registery;
 
 interface GameObject {
-	var world:World;
 	var hp:Int;
 	var maxHp:Int;
 	
-	var tilePos(getTilePos, setTilePos) : HxlPoint;
+	var tilePos(getTilePos, setTilePos):HxlPoint;
 	function getTilePos():HxlPoint;
-	function setTilePos(TilePos:HxlPoint):HxlPoint
+	function setTilePos(TilePos:HxlPoint):HxlPoint;
 }
 
-class GameObjectImpl extends HxlSprite
+class GameObjectImpl extends HxlSprite, implements GameObject
 {
+	public var hp:Int;
+	public var maxHp:Int;	
+	public var tilePos(getTilePos, setTilePos):HxlPoint;
+	
 	var _tilePos:HxlPoint;
 	
-	public function new(world:AbstractWorld, x:Float, y:Float, ?hp:Int=1) 
+	public function new(x:Float, y:Float, ?hp:Int=1) 
 	{
 		super(x, y);
-		world = world;
 		_tilePos = new HxlPoint();
-		hp = hp;
+		this.hp = hp;
 		maxHp = hp;
 		zIndex = 1;
 	}
@@ -37,14 +40,14 @@ class GameObjectImpl extends HxlSprite
 		
 		// remove from old tile
 		if (_tilePos != null) {
-			var tile = world.currentLevel.getTile(_tilePos.x, _tilePos.y);
+			var tile = Registery.world.currentLevel.getTile(_tilePos.x, _tilePos.y);
 			if(tile!=null)
 				tile.actor = null;
 		}
 		
 		// add to new tile
 		_tilePos = TilePos;
-		world.currentLevel.getTile(_tilePos.x, _tilePos.y).actor = this;
+		Registery.world.currentLevel.getTile(_tilePos.x, _tilePos.y).actor = this;
 		return TilePos;
 	}
 }
