@@ -35,7 +35,7 @@ class UITestState extends HxlState
 		textcon.addText("test?");
 		textcon.addText("Button 3..");
 		
-		sliding = new HxlSlidingDialog( 175, 0, 290, 400);
+		sliding = new HxlSlidingDialog( 84, 0, 472, 400);
 		sliding.setBackgroundColor(0xffddbcbc);
 		add(sliding);
 		//sliding.show();

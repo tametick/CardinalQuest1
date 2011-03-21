@@ -93,7 +93,6 @@ class HxlButtonContainer extends HxlDialog {
 					Y -= spacing;
 				}
 			}
-			HxlGraphics.log("Button width:"+Button.width+", height:"+Button.height+", x:"+Button.x+", y:"+Button.y);
 			count++;
 		}
 	}
