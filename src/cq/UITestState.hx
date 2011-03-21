@@ -4,6 +4,8 @@ import haxel.HxlButton;
 import haxel.HxlButtonContainer;
 import haxel.HxlTextContainer;
 import haxel.HxlSlidingDialog;
+import haxel.HxlSprite;
+import haxel.HxlGradient;
 
 class UITestState extends HxlState
 {
@@ -35,7 +37,7 @@ class UITestState extends HxlState
 		textcon.addText("test?");
 		textcon.addText("Button 3..");
 		
-		sliding = new HxlSlidingDialog( 84, 0, 472, 400);
+		sliding = new HxlSlidingDialog( 84, 0, 472, 480);
 		sliding.setBackgroundColor(0xffddbcbc);
 		add(sliding);
 		//sliding.show();
@@ -47,6 +49,11 @@ class UITestState extends HxlState
 		
 		but2.setCallback(sliding.show);
 		but1.setCallback(sliding.hide);
+
+		var grad1:HxlSprite = HxlGradient.Rect(64, 64, [0xff0000, 0x0000ff, 0x00ff00], null, null, Math.PI/2);
+		grad1.x = 300;
+		grad1.y = 200;
+		add(grad1);
 	}
 
 	public function testfunc() {

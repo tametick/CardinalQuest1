@@ -50,7 +50,7 @@ class HxlSlidingDialog extends HxlDialog
 	}
 	
 	public function show(?ShowCallback:Dynamic=null):Void {
-		if ( isDropping || isDropped ) return;
+		if ( isDropped ) return;
 		visible = true;
 		active = true;
 		var duration:Float = dropSpeed;
@@ -100,6 +100,7 @@ class HxlSlidingDialog extends HxlDialog
 			}
 		}
 		isDropping = true;
+		isDropped = false;
 		var targetX:Float = x;
 		var targetY:Float = y;
 		switch (direction) {
