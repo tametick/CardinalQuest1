@@ -30,7 +30,7 @@ class CqGame extends HxlGame
 	
 	public function new() 
 	{
-		super(640, 480, GameState, 1, "Geo");
+		super(640, 480, UITestState, 1, "Geo");
 		HxlState.bgColor = 0xFF000000;
 	}
 }

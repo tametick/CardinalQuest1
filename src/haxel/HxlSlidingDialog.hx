@@ -14,6 +14,8 @@ class HxlSlidingDialog extends HxlDialog
 	var dropSpeed:Float;
 	var isDropping:Bool;
 	var isDropped:Bool;
+	var dropX:Float;
+	var dropY:Float;
 	
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0)
 	{
@@ -39,7 +41,8 @@ class HxlSlidingDialog extends HxlDialog
 			case RIGHT:
 				x = HxlGraphics.width + width;
 		}
-		reset(x, y);		
+		dropX = x;
+		dropY = y;
 	}
 	
 	public function show():Void {
@@ -55,7 +58,6 @@ class HxlSlidingDialog extends HxlDialog
 			trace(duration);
 		}
 		isDropping = true;
-		//Actuate.tween(this, duration, { y: 0 } ).onComplete(shown);
 		Actuate.update(posTween, duration, { X: x, Y: y }, { X: x, Y: 0 } ).onComplete(shown);
 	}
 	
@@ -64,22 +66,18 @@ class HxlSlidingDialog extends HxlDialog
 		active = true;
 		var duration:Float = dropSpeed;
 		isDropping = true;
-		//Actuate.tween(this, duration, { y: -height } ).onComplete(hidden);
 		Actuate.update(posTween, duration, { X: x, Y: y }, { X: x, Y: -height } ).onComplete(hidden);
 	}
 
 	private function posTween(params:Dynamic):Void {
-		x = params.X;
-		y = params.Y;
-		//reset(x, y);
-		HxlGraphics.log("X: " + x + ", Y: " + y);
+		dropX = params.X;
+		dropY = params.Y;
 	}
 	
 	private function shown() {
-		trace("x: " + x + ", y: " + y);
-		trace("width: " + width + ", height: " + height);
 		isDropping = false;
 		isDropped = true;
+		dropY = 0;
 	}
 	
 	private function hidden() {
@@ -87,5 +85,16 @@ class HxlSlidingDialog extends HxlDialog
 		isDropped = false;
 		visible = false;
 		active = false;
+		dropY = -height;
+	}
+
+	public override function update():Void {
+		saveOldPosition();
+		if ( x != dropX || y != dropY ) {
+			x = dropX;
+			y = dropY;
+		}
+		updateMotion();
+		updateMembers();
 	}
 }
