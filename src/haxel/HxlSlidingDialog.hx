@@ -16,6 +16,8 @@ class HxlSlidingDialog extends HxlDialog
 	var isDropped:Bool;
 	var dropX:Float;
 	var dropY:Float;
+	var showCallback:Dynamic;
+	var hideCallback:Dynamic;
 	
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0)
 	{
@@ -28,6 +30,8 @@ class HxlSlidingDialog extends HxlDialog
 		visible = false;
 		active = false;
 		setHiddenPosition();
+		showCallback = null;
+		hideCallback = null;
 	}
 	
 	private function setHiddenPosition():Void {
@@ -45,7 +49,7 @@ class HxlSlidingDialog extends HxlDialog
 		dropY = y;
 	}
 	
-	public function show():Void {
+	public function show(?ShowCallback:Dynamic=null):Void {
 		if ( isDropping || isDropped ) return;
 		visible = true;
 		active = true;
@@ -75,10 +79,11 @@ class HxlSlidingDialog extends HxlDialog
 			case RIGHT:
 				targetX = HxlGraphics.width - width;
 		}
+		if ( ShowCallback ) showCallback = ShowCallback;
 		Actuate.update(posTween, duration, { X: x, Y: y }, { X: targetX, Y: targetY } ).onComplete(shown);
 	}
 	
-	public function hide():Void {
+	public function hide(?HideCallback:Dynamic=null):Void {
 		if ( !visible ) return;
 		active = true;
 		var duration:Float = dropSpeed;
@@ -107,6 +112,7 @@ class HxlSlidingDialog extends HxlDialog
 			case RIGHT:
 				targetX = HxlGraphics.width + width;
 		}
+		if ( HideCallback ) hideCallback = HideCallback();
 		Actuate.update(posTween, duration, { X: x, Y: y }, { X: targetX, Y: targetY } ).onComplete(hidden);
 	}
 
@@ -128,6 +134,10 @@ class HxlSlidingDialog extends HxlDialog
 			case RIGHT:
 				dropX = HxlGraphics.width - width;
 		}
+		if ( showCallback ) {
+			showCallback();
+			showCallback = null;
+		}
 	}
 	
 	private function hidden() {
@@ -144,6 +154,10 @@ class HxlSlidingDialog extends HxlDialog
 				dropX = 0 - width;
 			case RIGHT:
 				dropX = HxlGraphics.width + width;
+		}
+		if ( hideCallback ) {
+			hideCallback();
+			hideCallback = null;
 		}
 	}
 
