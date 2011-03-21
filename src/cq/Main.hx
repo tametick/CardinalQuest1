@@ -2,7 +2,7 @@ package cq;
 import haxel.HxlPreloader;
 import haxel.HxlGame;
 import haxel.HxlState;
-import cq.Resources;
+import cq.CqResources;
 
 import flash.Lib;
 

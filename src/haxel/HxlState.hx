@@ -9,6 +9,9 @@ class HxlState extends Sprite {
 	public static var bgColor:Int;
 	public var defaultGroup:HxlGroup;
 
+	var initialized:Int;
+	//var loadingBox:LoadingBox;
+	
 	public function new() {
 
 		super();
@@ -25,6 +28,7 @@ class HxlState extends Sprite {
 	}
 
 	public function create():Void {
+		initialized = -1;
 	}
 	
 	public function add(obj:HxlObject):HxlObject {
@@ -49,6 +53,11 @@ class HxlState extends Sprite {
 
 	public function update():Void {
 		defaultGroup.update();
+		if ( initialized == -1 ) {
+//			loadingBox.visible = true;
+			initialized++;
+			return;
+		}
 	}
 
 	public function destroy():Void {

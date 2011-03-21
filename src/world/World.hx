@@ -5,4 +5,9 @@ class World
 	public var currentLevel:Level;
 	public var currentLevelIndex:Int;
 	var levels:Array<Level>;
+	
+	public function new() {
+		currentLevelIndex = 0;
+		levels = new Array<Level>();
+	}
 }

@@ -12,7 +12,7 @@ class SpritePlayer extends Bitmap { public function new(){super();} }
 class SpriteTiles extends Bitmap { public function new(){super();} }
 class SpriteCorpses extends Bitmap { public function new(){super();} }
 
-class Resources 
+class CqResources 
 {
 	
 }
