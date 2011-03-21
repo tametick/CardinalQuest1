@@ -49,12 +49,12 @@ class HxlButton extends HxlGroup {
 	 * @param	Y			The Y position of the button.
 	 * @param	Callback	The function to call whenever the button is clicked.
 	 */
-	public function new(X:Int,Y:Int,?Callback:Dynamic=null) {
+	public function new(X:Int,Y:Int,?Width:Int=100,?Height:Int=20,?Callback:Dynamic=null) {
 		super();
 		x = X;
 		y = Y;
-		width = 100;
-		height = 20;
+		width = Width;
+		height = Height;
 		_off = new HxlSprite().createGraphic(Math.floor(width),Math.floor(height),0xff7f7f7f);
 		//_off.solid = false;
 		add(_off,true);
@@ -72,6 +72,17 @@ class HxlButton extends HxlGroup {
 
 	public function setCallback(?Callback:Dynamic=null) {
 		_callback = Callback;
+	}
+
+	public function setBackgroundColor(ColorNormal:Int, ColorHover:Int, ?Width:Int=0, ?Height:Int=0):Void {
+		if ( Width > 0 ) width = Width;
+		if ( Height > 0 ) height = Height;
+		remove(_on, true);
+		remove(_off, true);
+		_on = new HxlSprite().createGraphic(Math.floor(width), Math.floor(height), ColorHover);
+		add(_on, true);
+		_off = new HxlSprite().createGraphic(Math.floor(width), Math.floor(height), ColorNormal);
+		add(_off, true);
 	}
 
 	/**

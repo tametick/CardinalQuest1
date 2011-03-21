@@ -14,9 +14,11 @@ class UITestState extends HxlState
 	public override function create():Void {
 		super.create();
 
-		var but1:HxlButton = new HxlButton(0, 0);
-		var but2:HxlButton = new HxlButton(0, 0);
-		var but3:HxlButton = new HxlButton(0, 0);
+		var but1:HxlButton = new HxlButton(0, 0, 64, 64);
+		var but2:HxlButton = new HxlButton(0, 0, 64, 64);
+		var but3:HxlButton = new HxlButton(0, 0, 64, 64);
+
+		//but1.setBackgroundColor(0xffaaaaaa, 0xffeeeeee, 64, 64);
 
 		var butcon:HxlButtonContainer = new HxlButtonContainer( 0, 0, 150, 480, HxlButtonContainer.VERTICAL, HxlButtonContainer.BOTTOM_TO_TOP, 20, 10);
 		butcon.addButton(but1);
