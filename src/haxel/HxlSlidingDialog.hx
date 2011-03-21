@@ -58,7 +58,19 @@ class HxlSlidingDialog extends HxlDialog
 			trace(duration);
 		}
 		isDropping = true;
-		Actuate.update(posTween, duration, { X: x, Y: y }, { X: x, Y: 0 } ).onComplete(shown);
+		var targetX:Float = x;
+		var targetY:Float = y;
+		switch (direction) {
+			case TOP:
+				targetY = 0;
+			case BOTTOM:
+				targetY = HxlGraphics.height - height;
+			case LEFT:
+				targetX = 0;
+			case RIGHT:
+				targetX = HxlGraphics.width - width;
+		}
+		Actuate.update(posTween, duration, { X: x, Y: y }, { X: targetX, Y: targetY } ).onComplete(shown);
 	}
 	
 	public function hide():Void {
@@ -66,7 +78,19 @@ class HxlSlidingDialog extends HxlDialog
 		active = true;
 		var duration:Float = dropSpeed;
 		isDropping = true;
-		Actuate.update(posTween, duration, { X: x, Y: y }, { X: x, Y: -height } ).onComplete(hidden);
+		var targetX:Float = x;
+		var targetY:Float = y;
+		switch (direction) {
+			case TOP:
+				targetY = 0 - height;
+			case BOTTOM:
+				targetY = HxlGraphics.height + height;
+			case LEFT:
+				targetX = 0 - width;
+			case RIGHT:
+				targetX = HxlGraphics.width + width;
+		}
+		Actuate.update(posTween, duration, { X: x, Y: y }, { X: targetX, Y: targetY } ).onComplete(hidden);
 	}
 
 	private function posTween(params:Dynamic):Void {
@@ -77,7 +101,16 @@ class HxlSlidingDialog extends HxlDialog
 	private function shown() {
 		isDropping = false;
 		isDropped = true;
-		dropY = 0;
+		switch (direction) {
+			case TOP:
+				dropY = 0;
+			case BOTTOM:
+				dropY = HxlGraphics.height - height;
+			case LEFT:
+				dropX = 0;
+			case RIGHT:
+				dropX = HxlGraphics.width - width;
+		}
 	}
 	
 	private function hidden() {
@@ -85,7 +118,16 @@ class HxlSlidingDialog extends HxlDialog
 		isDropped = false;
 		visible = false;
 		active = false;
-		dropY = -height;
+		switch (direction) {
+			case TOP:
+				dropY = 0 - height;
+			case BOTTOM:
+				dropY = HxlGraphics.height + height;
+			case LEFT:
+				dropX = 0 - width;
+			case RIGHT:
+				dropX = HxlGraphics.width + width;
+		}
 	}
 
 	public override function update():Void {
