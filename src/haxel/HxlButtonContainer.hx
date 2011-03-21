@@ -66,7 +66,7 @@ class HxlButtonContainer extends HxlDialog {
 
 				if ( order == LEFT_TO_RIGHT && count > 0 ) {
 					X += spacing;
-				} else {
+				} else if ( order == RIGHT_TO_LEFT ) {
 					X -= Button.width;
 				}
 
@@ -81,7 +81,7 @@ class HxlButtonContainer extends HxlDialog {
 			} else {
 				if ( order == TOP_TO_BOTTOM && count > 0 ) {
 					Y += spacing;
-				} else {
+				} else if ( order == BOTTOM_TO_TOP ) {
 					Y -= Button.height;
 				}
 				X = (width / 2) - (Button.width / 2);
@@ -93,6 +93,7 @@ class HxlButtonContainer extends HxlDialog {
 					Y -= spacing;
 				}
 			}
+			HxlGraphics.log("Button width:"+Button.width+", height:"+Button.height+", x:"+Button.x+", y:"+Button.y);
 			count++;
 		}
 	}

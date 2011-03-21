@@ -18,9 +18,7 @@ class UITestState extends HxlState
 		var but2:HxlButton = new HxlButton(0, 0, 64, 64);
 		var but3:HxlButton = new HxlButton(0, 0, 64, 64);
 
-		//but1.setBackgroundColor(0xffaaaaaa, 0xffeeeeee, 64, 64);
-
-		var butcon:HxlButtonContainer = new HxlButtonContainer( 0, 0, 150, 480, HxlButtonContainer.VERTICAL, HxlButtonContainer.BOTTOM_TO_TOP, 20, 10);
+		var butcon:HxlButtonContainer = new HxlButtonContainer( 0, 0, 84, 480, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
 		butcon.addButton(but1);
 		butcon.addButton(but2);
 		butcon.addButton(but3);
