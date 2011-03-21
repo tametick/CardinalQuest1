@@ -35,11 +35,11 @@ class HxlSlidingDialog extends HxlDialog
 			case TOP:
 				y = 0 - height;
 			case BOTTOM:
-				y = HxlGraphics.height + height;
+				y = HxlGraphics.height;
 			case LEFT:
 				x = 0 - width;
 			case RIGHT:
-				x = HxlGraphics.width + width;
+				x = HxlGraphics.width;
 		}
 		dropX = x;
 		dropY = y;
@@ -54,8 +54,13 @@ class HxlSlidingDialog extends HxlDialog
 			switch (direction) {
 				case TOP:
 					duration = (y / -height);
+				case BOTTOM:
+					duration = (y / HxlGraphics.height);
+				case LEFT:
+					duration = (x / -width);
+				case RIGHT:
+					duration = (x / HxlGraphics.width);
 			}
-			trace(duration);
 		}
 		isDropping = true;
 		var targetX:Float = x;
@@ -77,6 +82,18 @@ class HxlSlidingDialog extends HxlDialog
 		if ( !visible ) return;
 		active = true;
 		var duration:Float = dropSpeed;
+		if ( isDropping ) {
+			switch (direction) {
+				case TOP:
+					duration = (y / -height);
+				case BOTTOM:
+					duration = (y / HxlGraphics.height);
+				case LEFT:
+					duration = (x / -width);
+				case RIGHT:
+					duration = (x / HxlGraphics.width);
+			}
+		}
 		isDropping = true;
 		var targetX:Float = x;
 		var targetY:Float = y;
