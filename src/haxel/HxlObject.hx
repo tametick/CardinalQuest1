@@ -316,7 +316,7 @@ class HxlObject extends HxlRect {
 	public function update():Void {
 		updateMotion();
 		//updateFlickering();
-	}
+		}
 
 	/**
 	 * Override this function to draw graphics (see <code>HxlSprite</code>).

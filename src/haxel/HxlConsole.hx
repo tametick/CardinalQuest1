@@ -29,6 +29,7 @@ class HxlConsole extends Sprite {
 	var _memDisplay:TextField;
 	var _curFPS:Int;
 	var _rendersDisplay:TextField;
+	var _updatesDisplay:TextField;
 
 	var _Y:Float;
 	var _YT:Float;
@@ -109,11 +110,29 @@ class HxlConsole extends Sprite {
 		_rendersDisplay.defaultTextFormat = new TextFormat(DefaultFont,18,0xffffff,true,null,null,null,null,TextFormatAlign.RIGHT);
 		addChild(_rendersDisplay);
 
+		_updatesDisplay = new TextField();
+		_updatesDisplay.width = 100;
+		_updatesDisplay.x = tmp.width-100;
+		_updatesDisplay.height = 20;
+		_updatesDisplay.y = 40;
+		_updatesDisplay.multiline = true;
+		_updatesDisplay.wordWrap = true;
+		_updatesDisplay.selectable = false;
+		#if flash9
+		_updatesDisplay.embedFonts = true;
+		_updatesDisplay.antiAliasType = AntiAliasType.NORMAL;
+		_updatesDisplay.gridFitType = GridFitType.PIXEL;
+		#else
+		#end
+		_updatesDisplay.defaultTextFormat = new TextFormat(DefaultFont,18,0xffffff,true,null,null,null,null,TextFormatAlign.RIGHT);
+		addChild(_updatesDisplay);
+
+
 		_memDisplay = new TextField();
 		_memDisplay.width = 200;
 		_memDisplay.x = tmp.width-200;
 		_memDisplay.height = 20;
-		_memDisplay.y = 40;
+		_memDisplay.y = 60;
 		_memDisplay.multiline = true;
 		_memDisplay.wordWrap = true;
 		_memDisplay.selectable = false;
@@ -130,7 +149,7 @@ class HxlConsole extends Sprite {
 		_extraDisplay.width = 100;
 		_extraDisplay.x = tmp.width-100;
 		_extraDisplay.height = 128;
-		_extraDisplay.y = 60;
+		_extraDisplay.y = 80;
 		_extraDisplay.alpha = 0.5;
 		_extraDisplay.multiline = true;
 		_extraDisplay.wordWrap = true;
@@ -193,6 +212,8 @@ class HxlConsole extends Sprite {
 		_extraDisplay.text = up + "ms update\n" + rn + "ms render\n" + fx + "ms flixel\n" + (tt-fx) + "ms flash\n" + tt + "ms total";
 
 		_rendersDisplay.text = "Renders: "+HxlGraphics.numRenders;
+
+		_updatesDisplay.text = "Updates: "+HxlGraphics.numUpdates;
 
 		var memoryUsedInKb = (System.totalMemory/1024);
 		_memDisplay.text = "Memory: " + memoryUsedInKb + "kb"; 

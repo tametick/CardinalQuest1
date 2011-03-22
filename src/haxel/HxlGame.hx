@@ -390,6 +390,7 @@ class HxlGame extends Sprite {
 		}
 
 		// State updating
+		HxlGraphics.numUpdates = 0;
 		HxlObject._refreshBounds = false;
 		HxlGraphics.updateInput();
 		HxlGraphics.updateSounds();

@@ -31,6 +31,7 @@ class UITestState extends HxlState
 		textcon.setBackgroundColor(0xff333333);
 		textcon.setFormat("Geo", 18, 0xffffff, "left", 0x000000);
 		add(textcon);
+		textcon.setColorStep(true);
 		textcon.addText("Uh oh, whats that sound?");
 		textcon.addText("Tick tock, tick tock");
 		textcon.addText("Boom goes the dynamite!");

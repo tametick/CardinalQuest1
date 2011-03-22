@@ -130,6 +130,11 @@ class HxlGraphics {
 	public static var numRenders:Int = 0;
 
 	/**
+	 * Number of updates made for the current frame.
+	 **/
+	public static var numUpdates:Int = 0;	
+
+	/**
 	 * A handy container for a background music object.
 	 */
 	public static var music:HxlSound;

@@ -391,6 +391,7 @@ class HxlGroup extends HxlObject {
 				}
 				if (o.active) {
 					o.update();
+					HxlGraphics.numUpdates++;
 				}
 				/*
 				if (moved && o.solid) {
