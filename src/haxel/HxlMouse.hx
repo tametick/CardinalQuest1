@@ -43,7 +43,12 @@ class HxlMouse {
 	 * Helper for mouse visibility.
 	 */
 	var _out:Bool;
-	
+
+	/**
+	 * Current HxlSprite object being dragged (if any)
+	 **/
+	public var dragSprite:HxlSprite;
+
 	/**
 	 * Constructor.
 	 */

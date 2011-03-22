@@ -55,6 +55,9 @@ class UITestState extends HxlState
 		grad1.x = 300;
 		grad1.y = 200;
 		add(grad1);
+		grad1.toggleDrag(true);
+		grad1.onDragStart(function() { trace("Started dragging!"); });
+		grad1.onDragStop(function() { trace("Stopped dragging!"); });
 	}
 
 	public function testfunc() {

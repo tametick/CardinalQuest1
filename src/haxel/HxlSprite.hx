@@ -6,6 +6,7 @@ import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.geom.ColorTransform;
+import flash.events.MouseEvent;
 
 #if flash9
 import flash.display.BlendMode;
@@ -105,6 +106,16 @@ class HxlSprite extends HxlObject {
 	public var alphaVelocity:Float;
 	public var scaleVelocity:HxlPoint;
 
+	// Mouse drag functionality properties
+	var dragEnabled:Bool;
+	public var isDragging:Bool;
+	var dragStartPoint:HxlPoint;
+	var dragStopPoint:HxlPoint;
+	var dragOffset:HxlPoint;
+	var dragStartCallback:Dynamic;
+	var dragStopCallback:Dynamic;
+	var dragMoveCallback:Dynamic;
+
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:Class<Bitmap>=null) {
 		super();
 		x = X;
@@ -139,6 +150,12 @@ class HxlSprite extends HxlObject {
 		} else {
 			loadGraphic(SimpleGraphic);
 		}
+
+		dragEnabled = false;
+		isDragging = false;
+		dragStartCallback = null;
+		dragStopCallback = null;
+		dragMoveCallback = null;
 	}
 
 	/**
@@ -378,6 +395,12 @@ class HxlSprite extends HxlObject {
 		updateMotion();
 		updateAnimation();
 		//updateFlickering();
+		if ( dragEnabled && isDragging && HxlGraphics.mouse.dragSprite == this ) {
+			if ( dragOffset == null ) dragOffset = new HxlPoint(0,0);
+			x = HxlGraphics.mouse.x - dragOffset.x;
+			y = HxlGraphics.mouse.y - dragOffset.y;
+			if ( dragMoveCallback != null ) dragMoveCallback();
+		}
 	}
 
 	/**
@@ -446,6 +469,25 @@ class HxlSprite extends HxlObject {
 		}
 	}
 
+	public override function destroy():Void {
+		toggleDrag(false);
+		dragStopCallback = null;
+		dragStartCallback = null;
+		dragMoveCallback = null;
+		dragStartPoint = null;
+		dragStopPoint = null;
+		super.destroy();
+	}
+
+	public override function kill():Void {
+		toggleDrag(false);
+		dragStopCallback = null;
+		dragStartCallback = null;
+		dragMoveCallback = null;
+		dragStartPoint = null;
+		dragStopPoint = null;
+		super.kill();
+	}
 
 	/**
 	 * Resets some important variables for sprite optimization and rendering.
@@ -721,4 +763,56 @@ class HxlSprite extends HxlObject {
 	public function unsafeBind(Pixels:BitmapData):Void {
 		_pixels = _framePixels = Pixels;
 	}
+
+	public function toggleDrag(Toggle:Bool):Void {
+		if ( !dragEnabled && Toggle ) {
+			HxlGraphics.stage.addEventListener(MouseEvent.MOUSE_DOWN, onDragMouseDown);
+			HxlGraphics.stage.addEventListener(MouseEvent.MOUSE_UP, onDragMouseUp);
+		} else if ( dragEnabled && !Toggle ) {
+			HxlGraphics.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onDragMouseDown);
+			HxlGraphics.stage.removeEventListener(MouseEvent.MOUSE_UP, onDragMouseUp);
+			if ( isDragging && HxlGraphics.mouse.dragSprite == this ) {
+				HxlGraphics.mouse.dragSprite = null;
+			}
+		}
+
+		dragEnabled = Toggle;
+		isDragging = false;
+		dragStopPoint = null;
+		dragStartPoint = null;
+		dragOffset = null;
+	}
+
+	public function onDragStart(?Callback:Dynamic=null):Void {
+		dragStartCallback = Callback;
+	}
+
+	public function onDragStop(?Callback:Dynamic=null):Void {
+		dragStopCallback = Callback;
+	}
+
+	public function onDragMove(?Callback:Dynamic=null):Void {
+		dragMoveCallback = Callback;
+	}
+
+	private function onDragMouseDown(event:MouseEvent):Void {
+		if ( !exists || !visible || !active || !dragEnabled ) return;
+		if ( overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y) ) {
+			dragStartPoint = new HxlPoint(x, y);
+			dragStopPoint = null;
+			isDragging = true;
+			dragOffset = new HxlPoint(HxlGraphics.mouse.x - x, HxlGraphics.mouse.y - y);
+			HxlGraphics.mouse.dragSprite = this;
+			if ( dragStartCallback != null ) dragStartCallback();
+		}
+	}
+
+	private function onDragMouseUp(event:MouseEvent):Void {
+		if ( !exists || !visible || !active || !dragEnabled || HxlGraphics.mouse.dragSprite != this ) return;
+		HxlGraphics.mouse.dragSprite = null;
+		isDragging = false;
+		dragStopPoint = new HxlPoint(x, y);
+		if ( dragStopCallback != null ) dragStopCallback();
+	}
+
 }
