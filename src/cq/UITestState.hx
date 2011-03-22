@@ -51,7 +51,7 @@ class UITestState extends HxlState
 		but2.setCallback(sliding.show);
 		but1.setCallback(sliding.hide);
 
-		var grad1:HxlSprite = HxlGradient.Rect(64, 64, [0xff0000, 0x0000ff, 0x00ff00], null, null, Math.PI/2);
+		var grad1:HxlSprite = HxlGradient.Rect(64, 64, [0xffcccc, 0xff3333, 0xff0000], [0, 128, 255], null, Math.PI/2, 10);
 		grad1.x = 300;
 		grad1.y = 200;
 		add(grad1);

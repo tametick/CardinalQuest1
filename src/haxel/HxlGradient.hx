@@ -10,7 +10,7 @@ import flash.geom.Matrix;
 
 class HxlGradient {
 
-	static public function Rect(Width:Int, Height:Int, Colors:Array<Int>, ?Ratios:Array<Int>=null, ?Alphas:Array<Float>=null, ?Rotation:Float=0.0):HxlSprite {
+	static public function Rect(Width:Int, Height:Int, Colors:Array<Int>, ?Ratios:Array<Int>=null, ?Alphas:Array<Float>=null, ?Rotation:Float=0.0, ?CornerRadius:Float=0.0):HxlSprite {
 		var spr:HxlSprite = new HxlSprite();
 		var type = GradientType.LINEAR; 
 		var colors:Array<Int> = Colors; 
@@ -52,7 +52,11 @@ class HxlGradient {
  
 		var square:Shape = new Shape();
 		square.graphics.beginGradientFill(type, colors, alphas, ratios, matrix, spreadMethod, interp, focalPtRatio); 
-		square.graphics.drawRect(0, 0, Width, Height); 
+		if ( CornerRadius <= 0.0 ) {
+			square.graphics.drawRect(0, 0, Width, Height); 
+		} else {
+			square.graphics.drawRoundRect(0, 0, Width, Height, CornerRadius, CornerRadius);
+		}
 
 		var bmp:Bitmap = new Bitmap(new BitmapData(Width, Height, true, 0x0));
 		bmp.bitmapData.draw(square);
