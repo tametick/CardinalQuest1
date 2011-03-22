@@ -11,7 +11,7 @@ import flash.system.ApplicationDomain;
 import flash.utils.ByteArray;
 import flash.Lib;
 
-import cq.CqMain;
+import cq.Main;
 
 class MovieBytes extends ByteArray{}
 

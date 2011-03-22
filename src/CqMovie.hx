@@ -8,7 +8,7 @@ import flash.utils.ByteArray;
 import flash.display.Sprite;
 import flash.Lib;
 
-import cq.CqMain;
+import cq.Main;
 
 class CqMovie extends MovieClip
 {
@@ -22,6 +22,6 @@ class CqMovie extends MovieClip
 	public function new()
 	{
 		super();
-		CqMain.main();
+		Main.main();
 	}
 }

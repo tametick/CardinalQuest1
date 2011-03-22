@@ -19,7 +19,7 @@
 	<SymbolClass id="5" class="cq.SpritePlayer" />
 
 	<DefineBitsJPEG id="6" file="../rsrc/cq/tiles-small.png" />
-	<SymbolClass id="6" class="cq.SpriteTilesSmall" />
+	<SymbolClass id="6" class="cq.SpriteTiles" />
 
 	<DefineFont id="7" file="../rsrc/cq/Geo-Regular.ttf" />
 	<SymbolClass id="7" class="cq.FontGeo" />
