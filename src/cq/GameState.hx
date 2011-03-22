@@ -25,7 +25,6 @@ class GameState extends HxlState
 			Registery.player = player;
 			
 			
-			// todo = cqLevel and cqPlayer need bitmaps!
 			add(world.currentLevel);
 			world.currentLevel.follow();
 			

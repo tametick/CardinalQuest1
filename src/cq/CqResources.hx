@@ -14,5 +14,5 @@ class SpriteCorpses extends Bitmap { public function new(){super();} }
 
 class CqResources 
 {
-	
+	public static var x:Int;
 }
