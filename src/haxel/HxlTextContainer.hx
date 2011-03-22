@@ -55,7 +55,7 @@ class HxlTextContainer extends HxlDialog {
 		stepColorEffect = false;
 		stepColors = new Array();
 
-		stepAlphaEffect = true;
+		stepAlphaEffect = false;
 		stepAlpha = 0.3;
 	}
 
@@ -64,6 +64,18 @@ class HxlTextContainer extends HxlDialog {
 		if ( fadeEffect &&  scrollTimer.delta() > 0 ) {
 			if ( lines.length > 0 ) scrollText();
 			scrollTimer.reset(scrollRate);
+		}
+	}
+
+	public function setColorStep(Toggle:Bool, ?Colors:Array<Int>=null):Void {
+		stepColorEffect = Toggle;
+		if ( Colors != null ) {
+			stepColors = Colors;
+		} else {
+			stepColors = new Array();
+			stepColors.push(0x999999);
+			stepColors.push(0xcccccc);
+			stepColors.push(0xffffff);
 		}
 	}
 
@@ -120,6 +132,13 @@ class HxlTextContainer extends HxlDialog {
 				if ( count > 0 ) Y += fontSize + lineSpacing;
 				line.x = X;
 				line.y = Y;
+				if ( stepColorEffect ) {
+					if ( count < stepColors.length ) {
+						line.color = stepColors[count];
+					} else if ( stepColors.length > 0 ) {
+						line.color = stepColors[stepColors.length-1];
+					}
+				}
 				count++;
 				if ( stepAlphaEffect ) {
 					line.alpha = Math.max(0.0, 1.0 - (stepAlpha * (lines.length - count)));
@@ -133,6 +152,13 @@ class HxlTextContainer extends HxlDialog {
 			for ( line in lines ) {
 				line.x = X;
 				line.y = Y + (lineNum * fontSize);
+				if ( stepColorEffect ) {
+					if ( count < stepColors.length ) {
+						line.color = stepColors[count];
+					} else if ( stepColors.length > 0 ) {
+						line.color = stepColors[stepColors.length-1];
+					}
+				}		
 				count++;
 				lineNum--;
 				if ( stepAlphaEffect ) {
