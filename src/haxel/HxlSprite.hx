@@ -190,9 +190,11 @@ class HxlSprite extends HxlObject {
 	 * 
 	 * @return	This HxlSprite instance (nice for chaining stuff together, if you're into that).
 	 */
-	public function loadGraphic(Graphic:Class<Bitmap>,?Animated:Bool=false,?Reverse:Bool=false,?Width:Int=0,?Height:Int=0,?Unique:Bool=false):HxlSprite {
+	public function loadGraphic(Graphic:Class<Bitmap>,?Animated:Bool=false,?Reverse:Bool=false,?Width:Int=0,?Height:Int=0,?Unique:Bool=false, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlSprite {
 		_bakedRotation = 0;
-		_pixels = HxlGraphics.addBitmap(Graphic,Reverse,Unique);
+		Width = Std.int(Width * ScaleX);
+		Height = Std.int(Height * ScaleY);
+		_pixels = HxlGraphics.addBitmap(Graphic,Reverse,Unique, null, ScaleX, ScaleY);
 		if (Reverse) {
 			_flipped = _pixels.width>>1;
 		} else {

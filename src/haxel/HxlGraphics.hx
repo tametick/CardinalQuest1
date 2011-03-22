@@ -409,11 +409,12 @@ class HxlGraphics {
 	 * 
 	 * @return	The <code>BitmapData</code> we just created.
 	 */
-	public static function addBitmap(Graphic:Class<Bitmap>,?Reverse:Bool=false, ?Unique:Bool=false, ?Key:String=null):BitmapData {
+	public static function addBitmap(Graphic:Class<Bitmap>,?Reverse:Bool=false, ?Unique:Bool=false, ?Key:String=null, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):BitmapData {
 		var key:String = Key;
 		var needReverse:Bool = false;
 		if ( key == null ) {
 			key = Type.getClassName(Graphic);
+			if ( ScaleX != 1.0 || ScaleY != 1.0 ) key = key+"-"+ScaleX+"x"+ScaleY;
 			if(Unique && (Reflect.hasField(_cache, key)) && (Reflect.field(_cache, key) != null)) {
 				//Generate a unique key
 				var inc:Int = 0;
@@ -429,6 +430,13 @@ class HxlGraphics {
 		if (!checkBitmapCache(key)) {
 			//flash.Lib.current.addChild(Type.createInstance(Graphic, []));
 			var bd:BitmapData = Type.createInstance(Graphic, []).bitmapData;
+			if ( ScaleX != 1.0 || ScaleY != 1.0 ) {
+				var newPixels:BitmapData = new BitmapData(Std.int(bd.width * ScaleX), Std.int(bd.height * ScaleY), true, 0x00000000);
+				var mtx:Matrix = new Matrix();
+				mtx.scale(ScaleX, ScaleY);
+				newPixels.draw(bd, mtx);
+				bd = newPixels;
+			}
 			Reflect.setField(_cache, key, bd);
 			if (Reverse) needReverse = true;
 		}

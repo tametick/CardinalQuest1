@@ -1,4 +1,5 @@
 package cq;
+import cq.CqResources;
 import haxel.HxlState;
 import haxel.HxlButton;
 import haxel.HxlButtonContainer;
@@ -58,6 +59,13 @@ class UITestState extends HxlState
 		grad1.toggleDrag(true);
 		grad1.onDragStart(function() { trace("Started dragging!"); });
 		grad1.onDragStop(function() { trace("Stopped dragging!"); });
+
+		var myspr:HxlSprite = new HxlSprite();
+		myspr.loadGraphic(SpritePlayer, true, false, 32, 32, false, 2, 2);
+		myspr.x = 200;
+		myspr.y = 200;
+		myspr.setFrame(3);
+		add(myspr);
 	}
 
 	public function testfunc() {
