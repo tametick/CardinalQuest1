@@ -14,9 +14,16 @@ class HxlTextContainer extends HxlDialog {
 	var scrollTimer:HxlTimer;
 	public var scrollRate:Float;
 	public var maxLines:Int;
+	var reverseOrder:Bool;
+
 	var fadeEffect:Bool;
 	var isFading:Bool;
-	var reverseOrder:Bool;
+
+	var stepColorEffect:Bool;
+	var stepColors:Array<Int>;
+
+	var stepAlphaEffect:Bool;
+	var stepAlpha:Float;
 
 	/**
 	 * Amount of space (in pixels) between edges of container and text.
@@ -37,16 +44,24 @@ class HxlTextContainer extends HxlDialog {
 		maxLines = 3;
 		lineSpacing = 3;
 		lines = new List();
+		reverseOrder = true;
+
 		scrollRate = 1.0;
 		scrollTimer = new HxlTimer(scrollRate);
-		fadeEffect = true;
+
+		fadeEffect = false;
 		isFading = false;
-		reverseOrder = true;
+
+		stepColorEffect = false;
+		stepColors = new Array();
+
+		stepAlphaEffect = true;
+		stepAlpha = 0.3;
 	}
 
 	public override function update():Void {
 	    super.update();
-		if ( scrollTimer.delta() > 0 ) {
+		if ( fadeEffect &&  scrollTimer.delta() > 0 ) {
 			if ( lines.length > 0 ) scrollText();
 			scrollTimer.reset(scrollRate);
 		}
@@ -106,6 +121,9 @@ class HxlTextContainer extends HxlDialog {
 				line.x = X;
 				line.y = Y;
 				count++;
+				if ( stepAlphaEffect ) {
+					line.alpha = Math.max(0.0, 1.0 - (stepAlpha * (lines.length - count)));
+				}
 			}
 		} else {
 			var Y:Float = y + _padding;
@@ -117,6 +135,9 @@ class HxlTextContainer extends HxlDialog {
 				line.y = Y + (lineNum * fontSize);
 				count++;
 				lineNum--;
+				if ( stepAlphaEffect ) {
+					line.alpha = Math.max(0.0, 1.0 - (stepAlpha * (lines.length - count)));
+				}		
 			}
 		}
 		reset(x, y);
