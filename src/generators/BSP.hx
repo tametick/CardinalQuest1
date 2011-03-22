@@ -122,9 +122,9 @@ class BSP
 			var stepsTaken = 0;
 			while (x < end.x) {
 				var neighbours = numberOfNeighbours(map, x, y - 1, floorIndex);
-				if (neighbours == 1 || neighbours == 2)
+			/*	if (neighbours == 1 || neighbours == 2)
 					map[y][x] = doorIndex;
-				else if(map[y][x]==wallIndex)
+				else */if(map[y][x]==wallIndex)
 					map[y][x] = -1;
 					
 				if (isZ && stepsTaken >= dx / 2 - 1) {
@@ -150,9 +150,9 @@ class BSP
 			var stepsTaken = 0;
 			while (y < end.y) {
 				var neighbours = numberOfNeighbours(map, x, y, floorIndex);
-				if (neighbours == 1 || neighbours == 2)
+				/*if (neighbours == 1 || neighbours == 2)
 					map[y][x] = doorIndex;
-				else if(map[y][x]==wallIndex)
+				else */if(map[y][x]==wallIndex)
 					map[y][x] = -1;
 				
 				if (isZ && stepsTaken >= dy / 2 -1) {
