@@ -1,6 +1,7 @@
 package haxel;
 
 import flash.events.MouseEvent;
+import flash.media.Sound;
 
 class HxlButton extends HxlGroup {
 	public var on(getOn, setOn) : Bool;
@@ -40,6 +41,9 @@ class HxlButton extends HxlGroup {
 	 * Helper variable for correcting its members' <code>scrollFactor</code> objects.
 	 */
 	var _sf:HxlPoint;
+
+	// Sounds for various events
+	var clickSound:HxlSound;
 	
 	/**
 	 * Creates a new <code>HxlButton</code> object with a gray background
@@ -68,6 +72,13 @@ class HxlButton extends HxlGroup {
 		_pressed = false;
 		_initialized = false;
 		_sf = null;
+		clickSound = null;
+	}
+
+	public function setClickSound(ClickSound:Class<Sound>):HxlSound {
+		if ( clickSound == null ) clickSound = new HxlSound();
+		clickSound.loadEmbedded(ClickSound, false);
+		return clickSound;
 	}
 
 	public function setCallback(?Callback:Dynamic=null) {
@@ -217,7 +228,10 @@ class HxlButton extends HxlGroup {
 	 */
 	function onMouseUp(event:MouseEvent):Void {
 		if (!exists || !visible || !active || !HxlGraphics.mouse.justReleased() || (_callback == null)) return;
-		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) _callback();
+		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
+			_callback();
+			if ( clickSound != null ) clickSound.play();
+		}
 	}
 
 }
