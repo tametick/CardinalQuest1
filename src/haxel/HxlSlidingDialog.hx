@@ -15,8 +15,6 @@ class HxlSlidingDialog extends HxlDialog
 	var dropSpeed:Float;
 	var isDropping:Bool;
 	var isDropped:Bool;
-	var dropX:Float;
-	var dropY:Float;
 	var showCallback:Dynamic;
 	var hideCallback:Dynamic;
 	var showSound:HxlSound;
@@ -50,8 +48,8 @@ class HxlSlidingDialog extends HxlDialog
 			case RIGHT:
 				x = HxlGraphics.width;
 		}
-		dropX = x;
-		dropY = y;
+		targetX = x;
+		targetY = y;
 	}
 	
 	public function show(?ShowCallback:Dynamic=null):Void {
@@ -125,8 +123,8 @@ class HxlSlidingDialog extends HxlDialog
 	}
 
 	private function posTween(params:Dynamic):Void {
-		dropX = params.X;
-		dropY = params.Y;
+		targetX = params.X;
+		targetY = params.Y;
 	}
 	
 	private function shown() {
@@ -134,13 +132,13 @@ class HxlSlidingDialog extends HxlDialog
 		isDropped = true;
 		switch (direction) {
 			case TOP:
-				dropY = 0;
+				targetY = 0;
 			case BOTTOM:
-				dropY = HxlGraphics.height - height;
+				targetY = HxlGraphics.height - height;
 			case LEFT:
-				dropX = 0;
+				targetX = 0;
 			case RIGHT:
-				dropX = HxlGraphics.width - width;
+				targetX = HxlGraphics.width - width;
 		}
 		if ( showCallback ) {
 			showCallback();
@@ -155,13 +153,13 @@ class HxlSlidingDialog extends HxlDialog
 		active = false;
 		switch (direction) {
 			case TOP:
-				dropY = 0 - height;
+				targetY = 0 - height;
 			case BOTTOM:
-				dropY = HxlGraphics.height + height;
+				targetY = HxlGraphics.height + height;
 			case LEFT:
-				dropX = 0 - width;
+				targetX = 0 - width;
 			case RIGHT:
-				dropX = HxlGraphics.width + width;
+				targetX = HxlGraphics.width + width;
 		}
 		if ( hideCallback ) {
 			hideCallback();
@@ -170,13 +168,7 @@ class HxlSlidingDialog extends HxlDialog
 	}
 
 	public override function update():Void {
-		saveOldPosition();
-		if ( x != dropX || y != dropY ) {
-			x = dropX;
-			y = dropY;
-		}
-		updateMotion();
-		updateMembers();
+		super.update();
 	}
 
 	public function setHideSound(HideSound:Class<Sound>):HxlSound {

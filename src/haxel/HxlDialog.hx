@@ -9,6 +9,13 @@ class HxlDialog extends HxlGroup
 
 	var background:HxlSprite;
 
+	/* These are used to set a position for the dialog and all of its children
+	 * to be moved to on the next call to update. Use these when moving a 
+	 * dialog rather than setting x and y!
+	 */
+	public var targetX:Float;
+	public var targetY:Float;
+
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100) {
 		super();
 		x = X;
@@ -17,6 +24,8 @@ class HxlDialog extends HxlGroup
 		height = Height;
 		scrollFactor.x = 0;
 		scrollFactor.y = 0;
+		targetX = X;
+		targetY = Y;
 	}
 
 	public override function add(Object:HxlObject,?ShareScroll:Bool=true):HxlObject {
@@ -88,8 +97,13 @@ class HxlDialog extends HxlGroup
 
 	public override function update():Void
 	{
-	    super.update();
-	    reset(x, y);
+		saveOldPosition();
+		if ( targetX != x || targetY != y ) {
+			x = targetX;
+			y = targetY;
+		}
+		updateMotion();
+		updateMembers();
 	}
 
 }

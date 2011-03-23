@@ -58,8 +58,8 @@ class UITestState extends HxlState
 		grad1.y = 200;
 		add(grad1);
 		grad1.toggleDrag(true);
-		grad1.onDragStart(function() { trace("Started dragging!"); });
-		grad1.onDragStop(function() { trace("Stopped dragging!"); });
+		//grad1.onDragStart(function() { trace("Started dragging!"); });
+		//grad1.onDragStop(function() { trace("Stopped dragging!"); });
 
 		var myspr:HxlSprite = new HxlSprite();
 		myspr.loadGraphic(SpritePlayer, true, false, 32, 32, false, 2, 2);
@@ -67,6 +67,7 @@ class UITestState extends HxlState
 		myspr.y = 200;
 		myspr.setFrame(3);
 		add(myspr);
+		myspr.toggleDrag(true);
 	}
 
 	public function testfunc() {
