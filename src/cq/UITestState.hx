@@ -26,7 +26,8 @@ class UITestState extends HxlState
 		butcon.addButton(but2);
 		butcon.addButton(but3);
 		add(butcon);
-		butcon.setBackgroundColor(0xff333333);
+		//butcon.setBackgroundColor(0xff333333);
+		butcon.setBackgroundGraphic(SpriteTiles, true);
 
 		textcon = new HxlTextContainer( 170, 0, 300, 80 );
 		textcon.setBackgroundColor(0xff333333);

@@ -1,6 +1,8 @@
 package haxel;
 
 import flash.display.Bitmap;
+import flash.display.BitmapData;
+import flash.display.Shape;
 
 class HxlDialog extends HxlGroup
 {
@@ -37,13 +39,32 @@ class HxlDialog extends HxlGroup
 		background.createGraphic(Std.int(width), Std.int(height), Color);
 	}
 
-	public function setBackgroundGraphic(Graphic:Class<Bitmap>):Void {
+	public function setBackgroundGraphic(Graphic:Class<Bitmap>, ?Tiled:Bool=false):Void {
 		if ( background == null ) {
 			background = new HxlSprite(0, 0);
 			background.zIndex = 0;
 			add(background);
 		}
-		background.loadGraphic(Graphic);
+		if ( Tiled ) {
+			background.width = width;
+			background.height = height;
+			var source:BitmapData = Type.createInstance(Graphic, []).bitmapData;
+			var targetBmp:BitmapData = new BitmapData(Std.int(width), Std.int(height), true, 0x0);
+			var targetShape:Shape = new Shape();
+			targetShape.graphics.beginBitmapFill(source, null, true);
+			// drawRoundRect below if using corner radius
+			targetShape.graphics.drawRect(0, 0, width, height);
+			targetShape.graphics.endFill();
+			targetBmp.draw(targetShape);
+			background.width = width;
+			background.height = height;
+			background.pixels = targetBmp;
+			targetBmp = null;
+			targetShape = null;
+			source = null;
+		} else {
+			background.loadGraphic(Graphic);
+		}
 	}
 
 
