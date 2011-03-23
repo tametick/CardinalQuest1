@@ -1,5 +1,6 @@
 package haxel;
 
+import flash.media.Sound;
 import com.eclecticdesignstudio.motion.Actuate;
 
 class HxlSlidingDialog extends HxlDialog
@@ -18,7 +19,9 @@ class HxlSlidingDialog extends HxlDialog
 	var dropY:Float;
 	var showCallback:Dynamic;
 	var hideCallback:Dynamic;
-	
+	var showSound:HxlSound;
+	var hideSound:HxlSound;
+
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0)
 	{
 		super(X, Y, Width, Height);
@@ -32,6 +35,8 @@ class HxlSlidingDialog extends HxlDialog
 		setHiddenPosition();
 		showCallback = null;
 		hideCallback = null;
+		showSound = null;
+		hideSound = null;
 	}
 	
 	private function setHiddenPosition():Void {
@@ -81,6 +86,7 @@ class HxlSlidingDialog extends HxlDialog
 		}
 		if ( ShowCallback ) showCallback = ShowCallback;
 		Actuate.update(posTween, duration, { X: x, Y: y }, { X: targetX, Y: targetY } ).onComplete(shown);
+		if ( showSound != null ) showSound.play();
 	}
 	
 	public function hide(?HideCallback:Dynamic=null):Void {
@@ -115,6 +121,7 @@ class HxlSlidingDialog extends HxlDialog
 		}
 		if ( HideCallback ) hideCallback = HideCallback();
 		Actuate.update(posTween, duration, { X: x, Y: y }, { X: targetX, Y: targetY } ).onComplete(hidden);
+		if ( hideSound != null ) hideSound.play();
 	}
 
 	private function posTween(params:Dynamic):Void {
@@ -171,4 +178,17 @@ class HxlSlidingDialog extends HxlDialog
 		updateMotion();
 		updateMembers();
 	}
+
+	public function setHideSound(HideSound:Class<Sound>):HxlSound {
+		if ( hideSound == null ) hideSound = new HxlSound();
+		hideSound.loadEmbedded(HideSound, false);
+		return hideSound;
+	}
+
+	public function setShowSound(ShowSound:Class<Sound>):HxlSound {
+		if ( showSound == null ) showSound = new HxlSound();
+		showSound.loadEmbedded(ShowSound, false);
+		return showSound;
+	}
+
 }
