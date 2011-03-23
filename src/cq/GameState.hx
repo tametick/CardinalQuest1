@@ -6,6 +6,9 @@ import data.Registery;
 
 class GameState extends HxlState
 {
+
+	var gameUI:GameUI;
+
 	public override function create():Void {
 		super.create();		
 		
@@ -18,6 +21,13 @@ class GameState extends HxlState
 		super.update();	
 	
 		if ( initialized == 0 ) {
+			// create and init the game gui
+			// NOTE TO TAMETICK:
+			//  Just comment out these lines to disable the gui while you are testing
+			gameUI = new GameUI();
+			gameUI.zIndex = 50;
+			add(gameUI);
+
 			// populating the registry = might need to move this somewhere else
 			var world = new CqWorld();
 			var player = new CqPlayer();

@@ -105,6 +105,10 @@ class HxlButton extends HxlGroup {
 	 * @return	This HxlButton instance (nice for chaining stuff together, if you're into that).
 	 */
 	public function loadGraphic(Image:HxlSprite,?ImageHighlight:HxlSprite=null):HxlButton {
+		Image.x = _off.x;
+		Image.y = _off.y;
+		trace("x: "+_off.x+", y: "+_off.y);
+		//remove(_on, true);
 		_off = cast( replace(_off,Image), HxlSprite);
 		if (ImageHighlight == null) {
 			if (_on != _off) {
@@ -120,6 +124,8 @@ class HxlButton extends HxlGroup {
 		width = _off.width;
 		height = _off.height;
 		//refreshHulls();
+		_off.reset(_off.x, _off.y);
+		_on.reset(_on.x, _on.y);
 		return this;
 	}
 

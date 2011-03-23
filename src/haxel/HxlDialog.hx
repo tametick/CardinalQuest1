@@ -62,6 +62,15 @@ class HxlDialog extends HxlGroup
 		}
 	}
 
+	public function setBackgroundSprite(Sprite:HxlSprite):Void {
+		if ( background == null ) {
+			background = new HxlSprite(0, 0);
+			background.zIndex = 0;
+			add(background);
+		}
+		background.pixels = Sprite.pixels;
+	}
+
 	public function setBackgroundGraphic(Graphic:Class<Bitmap>, ?Tiled:Bool=false, ?CornerRadius:Float=0.0):Void {
 		if ( background == null ) {
 			background = new HxlSprite(0, 0);
