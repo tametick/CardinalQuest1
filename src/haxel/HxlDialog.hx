@@ -30,13 +30,27 @@ class HxlDialog extends HxlGroup
 		return NewObject;
 	}
 
-	public function setBackgroundColor(Color:Int):Void {
+	public function setBackgroundColor(Color:Int, ?CornerRadius:Float=0.0):Void {
 		if ( background == null ) {
 			background = new HxlSprite(0, 0);
 			background.zIndex = 0;
 			add(background);
 		}
-		background.createGraphic(Std.int(width), Std.int(height), Color);
+		if ( CornerRadius <= 0.0 ) {
+			background.createGraphic(Std.int(width), Std.int(height), Color);
+		} else {
+			var target:Shape = new Shape();
+			target.graphics.beginFill(Color);
+			target.graphics.drawRoundRect(0, 0, width, height, CornerRadius, CornerRadius);
+			target.graphics.endFill();
+			var bmp:BitmapData = new BitmapData(Std.int(width), Std.int(height), true, 0x0);
+			bmp.draw(target);
+			background.width = width;
+			background.height = height;
+			background.pixels = bmp;
+			target = null;
+			bmp = null;
+		}
 	}
 
 	public function setBackgroundGraphic(Graphic:Class<Bitmap>, ?Tiled:Bool=false, ?CornerRadius:Float=0.0):Void {
