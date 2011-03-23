@@ -7,13 +7,15 @@ import haxel.HxlTextContainer;
 import haxel.HxlSlidingDialog;
 import haxel.HxlSprite;
 import haxel.HxlGradient;
+import haxel.HxlUIBar;
 
 class UITestState extends HxlState
 {
 
 	var textcon:HxlTextContainer;
 	var sliding:HxlSlidingDialog;
-	
+	var bar:HxlUIBar;
+
 	public override function create():Void {
 		super.create();
 
@@ -44,11 +46,11 @@ class UITestState extends HxlState
 		sliding.setBackgroundColor(0xffddbcbc);
 		add(sliding);
 		//sliding.show();
-		
-		var self = this;
-		but3.setCallback(function() {
-			self.testfunc();
-		});
+
+		var but4:HxlButton = new HxlButton(200, 200, 64, 64);
+		sliding.add(but4);
+		//add(but4);
+
 		
 		but2.setCallback(sliding.show);
 		but1.setCallback(sliding.hide);
@@ -68,6 +70,24 @@ class UITestState extends HxlState
 		myspr.setFrame(3);
 		add(myspr);
 		myspr.toggleDrag(true);
+
+		bar = new HxlUIBar(200, 300, 300, 20);
+		bar.setFrameColor(0xff444444);
+		bar.setInteriorColor(0xff000000);
+		bar.setBarColor(0xffff5555);
+		add(bar);
+		//bar.setPercent(Math.random() * 1.0);
+
+		var self = this;
+		but3.setCallback(function() {
+			self.testfunc();
+			self.randBarValue();
+		});
+
+	}
+
+	public function randBarValue() {
+		bar.setPercent(Math.random() * 1.0);
 	}
 
 	public function testfunc() {
