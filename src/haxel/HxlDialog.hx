@@ -39,7 +39,7 @@ class HxlDialog extends HxlGroup
 		background.createGraphic(Std.int(width), Std.int(height), Color);
 	}
 
-	public function setBackgroundGraphic(Graphic:Class<Bitmap>, ?Tiled:Bool=false):Void {
+	public function setBackgroundGraphic(Graphic:Class<Bitmap>, ?Tiled:Bool=false, ?CornerRadius:Float=0.0):Void {
 		if ( background == null ) {
 			background = new HxlSprite(0, 0);
 			background.zIndex = 0;
@@ -53,7 +53,11 @@ class HxlDialog extends HxlGroup
 			var targetShape:Shape = new Shape();
 			targetShape.graphics.beginBitmapFill(source, null, true);
 			// drawRoundRect below if using corner radius
-			targetShape.graphics.drawRect(0, 0, width, height);
+			if ( CornerRadius <= 0.0 ) {
+				targetShape.graphics.drawRect(0, 0, width, height);
+			} else {
+				targetShape.graphics.drawRoundRect(0, 0, width, height, CornerRadius, CornerRadius);
+			}
 			targetShape.graphics.endFill();
 			targetBmp.draw(targetShape);
 			background.width = width;
