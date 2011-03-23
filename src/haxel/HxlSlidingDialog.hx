@@ -57,13 +57,13 @@ class HxlSlidingDialog extends HxlDialog
 		if ( isDropping ) {
 			switch (direction) {
 				case TOP:
-					duration = (y / -height);
+					duration = dropSpeed * Math.abs( Math.abs(0 - y) / height );
 				case BOTTOM:
-					duration = (y / HxlGraphics.height);
+					duration = dropSpeed * Math.abs( Math.abs((HxlGraphics.height - height) - y) / height );
 				case LEFT:
-					duration = (x / -width);
+					duration = dropSpeed * Math.abs( Math.abs(0 - x) / width);
 				case RIGHT:
-					duration = (x / HxlGraphics.width);
+					duration = dropSpeed * Math.abs( Math.abs((HxlGraphics.width - width) - x) / width );
 			}
 		}
 		isDropping = true;
@@ -90,13 +90,13 @@ class HxlSlidingDialog extends HxlDialog
 		if ( isDropping ) {
 			switch (direction) {
 				case TOP:
-					duration = (y / -height);
+					duration = dropSpeed * Math.abs( Math.abs(0 - y) / height );
 				case BOTTOM:
-					duration = (y / HxlGraphics.height);
+					duration = dropSpeed * Math.abs( Math.abs((HxlGraphics.height - height) - y) / height );
 				case LEFT:
-					duration = (x / -width);
+					duration = dropSpeed * Math.abs( Math.abs(0 - x) / width);
 				case RIGHT:
-					duration = (x / HxlGraphics.width);
+					duration = dropSpeed * Math.abs( Math.abs((HxlGraphics.width - width) - x) / width );
 			}
 		}
 		isDropping = true;
