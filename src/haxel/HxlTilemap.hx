@@ -141,10 +141,12 @@ class HxlTilemap extends HxlObject {
 	 * @param	TileGraphic		All the tiles you want to use, arranged in a strip corresponding to the numbers in MapData.
 	 * @param	TileWidth		The width of your tiles (e.g. 8) - defaults to height of the tile graphic if unspecified.
 	 * @param	TileHeight		The height of your tiles (e.g. 8) - defaults to width if unspecified.
+	 * @param 	ScaleX 			Desired X scale of the rendered graphics.
+	 * @param 	ScaleY 			Desired Y scale of the rendered graphics.
 	 * 
 	 * @return	A pointer this instance of HxlTilemap, for chaining as usual :)
 	 */
-	public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?RowWidth:Int):HxlTilemap {
+	public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {
 		mapData = MapData;
 		
 		//Figure out the map dimensions based on the mapdata
@@ -165,7 +167,9 @@ class HxlTilemap extends HxlObject {
 		*/
 
 		//Figure out the size of the tiles
-		_pixels = HxlGraphics.addBitmap(TileGraphic);
+		_pixels = HxlGraphics.addBitmap(TileGraphic, false, false, null, ScaleX, ScaleY);
+		if ( ScaleX != 1.0 && ScaleX > 0.0 ) TileWidth = Std.int(TileWidth * ScaleX);
+		if ( ScaleY != 1.0 && ScaleY > 0.0 ) TileHeight = Std.int(TileHeight * ScaleY);
 		_tileWidth = TileWidth;
 		if (_tileWidth == 0) {
 			_tileWidth = _pixels.height;

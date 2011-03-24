@@ -26,8 +26,8 @@ class Level extends HxlTilemap
 		return false;
 	}
 	
-	override public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?RowWidth:Int):HxlTilemap {
-		var map = super.loadMap(MapData, TileGraphic, TileWidth, TileHeight, RowWidth);
+	override public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {
+		var map = super.loadMap(MapData, TileGraphic, TileWidth, TileHeight, ScaleX, ScaleY);
 		
 		_pathMap = new PathMap(widthInTiles, heightInTiles);
 		

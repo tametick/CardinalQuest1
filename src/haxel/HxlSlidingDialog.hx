@@ -83,6 +83,7 @@ class HxlSlidingDialog extends HxlDialog
 				targetX = HxlGraphics.width - width;
 		}
 		if ( ShowCallback ) showCallback = ShowCallback;
+		Actuate.stop(this, {}, false);
 		Actuate.update(posTween, duration, { X: x, Y: y }, { X: targetX, Y: targetY } ).onComplete(shown);
 		if ( showSound != null ) showSound.play();
 	}
@@ -117,7 +118,8 @@ class HxlSlidingDialog extends HxlDialog
 			case RIGHT:
 				targetX = HxlGraphics.width + width;
 		}
-		if ( HideCallback ) hideCallback = HideCallback();
+		if ( HideCallback ) hideCallback = HideCallback;
+		Actuate.stop(this, {}, false);
 		Actuate.update(posTween, duration, { X: x, Y: y }, { X: targetX, Y: targetY } ).onComplete(hidden);
 		if ( hideSound != null ) hideSound.play();
 	}
@@ -142,7 +144,7 @@ class HxlSlidingDialog extends HxlDialog
 		}
 		if ( showCallback ) {
 			showCallback();
-			showCallback = null;
+			//showCallback = null;
 		}
 	}
 	
@@ -163,12 +165,19 @@ class HxlSlidingDialog extends HxlDialog
 		}
 		if ( hideCallback ) {
 			hideCallback();
-			hideCallback = null;
+			//hideCallback = null;
 		}
 	}
 
 	public override function update():Void {
 		super.update();
+	}
+
+	public function setShowCallback(ShowCallback:Dynamic):Void {
+		showCallback = ShowCallback;
+	}
+	public function setHideCallback(HideCallback:Dynamic):Void {
+		hideCallback = HideCallback;
 	}
 
 	public function setHideSound(HideSound:Class<Sound>):HxlSound {
