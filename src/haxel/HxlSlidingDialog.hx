@@ -95,14 +95,15 @@ class HxlSlidingDialog extends HxlDialog
 		if ( isDropping ) {
 			switch (direction) {
 				case TOP:
-					duration = dropSpeed * Math.abs( Math.abs(0 - y) / height );
+					duration = dropSpeed * Math.abs( Math.abs((0-height) - y) / height );
 				case BOTTOM:
 					duration = dropSpeed * Math.abs( Math.abs((HxlGraphics.height - height) - y) / height );
 				case LEFT:
-					duration = dropSpeed * Math.abs( Math.abs(0 - x) / width);
+					duration = dropSpeed * Math.abs( Math.abs((0-width) - x) / width);
 				case RIGHT:
 					duration = dropSpeed * Math.abs( Math.abs((HxlGraphics.width - width) - x) / width );
 			}
+			trace("***** duration: "+duration);
 		}
 		isDropping = true;
 		isDropped = false;
