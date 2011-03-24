@@ -39,6 +39,8 @@ class GameUI extends HxlDialog {
 		currentPanel = null;
 		var self = this;
 
+		// highlight button for current view (if any)
+
 		/**
 		 * Create and init main containers
 		 **/
@@ -146,7 +148,6 @@ class GameUI extends HxlDialog {
 		btn5.setBackgroundColor(0xff999999, 0xffcccccc);
 		rightButtons.addButton(btn5);
 
-		// highlight button for current view (if any)
 	}
 
 	function showPanel(Panel:HxlSlidingDialog):Void {

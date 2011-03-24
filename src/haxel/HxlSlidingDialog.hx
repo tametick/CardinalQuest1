@@ -103,7 +103,6 @@ class HxlSlidingDialog extends HxlDialog
 				case RIGHT:
 					duration = dropSpeed * Math.abs( Math.abs((HxlGraphics.width - width) - x) / width );
 			}
-			trace("***** duration: "+duration);
 		}
 		isDropping = true;
 		isDropped = false;
