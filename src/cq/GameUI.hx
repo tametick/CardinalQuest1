@@ -19,7 +19,7 @@ class GameUI extends HxlDialog {
 
 	// View state panels
 	var panelMap:HxlSlidingDialog;
-	var panelInventory:HxlSlidingDialog;
+	var panelInventory:CqInventoryDialog;
 	var panelCharacter:HxlSlidingDialog;
 	var panelLog:HxlSlidingDialog;
 
@@ -45,7 +45,7 @@ class GameUI extends HxlDialog {
 		 * Create and init main containers
 		 **/
 		leftButtons = new HxlButtonContainer(0, 100, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
-		//leftButtons.setBackgroundColor(0x88555555);
+		leftButtons.setBackgroundColor(0x99555555, 10);
 		add(leftButtons);
 
 		rightButtons = new HxlButtonContainer(HxlGraphics.width-84, 100, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
@@ -64,8 +64,8 @@ class GameUI extends HxlDialog {
 		panelMap = new HxlSlidingDialog(84, 0, 472, 480);
 		panelMap.setBackgroundColor(0xff9A9DBC);
 		add(panelMap);
+		panelInventory = new CqInventoryDialog(84, 0, 472, 480);
 
-		panelInventory = new HxlSlidingDialog(84, 0, 472, 480);
 		panelInventory.setBackgroundColor(0xffBC9A9A);
 		add(panelInventory);
 

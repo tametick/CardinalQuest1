@@ -504,7 +504,7 @@ class HxlSprite extends HxlObject {
 		_flashRect2.width = _pixels.width;
 		_flashRect2.height = _pixels.height;
 		if ((_framePixels == null) || (_framePixels.width != width) || (_framePixels.height != height)) {
-			_framePixels = new BitmapData(Math.floor(width), Math.floor(height), true, 0x00FFFFFF);
+			_framePixels = new BitmapData(Math.floor(width), Math.floor(height), true, 0xff000000);
 		}
 		if ((_bbb == null) || (_bbb.width != width) || (_bbb.height != height)) {
 			_bbb = new BitmapData(Math.floor(width), Math.floor(height));

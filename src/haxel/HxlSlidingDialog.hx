@@ -2,6 +2,7 @@ package haxel;
 
 import flash.media.Sound;
 import com.eclecticdesignstudio.motion.Actuate;
+import com.eclecticdesignstudio.motion.easing.Quad;
 
 class HxlSlidingDialog extends HxlDialog
 {
@@ -84,7 +85,9 @@ class HxlSlidingDialog extends HxlDialog
 		}
 		if ( ShowCallback ) showCallback = ShowCallback;
 		Actuate.stop(this, {}, false);
-		Actuate.update(posTween, duration, { X: x, Y: y }, { X: targetX, Y: targetY } ).onComplete(shown);
+		Actuate.update(posTween, duration, { X: x, Y: y }, { X: targetX, Y: targetY } )
+			.onComplete(shown)
+			.ease(Quad.easeOut);
 		if ( showSound != null ) showSound.play();
 	}
 	
@@ -104,6 +107,7 @@ class HxlSlidingDialog extends HxlDialog
 					duration = dropSpeed * Math.abs( Math.abs((HxlGraphics.width - width) - x) / width );
 			}
 		}
+		duration = duration * 0.5;
 		isDropping = true;
 		isDropped = false;
 		var targetX:Float = x;
