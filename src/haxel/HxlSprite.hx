@@ -223,6 +223,31 @@ class HxlSprite extends HxlObject {
 	}
 
 	/**
+	 * Fetches a bitmapData object from the cache matching the supplied key.
+	 **/
+	public function loadCachedGraphic(Key:String, ?Animated:Bool=false):HxlSprite {
+		var Width:Int = 0;
+		var Height:Int = 0;
+		_pixels = HxlGraphics.getBitmap(Key);
+
+		if (Animated) {
+			Width = _pixels.height;
+		} else {
+			Width = Math.floor(_pixels.width);
+		}
+		width = frameWidth = Width;
+		if (Animated) {
+			Height = Math.floor(width);
+		} else {
+			Height = Math.floor(_pixels.height);
+		}
+		height = frameHeight = Height;
+		resetHelpers();
+
+		return this;
+	}
+
+	/**
 	 * Create a pre-rotated sprite sheet from a simple sprite.
 	 * This can make a huge difference in graphical performance!
 	 * 

@@ -1,5 +1,7 @@
 package cq;
 
+import flash.display.BitmapData;
+
 import haxel.HxlButton;
 import haxel.HxlButtonContainer;
 import haxel.HxlDialog;

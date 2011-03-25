@@ -459,6 +459,36 @@ class HxlGraphics {
 
 	}
 
+	public static function addBitmapData(Graphic:BitmapData, ?Key:String=null):BitmapData {
+		var key:String = Key;
+		if(key == null) {
+			key = "data-"+Graphic.width+"x"+Graphic.height;
+			if ( Reflect.hasField(_cache, key) && (Reflect.field(_cache, key) != null)) {
+				//Generate a unique key
+				var inc:Int = 0;
+				var ukey:String;
+				do { ukey = key + inc++;
+				} while((Reflect.hasField(_cache, ukey)) && (Reflect.field(_cache, ukey) != null));
+				key = ukey;
+			}
+		}
+		if ( !checkBitmapCache(key) ) {
+			var bd:BitmapData = new BitmapData( Graphic.width, Graphic.height, true, 0x00000000 );
+			bd.draw(Graphic);
+			Reflect.setField(_cache, key, bd);
+		}
+		return Reflect.field(_cache, key);
+	}
+
+	/**
+	 * Returns a BitmapData object for the cached graphic matching the supplied key.
+	 * If a matching bitmap is now found, returns a 20x20 pixel red square.
+	 **/
+	public static function getBitmap(Key:String):BitmapData {
+		if ( Key == null || !checkBitmapCache(Key) ) return createBitmap(20, 20, 0xff0000); 
+		return Reflect.field(_cache, Key);
+	}
+
 	/**
 	 * Retrieves the Flash stage object (required for event listeners)
 	 * 
