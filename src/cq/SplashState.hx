@@ -1,6 +1,8 @@
 package cq;
 
 import cq.CqResources;
+import flash.events.MouseEvent;
+import flash.events.KeyboardEvent;
 import haxel.HxlGraphics;
 import haxel.HxlState;
 import haxel.HxlText;
@@ -28,6 +30,7 @@ class SplashState extends HxlState
 		add(splashText);
 
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
+		HxlGraphics.stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 	}
 
 	public override function update():Void {
@@ -37,12 +40,22 @@ class SplashState extends HxlState
 			fadeTimer.reset();
 			stateNum = 1;
 		} else if ( stateNum == 1 && fadeTimer.delta() >= waitTime ) {
-			stateNum = 2;
-			HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
-				var newState = new MainMenuState();
-				HxlGraphics.state = newState;
-			}, true);
+			nextScreen();
 		}
+	}
+
+	function onMouseDown(event:MouseEvent):Void {
+		if ( stateNum != 1 ) return;
+		nextScreen();
+	}
+
+	function nextScreen() {
+		stateNum = 2;
+		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
+			var newState = new MainMenuState();
+			HxlGraphics.state = newState;
+		}, true);
+		HxlGraphics.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);	
 	}
 
 }
