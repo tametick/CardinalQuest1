@@ -39,6 +39,7 @@ class HxlMenuItem extends HxlText
 	}
 
 	public function setNormalFormat(?Font:String=null,?Size:Int=8,?Color:Int=0xffffff,?Alignment:String=null,?ShadowColor:Int=0):Void {
+		if ( Font == null ) Font = "";
 		normalFormat.font = Font;
 		normalFormat.size = Size;
 		normalFormat.color = Color;
@@ -48,6 +49,7 @@ class HxlMenuItem extends HxlText
 	}
 
 	public function setHoverFormat(?Font:String=null,?Size:Int=8,?Color:Int=0xffffff,?Alignment:String=null,?ShadowColor:Int=0):Void {
+		if ( Font == null ) Font = "";
 		hoverFormat.font = Font;
 		hoverFormat.size = Size;
 		hoverFormat.color = Color;

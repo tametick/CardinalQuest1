@@ -39,7 +39,7 @@ class SplashState extends HxlState
 		} else if ( stateNum == 1 && fadeTimer.delta() >= waitTime ) {
 			stateNum = 2;
 			HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
-				var newState = new GameState();
+				var newState = new MainMenuState();
 				HxlGraphics.state = newState;
 			}, true);
 		}

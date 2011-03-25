@@ -75,15 +75,7 @@ class HxlMenu extends HxlDialog
 			if ( _selectSound != null ) _selectSound.play();
 		}
 	}
-	
-	public function setBackgroundColor(Color:Int):Void {
-		background.createGraphic(Std.int(width), Std.int(height), Color);
-	}
-
-	public function setBackgroundGraphic(Graphic:Class<Bitmap>):Void {
-		background.loadGraphic(Graphic);
-	}
-		
+			
 	public function setScrollSound(ScrollSound:Class<Sound>):HxlSound {
 		if ( _scrollSound == null ) _scrollSound = new HxlSound();
 		_scrollSound.loadEmbedded(ScrollSound, false);
