@@ -16,6 +16,8 @@ class MainMenuState extends HxlState
 	var titleText:HxlText;
 
 	var menu:HxlMenu;
+	var btnNewGame:HxlMenuItem;
+	var btnCredits:HxlMenuItem;
 
 	public override function create():Void {
 		super.create();
@@ -30,16 +32,19 @@ class MainMenuState extends HxlState
 		menu = new HxlMenu(220, 220, 200, 200);
 		add(menu);
 
-		var item1:HxlMenuItem = new HxlMenuItem(0, 0, 200, "New Game");
-		item1.setNormalFormat(null, 40, 0xffffff, "center");
-		item1.setHoverFormat(null, 40, 0xffff00, "center");
-		menu.addItem(item1);
+		var self = this;
 
-		var item2:HxlMenuItem = new HxlMenuItem(0, 40, 200, "Credits");
-		item2.setNormalFormat(null, 40, 0xffffff, "center");
-		item2.setHoverFormat(null, 40, 0xffff00, "center");
-		menu.addItem(item2);
+		var btnNewGame:HxlMenuItem = new HxlMenuItem(0, 0, 200, "New Game");
+		btnNewGame.setNormalFormat(null, 40, 0xffffff, "center");
+		btnNewGame.setHoverFormat(null, 40, 0xffff00, "center");
+		menu.addItem(btnNewGame);
+		btnNewGame.setCallback(function() { self.changeState(GameState); });
 
+		var btnCredits:HxlMenuItem = new HxlMenuItem(0, 40, 200, "Credits");
+		btnCredits.setNormalFormat(null, 40, 0xffffff, "center");
+		btnCredits.setHoverFormat(null, 40, 0xffff00, "center");
+		menu.addItem(btnCredits);
+		btnCredits.setCallback(function() { self.changeState(CreditsState); });
 
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
 	}
@@ -47,5 +52,13 @@ class MainMenuState extends HxlState
 	public override function update():Void {
 		super.update();			
 	}
+
+	function changeState(TargetState:Class<HxlState>) {
+		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
+			var newState = Type.createInstance(TargetState, []);
+			HxlGraphics.state = newState;
+		}, true);
+	}
+
 
 }
