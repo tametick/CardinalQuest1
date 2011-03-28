@@ -2,8 +2,13 @@ package world;
 
 import flash.display.Bitmap;
 import com.baseoneonline.haxe.astar.PathMap;
+
 import haxel.HxlPoint;
 import haxel.HxlTilemap;
+import haxel.HxlState;
+import haxel.HxlGraphics;
+
+import data.Registery;
 
 class Level extends HxlTilemap
 {
@@ -24,6 +29,29 @@ class Level extends HxlTilemap
 	
 	public function isBlockingMovement(X:Int, Y:Int, ?CheckActor:Bool = false):Bool { 
 		return false;
+	}
+	
+	public override function onAdd(state:HxlState) {
+		addAllActors(state);
+		addAllLoots(state);
+		
+		follow();
+		HxlGraphics.follow(Registery.player, 10);
+	}
+	
+	function addAllActors(state:HxlState) {
+		var player = Registery.player;
+		player.tilePos = startingLocation;
+		player.x = getPixelPositionOfTile(player.tilePos.x, player.tilePos.y).x;
+		player.y = getPixelPositionOfTile(player.tilePos.x, player.tilePos.y).y;
+		state.add(player);
+		
+		for (mob in mobs)
+			state.add(mob);
+	}
+	
+	function addAllLoots(state:HxlState) {
+		
 	}
 	
 	override public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {

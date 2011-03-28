@@ -34,11 +34,7 @@ class GameState extends HxlState
 			Registery.world = world;
 			Registery.player = player;
 			
-			
 			add(world.currentLevel);
-			world.currentLevel.follow();
-			
-			//HxlGraphics.follow(player, 10);
 			
 			//updateFieldOfView(true);
 

@@ -9,6 +9,8 @@ import flash.geom.Point;
 interface HxlObjectI {
 	public var x:Float;
 	public var y:Float;
+	public var width:Float;
+	public var height:Float;
 	public var scrollFactor:HxlPoint;
 	
 	public function onAdd(state:HxlState):Void;

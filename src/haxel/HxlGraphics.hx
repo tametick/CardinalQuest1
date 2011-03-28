@@ -12,6 +12,7 @@ import haxel.HxlKeyboard;
 import haxel.HxlFlash;
 import haxel.HxlQuake;
 import haxel.HxlFade;
+import haxel.HxlObject;
 
 class HxlGraphics {
 
@@ -78,7 +79,7 @@ class HxlGraphics {
 	/**
 	 * Tells the camera to follow this <code>FlxCore</code> object around.
 	 */
-	public static var followTarget:HxlObject;
+	public static var followTarget:HxlObjectI;
 	/**
 	 * Used to force the camera to look ahead of the <code>followTarget</code>.
 	 */
@@ -262,7 +263,7 @@ class HxlGraphics {
 	 * @param	Target		The object to follow.
 	 * @param	Lerp		How much lag the camera should have (can help smooth out the camera movement).
 	 */
-	public static function follow(Target:HxlObject, ?Lerp:Float=1):Void {
+	public static function follow(Target:HxlObjectI, ?Lerp:Float=1):Void {
 		followTarget = Target;
 		followLerp = Lerp;
 		_scrollTarget.x = (Math.floor(width)>>1)-followTarget.x-(Math.floor(followTarget.width)>>1);

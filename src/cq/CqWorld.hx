@@ -29,27 +29,6 @@ class CqLevel extends Level {
 		
 		loadMap(newMapData, SpriteTiles, 16, 16, 2.0, 2.0);
 	}
-	
-	
-	public override function onAdd(state:HxlState) {
-		addAllActors(state);
-		addAllLoots(state);
-	}
-	
-	function addAllActors(state:HxlState) {
-		var player = Registery.player;
-		player.tilePos = startingLocation;
-		player.x = getPixelPositionOfTile(player.tilePos.x, player.tilePos.y).x;
-		player.y = getPixelPositionOfTile(player.tilePos.x, player.tilePos.y).y;
-		state.add(player);
-		
-		for (mob in mobs)
-			state.add(mob);
-	}
-	
-	function addAllLoots(state:HxlState) {
-		
-	}
 }
 
 class CqWorld extends World 
