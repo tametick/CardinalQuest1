@@ -45,6 +45,9 @@ class HxlButton extends HxlGroup {
 	 */
 	var _sf:HxlPoint;
 
+	var _isActive:Bool;
+	var _isDisabled:Bool;
+
 	// Sounds for various events
 	var clickSound:HxlSound;
 	
@@ -75,6 +78,8 @@ class HxlButton extends HxlGroup {
 		_onT = null;
 		_activeT = null;
 		_disabledT = null;
+		_isActive = false;
+		_isDisabled = false;
 		_callback = Callback;
 		_onToggle = false;
 		_pressed = false;
@@ -134,6 +139,16 @@ class HxlButton extends HxlGroup {
 		_off.reset(_off.x, _off.y);
 		_on.reset(_on.x, _on.y);
 		return this;
+	}
+
+	public function setActive(Toggle:Bool):Void {
+		_isActive = Toggle;
+		visibility(false);
+	}
+
+	public function setDisabled(Toggle:Bool):Void {
+		_isDisabled = Toggle;
+		visibility(false);
 	}
 
 	/**
@@ -222,13 +237,24 @@ class HxlButton extends HxlGroup {
 	 * 
 	 * @param	On		Whether the button should be on or off.
 	 */
-	function visibility(On:Bool):Void {
+	function visibility(On:Bool=null):Void {
 		if (On) {
 			_off.visible = false;
 			if (_offT != null) _offT.visible = false;
 			_on.visible = true;
 			if (_onT != null) _onT.visible = true;
 		} else {
+			_on.visible = false;
+			if (_onT != null) _onT.visible = false;
+			_off.visible = true;
+			if (_offT != null) _offT.visible = true;
+		}
+		if ( _isActive ) {
+			_off.visible = false;
+			if (_offT != null) _offT.visible = false;
+			_on.visible = true;
+			if (_onT != null) _onT.visible = true;
+		} else if ( _isDisabled ) {
 			_on.visible = false;
 			if (_onT != null) _onT.visible = false;
 			_off.visible = true;
