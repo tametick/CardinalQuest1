@@ -1,5 +1,7 @@
 package haxel;
 
+import haxel.HxlObject;
+
 class HxlButtonContainer extends HxlDialog {
 
 	public static var VERTICAL:Int = 0;
@@ -97,7 +99,7 @@ class HxlButtonContainer extends HxlDialog {
 		}
 	}
 
-	public override function add(Object:HxlObject,?ShareScroll:Bool=true):HxlObject {
+	public override function add(Object:HxlObjectI,?ShareScroll:Bool=true):HxlObjectI {
 		super.add(Object, ShareScroll);
 		return Object;
 	}

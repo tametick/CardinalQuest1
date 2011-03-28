@@ -3,6 +3,8 @@ package haxel;
 import flash.display.Sprite;
 import flash.geom.Rectangle;
 
+import haxel.HxlObject;
+
 class HxlState extends Sprite {
 
 	public static var screen:HxlSprite;
@@ -31,8 +33,10 @@ class HxlState extends Sprite {
 		initialized = -1;
 	}
 	
-	public function add(obj:HxlObject):HxlObject {
-		return defaultGroup.add(obj);
+	public function add(obj:HxlObjectI):HxlObjectI {
+		defaultGroup.add(obj);
+		obj.onAdd(this);
+		return obj;
 	}
 	
 	public function remove(obj:HxlObject):HxlObject {

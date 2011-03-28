@@ -1,11 +1,12 @@
 package world;
 
+import haxel.HxlObject;
 import haxel.HxlSprite;
 import haxel.HxlPoint;
 
 import data.Registery;
 
-interface GameObject {
+interface GameObject implements HxlObjectI{
 	var hp:Int;
 	var maxHp:Int;
 	
@@ -36,18 +37,16 @@ class GameObjectImpl extends HxlSprite, implements GameObject
 	}
 	
 	public function setTilePos(TilePos:HxlPoint):HxlPoint {
-		// todo - multiple actors & loots
-		
 		// remove from old tile
 		if (_tilePos != null) {
 			var tile = Registery.world.currentLevel.getTile(_tilePos.x, _tilePos.y);
 			if(tile!=null)
-				tile.actor = null;
+				tile.actors.remove(this);
 		}
 		
 		// add to new tile
 		_tilePos = TilePos;
-		Registery.world.currentLevel.getTile(_tilePos.x, _tilePos.y).actor = this;
+		Registery.world.currentLevel.getTile(_tilePos.x, _tilePos.y).actors.push(this);
 		return TilePos;
 	}
 }

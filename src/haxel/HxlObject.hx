@@ -2,10 +2,19 @@ package haxel;
 
 import flash.geom.Point;
 
+
 /**
  * Base class for which most display objects.
  **/
-class HxlObject extends HxlRect {
+interface HxlObjectI {
+	public var x:Float;
+	public var y:Float;
+	public var scrollFactor:HxlPoint;
+	
+	public function onAdd(state:HxlState):Void;
+}
+ 
+class HxlObject extends HxlRect, implements HxlObjectI {
 
 	public var solid(getSolid, setSolid) : Bool;
 
@@ -208,6 +217,13 @@ class HxlObject extends HxlRect {
 		}
 	}
 
+	/**
+	 * override this function if you want to do something after the object is added
+	 */
+	public function onAdd(state:HxlState) {
+		
+	}
+	
 	/**
 	 * Call this function to "kill" a sprite so that it no longer 'exists'.
 	 */

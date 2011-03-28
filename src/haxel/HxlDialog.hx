@@ -4,6 +4,8 @@ import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Shape;
 
+import haxel.HxlObject;
+
 class HxlDialog extends HxlGroup
 {
 
@@ -29,7 +31,7 @@ class HxlDialog extends HxlGroup
 		_dialog = true;
 	}
 
-	public override function add(Object:HxlObject,?ShareScroll:Bool=true):HxlObject {
+	public override function add(Object:HxlObjectI,?ShareScroll:Bool=true):HxlObjectI {
 		super.add(Object, ShareScroll);
 		return Object;
 	}

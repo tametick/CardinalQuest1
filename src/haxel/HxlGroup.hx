@@ -1,5 +1,7 @@
 package haxel;
 
+import haxel.HxlObject;
+
 class HxlGroup extends HxlObject {
 
 	public var members:Array<Dynamic>;
@@ -23,12 +25,13 @@ class HxlGroup extends HxlObject {
 	 *
 	 * @return	The same <code>HxlCore</code> object that was passed in.
 	 */
-	public function add(Object:HxlObject,?ShareScroll:Bool=false):HxlObject {
+	public function add(Object:HxlObjectI,?ShareScroll:Bool=false):HxlObjectI {
 		members.push(Object);
-		if(ShareScroll) {
+		if(ShareScroll)
 			Object.scrollFactor = scrollFactor;
-		}
-		if ( HxlGraphics.autoZSort ) sortMembersByZIndex();
+		if ( HxlGraphics.autoZSort ) 
+			sortMembersByZIndex();
+		
 		return Object;
 	}
 

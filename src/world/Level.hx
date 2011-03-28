@@ -42,4 +42,12 @@ class Level extends HxlTilemap
 				
 		return map;
 	}
+	
+	
+	/**
+	 * Slightly less confusing name in this context
+	 */
+	public function getPixelPositionOfTile(X:Dynamic, Y:Dynamic, ?Center:Bool = false):HxlPoint {
+		return super.getTilePos(X, Y, Center);
+	}
 }
