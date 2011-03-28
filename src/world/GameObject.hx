@@ -6,7 +6,7 @@ import haxel.HxlPoint;
 
 import data.Registery;
 
-interface GameObject implements HxlObjectI{
+interface GameObject implements HxlObjectI {
 	var hp:Int;
 	var maxHp:Int;
 	

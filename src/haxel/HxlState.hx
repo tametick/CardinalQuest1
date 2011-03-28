@@ -2,6 +2,7 @@ package haxel;
 
 import flash.display.Sprite;
 import flash.geom.Rectangle;
+import flash.events.KeyboardEvent;
 
 import haxel.HxlObject;
 
@@ -59,12 +60,25 @@ class HxlState extends Sprite {
 		defaultGroup.update();
 		if ( initialized == -1 ) {
 //			loadingBox.visible = true;
-			initialized++;
-			return;
+			initialized = 0;
+		} else if ( initialized == 0 ){
+			HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+			HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			init();
+			initialized = 1;
+//			loadingBox.visible = false;
+		} else {
+			
 		}
 	}
 
 	public function destroy():Void {
+		HxlGraphics.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		HxlGraphics.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		defaultGroup.destroy();
 	}
+
+	function init() { }
+	function onKeyUp(event:KeyboardEvent) { }
+	function onKeyDown(event:KeyboardEvent) { }
 }

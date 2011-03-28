@@ -4,9 +4,10 @@ import haxel.HxlGraphics;
 
 import data.Registery;
 
+import flash.events.KeyboardEvent;
+
 class GameState extends HxlState
 {
-
 	var gameUI:GameUI;
 
 	public override function create():Void {
@@ -17,31 +18,35 @@ class GameState extends HxlState
 		//add(loadingBox);
 	}
 	
-	public override function update():Void {
+	public override function update() {
 		super.update();	
-	
-		if ( initialized == 0 ) {
-			// create and init the game gui
-			// NOTE TO TAMETICK:
-			//  Just comment out these lines to disable the gui while you are testing
-			gameUI = new GameUI();
-			gameUI.zIndex = 50;
-			add(gameUI);
-
-			// populating the registry = might need to move this somewhere else
-			var world = new CqWorld();
-			var player = new CqPlayer();
-			Registery.world = world;
-			Registery.player = player;
+		if ( initialized < 1 ) 
+			return;
 			
-			add(world.currentLevel);
-			
-			//updateFieldOfView(true);
-
-			initialized = 1;
-			
-			//loadingBox.visible = false;
-		}
 		
+	}
+	
+	override function init() {
+		// create and init the game gui
+		gameUI = new GameUI();
+		gameUI.zIndex = 50;
+		add(gameUI);
+
+		// populating the registry = might need to move this somewhere else
+		var world = new CqWorld();
+		var player = new CqPlayer();
+		Registery.world = world;
+		Registery.player = player;
+		
+		add(world.currentLevel);
+		
+		//updateFieldOfView(true);
+	}
+	
+	override function onKeyUp(event:KeyboardEvent):Void {
+		
+	}
+	override function onKeyDown(event:KeyboardEvent):Void { 
+		trace(event.keyCode);
 	}
 }
