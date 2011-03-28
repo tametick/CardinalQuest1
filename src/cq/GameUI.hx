@@ -48,6 +48,7 @@ class GameUI extends HxlDialog {
 		 **/
 		leftButtons = new HxlButtonContainer(0, 100, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
 		leftButtons.setBackgroundColor(0x99555555, 10);
+		leftButtons.scrollFactor.x = leftButtons.scrollFactor.y = 0;
 		add(leftButtons);
 
 		rightButtons = new HxlButtonContainer(HxlGraphics.width-84, 100, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
@@ -83,6 +84,7 @@ class GameUI extends HxlDialog {
 		 * Left side panel buttons
 		 **/
 		btnMainView = new HxlButton(0, 0, 64, 64);
+		//btnMainView.scrollFactor.x = btnMainView.scrollFactor.y = 0;
 		btnMainView.setBackgroundColor(0xff999999, 0xffcccccc);
 		btnMainView.loadText(new HxlText(0, 23, 64, "Main", true, "Geo").setFormat("Geo", 18, 0xffffff, "center", 0x010101));
 		btnMainView.setCallback(function() {

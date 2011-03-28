@@ -9,7 +9,7 @@ import haxel.HxlObject;
 class HxlDialog extends HxlGroup
 {
 
-	public var background:HxlSprite;
+	var background:HxlSprite;
 
 	/* These are used to set a position for the dialog and all of its children
 	 * to be moved to on the next call to update. Use these when moving a 
@@ -68,7 +68,7 @@ class HxlDialog extends HxlGroup
 	public function setBackgroundSprite(Sprite:HxlSprite):Void {
 		if ( background == null ) {
 			background = new HxlSprite(0, 0);
-			background.zIndex = 0;
+			background.zIndex = -1;
 			add(background);
 		}
 		background.pixels = Sprite.pixels;
@@ -77,7 +77,7 @@ class HxlDialog extends HxlGroup
 	public function setBackgroundGraphic(Graphic:Class<Bitmap>, ?Tiled:Bool=false, ?CornerRadius:Float=0.0):Void {
 		if ( background == null ) {
 			background = new HxlSprite(0, 0);
-			background.zIndex = 0;
+			background.zIndex = -1;
 			add(background);
 		}
 		if ( Tiled ) {
@@ -104,6 +104,15 @@ class HxlDialog extends HxlGroup
 		} else {
 			background.loadGraphic(Graphic);
 		}
+	}
+
+	public function setBackgroundKey(Key:String):Void {
+		if ( background == null ) {
+			background = new HxlSprite(0, 0);
+			background.zIndex = -1;
+			add(background);
+		}
+		background.loadCachedGraphic(Key);
 	}
 
 	override function updateMembers():Void {

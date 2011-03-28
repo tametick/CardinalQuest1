@@ -10,8 +10,7 @@ import flash.geom.Matrix;
 
 class HxlGradient {
 
-	static public function Rect(Width:Int, Height:Int, Colors:Array<Int>, ?Ratios:Array<Int>=null, ?Alphas:Array<Float>=null, ?Rotation:Float=0.0, ?CornerRadius:Float=0.0):HxlSprite {
-		var spr:HxlSprite = new HxlSprite();
+	static public function RectData(Width:Int, Height:Int, Colors:Array<Int>, ?Ratios:Array<Int>=null, ?Alphas:Array<Float>=null, ?Rotation:Float=0.0, ?CornerRadius:Float=0.0):BitmapData {
 		var type = GradientType.LINEAR; 
 		var colors:Array<Int> = Colors; 
 		var alphas:Array<Float>;
@@ -60,8 +59,14 @@ class HxlGradient {
 
 		var bmp:Bitmap = new Bitmap(new BitmapData(Width, Height, true, 0x0));
 		bmp.bitmapData.draw(square);
-		spr.pixels = bmp.bitmapData;
 
+		return bmp.bitmapData;
+
+	}
+
+	static public function Rect(Width:Int, Height:Int, Colors:Array<Int>, ?Ratios:Array<Int>=null, ?Alphas:Array<Float>=null, ?Rotation:Float=0.0, ?CornerRadius:Float=0.0):HxlSprite {
+		var spr:HxlSprite = new HxlSprite();
+		spr.pixels = RectData(Width, Height, Colors, Ratios, Alphas, Rotation, CornerRadius);
 		return spr;
 	}
 
