@@ -67,9 +67,10 @@ class GameUI extends HxlDialog {
 		panelMap = new HxlSlidingDialog(84, 0, 472, 480);
 		panelMap.setBackgroundColor(0xff9A9DBC);
 		add(panelMap);
-		panelInventory = new CqInventoryDialog(84, 0, 472, 480);
 
+		panelInventory = new CqInventoryDialog(84, 0, 472, 480);
 		panelInventory.setBackgroundColor(0xffBC9A9A);
+		panelInventory.zIndex = 2;
 		add(panelInventory);
 
 		panelCharacter = new HxlSlidingDialog(84, 0, 472, 480);
