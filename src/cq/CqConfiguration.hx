@@ -3,7 +3,6 @@ import data.AbstractConfiguration;
 
 class CqConfiguration extends Configuration
 {
-
 	public static function getLevelWidth(level:Int) { 
 		return 32; 
 	}

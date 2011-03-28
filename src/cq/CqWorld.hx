@@ -9,6 +9,7 @@ import world.Mob;
 import world.Loot;
 import world.Tile;
 import haxel.HxlUtil;
+import haxel.HxlGraphics;
 
 
 class CqTile extends Tile {
@@ -20,13 +21,14 @@ class CqLevel extends Level {
 	{
 		super();
 		tileClass = CqTile;
+		var tiles = new SpriteTiles();
 		
 		// fix me
 		var walkableAndSeeThroughTiles = new Array<Int>();
-		walkableAndSeeThroughTiles.push(3);
+		walkableAndSeeThroughTiles.push(tiles.getSpriteIndex("red_wall1"));
 		// em xif
 		
-		var newMapData = BSP.getBSPMap(30, 30, 8, 3, 10);
+		var newMapData = BSP.getBSPMap(30, 30, tiles.getSpriteIndex("red_wall1"), tiles.getSpriteIndex("red_floor0"), tiles.getSpriteIndex("red_door_close"));
 		startingLocation = HxlUtil.getRandomTile(30, 30, newMapData, walkableAndSeeThroughTiles);
 		
 		// use the following line to see sprite scaling for tilemap images :D
