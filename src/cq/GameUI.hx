@@ -88,16 +88,16 @@ class GameUI extends HxlDialog {
 		btnMainView.setBackgroundColor(0xff999999, 0xffcccccc);
 		btnMainView.loadText(new HxlText(0, 23, 64, "Main", true, "Geo").setFormat("Geo", 18, 0xffffff, "center", 0x010101));
 		btnMainView.setCallback(function() {
-			self.showPanel(null);
+			self.showPanel(null, self.btnMainView);
 		});
-
+		btnMainView.setActive(true);
 		leftButtons.addButton(btnMainView);
 
 		btnMapView = new HxlButton(0, 0, 64, 64);
 		btnMapView.setBackgroundColor(0xff999999, 0xffcccccc);
 		btnMapView.loadText(new HxlText(0, 23, 64, "Map", true, "Geo").setFormat("Geo", 18, 0xffffff, "center", 0x010101));
 		btnMapView.setCallback(function() {
-			self.showPanel(self.panelMap);
+			self.showPanel(self.panelMap, self.btnMapView);
 		});
 		leftButtons.addButton(btnMapView);
 
@@ -105,27 +105,24 @@ class GameUI extends HxlDialog {
 		btnInventoryView.setBackgroundColor(0xff999999, 0xffcccccc);
 		btnInventoryView.loadText(new HxlText(0, 23, 64, "Inv", true, "Geo").setFormat("Geo", 18, 0xffffff, "center", 0x010101));
 		btnInventoryView.setCallback(function() {
-			self.showPanel(self.panelInventory);
+			self.showPanel(self.panelInventory, self.btnInventoryView);
 		});
-
 		leftButtons.addButton(btnInventoryView);
 
 		btnCharacterView = new HxlButton(0, 0, 64, 64);
 		btnCharacterView.setBackgroundColor(0xff999999, 0xffcccccc);
 		btnCharacterView.loadText(new HxlText(0, 23, 64, "Char", true, "Geo").setFormat("Geo", 18, 0xffffff, "center", 0x010101));
 		btnCharacterView.setCallback(function() {
-			self.showPanel(self.panelCharacter);
+			self.showPanel(self.panelCharacter, self.btnCharacterView);
 		});
-
 		leftButtons.addButton(btnCharacterView);
 
 		btnLogView = new HxlButton(0, 0, 64, 64);
 		btnLogView.setBackgroundColor(0xff999999, 0xffcccccc);
 		btnLogView.loadText(new HxlText(0, 23, 64, "Log", true, "Geo").setFormat("Geo", 18, 0xffffff, "center", 0x010101));
 		btnLogView.setCallback(function() {
-			self.showPanel(self.panelLog);
+			self.showPanel(self.panelLog, self.btnLogView);
 		});
-
 		leftButtons.addButton(btnLogView);
 
 		/**
@@ -154,7 +151,15 @@ class GameUI extends HxlDialog {
 
 	}
 
-	function showPanel(Panel:HxlSlidingDialog):Void {
+	function showPanel(Panel:HxlSlidingDialog, ?Button:HxlButton=null):Void {
+		if ( Button != null ) {
+			btnMainView.setActive(false);
+			btnMapView.setActive(false);
+			btnInventoryView.setActive(false);
+			btnCharacterView.setActive(false);
+			btnLogView.setActive(false);
+			Button.setActive(true);
+		}
 		if ( Panel == null ) {
 			if ( currentPanel != null ) {
 				var self = this;
