@@ -23,7 +23,7 @@ class GameObjectImpl extends HxlSprite, implements GameObject
 	
 	var _tilePos:HxlPoint;
 	
-	public function new(x:Float, y:Float, ?hp:Int=1) 
+	public function new(?x:Float, ?y:Float, ?hp:Int=1) 
 	{
 		super(x, y);
 		_tilePos = new HxlPoint();

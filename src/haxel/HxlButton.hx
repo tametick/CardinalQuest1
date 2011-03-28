@@ -237,7 +237,7 @@ class HxlButton extends HxlGroup {
 	 * 
 	 * @param	On		Whether the button should be on or off.
 	 */
-	function visibility(On:Bool=null):Void {
+	function visibility(On:Bool):Void {
 		if (On) {
 			_off.visible = false;
 			if (_offT != null) _offT.visible = false;

@@ -1,4 +1,5 @@
 package cq;
+import haxel.HxlPoint;
 import haxel.HxlState;
 import haxel.HxlGraphics;
 
@@ -46,7 +47,18 @@ class GameState extends HxlState
 	override function onKeyUp(event:KeyboardEvent):Void {
 		
 	}
-	override function onKeyDown(event:KeyboardEvent):Void { 
-		trace(event.keyCode);
+	override function onKeyDown(event:KeyboardEvent):Void {
+		var player = Registery.player;
+		var world = Registery.world;
+		
+		if (player.isMoving)
+			return;
+		
+		player.isMoving = true;
+		var targetTile = getTargetAccordingToKeyPress();		
+		player.setTilePos(new HxlPoint(player.tilePos.x + targetTile.x, player.tilePos.y + targetTile.y));
+		var positionOfTile:HxlPoint = world.currentLevel.getPixelPositionOfTile(Math.round(player.tilePos.x), Math.round(player.tilePos.y));
+		player.moveToPixel(positionOfTile.x, positionOfTile.y);
+		//updateFieldOfView();
 	}
 }
