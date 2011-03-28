@@ -4,27 +4,30 @@ import flash.events.MouseEvent;
 import flash.media.Sound;
 
 class HxlButton extends HxlGroup {
+
 	public var on(getOn, setOn) : Bool;
+
 	/**
 	 * Used for checkbox-style behavior.
 	 */
 	var _onToggle:Bool;
+
 	/**
-	 * Stores the 'off' or normal button state graphic.
-	 */
+	 * Graphics to use for various button states.
+	 **/
 	var _off:HxlSprite;
-	/**
-	 * Stores the 'on' or highlighted button state graphic.
-	 */
 	var _on:HxlSprite;
+	var _active:HxlSprite;
+	var _disabled:HxlSprite;
+
 	/**
-	 * Stores the 'off' or normal button state label.
-	 */
+	 * Text objects to use for various button states.
+	 **/
 	var _offT:HxlText;
-	/**
-	 * Stores the 'on' or highlighted button state label.
-	 */
 	var _onT:HxlText;
+	var _activeT:HxlText;
+	var _disabledT:HxlText;
+
 	/**
 	 * This function is called when the button is clicked.
 	 */
@@ -65,8 +68,12 @@ class HxlButton extends HxlGroup {
 		_on  = new HxlSprite().createGraphic(Math.floor(width),Math.floor(height),0xffffffff);
 		//_on.solid = false;
 		add(_on,true);
+		_active = null;
+		_disabled = null;
 		_offT = null;
 		_onT = null;
+		_activeT = null;
+		_disabledT = null;
 		_callback = Callback;
 		_onToggle = false;
 		_pressed = false;
@@ -107,7 +114,6 @@ class HxlButton extends HxlGroup {
 	public function loadGraphic(Image:HxlSprite,?ImageHighlight:HxlSprite=null):HxlButton {
 		Image.x = _off.x;
 		Image.y = _off.y;
-		trace("x: "+_off.x+", y: "+_off.y);
 		//remove(_on, true);
 		_off = cast( replace(_off,Image), HxlSprite);
 		if (ImageHighlight == null) {

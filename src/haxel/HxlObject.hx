@@ -26,9 +26,15 @@ class HxlObject extends HxlRect {
 	public var origin:HxlPoint;
 
 	/**
-	 * Dedicated internal flag for whether or not this class is a FlxGroup.
+	 * Dedicated internal flag for whether or not this class is a HxlGroup.
 	 */
 	public var _group:Bool;
+
+	/**
+	 * Dedicated internal flag for whether or not this class is a HxlDialog.
+	 */
+	public var _dialog:Bool;
+
 
 	/**
 	 * If an object is not visible, the game loop will not automatically call <code>render()</code> on it.
@@ -168,6 +174,7 @@ class HxlObject extends HxlRect {
 		origin = new HxlPoint();
 		_flashPoint = new Point();
 		_group = false;
+		_dialog = false;
 
 		zIndex = 0;
 	}

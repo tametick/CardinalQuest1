@@ -7,7 +7,7 @@ import flash.display.Shape;
 class HxlDialog extends HxlGroup
 {
 
-	var background:HxlSprite;
+	public var background:HxlSprite;
 
 	/* These are used to set a position for the dialog and all of its children
 	 * to be moved to on the next call to update. Use these when moving a 
@@ -26,6 +26,7 @@ class HxlDialog extends HxlGroup
 		scrollFactor.y = 0;
 		targetX = X;
 		targetY = Y;
+		_dialog = true;
 	}
 
 	public override function add(Object:HxlObject,?ShareScroll:Bool=true):HxlObject {
@@ -42,7 +43,7 @@ class HxlDialog extends HxlGroup
 	public function setBackgroundColor(Color:Int, ?CornerRadius:Float=0.0):Void {
 		if ( background == null ) {
 			background = new HxlSprite(0, 0);
-			background.zIndex = 0;
+			background.zIndex = -1;
 			add(background);
 		}
 		if ( CornerRadius <= 0.0 ) {
@@ -103,6 +104,54 @@ class HxlDialog extends HxlGroup
 		}
 	}
 
+	override function updateMembers():Void {
+		var mx:Float = Math.NaN;
+		var my:Float = Math.NaN;
+		var moved:Bool = false;
+		if ((x != _last.x) || (y != _last.y)) {
+			moved = true;
+			mx = x - _last.x;
+			my = y - _last.y;
+		}
+		var o:HxlObject;
+		var l:Int = members.length;
+		for (i in 0...l) {
+			o = cast( members[i], HxlObject);
+			if ((o != null) && o.exists) {
+				if (moved) {
+					if ( o._dialog ) {
+						var dlgO:HxlDialog = cast(o, HxlDialog);
+						dlgO.targetX += mx;
+						dlgO.targetY += my;
+					} else if (o._group) {
+						o.reset(o.x+mx,o.y+my);
+					} else {
+						o.x += mx;
+						o.y += my;
+					}
+				}
+				if (o.active) {
+					o.update();
+					HxlGraphics.numUpdates++;
+				}
+				/*
+				if (moved && o.solid) {
+					o.colHullX.width += ((mx>0)?mx:-mx);
+					if ( mx < 0) {
+						o.colHullX.x += mx;
+					}
+					o.colHullY.x = x;
+					o.colHullY.height += ((my>0)?my:-my);
+					if (my < 0) {
+						o.colHullY.y += my;
+					}
+					o.colVector.x += mx;
+					o.colVector.y += my;
+				}
+				*/
+			}
+		}
+	}
 
 	public override function update():Void
 	{
