@@ -56,6 +56,8 @@ class GameState extends HxlState
 		
 		player.isMoving = true;
 		var targetTile = getTargetAccordingToKeyPress();		
+		if ( targetTile == null ) return;
+		trace(targetTile);
 		player.setTilePos(new HxlPoint(player.tilePos.x + targetTile.x, player.tilePos.y + targetTile.y));
 		var positionOfTile:HxlPoint = world.currentLevel.getPixelPositionOfTile(Math.round(player.tilePos.x), Math.round(player.tilePos.y));
 		player.moveToPixel(positionOfTile.x, positionOfTile.y);
