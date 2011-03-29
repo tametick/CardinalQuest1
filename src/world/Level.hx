@@ -7,6 +7,7 @@ import haxel.HxlPoint;
 import haxel.HxlTilemap;
 import haxel.HxlState;
 import haxel.HxlGraphics;
+import haxel.HxlUtil;
 
 import data.Registery;
 
@@ -25,6 +26,10 @@ class Level extends HxlTilemap
 		loots = new Array();
 		_pathMap = null;
 		startingIndex = 1;
+	}
+	
+	public function isBlockingView(X:Int, Y:Int):Bool { 
+		return false;
 	}
 	
 	public function isBlockingMovement(X:Int, Y:Int, ?CheckActor:Bool = false):Bool { 
@@ -77,5 +82,57 @@ class Level extends HxlTilemap
 	 */
 	public function getPixelPositionOfTile(X:Dynamic, Y:Dynamic, ?Center:Bool = false):HxlPoint {
 		return super.getTilePos(X, Y, Center);
+	}
+	
+	
+	public function updateFieldOfView(?SkipTween:Bool = false) {
+		var player = Registery.player;
+		
+		var bottom = Std.int(Math.min(heightInTiles - 1, player.tilePos.y + (player.visionRadius+1)));
+		var top = Std.int(Math.max(0, player.tilePos.y - (player.visionRadius+1)));
+		var right = Std.int(Math.min(widthInTiles - 1, player.tilePos.x + (player.visionRadius+1)));
+		var left = Std.int(Math.max(0, player.tilePos.x - (player.visionRadius+1)));
+		var tile:HxlTile;
+		for ( x in left...right+1 ) {
+			for ( y in top...bottom+1 ) {
+				tile = getTile(x, y);
+				if ( tile.visibility == Visibility.IN_SIGHT ) 
+					tile.visibility = Visibility.SEEN;
+			}
+		}
+
+		if ( isBlockingView(Std.int(player.tilePos.x), Std.int(player.tilePos.y)) ) {
+			var adjacent = new Array();
+			adjacent = [[ -1, -1], [0, -1], [1, -1], [ -1, 0], [1, 0], [ -1, 1], [0, 1], [1, 1]];
+			for ( i in adjacent ) {
+				var xx = Std.int(player.tilePos.x + i[0]);
+				var yy = Std.int(player.tilePos.y + i[1]);
+				if(yy<heightInTiles && xx<widthInTiles && yy>=0 && xx>=0)
+					cast(getTile(xx, yy), Tile).visibility = Visibility.IN_SIGHT;
+			}
+		} else {		
+			HxlUtil.markFieldOfView(player.tilePos, player.visionRadius, this);
+		}
+
+		for ( x in left...right+1 ) {
+			for ( y in top...bottom+1 ) {
+				tile = getTile(x, y);
+				switch (tile.visibility) {
+					case Visibility.IN_SIGHT:
+						if ( SkipTween ) {
+							tile.color = 0xffffff;
+						} else {
+							cast(tile,Tile).colorTo(255, player.moveSpeed);
+						}
+					case Visibility.SEEN:
+						if ( SkipTween ) {
+							tile.color = 0x888888;
+						} else {
+							cast(tile,Tile).colorTo(95, player.moveSpeed);
+						}
+					case Visibility.UNSEEN:
+				}
+			}
+		}
 	}
 }

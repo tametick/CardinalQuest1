@@ -9,9 +9,11 @@ import com.eclecticdesignstudio.motion.Actuate;
 
 class CqActor extends GameObjectImpl, implements Actor {
 	public var moveSpeed:Float;	
+	public var visionRadius:Float;
 	public function new(?X:Float=-1, ?Y:Float=-1) {
 		super(X, Y);
 		moveSpeed = 0.25;
+		visionRadius = 5.2;
 	}
 	
 	public var isMoving:Bool;
