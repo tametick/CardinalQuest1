@@ -7,9 +7,36 @@ import data.Configuration;
 import haxel.HxlSpriteSheet;
 
 class FontGeo extends Font { public function new(){super();} }
-class SpriteEffects extends HxlSpriteSheet { public function new(){super();} }
-class SpriteItems extends HxlSpriteSheet { public function new(){super();} }
-class SpriteMonsters extends HxlSpriteSheet { public function new(){super();} }
+class SpriteEffects extends HxlSpriteSheet { 
+	public function new() {
+		spriteNames = [
+			["small_scratch","big_scratch"]
+		];
+		super();
+	} 
+}
+class SpriteItems extends HxlSpriteSheet { 
+	public function new() {
+		spriteNames = [
+			["amulet","boots","leather_armor","brestplate","chest","glove","cap","ring","braclet","winged_sandles"],
+			["staff","dagger","short_sword","long_sword","purple_potion","green_potion","blue_potion","yellow_potion","red_potion","helm"],
+		];
+		super();
+	} 	
+}
+class SpriteMonsters extends HxlSpriteSheet { 	
+	public function new() {
+		spriteNames = [
+			["kobold_spear","kobold_knives","kobold_mage"],
+			["werewolf_gray","werewolf_blue","werewolf_purple"],
+			["bandit_long_swords","bandit_short_swords","bandit_single_long_sword","bandit_knives"],
+			["minotauer","minotauer_axe","minotauer_sword"],
+			["succubus","succubus_staff","succubus_whip","succubus_scepter",],
+			["spider_yellow","spider_red","spider_gray","spider_green"],
+		];
+		super();
+	} 
+}
 
 class SpritePlayer extends HxlSpriteSheet { 
 	public function new() { 
@@ -42,6 +69,13 @@ class SpriteTiles extends HxlSpriteSheet {
 		];
 	}
 }
-class SpriteCorpses extends HxlSpriteSheet { public function new(){super();} }
+class SpriteCorpses extends HxlSpriteSheet { 
+	public function new() {
+		spriteNames = [
+			["big_skull","small_skull"]
+		];
+		super();
+	} 
+}
 
 class CqResources { }
