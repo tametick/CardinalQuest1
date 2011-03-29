@@ -48,7 +48,7 @@ class GameState extends HxlState
 		
 		add(world.currentLevel);
 		
-		//updateFieldOfView(true);
+		world.currentLevel.updateFieldOfView(true);
 	}
 	
 	override function onKeyUp(event:KeyboardEvent) { }
@@ -73,6 +73,6 @@ class GameState extends HxlState
 		player.setTilePos(new HxlPoint(player.tilePos.x + targetTile.x, player.tilePos.y + targetTile.y));
 		var positionOfTile:HxlPoint = world.currentLevel.getPixelPositionOfTile(Math.round(player.tilePos.x), Math.round(player.tilePos.y));
 		player.moveToPixel(positionOfTile.x, positionOfTile.y);		
-		//updateFieldOfView();
+		world.currentLevel.updateFieldOfView();
 	}
 }

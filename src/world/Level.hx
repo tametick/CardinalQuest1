@@ -67,7 +67,7 @@ class Level extends HxlTilemap
 		for (y in 0...map.heightInTiles) {
 			for (x in 0...map.widthInTiles) {
 				cast(_tiles[y][x], Tile).level = this;
-//				_tiles[y][x].color = 0x000000;
+				_tiles[y][x].color = 0x000000;
 				if ( isBlockingMovement(x, y) ) 
 					_pathMap.setWalkable(x, y, false);
 			}

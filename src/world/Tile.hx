@@ -17,11 +17,13 @@ class Tile extends HxlTile
 	public var level:Level;
 	
 	override public function isBlockingMovement():Bool {
-		return !HxlUtil.contains(Resources.walkableTiles, dataNum);
+		return false;
+		//return !HxlUtil.contains(Resources.walkableTiles, dataNum);
 	}
 	
 	override public function isBlockingView():Bool {
-		return !HxlUtil.contains(Resources.seeThroughTiles, dataNum);
+		return false;
+		//return !HxlUtil.contains(Resources.seeThroughTiles, dataNum);
 	}
 	
 	public function new(?X:Int = 0, ?Y:Int = 0, ?Rect:Rectangle = null) {
