@@ -59,7 +59,7 @@ class GameState extends HxlState
 		if (player.isMoving)
 			return;
 		
-		var targetTile = getTargetAccordingToKeyPress();
+		var targetTile = world.currentLevel.getTargetAccordingToKeyPress();
 		if ( targetTile != null ) {
 			// movement 
 			movePlayer(world, player, targetTile);
