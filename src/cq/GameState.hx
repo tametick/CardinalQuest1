@@ -5,9 +5,10 @@ import haxel.HxlState;
 import haxel.HxlGraphics;
 
 import data.Registery;
-
 import world.World;
 import world.Player;
+
+import cq.CqPlayer;
 
 import flash.events.KeyboardEvent;
 
@@ -39,7 +40,7 @@ class GameState extends HxlState
 
 		// populating the registry = might need to move this somewhere else
 		var world = new CqWorld();
-		var player = new CqPlayer();
+		var player = new CqPlayer(CqClass.FIGHTER);
 		Registery.world = world;
 		Registery.player = player;
 		

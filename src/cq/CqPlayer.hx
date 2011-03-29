@@ -3,11 +3,13 @@ import world.Actor;
 import world.Player;
 import world.GameObject;
 
+import cq.CqResources;
+
 import com.eclecticdesignstudio.motion.Actuate;
 
 class CqActor extends GameObjectImpl, implements Actor {
 	public var moveSpeed:Float;	
-	public function new(?X:Float, ?Y:Float) {
+	public function new(?X:Float=-1, ?Y:Float=-1) {
 		super(X, Y);
 		moveSpeed = 0.25;
 	}
@@ -25,5 +27,25 @@ class CqActor extends GameObjectImpl, implements Actor {
 
 
 class CqPlayer extends CqActor, implements Player {
+	public function new(playerClass:CqClass, ?X:Float=-1, ?Y:Float=-1) {
+		super(X, Y);
+		loadGraphic(SpritePlayer, true, false, 16, 16, false, 2.0, 2.0);
+		
+		var sprites = new SpritePlayer();
+		switch(playerClass) {
+			case FIGHTER:
+				addAnimation("idle", [sprites.getSpriteIndex("fighter")], 0 );
+			case WIZARD:
+				addAnimation("idle", [sprites.getSpriteIndex("wizard")], 0 );
+			case THIEF:
+				addAnimation("idle", [sprites.getSpriteIndex("thief")], 0 );
+		}
+		play("idle");
+	}
+}
 
+enum CqClass {
+	FIGHTER;
+	WIZARD;
+	THIEF;
 }
