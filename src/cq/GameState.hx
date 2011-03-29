@@ -65,6 +65,10 @@ class GameState extends HxlState
 			movePlayer(world, player, targetTile);
 		} else {
 			// other actions?
+			if ( event.keyCode == 27 ) {
+				HxlGraphics.pushState(new MainMenuState());
+			}
+
 		}		
 	}
 	
