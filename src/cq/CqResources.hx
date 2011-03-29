@@ -10,7 +10,21 @@ class FontGeo extends Font { public function new(){super();} }
 class SpriteEffects extends HxlSpriteSheet { public function new(){super();} }
 class SpriteItems extends HxlSpriteSheet { public function new(){super();} }
 class SpriteMonsters extends HxlSpriteSheet { public function new(){super();} }
-class SpritePlayer extends HxlSpriteSheet { public function new(){super();} }
+
+class SpritePlayer extends HxlSpriteSheet { 
+	public function new() { 
+		spriteNames = [
+			["berserk_fighter", "figher", "wizard", "thief", "cloaked_thief"],
+			["berserk_fighter_long_sword", "figher_long_sword", "wizard_long_sword","thief_long_sword","cloaked_thief_long_sword"],
+			["berserk_fighter_short_sword", "figher_short_sword", "wizard_short_sword","thief_short_sword","cloaked_thief_short_sword"],
+			["berserk_fighter_staff", "figher_staff", "wizard_staff","thief_staff","cloaked_thief_staff"],
+			["berserk_fighter_dagger", "figher_dagger", "wizard_dagger","thief_dagger","cloaked_thief_dagger"]
+		];
+		
+		super(); 
+	} 
+}
+
 class SpriteTiles extends HxlSpriteSheet { 
 	public var walkableAndSeeThroughTiles:Array<Int>;
 	public function new() { 
@@ -21,16 +35,13 @@ class SpriteTiles extends HxlSpriteSheet {
 		];
 		super();
 		
-		walkableAndSeeThroughTiles = 
-			[getSpriteIndex("red_floor0"), getSpriteIndex("blue_floor0"), getSpriteIndex("brown_floor0"),
+		walkableAndSeeThroughTiles = [
+			getSpriteIndex("red_floor0"), getSpriteIndex("blue_floor0"), getSpriteIndex("brown_floor0"),
 			getSpriteIndex("red_floor1"), getSpriteIndex("blue_floor1"), getSpriteIndex("brown_floor1"),
 			getSpriteIndex("red_down"), getSpriteIndex("blue_down"), getSpriteIndex("brown_down"),
-			];
+		];
 	}
 }
 class SpriteCorpses extends HxlSpriteSheet { public function new(){super();} }
 
-class CqResources 
-{
-	public static var x:Int;
-}
+class CqResources { }
