@@ -4,9 +4,11 @@ import flash.text.Font;
 import flash.media.Sound;
 
 import data.Configuration;
+import data.Resources;
 import haxel.HxlSpriteSheet;
 
-class FontGeo extends Font { public function new(){super();} }
+class FontGeo extends Font { public function new() { super(); } }
+
 class SpriteEffects extends HxlSpriteSheet { 
 	public function new() {
 		spriteNames = [
@@ -53,6 +55,7 @@ class SpritePlayer extends HxlSpriteSheet {
 }
 
 class SpriteTiles extends HxlSpriteSheet { 
+	static var inited = false;
 	public var walkableAndSeeThroughTiles:Array<Int>;
 	public function new() { 
 		spriteNames = [
@@ -67,6 +70,12 @@ class SpriteTiles extends HxlSpriteSheet {
 			getSpriteIndex("red_floor1"), getSpriteIndex("blue_floor1"), getSpriteIndex("brown_floor1"),
 			getSpriteIndex("red_down"), getSpriteIndex("blue_down"), getSpriteIndex("brown_down"),
 		];
+		
+		if (!inited) {
+			Resources.walkableTiles = Resources.walkableTiles.concat(walkableAndSeeThroughTiles);
+			Resources.seeThroughTiles = Resources.seeThroughTiles.concat(walkableAndSeeThroughTiles);
+			inited = true;
+		}
 	}
 }
 class SpriteCorpses extends HxlSpriteSheet { 

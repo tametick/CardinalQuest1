@@ -28,12 +28,18 @@ class Level extends HxlTilemap
 		startingIndex = 1;
 	}
 	
-	public function isBlockingView(X:Int, Y:Int):Bool { 
-		return false;
+	public function isBlockingMovement(X:Int, Y:Int, ?CheckActor:Bool=false):Bool { 
+		if ( X < 0 || Y < 0 || X >= widthInTiles || Y >= heightInTiles ) 
+			return true;
+		if ( CheckActor && cast(_tiles[Y][X], Tile).actors.length>0 )
+			return true;
+		return _tiles[Y][X].isBlockingMovement();
 	}
 	
-	public function isBlockingMovement(X:Int, Y:Int, ?CheckActor:Bool = false):Bool { 
-		return false;
+	public function isBlockingView(X:Int, Y:Int):Bool {
+		if ( X < 0 || Y < 0 || X >= widthInTiles || Y >= heightInTiles ) 
+			return true;
+		return _tiles[Y][X].isBlockingView();
 	}
 	
 	public override function onAdd(state:HxlState) {
