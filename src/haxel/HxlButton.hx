@@ -189,7 +189,7 @@ class HxlButton extends HxlGroup {
 	public override function update():Void {
 		if (!_initialized) {
 			if (HxlGraphics.stage != null) {
-				HxlGraphics.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+				addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 				_initialized = true;
 			}
 		}
@@ -228,7 +228,7 @@ class HxlButton extends HxlGroup {
 	 */
 	public override function destroy():Void {
 		if (HxlGraphics.stage != null) {
-			HxlGraphics.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 		}
 	}
 	

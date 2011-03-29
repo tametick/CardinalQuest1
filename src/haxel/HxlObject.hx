@@ -158,6 +158,8 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	 */
 	public var moves:Bool;
 
+	var eventListeners:Array<Dynamic>;
+
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0) {
 		super(X, Y, Width, Height);
 		scrollFactor = new HxlPoint(1,1);
@@ -188,6 +190,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		_dialog = false;
 
 		zIndex = 0;
+		eventListeners = new Array();
 	}
 
 	/**
@@ -381,5 +384,39 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		}
 		return true;
 	}
+	
+	function addEventListener(Type:String, Listener:Dynamic, UseCapture:Bool=false, Priority:Int=0, UseWeakReference:Bool=false):Void { 
+		HxlGraphics.stage.addEventListener(Type, Listener, UseCapture, Priority, UseWeakReference);
+		eventListeners.push( {Type: Type, Listener: Listener, UseCapture: UseCapture} );
+	}
 
+	function removeEventListener(Type:String, Listener:Dynamic):Void {
+		HxlGraphics.stage.removeEventListener(Type, Listener);
+		for ( i in 0...eventListeners.length ) {
+			var ev:Dynamic = eventListeners[i];
+			if ( ev.Type == Type && ev.Listener == Listener ) {
+				eventListeners.splice(i, 1);
+				break;
+			}
+		}
+	}
+
+	function clearEventListeners():Void {
+		while ( eventListeners.length > 0 ) {
+			var i:Dynamic = eventListeners.pop();
+			HxlGraphics.stage.removeEventListener(i.Type, i.Listener);
+		}
+	}
+
+	function pauseEventListeners():Void {
+		for ( i in eventListeners ) {
+			HxlGraphics.stage.removeEventListener(i.Type, i.Listener);
+		}
+	}
+
+	function resumeEventListeners():Void {
+		for ( i in eventListeners ) {
+			HxlGraphics.stage.addEventListener(i.Type, i.Listener, i.UseCapture);
+		}
+	}
 }
