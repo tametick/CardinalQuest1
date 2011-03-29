@@ -1,9 +1,13 @@
 package cq;
+
 import haxel.HxlPoint;
 import haxel.HxlState;
 import haxel.HxlGraphics;
 
 import data.Registery;
+
+import world.World;
+import world.Player;
 
 import flash.events.KeyboardEvent;
 
@@ -44,22 +48,28 @@ class GameState extends HxlState
 		//updateFieldOfView(true);
 	}
 	
-	override function onKeyUp(event:KeyboardEvent):Void {
-		
-	}
-	override function onKeyDown(event:KeyboardEvent):Void {
+	override function onKeyUp(event:KeyboardEvent) { }
+	override function onKeyDown(event:KeyboardEvent) {
 		var player = Registery.player;
 		var world = Registery.world;
 		
 		if (player.isMoving)
 			return;
 		
+		var targetTile = getTargetAccordingToKeyPress();
+		if ( targetTile != null ) {
+			// movement 
+			movePlayer(world, player, targetTile);
+		} else {
+			// other actions?
+		}		
+	}
+	
+	function movePlayer(world:World, player:Player, targetTile:HxlPoint) {
 		player.isMoving = true;
-		var targetTile = getTargetAccordingToKeyPress();		
-		if ( targetTile == null ) return;
 		player.setTilePos(new HxlPoint(player.tilePos.x + targetTile.x, player.tilePos.y + targetTile.y));
 		var positionOfTile:HxlPoint = world.currentLevel.getPixelPositionOfTile(Math.round(player.tilePos.x), Math.round(player.tilePos.y));
-		player.moveToPixel(positionOfTile.x, positionOfTile.y);
+		player.moveToPixel(positionOfTile.x, positionOfTile.y);		
 		//updateFieldOfView();
 	}
 }

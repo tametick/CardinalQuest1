@@ -6,8 +6,7 @@ import cq.CqResources;
 
 import flash.Lib;
 
-class Main
-{
+class Main {
 	public static function main() {
 		#if flash9
 		haxe.Log.setColor(0xffffff);
@@ -22,14 +21,10 @@ class Main
 	public function new() {		
 		Lib.current.addChild(new Game());
 	}	
-	
 }
 
-class Game extends HxlGame
-{
-	
-	public function new() 
-	{
+class Game extends HxlGame {
+	public function new() {
 		//super(640, 480, SplashState, 1, "Geo");
 		super(640, 480, GameState, 1, "Geo");
 		HxlState.bgColor = 0xFF000000;
