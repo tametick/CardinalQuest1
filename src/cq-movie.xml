@@ -18,7 +18,7 @@
 	<DefineBitsJPEG id="5" file="../rsrc/cq/player.png" />
 	<SymbolClass id="5" class="cq.SpritePlayer" />
 
-	<DefineBitsJPEG id="6" file="../rsrc/cq/tiles-small.png" />
+	<DefineBitsJPEG id="6" file="../rsrc/cq/tiles.png" />
 	<SymbolClass id="6" class="cq.SpriteTiles" />
 
 	<DefineFont id="7" file="../rsrc/cq/Geo-Regular.ttf" />
