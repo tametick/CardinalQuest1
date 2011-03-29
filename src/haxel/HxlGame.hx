@@ -141,8 +141,6 @@ class HxlGame extends Sprite {
 	public function switchState(State:HxlState, ?Push:Bool=false):Void { 
 		//Basic reset stuff
 		//HxlGraphics.panel.hide();
-		_screen.x = 0;
-		_screen.y = 0;
 		//Swap the new state for the old one and dispose of it
 		_screen.addChild(State);
 		_state = State;
@@ -157,6 +155,8 @@ class HxlGame extends Sprite {
 				HxlGraphics.flash.stop();
 				HxlGraphics.fade.stop();
 				HxlGraphics.quake.stop();
+				_screen.x = 0;
+				_screen.y = 0;
 			} else {
 				// If we aren't pushing a state to the stack, we should clear out any previously stacked states
 				while ( stateStack.length > 0 ) {
@@ -172,6 +172,8 @@ class HxlGame extends Sprite {
 				HxlGraphics.flash.stop();
 				HxlGraphics.fade.stop();
 				HxlGraphics.quake.stop();
+				_screen.x = 0;
+				_screen.y = 0;
 				State.stackId = 0;
 				stateStack.push(State);
 				//_screen.swapChildren(State,_state);
@@ -183,6 +185,8 @@ class HxlGame extends Sprite {
 			HxlGraphics.flash.stop();
 			HxlGraphics.fade.stop();
 			HxlGraphics.quake.stop();
+			_screen.x = 0;
+			_screen.y = 0;
 			State.stackId = 0;
 			stateStack.push(State);
 		}

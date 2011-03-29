@@ -25,6 +25,7 @@ class HxlState extends Sprite {
 	var _followLerp:Float;
 	var _followMin:Point;
 	var _followMax:Point;
+	var _scroll:Point;
 
 	var keyboard:HxlKeyboard;
 	var initialized:Int;
@@ -71,7 +72,14 @@ class HxlState extends Sprite {
 	}
 
 	public function render():Void {
-		defaultGroup.render();
+		if ( _isStacked ) {
+			var oldScroll:Point = HxlGraphics.scroll;
+			HxlGraphics.scroll = _scroll;
+			defaultGroup.render();
+			HxlGraphics.scroll = oldScroll;
+		} else {
+			defaultGroup.render();
+		}
 	}
 
 	public function postProcess():Void {
@@ -125,6 +133,7 @@ class HxlState extends Sprite {
 				_followLerp = HxlGraphics.followLerp;
 				_followMin = HxlGraphics.followMin;
 				_followMax = HxlGraphics.followMax;
+				_scroll = new Point(HxlGraphics.scroll.x,HxlGraphics.scroll.y);
 			} else {
 				resumeEventListeners();
 				defaultGroup.resumeEventListeners();
