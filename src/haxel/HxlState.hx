@@ -13,6 +13,10 @@ class HxlState extends Sprite {
 	public static var bgColor:Int;
 	public var defaultGroup:HxlGroup;
 
+	public var stackId:Int;
+	public var stackRender:Bool;
+	public var stackBlockRender:Bool;
+
 	var keyboard:HxlKeyboard;
 	var initialized:Int;
 	//var loadingBox:LoadingBox;
@@ -21,6 +25,9 @@ class HxlState extends Sprite {
 
 		super();
 		defaultGroup = new HxlGroup();
+		stackId = 0;
+		stackRender = true;
+		stackBlockRender = false;
 		if ( screen == null ) {
 			screen = new HxlSprite();
 			screen.createGraphic(HxlGraphics.width, HxlGraphics.height, 0, true);

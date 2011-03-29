@@ -54,9 +54,18 @@ class MainMenuState extends HxlState
 	}
 
 	function changeState(TargetState:Class<HxlState>) {
+		var self = this;
 		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
 			var newState = Type.createInstance(TargetState, []);
 			HxlGraphics.state = newState;
+			// Test code for state stacking
+			/*
+			if ( self.stackId == 0 || TargetState == CreditsState ) {
+				HxlGraphics.state = newState;
+			} else {
+				HxlGraphics.popState();
+			}
+			*/
 		}, true);
 	}
 

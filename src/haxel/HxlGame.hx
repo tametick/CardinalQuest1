@@ -68,6 +68,7 @@ class HxlGame extends Sprite {
 	public var _gameYOffset:Int;
 	public var _frame:Class<Bitmap>;
 	public var _zeroPoint:Point;
+	public var stateStack:Array<HxlState>;
 
 	// basic update stuff
 	public var _paused:Bool;
@@ -96,6 +97,7 @@ class HxlGame extends Sprite {
 		_state = null;
 		_iState = InitialState;
 		_zeroPoint = new Point();
+		stateStack = new Array();
 
 		useDefaultHotKeys = true;
 
@@ -136,7 +138,7 @@ class HxlGame extends Sprite {
 	 * 
 	 * @param	State		The class name of the state you want (e.g. PlayState)
 	 */
-	public function switchState(State:HxlState):Void { 
+	public function switchState(State:HxlState, ?Push:Bool=false):Void { 
 		//Basic reset stuff
 		//HxlGraphics.panel.hide();
 		HxlGraphics.unfollow();
@@ -149,16 +151,52 @@ class HxlGame extends Sprite {
 		_screen.y = 0;
 		//Swap the new state for the old one and dispose of it
 		_screen.addChild(State);
-		if (_state != null) {
-			_state.destroy(); //important that it is destroyed while still in the display list
-			_screen.addChild(State);
-			//_screen.swapChildren(State,_state);
-			_screen.removeChild(_state);
-		}
 		_state = State;
+		if (_state != null) {
+			if ( Push ) {
+				State.stackId = stateStack.length;
+				stateStack.push(State);
+			} else {
+				// If we aren't pushing a state to the stack, we should clear out any previously stacked states
+				while ( stateStack.length > 0 ) {
+					var i:HxlState = stateStack.pop();
+					if ( i != null ) {
+						i.destroy();
+						_screen.removeChild(i);
+					}
+				}
+				State.stackId = 0;
+				stateStack.push(State);
+				//_state.destroy(); //important that it is destroyed while still in the display list
+				//_screen.swapChildren(State,_state);
+				//_screen.removeChild(_state);
+			}
+		} else {
+			State.stackId = 0;
+			stateStack.push(State);
+		}
 		_state.scaleX = _state.scaleY = _zoom;
 		//Finally, create the new state
 		_state.create();
+
+	}
+
+	public function popState():Void {
+		if ( stateStack.length <= 1 ) return;
+		var State:HxlState = stateStack.pop();
+		State.destroy();
+		_screen.removeChild(State);
+		State = stateStack[stateStack.length-1];
+		HxlGraphics.unfollow();
+		HxlGraphics.resetInput();
+		HxlGraphics.destroySounds();
+		HxlGraphics.flash.stop();
+		HxlGraphics.fade.stop();
+		HxlGraphics.quake.stop();
+		_screen.x = 0;
+		_screen.y = 0;
+		_state = State;
+		//_state.scaleX = _state.scaleY = _zoom;
 	}
 
 	function onKeyUp(event:KeyboardEvent):Void {
@@ -419,7 +457,24 @@ class HxlGame extends Sprite {
 
 		HxlGraphics.buffer.lock();
 		_state.preProcess();
+
+		// rough state stack rendering code, not currently working..
+		/*
+		if ( stateStack.length > 1 ) {
+			var startState:Int = 0;
+			for ( i in 0...stateStack.length ) {
+				if ( stateStack[i].stackBlockRender ) startState = i;
+			}
+			if ( startState != _state.stackId ) {
+				for ( i in startState...stateStack.length-1 ) {
+					stateStack[i].render();
+				}
+			}
+		}
+		*/
+
 		_state.render();
+		
 		if ( HxlGraphics.flash.exists ) {
 			HxlGraphics.flash.render();
 		}

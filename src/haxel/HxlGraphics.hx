@@ -796,6 +796,16 @@ class HxlGraphics {
 		_game.switchState(State);
 		return State;
 	}
+
+	public static function pushState(State:HxlState):HxlState {
+		_game.switchState(State, true);
+		return State;
+	}
+
+	public static function popState():Void {
+		_game.popState();
+	}
+
 	/**
 	 * Set <code>pause</code> to true to pause the game, all sounds, and display the pause popup.
 	 */

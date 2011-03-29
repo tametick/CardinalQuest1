@@ -22,6 +22,8 @@ class GameState extends HxlState
 		HxlGraphics.fade.start(false, 0x00000000, 0.25);
 		//loadingBox = new HxlLoadingBox();
 		//add(loadingBox);
+
+		//HxlGraphics.pushState(new MainMenuState());
 	}
 	
 	public override function update() {
@@ -31,7 +33,7 @@ class GameState extends HxlState
 			
 		
 	}
-	
+
 	override function init() {
 		// create and init the game gui
 		gameUI = new GameUI();
