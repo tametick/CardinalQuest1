@@ -512,4 +512,41 @@ class HxlGroup extends HxlObject {
 		if ( members.length == 0 ) return;
 		members.sort(zIndexSort);
 	}
+
+	override function clearEventListeners():Void {
+		super.clearEventListeners();
+		var o:HxlObject;
+		var l:Int = members.length;
+		for (i in 0...l) {
+			o = cast( members[i], HxlObject);
+			if (o != null) {
+				o.clearEventListeners();
+			}
+		}
+	}
+
+	override public function pauseEventListeners():Void {
+		super.pauseEventListeners();
+		var o:HxlObject;
+		var l:Int = members.length;
+		for (i in 0...l) {
+			o = cast( members[i], HxlObject);
+			if (o != null) {
+				o.pauseEventListeners();
+			}
+		}
+	}
+
+	override public function resumeEventListeners():Void {
+		super.resumeEventListeners();
+		var o:HxlObject;
+		var l:Int = members.length;
+		for (i in 0...l) {
+			o = cast( members[i], HxlObject);
+			if (o != null) {
+				o.resumeEventListeners();
+			}
+		}
+	}
+
 }

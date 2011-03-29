@@ -256,6 +256,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	 */
 	public function destroy():Void {
 		//Nothing to destroy yet
+		clearEventListeners();
 	}
 
 	/**
@@ -408,13 +409,14 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		}
 	}
 
-	function pauseEventListeners():Void {
+	public function pauseEventListeners():Void {
 		for ( i in eventListeners ) {
 			HxlGraphics.stage.removeEventListener(i.Type, i.Listener);
 		}
 	}
 
-	function resumeEventListeners():Void {
+	public function resumeEventListeners():Void {
+		if ( HxlGraphics.stage == null ) return;
 		for ( i in eventListeners ) {
 			HxlGraphics.stage.addEventListener(i.Type, i.Listener, i.UseCapture);
 		}

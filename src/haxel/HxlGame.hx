@@ -155,6 +155,7 @@ class HxlGame extends Sprite {
 		if (_state != null) {
 			if ( Push ) {
 				State.stackId = stateStack.length;
+				stateStack[stateStack.length-1].isStacked = true;
 				stateStack.push(State);
 			} else {
 				// If we aren't pushing a state to the stack, we should clear out any previously stacked states
@@ -178,7 +179,7 @@ class HxlGame extends Sprite {
 		_state.scaleX = _state.scaleY = _zoom;
 		//Finally, create the new state
 		_state.create();
-
+		_state.isStacked = false;
 	}
 
 	public function popState():Void {
@@ -196,6 +197,7 @@ class HxlGame extends Sprite {
 		_screen.x = 0;
 		_screen.y = 0;
 		_state = State;
+		_state.isStacked = false;
 		//_state.scaleX = _state.scaleY = _zoom;
 	}
 
