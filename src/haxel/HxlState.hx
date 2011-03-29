@@ -1,6 +1,7 @@
 package haxel;
 
 import flash.display.Sprite;
+import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.events.KeyboardEvent;
 
@@ -19,6 +20,11 @@ class HxlState extends Sprite {
 	var _isStacked:Bool;
 	public var isStacked(getIsStacked, setIsStacked):Bool;
 	var eventListeners:Array<Dynamic>;
+	var _followTarget:HxlObjectI;
+	var _followLead:Point;
+	var _followLerp:Float;
+	var _followMin:Point;
+	var _followMax:Point;
 
 	var keyboard:HxlKeyboard;
 	var initialized:Int;
@@ -112,15 +118,25 @@ class HxlState extends Sprite {
 		_isStacked = Toggle;
 		if ( initialized > 0 ) {
 			if ( _isStacked ) {
-				// pause my own event listeners
 				pauseEventListeners();
-				// pause event listeners on defaultGroup
 				defaultGroup.pauseEventListeners();
+				_followTarget = HxlGraphics.followTarget;
+				_followLead = HxlGraphics.followLead;
+				_followLerp = HxlGraphics.followLerp;
+				_followMin = HxlGraphics.followMin;
+				_followMax = HxlGraphics.followMax;
 			} else {
-				// resume my event listeners
 				resumeEventListeners();
-				// resume event listeners on defaultGroup
 				defaultGroup.resumeEventListeners();
+				if ( _followTarget != null ) {
+					HxlGraphics.follow(_followTarget, _followLerp);
+				}
+				HxlGraphics.followLead = _followLead;
+				if ( _followMin != null && _followMax != null ) {
+					HxlGraphics.followMin = _followMin;
+					HxlGraphics.followMax = _followMax;
+					HxlGraphics.doFollow();
+				}
 			}
 		}
 		return _isStacked;

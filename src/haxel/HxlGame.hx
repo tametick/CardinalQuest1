@@ -141,12 +141,6 @@ class HxlGame extends Sprite {
 	public function switchState(State:HxlState, ?Push:Bool=false):Void { 
 		//Basic reset stuff
 		//HxlGraphics.panel.hide();
-		HxlGraphics.unfollow();
-		HxlGraphics.resetInput();
-		HxlGraphics.destroySounds();
-		HxlGraphics.flash.stop();
-		HxlGraphics.fade.stop();
-		HxlGraphics.quake.stop();
 		_screen.x = 0;
 		_screen.y = 0;
 		//Swap the new state for the old one and dispose of it
@@ -157,6 +151,12 @@ class HxlGame extends Sprite {
 				State.stackId = stateStack.length;
 				stateStack[stateStack.length-1].isStacked = true;
 				stateStack.push(State);
+				HxlGraphics.unfollow();
+				HxlGraphics.resetInput();
+				HxlGraphics.destroySounds();
+				HxlGraphics.flash.stop();
+				HxlGraphics.fade.stop();
+				HxlGraphics.quake.stop();
 			} else {
 				// If we aren't pushing a state to the stack, we should clear out any previously stacked states
 				while ( stateStack.length > 0 ) {
@@ -166,13 +166,23 @@ class HxlGame extends Sprite {
 						_screen.removeChild(i);
 					}
 				}
+				HxlGraphics.unfollow();
+				HxlGraphics.resetInput();
+				HxlGraphics.destroySounds();
+				HxlGraphics.flash.stop();
+				HxlGraphics.fade.stop();
+				HxlGraphics.quake.stop();
 				State.stackId = 0;
 				stateStack.push(State);
-				//_state.destroy(); //important that it is destroyed while still in the display list
 				//_screen.swapChildren(State,_state);
-				//_screen.removeChild(_state);
 			}
 		} else {
+			HxlGraphics.unfollow();
+			HxlGraphics.resetInput();
+			HxlGraphics.destroySounds();
+			HxlGraphics.flash.stop();
+			HxlGraphics.fade.stop();
+			HxlGraphics.quake.stop();
 			State.stackId = 0;
 			stateStack.push(State);
 		}
