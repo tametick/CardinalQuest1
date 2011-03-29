@@ -459,7 +459,7 @@ class HxlGame extends Sprite {
 		_state.preProcess();
 
 		// rough state stack rendering code, not currently working..
-		/*
+		
 		if ( stateStack.length > 1 ) {
 			var startState:Int = 0;
 			for ( i in 0...stateStack.length ) {
@@ -471,7 +471,7 @@ class HxlGame extends Sprite {
 				}
 			}
 		}
-		*/
+		
 
 		_state.render();
 		
