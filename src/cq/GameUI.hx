@@ -17,7 +17,7 @@ class GameUI extends HxlDialog {
 	// Main UI containers
 	var leftButtons:HxlButtonContainer;
 	var rightButtons:HxlButtonContainer;
-	var statusDialog:HxlTextContainer;
+	//var statusDialog:HxlTextContainer;
 
 	// View state panels
 	var panelMap:HxlSlidingDialog;
@@ -46,20 +46,23 @@ class GameUI extends HxlDialog {
 		/**
 		 * Create and init main containers
 		 **/
-		leftButtons = new HxlButtonContainer(0, 100, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
-		leftButtons.setBackgroundColor(0x99555555, 10);
+		leftButtons = new HxlButtonContainer(0, 50, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
+		//leftButtons.setBackgroundColor(0x99555555, 10);
 		leftButtons.scrollFactor.x = leftButtons.scrollFactor.y = 0;
 		add(leftButtons);
 
-		rightButtons = new HxlButtonContainer(HxlGraphics.width-84, 100, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
+		rightButtons = new HxlButtonContainer(HxlGraphics.width-84, 50, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
 		//rightButtons.setBackgroundColor(0x88555555);
 		add(rightButtons);
 
+		// Status message disabled for now, can likely remove this
+		/*
 		statusDialog = new HxlTextContainer( 10, 10, 620, 80 );
 		statusDialog.setFormat("Geo", 18, 0xffffff, "left", 0x000000);
 		statusDialog.setColorStep(true);
 		statusDialog.setBackgroundSprite(HxlGradient.Rect(620, 40, [0xffffff, 0xffffff, 0xffffff], [0, 128, 255], [0.5, 0.0, 0.0], Math.PI/2, 20));
 		add(statusDialog);
+		*/
 
 		/**
 		 * View state panels
