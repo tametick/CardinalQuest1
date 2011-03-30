@@ -38,11 +38,11 @@ class HxlMenu extends HxlDialog
 	public function toggleInput(Toggle:Bool):Void {
 		inputEnabled = Toggle;
 		if ( inputEnabled ) {
-			HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-			HxlGraphics.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 		} else {
-			HxlGraphics.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-			HxlGraphics.stage.removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);				
+			removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);				
 		}
 	}
 	
