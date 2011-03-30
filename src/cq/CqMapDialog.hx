@@ -52,18 +52,37 @@ class CqMapDialog extends HxlSlidingDialog {
 		cellSize.y = Math.floor(mapSize.y / Registery.world.currentLevel.heightInTiles);
 	}
 
+	public override function show(?ShowCallback:Dynamic=null):Void {
+		super.show(ShowCallback);
+		updateMap();
+	}
+
 	public function updateMap():Void {
-		// just draw entire map for now
 		var tiles:Array<Array<HxlTile>> = Registery.world.currentLevel.getTiles();
 		var mapW:Int = Registery.world.currentLevel.widthInTiles;
 		var mapH:Int = Registery.world.currentLevel.heightInTiles;
 		var graph = mapShape.graphics;
 		var Color:Int = 0x339933;
+		var SightColor:Int = 0x339933;
+		var SeenColor:Int = 0x116611;
+		var WallSightColor:Int = 0x333399;
+		var WallSeenColor:Int = 0x111166;
 		graph.clear();
 		for ( Y in 0...mapH ) {
 			for ( X in 0...mapW ) {
-				//if ( !tiles[Y][X].isBlockingMovement() ) {
-				if ( !Registery.world.currentLevel.isBlockingMovement(X, Y) ) {
+				Color = -1;
+				if ( tiles[Y][X].visibility == Visibility.SEEN ) {
+					Color = SeenColor;
+					if ( Registery.world.currentLevel.isBlockingMovement(X, Y) ) {
+						Color = WallSeenColor;
+					}
+				} else if ( tiles[Y][X].visibility == Visibility.IN_SIGHT ) {
+					Color = SightColor;
+					if ( Registery.world.currentLevel.isBlockingMovement(X, Y) ) {
+						Color = WallSightColor;
+					}
+				}
+				if ( Color != -1 ) {
 					graph.beginFill(Color);
 					graph.drawRect( (X * cellSize.x), (Y * cellSize.y), cellSize.x, cellSize.y );
 					graph.endFill();
