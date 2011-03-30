@@ -91,7 +91,7 @@ class Level extends HxlTilemap
 	}
 	
 	
-	public function updateFieldOfView(?SkipTween:Bool = false) {
+	public function updateFieldOfView(?skipTween:Bool = false, ?seenTween:Int = 95, ?seenColor:Int=0x888888, ?inSightTween:Int=255, ?inSightColor:Int=0xffffff) {		
 		var player = Registery.player;
 		
 		var bottom = Std.int(Math.min(heightInTiles - 1, player.tilePos.y + (player.visionRadius+1)));
@@ -125,16 +125,16 @@ class Level extends HxlTilemap
 				tile = getTile(x, y);
 				switch (tile.visibility) {
 					case Visibility.IN_SIGHT:
-						if ( SkipTween ) {
-							tile.color = 0xffffff;
+						if ( skipTween ) {
+							tile.color = inSightColor;
 						} else {
-							cast(tile,Tile).colorTo(255, player.moveSpeed);
+							cast(tile,Tile).colorTo(inSightTween, player.moveSpeed);
 						}
 					case Visibility.SEEN:
-						if ( SkipTween ) {
-							tile.color = 0x888888;
+						if ( skipTween ) {
+							tile.color = seenColor;
 						} else {
-							cast(tile,Tile).colorTo(95, player.moveSpeed);
+							cast(tile,Tile).colorTo(seenTween, player.moveSpeed);
 						}
 					case Visibility.UNSEEN:
 				}
