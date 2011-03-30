@@ -35,11 +35,6 @@ class GameState extends HxlState
 	}
 
 	override function init() {
-		// create and init the game gui
-		gameUI = new GameUI();
-		gameUI.zIndex = 50;
-		add(gameUI);
-
 		// populating the registry = might need to move this somewhere else
 		var world = new CqWorld();
 		var player = new CqPlayer(CqClass.FIGHTER);
@@ -50,6 +45,10 @@ class GameState extends HxlState
 		
 		world.currentLevel.updateFieldOfView(true);
 
+		// create and init the game gui
+		gameUI = new GameUI();
+		gameUI.zIndex = 50;
+		add(gameUI);
 	}
 	
 	override function onKeyUp(event:KeyboardEvent) { }

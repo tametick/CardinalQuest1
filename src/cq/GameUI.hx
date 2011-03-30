@@ -20,7 +20,7 @@ class GameUI extends HxlDialog {
 	//var statusDialog:HxlTextContainer;
 
 	// View state panels
-	var panelMap:HxlSlidingDialog;
+	var panelMap:CqMapDialog;
 	var panelInventory:CqInventoryDialog;
 	var panelCharacter:HxlSlidingDialog;
 	var panelLog:HxlSlidingDialog;
@@ -67,7 +67,7 @@ class GameUI extends HxlDialog {
 		/**
 		 * View state panels
 		 **/
-		panelMap = new HxlSlidingDialog(84, 0, 472, 480);
+		panelMap = new CqMapDialog(84, 0, 472, 480);
 		panelMap.setBackgroundColor(0xff9A9DBC);
 		add(panelMap);
 

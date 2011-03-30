@@ -213,6 +213,10 @@ class HxlTilemap extends HxlObject {
 		return this;
 	}
 
+	public function getTiles():Array<Array<HxlTile>> {
+		return _tiles;
+	}
+
 	/**
 	 * Generates a bounding box version of the tiles, flixel should call this automatically when necessary.
 	 */
