@@ -52,7 +52,12 @@ class GameState extends HxlState
 	}
 	
 	override function onKeyUp(event:KeyboardEvent) { }
-	override function onKeyDown(event:KeyboardEvent) {
+	override function onKeyDown(event:KeyboardEvent) {		
+		if ( HxlGraphics.keys.ESCAPE ) {
+			HxlGraphics.pushState(new MainMenuState());
+			return;
+		}
+		
 		var player = Registery.player;
 		var world = Registery.world;
 		
@@ -65,10 +70,7 @@ class GameState extends HxlState
 			movePlayer(world, player, targetTile);
 		} else {
 			// other actions?
-			if ( event.keyCode == 27 ) {
-				HxlGraphics.pushState(new MainMenuState());
-			}
-
+			
 		}		
 	}
 	
