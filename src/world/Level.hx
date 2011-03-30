@@ -91,7 +91,12 @@ class Level extends HxlTilemap
 	}
 	
 	
-	public function updateFieldOfView(?skipTween:Bool = false, ?gradientColoring:Bool = true, ?seenTween:Int = 95, ?seenColor:Int=0x888888, ?inSightTween:Int=255, ?inSightColor:Int=0xffffff) {		
+	function tweenToColor(tween:Int):Int {
+		var hex = StringTools.hex(tween);
+		return Std.parseInt("0x"+hex+hex+hex);
+	}
+	
+	public function updateFieldOfView(?skipTween:Bool = false, ?gradientColoring:Bool = true, ?seenTween:Int = 95, ?inSightTween:Int=255) {
 		var player = Registery.player;
 		
 		var bottom = Std.int(Math.min(heightInTiles - 1, player.tilePos.y + (player.visionRadius+1)));
@@ -131,11 +136,13 @@ class Level extends HxlTilemap
 				switch (tile.visibility) {
 					case Visibility.IN_SIGHT:
 						if ( skipTween ) {
-							if (gradientColoring)
-								tile.color  = normalizeColor(dist, player.visionRadius, seenColor, inSightColor);
-							else
+							if (gradientColoring) {
+								var normTween = normalizeColor(dist, player.visionRadius, seenTween, inSightTween);
+								tile.color = tweenToColor(normTween);
+							} else {
+								var inSightColor = tweenToColor(inSightTween);
 								tile.color = inSightColor;
-								
+							}
 						} else {
 							if (gradientColoring)
 								cast(tile,Tile).colorTo(normalizeColor(dist, player.visionRadius, seenTween, inSightTween), player.moveSpeed);
@@ -144,6 +151,7 @@ class Level extends HxlTilemap
 						}
 					case Visibility.SEEN:
 						if ( skipTween ) {
+							var seenColor = tweenToColor(seenTween);
 							tile.color = seenColor;
 						} else {
 							cast(tile,Tile).colorTo(seenTween, player.moveSpeed);
