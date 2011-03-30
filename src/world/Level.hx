@@ -91,7 +91,7 @@ class Level extends HxlTilemap
 	}
 	
 	
-	public function updateFieldOfView(?skipTween:Bool = false, ?seenTween:Int = 95, ?seenColor:Int=0x888888, ?inSightTween:Int=255, ?inSightColor:Int=0xffffff) {		
+	public function updateFieldOfView(?skipTween:Bool = false, ?gradientColoring:Bool = true, ?seenTween:Int = 95, ?seenColor:Int=0x888888, ?inSightTween:Int=255, ?inSightColor:Int=0xffffff) {		
 		var player = Registery.player;
 		
 		var bottom = Std.int(Math.min(heightInTiles - 1, player.tilePos.y + (player.visionRadius+1)));
@@ -99,6 +99,8 @@ class Level extends HxlTilemap
 		var right = Std.int(Math.min(widthInTiles - 1, player.tilePos.x + (player.visionRadius+1)));
 		var left = Std.int(Math.max(0, player.tilePos.x - (player.visionRadius+1)));
 		var tile:HxlTile;
+		
+		// reset previously seen tiles
 		for ( x in left...right+1 ) {
 			for ( y in top...bottom+1 ) {
 				tile = getTile(x, y);
@@ -108,6 +110,7 @@ class Level extends HxlTilemap
 		}
 
 		if ( isBlockingView(Std.int(player.tilePos.x), Std.int(player.tilePos.y)) ) {
+			// if player is on a view blocking tile, only show adjacent tiles
 			var adjacent = new Array();
 			adjacent = [[ -1, -1], [0, -1], [1, -1], [ -1, 0], [1, 0], [ -1, 1], [0, 1], [1, 1]];
 			for ( i in adjacent ) {
@@ -116,19 +119,28 @@ class Level extends HxlTilemap
 				if(yy<heightInTiles && xx<widthInTiles && yy>=0 && xx>=0)
 					cast(getTile(xx, yy), Tile).visibility = Visibility.IN_SIGHT;
 			}
-		} else {		
+		} else {
 			HxlUtil.markFieldOfView(player.tilePos, player.visionRadius, this);
 		}
-
+		
 		for ( x in left...right+1 ) {
 			for ( y in top...bottom+1 ) {
 				tile = getTile(x, y);
+				var dist = HxlUtil.distance(player.tilePos, new HxlPoint(x, y));
+				
 				switch (tile.visibility) {
 					case Visibility.IN_SIGHT:
 						if ( skipTween ) {
-							tile.color = inSightColor;
+							if (gradientColoring)
+								tile.color  = normalizeColor(dist, player.visionRadius, seenColor, inSightColor);
+							else
+								tile.color = inSightColor;
+								
 						} else {
-							cast(tile,Tile).colorTo(inSightTween, player.moveSpeed);
+							if (gradientColoring)
+								cast(tile,Tile).colorTo(normalizeColor(dist, player.visionRadius, seenTween, inSightTween), player.moveSpeed);
+							else
+								cast(tile,Tile).colorTo(inSightTween, player.moveSpeed);
 						}
 					case Visibility.SEEN:
 						if ( skipTween ) {
@@ -140,6 +152,12 @@ class Level extends HxlTilemap
 				}
 			}
 		}
+	}
+	
+	function normalizeColor(dist:Float, maxDist:Float, minColor:Int, maxColor:Int):Int {
+		var dimness = (maxDist-dist) / maxDist;
+		var color = minColor + (maxColor - minColor)*dimness;
+		return Math.round(color);
 	}
 	
 	public function getTargetAccordingToKeyPress():HxlPoint {
