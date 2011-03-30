@@ -13,7 +13,7 @@ class CqActor extends GameObjectImpl, implements Actor {
 	public function new(?X:Float=-1, ?Y:Float=-1) {
 		super(X, Y);
 		moveSpeed = 0.25;
-		visionRadius = 5.2;
+		visionRadius = 8.2;
 	}
 	
 	public var isMoving:Bool;
