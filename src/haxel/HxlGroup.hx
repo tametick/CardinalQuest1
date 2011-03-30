@@ -8,6 +8,7 @@ class HxlGroup extends HxlObject {
 
 	var _last:HxlPoint;
 	var _first:Bool;
+	public var initialized:Bool;
 
 	public function new() {
 		super();
@@ -15,6 +16,7 @@ class HxlGroup extends HxlObject {
 		members = new Array<HxlObject>();
 		_last = new HxlPoint();
 		_first = true;
+		initialized = false;
 	}
 
 	/**
@@ -423,6 +425,7 @@ class HxlGroup extends HxlObject {
 		updateMotion();
 		updateMembers();
 		//updateFlickering();
+		if ( !initialized ) initialized = true;
 	}
 
 	/**

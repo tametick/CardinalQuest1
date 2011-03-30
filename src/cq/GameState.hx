@@ -49,6 +49,7 @@ class GameState extends HxlState
 		add(world.currentLevel);
 		
 		world.currentLevel.updateFieldOfView(true);
+
 	}
 	
 	override function onKeyUp(event:KeyboardEvent) { }

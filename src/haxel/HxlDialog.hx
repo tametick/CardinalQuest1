@@ -173,6 +173,7 @@ class HxlDialog extends HxlGroup
 		}
 		updateMotion();
 		updateMembers();
+		if ( !initialized ) initialized = true;
 	}
 
 }

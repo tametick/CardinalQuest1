@@ -5,6 +5,7 @@ import haxel.HxlDialog;
 import haxel.HxlGradient;
 import haxel.HxlGraphics;
 import haxel.HxlObject;
+import haxel.HxlPoint;
 import haxel.HxlSlidingDialog;
 import haxel.HxlSprite;
 import haxel.HxlUtil;
@@ -32,13 +33,25 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		dlgGrid.setBackgroundColor(0xff999999);
 		add(dlgGrid);
 
+		var itemBg:BitmapData = HxlGradient.RectData(49, 49, [0xc1c1c1, 0x9e9e9e], null, Math.PI/2, 8.0);
+		var itemBgKey:String = "ItemBG";
+		HxlGraphics.addBitmapData(itemBg, itemBgKey);
+
+		var item1:CqInventoryItem = new CqInventoryItem(dlgGrid, 2, 2);
+		item1.loadCachedGraphic(itemBgKey);
+		item1.toggleDrag(true);
+		item1.zIndex = 5;
+		var cellpos:HxlPoint = dlgGrid.getCellItemPos(1);
+		item1.x = cellpos.x;
+		item1.y = cellpos.y;
+		add(item1);
 	}
 
 }
 
 class CqInventoryGrid extends HxlDialog {
 
-	var cells:Array<CqInventoryCell>;
+	public var cells:Array<CqInventoryCell>;
 
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100) {
 		super(X, Y, Width, Height);
@@ -52,11 +65,6 @@ class CqInventoryGrid extends HxlDialog {
 		var cellBgHighlight:BitmapData = HxlGradient.RectData(53, 53, [0x686835, 0xADAB6B], null, Math.PI/2, 5.0);
 		var cellBgHighlightKey:String = "CellBGHighlight";
 		HxlGraphics.addBitmapData(cellBgHighlight, cellBgHighlightKey);
-
-		var itemBg:BitmapData = HxlGradient.RectData(49, 49, [0xc1c1c1, 0x9e9e9e], null, Math.PI/2, 8.0);
-		var itemBgKey:String = "ItemBG";
-		HxlGraphics.addBitmapData(itemBg, itemBgKey);
-
 
 		var cell1:CqInventoryCell = new CqInventoryCell(5, 5, 53, 53);
 		cell1.setGraphicKeys(cellBgKey, cellBgHighlightKey);
@@ -88,11 +96,19 @@ class CqInventoryGrid extends HxlDialog {
 		add(cell6);
 		cells.push(cell6);
 
-		var item1:CqInventoryItem = new CqInventoryItem(2, 2);
-		item1.loadCachedGraphic(itemBgKey);
-		item1.toggleDrag(true);
+	}
 
-		cell2.add(item1);
+	public function getCellItemPos(Cell:Int):HxlPoint {
+		if ( !initialized ) {
+			return new HxlPoint(x + cells[Cell].x + 2, y + cells[Cell].y + 2);
+		}
+		return new HxlPoint(cells[Cell].x + 2, cells[Cell].y + 2);
+
+	}
+
+	public function highlightedCellItemPos():HxlPoint {
+		var Cell:CqInventoryCell = CqInventoryCell.highlightedCell;
+		return new HxlPoint(Cell.x + 2, Cell.y + 2);
 
 	}
 
@@ -100,6 +116,7 @@ class CqInventoryGrid extends HxlDialog {
 
 class CqInventoryCell extends HxlDialog {
 
+	public static var highlightedCell:CqInventoryCell = null;
 	var cellObj:HxlObject;
 	var bgHighlight:HxlSprite;
 	var isHighlighted:Bool;
@@ -154,9 +171,11 @@ class CqInventoryCell extends HxlDialog {
 		if ( isHighlighted ) {
 			background.visible = false;
 			bgHighlight.visible = true;
+			highlightedCell = this;
 		} else {
 			background.visible = true;
 			bgHighlight.visible = false;
+			if ( highlightedCell == this ) highlightedCell = null;
 		}
 	}
 
@@ -164,8 +183,32 @@ class CqInventoryCell extends HxlDialog {
 
 class CqInventoryItem extends HxlSprite {
 
-	public function new(?X:Float=0, ?Y:Float=0) {
+	var _grid:CqInventoryGrid;
+	var idleZIndex:Int;
+	var dragZIndex:Int;
+
+	public function new(Grid:CqInventoryGrid, ?X:Float=0, ?Y:Float=0) {
 		super(X, Y);
+		idleZIndex = 5;
+		dragZIndex = 6;
+		_grid = Grid;
 	}
 
+	override function dragStart():Void {
+		zIndex = dragZIndex;
+		_grid.sortMembersByZIndex();
+		super.dragStart();
+	}
+
+	override function dragStop():Void {
+		if ( CqInventoryCell.highlightedCell != null ) {
+			var cellpos:HxlPoint = _grid.highlightedCellItemPos();
+			x = cellpos.x;
+			y = cellpos.y;
+		}
+		// If there was no eligible drop target, revert to pre drag position
+		zIndex = idleZIndex;
+		_grid.sortMembersByZIndex();
+		super.dragStop();
+	}
 }
