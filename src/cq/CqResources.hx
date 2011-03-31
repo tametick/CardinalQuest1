@@ -18,12 +18,12 @@ class SpriteEffects extends HxlSpriteSheet {
 	} 
 }
 class SpriteItems extends HxlSpriteSheet { 
-	public function new() {
+	public function new(?firstIndex:Int=1) {
 		spriteNames = [
 			["amulet","boots","leather_armor","brestplate","chest","glove","cap","ring","braclet","winged_sandles"],
 			["staff","dagger","short_sword","long_sword","purple_potion","green_potion","blue_potion","yellow_potion","red_potion","helm"],
 		];
-		super();
+		super(firstIndex);
 	} 	
 }
 class SpriteMonsters extends HxlSpriteSheet { 	

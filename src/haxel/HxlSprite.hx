@@ -225,9 +225,7 @@ class HxlSprite extends HxlObject {
 	/**
 	 * Fetches a bitmapData object from the cache matching the supplied key.
 	 **/
-	public function loadCachedGraphic(Key:String, ?Animated:Bool=false):HxlSprite {
-		var Width:Int = 0;
-		var Height:Int = 0;
+	public function loadCachedGraphic(Key:String, ?Animated:Bool=false, ?Width:Int=0, ?Height:Int=0):HxlSprite {
 		_pixels = HxlGraphics.getBitmap(Key);
 
 		if (Animated) {
@@ -768,6 +766,10 @@ class HxlSprite extends HxlObject {
 	 */
 	public function getPixels():BitmapData {
 		return _pixels;
+	}
+
+	public function getFramePixels():BitmapData {
+		return _framePixels;
 	}
 	
 	/**
