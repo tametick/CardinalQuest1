@@ -1,6 +1,7 @@
 package cq;
 
 import haxel.HxlLog;
+import world.Mob;
 
 import world.Actor;
 import world.Player;
@@ -16,9 +17,10 @@ import com.eclecticdesignstudio.motion.Actuate;
 class CqActor extends GameObjectImpl, implements Actor {
 	public var moveSpeed:Float;	
 	public var visionRadius:Float;
-	public var attack:Int;
-	public var defense:Int;
 	
+	var attack:Int;
+	var defense:Int;
+	var faction:Int;
 	var weapon:CqWeapon;
 	
 	// changes to basic abilities (attack, defense, speed, spirit) caused by equipped items or spells
@@ -55,8 +57,8 @@ class CqActor extends GameObjectImpl, implements Actor {
 
 		if (Math.random() < atk / (atk + def)) {
 			// Hit
-/*			
-			if ( vars.faction > 0 && vars.special != undefined && Math.random() <= 0.25 ) {
+			/*
+			if ( faction > 0 && vars.special != undefined && Math.random() <= 0.25 ) {
 				// Use my special rather than apply attack damage
 				Special()[vars.special](this);
 				if(vars.special == "berserk")
@@ -65,7 +67,7 @@ class CqActor extends GameObjectImpl, implements Actor {
 					messageLog.append("<b style='color: rgb("+vars.color.join()+");'>"+vars.description[0]+"</b> <i>"+vars.special+"s</i> you!");
 				return;
 			}
-
+/*
 			var dmgMultipler = 1;
 			if(vars.buffs && vars.buffs.damageMultipler && vars.buffs.damageMultipler!=0)
 				dmgMultipler = vars.buffs.damageMultipler * 1;
@@ -104,6 +106,7 @@ class CqPlayer extends CqActor, implements Player {
 	public function new(playerClass:CqClass, ?X:Float=-1, ?Y:Float=-1) {
 		super(X, Y);
 		loadGraphic(SpritePlayer, true, false, 16, 16, false, 2.0, 2.0);
+		faction = 0;
 		
 		var sprites = new SpritePlayer();
 		switch(playerClass) {
@@ -118,8 +121,31 @@ class CqPlayer extends CqActor, implements Player {
 	}
 }
 
+class CqMob extends CqActor, implements Mob {
+	public function new(mobType:CqMobType, ?X:Float=-1, ?Y:Float=-1) {
+		super(X, Y);
+		loadGraphic(SpriteMonsters, true, false, 16, 16, false, 2.0, 2.0);
+		faction = 1;
+		
+		var sprites = new SpriteMonsters();
+		switch(CqMobType) {
+
+		}
+		//play("idle");
+	}
+}
+
 enum CqClass {
 	FIGHTER;
 	WIZARD;
 	THIEF;
+}
+
+enum CqMobType {
+	KOBOLD;
+	BANDIT;
+	SUCCUBUS;
+	GIANT_SPIDER;
+	WEREWOLF;
+	MINOTAUR;
 }
