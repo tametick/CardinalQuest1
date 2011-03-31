@@ -388,7 +388,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	
 	function addEventListener(Type:String, Listener:Dynamic, UseCapture:Bool=false, Priority:Int=0, UseWeakReference:Bool=false):Void { 
 		HxlGraphics.stage.addEventListener(Type, Listener, UseCapture, Priority, UseWeakReference);
-		eventListeners.push( {Type: Type, Listener: Listener, UseCapture: UseCapture} );
+		eventListeners.push( {Type: Type, Listener: Listener, UseCapture: UseCapture, Priority: Priority} );
 	}
 
 	function removeEventListener(Type:String, Listener:Dynamic):Void {
@@ -418,7 +418,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	public function resumeEventListeners():Void {
 		if ( HxlGraphics.stage == null ) return;
 		for ( i in eventListeners ) {
-			HxlGraphics.stage.addEventListener(i.Type, i.Listener, i.UseCapture);
+			HxlGraphics.stage.addEventListener(i.Type, i.Listener, i.UseCapture, i.Priority);
 		}
 	}
 }
