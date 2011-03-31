@@ -5,6 +5,11 @@ import flash.Lib;
 
 import haxel.HxlTilemap;
 
+class Range {
+	public var start:Int;
+	public var end:Int;
+}
+
 class HxlUtil {
 
 	public function new() { }

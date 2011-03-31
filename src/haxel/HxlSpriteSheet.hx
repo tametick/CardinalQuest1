@@ -7,16 +7,18 @@ class HxlSpriteSheet extends Bitmap {
 	var spriteIndex:Hash<Int>;
 	
 	public function new(?firstIndex:Int=1) {
-		initSpriteIndexes(firstIndex);
+		spriteIndex = initSpriteIndexes(firstIndex,spriteNames);
 		super(); 
 	}
 	
-	function initSpriteIndexes(firstIndex:Int) {
+	static function initSpriteIndexes(firstIndex:Int, spriteNames:Array<Array<String>>):Hash<Int> {
 		var index = firstIndex;
-		spriteIndex = new Hash<Int>();
+		var spriteIndex = new Hash<Int>();
 		for (spriteY in 0...spriteNames.length)
 			for (spriteX in 0...spriteNames[spriteY].length)
 				spriteIndex.set(spriteNames[spriteY][spriteX], index++);
+				
+		return spriteIndex;
 	}
 	
 	public function getSpriteIndex(name:String):Int {

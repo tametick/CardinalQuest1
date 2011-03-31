@@ -22,6 +22,7 @@ class CqLevel extends Level {
 	public function new() {
 		super();
 		tileClass = CqTile;
+		// fixme - use static function instead
 		var tiles = new SpriteTiles();
 				
 		var newMapData = BSP.getBSPMap(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), tiles.getSpriteIndex("red_wall4"), tiles.getSpriteIndex("red_floor0"), tiles.getSpriteIndex("red_door_close"));

@@ -1,8 +1,9 @@
 package cq;
 
 import haxel.HxlLog;
-import world.Mob;
+import haxel.HxlUtil;
 
+import world.Mob;
 import world.Actor;
 import world.Player;
 import world.GameObject;
@@ -14,13 +15,20 @@ import cq.CqItem;
 
 import com.eclecticdesignstudio.motion.Actuate;
 
-class CqActor extends GameObjectImpl, implements Actor {
+
+class CqObject extends GameObjectImpl {
+}
+
+class CqActor extends CqObject, implements Actor {
 	public var moveSpeed:Float;	
 	public var visionRadius:Float;
 	
 	var attack:Int;
 	var defense:Int;
 	var faction:Int;
+	
+	// natural damage without weapon
+	var damage:Range;
 	
 	var equippedWeapon:CqWeapon;
 	var equippedSpell:CqSpell;
@@ -36,8 +44,16 @@ class CqActor extends GameObjectImpl, implements Actor {
 		visionRadius = 8.2;
 		this.attack = attack;
 		this.defense = defense;
-		buffs = new Hash<Int>();
+		initBuffs();
 		specialEffects = new Hash();
+	}
+	
+	function initBuffs(){
+		var buffs = new Hash<Int>();
+		buffs.set("attack",0);
+		buffs.set("defense",0);
+		buffs.set("damageMultipler", 1);
+		buffs.set("life", 0);
 	}
 	
 	public var isMoving:Bool;
@@ -50,7 +66,21 @@ class CqActor extends GameObjectImpl, implements Actor {
 		isMoving = false;
 	}
 	
-	public function attackOther(other:Actor) {
+	function attackObject(other:CqObject) {
+		// todo = bust chests
+	}
+	
+	function injureActor(other:CqActor) {
+	}
+	
+	function killActor(other:CqActor) {
+	}
+
+	public function attackOther(other:GameObject) {
+		if (!Std.is(other, CqActor)){
+			attackObject(cast(other, CqObject));
+			return;
+		}
 		var other = cast(other, CqActor);
 		
 		// attack & defense buffs
@@ -61,37 +91,34 @@ class CqActor extends GameObjectImpl, implements Actor {
 			// Hit
 
 			if ( Std.is(other,CqMob) && other.equippedSpell!=null && Math.random() <= 0.25 ) {
-				// Use my special rather than apply attack damage
-/*				Special()[vars.special](this);
+				// Use my spell rather than apply attack damage
+			  /*Special()[vars.special](this);
 				if(vars.special == "berserk")
 					messageLog.append("<b style='color: rgb("+vars.color.join()+");'>"+vars.description[0]+"</b> <i>"+vars.special+"s</i>!");
 				else
 					messageLog.append("<b style='color: rgb("+vars.color.join()+");'>"+vars.description[0]+"</b> <i>"+vars.special+"s</i> you!");
 				return;*/
 			}
-/*
-			var dmgMultipler = 1;
-			if(vars.buffs && vars.buffs.damageMultipler && vars.buffs.damageMultipler!=0)
-				dmgMultipler = vars.buffs.damageMultipler * 1;
 
-			if (vars.weapon && vars.weapon.wielded.length > 0) {
+			var dmgMultipler = buffs.get("damageMultipler");
+
+			if (equippedWeapon!=null) {
 				// With weapon
-				var damageRange = vars.weapon.wielded[0].vars.damage;
-
-				other.vars.life -= utils.randInt(damageRange[0] * dmgMultipler, damageRange[1] * dmgMultipler);
+				var damageRange = equippedWeapon.damage;
+				other.hp -= HxlUtil.randomIntInRange(damageRange.start * dmgMultipler, damageRange.end * dmgMultipler);
 			} else {
 				// With natural attack
-				other.vars.life -= utils.randInt(vars.damage[0] * dmgMultipler, vars.damage[1] * dmgMultipler);
+				other.hp -= HxlUtil.randomIntInRange(damage.start * dmgMultipler, damage.end * dmgMultipler);
 			}
 			
 			// life buffs
-			var lif = other.vars.life + (other.vars.buffs ? (other.vars.buffs.life ? other.vars.buffs.life : 0) : 0);
+			var lif = other.hp + other.buffs.get("life");
 			
 			if (lif > 0)
-				injure(other);
+				injureActor(other);
 			else
-				kill(other);
-*/
+				killActor(other);
+
 		} else {
 			// Miss
 			if (this == cast(Registery.player,CqPlayer)) {
@@ -110,6 +137,7 @@ class CqPlayer extends CqActor, implements Player {
 		loadGraphic(SpritePlayer, true, false, 16, 16, false, 2.0, 2.0);
 		faction = 0;
 		
+		// fixme - use static method
 		var sprites = new SpritePlayer();
 		switch(playerClass) {
 			case FIGHTER:
