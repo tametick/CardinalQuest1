@@ -18,7 +18,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 
 	var dlgCharacter:HxlDialog;
 	var dlgInfo:HxlDialog;
-	var dlgGrid:CqInventoryGrid;
+	public var dlgGrid:CqInventoryGrid;
 	var itemSheet:HxlSpriteSheet;
 	var itemSprite:HxlSprite;
 
@@ -50,20 +50,20 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		HxlGraphics.addBitmapData(itemBg, itemBgKey);
 		CqInventoryItem.backgroundKey = itemBgKey;
 
-		var item1:CqInventoryItem = new CqInventoryItem(dlgGrid, 2, 2);
+		var item1:CqInventoryItem = new CqInventoryItem(this, 2, 2);
 		itemSprite.setFrame(itemSheet.getSpriteIndex("winged_sandles"));
 		item1.setIcon(itemSprite.getFramePixels());
 		item1.toggleDrag(true);
 		item1.zIndex = 5;
-		item1.setPos(dlgGrid.getCellItemPos(1));
+		item1.setCell(1);
 		add(item1);
 
-		var item2:CqInventoryItem = new CqInventoryItem(dlgGrid, 2, 2);
+		var item2:CqInventoryItem = new CqInventoryItem(this, 2, 2);
 		itemSprite.setFrame(itemSheet.getSpriteIndex("leather_armor"));
 		item2.setIcon(itemSprite.getFramePixels());
 		item2.toggleDrag(true);
 		item2.zIndex = 5;
-		item2.setPos(dlgGrid.getCellItemPos(4));
+		item2.setCell(4);
 		add(item2);
 	
 	}
@@ -95,43 +95,13 @@ class CqInventoryGrid extends HxlDialog {
 		var cols:Int = 7;
 		for ( row in 0...rows ) {
 			for ( col in 0...cols ) {
-				var cell:CqInventoryCell = new CqInventoryCell( offsetX + ((col+1) * padding) + (col * cellSize), ((row+1) * padding) + (row * cellSize), cellSize, cellSize);
+				var idx:Int = cells.length;
+				var cell:CqInventoryCell = new CqInventoryCell( offsetX + ((col+1) * padding) + (col * cellSize), ((row+1) * padding) + (row * cellSize), cellSize, cellSize, idx);
 				cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
 				add(cell);
 				cells.push(cell);
 			}
 		}
-		/*
-		var cell1:CqInventoryCell = new CqInventoryCell(5, 5, 54, 54);
-		cell1.setGraphicKeys(cellBgKey, cellBgHighlightKey);
-		add(cell1);
-		cells.push(cell1);
-
-		var cell2:CqInventoryCell = new CqInventoryCell(63, 5, 54, 54);
-		cell2.setGraphicKeys(cellBgKey, cellBgHighlightKey);
-		add(cell2);
-		cells.push(cell2);
-
-		var cell3:CqInventoryCell = new CqInventoryCell(121, 5, 54, 54);
-		cell3.setGraphicKeys(cellBgKey, cellBgHighlightKey);
-		add(cell3);
-		cells.push(cell3);
-
-		var cell4:CqInventoryCell = new CqInventoryCell(5, 63, 54, 54);
-		cell4.setGraphicKeys(cellBgKey, cellBgHighlightKey);
-		add(cell4);
-		cells.push(cell4);
-
-		var cell5:CqInventoryCell = new CqInventoryCell(63, 63, 54, 54);
-		cell5.setGraphicKeys(cellBgKey, cellBgHighlightKey);
-		add(cell5);
-		cells.push(cell5);
-
-		var cell6:CqInventoryCell = new CqInventoryCell(121, 63, 54, 54);
-		cell6.setGraphicKeys(cellBgKey, cellBgHighlightKey);
-		add(cell6);
-		cells.push(cell6);
-		*/
 	}
 
 	public function getCellItemPos(Cell:Int):HxlPoint {
@@ -142,10 +112,22 @@ class CqInventoryGrid extends HxlDialog {
 
 	}
 
+	public function setCellObj(Cell:Int, CellObj:CqInventoryItem):Void {
+		cells[Cell].setCellObj(CellObj);
+	}
+
+	public function getCellObj(Cell:Int):CqInventoryItem {
+		return cells[Cell].getCellObj();
+	}
+
 	public function highlightedCellItemPos():HxlPoint {
 		var Cell:CqInventoryCell = CqInventoryCell.highlightedCell;
 		return new HxlPoint(Cell.x + 2, Cell.y + 2);
 
+	}
+
+	public function highlightedCell():CqInventoryCell {
+		return CqInventoryCell.highlightedCell;
 	}
 
 }
@@ -153,15 +135,17 @@ class CqInventoryGrid extends HxlDialog {
 class CqInventoryCell extends HxlDialog {
 
 	public static var highlightedCell:CqInventoryCell = null;
-	var cellObj:HxlObject;
+	var cellObj:CqInventoryItem;
 	var bgHighlight:HxlSprite;
 	var isHighlighted:Bool;
+	public var cellIndex:Int;
 
-	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100) {
+	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?CellIndex:Int=0) {
 		super(X, Y, Width, Height);
 		bgHighlight = null;
 		cellObj = null;
 		isHighlighted = false;
+		cellIndex = CellIndex;
 	}
 
 	public function setGraphicKeys(Normal:String, ?Highlight:String=null):Void {
@@ -215,6 +199,14 @@ class CqInventoryCell extends HxlDialog {
 		}
 	}
 
+	public function setCellObj(CellObj:CqInventoryItem):Void {
+		cellObj = CellObj;
+	}
+
+	public function getCellObj():CqInventoryItem {
+		return cellObj;
+	}
+
 }
 
 class CqInventoryItem extends HxlSprite {
@@ -222,18 +214,20 @@ class CqInventoryItem extends HxlSprite {
 	public static var backgroundKey:String;
 	var background:BitmapData;
 	var icon:BitmapData;
-	var _grid:CqInventoryGrid;
+	var _dlg:CqInventoryDialog;
 	var idleZIndex:Int;
 	var dragZIndex:Int;
+	var cellIndex:Int;
 
-	public function new(Grid:CqInventoryGrid, ?X:Float=0, ?Y:Float=0) {
+	public function new(Dialog:CqInventoryDialog, ?X:Float=0, ?Y:Float=0) {
 		super(X, Y);
 		loadCachedGraphic(backgroundKey);
 		background = HxlGraphics.getBitmap(backgroundKey);
 		icon = null;
 		idleZIndex = 5;
 		dragZIndex = 6;
-		_grid = Grid;
+		_dlg = Dialog;
+		cellIndex = 0;
 		//pixels = background;
 		//width = background.width;
 		//height = background.height;
@@ -249,6 +243,12 @@ class CqInventoryItem extends HxlSprite {
 		pixels = temp;
 	}
 
+	public function setCell(Cell:Int):Void {
+		cellIndex = Cell;
+		setPos(_dlg.dlgGrid.getCellItemPos(Cell));
+		_dlg.dlgGrid.setCellObj(Cell, this);
+	}
+
 	public function setPos(Pos:HxlPoint):Void {
 		x = Pos.x;
 		y = Pos.y;
@@ -256,19 +256,28 @@ class CqInventoryItem extends HxlSprite {
 
 	override function dragStart():Void {
 		zIndex = dragZIndex;
-		_grid.sortMembersByZIndex();
+		_dlg.sortMembersByZIndex();
 		super.dragStart();
 	}
 
 	override function dragStop():Void {
 		if ( CqInventoryCell.highlightedCell != null ) {
-			setPos(_grid.highlightedCellItemPos());
+			if ( CqInventoryCell.highlightedCell.getCellObj() != null ) {
+				var other:CqInventoryItem = CqInventoryCell.highlightedCell.getCellObj();
+				other.setCell(cellIndex);
+				setCell(CqInventoryCell.highlightedCell.cellIndex);
+				cellIndex = CqInventoryCell.highlightedCell.cellIndex;
+			} else {
+				_dlg.dlgGrid.setCellObj(cellIndex, null);
+				setCell(CqInventoryCell.highlightedCell.cellIndex);
+				cellIndex = CqInventoryCell.highlightedCell.cellIndex;
+			}
 		} else {
 			// If there was no eligible drop target, revert to pre drag position
 			setPos(dragStartPoint);
 		}
 		zIndex = idleZIndex;
-		_grid.sortMembersByZIndex();
+		_dlg.sortMembersByZIndex();
 		super.dragStop();
 	}
 }
