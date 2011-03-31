@@ -80,6 +80,27 @@ class GameState extends HxlState
 	override function onMouseDown(event:MouseEvent) { 
 		var tileX = Std.int(HxlGraphics.mouse.x / (CqConfiguration.tileSize*2));
 		var tileY = Std.int(HxlGraphics.mouse.y / (CqConfiguration.tileSize*2));
+
+		var dx = HxlGraphics.mouse.x - Registery.player.x;
+		var dy = HxlGraphics.mouse.y - Registery.player.y;
+		var level = Registery.world.currentLevel;
+		if (Math.abs(dx) > Math.abs(dy)){
+			if (dx < 0) {
+				if (!level.isBlockingMovement(Std.int(Registery.player.tilePos.x - 1), Std.int(Registery.player.tilePos.y)))
+					movePlayer(Registery.world, Registery.player, new HxlPoint( -1, 0));					
+			} else {
+				if (!level.isBlockingMovement(Std.int(Registery.player.tilePos.x + 1), Std.int(Registery.player.tilePos.y)))
+					movePlayer(Registery.world, Registery.player, new HxlPoint( 1, 0));
+			}
+		} else {
+			if (dy < 0) {
+				if (!level.isBlockingMovement(Std.int(Registery.player.tilePos.x), Std.int(Registery.player.tilePos.y-1)))
+					movePlayer(Registery.world, Registery.player, new HxlPoint( 0, -1));
+			} else {
+				if (!level.isBlockingMovement(Std.int(Registery.player.tilePos.x), Std.int(Registery.player.tilePos.y+1)))
+					movePlayer(Registery.world, Registery.player, new HxlPoint( 0, 1));
+			}
+		}
 		
 	}
 	
