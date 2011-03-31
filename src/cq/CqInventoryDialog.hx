@@ -43,7 +43,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		var itemSheetKey:String = "ItemIconSheet";
 		//HxlGraphics.addBitmap(SpriteItems, false, false, itemSheetKey, 2.0, 2.0);
 		itemSprite = new HxlSprite(0, 0);
-		itemSprite.loadGraphic(SpriteItems, true, false, 16, 16, false, 3.0, 3.0);
+		itemSprite.loadGraphic(SpriteItems, true, false, CqConfiguration.tileSize, CqConfiguration.tileSize, false, 3.0, 3.0);
 
 		var itemBg:BitmapData = HxlGradient.RectData(50, 50, [0xc1c1c1, 0x9e9e9e], null, Math.PI/2, 8.0);
 		var itemBgKey:String = "ItemBG";

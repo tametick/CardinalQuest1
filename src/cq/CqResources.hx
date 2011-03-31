@@ -3,7 +3,6 @@ package cq;
 import flash.text.Font;
 import flash.media.Sound;
 
-import data.Configuration;
 import data.Resources;
 import haxel.HxlSpriteSheet;
 

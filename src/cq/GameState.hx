@@ -5,12 +5,14 @@ import haxel.HxlState;
 import haxel.HxlGraphics;
 
 import data.Registery;
+
 import world.World;
 import world.Player;
 
 import cq.CqActor;
 
 import flash.events.KeyboardEvent;
+import flash.events.MouseEvent;
 
 class GameState extends HxlState
 {
@@ -73,6 +75,15 @@ class GameState extends HxlState
 			
 		}		
 	}
+	override function onMouseOver(event:MouseEvent) { }
+	override function onMouseUp(event:MouseEvent) { }
+	override function onMouseDown(event:MouseEvent) { 
+		var tileX = Std.int(HxlGraphics.mouse.x / (CqConfiguration.tileSize*2));
+		var tileY = Std.int(HxlGraphics.mouse.y / (CqConfiguration.tileSize*2));
+		
+	}
+	
+
 	
 	function movePlayer(world:World, player:Player, targetTile:HxlPoint) {
 		player.isMoving = true;

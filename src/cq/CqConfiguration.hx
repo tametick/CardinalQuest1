@@ -1,8 +1,9 @@
 package cq;
-import data.Configuration;
 
-class CqConfiguration extends Configuration
+class CqConfiguration
 {
+	public static var tileSize = 16;
+	
 	public static function getLevelWidth(?level:Int=0) { 
 		return 32; 
 	}

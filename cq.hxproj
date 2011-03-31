@@ -37,7 +37,6 @@
     <compile path="src\world\Player.hx" />
     <compile path="src\world\Tile.hx" />
     <compile path="src\world\World.hx" />
-    <compile path="src\data\Configuration.hx" />
     <compile path="src\data\Registery.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->

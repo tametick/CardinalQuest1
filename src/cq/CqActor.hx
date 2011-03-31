@@ -144,7 +144,7 @@ class CqActor extends CqObject, implements Actor {
 class CqPlayer extends CqActor, implements Player {
 	public function new(playerClass:CqClass, ?X:Float=-1, ?Y:Float=-1) {
 		super(X, Y);
-		loadGraphic(SpritePlayer, true, false, 16, 16, false, 2.0, 2.0);
+		loadGraphic(SpritePlayer, true, false, CqConfiguration.tileSize, CqConfiguration.tileSize, false, 2.0, 2.0);
 		faction = 0;
 		
 		// fixme - use static method
@@ -164,7 +164,7 @@ class CqPlayer extends CqActor, implements Player {
 class CqMob extends CqActor, implements Mob {
 	public function new(mobType:CqMobType, ?X:Float=-1, ?Y:Float=-1) {
 		super(X, Y);
-		loadGraphic(SpriteMonsters, true, false, 16, 16, false, 2.0, 2.0);
+		loadGraphic(SpriteMonsters, true, false, CqConfiguration.tileSize, CqConfiguration.tileSize, false, 2.0, 2.0);
 		faction = 1;
 		
 		var sprites = new SpriteMonsters();

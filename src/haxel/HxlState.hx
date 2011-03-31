@@ -100,7 +100,8 @@ class HxlState extends Sprite {
 				_addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 				_addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 				_addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-				_addEventListener(MouseEvent.MOUSE_UP, onMouseUp);			
+				_addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+				_addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 			}
 			init();
 			initialized = 1;
@@ -122,6 +123,7 @@ class HxlState extends Sprite {
 	function onKeyDown(event:KeyboardEvent) { }
 	function onMouseDown(event:MouseEvent) { }
 	function onMouseUp(event:MouseEvent) { }
+	function onMouseOver(event:MouseEvent) { }
 
 	public function getIsStacked():Bool {
 		return _isStacked;
