@@ -21,7 +21,9 @@ class CqActor extends GameObjectImpl, implements Actor {
 	var attack:Int;
 	var defense:Int;
 	var faction:Int;
-	var weapon:CqWeapon;
+	
+	var equippedWeapon:CqWeapon;
+	var equippedSpell:CqSpell;
 	
 	// changes to basic abilities (attack, defense, speed, spirit) caused by equipped items or spells
 	var buffs:Hash<Int>;
@@ -57,15 +59,15 @@ class CqActor extends GameObjectImpl, implements Actor {
 
 		if (Math.random() < atk / (atk + def)) {
 			// Hit
-			/*
-			if ( faction > 0 && vars.special != undefined && Math.random() <= 0.25 ) {
+
+			if ( Std.is(other,CqMob) && other.equippedSpell!=null && Math.random() <= 0.25 ) {
 				// Use my special rather than apply attack damage
-				Special()[vars.special](this);
+/*				Special()[vars.special](this);
 				if(vars.special == "berserk")
 					messageLog.append("<b style='color: rgb("+vars.color.join()+");'>"+vars.description[0]+"</b> <i>"+vars.special+"s</i>!");
 				else
 					messageLog.append("<b style='color: rgb("+vars.color.join()+");'>"+vars.description[0]+"</b> <i>"+vars.special+"s</i> you!");
-				return;
+				return;*/
 			}
 /*
 			var dmgMultipler = 1;
