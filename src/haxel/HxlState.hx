@@ -1,6 +1,7 @@
 package haxel;
 
 import flash.display.Sprite;
+import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.events.KeyboardEvent;
@@ -98,6 +99,8 @@ class HxlState extends Sprite {
 			} else {
 				_addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 				_addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+				_addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+				_addEventListener(MouseEvent.MOUSE_UP, onMouseUp);			
 			}
 			init();
 			initialized = 1;
@@ -117,6 +120,8 @@ class HxlState extends Sprite {
 	function init() { }
 	function onKeyUp(event:KeyboardEvent) { }
 	function onKeyDown(event:KeyboardEvent) { }
+	function onMouseDown(event:MouseEvent) { }
+	function onMouseUp(event:MouseEvent) { }
 
 	public function getIsStacked():Bool {
 		return _isStacked;
