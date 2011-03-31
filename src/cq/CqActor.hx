@@ -71,9 +71,19 @@ class CqActor extends CqObject, implements Actor {
 	}
 	
 	function injureActor(other:CqActor) {
+		if (this == cast(Registery.player,CqPlayer)) {
+			HxlLog.append("You hit");
+		} else {
+			HxlLog.append("Hit you");
+		}
 	}
 	
 	function killActor(other:CqActor) {
+		if (this == cast(Registery.player,CqPlayer)) {
+			HxlLog.append("You kill");
+		} else {
+			HxlLog.append("kill you");
+		}
 	}
 
 	public function attackOther(other:GameObject) {
