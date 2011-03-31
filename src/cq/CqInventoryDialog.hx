@@ -27,15 +27,15 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		// Size: 472 x 480
 		super(X, Y, Width, Height, Direction);
 
-		dlgCharacter = new HxlDialog(10, 10, 221, 220);
+		dlgCharacter = new HxlDialog(10, 10, 221, 255);
 		dlgCharacter.setBackgroundColor(0xff333333);
 		add(dlgCharacter);
 
-		dlgInfo = new HxlDialog(241, 10, 221, 220);
+		dlgInfo = new HxlDialog(241, 10, 221, 255);
 		dlgInfo.setBackgroundColor(0xff333333);
 		add(dlgInfo);
 
-		dlgGrid = new CqInventoryGrid(10, 240, 452, 230);
+		dlgGrid = new CqInventoryGrid(10, 275, 452, 195);
 		dlgGrid.setBackgroundColor(0xff999999);
 		add(dlgGrid);
 
@@ -80,6 +80,21 @@ class CqInventoryGrid extends HxlDialog {
 		var cellBgHighlightKey:String = "CellBGHighlight";
 		HxlGraphics.addBitmapData(cellBgHighlight, cellBgHighlightKey);
 
+		var padding:Int = 8;
+		var cellSize:Int = 54;
+		var offsetX:Int = 5;
+
+		var rows:Int = 3;
+		var cols:Int = 7;
+		for ( row in 0...rows ) {
+			for ( col in 0...cols ) {
+				var cell:CqInventoryCell = new CqInventoryCell( offsetX + ((col+1) * padding) + (col * cellSize), ((row+1) * padding) + (row * cellSize), cellSize, cellSize);
+				cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+				add(cell);
+				cells.push(cell);
+			}
+		}
+		/*
 		var cell1:CqInventoryCell = new CqInventoryCell(5, 5, 54, 54);
 		cell1.setGraphicKeys(cellBgKey, cellBgHighlightKey);
 		add(cell1);
@@ -109,7 +124,7 @@ class CqInventoryGrid extends HxlDialog {
 		cell6.setGraphicKeys(cellBgKey, cellBgHighlightKey);
 		add(cell6);
 		cells.push(cell6);
-
+		*/
 	}
 
 	public function getCellItemPos(Cell:Int):HxlPoint {
