@@ -55,10 +55,17 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		item1.setIcon(itemSprite.getFramePixels());
 		item1.toggleDrag(true);
 		item1.zIndex = 5;
-		var cellpos:HxlPoint = dlgGrid.getCellItemPos(1);
-		item1.x = cellpos.x;
-		item1.y = cellpos.y;
+		item1.setPos(dlgGrid.getCellItemPos(1));
 		add(item1);
+
+		var item2:CqInventoryItem = new CqInventoryItem(dlgGrid, 2, 2);
+		itemSprite.setFrame(itemSheet.getSpriteIndex("leather_armor"));
+		item2.setIcon(itemSprite.getFramePixels());
+		item2.toggleDrag(true);
+		item2.zIndex = 5;
+		item2.setPos(dlgGrid.getCellItemPos(4));
+		add(item2);
+	
 	}
 
 }
@@ -242,6 +249,11 @@ class CqInventoryItem extends HxlSprite {
 		pixels = temp;
 	}
 
+	public function setPos(Pos:HxlPoint):Void {
+		x = Pos.x;
+		y = Pos.y;
+	}
+
 	override function dragStart():Void {
 		zIndex = dragZIndex;
 		_grid.sortMembersByZIndex();
@@ -250,11 +262,11 @@ class CqInventoryItem extends HxlSprite {
 
 	override function dragStop():Void {
 		if ( CqInventoryCell.highlightedCell != null ) {
-			var cellpos:HxlPoint = _grid.highlightedCellItemPos();
-			x = cellpos.x;
-			y = cellpos.y;
+			setPos(_grid.highlightedCellItemPos());
+		} else {
+			// If there was no eligible drop target, revert to pre drag position
+			setPos(dragStartPoint);
 		}
-		// If there was no eligible drop target, revert to pre drag position
 		zIndex = idleZIndex;
 		_grid.sortMembersByZIndex();
 		super.dragStop();
