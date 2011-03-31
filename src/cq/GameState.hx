@@ -8,7 +8,7 @@ import data.Registery;
 import world.World;
 import world.Player;
 
-import cq.CqPlayer;
+import cq.CqActor;
 
 import flash.events.KeyboardEvent;
 
