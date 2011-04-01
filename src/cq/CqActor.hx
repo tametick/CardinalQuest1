@@ -12,12 +12,9 @@ import data.Registery;
 
 import cq.CqResources;
 import cq.CqItem;
+import cq.CqWorld;
 
 import com.eclecticdesignstudio.motion.Actuate;
-
-
-class CqObject extends GameObjectImpl {
-}
 
 class CqActor extends CqObject, implements Actor {
 	public var moveSpeed:Float;	

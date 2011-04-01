@@ -40,7 +40,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		dlgGrid.setBackgroundColor(0xff999999);
 		add(dlgGrid);
 
-		itemSheet = new SpriteItems(0);
+		itemSheet = new SpriteItems();
 		var itemSheetKey:String = "ItemIconSheet";
 		//HxlGraphics.addBitmap(SpriteItems, false, false, itemSheetKey, 2.0, 2.0);
 		itemSprite = new HxlSprite(0, 0);

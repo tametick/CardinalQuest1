@@ -96,7 +96,7 @@ class Level extends HxlTilemap
 					_pathMap.setWalkable(x, y, false);
 			}
 		}
-				
+
 		return map;
 	}
 	

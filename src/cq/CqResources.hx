@@ -13,16 +13,16 @@ class SpriteEffects extends HxlSpriteSheet {
 		spriteNames = [
 			["small_scratch","big_scratch"]
 		];
-		super();
+		super(0);
 	} 
 }
 class SpriteItems extends HxlSpriteSheet { 
-	public function new(?firstIndex:Int=1) {
+	public function new() {
 		spriteNames = [
 			["amulet","boots","leather_armor","brestplate","chest","glove","cap","ring","braclet","winged_sandles"],
 			["staff","dagger","short_sword","long_sword","purple_potion","green_potion","blue_potion","yellow_potion","red_potion","helm"],
 		];
-		super(firstIndex);
+		super(0);
 	} 	
 }
 class SpriteMonsters extends HxlSpriteSheet { 	
@@ -35,7 +35,7 @@ class SpriteMonsters extends HxlSpriteSheet {
 			["succubus","succubus_staff","succubus_whip","succubus_scepter",],
 			["spider_yellow","spider_red","spider_gray","spider_green"],
 		];
-		super();
+		super(0);
 	} 
 }
 
@@ -62,7 +62,7 @@ class SpriteTiles extends HxlSpriteSheet {
 			["blue_up", "blue_down", "blue_floor0", "blue_floor1", "blue_wall0", "blue_wall1", "blue_wall2", "blue_wall3", "blue_wall4", "blue_door_close", "blue_door_open"], 
 			["brown_up","brown_down","brown_floor0","brown_floor1","brown_wall0","brown_wall1","brown_wall2","brown_wall3","brown_wall4","brown_door_close","brown_door_open"], 
 		];
-		super();
+		super(1);
 		
 		walkableAndSeeThroughTiles = [
 			getSpriteIndex("red_floor0"), getSpriteIndex("blue_floor0"), getSpriteIndex("brown_floor0"),
@@ -73,6 +73,7 @@ class SpriteTiles extends HxlSpriteSheet {
 		if (!inited) {
 			Resources.walkableTiles = Resources.walkableTiles.concat(walkableAndSeeThroughTiles);
 			Resources.seeThroughTiles = Resources.seeThroughTiles.concat(walkableAndSeeThroughTiles);
+			Resources.walkableAndSeeThroughTiles = Resources.walkableAndSeeThroughTiles.concat(walkableAndSeeThroughTiles);
 			inited = true;
 		}
 	}
@@ -82,7 +83,7 @@ class SpriteCorpses extends HxlSpriteSheet {
 		spriteNames = [
 			["big_skull","small_skull"]
 		];
-		super();
+		super(0);
 	} 
 }
 

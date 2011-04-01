@@ -1,23 +1,31 @@
 package cq;
 
 import cq.CqResources;
+import cq.CqItem;
+
 import haxel.HxlPoint;
 import haxel.HxlState;
 
 import generators.BSP;
+
 import world.World;
 import world.Level;
 import world.Mob;
 import world.Loot;
 import world.Tile;
+import world.GameObject;
+
 import haxel.HxlUtil;
 import haxel.HxlGraphics;
 
 import data.Registery;
 
-class CqTile extends Tile {
-
+class CqObject extends GameObjectImpl {
+	public function new(?X:Float = -1, ?Y:Float= -1) {
+		super(X, Y);
+	}	
 }
+class CqTile extends Tile {}
 
 class CqLevel extends Level {	
 	// fixme - use static function instead
@@ -51,10 +59,14 @@ class CqLevel extends Level {
 	}
 	
 	function addChest(pos:HxlPoint) {
-		var idx = itemSprites.getSpriteIndex("chest");
-		// add to level loot list
-		// add to tile loot list
+		var pixelPos = getPixelPositionOfTile(pos.x, pos.y);
 		
+		var chest = new CqChest(pixelPos.x, pixelPos.y);
+		// add to level loot list
+		loots.push(chest);
+		
+		// add to tile loot list
+		cast(getTile(pos.x, pos.y), CqTile).loots.push(chest);
 	}
 	
 }

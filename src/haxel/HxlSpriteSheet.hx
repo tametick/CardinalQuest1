@@ -6,7 +6,7 @@ class HxlSpriteSheet extends Bitmap {
 	var spriteNames:Array<Array<String>>;
 	var spriteIndex:Hash<Int>;
 	
-	public function new(?firstIndex:Int=1) {
+	public function new(firstIndex) {
 		spriteIndex = initSpriteIndexes(firstIndex,spriteNames);
 		super(); 
 	}
