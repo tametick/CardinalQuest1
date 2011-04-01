@@ -14,6 +14,7 @@ interface HxlObjectI {
 	public var scrollFactor:HxlPoint;
 	
 	public function onAdd(state:HxlState):Void;
+	public function onRemove(state:HxlState):Void;
 }
  
 class HxlObject extends HxlRect, implements HxlObjectI {
@@ -223,11 +224,10 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	}
 
 	/**
-	 * override this function if you want to do something after the object is added
+	 * override these function if you want to do something after the object is added or removed
 	 */
-	public function onAdd(state:HxlState) {
-		
-	}
+	public function onAdd(state:HxlState) {}
+	public function onRemove(state:HxlState) {}
 	
 	/**
 	 * Call this function to "kill" a sprite so that it no longer 'exists'.

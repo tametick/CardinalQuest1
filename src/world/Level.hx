@@ -18,8 +18,7 @@ class Level extends HxlTilemap
 	public var startingLocation:HxlPoint;
 	var _pathMap:PathMap;
 	
-	public function new() 
-	{
+	public function new() {
 		super();
 		
 		mobs = new Array();
@@ -48,6 +47,11 @@ class Level extends HxlTilemap
 		
 		follow();
 		HxlGraphics.follow(Registery.player, 10);
+	}
+	
+	public override function onRemove(state:HxlState) {
+		removeAllActors(state);
+		removeAllLoots(state);
 	}
 	
 	function addAllActors(state:HxlState) {
@@ -110,7 +114,7 @@ class Level extends HxlTilemap
 		return Std.parseInt("0x"+hex+hex+hex);
 	}
 	
-	public function updateFieldOfView(?skipTween:Bool = false, ?gradientColoring:Bool = true, ?seenTween:Int = 95, ?inSightTween:Int=255) {
+	public function updateFieldOfView(?skipTween:Bool = false, ?gradientColoring:Bool = true, ?seenTween:Int = 64, ?inSightTween:Int=255) {
 		var player = Registery.player;
 		
 		var bottom = Std.int(Math.min(heightInTiles - 1, player.tilePos.y + (player.visionRadius+1)));
