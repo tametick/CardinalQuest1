@@ -23,7 +23,7 @@ class GameObjectImpl extends HxlSprite, implements GameObject
 	
 	var _tilePos:HxlPoint;
 	
-	public function new(?x:Float, ?y:Float, ?hp:Int=1) 
+	public function new(x:Float, y:Float, ?hp:Int=1) 
 	{
 		super(x, y);
 		_tilePos = new HxlPoint();
@@ -40,12 +40,14 @@ class GameObjectImpl extends HxlSprite, implements GameObject
 		// remove from old tile
 		if (_tilePos != null) {
 			var tile = Registery.world.currentLevel.getTile(_tilePos.x, _tilePos.y);
-			if(tile!=null)
+			if (tile != null)
+				// fixme - actor or loot
 				tile.actors.remove(this);
 		}
 		
 		// add to new tile
 		_tilePos = TilePos;
+		
 		Registery.world.currentLevel.getTile(_tilePos.x, _tilePos.y).actors.push(this);
 		return TilePos;
 	}

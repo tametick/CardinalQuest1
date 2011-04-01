@@ -21,8 +21,9 @@ import haxel.HxlGraphics;
 import data.Registery;
 
 class CqObject extends GameObjectImpl {
-	public function new(?X:Float = -1, ?Y:Float= -1) {
+	public function new(X:Float, Y) {
 		super(X, Y);
+		_tilePos = new HxlPoint(X / (CqConfiguration.tileSize*2.0), Y / (CqConfiguration.tileSize*2.0));
 	}	
 }
 class CqTile extends Tile {}
@@ -49,7 +50,6 @@ class CqLevel extends Level {
 	function addChests(numberOfChests:Int) {
 		for (c in 0...numberOfChests){
 			var pos; 
-			
 			do {
 				pos = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
 			} while (cast(getTile(pos.x, pos.y), CqTile).loots.length > 0);

@@ -82,6 +82,15 @@ class Level extends HxlTilemap
 			state.remove(loot);
 	}
 	
+	public function removeLoot(state:HxlState, loot:Loot) {
+		loots.remove(loot);
+		
+		var lootTile = cast(getTile(loot.getTilePos().x, loot.getTilePos().y), Tile);
+		lootTile .loots.remove(loot);
+		
+		state.remove(loot);
+	}
+	
 	
 	override public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {
 		var map = super.loadMap(MapData, TileGraphic, TileWidth, TileHeight, ScaleX, ScaleY);

@@ -10,6 +10,8 @@ import world.World;
 import world.Player;
 
 import cq.CqActor;
+import cq.CqWorld;
+import cq.CqItem;
 
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
@@ -68,11 +70,10 @@ class GameState extends HxlState
 		
 		var targetTile = world.currentLevel.getTargetAccordingToKeyPress();
 		if ( targetTile != null ) {
-			// movement 
-			movePlayer(world, player, targetTile);
+			// move or attack
+			playerAct(world, player, targetTile);
 		} else {
 			// other actions?
-			
 		}		
 	}
 	override function onMouseOver(event:MouseEvent) { }
@@ -87,18 +88,18 @@ class GameState extends HxlState
 		if (Math.abs(dx) > Math.abs(dy)){
 			if (dx < 0) {
 				if (!level.isBlockingMovement(Std.int(Registery.player.tilePos.x - 1), Std.int(Registery.player.tilePos.y)))
-					movePlayer(Registery.world, Registery.player, new HxlPoint( -1, 0));					
+					playerAct(Registery.world, Registery.player, new HxlPoint( -1, 0));					
 			} else {
 				if (!level.isBlockingMovement(Std.int(Registery.player.tilePos.x + 1), Std.int(Registery.player.tilePos.y)))
-					movePlayer(Registery.world, Registery.player, new HxlPoint( 1, 0));
+					playerAct(Registery.world, Registery.player, new HxlPoint( 1, 0));
 			}
 		} else {
 			if (dy < 0) {
 				if (!level.isBlockingMovement(Std.int(Registery.player.tilePos.x), Std.int(Registery.player.tilePos.y-1)))
-					movePlayer(Registery.world, Registery.player, new HxlPoint( 0, -1));
+					playerAct(Registery.world, Registery.player, new HxlPoint( 0, -1));
 			} else {
 				if (!level.isBlockingMovement(Std.int(Registery.player.tilePos.x), Std.int(Registery.player.tilePos.y+1)))
-					movePlayer(Registery.world, Registery.player, new HxlPoint( 0, 1));
+					playerAct(Registery.world, Registery.player, new HxlPoint( 0, 1));
 			}
 		}
 		
@@ -106,11 +107,27 @@ class GameState extends HxlState
 	
 
 	
-	function movePlayer(world:World, player:Player, targetTile:HxlPoint) {
-		player.isMoving = true;
-		player.setTilePos(new HxlPoint(player.tilePos.x + targetTile.x, player.tilePos.y + targetTile.y));
-		var positionOfTile:HxlPoint = world.currentLevel.getPixelPositionOfTile(Math.round(player.tilePos.x), Math.round(player.tilePos.y));
-		player.moveToPixel(positionOfTile.x, positionOfTile.y);		
-		world.currentLevel.updateFieldOfView();
+	function playerAct(world:World, player:Player, targetTile:HxlPoint) {
+		var tile = cast(world.currentLevel.getTile(player.tilePos.x + targetTile.x,  player.tilePos.y + targetTile.y),CqTile);
+		
+		if (tile.actors.length>0) {
+			// attack actor
+		} else if (tile.loots.length > 0) {
+			var loot = tile.loots[tile.loots.length - 1];
+			if (Std.is(loot, CqChest)) {
+				// bust chest
+				var chest = cast(loot, CqChest);
+				chest.bust(this);
+			} else {
+				// pickup item(?)
+			}
+			
+		} else {
+			player.isMoving = true;
+			player.setTilePos(new HxlPoint(player.tilePos.x + targetTile.x, player.tilePos.y + targetTile.y));
+			var positionOfTile:HxlPoint = world.currentLevel.getPixelPositionOfTile(Math.round(player.tilePos.x), Math.round(player.tilePos.y));
+			player.moveToPixel(positionOfTile.x, positionOfTile.y);		
+			world.currentLevel.updateFieldOfView();
+		}
 	}
 }
