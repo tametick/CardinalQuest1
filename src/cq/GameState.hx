@@ -78,7 +78,6 @@ class GameState extends HxlState
 	override function onMouseOver(event:MouseEvent) { }
 	override function onMouseUp(event:MouseEvent) { }
 	override function onMouseDown(event:MouseEvent) {
-		trace("mouse down");
 		var tileX = Std.int(HxlGraphics.mouse.x / (CqConfiguration.tileSize*2));
 		var tileY = Std.int(HxlGraphics.mouse.y / (CqConfiguration.tileSize*2));
 

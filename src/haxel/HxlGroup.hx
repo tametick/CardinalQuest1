@@ -69,7 +69,7 @@ class HxlGroup extends HxlObject {
 	 * 
 	 * @return	The removed object.
 	 */
-	public function remove(Object:HxlObject,?Splice:Bool=true):HxlObject {
+	public function remove(Object:HxlObjectI,?Splice:Bool=true):HxlObjectI {
 		var index:Int = -1;
 		for (i in 0 ... members.length) {
 			if (members[i] == Object) {

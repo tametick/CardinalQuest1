@@ -63,7 +63,7 @@ class HxlState extends Sprite {
 		return obj;
 	}
 	
-	public function remove(obj:HxlObject):HxlObject {
+	public function remove(obj:HxlObjectI):HxlObjectI {
 		return defaultGroup.remove(obj);
 	}
 

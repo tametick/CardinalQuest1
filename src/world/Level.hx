@@ -62,8 +62,22 @@ class Level extends HxlTilemap
 	}
 	
 	function addAllLoots(state:HxlState) {
-		
+		for (loot in loots )
+			state.add(loot);
 	}
+	
+	public function removeAllActors(state:HxlState) {
+		state.remove(Registery.player);
+			
+		for (mob in mobs)
+			state.remove(mob);
+	}
+	
+	public function removeAllLoots(state:HxlState) {			
+		for (loot in loots)
+			state.remove(loot);
+	}
+	
 	
 	override public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {
 		var map = super.loadMap(MapData, TileGraphic, TileWidth, TileHeight, ScaleX, ScaleY);
