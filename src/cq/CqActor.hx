@@ -142,13 +142,14 @@ class CqActor extends CqObject, implements Actor {
 
 
 class CqPlayer extends CqActor, implements Player {
+	// fixme - use static method
+	static var sprites = new SpritePlayer();
+	
 	public function new(playerClass:CqClass, ?X:Float=-1, ?Y:Float=-1) {
 		super(X, Y);
 		loadGraphic(SpritePlayer, true, false, CqConfiguration.tileSize, CqConfiguration.tileSize, false, 2.0, 2.0);
 		faction = 0;
 		
-		// fixme - use static method
-		var sprites = new SpritePlayer();
 		switch(playerClass) {
 			case FIGHTER:
 				addAnimation("idle", [sprites.getSpriteIndex("fighter")], 0 );
@@ -162,12 +163,15 @@ class CqPlayer extends CqActor, implements Player {
 }
 
 class CqMob extends CqActor, implements Mob {
+	//fixme
+	static var sprites = new SpriteMonsters();
+	
 	public function new(mobType:CqMobType, ?X:Float=-1, ?Y:Float=-1) {
 		super(X, Y);
 		loadGraphic(SpriteMonsters, true, false, CqConfiguration.tileSize, CqConfiguration.tileSize, false, 2.0, 2.0);
 		faction = 1;
 		
-		var sprites = new SpriteMonsters();
+		
 		switch(CqMobType) {
 
 		}
