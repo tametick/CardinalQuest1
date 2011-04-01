@@ -82,7 +82,7 @@ class Level extends HxlTilemap
 			state.remove(loot);
 	}
 	
-	public function removeLoot(state:HxlState, loot:Loot) {
+	public function removeLootFromLevel(state:HxlState, loot:Loot) {
 		loots.remove(loot);
 		
 		var lootTile = cast(getTile(loot.getTilePos().x, loot.getTilePos().y), Tile);

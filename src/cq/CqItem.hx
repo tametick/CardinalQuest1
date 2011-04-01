@@ -25,10 +25,12 @@ class CqChest extends CqObject, implements Loot{
 	}
 	
 	public function bust(state:HxlState) {
-		Registery.world.currentLevel.removeLoot(state, this);
+		// remove chest
+		Registery.world.currentLevel.removeLootFromLevel(state, this);
 		
-		
-		
+		// add random item
+		var newItemType = Type.createEnum(CqItemType,  HxlUtil.getRandomElement(Type.getEnumConstructs(CqItemType)));
+		trace(newItemType);
 	}
 }
 
@@ -38,4 +40,27 @@ class CqWeapon extends CqItem {
 
 class CqItem extends GameObjectImpl, implements Loot {
 
+}
+
+enum CqItemType {
+	AMULET;
+	BOOTS;
+	LEATHER_ARMOR;
+	BRESTPLATE;
+	CHEST;
+	GLOVE;
+	CAP;
+	RING;
+	BRACLET;
+	WINGED_SANDLES;
+	STAFF;
+	DAGGER;
+	SHORT_SWORD;
+	LONG_SWORD;
+	PURPLE_POTION;
+	GREEN_POTION;
+	BLUE_POTION;
+	YELLOW_POTION;
+	RED_POTION;
+	HELM;
 }
