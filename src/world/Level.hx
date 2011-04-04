@@ -45,7 +45,7 @@ class Level extends HxlTilemap
 		addAllActors(state);
 		addAllLoots(state);
 		
-		follow();
+		//follow();
 		HxlGraphics.follow(Registery.player, 10);
 	}
 	
