@@ -8,5 +8,7 @@
 		<bitmap id="cq.SpriteMonsters" import="monsters.png"/>
 		<bitmap id="cq.SpritePlayer" import="player.png"/>
 		<bitmap id="cq.SpriteTiles" import="tiles.png"/>
+		<bitmap id="cq.SpriteSpells" import="spells.png"/>
+		<bitmap id="cq.SpriteDecorations" import="decorations.png"/>
 	</library>
 </movie>

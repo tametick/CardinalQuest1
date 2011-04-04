@@ -87,4 +87,22 @@ class SpriteCorpses extends HxlSpriteSheet {
 	} 
 }
 
+class SpriteSpells extends HxlSpriteSheet { 
+	public function new() {
+//		spriteNames = [
+//			[]
+//		];
+		super(0);
+	} 
+}
+class SpriteDecorations extends HxlSpriteSheet { 
+	public function new() {
+//		spriteNames = [
+//			[]
+//		];
+		super(0);
+	} 
+}
+
+
 class CqResources { }
