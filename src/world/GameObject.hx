@@ -41,14 +41,20 @@ class GameObjectImpl extends HxlSprite, implements GameObject
 		if (_tilePos != null) {
 			var tile = Registery.world.currentLevel.getTile(_tilePos.x, _tilePos.y);
 			if (tile != null)
-				// fixme - actor or loot
-				tile.actors.remove(this);
+				if(Std.is(this,Actor))
+					tile.actors.remove(this);
+				else if (Std.is(this, Loot))
+					tile.loots.remove(this);
 		}
 		
 		// add to new tile
 		_tilePos = TilePos;
+
+		if(Std.is(this,Actor))
+			Registery.world.currentLevel.getTile(_tilePos.x, _tilePos.y).actors.push(this);
+		else if (Std.is(this, Loot))
+			Registery.world.currentLevel.getTile(_tilePos.x, _tilePos.y).loots.push(this);
 		
-		Registery.world.currentLevel.getTile(_tilePos.x, _tilePos.y).actors.push(this);
 		return TilePos;
 	}
 }
