@@ -1,7 +1,9 @@
 package cq;
 
 import haxel.HxlLog;
+import haxel.HxlState;
 import haxel.HxlUtil;
+import haxel.HxlPoint;
 
 import world.Mob;
 import world.Actor;
@@ -65,7 +67,7 @@ class CqActor extends CqObject, implements Actor {
 	}
 	
 	function attackObject(other:CqObject) {
-		// todo = bust chests
+		// todo = bust chests?
 	}
 	
 	function injureActor(other:CqActor) {
@@ -143,10 +145,13 @@ class CqPlayer extends CqActor, implements Player {
 	// fixme - use static method
 	static var sprites = SpritePlayer.instance;
 	
+	public var inventory:Array<CqItem>;
+	
 	public function new(playerClass:CqClass, ?X:Float=-1, ?Y:Float=-1) {
 		super(X, Y);
 		loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 2.0, 2.0);
 		faction = 0;
+		inventory = new Array<CqItem>();
 		
 		switch(playerClass) {
 			case FIGHTER:
@@ -158,6 +163,44 @@ class CqPlayer extends CqActor, implements Player {
 		}
 		play("idle");
 	}
+	
+	function pickup(state:HxlState, item:CqItem) {
+		// remove item from map
+		Registery.world.currentLevel.removeLootFromLevel(state, item);
+		
+		// add to actor inventory
+		inventory.push(item);
+	}
+	
+	public function act(state:HxlState, targetTile:HxlPoint) {
+		var world = Registery.world;
+		var tile = cast(world.currentLevel.getTile(tilePos.x + targetTile.x,  tilePos.y + targetTile.y),CqTile);
+		
+		if (tile.actors.length>0) {
+			// attack actor
+		} else if (tile.loots.length > 0) {
+			var loot = tile.loots[tile.loots.length - 1];
+			if (Std.is(loot, CqChest)) {
+				// bust chest & don't move
+				var chest = cast(loot, CqChest);
+				chest.bust(state);
+				
+				return;
+				
+			} else {
+				// pickup item
+				var item = cast(loot, CqItem);
+				pickup(state,item);
+			}
+		}
+		
+		isMoving = true;
+		setTilePos(new HxlPoint(tilePos.x + targetTile.x, tilePos.y + targetTile.y));
+		var positionOfTile:HxlPoint = world.currentLevel.getPixelPositionOfTile(Math.round(tilePos.x), Math.round(tilePos.y));
+		moveToPixel(positionOfTile.x, positionOfTile.y);		
+		world.currentLevel.updateFieldOfView();		
+	}
+	
 }
 
 class CqMob extends CqActor, implements Mob {

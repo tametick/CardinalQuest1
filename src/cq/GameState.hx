@@ -71,7 +71,7 @@ class GameState extends HxlState
 		var targetTile = world.currentLevel.getTargetAccordingToKeyPress();
 		if ( targetTile != null ) {
 			// move or attack
-			playerAct(world, player, targetTile);
+			Registery.player.act(this,targetTile);
 		} else {
 			// other actions?
 		}		
@@ -90,33 +90,11 @@ class GameState extends HxlState
 		
 		if (targetTile != null) {
 			// move or attack in chosen tile
-			playerAct(Registery.world, Registery.player, targetTile);
+			Registery.player.act(this,targetTile);
 		} else {
 			
 		}
 	}	
 	
-	function playerAct(world:World, player:Player, targetTile:HxlPoint) {
-		var tile = cast(world.currentLevel.getTile(player.tilePos.x + targetTile.x,  player.tilePos.y + targetTile.y),CqTile);
-		
-		if (tile.actors.length>0) {
-			// attack actor
-		} else if (tile.loots.length > 0) {
-			var loot = tile.loots[tile.loots.length - 1];
-			if (Std.is(loot, CqChest)) {
-				// bust chest
-				var chest = cast(loot, CqChest);
-				chest.bust(this);
-			} else {
-				// pickup item(?)
-			}
-			
-		} else {
-			player.isMoving = true;
-			player.setTilePos(new HxlPoint(player.tilePos.x + targetTile.x, player.tilePos.y + targetTile.y));
-			var positionOfTile:HxlPoint = world.currentLevel.getPixelPositionOfTile(Math.round(player.tilePos.x), Math.round(player.tilePos.y));
-			player.moveToPixel(positionOfTile.x, positionOfTile.y);		
-			world.currentLevel.updateFieldOfView();
-		}
-	}
+	
 }
