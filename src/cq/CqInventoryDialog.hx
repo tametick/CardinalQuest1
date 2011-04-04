@@ -261,22 +261,24 @@ class CqInventoryItem extends HxlSprite {
 		if ( dragEnabled ) {
 			removeEventListener(MouseEvent.MOUSE_DOWN, onDragMouseDown);
 			removeEventListener(MouseEvent.MOUSE_UP, onDragMouseUp);
-			addEventListener(MouseEvent.MOUSE_DOWN, onDragMouseDown, false, 5);
-			addEventListener(MouseEvent.MOUSE_UP, onDragMouseUp, false, 5);
-			//trace("mouse down event listener set with priority 5");
+			addEventListener(MouseEvent.MOUSE_DOWN, onDragMouseDown, true, 5);
+			addEventListener(MouseEvent.MOUSE_UP, onDragMouseUp, true, 5);
 		}
 	}
 
 	private override function onDragMouseDown(event:MouseEvent):Void {
 		super.onDragMouseDown(event);
-		//trace("stopping propagation");
-		if ( isDragging ) event.stopPropagation();
+		if ( isDragging ) {
+			event.stopPropagation();
+		}
 	}
 
 	private override function onDragMouseUp(event:MouseEvent):Void {
 		if ( !exists || !visible || !active || !dragEnabled || HxlGraphics.mouse.dragSprite != this ) return;
 		super.onDragMouseUp(event);
-		event.stopPropagation();
+		if ( !isDragging ) {
+			event.stopPropagation();
+		}
 	}
 
 	override function dragStart():Void {

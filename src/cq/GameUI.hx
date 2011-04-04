@@ -88,12 +88,12 @@ class GameUI extends HxlDialog {
 		 * Left side panel buttons
 		 **/
 		btnMainView = new HxlButton(0, 0, 64, 64);
-		//btnMainView.scrollFactor.x = btnMainView.scrollFactor.y = 0;
 		btnMainView.setBackgroundColor(0xff999999, 0xffcccccc);
 		btnMainView.loadText(new HxlText(0, 23, 64, "Main", true, "Geo").setFormat("Geo", 18, 0xffffff, "center", 0x010101));
 		btnMainView.setCallback(function() {
 			self.showPanel(null, self.btnMainView);
 		});
+		btnMainView.configEvent(5, true, true);
 		btnMainView.setActive(true);
 		leftButtons.addButton(btnMainView);
 
@@ -103,6 +103,7 @@ class GameUI extends HxlDialog {
 		btnMapView.setCallback(function() {
 			self.showPanel(self.panelMap, self.btnMapView);
 		});
+		btnMapView.configEvent(5, true, true);
 		leftButtons.addButton(btnMapView);
 
 		btnInventoryView = new HxlButton(0, 0, 64, 64);
@@ -111,6 +112,7 @@ class GameUI extends HxlDialog {
 		btnInventoryView.setCallback(function() {
 			self.showPanel(self.panelInventory, self.btnInventoryView);
 		});
+		btnInventoryView.configEvent(5, true, true);
 		leftButtons.addButton(btnInventoryView);
 
 		btnCharacterView = new HxlButton(0, 0, 64, 64);
@@ -119,6 +121,7 @@ class GameUI extends HxlDialog {
 		btnCharacterView.setCallback(function() {
 			self.showPanel(self.panelCharacter, self.btnCharacterView);
 		});
+		btnCharacterView.configEvent(5, true, true);
 		leftButtons.addButton(btnCharacterView);
 
 		btnLogView = new HxlButton(0, 0, 64, 64);
@@ -127,6 +130,7 @@ class GameUI extends HxlDialog {
 		btnLogView.setCallback(function() {
 			self.showPanel(self.panelLog, self.btnLogView);
 		});
+		btnLogView.configEvent(5, true, true);
 		leftButtons.addButton(btnLogView);
 
 		/**
@@ -135,22 +139,27 @@ class GameUI extends HxlDialog {
 		// these are temporary
 		var btn1:HxlButton = new HxlButton(0, 0, 64, 64);
 		btn1.setBackgroundColor(0xff999999, 0xffcccccc);
+		btn1.configEvent(5, true, true);
 		rightButtons.addButton(btn1);
 
 		var btn2:HxlButton = new HxlButton(0, 0, 64, 64);
 		btn2.setBackgroundColor(0xff999999, 0xffcccccc);
+		btn2.configEvent(5, true, true);
 		rightButtons.addButton(btn2);
 
 		var btn3:HxlButton = new HxlButton(0, 0, 64, 64);
 		btn3.setBackgroundColor(0xff999999, 0xffcccccc);
+		btn3.configEvent(5, true, true);
 		rightButtons.addButton(btn3);
 
 		var btn4:HxlButton = new HxlButton(0, 0, 64, 64);
 		btn4.setBackgroundColor(0xff999999, 0xffcccccc);
+		btn4.configEvent(5, true, true);
 		rightButtons.addButton(btn4);
 
 		var btn5:HxlButton = new HxlButton(0, 0, 64, 64);
 		btn5.setBackgroundColor(0xff999999, 0xffcccccc);
+		btn5.configEvent(5, true, true);
 		rightButtons.addButton(btn5);
 
 	}

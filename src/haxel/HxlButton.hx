@@ -50,7 +50,11 @@ class HxlButton extends HxlGroup {
 
 	// Sounds for various events
 	var clickSound:HxlSound;
-	
+
+	var eventPriority:Int;
+	var eventUseCapture:Bool;
+	var eventStopPropagate:Bool;
+
 	/**
 	 * Creates a new <code>HxlButton</code> object with a gray background
 	 * and a callback function on the UI thread.
@@ -86,6 +90,27 @@ class HxlButton extends HxlGroup {
 		_initialized = false;
 		_sf = null;
 		clickSound = null;
+		eventPriority = 0;
+		eventUseCapture = false;
+		eventStopPropagate = false;
+	}
+
+	public function setEventPriority(Priority:Int):Void {
+		eventPriority = Priority;
+	}
+
+	public function setEventUseCapture(Toggle:Bool):Void {
+		eventUseCapture = Toggle;
+	}
+
+	public function setEventStopPropagate(Toggle:Bool):Void {
+		eventStopPropagate = Toggle;
+	}
+
+	public function configEvent(Priority:Int, Capture:Bool, StopPropagate:Bool):Void {
+		eventPriority = Priority;
+		eventUseCapture = Capture;
+		eventStopPropagate = StopPropagate;
 	}
 
 	public function setClickSound(ClickSound:Class<Sound>):HxlSound {
@@ -189,7 +214,8 @@ class HxlButton extends HxlGroup {
 	public override function update():Void {
 		if (!_initialized) {
 			if (HxlGraphics.stage != null) {
-				addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+				addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, eventUseCapture, eventPriority);
+				addEventListener(MouseEvent.MOUSE_UP, onMouseUp, eventUseCapture, eventPriority);
 				_initialized = true;
 			}
 		}
@@ -228,6 +254,7 @@ class HxlButton extends HxlGroup {
 	 */
 	public override function destroy():Void {
 		if (HxlGraphics.stage != null) {
+			removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 			removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
 		}
 	}
@@ -266,11 +293,30 @@ class HxlButton extends HxlGroup {
 	 * Internal function for handling the actual callback call (for UI thread dependent calls like <code>FlxU.openURL()</code>).
 	 */
 	function onMouseUp(event:MouseEvent):Void {
-		if (!exists || !visible || !active || !HxlGraphics.mouse.justReleased() || (_callback == null)) return;
-		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
-			_callback();
-			if ( clickSound != null ) clickSound.play();
+		if ( !eventUseCapture ) {
+			if (!exists || !visible || !active || !HxlGraphics.mouse.justReleased() ) return;
+		} else {
+			if (!exists || !visible || !active) return;
 		}
+
+		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
+			if ( _callback != null ) _callback();
+			if ( clickSound != null ) clickSound.play();
+			if ( eventStopPropagate ) event.stopPropagation();
+		}
+	}
+
+	function onMouseDown(event:MouseEvent):Void {
+		if ( !eventUseCapture ) {
+			if (!exists || !visible || !active || !HxlGraphics.mouse.justPressed() ) return;
+		} else {
+			if (!exists || !visible || !active ) return;
+		}
+
+		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
+			if ( eventStopPropagate ) event.stopPropagation();
+		}
+
 	}
 
 }
