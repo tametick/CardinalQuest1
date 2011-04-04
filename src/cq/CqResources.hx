@@ -9,6 +9,7 @@ import haxel.HxlSpriteSheet;
 class FontGeo extends Font { public function new() { super(); } }
 
 class SpriteEffects extends HxlSpriteSheet { 
+	public static var instance = new SpriteEffects();
 	public function new() {
 		spriteNames = [
 			["small_scratch","big_scratch"]
@@ -17,6 +18,7 @@ class SpriteEffects extends HxlSpriteSheet {
 	} 
 }
 class SpriteItems extends HxlSpriteSheet { 
+	public static var instance = new SpriteItems();
 	public function new() {
 		spriteNames = [
 			["amulet","boots","leather_armor","brestplate","chest","glove","cap","ring","braclet","winged_sandles"],
@@ -26,6 +28,7 @@ class SpriteItems extends HxlSpriteSheet {
 	} 	
 }
 class SpriteMonsters extends HxlSpriteSheet { 	
+	public static var instance = new SpriteMonsters();
 	public function new() {
 		spriteNames = [
 			["kobold_spear","kobold_knives","kobold_mage"],
@@ -40,6 +43,7 @@ class SpriteMonsters extends HxlSpriteSheet {
 }
 
 class SpritePlayer extends HxlSpriteSheet { 
+	public static var instance = new SpritePlayer();
 	public function new() { 
 		spriteNames = [
 			["berserk_fighter", "fighter", "wizard", "thief", "cloaked_thief"],
@@ -54,6 +58,7 @@ class SpritePlayer extends HxlSpriteSheet {
 }
 
 class SpriteTiles extends HxlSpriteSheet { 
+	public static var instance = new SpriteTiles();
 	static var inited = false;
 	public var walkableAndSeeThroughTiles:Array<Int>;
 	public function new() { 
@@ -79,6 +84,7 @@ class SpriteTiles extends HxlSpriteSheet {
 	}
 }
 class SpriteCorpses extends HxlSpriteSheet { 
+	public static var instance = new SpriteCorpses();
 	public function new() {
 		spriteNames = [
 			["big_skull","small_skull"]
@@ -88,18 +94,20 @@ class SpriteCorpses extends HxlSpriteSheet {
 }
 
 class SpriteSpells extends HxlSpriteSheet { 
+	public static var instance = new SpriteSpells();
 	public function new() {
-//		spriteNames = [
-//			[]
-//		];
+		spriteNames = [
+			[]
+		];
 		super(0);
 	} 
 }
 class SpriteDecorations extends HxlSpriteSheet { 
+	public static var instance = new SpriteDecorations();
 	public function new() {
-//		spriteNames = [
-//			[]
-//		];
+		spriteNames = [
+			[]
+		];
 		super(0);
 	} 
 }

@@ -30,8 +30,8 @@ class CqTile extends Tile {}
 
 class CqLevel extends Level {	
 	// fixme - use static function instead
-	static var tiles = new SpriteTiles();
-	static var itemSprites = new SpriteItems();
+	static var tiles = SpriteTiles.instance;
+	static var itemSprites = SpriteItems.instance;
 	
 	public function new() {
 		super();

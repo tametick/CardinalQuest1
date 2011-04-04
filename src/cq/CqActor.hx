@@ -140,7 +140,7 @@ class CqActor extends CqObject, implements Actor {
 
 class CqPlayer extends CqActor, implements Player {
 	// fixme - use static method
-	static var sprites = new SpritePlayer();
+	static var sprites = SpritePlayer.instance;
 	
 	public function new(playerClass:CqClass, ?X:Float=-1, ?Y:Float=-1) {
 		super(X, Y);
@@ -161,7 +161,7 @@ class CqPlayer extends CqActor, implements Player {
 
 class CqMob extends CqActor, implements Mob {
 	//fixme
-	static var sprites = new SpriteMonsters();
+	static var sprites = SpriteMonsters.instance;
 	
 	public function new(mobType:CqMobType, ?X:Float=-1, ?Y:Float=-1) {
 		super(X, Y);

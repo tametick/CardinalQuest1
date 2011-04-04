@@ -15,7 +15,7 @@ import haxel.HxlUtil;
  */
 class CqChest extends CqObject, implements Loot{
 	// fixme
-	static var sprites = new SpriteItems();
+	static var sprites = SpriteItems.instance;
 	
 	public function new(X:Float, Y:Float) {
 		super(X, Y);
