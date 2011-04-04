@@ -13,11 +13,13 @@ import haxel.HxlUtil;
 
 class CqItem extends GameObjectImpl, implements Loot {
 	static var sprites = SpriteItems.instance;
+	public var equipSlot:CqEquipSlot;
 	public function new(X:Float, Y:Float, typeName:String) {
 		super(X, Y);
 		loadGraphic(SpriteItems, false, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 		addAnimation("idle", [CqItem.sprites.getSpriteIndex(typeName)], 0 );
 		play("idle");
+		equipSlot = null;
 	}
 }
 
@@ -81,22 +83,41 @@ class CqConsumable extends CqItem {
 
 }
 class CqShoes extends CqItem {
-	
+	public function new(X:Float, Y:Float, typeName:String) {
+		super(X, Y, typeName);
+		equipSlot = SHOES;
+	}
 }
 class CqArmor extends CqItem {
-	
+	public function new(X:Float, Y:Float, typeName:String) {
+		super(X, Y, typeName);
+		equipSlot = ARMOR;
+	}
 }
 class CqJewelry extends CqItem {
-	
+	public function new(X:Float, Y:Float, typeName:String) {
+		super(X, Y, typeName);
+		equipSlot = JEWELRY;
+	}
 }
 class CqHat extends CqItem {
-	
+	public function new(X:Float, Y:Float, typeName:String) {
+		super(X, Y, typeName);
+		equipSlot = HAT;
+	}
 }
 class CqGloves extends CqItem {
-	
+	public function new(X:Float, Y:Float, typeName:String) {
+		super(X, Y, typeName);
+		equipSlot = GLOVES;
+	}
 }
 class CqWeapon extends CqItem {
 	public var damage:Range;
+	public function new(X:Float, Y:Float, typeName:String) {
+		super(X, Y, typeName);
+		equipSlot = WEAPON;
+	}
 }
 
 enum CqItemType {
@@ -120,4 +141,13 @@ enum CqItemType {
 	YELLOW_POTION;
 	RED_POTION;
 	HELM;
+}
+
+enum CqEquipSlot {
+	SHOES;
+	ARMOR;
+	JEWELRY;
+	HAT;
+	GLOVES;
+	WEAPON;
 }
