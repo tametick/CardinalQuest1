@@ -146,6 +146,7 @@ class CqPlayer extends CqActor, implements Player {
 	static var sprites = SpritePlayer.instance;
 	
 	public var inventory:Array<CqItem>;
+	var pickupCallback:Dynamic;
 	
 	public function new(playerClass:CqClass, ?X:Float=-1, ?Y:Float=-1) {
 		super(X, Y);
@@ -164,12 +165,19 @@ class CqPlayer extends CqActor, implements Player {
 		play("idle");
 	}
 	
+	public function setPickupCallback(Callback:Dynamic):Void {
+		pickupCallback = Callback;
+	}
+
 	function pickup(state:HxlState, item:CqItem) {
 		// remove item from map
 		Registery.world.currentLevel.removeLootFromLevel(state, item);
 		
 		// add to actor inventory
 		inventory.push(item);
+
+		// perform pickup callback function (if set)
+		if ( pickupCallback != null ) pickupCallback(item);
 	}
 	
 	public function act(state:HxlState, targetTile:HxlPoint) {
