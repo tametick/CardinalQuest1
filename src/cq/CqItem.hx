@@ -14,12 +14,14 @@ import haxel.HxlUtil;
 class CqItem extends GameObjectImpl, implements Loot {
 	static var sprites = SpriteItems.instance;
 	public var equipSlot:CqEquipSlot;
+	public var spriteIndex:String;
 	public function new(X:Float, Y:Float, typeName:String) {
 		super(X, Y);
 		loadGraphic(SpriteItems, false, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 		addAnimation("idle", [CqItem.sprites.getSpriteIndex(typeName)], 0 );
 		play("idle");
 		equipSlot = null;
+		spriteIndex = typeName;
 	}
 }
 
