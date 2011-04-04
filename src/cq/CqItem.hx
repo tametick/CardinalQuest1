@@ -1,9 +1,11 @@
 package cq;
 
+import data.Configuration;
 import data.Registery;
 import haxel.HxlState;
 import world.Loot;
 import world.GameObject;
+import cq.CqConfiguration;
 import cq.CqResources;
 import cq.CqWorld;
 
@@ -13,30 +15,25 @@ import haxel.HxlUtil;
 /**
  * Chests are encountered in the dungeon and once detroyed drop a random item
  */
-class CqChest extends CqObject, implements Loot{
-	// fixme
-	static var sprites = SpriteItems.instance;
-	
+class CqChest extends CqItem {
 	public function new(X:Float, Y:Float) {
 		super(X, Y);
-		loadGraphic(SpriteItems, false, false, 16, 16, false, 2.0, 2.0);
-		addAnimation("idle", [sprites.getSpriteIndex("chest")], 0 );
+		loadGraphic(SpriteItems, false, false, Configuration.tileSize, Configuration.tileSize, false, 2.0, 2.0);
+		addAnimation("idle", [CqItem.sprites.getSpriteIndex("chest")], 0 );
 		play("idle");
 	}
 	
 	public function bust(state:HxlState) {
-		
 		// remove chest
 		Registery.world.currentLevel.removeLootFromLevel(state, this);
 		
 		// add random item
 		var newItem = null;
-		
 		do {
 			newItem	= HxlUtil.getRandomElement(Type.getEnumConstructs(CqItemType)); 
 		} while (newItem == "CHEST");
-		
 		var newItemType = Type.createEnum(CqItemType,  newItem);
+		
 		trace(newItemType);
 	}
 }
@@ -46,7 +43,11 @@ class CqWeapon extends CqItem {
 }
 
 class CqItem extends GameObjectImpl, implements Loot {
-
+	static var sprites = SpriteItems.instance;
+	public function new(X:Float, Y:Float) {
+		super(X, Y);
+	}
+	
 }
 
 enum CqItemType {

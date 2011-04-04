@@ -82,8 +82,8 @@ class GameState extends HxlState
 		if (Registery.player.isMoving)
 			return;
 		
-		//var tileX = Std.int(HxlGraphics.mouse.x / (CqConfiguration.tileSize*2));
-		//var tileY = Std.int(HxlGraphics.mouse.y / (CqConfiguration.tileSize*2));
+		//var tileX = Std.int(HxlGraphics.mouse.x / (Configuration.tileSize*2));
+		//var tileY = Std.int(HxlGraphics.mouse.y / (Configuration.tileSize*2));
 		var dx = HxlGraphics.mouse.x - Registery.player.x;
 		var dy = HxlGraphics.mouse.y - Registery.player.y;		
 		var targetTile:HxlPoint = Registery.world.currentLevel.getTargetAccordingToMousePosition(dx,dy);

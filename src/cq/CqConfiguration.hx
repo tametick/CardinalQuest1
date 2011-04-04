@@ -1,9 +1,9 @@
 package cq;
 
-class CqConfiguration
-{
-	public static var tileSize = 16;
-	public static var chestsPerLevel = 10;
+import data.Configuration;
+
+class CqConfiguration extends Configuration {
+	public static var chestsPerLevel = 1;
 	
 	public static function getLevelWidth(?level:Int=0) { 
 		return 32; 

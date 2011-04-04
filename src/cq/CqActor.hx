@@ -9,6 +9,7 @@ import world.Player;
 import world.GameObject;
 
 import data.Registery;
+import data.Configuration;
 
 import cq.CqResources;
 import cq.CqItem;
@@ -144,7 +145,7 @@ class CqPlayer extends CqActor, implements Player {
 	
 	public function new(playerClass:CqClass, ?X:Float=-1, ?Y:Float=-1) {
 		super(X, Y);
-		loadGraphic(SpritePlayer, true, false, CqConfiguration.tileSize, CqConfiguration.tileSize, false, 2.0, 2.0);
+		loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 2.0, 2.0);
 		faction = 0;
 		
 		switch(playerClass) {
@@ -165,7 +166,7 @@ class CqMob extends CqActor, implements Mob {
 	
 	public function new(mobType:CqMobType, ?X:Float=-1, ?Y:Float=-1) {
 		super(X, Y);
-		loadGraphic(SpriteMonsters, true, false, CqConfiguration.tileSize, CqConfiguration.tileSize, false, 2.0, 2.0);
+		loadGraphic(SpriteMonsters, true, false, Configuration.tileSize, Configuration.tileSize, false, 2.0, 2.0);
 		faction = 1;
 		
 		

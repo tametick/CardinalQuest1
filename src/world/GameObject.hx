@@ -3,7 +3,9 @@ package world;
 import haxel.HxlObject;
 import haxel.HxlSprite;
 import haxel.HxlPoint;
+import haxel.HxlGraphics;
 
+import data.Configuration;
 import data.Registery;
 
 interface GameObject implements HxlObjectI {
@@ -26,7 +28,10 @@ class GameObjectImpl extends HxlSprite, implements GameObject
 	public function new(x:Float, y:Float, ?hp:Int=1) 
 	{
 		super(x, y);
-		_tilePos = new HxlPoint();
+		var tileX = x / Configuration.zoomedTileSize();
+		var tileY = y/Configuration.zoomedTileSize();
+		_tilePos = new HxlPoint(tileX, tileY);
+		
 		this.hp = hp;
 		maxHp = hp;
 		zIndex = 1;

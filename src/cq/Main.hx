@@ -3,6 +3,7 @@ import haxel.HxlPreloader;
 import haxel.HxlGame;
 import haxel.HxlState;
 import cq.CqResources;
+import data.Configuration;
 
 import flash.Lib;
 
@@ -25,6 +26,9 @@ class Main {
 
 class Game extends HxlGame {
 	public function new() {
+		Configuration.tileSize = 16;
+		Configuration.zoom = 2.0;
+		
 		//super(640, 480, SplashState, 1, "Geo");
 		super(640, 480, GameState, 1, "Geo");
 		HxlState.bgColor = 0xFF000000;
