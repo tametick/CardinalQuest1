@@ -227,4 +227,28 @@ class Level extends HxlTilemap
 		
 		return targetTile;
 	}
+	
+	public function getTargetAccordingToMousePosition(dx:Float, dy:Float):HxlPoint {
+		var targetTile:HxlPoint = null;
+		var level = Registery.world.currentLevel;
+		if (Math.abs(dx) > Math.abs(dy)){
+			if (dx < 0) {
+				if (!level.isBlockingMovement(Std.int(Registery.player.tilePos.x - 1), Std.int(Registery.player.tilePos.y)))
+					targetTile = new HxlPoint( -1, 0);
+			} else {
+				if (!level.isBlockingMovement(Std.int(Registery.player.tilePos.x + 1), Std.int(Registery.player.tilePos.y)))
+					targetTile = new HxlPoint( 1, 0);
+			}
+		} else {
+			if (dy < 0) {
+				if (!level.isBlockingMovement(Std.int(Registery.player.tilePos.x), Std.int(Registery.player.tilePos.y-1)))
+					targetTile = new HxlPoint( 0, -1);
+			} else {
+				if (!level.isBlockingMovement(Std.int(Registery.player.tilePos.x), Std.int(Registery.player.tilePos.y+1)))
+					targetTile = new HxlPoint( 0, 1);
+			}
+		}
+		return targetTile;
+	}
+	
 }
