@@ -23,7 +23,7 @@ class GameUI extends HxlDialog {
 	var panelMap:CqMapDialog;
 	var panelInventory:CqInventoryDialog;
 	var panelCharacter:HxlSlidingDialog;
-	var panelLog:HxlSlidingDialog;
+	var panelLog:CqMessageDialog;
 
 	// Left side button panel
 	var btnMainView:HxlButton;
@@ -80,7 +80,7 @@ class GameUI extends HxlDialog {
 		panelCharacter.setBackgroundColor(0xff9ABC9D);
 		add(panelCharacter);
 
-		panelLog = new HxlSlidingDialog(84, 0, 472, 480);
+		panelLog = new CqMessageDialog(84, 0, 472, 480);
 		panelLog.setBackgroundColor(0xffBCB59A);
 		add(panelLog);
 

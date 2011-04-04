@@ -14,7 +14,7 @@ class HxlTextContainer extends HxlDialog {
 	var scrollTimer:HxlTimer;
 	public var scrollRate:Float;
 	public var maxLines:Int;
-	var reverseOrder:Bool;
+	public var reverseOrder:Bool;
 
 	var fadeEffect:Bool;
 	var isFading:Bool;
