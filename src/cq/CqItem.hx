@@ -25,11 +25,18 @@ class CqChest extends CqObject, implements Loot{
 	}
 	
 	public function bust(state:HxlState) {
+		
 		// remove chest
 		Registery.world.currentLevel.removeLootFromLevel(state, this);
 		
 		// add random item
-		var newItemType = Type.createEnum(CqItemType,  HxlUtil.getRandomElement(Type.getEnumConstructs(CqItemType)));
+		var newItem = null;
+		
+		do {
+			newItem	= HxlUtil.getRandomElement(Type.getEnumConstructs(CqItemType)); 
+		} while (newItem == "CHEST");
+		
+		var newItemType = Type.createEnum(CqItemType,  newItem);
 		trace(newItemType);
 	}
 }
