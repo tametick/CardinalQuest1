@@ -31,10 +31,10 @@ class SpriteMonsters extends HxlSpriteSheet {
 	public static var instance = new SpriteMonsters();
 	public function new() {
 		spriteNames = [
-			["kobold_spear","kobold_knives","kobold_mage"],
-			["werewolf_gray","werewolf_blue","werewolf_purple"],
+			["kobold_spear","kobold_knives","kobold_mage", "kobold_blank"],
+			["werewolf_gray","werewolf_blue","werewolf_purple", "werewolf_blank"],
 			["bandit_long_swords","bandit_short_swords","bandit_single_long_sword","bandit_knives"],
-			["minotauer","minotauer_axe","minotauer_sword"],
+			["minotauer","minotauer_axe","minotauer_sword","minotauer_blank"],
 			["succubus","succubus_staff","succubus_whip","succubus_scepter",],
 			["spider_yellow","spider_red","spider_gray","spider_green"],
 		];
