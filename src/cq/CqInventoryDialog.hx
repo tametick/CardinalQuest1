@@ -24,7 +24,8 @@ class CqInventoryDialog extends HxlSlidingDialog {
 
 	var dlgCharacter:HxlDialog;
 	var dlgInfo:HxlDialog;
-	public var dlgGrid:CqInventoryGrid;
+	public var dlgInvGrid:CqInventoryGrid;
+	public var dlgEqGrid:CqEquipmentGrid;
 	var itemSheet:HxlSpriteSheet;
 	var itemSprite:HxlSprite;
 
@@ -34,16 +35,19 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		super(X, Y, Width, Height, Direction);
 
 		dlgCharacter = new HxlDialog(10, 10, 221, 255);
-		dlgCharacter.setBackgroundColor(0xff333333);
+		dlgCharacter.setBackgroundColor(0xff555555);
 		add(dlgCharacter);
 
+		dlgEqGrid = new CqEquipmentGrid(0, 0, 221, 255);
+		dlgCharacter.add(dlgEqGrid);
+
 		dlgInfo = new HxlDialog(241, 10, 221, 255);
-		dlgInfo.setBackgroundColor(0xff333333);
+		dlgInfo.setBackgroundColor(0xff555555);
 		add(dlgInfo);
 
-		dlgGrid = new CqInventoryGrid(10, 275, 452, 195);
-		dlgGrid.setBackgroundColor(0xff999999);
-		add(dlgGrid);
+		dlgInvGrid = new CqInventoryGrid(10, 275, 452, 195);
+		dlgInvGrid.setBackgroundColor(0xff999999);
+		add(dlgInvGrid);
 
 		itemSheet = SpriteItems.instance;
 		var itemSheetKey:String = "ItemIconSheet";
@@ -62,13 +66,13 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	}
 
 	public function itemPickup(Item:CqItem):Void {
-		for ( cell in dlgGrid.cells ) {
+		for ( cell in dlgInvGrid.cells ) {
 			if ( cell.getCellObj() == null ) {
 				var item:CqInventoryItem = new CqInventoryItem(this, 2, 2);
 				item.toggleDrag(true);
 				item.zIndex = 5;
-				item.setCell(cell.cellIndex);
-				item.setItem(Item);
+				item.setInventoryCell(cell.cellIndex);
+				item.item = Item;
 				itemSprite.setFrame(itemSheet.getSpriteIndex(Item.spriteIndex));
 				item.setIcon(itemSprite.getFramePixels());
 				add(item);
@@ -91,18 +95,30 @@ class CqInventoryGrid extends HxlDialog {
 
 	public var cells:Array<CqInventoryCell>;
 
-	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100) {
+	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?CreateCells:Bool=true) {
 		super(X, Y, Width, Height);
-
+		
 		cells = new Array();
 
-		var cellBg:BitmapData = HxlGradient.RectData(54, 54, [0x333333, 0x555555], null, Math.PI/2, 5.0);
-		var cellBgKey:String = "InventoryCellBG";
-		HxlGraphics.addBitmapData(cellBg, cellBgKey);
+		if ( !CreateCells ) return;
 
-		var cellBgHighlight:BitmapData = HxlGradient.RectData(54, 54, [0x686835, 0xADAB6B], null, Math.PI/2, 5.0);
+		var cellBgKey:String = "InventoryCellBG";
+		var cellBg:BitmapData;
+		if ( HxlGraphics.checkBitmapCache(cellBgKey) ) {
+			cellBg = HxlGraphics.getBitmap(cellBgKey);
+		} else {
+			cellBg = HxlGradient.RectData(54, 54, [0x333333, 0x555555], null, Math.PI/2, 5.0);
+			HxlGraphics.addBitmapData(cellBg, cellBgKey);
+		}
+
 		var cellBgHighlightKey:String = "CellBGHighlight";
-		HxlGraphics.addBitmapData(cellBgHighlight, cellBgHighlightKey);
+		var cellBgHighlight:BitmapData;
+		if ( HxlGraphics.checkBitmapCache(cellBgHighlightKey) ) {
+			cellBgHighlight = HxlGraphics.getBitmap(cellBgHighlightKey);
+		} else {
+			cellBgHighlight = HxlGradient.RectData(54, 54, [0x686835, 0xADAB6B], null, Math.PI/2, 5.0);
+			HxlGraphics.addBitmapData(cellBgHighlight, cellBgHighlightKey);
+		}
 
 		var padding:Int = 8;
 		var cellSize:Int = 54;
@@ -145,6 +161,75 @@ class CqInventoryGrid extends HxlDialog {
 
 	public function highlightedCell():CqInventoryCell {
 		return CqInventoryCell.highlightedCell;
+	}
+
+}
+
+class CqEquipmentGrid extends CqInventoryGrid {
+
+	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100) {
+		super(X, Y, Width, Height, false);
+
+		cells = new Array();
+
+		var cellBgKey:String = "EquipmentCellBG";
+		var cellBg:BitmapData;
+		if ( HxlGraphics.checkBitmapCache(cellBgKey) ) {
+			cellBg = HxlGraphics.getBitmap(cellBgKey);
+		} else {
+			cellBg = HxlGradient.RectData(54, 54, [0x333333, 0x555555], null, Math.PI/2, 5.0);
+			HxlGraphics.addBitmapData(cellBg, cellBgKey);
+		}
+
+		var cellBgHighlightKey:String = "EqCellBGHighlight";
+		var cellBgHighlight:BitmapData;
+		if ( HxlGraphics.checkBitmapCache(cellBgHighlightKey) ) {
+			cellBgHighlight = HxlGraphics.getBitmap(cellBgHighlightKey);
+		} else {
+			cellBgHighlight = HxlGradient.RectData(54, 54, [0x686835, 0xADAB6B], null, Math.PI/2, 5.0);
+			HxlGraphics.addBitmapData(cellBgHighlight, cellBgHighlightKey);
+		}
+
+		var cellSize:Int = 54;
+		var padding:Int = 8;
+		var idx:Int = 0;
+		var cell:CqEquipmentCell;
+	
+		cell = new CqEquipmentCell(SHOES, 8, 193, cellSize, cellSize, idx);
+		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+		add(cell);
+		cells.push(cell);
+		idx++;
+
+		cell = new CqEquipmentCell(GLOVES, 8, 100, cellSize, cellSize, idx);
+		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+		add(cell);
+		cells.push(cell);
+		idx++;
+
+		cell = new CqEquipmentCell(ARMOR, 8, 8, cellSize, cellSize, idx);
+		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+		add(cell);
+		cells.push(cell);
+		idx++;
+
+		cell = new CqEquipmentCell(JEWELRY, 159, 193, cellSize, cellSize, idx);
+		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+		add(cell);
+		cells.push(cell);
+		idx++;
+
+		cell = new CqEquipmentCell(WEAPON, 159, 100, cellSize, cellSize, idx);
+		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+		add(cell);
+		cells.push(cell);
+		idx++;
+
+		cell = new CqEquipmentCell(HAT, 159, 8, cellSize, cellSize, idx);
+		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+		add(cell);
+		cells.push(cell);
+		idx++;
 	}
 
 }
@@ -226,6 +311,23 @@ class CqInventoryCell extends HxlDialog {
 
 }
 
+class CqEquipmentCell extends CqInventoryCell {
+
+	public static var highlightedCell:CqInventoryCell = null;
+	public var equipSlot:CqEquipSlot; // This should be read only
+
+	public function new(EquipSlot:CqEquipSlot, ?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?CellIndex:Int=0) {
+		super(X, Y, Width, Height, CellIndex);
+		equipSlot = EquipSlot;
+	}
+
+	override function setHighlighted(Toggle:Bool):Void {
+		if ( Toggle && cast(HxlGraphics.mouse.dragSprite, CqInventoryItem).item.equipSlot != equipSlot ) return; 
+		super.setHighlighted(Toggle);
+	}
+
+}
+
 class CqInventoryItem extends HxlSprite {
 
 	public static var backgroundKey:String;
@@ -237,7 +339,8 @@ class CqInventoryItem extends HxlSprite {
 	var idleZIndex:Int;
 	var dragZIndex:Int;
 	var cellIndex:Int;
-	var item:CqItem;
+	public var cellEquip:Bool;
+	public var item:CqItem;
 	var selected:Bool;
 
 	public function new(Dialog:CqInventoryDialog, ?X:Float=0, ?Y:Float=0) {
@@ -247,6 +350,7 @@ class CqInventoryItem extends HxlSprite {
 		dragZIndex = 6;
 		_dlg = Dialog;
 		cellIndex = 0;
+		cellEquip = false;
 		item = null;
 		zIndex = idleZIndex;
 		setSelected(false);
@@ -265,10 +369,6 @@ class CqInventoryItem extends HxlSprite {
 		}
 	}
 
-	public function setItem(Item:CqItem):Void {
-		item = Item;
-	}
-
 	public function setIcon(Icon:BitmapData):Void {
 		icon = new BitmapData(Icon.width, Icon.height, true, 0x0);
 		icon.copyPixels(Icon, new Rectangle(0, 0, Icon.width, Icon.height), new Point(0,0), null, null, true);
@@ -280,10 +380,18 @@ class CqInventoryItem extends HxlSprite {
 		pixels = temp;
 	}
 
-	public function setCell(Cell:Int):Void {
+	public function setInventoryCell(Cell:Int):Void {
 		cellIndex = Cell;
-		setPos(_dlg.dlgGrid.getCellItemPos(Cell));
-		_dlg.dlgGrid.setCellObj(Cell, this);
+		setPos(_dlg.dlgInvGrid.getCellItemPos(Cell));
+		_dlg.dlgInvGrid.setCellObj(Cell, this);
+		cellEquip = false;
+	}
+
+	public function setEquipmentCell(Cell:Int):Void {
+		cellIndex = Cell;
+		setPos(_dlg.dlgEqGrid.getCellItemPos(Cell));
+		_dlg.dlgEqGrid.setCellObj(Cell, this);
+		cellEquip = true;
 	}
 
 	public function setPos(Pos:HxlPoint):Void {
@@ -332,12 +440,28 @@ class CqInventoryItem extends HxlSprite {
 		if ( CqInventoryCell.highlightedCell != null ) {
 			if ( CqInventoryCell.highlightedCell.getCellObj() != null ) {
 				var other:CqInventoryItem = CqInventoryCell.highlightedCell.getCellObj();
-				other.setCell(cellIndex);
-				setCell(CqInventoryCell.highlightedCell.cellIndex);
+				if ( !cellEquip ) {
+					other.setInventoryCell(cellIndex);
+				} else {
+					other.setEquipmentCell(cellIndex);
+				}
+				if ( Std.is(CqInventoryCell.highlightedCell, CqEquipmentCell) ) {
+					setEquipmentCell(CqInventoryCell.highlightedCell.cellIndex);
+				} else {
+					setInventoryCell(CqInventoryCell.highlightedCell.cellIndex);
+				}
 				cellIndex = CqInventoryCell.highlightedCell.cellIndex;
 			} else {
-				_dlg.dlgGrid.setCellObj(cellIndex, null);
-				setCell(CqInventoryCell.highlightedCell.cellIndex);
+				if ( !cellEquip ) {
+					_dlg.dlgInvGrid.setCellObj(cellIndex, null);
+				} else {
+					_dlg.dlgEqGrid.setCellObj(cellIndex, null);
+				}
+				if ( Std.is(CqInventoryCell.highlightedCell, CqEquipmentCell) ) {
+					setEquipmentCell(CqInventoryCell.highlightedCell.cellIndex);
+				} else {
+					setInventoryCell(CqInventoryCell.highlightedCell.cellIndex);
+				}
 				cellIndex = CqInventoryCell.highlightedCell.cellIndex;
 			}
 		} else {
