@@ -15,10 +15,12 @@ class CqItem extends GameObjectImpl, implements Loot {
 	static var sprites = SpriteItems.instance;
 	public var equipSlot:CqEquipSlot;
 	public var type:CqItemType;
+	public var spriteIndex:String;
 	public function new(X:Float, Y:Float, typeName:String) {
 		super(X, Y);
 		loadGraphic(SpriteItems, false, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 		type = Type.createEnum(CqItemType,  typeName.toUpperCase());
+		spriteIndex = typeName;
 		addAnimation("idle", [sprites.getSpriteIndex(typeName)], 0 );
 		play("idle");
 	}

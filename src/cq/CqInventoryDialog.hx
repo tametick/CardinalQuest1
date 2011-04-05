@@ -54,22 +54,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		var itemBg:BitmapData = HxlGradient.RectData(50, 50, [0xc1c1c1, 0x9e9e9e], null, Math.PI/2, 8.0);
 		var itemBgKey:String = "ItemBG";
 		HxlGraphics.addBitmapData(itemBg, itemBgKey);
-		CqInventoryItem.backgroundKey = itemBgKey;
-
-		var item1:CqInventoryItem = new CqInventoryItem(this, 2, 2);
-		itemSprite.setFrame(itemSheet.getSpriteIndex("winged_sandles"));
-		item1.setIcon(itemSprite.getFramePixels());
-		item1.toggleDrag(true);
-		item1.setCell(1);
-		add(item1);
-
-		var item2:CqInventoryItem = new CqInventoryItem(this, 2, 2);
-		itemSprite.setFrame(itemSheet.getSpriteIndex("leather_armor"));
-		item2.setIcon(itemSprite.getFramePixels());
-		item2.toggleDrag(true);
-		item2.setCell(4);
-		add(item2);
-	
+		CqInventoryItem.backgroundKey = itemBgKey;	
 	}
 
 	public function itemPickup(Item:CqItem):Void {
@@ -79,6 +64,9 @@ class CqInventoryDialog extends HxlSlidingDialog {
 				item.toggleDrag(true);
 				item.zIndex = 5;
 				item.setCell(cell.cellIndex);
+				item.setItem(Item);
+				itemSprite.setFrame(itemSheet.getSpriteIndex(Item.spriteIndex));
+				item.setIcon(itemSprite.getFramePixels());
 				add(item);
 				break;
 			}
@@ -248,6 +236,10 @@ class CqInventoryItem extends HxlSprite {
 		cellIndex = 0;
 		item = null;
 		zIndex = idleZIndex;
+	}
+
+	public function setItem(Item:CqItem):Void {
+		item = Item;
 	}
 
 	public function setIcon(Icon:BitmapData):Void {
