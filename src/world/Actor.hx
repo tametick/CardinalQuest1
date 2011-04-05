@@ -1,9 +1,12 @@
 package world;
 
+import haxel.HxlState;
+
 interface Actor implements GameObject {
-	public function attackOther(other:GameObject):Void;
-	public function moveToPixel(X:Float, Y:Float):Void;
-	public function moveStop():Void;
-	public var visionRadius:Float;
-	public var moveSpeed:Float;
+	function attackObject(state:HxlState, other:GameObject):Void;
+	function attackOther(state:HxlState, other:GameObject):Void;
+	function moveToPixel(X:Float, Y:Float):Void;
+	function moveStop():Void;
+	var visionRadius:Float;
+	var moveSpeed:Float;
 }
