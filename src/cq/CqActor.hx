@@ -239,6 +239,14 @@ class CqMob extends CqActor, implements Mob {
 		addAnimation("idle", [sprites.getSpriteIndex(typeName)], 0 );
 		play("idle");
 	}
+	
+	public function actUnaware() {
+		// todo
+	}
+	
+	public function actAware() {
+		// todo
+	}
 }
 
 class CqMobFactory {	

@@ -74,7 +74,9 @@ class GameState extends HxlState {
 			Registery.player.act(this,targetTile);
 		} else {
 			// other actions?
-		}		
+		}
+		
+		passTurn();
 	}
 	override function onMouseOver(event:MouseEvent) { }
 	override function onMouseUp(event:MouseEvent) { }
@@ -92,5 +94,19 @@ class GameState extends HxlState {
 		} else {
 			
 		}
+		
+		passTurn();
+	}
+	
+	// todo
+	function passTurn() {/*
+		player.calculateFieldOfView();
+		player.vars.actionPoints = 0;
+		while (player.vars.actionPoints < 60) {
+			var continueTicking = maps[currentMap].tick();
+			ticks++;
+			if(!continueTicking)
+				break;
+		}*/
 	}
 }
