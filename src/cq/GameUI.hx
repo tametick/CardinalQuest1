@@ -184,7 +184,6 @@ class GameUI extends HxlDialog {
 					});
 				} else {
 					// User clicked on a view state button which is already active, switch back to main view state
-					//currentPanel.show();
 					if ( currentPanel != null ) {
 						var self = this;
 						currentPanel.hide(function() { self.currentPanel = null; });

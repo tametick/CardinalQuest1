@@ -47,7 +47,6 @@ class CqInventoryDialog extends HxlSlidingDialog {
 
 		itemSheet = SpriteItems.instance;
 		var itemSheetKey:String = "ItemIconSheet";
-		//HxlGraphics.addBitmap(SpriteItems, false, false, itemSheetKey, 2.0, 2.0);
 		itemSprite = new HxlSprite(0, 0);
 		itemSprite.loadGraphic(SpriteItems, true, false, Configuration.tileSize, Configuration.tileSize, false, 3.0, 3.0);
 
@@ -55,6 +54,11 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		var itemBgKey:String = "ItemBG";
 		HxlGraphics.addBitmapData(itemBg, itemBgKey);
 		CqInventoryItem.backgroundKey = itemBgKey;	
+
+		var itemSelectedBg:BitmapData = HxlGradient.RectData(50, 50, [0xEFEDBC, 0xB9B99A], null, Math.PI/2, 8.0);
+		var itemSelectedBgKey:String = "ItemSelectedBG";
+		HxlGraphics.addBitmapData(itemSelectedBg, itemSelectedBgKey);
+		CqInventoryItem.backgroundSelectedKey = itemSelectedBgKey;
 	}
 
 	public function itemPickup(Item:CqItem):Void {
@@ -70,6 +74,14 @@ class CqInventoryDialog extends HxlSlidingDialog {
 				add(item);
 				break;
 			}
+		}
+	}
+
+	public override function hide(?HideCallback:Dynamic=null):Void {
+		super.hide(HideCallback);
+		if ( CqInventoryItem.selectedItem != null ) {
+			CqInventoryItem.selectedItem.setSelected(false);
+			CqInventoryItem.selectedItem = null;
 		}
 	}
 
@@ -217,6 +229,8 @@ class CqInventoryCell extends HxlDialog {
 class CqInventoryItem extends HxlSprite {
 
 	public static var backgroundKey:String;
+	public static var backgroundSelectedKey:String;
+	public static var selectedItem:CqInventoryItem = null;
 	var background:BitmapData;
 	var icon:BitmapData;
 	var _dlg:CqInventoryDialog;
@@ -224,11 +238,10 @@ class CqInventoryItem extends HxlSprite {
 	var dragZIndex:Int;
 	var cellIndex:Int;
 	var item:CqItem;
+	var selected:Bool;
 
 	public function new(Dialog:CqInventoryDialog, ?X:Float=0, ?Y:Float=0) {
 		super(X, Y);
-		loadCachedGraphic(backgroundKey);
-		background = HxlGraphics.getBitmap(backgroundKey);
 		icon = null;
 		idleZIndex = 5;
 		dragZIndex = 6;
@@ -236,6 +249,20 @@ class CqInventoryItem extends HxlSprite {
 		cellIndex = 0;
 		item = null;
 		zIndex = idleZIndex;
+		setSelected(false);
+	}
+
+	public function setSelected(Toggle:Bool):Void {
+		selected = Toggle;
+		if ( selected ) {
+			loadCachedGraphic(backgroundSelectedKey);
+			background = HxlGraphics.getBitmap(backgroundSelectedKey);
+			if ( icon != null ) setIcon(icon);
+		} else {
+			loadCachedGraphic(backgroundKey);
+			background = HxlGraphics.getBitmap(backgroundKey);
+			if ( icon != null ) setIcon(icon);
+		}
 	}
 
 	public function setItem(Item:CqItem):Void {
@@ -243,7 +270,8 @@ class CqInventoryItem extends HxlSprite {
 	}
 
 	public function setIcon(Icon:BitmapData):Void {
-		icon = Icon;
+		icon = new BitmapData(Icon.width, Icon.height, true, 0x0);
+		icon.copyPixels(Icon, new Rectangle(0, 0, Icon.width, Icon.height), new Point(0,0), null, null, true);
 		var X:Int = Std.int((width / 2) - (icon.width / 2));
 		var Y:Int = Std.int((height / 2) - (icon.height / 2));
 		var temp:BitmapData = new BitmapData(background.width, background.height, true, 0x0);
@@ -277,6 +305,12 @@ class CqInventoryItem extends HxlSprite {
 		super.onDragMouseDown(event);
 		if ( isDragging ) {
 			event.stopPropagation();
+			if ( selectedItem != null ) {
+				selectedItem.setSelected(false);
+				selectedItem = null;
+			}
+			selectedItem = this;
+			setSelected(true);
 		}
 	}
 
