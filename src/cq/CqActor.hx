@@ -38,18 +38,19 @@ class CqActor extends CqObject, implements Actor {
 	// special effects caused by magical items or spells
 	var specialEffects:Hash<Dynamic>;
 	
-	public function new(?X:Float=-1, ?Y:Float=-1,?attack:Int=1,?defense:Int=1) {
+	public function new(X:Float, Y:Float,attack:Int,defense:Int,damage:Range) {
 		super(X, Y);
 		moveSpeed = 0.25;
 		visionRadius = 8.2;
 		this.attack = attack;
 		this.defense = defense;
+		this.damage = damage;
 		initBuffs();
 		specialEffects = new Hash();
 	}
 	
 	function initBuffs(){
-		var buffs = new Hash<Int>();
+		buffs = new Hash<Int>();
 		buffs.set("attack",0);
 		buffs.set("defense",0);
 		buffs.set("damageMultipler", 1);
@@ -66,31 +67,42 @@ class CqActor extends CqObject, implements Actor {
 		isMoving = false;
 	}
 	
-	function attackObject(other:CqObject) {
-		// todo = bust chests?
+	public function attackObject(state:HxlState, other:GameObject) {
+		var chest = cast(other, CqChest);
+		chest.bust(state);
 	}
 	
 	function injureActor(other:CqActor) {
 		if (this == cast(Registery.player,CqPlayer)) {
 			HxlLog.append("You hit");
+			trace("You hit");
 		} else {
 			HxlLog.append("Hit you");
+			trace("Hit you");
 		}
 	}
 	
-	function killActor(other:CqActor) {
-		if (this == cast(Registery.player,CqPlayer)) {
+	function gainExperience(other:CqActor) {
+			//todo
+	}
+	
+	function killActor(state:HxlState, other:CqActor) {
+		// todo
+		if (this == cast(Registery.player, CqPlayer)) {
+			var mob = cast(other, CqMob);
+			
 			HxlLog.append("You kill");
+			trace("You kill");
+			gainExperience(mob);
+			// remove other
+			Registery.world.currentLevel.removeMobFromLevel(state, mob);
 		} else {
 			HxlLog.append("kill you");
+			trace("kill you");
 		}
 	}
 
-	public function attackOther(other:GameObject) {
-		if (!Std.is(other, CqActor)){
-			attackObject(cast(other, CqObject));
-			return;
-		}
+	public function attackOther(state:HxlState, other:GameObject) {
 		var other = cast(other, CqActor);
 		
 		// attack & defense buffs
@@ -127,14 +139,16 @@ class CqActor extends CqObject, implements Actor {
 			if (lif > 0)
 				injureActor(other);
 			else
-				killActor(other);
+				killActor(state,other);
 
 		} else {
 			// Miss
 			if (this == cast(Registery.player,CqPlayer)) {
 				HxlLog.append("You miss");//<b style='color: rgb("+other.vars.color.join()+");'>"+other.vars.description[0]+"</b>.");
+				trace("You miss");
 			} else {
 				HxlLog.append("Misses you");//"<b style='color: rgb("+vars.color.join()+");'>"+vars.description[0]+"</b> misses you.");
+				trace("Misses you");
 			}
 		}
 	}
@@ -149,7 +163,8 @@ class CqPlayer extends CqActor, implements Player {
 	var pickupCallback:Dynamic;
 	
 	public function new(playerClass:CqClass, ?X:Float=-1, ?Y:Float=-1) {
-		super(X, Y);
+		// fixme - correct attributes
+		super(X, Y,1,1,new Range(1,1));
 		loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 2.0, 2.0);
 		faction = 0;
 		inventory = new Array<CqItem>();
@@ -186,15 +201,15 @@ class CqPlayer extends CqActor, implements Player {
 		
 		if (tile.actors.length>0) {
 			// attack actor
+			var other = tile.actors[tile.actors.length - 1];
+			attackOther(state,other);
+			return;
 		} else if (tile.loots.length > 0) {
 			var loot = tile.loots[tile.loots.length - 1];
 			if (Std.is(loot, CqChest)) {
 				// bust chest & don't move
-				var chest = cast(loot, CqChest);
-				chest.bust(state);
-				
+				attackObject(state,loot);
 				return;
-				
 			} else {
 				// pickup item
 				var item = cast(loot, CqItem);
@@ -216,7 +231,8 @@ class CqMob extends CqActor, implements Mob {
 	public var type:CqMobType;
 	
 	public function new(X:Float, Y:Float, typeName:String) {
-		super(X, Y);
+		// fixme - correct attribute according to typename
+		super(X, Y,1,1,new Range(1,1));
 		loadGraphic(SpriteMonsters, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 		faction = 1;
 		type = Type.createEnum(CqMobType,  typeName.toUpperCase());

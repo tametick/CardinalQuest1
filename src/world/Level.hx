@@ -63,6 +63,16 @@ class Level extends HxlTilemap
 		addObject(state, mob);
 	}
 	
+	public function removeMobFromLevel(state:HxlState, mob:Mob) {
+		mobs.remove(mob);
+		
+		var mobPos = mob.getTilePos();		
+		var mobTile = cast(getTile(mobPos.x, mobPos.y), Tile);
+		mobTile.actors.remove(mob);
+		
+		state.remove(mob);
+	}
+	
 	function addObject(state:HxlState, obj:GameObject) {
 		state.add(obj);
 	}
