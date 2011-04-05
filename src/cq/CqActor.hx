@@ -82,11 +82,20 @@ class CqActor extends CqObject, implements Actor {
 		}
 	}
 	
-	function killActor(other:CqActor) {
+	function gainExperience(other:CqActor) {
+			//todo
+	}
+	
+	function killActor(state:HxlState, other:CqActor) {
 		// todo
-		if (this == cast(Registery.player,CqPlayer)) {
+		if (this == cast(Registery.player, CqPlayer)) {
+			var mob = cast(other, CqMob);
+			
 			HxlLog.append("You kill");
 			trace("You kill");
+			gainExperience(mob);
+			// remove other
+			Registery.world.currentLevel.removeMobFromLevel(state, mob);
 		} else {
 			HxlLog.append("kill you");
 			trace("kill you");
@@ -130,7 +139,7 @@ class CqActor extends CqObject, implements Actor {
 			if (lif > 0)
 				injureActor(other);
 			else
-				killActor(other);
+				killActor(state,other);
 
 		} else {
 			// Miss
