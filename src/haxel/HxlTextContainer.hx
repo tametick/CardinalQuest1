@@ -101,9 +101,28 @@ class HxlTextContainer extends HxlDialog {
 		}
 		lines.add(line);
 		line.zIndex = 1;
+		enforceMaxHeight();
 		add(line);
 		updateLayout();
 		if ( lines.length == 1 ) scrollTimer.reset(scrollRate);
+	}
+
+	public function enforceMaxHeight():Void {
+		var totalHeight:Float = 0;
+		var count:Int = 0;
+		for ( line in lines ) {
+			if ( count > 0 ) totalHeight += lineSpacing;
+			totalHeight += line.height;
+		}
+		if ( totalHeight < height ) return;
+		Actuate.stop(this, {}, false);
+		var line:HxlText;
+		while ( totalHeight > height ) {
+			line = lines.pop();
+			remove(line);
+			totalHeight -= line.height;
+			totalHeight -= lineSpacing;
+		}
 	}
 
 	public function scrollText():Void {

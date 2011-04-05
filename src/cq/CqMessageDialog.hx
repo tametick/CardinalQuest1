@@ -15,12 +15,12 @@ class CqMessageDialog extends HxlSlidingDialog {
 
 		textBox = new HxlTextContainer( 0, 0, 472, 480 );
 		textBox.reverseOrder = false;
-		textBox.maxLines = 27;
+		textBox.maxLines = 100;
 		textBox.setFormat(null, 12, 0xffffff, "left", 0xff000000);
 		add(textBox);
 		textBox.addText("Test 1..");
 		textBox.addText("Test 2..");
-		for ( i in 0...30 ) {
+		for ( i in 0...100 ) {
 			textBox.addText("Test "+i+"..");
 		}
 	}
