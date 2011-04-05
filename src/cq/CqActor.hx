@@ -212,19 +212,28 @@ class CqPlayer extends CqActor, implements Player {
 }
 
 class CqMob extends CqActor, implements Mob {
-	//fixme
 	static var sprites = SpriteMonsters.instance;
+	public var type:CqMobType;
 	
-	public function new(mobType:CqMobType, ?X:Float=-1, ?Y:Float=-1) {
+	public function new(X:Float, Y:Float, typeName:String) {
 		super(X, Y);
-		loadGraphic(SpriteMonsters, true, false, Configuration.tileSize, Configuration.tileSize, false, 2.0, 2.0);
+		loadGraphic(SpriteMonsters, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 		faction = 1;
-		
-		
-		switch(CqMobType) {
+		type = Type.createEnum(CqMobType,  typeName.toUpperCase());
+		addAnimation("idle", [sprites.getSpriteIndex(typeName)], 0 );
+		play("idle");
+	}
+}
 
-		}
-		//play("idle");
+class CqMobFactory {
+	public static function newMobFromType(X:Float, Y:Float, typeName:String):CqMob{
+		return new CqMob(X, Y, typeName.toLowerCase());
+	}
+	public static function newMobFromLevel(X:Float, Y:Float, level:Int):CqMob {
+		// fixme
+		var typeName = "BANDIT_LONG_SWORDS";
+		
+		return new CqMob(X, Y, typeName.toLowerCase());
 	}
 }
 
@@ -235,10 +244,10 @@ enum CqClass {
 }
 
 enum CqMobType {
-	KOBOLD;
-	BANDIT;
-	SUCCUBUS;
-	GIANT_SPIDER;
-	WEREWOLF;
-	MINOTAUR;
+	BANDIT_LONG_SWORDS; BANDIT_SHORT_SWORDS; BANDIT_SINGLE_LONG_SWORD; BANDIT_KNIVES;
+	KOBOLD_SPEAR; KOBOLD_KNIVES; KOBOLD_MAGE;
+	SUCCUBUS; SUCCUBUS_STAFF; SUCCUBUS_WHIP; SUCCUBUS_SCEPTER;
+	SPIDER_YELLOW; SPIDER_RED; SPIDER_GRAY; SPIDER_GREEN;
+	WEREWOLF_GRAY; WEREWOLF_BLUE; WEREWOLF_PURPLE;
+	MINOTAUER; MINOTAUER_AXE; MINOTAUER_SWORD;
 }

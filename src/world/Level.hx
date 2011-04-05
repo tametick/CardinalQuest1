@@ -17,10 +17,12 @@ class Level extends HxlTilemap
 	public var loots:Array<Loot>;
 	public var startingLocation:HxlPoint;
 	var _pathMap:PathMap;
+	var index:Int;
 	
-	public function new() {
+	public function new(index:Int) {
 		super();
 		
+		this.index = index;
 		mobs = new Array();
 		loots = new Array();
 		_pathMap = null;
@@ -54,6 +56,17 @@ class Level extends HxlTilemap
 		removeAllLoots(state);
 	}
 	
+	public function addMobToLevel(state:HxlState, mob:Mob) {
+		mobs.push(mob);
+		var tile = cast(getTile(mob.getTilePos().x, mob.getTilePos().y), Tile);
+		tile.actors.push(mob);
+		addObject(state, mob);
+	}
+	
+	function addObject(state:HxlState, obj:GameObject) {
+		state.add(obj);
+	}
+	
 	function addAllActors(state:HxlState) {
 		var player = Registery.player;
 		player.tilePos = startingLocation;
@@ -62,16 +75,26 @@ class Level extends HxlTilemap
 		state.add(player);
 		
 		for (mob in mobs)
-			state.add(mob);
+			addObject(state, mob);
 	}
 	
-	public function addLoot(state:HxlState, loot:Loot) {
+	public function addLootToLevel(state:HxlState, loot:Loot) {
+		// add item to level loot list
+		loots.push(loot);
+		// add item to tile loot list
+		var tile = cast(getTile(loot.getTilePos().x, loot.getTilePos().y), Tile);
+		tile.loots.push(loot);
+		// make item viewable on level
+		addObject(state, loot);
+	}
+	
+	function addLoot(state:HxlState, loot:Loot) {
 		state.add(loot);
 	}
 	
 	function addAllLoots(state:HxlState) {
 		for (loot in loots )
-			addLoot(state,loot);
+			addObject(state,loot);
 	}
 	
 	public function removeAllActors(state:HxlState) {

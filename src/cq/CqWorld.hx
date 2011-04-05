@@ -2,6 +2,7 @@ package cq;
 
 import cq.CqResources;
 import cq.CqItem;
+import cq.CqActor;
 
 import haxel.HxlPoint;
 import haxel.HxlState;
@@ -33,18 +34,18 @@ class CqLevel extends Level {
 	static var tiles = SpriteTiles.instance;
 	static var itemSprites = SpriteItems.instance;
 	
-	public function new() {
-		super();
+	public function new(index:Int) {
+		super(index);
 		tileClass = CqTile;
-		
 				
 		var newMapData = BSP.getBSPMap(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), tiles.getSpriteIndex("red_wall4"), tiles.getSpriteIndex("red_floor0"), tiles.getSpriteIndex("red_door_close"));
 		startingLocation = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
 		
 		loadMap(newMapData, SpriteTiles, Configuration.tileSize, Configuration.tileSize, 2.0, 2.0);
 		
-		// place chests
+		
 		addChests(CqConfiguration.chestsPerLevel);
+		addMobs(CqConfiguration.mobsPerLevel);
 	}
 	
 	function addChests(numberOfChests:Int) {
@@ -54,19 +55,40 @@ class CqLevel extends Level {
 				pos = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
 			} while (cast(getTile(pos.x, pos.y), CqTile).loots.length > 0);
 			
-			addChest(pos);
+			createAndaddChest(pos);
 		}
 	}
+
+	function addMobs(numberOfMobs:Int) {
+		for (c in 0...numberOfMobs){
+			var pos; 
+			do {
+				pos = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
+			} while (cast(getTile(pos.x, pos.y), CqTile).actors.length > 0 && cast(getTile(pos.x, pos.y), CqTile).loots.length > 0);
+			
+			createAndaddMob(pos, index);
+		}
+	}
+
 	
-	function addChest(pos:HxlPoint) {
+	function createAndaddChest(pos:HxlPoint) {
 		var pixelPos = getPixelPositionOfTile(pos.x, pos.y);
 		var chest = new CqChest(pixelPos.x, pixelPos.y);
 		
 		// add to level loot list
 		loots.push(chest);
-		
 		// add to tile loot list
 		cast(getTile(pos.x, pos.y), CqTile).loots.push(chest);
+	}
+	
+	function createAndaddMob(pos:HxlPoint, levelIndex:Int) {
+		var pixelPos = getPixelPositionOfTile(pos.x, pos.y);
+		var mob = CqMobFactory.newMobFromLevel(pixelPos.x, pixelPos.y, levelIndex);
+		
+		// add to level mobs list
+		mobs.push(mob);
+		// add to tile actors list
+		cast(getTile(pos.x, pos.y), CqTile).actors.push(mob);
 	}
 	
 }
@@ -76,7 +98,7 @@ class CqWorld extends World
 	public function new() {
 		super();
 		
-		levels.push(new CqLevel());
-		currentLevel = levels[0];
+		levels.push(new CqLevel(currentLevelIndex));
+		currentLevel = levels[currentLevelIndex];
 	}
 }

@@ -14,14 +14,13 @@ import haxel.HxlUtil;
 class CqItem extends GameObjectImpl, implements Loot {
 	static var sprites = SpriteItems.instance;
 	public var equipSlot:CqEquipSlot;
-	public var spriteIndex:String;
+	public var type:CqItemType;
 	public function new(X:Float, Y:Float, typeName:String) {
 		super(X, Y);
 		loadGraphic(SpriteItems, false, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
-		addAnimation("idle", [CqItem.sprites.getSpriteIndex(typeName)], 0 );
+		type = Type.createEnum(CqItemType,  typeName.toUpperCase());
+		addAnimation("idle", [sprites.getSpriteIndex(typeName)], 0 );
 		play("idle");
-		equipSlot = null;
-		spriteIndex = typeName;
 	}
 }
 
@@ -41,13 +40,8 @@ class CqChest extends CqItem {
 		} while (type == "CHEST");
 		var item = CqLootFactory.newItem(x, y, type);		
 		
-		
-		// add item to level loot list
-		Registery.world.currentLevel.loots.push(item);
-		// add item to tile loot list
-		cast(Registery.world.currentLevel.getTile(getTilePos().x, getTilePos().y), CqTile).loots.push(item);
-		// make item viewable on level
-		Registery.world.currentLevel.addLoot(state, item);
+		// add item to level
+		Registery.world.currentLevel.addLootToLevel(state, item);
 		
 		// remove chest
 		Registery.world.currentLevel.removeLootFromLevel(state, this);

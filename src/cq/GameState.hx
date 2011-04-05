@@ -16,8 +16,7 @@ import cq.CqItem;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 
-class GameState extends HxlState
-{
+class GameState extends HxlState {
 	var gameUI:GameUI;
 
 	public override function create():Void {
@@ -82,8 +81,6 @@ class GameState extends HxlState
 		if (Registery.player.isMoving)
 			return;
 		
-		//var tileX = Std.int(HxlGraphics.mouse.x / (Configuration.tileSize*2));
-		//var tileY = Std.int(HxlGraphics.mouse.y / (Configuration.tileSize*2));
 		var dx = HxlGraphics.mouse.x - Registery.player.x;
 		var dy = HxlGraphics.mouse.y - Registery.player.y;		
 		var targetTile:HxlPoint = Registery.world.currentLevel.getTargetAccordingToMousePosition(dx,dy);
@@ -94,7 +91,5 @@ class GameState extends HxlState
 		} else {
 			
 		}
-	}	
-	
-	
+	}
 }
