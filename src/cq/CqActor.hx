@@ -230,8 +230,8 @@ class CqMobFactory {
 		return new CqMob(X, Y, typeName.toLowerCase());
 	}
 	public static function newMobFromLevel(X:Float, Y:Float, level:Int):CqMob {
-		// fixme
-		var typeName = "BANDIT_LONG_SWORDS";
+		// fixme - use level
+		var typeName = HxlUtil.getRandomElement(Type.getEnumConstructs(CqMobType));
 		
 		return new CqMob(X, Y, typeName.toLowerCase());
 	}
