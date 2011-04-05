@@ -19,7 +19,6 @@ class GameUI extends HxlDialog {
 	// Main UI containers
 	var leftButtons:HxlButtonContainer;
 	var rightButtons:HxlButtonContainer;
-	//var statusDialog:HxlTextContainer;
 
 	// View state panels
 	var panelMap:CqMapDialog;
@@ -56,15 +55,6 @@ class GameUI extends HxlDialog {
 		rightButtons = new HxlButtonContainer(HxlGraphics.width-84, 50, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
 		//rightButtons.setBackgroundColor(0x88555555);
 		add(rightButtons);
-
-		// Status message disabled for now, can likely remove this
-		/*
-		statusDialog = new HxlTextContainer( 10, 10, 620, 80 );
-		statusDialog.setFormat("Geo", 18, 0xffffff, "left", 0x000000);
-		statusDialog.setColorStep(true);
-		statusDialog.setBackgroundSprite(HxlGradient.Rect(620, 40, [0xffffff, 0xffffff, 0xffffff], [0, 128, 255], [0.5, 0.0, 0.0], Math.PI/2, 20));
-		add(statusDialog);
-		*/
 
 		/**
 		 * View state panels
@@ -187,12 +177,23 @@ class GameUI extends HxlDialog {
 			} else {
 				var self = this;
 				if ( currentPanel != Panel ) {
+					// A view state other than main is already active.. Hide that one first before showing the selected one
 					currentPanel.hide(function() {
 						self.currentPanel = Panel;
 						self.currentPanel.show();
 					});
 				} else {
-					currentPanel.show();
+					// User clicked on a view state button which is already active, switch back to main view state
+					//currentPanel.show();
+					if ( currentPanel != null ) {
+						var self = this;
+						currentPanel.hide(function() { self.currentPanel = null; });
+						btnMainView.setActive(true);
+						btnMapView.setActive(false);
+						btnInventoryView.setActive(false);
+						btnCharacterView.setActive(false);
+						btnLogView.setActive(false);
+					}
 				}
 			}
 		}
