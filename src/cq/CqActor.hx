@@ -241,13 +241,48 @@ class CqMob extends CqActor, implements Mob {
 	}
 }
 
-class CqMobFactory {
-	public static function newMobFromType(X:Float, Y:Float, typeName:String):CqMob{
-		return new CqMob(X, Y, typeName.toLowerCase());
-	}
+class CqMobFactory {	
 	public static function newMobFromLevel(X:Float, Y:Float, level:Int):CqMob {
-		// fixme - use level
-		var typeName = HxlUtil.getRandomElement(Type.getEnumConstructs(CqMobType));
+		var typeName = null;
+		switch(level+1) {
+			case 1,2:
+				typeName = HxlUtil.getRandomElement(SpriteMonsters.bandits);
+			case 3:
+				if(Math.random()<0.7)
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.bandits);
+				else
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.kobolds);
+			case 4:
+				typeName = HxlUtil.getRandomElement(SpriteMonsters.kobolds);
+			case 5:
+				if(Math.random()<0.7)
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.kobolds);
+				else
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.succubi);
+			case 6:
+				typeName = HxlUtil.getRandomElement(SpriteMonsters.succubi);
+			case 7:
+				if(Math.random()<0.7)
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.succubi);
+				else
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.spiders);
+			case 8:
+				typeName = HxlUtil.getRandomElement(SpriteMonsters.spiders);
+			case 9:
+				if(Math.random()<0.7)
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.spiders);
+				else
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.werewolves);
+			case 10:
+				typeName = HxlUtil.getRandomElement(SpriteMonsters.werewolves);
+			case 11:
+				if(Math.random()<0.7)
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.werewolves);
+				else
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.minotauers);
+			case 12:
+				typeName = HxlUtil.getRandomElement(SpriteMonsters.minotauers);
+		}
 		
 		return new CqMob(X, Y, typeName.toLowerCase());
 	}

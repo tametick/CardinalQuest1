@@ -29,14 +29,20 @@ class SpriteItems extends HxlSpriteSheet {
 }
 class SpriteMonsters extends HxlSpriteSheet { 	
 	public static var instance = new SpriteMonsters();
+	public static var kobolds = ["kobold_spear", "kobold_knives", "kobold_mage",];
+	public static var werewolves = ["werewolf_gray", "werewolf_blue", "werewolf_purple"];
+	public static var bandits = ["bandit_long_swords", "bandit_short_swords", "bandit_single_long_sword", "bandit_knives"];
+	public static var minotauers = ["minotauer", "minotauer_axe", "minotauer_sword"];
+	public static var succubi = ["succubus", "succubus_staff", "succubus_whip", "succubus_scepter", ];
+	public static var spiders = ["spider_yellow", "spider_red", "spider_gray", "spider_green"];
 	public function new() {
 		spriteNames = [
-			["kobold_spear","kobold_knives","kobold_mage", "kobold_blank"],
-			["werewolf_gray","werewolf_blue","werewolf_purple", "werewolf_blank"],
-			["bandit_long_swords","bandit_short_swords","bandit_single_long_sword","bandit_knives"],
-			["minotauer","minotauer_axe","minotauer_sword","minotauer_blank"],
-			["succubus","succubus_staff","succubus_whip","succubus_scepter",],
-			["spider_yellow","spider_red","spider_gray","spider_green"],
+			kobolds.concat(["kobold_blank"]),
+			werewolves.concat(["werewolf_blank"]),
+			bandits,
+			minotauers.concat(["minotauer_blank"]),
+			succubi,
+			spiders,
 		];
 		super(0);
 	} 
