@@ -52,6 +52,7 @@ class GameState extends HxlState {
 		gameUI = new GameUI();
 		gameUI.zIndex = 50;
 		add(gameUI);
+		player.setPickupCallback(gameUI.itemPickup);
 	}
 	
 	override function onKeyUp(event:KeyboardEvent) { }

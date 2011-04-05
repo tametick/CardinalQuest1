@@ -1,5 +1,7 @@
 package cq;
 
+import cq.CqItem;
+
 import flash.display.BitmapData;
 
 import haxel.HxlButton;
@@ -194,6 +196,10 @@ class GameUI extends HxlDialog {
 				}
 			}
 		}
+	}
+
+	public function itemPickup(Item:CqItem):Void {
+		panelInventory.itemPickup(Item);
 	}
 
 }

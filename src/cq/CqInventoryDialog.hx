@@ -1,11 +1,15 @@
 package cq;
 
+import cq.CqItem;
 import cq.CqResources;
+
+import data.Configuration;
+
 import flash.display.BitmapData;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
-import data.Configuration;
+
 import haxel.HxlDialog;
 import haxel.HxlGradient;
 import haxel.HxlGraphics;
@@ -56,7 +60,6 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		itemSprite.setFrame(itemSheet.getSpriteIndex("winged_sandles"));
 		item1.setIcon(itemSprite.getFramePixels());
 		item1.toggleDrag(true);
-		item1.zIndex = 5;
 		item1.setCell(1);
 		add(item1);
 
@@ -64,10 +67,22 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		itemSprite.setFrame(itemSheet.getSpriteIndex("leather_armor"));
 		item2.setIcon(itemSprite.getFramePixels());
 		item2.toggleDrag(true);
-		item2.zIndex = 5;
 		item2.setCell(4);
 		add(item2);
 	
+	}
+
+	public function itemPickup(Item:CqItem):Void {
+		for ( cell in dlgGrid.cells ) {
+			if ( cell.getCellObj() == null ) {
+				var item:CqInventoryItem = new CqInventoryItem(this, 2, 2);
+				item.toggleDrag(true);
+				item.zIndex = 5;
+				item.setCell(cell.cellIndex);
+				add(item);
+				break;
+			}
+		}
 	}
 
 }
@@ -220,6 +235,7 @@ class CqInventoryItem extends HxlSprite {
 	var idleZIndex:Int;
 	var dragZIndex:Int;
 	var cellIndex:Int;
+	var item:CqItem;
 
 	public function new(Dialog:CqInventoryDialog, ?X:Float=0, ?Y:Float=0) {
 		super(X, Y);
@@ -230,9 +246,8 @@ class CqInventoryItem extends HxlSprite {
 		dragZIndex = 6;
 		_dlg = Dialog;
 		cellIndex = 0;
-		//pixels = background;
-		//width = background.width;
-		//height = background.height;
+		item = null;
+		zIndex = idleZIndex;
 	}
 
 	public function setIcon(Icon:BitmapData):Void {
