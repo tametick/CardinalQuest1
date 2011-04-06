@@ -1,8 +1,12 @@
 package cq;
 
+import com.eclecticdesignstudio.motion.Actuate;
+import com.eclecticdesignstudio.motion.easing.Cubic;
+
 import data.Configuration;
 import data.Registery;
 import haxel.HxlState;
+import haxel.HxlGraphics;
 import world.Loot;
 import world.GameObject;
 import cq.CqConfiguration;
@@ -23,6 +27,19 @@ class CqItem extends GameObjectImpl, implements Loot {
 		spriteIndex = typeName;
 		addAnimation("idle", [sprites.getSpriteIndex(typeName)], 0 );
 		play("idle");
+	}
+
+	public function doPickupEffect():Void {
+		HxlGraphics.state.add(this);
+		var self = this;
+		Actuate.update(function(params:Dynamic) {
+			self.x = params.X;
+			self.y = params.Y;
+			self.alpha = params.Alpha;
+		}, 1.0, {X: x, Y: y, Alpha: 1.0}, {X: x, Y: y-48, Alpha: 0.0}).onComplete(function() {
+			HxlGraphics.state.remove(self);
+			self.destroy();
+		}).ease(Cubic.easeOut); 
 	}
 }
 
