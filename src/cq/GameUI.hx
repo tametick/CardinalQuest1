@@ -211,7 +211,6 @@ class GameUI extends HxlDialog {
 	}
 
 	public function initHealthBars():Void {
-		trace("Adding health bars to "+Registery.world.currentLevel.mobs.length+" mobs");
 		for ( actor in Registery.world.currentLevel.mobs ) {
 			addHealthBar(cast(actor, CqActor));
 		}

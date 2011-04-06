@@ -53,6 +53,10 @@ class CqActor extends CqObject, implements Actor {
 	public var visibleEffects:Array<String>;
 	
 	public var timers:Array<CqTimer>;
+
+	// callbacks
+	var onInjure:Dynamic;
+	var onKill:Dynamic;
 	
 	public function new(X:Float, Y:Float,attack:Int,defense:Int,damage:Range,speed:Int,spirit:Int) {
 		super(X, Y);
@@ -68,6 +72,8 @@ class CqActor extends CqObject, implements Actor {
 		specialEffects = new Hash();
 		visibleEffects = new Array<String>();
 		timers = new Array<CqTimer>();
+		onInjure = null;
+		onKill = null;
 	}
 	
 	function initBuffs(){
@@ -79,7 +85,15 @@ class CqActor extends CqObject, implements Actor {
 		buffs.set("speed", 0);
 		buffs.set("spirit",0);
 	}
-	
+
+	public function setOnInjure(Callback:Dynamic):Void {
+		onInjure = Callback;
+	}
+
+	public function setOnKill(Callback:Dynamic):Void {
+		onKill = Callback;
+	}
+
 	public function moveToPixel(X:Float, Y:Float):Void {
 		isMoving = true;
 		Actuate.tween(this, moveSpeed, { x: X, y: Y } ).onComplete(moveStop);
@@ -94,6 +108,10 @@ class CqActor extends CqObject, implements Actor {
 		chest.bust(state);
 	}
 	
+	public function doInjure():Void {
+		if ( onInjure != null ) onInjure();
+	}
+
 	function injureActor(other:CqActor) {
 		if (this == cast(Registery.player,CqPlayer)) {
 			HxlLog.append("You hit");
@@ -102,13 +120,19 @@ class CqActor extends CqObject, implements Actor {
 			HxlLog.append("Hit you");
 			trace("Hit you");
 		}
+		other.doInjure();
 	}
 	
 	function gainExperience(other:CqActor) {
 		//todo
 	}
 	
+	public function doKill():Void {
+		if ( onKill != null ) onKill();
+	}
+
 	function killActor(state:HxlState, other:CqActor) {
+		other.doKill();
 		// todo
 		if (this == cast(Registery.player, CqPlayer)) {
 			var mob = cast(other, CqMob);
