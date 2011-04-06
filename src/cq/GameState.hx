@@ -66,6 +66,8 @@ class GameState extends HxlState {
 		add(gameUI);
 		gameUI.initHealthBars();
 		player.setPickupCallback(gameUI.itemPickup);
+		player.setOnInjure(gameUI.doPlayerInjureEffect);
+		player.setOnKill(gameUI.doPlayerInjureEffect);
 	}
 	
 	override function onKeyUp(event:KeyboardEvent) { }

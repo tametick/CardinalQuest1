@@ -221,4 +221,8 @@ class GameUI extends HxlDialog {
 		HxlGraphics.state.add(bar);
 	}
 
+	public function doPlayerInjureEffect():Void {
+		HxlGraphics.flash.start(0xffff0000, 0.3, null, true);
+	}
+
 }
