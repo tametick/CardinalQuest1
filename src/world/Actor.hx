@@ -12,4 +12,5 @@ interface Actor implements GameObject {
 	var visionRadius:Float;
 	var moveSpeed:Float;
 	var isMoving:Bool;
+	var actionPoints:Int;
 }

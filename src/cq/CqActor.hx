@@ -25,6 +25,8 @@ class CqActor extends CqObject, implements Actor {
 	public var visionRadius:Float;
 	public var faction:Int;
 	
+	public var actionPoints:Int;
+	
 	var attack:Int;
 	var defense:Int;
 	// natural damage without weapon
@@ -40,6 +42,7 @@ class CqActor extends CqObject, implements Actor {
 	
 	public function new(X:Float, Y:Float,attack:Int,defense:Int,damage:Range) {
 		super(X, Y);
+		actionPoints = 0;
 		moveSpeed = 0.15;
 		visionRadius = 8.2;
 		this.attack = attack;
@@ -82,7 +85,7 @@ class CqActor extends CqObject, implements Actor {
 	}
 	
 	function gainExperience(other:CqActor) {
-			//todo
+		//todo
 	}
 	
 	function killActor(state:HxlState, other:CqActor) {
