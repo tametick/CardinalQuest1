@@ -1,6 +1,8 @@
 package cq;
 
+import cq.CqActor;
 import cq.CqItem;
+import cq.CqVitalBar;
 
 import data.Registery;
 
@@ -211,15 +213,13 @@ class GameUI extends HxlDialog {
 	public function initHealthBars():Void {
 		trace("Adding health bars to "+Registery.world.currentLevel.mobs.length+" mobs");
 		for ( actor in Registery.world.currentLevel.mobs ) {
-			var bar:HxlUIBar = new HxlUIBar(actor.x, actor.y + actor.height + 2, 32, 4);
-			bar.scrollFactor.x = bar.scrollFactor.y = 1;
-			bar.setFrameColor(0xff444444);
-			bar.setInteriorColor(0xff000000);
-			bar.setBarColor(0xffff0000);
-			bar.setPercent(0.65);
-			bar.zIndex = 5;
-			HxlGraphics.state.add(bar);
+			addHealthBar(cast(actor, CqActor));
 		}
+	}
+
+	public function addHealthBar(Actor:CqActor):Void {
+		var bar:CqHealthBar = new CqHealthBar(Actor, Actor.x, Actor.y + Actor.height + 2, 32, 4);
+		HxlGraphics.state.add(bar);
 	}
 
 }

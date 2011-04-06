@@ -419,6 +419,10 @@ class HxlSprite extends HxlObject {
 	public override function update():Void {
 		updateMotion();
 		updateAnimation();
+		if ( mountObject != null ) {
+			x = mountObject.x + mountOffsetX;
+			y = mountObject.y + mountOffsetY;
+		}
 		//updateFlickering();
 		if ( dragEnabled && isDragging && HxlGraphics.mouse.dragSprite == this ) {
 			if ( dragOffset == null ) dragOffset = new HxlPoint(0,0);

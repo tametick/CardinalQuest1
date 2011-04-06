@@ -423,6 +423,10 @@ class HxlGroup extends HxlObject {
 	public override function update():Void {
 		saveOldPosition();
 		updateMotion();
+		if ( mountObject != null ) {
+			x = mountObject.x + mountOffsetX;
+			y = mountObject.y + mountOffsetY;
+		}
 		updateMembers();
 		//updateFlickering();
 		if ( !initialized ) initialized = true;

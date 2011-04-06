@@ -171,6 +171,10 @@ class HxlDialog extends HxlGroup
 			x = targetX;
 			y = targetY;
 		}
+		if ( mountObject != null ) {
+			x = mountObject.x + mountOffsetX;
+			y = mountObject.y + mountOffsetY;
+		}
 		updateMotion();
 		updateMembers();
 		if ( !initialized ) initialized = true;

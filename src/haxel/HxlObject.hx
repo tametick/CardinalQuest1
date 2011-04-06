@@ -159,7 +159,14 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	 */
 	public var moves:Bool;
 
+	/**
+	 * An array of objects which represent event listeners assigned to this HxlObject.
+	 **/
 	var eventListeners:Array<Dynamic>;
+
+	var mountObject:HxlObject;
+	var mountOffsetX:Float;
+	var mountOffsetY:Float;
 
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0) {
 		super(X, Y, Width, Height);
@@ -192,6 +199,10 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 
 		zIndex = 0;
 		eventListeners = new Array();
+
+		mountObject = null;
+		mountOffsetX = 0;
+		mountOffsetY = 0;
 	}
 
 	/**
@@ -345,7 +356,11 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	public function update():Void {
 		updateMotion();
 		//updateFlickering();
+		if ( mountObject != null ) {
+			x = mountObject.x + mountOffsetX;
+			y = mountObject.y + mountOffsetY;
 		}
+	}
 
 	/**
 	 * Override this function to draw graphics (see <code>HxlSprite</code>).
@@ -420,5 +435,22 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		for ( i in eventListeners ) {
 			HxlGraphics.stage.addEventListener(i.Type, i.Listener, i.UseCapture, i.Priority);
 		}
+	}
+
+	/**
+	 * Mounts this HxlObject to another HxlObject, causing it to follow the target object's movement.
+	 * Uses the current position relative to the target object as the offset.
+	 **/
+	public function mount(Other:HxlObject):Void {
+		mountObject = Other;
+		mountOffsetX = x - Other.x;
+		mountOffsetY = y - Other.y;
+	}
+
+	/**
+	 * Unmounts from the currently mounted HxlObject.
+	 **/
+	public function unmount():Void {
+		mountObject = null;
 	}
 }
