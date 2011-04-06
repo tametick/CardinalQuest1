@@ -20,6 +20,12 @@ import cq.CqWorld;
 
 import com.eclecticdesignstudio.motion.Actuate;
 
+class CqTimer {
+	public var ticks:Int;
+	public var buffName:String;
+	public var buffValue:Int;
+}
+
 class CqActor extends CqObject, implements Actor {
 	public var isMoving:Bool;
 	public var moveSpeed:Float;	
@@ -27,21 +33,27 @@ class CqActor extends CqObject, implements Actor {
 	public var faction:Int;
 	
 	public var actionPoints:Int;
+	public var spiritPoints:Int;
 	
-	var attack:Int;
-	var defense:Int;
-	var damage:Range;// natural damage without weapon
-	var speed:Int;
+	public var attack:Int;
+	public var defense:Int;
+	public var damage:Range;// natural damage without weapon
+	public var speed:Int;
+	public var spirit:Int;
 	
 	var equippedWeapon:CqWeapon;
 	var equippedSpell:CqSpell;
 	
 	// changes to basic abilities (attack, defense, speed, spirit) caused by equipped items or spells
-	var buffs:Hash<Int>;
+	public var buffs:Hash<Int>;
 	// special effects caused by magical items or spells
-	var specialEffects:Hash<Dynamic>;
+	public var specialEffects:Hash<Dynamic>;
+	// visible effects from buffs & specialEffects
+	public var visibleEffects:Array<String>;
 	
-	public function new(X:Float, Y:Float,attack:Int,defense:Int,damage:Range,speed:Int) {
+	public var timers:Array<CqTimer>;
+	
+	public function new(X:Float, Y:Float,attack:Int,defense:Int,damage:Range,speed:Int,spirit:Int) {
 		super(X, Y);
 		actionPoints = 0;
 		moveSpeed = 0.15;
@@ -50,8 +62,11 @@ class CqActor extends CqObject, implements Actor {
 		this.defense = defense;
 		this.damage = damage;
 		this.speed = speed;
+		this.spirit = spirit;
 		initBuffs();
 		specialEffects = new Hash();
+		visibleEffects = new Array<String>();
+		timers = new Array<CqTimer>();
 	}
 	
 	function initBuffs(){
@@ -60,7 +75,8 @@ class CqActor extends CqObject, implements Actor {
 		buffs.set("defense",0);
 		buffs.set("damageMultipler", 1);
 		buffs.set("life", 0);
-		buffs.set("speed",0);
+		buffs.set("speed", 0);
+		buffs.set("spirit",0);
 	}
 	
 	public function moveToPixel(X:Float, Y:Float):Void {
@@ -158,7 +174,12 @@ class CqActor extends CqObject, implements Actor {
 		}
 	}
 	
-	public function act(state:HxlState, targetTile:HxlPoint) {
+	public function act(state:HxlState):Bool {
+		// todo
+		return true;
+	}
+	
+	public function actInDirection(state:HxlState, targetTile:HxlPoint) {
 		var world = Registery.world;
 		var tile = cast(world.currentLevel.getTile(tilePos.x + targetTile.x,  tilePos.y + targetTile.y),CqTile);
 		
@@ -204,7 +225,7 @@ class CqPlayer extends CqActor, implements Player {
 
 	public function new(playerClass:CqClass, ?X:Float=-1, ?Y:Float=-1) {
 		// fixme - correct attributes
-		super(X, Y,1,1,new Range(1,1),5);
+		super(X, Y,1,1,new Range(1,1),5,5);
 		loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 2.0, 2.0);
 		faction = 0;
 		inventory = new Array<CqItem>();
@@ -243,7 +264,7 @@ class CqMob extends CqActor, implements Mob {
 	
 	public function new(X:Float, Y:Float, typeName:String) {
 		// fixme - correct attribute according to typename
-		super(X, Y,1,1,new Range(1,1),5);
+		super(X, Y,1,1,new Range(1,1),5,0);
 		loadGraphic(SpriteMonsters, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 		faction = 1;
 		type = Type.createEnum(CqMobType,  typeName.toUpperCase());

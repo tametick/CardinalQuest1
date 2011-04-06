@@ -93,63 +93,60 @@ class CqLevel extends Level {
 		CqWorld.onActorAdded(mob);
 	}
 	
-	public override function tick() {
+	public override function tick(state:HxlState) {
 		var creatures:Array<CqActor> = new Array<CqActor>();
 		creatures.push(cast(Registery.player, CqActor));
 		for (mob in mobs)
 			creatures.push(cast(mob, CqActor));
-		
-		//[cast(Registery.player, CqActor)];//.concat(mobs);
-		
-/*		for (var c = 0; c < vars.creatures.length; c++) {
-			var buffs = vars.creatures[c].vars.buffs;
-			var visibleEffect = vars.creatures[c].vars.visibleEffect;
+			
+		for (creature in creatures) {
+			var buffs = creature.buffs;
+			var visibleEffects = creature.visibleEffects;
 			// remove timed out buffs & visibleEffects
-			var timers = vars.creatures[c].vars.timers;
-			if (timers) {
+			var timers = creature.timers;
+			if (timers.length>0) {
 				var expired = [];
-				for (var t = 0; t < timers.length; t++) {
-					timers[t][0]--;
-					if (timers[t][0] == 0) {
-						if(buffs[timers[t][1]]){
-							// reduce buff
-							buffs[timers[t][1]] -= timers[t][2]
-						} else if(visibleEffect==timers[t][1]) {
+				for (t in timers) {
+					t.ticks--;
+					if (t.ticks == 0) {
+						// reduce buff
+						var newVal = buffs.get(t.buffName) - t.buffValue;
+						buffs.set(t.buffName, newVal);
+						if(HxlUtil.contains(visibleEffects, t.buffName)) {
 							// remove visibleEffect
-							vars.creatures[c].vars.visibleEffect = null;
+							creature.visibleEffects.remove(t.buffName);
 						}
 						expired.push(t);
 					}
 				}
 				
 				// remove expired timers
-				for (var t=0; t<expired.lenth; t++) 
-					timers.remove(expired[t]);
+				for (t in expired) 
+					timers.remove(t);
 			}
 			
-			var speed = vars.creatures[c].vars.speed;
+			var speed = creature.speed;
 			// Apply speed buffs
-			if (vars.creatures[c].vars.buffs && vars.creatures[c].vars.buffs.speed) 
-				speed += vars.creatures[c].vars.buffs.speed;
-			speed = Math.max(speed, 1);
+			speed += creature.buffs.get("speed");
+			speed = Std.int(Math.max(speed, 1));
 			// apply spirit buffs
-			var spirit = vars.creatures[c].vars.spirit;
-			var specialActive = vars.creatures[c].vars.visibleEffect != null;
-			if (spirit && vars.creatures[c].vars.buffs && vars.creatures[c].vars.buffs.spirit) 
-				spirit += vars.creatures[c].vars.buffs.spirit;
-			spirit = Math.max(spirit, 1);
+			var spirit = creature.spirit;
+			var specialActive = creature.visibleEffects.length >0;
+			spirit += creature.buffs.get("spirit");
+			spirit = Std.int(Math.max(spirit, 1));
+			
 			// Charge action & spirit points				
-			vars.creatures[c].vars.actionPoints += speed;
-			if (spirit && !specialActive)
-				vars.creatures[c].vars.spiritPoints = Math.min(360, vars.creatures[c].vars.spiritPoints + spirit);
+			creature.actionPoints += speed;
+			if (!specialActive)
+				creature.spiritPoints = Std.int(Math.min(360, creature.spiritPoints + spirit));
 			
 			// Move mob if charged
-			if (c != 0 && vars.creatures[c].vars.actionPoints >= 60) {
-				if (vars.creatures[c].act()) {
-					vars.creatures[c].vars.actionPoints = 0;
+			if ( !Std.is(creature,CqPlayer)  &&  creature.actionPoints>=60 ) {
+				if (creature.act(state)) {
+					creature.actionPoints = 0;
 				}
 			}
-		}*/
+		}
 	}
 	
 }

@@ -288,5 +288,5 @@ class Level extends HxlTilemap
 		return targetTile;
 	}
 	
-	public function tick() { }
+	public function tick(state:HxlState) { }
 }

@@ -43,11 +43,10 @@ class GameState extends HxlState {
 		
 		level.updateFieldOfView();
 		player.actionPoints = 0;
-/*
+
 		while (player.actionPoints < 60) {
-			level.tick();
-			ticks++;
-		}*/
+			level.tick(this);
+		}
 	}
 
 	override function init() {
@@ -85,7 +84,7 @@ class GameState extends HxlState {
 		var targetTile = world.currentLevel.getTargetAccordingToKeyPress();
 		if ( targetTile != null ) {
 			// move or attack
-			Registery.player.act(this,targetTile);
+			Registery.player.actInDirection(this,targetTile);
 		} else {
 			// other actions?
 		}
@@ -104,7 +103,7 @@ class GameState extends HxlState {
 		
 		if (targetTile != null) {
 			// move or attack in chosen tile
-			Registery.player.act(this,targetTile);
+			Registery.player.actInDirection(this,targetTile);
 		} else {
 			
 		}
