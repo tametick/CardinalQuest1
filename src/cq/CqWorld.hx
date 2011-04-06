@@ -33,7 +33,7 @@ class CqLevel extends Level {
 	// fixme - use static function instead
 	static var tiles = SpriteTiles.instance;
 	static var itemSprites = SpriteItems.instance;
-	
+
 	public function new(index:Int) {
 		super(index);
 		tileClass = CqTile;
@@ -89,10 +89,12 @@ class CqLevel extends Level {
 		mobs.push(mob);
 		// add to tile actors list
 		cast(getTile(pos.x, pos.y), CqTile).actors.push(mob);
+		// call world's ActorAdded static method
+		CqWorld.onActorAdded(mob);
 	}
 	
 	public override function tick() {
-		var creatures = [Registery.player].concat(mobs);
+		//var creatures = [Registery.player].concat(mobs);
 		
 /*		for (var c = 0; c < vars.creatures.length; c++) {
 			var buffs = vars.creatures[c].vars.buffs;
@@ -149,10 +151,16 @@ class CqLevel extends Level {
 
 class CqWorld extends World 
 {
+	static public var actorAdded:Dynamic = null;
+
 	public function new() {
 		super();
 		
 		levels.push(new CqLevel(currentLevelIndex));
 		currentLevel = levels[currentLevelIndex];
+	}
+
+	static public function onActorAdded(Actor:CqActor):Void {
+		if ( actorAdded != null ) actorAdded();
 	}
 }

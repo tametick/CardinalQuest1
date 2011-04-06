@@ -4,6 +4,7 @@ import haxel.HxlLog;
 import haxel.HxlState;
 import haxel.HxlUtil;
 import haxel.HxlPoint;
+import haxel.HxlUIBar;
 
 import world.Mob;
 import world.Actor;
@@ -200,7 +201,7 @@ class CqPlayer extends CqActor, implements Player {
 	
 	public var inventory:Array<CqItem>;
 	var pickupCallback:Dynamic;
-	
+
 	public function new(playerClass:CqClass, ?X:Float=-1, ?Y:Float=-1) {
 		// fixme - correct attributes
 		super(X, Y,1,1,new Range(1,1),5);

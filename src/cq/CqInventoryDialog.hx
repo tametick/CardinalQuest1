@@ -380,6 +380,9 @@ class CqInventoryItem extends HxlSprite {
 		pixels = temp;
 	}
 
+	/**
+	 * Sets this object as the CellObj of the target inventory cell, and places this object within that cell.
+	 **/
 	public function setInventoryCell(Cell:Int):Void {
 		cellIndex = Cell;
 		setPos(_dlg.dlgInvGrid.getCellItemPos(Cell));
@@ -387,6 +390,9 @@ class CqInventoryItem extends HxlSprite {
 		cellEquip = false;
 	}
 
+	/**
+	 * Sets this object as the CellObj of the target equipment cell, and places this object within that cell.
+	 **/
 	public function setEquipmentCell(Cell:Int):Void {
 		cellIndex = Cell;
 		setPos(_dlg.dlgEqGrid.getCellItemPos(Cell));
@@ -414,9 +420,11 @@ class CqInventoryItem extends HxlSprite {
 		if ( isDragging ) {
 			event.stopPropagation();
 			if ( selectedItem != null ) {
+				// Unset the old selected item if one was set
 				selectedItem.setSelected(false);
 				selectedItem = null;
 			}
+			// I now become the selected item
 			selectedItem = this;
 			setSelected(true);
 		}
@@ -431,14 +439,17 @@ class CqInventoryItem extends HxlSprite {
 	}
 
 	override function dragStart():Void {
+		// Increase my z index, so i'm drawn above other sprites while im being dragged
 		zIndex = dragZIndex;
 		_dlg.sortMembersByZIndex();
 		super.dragStart();
 	}
 
 	override function dragStop():Void {
+		// If the user was hovering an eligable drop target, act on it
 		if ( CqInventoryCell.highlightedCell != null ) {
 			if ( CqInventoryCell.highlightedCell.getCellObj() != null ) {
+				// There was already an item in the target cell, switch places with it
 				var other:CqInventoryItem = CqInventoryCell.highlightedCell.getCellObj();
 				if ( !cellEquip ) {
 					other.setInventoryCell(cellIndex);
@@ -452,6 +463,7 @@ class CqInventoryItem extends HxlSprite {
 				}
 				cellIndex = CqInventoryCell.highlightedCell.cellIndex;
 			} else {
+				// The target cell was empty.. clear out my old cell and fill the new one
 				if ( !cellEquip ) {
 					_dlg.dlgInvGrid.setCellObj(cellIndex, null);
 				} else {
