@@ -142,7 +142,7 @@ class CqLevel extends Level {
 			
 			// Move mob if charged
 			if ( !Std.is(creature,CqPlayer)  &&  creature.actionPoints>=60 ) {
-				if (creature.act(state)) {
+				if (cast(creature,Mob).act(state)) {
 					creature.actionPoints = 0;
 				}
 			}

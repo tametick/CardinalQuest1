@@ -12,6 +12,7 @@ import world.Player;
 import world.GameObject;
 
 import data.Registery;
+import data.Resources;
 import data.Configuration;
 
 import cq.CqResources;
@@ -174,14 +175,12 @@ class CqActor extends CqObject, implements Actor {
 		}
 	}
 	
-	public function act(state:HxlState):Bool {
-		// todo
-		return true;
-	}
-	
-	public function actInDirection(state:HxlState, targetTile:HxlPoint) {
+	public function actInDirection(state:HxlState, targetTile:HxlPoint):Bool {
+		var targetX = tilePos.x + targetTile.x;
+		var targetY = tilePos.y + targetTile.y;
 		var world = Registery.world;
-		var tile = cast(world.currentLevel.getTile(tilePos.x + targetTile.x,  tilePos.y + targetTile.y),CqTile);
+		
+		var tile = cast(world.currentLevel.getTile(targetX,  targetY),CqTile);
 		
 		if (tile.actors.length > 0) {
 			var other = cast(tile.actors[tile.actors.length - 1],CqActor);
@@ -189,10 +188,12 @@ class CqActor extends CqObject, implements Actor {
 			// attack enemy actor
 			if(other.faction != faction) {
 				attackOther(state, other);
-			}
+				// end turn
+				return true;
+			} else
+				return false;
 			
-			// end turn
-			return;
+
 		} else if (tile.loots.length > 0 && Std.is(this,CqPlayer)) {
 			var loot = tile.loots[tile.loots.length - 1];
 			if (Std.is(loot, CqChest)) {
@@ -200,18 +201,20 @@ class CqActor extends CqObject, implements Actor {
 				attackObject(state, loot);
 				
 				// end turn
-				return;
+				return true;
 			} else {
 				// pickup item
 				var item = cast(loot, CqItem);
-				cast(this,CqPlayer).pickup(state,item);
+				cast(this, CqPlayer).pickup(state, item);
 			}
 		}
 		
 		isMoving = true;
-		setTilePos(new HxlPoint(tilePos.x + targetTile.x, tilePos.y + targetTile.y));
+		setTilePos(new HxlPoint(targetX, targetY));
 		var positionOfTile:HxlPoint = world.currentLevel.getPixelPositionOfTile(Math.round(tilePos.x), Math.round(tilePos.y));
 		moveToPixel(positionOfTile.x, positionOfTile.y);
+		
+		return true;
 	}
 }
 
@@ -224,7 +227,7 @@ class CqPlayer extends CqActor, implements Player {
 	var pickupCallback:Dynamic;
 
 	public function new(playerClass:CqClass, ?X:Float=-1, ?Y:Float=-1) {
-		// fixme - correct attributes
+		// fixme - accorrect attributes
 		super(X, Y,1,1,new Range(1,1),5,5);
 		loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 2.0, 2.0);
 		faction = 0;
@@ -261,23 +264,45 @@ class CqPlayer extends CqActor, implements Player {
 class CqMob extends CqActor, implements Mob {
 	static var sprites = SpriteMonsters.instance;
 	public var type:CqMobType;
+	var aware:Bool;
 	
 	public function new(X:Float, Y:Float, typeName:String) {
 		// fixme - correct attribute according to typename
 		super(X, Y,1,1,new Range(1,1),5,0);
 		loadGraphic(SpriteMonsters, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 		faction = 1;
+		aware = false;
 		type = Type.createEnum(CqMobType,  typeName.toUpperCase());
 		addAnimation("idle", [sprites.getSpriteIndex(typeName)], 0 );
 		play("idle");
 	}
 	
-	public function actUnaware() {
-		// todo
+	public function actUnaware(state:HxlState):Bool {
+		var directions = [];
+		if (!Registery.world.currentLevel.isBlockingMovement(Std.int(tilePos.x + 1), Std.int(tilePos.y)))
+			directions.push(new HxlPoint(1, 0));
+		if (!Registery.world.currentLevel.isBlockingMovement(Std.int(tilePos.x - 1), Std.int(tilePos.y)))
+			directions.push(new HxlPoint(-1, 0));
+		if (!Registery.world.currentLevel.isBlockingMovement(Std.int(tilePos.x), Std.int(tilePos.y+1)))
+			directions.push(new HxlPoint(0, 1));
+		if (!Registery.world.currentLevel.isBlockingMovement(Std.int(tilePos.x), Std.int(tilePos.y-1)))
+			directions.push(new HxlPoint(0, -1));
+			
+		var direction = HxlUtil.getRandomElement(directions);
+
+		return actInDirection(state,direction);
 	}
 	
-	public function actAware() {
+	public function actAware(state:HxlState):Bool {
 		// todo
+		return true;
+	}
+	
+	public function act(state:HxlState):Bool {
+		if (aware)
+			return actAware(state);
+		else
+			return actUnaware(state);
 	}
 }
 

@@ -119,4 +119,4 @@ class SpriteDecorations extends HxlSpriteSheet {
 }
 
 
-class CqResources { }
+class CqResources extends Resources { }
