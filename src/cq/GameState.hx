@@ -38,17 +38,15 @@ class GameState extends HxlState {
 	
 	// todo
 	function passTurn() {
-		Registery.world.currentLevel.updateFieldOfView();
+		var player = cast(Registery.player, CqPlayer);
+		var level = cast(Registery.world.currentLevel, CqLevel);
 		
-		
-		/*
-		player.calculateFieldOfView();
-		player.vars.actionPoints = 0;
-		while (player.vars.actionPoints < 60) {
-			var continueTicking = maps[currentMap].tick();
+		level.updateFieldOfView();
+		player.actionPoints = 0;
+/*
+		while (player.actionPoints < 60) {
+			level.tick();
 			ticks++;
-			if(!continueTicking)
-				break;
 		}*/
 	}
 

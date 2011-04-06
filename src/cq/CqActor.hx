@@ -29,8 +29,8 @@ class CqActor extends CqObject, implements Actor {
 	
 	var attack:Int;
 	var defense:Int;
-	// natural damage without weapon
-	var damage:Range;
+	var damage:Range;// natural damage without weapon
+	var speed:Int;
 	
 	var equippedWeapon:CqWeapon;
 	var equippedSpell:CqSpell;
@@ -40,7 +40,7 @@ class CqActor extends CqObject, implements Actor {
 	// special effects caused by magical items or spells
 	var specialEffects:Hash<Dynamic>;
 	
-	public function new(X:Float, Y:Float,attack:Int,defense:Int,damage:Range) {
+	public function new(X:Float, Y:Float,attack:Int,defense:Int,damage:Range,speed:Int) {
 		super(X, Y);
 		actionPoints = 0;
 		moveSpeed = 0.15;
@@ -48,6 +48,7 @@ class CqActor extends CqObject, implements Actor {
 		this.attack = attack;
 		this.defense = defense;
 		this.damage = damage;
+		this.speed = speed;
 		initBuffs();
 		specialEffects = new Hash();
 	}
@@ -58,6 +59,7 @@ class CqActor extends CqObject, implements Actor {
 		buffs.set("defense",0);
 		buffs.set("damageMultipler", 1);
 		buffs.set("life", 0);
+		buffs.set("speed",0);
 	}
 	
 	public function moveToPixel(X:Float, Y:Float):Void {
@@ -201,7 +203,7 @@ class CqPlayer extends CqActor, implements Player {
 	
 	public function new(playerClass:CqClass, ?X:Float=-1, ?Y:Float=-1) {
 		// fixme - correct attributes
-		super(X, Y,1,1,new Range(1,1));
+		super(X, Y,1,1,new Range(1,1),5);
 		loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 2.0, 2.0);
 		faction = 0;
 		inventory = new Array<CqItem>();
@@ -240,7 +242,7 @@ class CqMob extends CqActor, implements Mob {
 	
 	public function new(X:Float, Y:Float, typeName:String) {
 		// fixme - correct attribute according to typename
-		super(X, Y,1,1,new Range(1,1));
+		super(X, Y,1,1,new Range(1,1),5);
 		loadGraphic(SpriteMonsters, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 		faction = 1;
 		type = Type.createEnum(CqMobType,  typeName.toUpperCase());

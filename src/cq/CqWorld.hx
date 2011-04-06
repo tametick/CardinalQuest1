@@ -92,6 +92,8 @@ class CqLevel extends Level {
 	}
 	
 	public override function tick() {
+		var creatures = [Registery.player].concat(mobs);
+		
 /*		for (var c = 0; c < vars.creatures.length; c++) {
 			var buffs = vars.creatures[c].vars.buffs;
 			var visibleEffect = vars.creatures[c].vars.visibleEffect;
@@ -134,7 +136,7 @@ class CqLevel extends Level {
 			if (spirit && !specialActive)
 				vars.creatures[c].vars.spiritPoints = Math.min(360, vars.creatures[c].vars.spiritPoints + spirit);
 			
-			// Move if charged
+			// Move mob if charged
 			if (c != 0 && vars.creatures[c].vars.actionPoints >= 60) {
 				if (vars.creatures[c].act()) {
 					vars.creatures[c].vars.actionPoints = 0;
