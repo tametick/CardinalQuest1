@@ -94,7 +94,12 @@ class CqLevel extends Level {
 	}
 	
 	public override function tick() {
-		//var creatures = [Registery.player].concat(mobs);
+		var creatures:Array<CqActor> = new Array<CqActor>();
+		creatures.push(cast(Registery.player, CqActor));
+		for (mob in mobs)
+			creatures.push(cast(mob, CqActor));
+		
+		//[cast(Registery.player, CqActor)];//.concat(mobs);
 		
 /*		for (var c = 0; c < vars.creatures.length; c++) {
 			var buffs = vars.creatures[c].vars.buffs;
