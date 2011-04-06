@@ -33,8 +33,23 @@ class GameState extends HxlState {
 		super.update();	
 		if ( initialized < 1 ) 
 			return;
-			
+				
+	}
+	
+	// todo
+	function passTurn() {
+		Registery.world.currentLevel.updateFieldOfView();
 		
+		
+		/*
+		player.calculateFieldOfView();
+		player.vars.actionPoints = 0;
+		while (player.vars.actionPoints < 60) {
+			var continueTicking = maps[currentMap].tick();
+			ticks++;
+			if(!continueTicking)
+				break;
+		}*/
 	}
 
 	override function init() {
@@ -96,17 +111,5 @@ class GameState extends HxlState {
 		}
 		
 		passTurn();
-	}
-	
-	// todo
-	function passTurn() {/*
-		player.calculateFieldOfView();
-		player.vars.actionPoints = 0;
-		while (player.vars.actionPoints < 60) {
-			var continueTicking = maps[currentMap].tick();
-			ticks++;
-			if(!continueTicking)
-				break;
-		}*/
 	}
 }

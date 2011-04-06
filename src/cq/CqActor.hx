@@ -20,13 +20,13 @@ import cq.CqWorld;
 import com.eclecticdesignstudio.motion.Actuate;
 
 class CqActor extends CqObject, implements Actor {
+	public var isMoving:Bool;
 	public var moveSpeed:Float;	
 	public var visionRadius:Float;
+	public var faction:Int;
 	
 	var attack:Int;
 	var defense:Int;
-	var faction:Int;
-	
 	// natural damage without weapon
 	var damage:Range;
 	
@@ -40,7 +40,7 @@ class CqActor extends CqObject, implements Actor {
 	
 	public function new(X:Float, Y:Float,attack:Int,defense:Int,damage:Range) {
 		super(X, Y);
-		moveSpeed = 0.25;
+		moveSpeed = 0.15;
 		visionRadius = 8.2;
 		this.attack = attack;
 		this.defense = defense;
@@ -57,7 +57,6 @@ class CqActor extends CqObject, implements Actor {
 		buffs.set("life", 0);
 	}
 	
-	public var isMoving:Bool;
 	public function moveToPixel(X:Float, Y:Float):Void {
 		isMoving = true;
 		Actuate.tween(this, moveSpeed, { x: X, y: Y } ).onComplete(moveStop);
@@ -152,6 +151,41 @@ class CqActor extends CqObject, implements Actor {
 			}
 		}
 	}
+	
+	public function act(state:HxlState, targetTile:HxlPoint) {
+		var world = Registery.world;
+		var tile = cast(world.currentLevel.getTile(tilePos.x + targetTile.x,  tilePos.y + targetTile.y),CqTile);
+		
+		if (tile.actors.length > 0) {
+			var other = cast(tile.actors[tile.actors.length - 1],CqActor);
+			
+			// attack enemy actor
+			if(other.faction != faction) {
+				attackOther(state, other);
+			}
+			
+			// end turn
+			return;
+		} else if (tile.loots.length > 0 && Std.is(this,CqPlayer)) {
+			var loot = tile.loots[tile.loots.length - 1];
+			if (Std.is(loot, CqChest)) {
+				// bust chest & don't move
+				attackObject(state, loot);
+				
+				// end turn
+				return;
+			} else {
+				// pickup item
+				var item = cast(loot, CqItem);
+				cast(this,CqPlayer).pickup(state,item);
+			}
+		}
+		
+		isMoving = true;
+		setTilePos(new HxlPoint(tilePos.x + targetTile.x, tilePos.y + targetTile.y));
+		var positionOfTile:HxlPoint = world.currentLevel.getPixelPositionOfTile(Math.round(tilePos.x), Math.round(tilePos.y));
+		moveToPixel(positionOfTile.x, positionOfTile.y);
+	}
 }
 
 
@@ -184,7 +218,7 @@ class CqPlayer extends CqActor, implements Player {
 		pickupCallback = Callback;
 	}
 
-	function pickup(state:HxlState, item:CqItem) {
+	public function pickup(state:HxlState, item:CqItem) {
 		// remove item from map
 		Registery.world.currentLevel.removeLootFromLevel(state, item);
 		
@@ -193,35 +227,6 @@ class CqPlayer extends CqActor, implements Player {
 
 		// perform pickup callback function (if set)
 		if ( pickupCallback != null ) pickupCallback(item);
-	}
-	
-	public function act(state:HxlState, targetTile:HxlPoint) {
-		var world = Registery.world;
-		var tile = cast(world.currentLevel.getTile(tilePos.x + targetTile.x,  tilePos.y + targetTile.y),CqTile);
-		
-		if (tile.actors.length>0) {
-			// attack actor
-			var other = tile.actors[tile.actors.length - 1];
-			attackOther(state,other);
-			return;
-		} else if (tile.loots.length > 0) {
-			var loot = tile.loots[tile.loots.length - 1];
-			if (Std.is(loot, CqChest)) {
-				// bust chest & don't move
-				attackObject(state,loot);
-				return;
-			} else {
-				// pickup item
-				var item = cast(loot, CqItem);
-				pickup(state,item);
-			}
-		}
-		
-		isMoving = true;
-		setTilePos(new HxlPoint(tilePos.x + targetTile.x, tilePos.y + targetTile.y));
-		var positionOfTile:HxlPoint = world.currentLevel.getPixelPositionOfTile(Math.round(tilePos.x), Math.round(tilePos.y));
-		moveToPixel(positionOfTile.x, positionOfTile.y);		
-		world.currentLevel.updateFieldOfView();		
 	}
 	
 }
