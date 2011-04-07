@@ -10,6 +10,8 @@ import world.Mob;
 import world.Actor;
 import world.Player;
 import world.GameObject;
+import world.Tile;
+
 
 import data.Registery;
 import data.Resources;
@@ -102,12 +104,12 @@ class CqActor extends CqObject, implements Actor {
 		onKill.add(Callback);
 	}
 
-	public function moveToPixel(X:Float, Y:Float):Void {
+	public function moveToPixel(state:HxlState, X:Float, Y:Float):Void {
 		isMoving = true;
-		Actuate.tween(this, moveSpeed, { x: X, y: Y } ).onComplete(moveStop);
+		Actuate.tween(this, moveSpeed, { x: X, y: Y } ).onComplete(moveStop,[state]);
 	}
 	
-	public function moveStop():Void {
+	public function moveStop(state:HxlState):Void {
 		isMoving = false;
 	}
 	
@@ -243,7 +245,7 @@ class CqActor extends CqObject, implements Actor {
 		isMoving = true;
 		setTilePos(new HxlPoint(targetX, targetY));
 		var positionOfTile:HxlPoint = world.currentLevel.getPixelPositionOfTile(Math.round(tilePos.x), Math.round(tilePos.y));
-		moveToPixel(positionOfTile.x, positionOfTile.y);
+		moveToPixel(state, positionOfTile.x, positionOfTile.y);
 		
 		return true;
 	}
@@ -318,6 +320,14 @@ class CqPlayer extends CqActor, implements Player {
 		// todo - update hp bar
 	}
 	
+	public override function moveStop(state:HxlState):Void {
+		super.moveStop(state);
+		var currentTileIndex = cast(Registery.world.currentLevel.getTile(Std.int(tilePos.x), Std.int(tilePos.y)), Tile).dataNum;
+		
+		if (HxlUtil.contains(SpriteTiles.instance.stairsDown, currentTileIndex))
+		if (HxlUtil.contains(SpriteTiles.instance.stairsDown, currentTileIndex))
+			Registery.world.goToNextLevel(state);
+	}
 }
 
 class CqMob extends CqActor, implements Mob {

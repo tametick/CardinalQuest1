@@ -157,15 +157,28 @@ class CqLevel extends Level {
 	
 }
 
-class CqWorld extends World 
-{
+class CqWorld extends World {
 	static public var actorAdded:Dynamic = null;
 
 	public function new() {
 		super();
 		
-		levels.push(new CqLevel(currentLevelIndex));
-		currentLevel = levels[currentLevelIndex];
+		goToLevel(currentLevelIndex);
+	}
+	
+	function goToLevel(level:Int) {
+		levels.push(new CqLevel(level));
+		currentLevel = levels[level];
+	}
+	
+	public override function goToNextLevel(state:HxlState) {
+		state.remove(currentLevel);
+		
+		currentLevelIndex++;
+		goToLevel(currentLevelIndex);
+		
+		state.add(currentLevel);
+		currentLevel.updateFieldOfView(true);
 	}
 
 	static public function onActorAdded(Actor:CqActor):Void {
