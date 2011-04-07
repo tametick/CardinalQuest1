@@ -11,10 +11,12 @@ import data.Registery;
 interface GameObject implements HxlObjectI {
 	var hp:Int;
 	var maxHp:Int;
-	
+
 	var tilePos(getTilePos, setTilePos):HxlPoint;
 	function getTilePos():HxlPoint;
 	function setTilePos(TilePos:HxlPoint):HxlPoint;
+	function addOnDestroy(Callback:Dynamic):Void;
+	function destroy():Void;
 }
 
 class GameObjectImpl extends HxlSprite, implements GameObject
@@ -24,7 +26,9 @@ class GameObjectImpl extends HxlSprite, implements GameObject
 	public var tilePos(getTilePos, setTilePos):HxlPoint;
 	
 	var _tilePos:HxlPoint;
-	
+
+	var onDestroy:List<Dynamic>;
+
 	public function new(x:Float, y:Float, ?hp:Int=1) 
 	{
 		super(x, y);
@@ -35,6 +39,8 @@ class GameObjectImpl extends HxlSprite, implements GameObject
 		this.hp = hp;
 		maxHp = hp;
 		zIndex = 1;
+
+		onDestroy = new List();
 	}
 
 	public function getTilePos():HxlPoint {
@@ -62,4 +68,14 @@ class GameObjectImpl extends HxlSprite, implements GameObject
 		
 		return TilePos;
 	}
+
+	public function addOnDestroy(Callback:Dynamic):Void {
+		onDestroy.add(Callback);
+	}
+
+	public override function destroy():Void {
+		for ( Callback in onDestroy ) Callback();
+		super.destroy();
+	}
+
 }

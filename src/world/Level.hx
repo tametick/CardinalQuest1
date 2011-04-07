@@ -110,8 +110,10 @@ class Level extends HxlTilemap
 	public function removeAllActors(state:HxlState) {
 		state.remove(Registery.player);
 			
-		for (mob in mobs)
+		for (mob in mobs) {
 			state.remove(mob);
+			cast(mob, GameObject).destroy();
+		}
 	}
 	
 	public function removeAllLoots(state:HxlState) {			
