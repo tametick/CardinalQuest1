@@ -206,6 +206,9 @@ class CqActor extends CqObject, implements Actor {
 		
 		var tile = cast(world.currentLevel.getTile(targetX,  targetY),CqTile);
 		
+		if (world.currentLevel.isBlockingMovement(Math.round(targetX),  Math.round(targetY)))
+			return false;
+		
 		if (tile.actors.length > 0) {
 			var other = cast(tile.actors[tile.actors.length - 1],CqActor);
 			
@@ -325,7 +328,18 @@ class CqMob extends CqActor, implements Mob {
 	function actAware(state:HxlState):Bool {
 		var line = HxlUtil.getLine(tilePos, Registery.player.tilePos, isBlocking);
 		var dest = line[1];
-		var direction = new HxlPoint(dest.x - tilePos.x, dest.y - tilePos.y);
+		var dx = dest.x - tilePos.x;
+		var dy = dest.y - tilePos.y;
+		
+		// prevent diagonal movement
+		if (dx != 0 && dy != 0) {
+			if (Math.random() < 0.5)
+				dy = 0;
+			else
+				dx = 0;
+		}
+		
+		var direction = new HxlPoint(dx, dy);
 		
 		return actInDirection(state,direction);
 	}
