@@ -28,4 +28,7 @@ class HxlPoint {
 	public function toString() {
         return "<"+x+","+y+">";
     }
+	public function intEquals(o:HxlPoint):Bool {
+		return Math.round(x)==Math.round(o.x) && Math.round(y)==Math.round(o.y);
+	}
 }

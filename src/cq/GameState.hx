@@ -36,7 +36,6 @@ class GameState extends HxlState {
 				
 	}
 	
-	// todo
 	function passTurn() {
 		var player = cast(Registery.player, CqPlayer);
 		var level = cast(Registery.world.currentLevel, CqLevel);
@@ -70,7 +69,6 @@ class GameState extends HxlState {
 		player.setOnKill(gameUI.doPlayerInjureEffect);
 	}
 	
-	override function onKeyUp(event:KeyboardEvent) { }
 	override function onKeyDown(event:KeyboardEvent) {		
 		if ( HxlGraphics.keys.ESCAPE ) {
 			HxlGraphics.pushState(new MainMenuState());
@@ -88,13 +86,12 @@ class GameState extends HxlState {
 			// move or attack
 			Registery.player.actInDirection(this,targetTile);
 		} else {
-			// other actions?
+			// other keyboard actions?
 		}
 		
 		passTurn();
 	}
-	override function onMouseOver(event:MouseEvent) { }
-	override function onMouseUp(event:MouseEvent) { }
+
 	override function onMouseDown(event:MouseEvent) {
 		if (Registery.player.isMoving)
 			return;
@@ -106,8 +103,6 @@ class GameState extends HxlState {
 		if (targetTile != null) {
 			// move or attack in chosen tile
 			Registery.player.actInDirection(this,targetTile);
-		} else {
-			
 		}
 		
 		passTurn();

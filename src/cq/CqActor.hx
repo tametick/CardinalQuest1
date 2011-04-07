@@ -288,20 +288,20 @@ class CqPlayer extends CqActor, implements Player {
 class CqMob extends CqActor, implements Mob {
 	static var sprites = SpriteMonsters.instance;
 	public var type:CqMobType;
-	var aware:Bool;
+	var aware:Int;
 	
 	public function new(X:Float, Y:Float, typeName:String) {
 		// fixme - correct attribute according to typename
 		super(X, Y,1,1,new Range(1,1),5,0);
 		loadGraphic(SpriteMonsters, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 		faction = 1;
-		aware = false;
+		aware = 0;
 		type = Type.createEnum(CqMobType,  typeName.toUpperCase());
 		addAnimation("idle", [sprites.getSpriteIndex(typeName)], 0 );
 		play("idle");
 	}
 	
-	public function actUnaware(state:HxlState):Bool {
+	function actUnaware(state:HxlState):Bool {
 		var directions = [];
 		if (!Registery.world.currentLevel.isBlockingMovement(Std.int(tilePos.x + 1), Std.int(tilePos.y)))
 			directions.push(new HxlPoint(1, 0));
@@ -317,13 +317,30 @@ class CqMob extends CqActor, implements Mob {
 		return actInDirection(state,direction);
 	}
 	
-	public function actAware(state:HxlState):Bool {
+	function actAware(state:HxlState):Bool {
 		// todo
+		
 		return true;
 	}
 	
+	function updateAwarness() {
+		var map = Registery.world.currentLevel;
+		var isBlocking = function(p:HxlPoint):Bool { 
+			if ( p.x < 0 || p.y < 0 || p.x >= map.widthInTiles || p.y >= map.heightInTiles ) return true;
+			return map.getTile(Math.round(p.x), Math.round(p.y)).isBlockingView();
+		}
+		
+		if ( HxlUtil.isInLineOfSight(tilePos, Registery.player.tilePos,isBlocking,Registery.player.visionRadius) )
+			aware = 5;
+		else
+			if (aware > 0)
+			aware--;
+	}
+	
 	public function act(state:HxlState):Bool {
-		if (aware)
+		updateAwarness();
+		
+		if (aware>0)
 			return actAware(state);
 		else
 			return actUnaware(state);

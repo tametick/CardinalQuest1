@@ -243,6 +243,15 @@ class HxlUtil {
 		}
 	}
 	
+	public static function isInLineOfSight(src:HxlPoint, dest:HxlPoint, ?isBlocking:HxlPoint->Bool = null, ?maxDist:Float = -1) {
+		if (maxDist > -1 && HxlUtil.distance(src, dest) > maxDist)
+			return false;
+		
+		var line = getLine(src, dest, isBlocking);
+		
+		return line[line.length-1].intEquals(dest);
+	}
+	
 	public static function travrseLine(src:HxlPoint, dest:HxlPoint, ?isBlocking:HxlPoint->Bool=null, apply:HxlPoint->Void, ?maxDist:Float=-1) {
 		for (pos in getLine(src, dest, isBlocking)) {
 			if(maxDist<0 || distance(src,pos) <= maxDist)
