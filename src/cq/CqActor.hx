@@ -38,9 +38,12 @@ class CqActor extends CqObject, implements Actor {
 	
 	public var attack:Int;
 	public var defense:Int;
-	public var damage:Range;// natural damage without weapon
 	public var speed:Int;
 	public var spirit:Int;
+	public var vitality:Int;
+	
+	// natural damage without weapon
+	public var damage:Range;
 	
 	var equippedWeapon:CqWeapon;
 	var equippedSpell:CqSpell;
@@ -58,7 +61,7 @@ class CqActor extends CqObject, implements Actor {
 	var onInjure:Dynamic;
 	var onKill:Dynamic;
 	
-	public function new(X:Float, Y:Float,attack:Int,defense:Int,damage:Range,speed:Int,spirit:Int) {
+	public function new(X:Float, Y:Float,attack:Int,defense:Int,speed:Int,spirit:Int,vitality:Int,damage:Range) {
 		super(X, Y);
 		actionPoints = 0;
 		moveSpeed = 0.15;
@@ -68,6 +71,11 @@ class CqActor extends CqObject, implements Actor {
 		this.damage = damage;
 		this.speed = speed;
 		this.spirit = spirit;
+		this.vitality = vitality;
+		
+		maxHp = vitality;
+		hp = maxHp;
+		
 		initBuffs();
 		specialEffects = new Hash();
 		visibleEffects = new Array<String>();
@@ -255,7 +263,7 @@ class CqPlayer extends CqActor, implements Player {
 
 	public function new(playerClass:CqClass, ?X:Float=-1, ?Y:Float=-1) {
 		// fixme - accorrect attributes
-		super(X, Y, 1, 1, new Range(1, 1), 5, 5);
+		super(X, Y, 1, 1, 5, 5,5,new Range(1, 1));
 		
 		xp = 0;
 		level = 1;
@@ -317,7 +325,7 @@ class CqMob extends CqActor, implements Mob {
 	
 	public function new(X:Float, Y:Float, typeName:String) {
 		// fixme - correct attribute according to typename
-		super(X, Y, 1, 1, new Range(1, 1), 5, 0);
+		super(X, Y, 1, 1, 5, 0,1,new Range(1, 1));
 		xpValue = 1;
 		
 		loadGraphic(SpriteMonsters, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
