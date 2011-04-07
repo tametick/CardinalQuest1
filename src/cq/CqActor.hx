@@ -127,6 +127,7 @@ class CqActor extends CqObject, implements Actor {
 		} else {
 			HxlLog.append("Hit you");
 			trace("Hit you");
+			//trace("Your HP: "+other.hp+" / "+other.maxHp);
 		}
 		other.doInjure();
 	}
