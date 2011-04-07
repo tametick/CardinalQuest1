@@ -87,6 +87,7 @@ class GameState extends HxlState {
 			Registery.player.actInDirection(this,targetTile);
 		} else {
 			// other keyboard actions?
+			return;
 		}
 		
 		passTurn();
