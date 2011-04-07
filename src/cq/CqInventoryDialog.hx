@@ -2,6 +2,7 @@ package cq;
 
 import cq.CqItem;
 import cq.CqResources;
+import cq.CqSpell;
 
 import data.Configuration;
 
@@ -28,6 +29,8 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	public var dlgEqGrid:CqEquipmentGrid;
 	var itemSheet:HxlSpriteSheet;
 	var itemSprite:HxlSprite;
+	var spellSheet:HxlSpriteSheet;
+	var spellSprite:HxlSprite;
 
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0)
 	{
@@ -54,6 +57,11 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		itemSprite = new HxlSprite(0, 0);
 		itemSprite.loadGraphic(SpriteItems, true, false, Configuration.tileSize, Configuration.tileSize, false, 3.0, 3.0);
 
+		spellSheet = SpriteSpells.instance;
+		var spellSheetKey:String = "SpellIconSheet";
+		spellSprite = new HxlSprite(0, 0);
+		spellSprite.loadGraphic(SpriteSpells, true, false, Configuration.tileSize, Configuration.tileSize, false, 3.0, 3.0);
+
 		var itemBg:BitmapData = HxlGradient.RectData(50, 50, [0xc1c1c1, 0x9e9e9e], null, Math.PI/2, 8.0);
 		var itemBgKey:String = "ItemBG";
 		HxlGraphics.addBitmapData(itemBg, itemBgKey);
@@ -73,8 +81,13 @@ class CqInventoryDialog extends HxlSlidingDialog {
 				item.zIndex = 5;
 				item.setInventoryCell(cell.cellIndex);
 				item.item = Item;
-				itemSprite.setFrame(itemSheet.getSpriteIndex(Item.spriteIndex));
-				item.setIcon(itemSprite.getFramePixels());
+				if ( Std.is(Item, CqSpell) ) {
+					spellSprite.setFrame(spellSheet.getSpriteIndex(Item.spriteIndex));
+					item.setIcon(spellSprite.getFramePixels());
+				} else {
+					itemSprite.setFrame(itemSheet.getSpriteIndex(Item.spriteIndex));
+					item.setIcon(itemSprite.getFramePixels());
+				}
 				add(item);
 				break;
 			}

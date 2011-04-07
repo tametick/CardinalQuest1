@@ -183,4 +183,5 @@ enum CqEquipSlot {
 	HAT;
 	GLOVES;
 	WEAPON;
+	SPELL;
 }
