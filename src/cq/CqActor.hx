@@ -337,7 +337,6 @@ class CqPlayer extends CqActor, implements Player {
 		var currentTileIndex = cast(Registery.world.currentLevel.getTile(Std.int(tilePos.x), Std.int(tilePos.y)), Tile).dataNum;
 		
 		if (HxlUtil.contains(SpriteTiles.instance.stairsDown, currentTileIndex))
-		if (HxlUtil.contains(SpriteTiles.instance.stairsDown, currentTileIndex))
 			Registery.world.goToNextLevel(state);
 	}
 }
