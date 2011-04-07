@@ -220,21 +220,13 @@ class GameUI extends HxlDialog {
 	public function addHealthBar(Actor:CqActor):Void {
 		var bar:CqHealthBar = new CqHealthBar(Actor, Actor.x, Actor.y + Actor.height + 2, 32, 4);
 		HxlGraphics.state.add(bar);
-		//var tmp:CqFloatText = new CqFloatText(Actor.x + (Actor.width / 2), Actor.y - 16, "ABCab 123 cABC");
-		//tmp.zIndex = 4;
-		//HxlGraphics.state.add(tmp);
 		var self = this;
 		Actor.addOnInjure(function(?dmgTotal:Int=0) { 
 			self.showDamageText(Actor, dmgTotal);
 		});
-		/*
-		Actor.addOnKill(function(?dmgTotal:Int=0) {
-			self.showDamageText(Actor, dmgTotal);
-		});
-		*/
 	}
 
-	public function doPlayerInjureEffect(dmgTotal:Int):Void {
+	public function doPlayerInjureEffect(?dmgTotal:Int):Void {
 		HxlGraphics.flash.start(0xffff0000, 0.3, null, true);
 	}
 

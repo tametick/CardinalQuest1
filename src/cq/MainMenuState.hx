@@ -50,7 +50,7 @@ class MainMenuState extends HxlState
 		btnNewGame.setNormalFormat(null, 40, 0xffffff, "center");
 		btnNewGame.setHoverFormat(null, 40, 0xffff00, "center");
 		menu.addItem(btnNewGame);
-		btnNewGame.setCallback(function() { self.changeState(GameState); });
+		btnNewGame.setCallback(function() { self.changeState(CreateCharState); });
 
 		buttonY += 40;
 

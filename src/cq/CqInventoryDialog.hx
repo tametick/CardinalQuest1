@@ -21,6 +21,8 @@ import haxel.HxlSprite;
 import haxel.HxlSpriteSheet;
 import haxel.HxlUtil;
 
+import flash.filters.GlowFilter;
+
 class CqInventoryDialog extends HxlSlidingDialog {
 
 	var dlgCharacter:HxlDialog;
@@ -71,6 +73,19 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		var itemSelectedBgKey:String = "ItemSelectedBG";
 		HxlGraphics.addBitmapData(itemSelectedBg, itemSelectedBgKey);
 		CqInventoryItem.backgroundSelectedKey = itemSelectedBgKey;
+
+		// This snippet applies a glow filter to a BitmapData object.. whee!
+		/*
+		var tmp:BitmapData = new BitmapData(54, 54, true, 0x0);
+		tmp.copyPixels(HxlGraphics.getBitmap(itemBgKey), new Rectangle(0, 0, 50, 50), new Point(2, 2), null, null, true);
+		var glow:GlowFilter = new GlowFilter();
+		tmp.applyFilter(tmp, new Rectangle(0, 0, 54, 54), new Point(0, 0), glow);
+		HxlGraphics.addBitmapData(tmp, "tester!");
+		var tmp2:HxlSprite = new HxlSprite(100, 100);
+		tmp2.loadCachedGraphic("tester!");
+		tmp2.zIndex = 20;
+		add(tmp2);
+		*/
 	}
 
 	public function itemPickup(Item:CqItem):Void {
