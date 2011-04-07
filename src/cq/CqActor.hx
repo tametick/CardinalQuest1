@@ -62,6 +62,7 @@ class CqActor extends CqObject, implements Actor {
 	// callbacks
 	var onInjure:List<Dynamic>;
 	var onKill:List<Dynamic>;
+	var onDestroy:List<Dynamic>;
 	
 	public function new(X:Float, Y:Float,attack:Int,defense:Int,speed:Int,spirit:Int,vitality:Int,damage:Range) {
 		super(X, Y);
@@ -82,8 +83,10 @@ class CqActor extends CqObject, implements Actor {
 		specialEffects = new Hash();
 		visibleEffects = new Array<String>();
 		timers = new Array<CqTimer>();
+
 		onInjure = new List();
 		onKill = new List();
+		onDestroy = new List();
 	}
 	
 	function initBuffs(){
@@ -102,6 +105,10 @@ class CqActor extends CqObject, implements Actor {
 
 	public function addOnKill(Callback:Dynamic):Void {
 		onKill.add(Callback);
+	}
+
+	public function addOnDestroy(Callback:Dynamic):Void {
+		onDestroy.add(Callback);
 	}
 
 	public function moveToPixel(state:HxlState, X:Float, Y:Float):Void {
@@ -248,6 +255,11 @@ class CqActor extends CqObject, implements Actor {
 		moveToPixel(state, positionOfTile.x, positionOfTile.y);
 		
 		return true;
+	}
+
+	public override function destroy():Void {
+		for ( Callback in onDestroy ) Callback();
+		super.destroy();
 	}
 }
 

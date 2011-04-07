@@ -16,6 +16,7 @@ class CqVitalBar extends HxlUIBar {
 		mount(Actor);
 		Actor.addOnInjure(updateValue);
 		Actor.addOnKill(destroy);
+		Actor.addOnDestroy(destroy);
 	}
 
 	public function updateValue():Void {
