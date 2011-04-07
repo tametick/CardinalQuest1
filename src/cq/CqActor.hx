@@ -317,18 +317,20 @@ class CqMob extends CqActor, implements Mob {
 		return actInDirection(state,direction);
 	}
 	
+	static function isBlocking(p:HxlPoint):Bool {
+		if ( p.x < 0 || p.y < 0 || p.x >= Registery.world.currentLevel.widthInTiles || p.y >= Registery.world.currentLevel.heightInTiles ) return true;
+		return Registery.world.currentLevel.getTile(Math.round(p.x), Math.round(p.y)).isBlockingView();
+	}
+	
 	function actAware(state:HxlState):Bool {
-		// todo
+		var line = HxlUtil.getLine(tilePos, Registery.player.tilePos, isBlocking);
+		var dest = line[1];
+		var direction = new HxlPoint(dest.x - tilePos.x, dest.y - tilePos.y);
 		
-		return true;
+		return actInDirection(state,direction);
 	}
 	
 	function updateAwarness() {
-		var map = Registery.world.currentLevel;
-		var isBlocking = function(p:HxlPoint):Bool { 
-			if ( p.x < 0 || p.y < 0 || p.x >= map.widthInTiles || p.y >= map.heightInTiles ) return true;
-			return map.getTile(Math.round(p.x), Math.round(p.y)).isBlockingView();
-		}
 		
 		if ( HxlUtil.isInLineOfSight(tilePos, Registery.player.tilePos,isBlocking,Registery.player.visionRadius) )
 			aware = 5;
