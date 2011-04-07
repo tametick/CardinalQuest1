@@ -3,7 +3,7 @@ package haxel;
 import flash.display.Bitmap;
 
 class HxlSpriteSheet extends Bitmap {
-	var spriteNames:Array<Array<String>>;
+	public var spriteNames:Array<Array<String>>;
 	var spriteIndex:Hash<Int>;
 	
 	public function new(firstIndex) {

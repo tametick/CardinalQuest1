@@ -16,16 +16,23 @@ import cq.CqWorld;
 import haxel.HxlUtil;
 
 class CqItem extends GameObjectImpl, implements Loot {
-	static var sprites = SpriteItems.instance;
 	public var equipSlot:CqEquipSlot;
-	public var type:CqItemType;
+	public var type:Dynamic;
 	public var spriteIndex:String;
 	public function new(X:Float, Y:Float, typeName:String) {
 		super(X, Y);
-		loadGraphic(SpriteItems, false, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
-		type = Type.createEnum(CqItemType,  typeName.toUpperCase());
+		
+		if (Std.is(this, CqSpell)) {
+			loadGraphic(SpriteSpells, false, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
+			type = Type.createEnum(CqSpellType,  typeName.toUpperCase());
+			addAnimation("idle", [SpriteSpells.instance.getSpriteIndex(typeName)], 0 );
+		} else {
+			loadGraphic(SpriteItems, false, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
+			type = Type.createEnum(CqItemType,  typeName.toUpperCase());
+			addAnimation("idle", [SpriteItems.instance.getSpriteIndex(typeName)], 0 );
+		}
+		
 		spriteIndex = typeName;
-		addAnimation("idle", [sprites.getSpriteIndex(typeName)], 0 );
 		play("idle");
 	}
 
@@ -88,6 +95,7 @@ class CqLootFactory {
 			case STAFF, DAGGER, SHORT_SWORD, LONG_SWORD:
 				item = new CqWeapon(X, Y, typeName.toLowerCase());
 			case CHEST:
+			default:
 		}
 		
 		return item;
@@ -156,6 +164,16 @@ enum CqItemType {
 	YELLOW_POTION;
 	RED_POTION;
 	HELM;
+}
+
+enum CqSpellType {
+	FREEZE; 
+	FIREBALL; 
+	BERSERK; 
+	ENFEEBLE_MONSTER; 
+	BLESS_WEAPON; 
+	HASTE; 
+	SHADOW_WALK;
 }
 
 enum CqEquipSlot {

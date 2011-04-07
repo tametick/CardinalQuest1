@@ -51,7 +51,19 @@ class CqLevel extends Level {
 		
 		
 		addChests(CqConfiguration.chestsPerLevel);
+		addSpells(CqConfiguration.spellsPerLevel);
 		addMobs(CqConfiguration.mobsPerLevel);
+	}
+	
+	function addSpells(numberOfSpells:Int) {
+		for (s in 0...numberOfSpells){
+			var pos; 
+			do {
+				pos = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
+			} while (cast(getTile(pos.x, pos.y), CqTile).loots.length > 0);
+			
+			createAndaddSpell(pos);
+		}
 	}
 	
 	function addChests(numberOfChests:Int) {
@@ -76,7 +88,15 @@ class CqLevel extends Level {
 		}
 	}
 
-	
+	function createAndaddSpell(pos:HxlPoint) {
+		var pixelPos = getPixelPositionOfTile(pos.x, pos.y);
+		var spell = new CqSpell(pixelPos.x, pixelPos.y, HxlUtil.getRandomElement(SpriteSpells.instance.spriteNames[0]));
+		
+		// add to level loot list
+		loots.push(spell);
+		// add to tile loot list
+		cast(getTile(pos.x, pos.y), CqTile).loots.push(spell);
+	}
 	function createAndaddChest(pos:HxlPoint) {
 		var pixelPos = getPixelPositionOfTile(pos.x, pos.y);
 		var chest = new CqChest(pixelPos.x, pixelPos.y);
