@@ -1,5 +1,6 @@
 package cq;
 
+import cq.CqResources;
 import data.Registery;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
@@ -9,6 +10,7 @@ import haxel.HxlPoint;
 import haxel.HxlSlidingDialog;
 import haxel.HxlSprite;
 import haxel.HxlTilemap;
+import haxel.HxlUtil;
 
 class CqMapDialog extends HxlSlidingDialog {
 
@@ -67,12 +69,16 @@ class CqMapDialog extends HxlSlidingDialog {
 		var SeenColor:Int = 0x116611;
 		var WallSightColor:Int = 0x333399;
 		var WallSeenColor:Int = 0x111166;
+		var StairsColor:Int = 0xffffff;
 		graph.clear();
 		for ( Y in 0...mapH ) {
 			for ( X in 0...mapW ) {
 				Color = -1;
+
+				// Uncomment the following line to display the entire map for debugging purposes
+				//if ( tiles[Y][X].visibility == Visibility.SEEN || tiles[Y][X].visibility != Visibility.IN_SIGHT) {
 				if ( tiles[Y][X].visibility == Visibility.SEEN ) {
-					Color = SeenColor;
+								Color = SeenColor;
 					if ( Registery.world.currentLevel.isBlockingMovement(X, Y) ) {
 						Color = WallSeenColor;
 					}
@@ -86,6 +92,18 @@ class CqMapDialog extends HxlSlidingDialog {
 					graph.beginFill(Color);
 					graph.drawRect( (X * cellSize.x), (Y * cellSize.y), cellSize.x, cellSize.y );
 					graph.endFill();
+					if ( HxlUtil.contains(SpriteTiles.instance.stairsDown, tiles[Y][X].dataNum) ) {
+						// Draw stairs
+						var dx:Float = X * cellSize.x + 2;
+						var dy:Float = Y * cellSize.y + 2;
+						graph.moveTo(dx, dy);
+						graph.beginFill(StairsColor);
+						graph.lineTo(dx + (cellSize.x - 4), dy);
+						graph.lineTo(dx + ((cellSize.x - 4) / 2), dy + (cellSize.y - 4));
+						graph.lineTo(dx, dy);
+						graph.endFill();
+					}
+
 				}
 			}
 		}
