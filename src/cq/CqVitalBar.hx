@@ -22,6 +22,13 @@ class CqVitalBar extends HxlUIBar {
 
 	public function updateValue():Void {
 		setPercent(actor.hp / actor.maxHp);
+		if ( !Std.is(actor, CqPlayer) ) {
+			if ( actor.hp >= actor.maxHp ) {
+				visible = false;
+			} else {
+				visible = true;
+			}
+		}
 	}
 
 	public override function update():Void {
