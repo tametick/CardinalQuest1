@@ -123,10 +123,6 @@ class CqActor extends CqObject, implements Actor {
 		other.doInjure();
 	}
 	
-	function gainExperience(other:CqActor) {
-		//todo
-	}
-	
 	public function doKill():Void {
 		if ( onKill != null ) onKill();
 	}
@@ -134,12 +130,12 @@ class CqActor extends CqObject, implements Actor {
 	function killActor(state:HxlState, other:CqActor) {
 		other.doKill();
 		// todo
-		if (this == cast(Registery.player, CqPlayer)) {
+		if (Std.is(this, CqPlayer)) {
 			var mob = cast(other, CqMob);
 			
 			HxlLog.append("You kill");
 			trace("You kill");
-			gainExperience(mob);
+			cast(this, CqPlayer).gainExperience(mob);
 			// remove other
 			Registery.world.currentLevel.removeMobFromLevel(state, mob);
 		} else {
@@ -252,10 +248,18 @@ class CqPlayer extends CqActor, implements Player {
 	
 	public var inventory:Array<CqItem>;
 	var pickupCallback:Dynamic;
+	
+	public var xp:Int;
+	public var level:Int;
+
 
 	public function new(playerClass:CqClass, ?X:Float=-1, ?Y:Float=-1) {
 		// fixme - accorrect attributes
-		super(X, Y,1,1,new Range(1,1),5,5);
+		super(X, Y, 1, 1, new Range(1, 1), 5, 5);
+		
+		xp = 0;
+		level = 1;
+		
 		loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 2.0, 2.0);
 		faction = 0;
 		inventory = new Array<CqItem>();
@@ -286,20 +290,41 @@ class CqPlayer extends CqActor, implements Player {
 		if ( pickupCallback != null ) pickupCallback(item);
 	}
 	
+	public function gainExperience(other:CqMob) {
+		trace("gained " + other.xpValue + " xp");
+		cast(this, CqPlayer).xp += 1;
+		
+		if (xp >= nextLevel())
+			gainLevel();
+	}
+	
+	function nextLevel() {
+		return 50 * Math.pow(2, level);
+	}
+	
+	function gainLevel() {
+		trace("level: " + (++level));
+	}
+	
 }
 
 class CqMob extends CqActor, implements Mob {
 	static var sprites = SpriteMonsters.instance;
 	public var type:CqMobType;
+	public var xpValue:Int;
 	var aware:Int;
+	
 	
 	public function new(X:Float, Y:Float, typeName:String) {
 		// fixme - correct attribute according to typename
-		super(X, Y,1,1,new Range(1,1),5,0);
+		super(X, Y, 1, 1, new Range(1, 1), 5, 0);
+		xpValue = 1;
+		
 		loadGraphic(SpriteMonsters, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 		faction = 1;
 		aware = 0;
 		type = Type.createEnum(CqMobType,  typeName.toUpperCase());
+		
 		addAnimation("idle", [sprites.getSpriteIndex(typeName)], 0 );
 		play("idle");
 	}
