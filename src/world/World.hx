@@ -1,5 +1,7 @@
 package world;
 
+import haxel.HxlState;
+
 class World 
 {
 	public var currentLevel:Level;
@@ -10,4 +12,6 @@ class World
 		currentLevelIndex = 0;
 		levels = new Array<Level>();
 	}
+	
+	public function goToNextLevel(state:HxlState){}
 }

@@ -67,6 +67,7 @@ class SpriteTiles extends HxlSpriteSheet {
 	public static var instance = new SpriteTiles();
 	static var inited = false;
 	public var walkableAndSeeThroughTiles:Array<Int>;
+	public var stairsDown:Array<Int>;
 	public function new() { 
 		spriteNames = [
 			["red_up","red_down","red_floor0","red_floor1","red_wall0","red_wall1","red_wall2","red_wall3","red_wall4","red_door_close","red_door_open"], 
@@ -80,6 +81,7 @@ class SpriteTiles extends HxlSpriteSheet {
 			getSpriteIndex("red_floor1"), getSpriteIndex("blue_floor1"), getSpriteIndex("brown_floor1"),
 			getSpriteIndex("red_down"), getSpriteIndex("blue_down"), getSpriteIndex("brown_down"),
 		];
+		stairsDown = [getSpriteIndex("red_down"), getSpriteIndex("blue_down"), getSpriteIndex("brown_down")];
 		
 		if (!inited) {
 			Resources.walkableTiles = Resources.walkableTiles.concat(walkableAndSeeThroughTiles);
