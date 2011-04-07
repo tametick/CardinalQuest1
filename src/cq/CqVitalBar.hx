@@ -20,7 +20,7 @@ class CqVitalBar extends HxlUIBar {
 		updateValue();
 	}
 
-	public function updateValue():Void {
+	public function updateValue(?dmgTotal:Int=0):Void {
 		setPercent(actor.hp / actor.maxHp);
 		if ( !Std.is(actor, CqPlayer) ) {
 			if ( actor.hp >= actor.maxHp ) {

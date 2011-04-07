@@ -119,11 +119,11 @@ class CqActor extends CqObject, implements Actor {
 		chest.bust(state);
 	}
 	
-	public function doInjure():Void {
-		for ( Callback in onInjure ) Callback();
+	public function doInjure(?dmgTotal:Int=0):Void {
+		for ( Callback in onInjure ) Callback(dmgTotal);
 	}
 
-	function injureActor(other:CqActor) {
+	function injureActor(other:CqActor, dmgTotal:Int) {
 		if (this == cast(Registery.player,CqPlayer)) {
 			HxlLog.append("You hit");
 			trace("You hit");
@@ -131,15 +131,16 @@ class CqActor extends CqObject, implements Actor {
 			HxlLog.append("Hit you");
 			trace("Hit you");
 		}
-		other.doInjure();
+		other.doInjure(dmgTotal);
 	}
 	
-	public function doKill():Void {
+	public function doKill(?dmgTotal:Int=0):Void {
+		doInjure(dmgTotal);
 		for ( Callback in onKill ) Callback();
 	}
 
-	function killActor(state:HxlState, other:CqActor) {
-		other.doKill();
+	function killActor(state:HxlState, other:CqActor, dmgTotal:Int) {
+		other.doKill(dmgTotal);
 		// todo
 		if (Std.is(this, CqPlayer)) {
 			var mob = cast(other, CqMob);
@@ -176,23 +177,27 @@ class CqActor extends CqObject, implements Actor {
 			}
 
 			var dmgMultipler = buffs.get("damageMultipler");
+			var dmgTotal:Int;
 
 			if (equippedWeapon!=null) {
 				// With weapon
 				var damageRange = equippedWeapon.damage;
-				other.hp -= HxlUtil.randomIntInRange(damageRange.start * dmgMultipler, damageRange.end * dmgMultipler);
+				dmgTotal = HxlUtil.randomIntInRange(damageRange.start * dmgMultipler, damageRange.end * dmgMultipler);
+				other.hp -= dmgTotal;
+
 			} else {
 				// With natural attack
-				other.hp -= HxlUtil.randomIntInRange(damage.start * dmgMultipler, damage.end * dmgMultipler);
+				dmgTotal = HxlUtil.randomIntInRange(damage.start * dmgMultipler, damage.end * dmgMultipler);
+				other.hp -= dmgTotal;
 			}
 			
 			// life buffs
 			var lif = other.hp + other.buffs.get("life");
 			
 			if (lif > 0)
-				injureActor(other);
+				injureActor(other, dmgTotal);
 			else
-				killActor(state,other);
+				killActor(state,other,dmgTotal);
 
 		} else {
 			// Miss
