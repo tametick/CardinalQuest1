@@ -312,6 +312,10 @@ class CqPlayer extends CqActor, implements Player {
 	
 	function gainLevel() {
 		trace("level: " + (++level));
+		maxHp += vitality;
+		hp = maxHp;
+		
+		// todo - update hp bar
 	}
 	
 }
