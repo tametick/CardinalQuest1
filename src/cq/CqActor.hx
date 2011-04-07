@@ -58,8 +58,8 @@ class CqActor extends CqObject, implements Actor {
 	public var timers:Array<CqTimer>;
 
 	// callbacks
-	var onInjure:Dynamic;
-	var onKill:Dynamic;
+	var onInjure:List<Dynamic>;
+	var onKill:List<Dynamic>;
 	
 	public function new(X:Float, Y:Float,attack:Int,defense:Int,speed:Int,spirit:Int,vitality:Int,damage:Range) {
 		super(X, Y);
@@ -80,8 +80,8 @@ class CqActor extends CqObject, implements Actor {
 		specialEffects = new Hash();
 		visibleEffects = new Array<String>();
 		timers = new Array<CqTimer>();
-		onInjure = null;
-		onKill = null;
+		onInjure = new List();
+		onKill = new List();
 	}
 	
 	function initBuffs(){
@@ -94,12 +94,12 @@ class CqActor extends CqObject, implements Actor {
 		buffs.set("spirit",0);
 	}
 
-	public function setOnInjure(Callback:Dynamic):Void {
-		onInjure = Callback;
+	public function addOnInjure(Callback:Dynamic):Void {
+		onInjure.add(Callback);
 	}
 
-	public function setOnKill(Callback:Dynamic):Void {
-		onKill = Callback;
+	public function addOnKill(Callback:Dynamic):Void {
+		onKill.add(Callback);
 	}
 
 	public function moveToPixel(X:Float, Y:Float):Void {
@@ -117,7 +117,7 @@ class CqActor extends CqObject, implements Actor {
 	}
 	
 	public function doInjure():Void {
-		if ( onInjure != null ) onInjure();
+		for ( Callback in onInjure ) Callback();
 	}
 
 	function injureActor(other:CqActor) {
@@ -127,13 +127,12 @@ class CqActor extends CqObject, implements Actor {
 		} else {
 			HxlLog.append("Hit you");
 			trace("Hit you");
-			//trace("Your HP: "+other.hp+" / "+other.maxHp);
 		}
 		other.doInjure();
 	}
 	
 	public function doKill():Void {
-		if ( onKill != null ) onKill();
+		for ( Callback in onKill ) Callback();
 	}
 
 	function killActor(state:HxlState, other:CqActor) {

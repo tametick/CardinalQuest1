@@ -14,8 +14,12 @@ class CqVitalBar extends HxlUIBar {
 		scrollFactor.x = scrollFactor.y = 1;
 		zIndex = 5;
 		mount(Actor);
-		// Actor.setOnInjure();
-		Actor.setOnKill(destroy);
+		Actor.addOnInjure(updateValue);
+		Actor.addOnKill(destroy);
+	}
+
+	public function updateValue():Void {
+		setPercent(actor.hp / actor.maxHp);
 	}
 
 	public override function update():Void {
