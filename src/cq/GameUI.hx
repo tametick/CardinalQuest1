@@ -2,6 +2,8 @@ package cq;
 
 import cq.CqActor;
 import cq.CqItem;
+import cq.CqSpell;
+import cq.CqEffectChest;
 import cq.CqFloatText;
 import cq.CqVitalBar;
 
@@ -144,11 +146,12 @@ class GameUI extends HxlDialog {
 		 * Right side panel buttons
 		 **/
 		// these are temporary
+		
 		var btn1:HxlButton = new HxlButton(0, 0, 64, 64);
 		btn1.setBackgroundColor(0xff999999, 0xffcccccc);
 		btn1.configEvent(5, true, true);
 		rightButtons.addButton(btn1);
-
+		
 		var btn2:HxlButton = new HxlButton(0, 0, 64, 64);
 		btn2.setBackgroundColor(0xff999999, 0xffcccccc);
 		btn2.configEvent(5, true, true);
@@ -219,6 +222,19 @@ class GameUI extends HxlDialog {
 
 	public function itemPickup(Item:CqItem):Void {
 		panelInventory.itemPickup(Item);
+	}
+
+	public function initChests():Void {
+		for ( Item in Registery.world.currentLevel.loots ) {
+			if ( Std.is(Item, CqChest) ) {
+				cast(Item, CqChest).addOnBust(function(Target:CqChest) {
+					var eff:CqEffectChest = new CqEffectChest(Target.x + Target.origin.x, Target.y + Target.origin.y);
+					eff.zIndex = 6;
+					HxlGraphics.state.add(eff);
+					eff.start(true, 1.0, 10);
+				});
+			}
+		}
 	}
 
 	public function initHealthBars():Void {

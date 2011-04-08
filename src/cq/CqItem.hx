@@ -54,11 +54,22 @@ class CqItem extends GameObjectImpl, implements Loot {
  * Chests are encountered in the dungeon and once detroyed drop a random item
  */
 class CqChest extends CqItem {
+
+	var onBust:List<Dynamic>;
+
 	public function new(X:Float, Y:Float) {
 		super(X, Y,"chest");
+		onBust = new List();
 	}
 	
+	public function addOnBust(Callback:Dynamic):Void {
+		onBust.add(Callback);
+	}
+
 	public function bust(state:HxlState) {
+
+		for ( Callback in onBust ) Callback(this);
+
 		// create random item
 		var type = null;
 		do {
