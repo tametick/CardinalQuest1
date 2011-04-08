@@ -269,6 +269,7 @@ class CqPlayer extends CqActor, implements Player {
 	public var xp:Int;
 	public var level:Int;
 
+	var onGainXP:List<Dynamic>;
 
 	public function new(playerClass:CqClass, ?X:Float=-1, ?Y:Float=-1) {
 		// fixme - accorrect attributes
@@ -277,6 +278,8 @@ class CqPlayer extends CqActor, implements Player {
 		xp = 0;
 		level = 1;
 		
+		onGainXP = new List();
+
 		loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 2.0, 2.0);
 		faction = 0;
 		inventory = new Array<CqItem>();
@@ -291,7 +294,11 @@ class CqPlayer extends CqActor, implements Player {
 		}
 		play("idle");
 	}
-	
+
+	public function addOnGainXP(Callback:Dynamic):Void {
+		onGainXP.add(Callback);
+	}
+
 	public function setPickupCallback(Callback:Dynamic):Void {
 		pickupCallback = Callback;
 	}
@@ -308,9 +315,13 @@ class CqPlayer extends CqActor, implements Player {
 	}
 	
 	public function gainExperience(other:CqMob) {
+		// todo: the amount of xp gained should be passed to this method
+		var xpTotal:Int = 1;
 		trace("gained " + other.xpValue + " xp");
-		cast(this, CqPlayer).xp += 1;
+		cast(this, CqPlayer).xp += xpTotal;
 		
+		for ( Callback in onGainXP ) Callback(xpTotal);
+
 		if (xp >= nextLevel())
 			gainLevel();
 	}

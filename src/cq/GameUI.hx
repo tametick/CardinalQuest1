@@ -169,7 +169,6 @@ class GameUI extends HxlDialog {
 		btn5.configEvent(5, true, true);
 		rightButtons.addButton(btn5);
 
-		//panelMap = new CqMapDialog(84, 0, 472, 480);
 		xpBar = new HxlUIBar(84, 460, 472, 10);
 		xpBar.setBarColor(0xff59C65E);
 		xpBar.setPercent(0.7);
@@ -246,5 +245,9 @@ class GameUI extends HxlDialog {
 		var txt:CqFloatText = new CqFloatText(Actor.x + (Actor.width/2), Actor.y - 16, ""+Damage, 0xff2222, 18);
 		txt.zIndex = 4;
 		HxlGraphics.state.add(txt);
+	}
+	
+	public function doPlayerGainXP(?xpTotal:Int):Void {
+
 	}
 }
