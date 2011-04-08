@@ -39,6 +39,7 @@ class CqLevel extends Level {
 		tileClass = CqTile;
 				
 		var newMapData = BSP.getBSPMap(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), tiles.getSpriteIndex("red_wall4"), tiles.getSpriteIndex("red_floor0"), tiles.getSpriteIndex("red_door_close"));
+
 		startingLocation = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
 		var stairsDown:HxlPoint;
 		do {
@@ -48,8 +49,32 @@ class CqLevel extends Level {
 		newMapData[Std.int(stairsDown.y)][Std.int(stairsDown.x)] = tiles.getSpriteIndex("red_down");
 		
 		loadMap(newMapData, SpriteTiles, Configuration.tileSize, Configuration.tileSize, 2.0, 2.0);
-		
-		
+	
+		// We're going to disable rendering of tiles which will never be visible
+		for ( Y in 0...heightInTiles ) {
+			for ( X in 0...widthInTiles ) {
+				if ( HxlUtil.contains(tiles.solidAndBlockingTiles, _tiles[Y][X].dataNum) ) {
+					var pass:Bool = true;
+					var ty:Int = Y - 1;
+					while ( ty <= Y + 1 ) {
+						if ( ty >= 0 && ty < heightInTiles ) {
+							var tx:Int = X - 1;
+							while ( tx <= X + 1 ) {
+								if ( tx >= 0 && tx < widthInTiles ) {
+									if ( !HxlUtil.contains(tiles.solidAndBlockingTiles, _tiles[ty][tx].dataNum) ) pass = false;
+									if ( !pass ) break;
+								}
+								tx++;
+							}
+						}
+						if ( !pass ) break;
+						ty++;
+					}
+					if ( pass ) _tiles[Y][X].visible = false;
+				}
+			}
+		}
+
 		addChests(CqConfiguration.chestsPerLevel);
 		addSpells(CqConfiguration.spellsPerLevel);
 		addMobs(CqConfiguration.mobsPerLevel);

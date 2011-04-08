@@ -338,7 +338,7 @@ class HxlTilemap extends HxlObject {
 		for (r in 0..._screenRows) {
 			for (c in 0..._screenCols) {
 				tile = _tiles[r+ty][c+tx];
-				if ( tile.bitmapRect != null ) {
+				if ( tile.bitmapRect != null && tile.visible ) {
 					if ( tile._ct == null ) {
 						HxlGraphics.buffer.copyPixels(tileBitmap, tile.bitmapRect, _flashPoint, null, null, true);
 					} else {
@@ -683,6 +683,7 @@ enum Visibility {
 }
 
 class HxlTile {
+	public var visible:Bool;
 	public var visibility:Visibility;
 	
 	// override these
@@ -727,6 +728,7 @@ class HxlTile {
 		_alpha = 1;
 		_color = 0x00ffffff;
 		blend = null;
+		visible = true;
 	}
 
 	/**

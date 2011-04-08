@@ -67,6 +67,7 @@ class SpriteTiles extends HxlSpriteSheet {
 	public static var instance = new SpriteTiles();
 	static var inited = false;
 	public var walkableAndSeeThroughTiles:Array<Int>;
+	public var solidAndBlockingTiles:Array<Int>;
 	public var stairsDown:Array<Int>;
 	public function new() { 
 		spriteNames = [
@@ -76,6 +77,11 @@ class SpriteTiles extends HxlSpriteSheet {
 		];
 		super(1);
 		
+		solidAndBlockingTiles = [
+			getSpriteIndex("red_wall0"),getSpriteIndex("red_wall1"),getSpriteIndex("red_wall2"),getSpriteIndex("red_wall3"),getSpriteIndex("red_wall4"),getSpriteIndex("red_door_close"),
+			getSpriteIndex("blue_wall0"),getSpriteIndex("blue_wall1"),getSpriteIndex("blue_wall2"),getSpriteIndex("blue_wall3"),getSpriteIndex("blue_wall4"),getSpriteIndex("blue_door_close"),
+			getSpriteIndex("brown_wall0"),getSpriteIndex("brown_wall1"),getSpriteIndex("brown_wall2"),getSpriteIndex("brown_wall3"),getSpriteIndex("brown_wall4"),getSpriteIndex("brown_door_close"),
+		];
 		walkableAndSeeThroughTiles = [
 			getSpriteIndex("red_floor0"), getSpriteIndex("blue_floor0"), getSpriteIndex("brown_floor0"),
 			getSpriteIndex("red_floor1"), getSpriteIndex("blue_floor1"), getSpriteIndex("brown_floor1"),
@@ -87,6 +93,7 @@ class SpriteTiles extends HxlSpriteSheet {
 			Resources.walkableTiles = Resources.walkableTiles.concat(walkableAndSeeThroughTiles);
 			Resources.seeThroughTiles = Resources.seeThroughTiles.concat(walkableAndSeeThroughTiles);
 			Resources.walkableAndSeeThroughTiles = Resources.walkableAndSeeThroughTiles.concat(walkableAndSeeThroughTiles);
+			Resources.solidAndBlockingTiles = Resources.solidAndBlockingTiles.concat(solidAndBlockingTiles);
 			inited = true;
 		}
 	}
@@ -121,4 +128,4 @@ class SpriteDecorations extends HxlSpriteSheet {
 }
 
 
-class CqResources extends Resources { }
+class CqResources extends Resources {}
