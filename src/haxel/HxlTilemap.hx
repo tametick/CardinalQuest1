@@ -86,6 +86,7 @@ class HxlTilemap extends HxlObject {
 	var _callbacks:Array<Dynamic>;
 	var _screenRows:Int;
 	var _screenCols:Int;
+	var tileGraphicName:String;
 
 	var _tiles:Array<Array<HxlTile>>;
 
@@ -148,7 +149,9 @@ class HxlTilemap extends HxlObject {
 	 */
 	public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {
 		mapData = MapData;
-		
+	
+		tileGraphicName = Type.getClassName(TileGraphic);
+
 		//Figure out the map dimensions based on the mapdata
 		var c:Int;
 		heightInTiles = MapData.length;

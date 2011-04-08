@@ -42,6 +42,9 @@ class GameUI extends HxlDialog {
 	var btnCharacterView:HxlButton;
 	var btnLogView:HxlButton;
 
+	// Misc UI elements
+	var xpBar:HxlUIBar;
+
 	// State & helper vars
 	var currentPanel:HxlSlidingDialog;
 
@@ -70,6 +73,7 @@ class GameUI extends HxlDialog {
 		 **/
 		panelMap = new CqMapDialog(84, 0, 472, 480);
 		panelMap.setBackgroundColor(0xff9A9DBC);
+		panelMap.zIndex = 2;
 		add(panelMap);
 
 		panelInventory = new CqInventoryDialog(84, 0, 472, 480);
@@ -79,10 +83,12 @@ class GameUI extends HxlDialog {
 
 		panelCharacter = new HxlSlidingDialog(84, 0, 472, 480);
 		panelCharacter.setBackgroundColor(0xff9ABC9D);
+		panelCharacter.zIndex = 2;
 		add(panelCharacter);
 
 		panelLog = new CqMessageDialog(84, 0, 472, 480);
 		panelLog.setBackgroundColor(0xffBCB59A);
+		panelLog.zIndex = 2;
 		add(panelLog);
 
 		/**
@@ -162,6 +168,12 @@ class GameUI extends HxlDialog {
 		btn5.setBackgroundColor(0xff999999, 0xffcccccc);
 		btn5.configEvent(5, true, true);
 		rightButtons.addButton(btn5);
+
+		//panelMap = new CqMapDialog(84, 0, 472, 480);
+		xpBar = new HxlUIBar(84, 460, 472, 10);
+		xpBar.setBarColor(0xff59C65E);
+		xpBar.setPercent(0.7);
+		add(xpBar);
 
 	}
 

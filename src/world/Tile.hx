@@ -1,10 +1,13 @@
 package world;
 
+import haxel.HxlGraphics;
 import haxel.HxlTilemap;
 import haxel.HxlUtil;
 
 import data.Resources;
 
+import flash.display.BitmapData;
+import flash.geom.Point;
 import flash.geom.Rectangle;
 
 import com.eclecticdesignstudio.motion.Actuate;
