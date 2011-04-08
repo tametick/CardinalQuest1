@@ -316,17 +316,17 @@ class CqPlayer extends CqActor, implements Player {
 	
 	public function gainExperience(other:CqMob) {
 		// todo: the amount of xp gained should be passed to this method
-		var xpTotal:Int = 1;
+		var xpGained:Int = 1;
 		trace("gained " + other.xpValue + " xp");
-		cast(this, CqPlayer).xp += xpTotal;
+		cast(this, CqPlayer).xp += xpGained;
 		
-		for ( Callback in onGainXP ) Callback(xpTotal);
-
 		if (xp >= nextLevel())
 			gainLevel();
+
+		for ( Callback in onGainXP ) Callback(xpGained);
 	}
 	
-	function nextLevel() {
+	public function nextLevel() {
 		return 50 * Math.pow(2, level);
 	}
 	

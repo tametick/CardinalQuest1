@@ -171,7 +171,6 @@ class GameUI extends HxlDialog {
 
 		xpBar = new HxlUIBar(84, 460, 472, 10);
 		xpBar.setBarColor(0xff59C65E);
-		xpBar.setPercent(0.7);
 		add(xpBar);
 
 	}
@@ -247,7 +246,8 @@ class GameUI extends HxlDialog {
 		HxlGraphics.state.add(txt);
 	}
 	
-	public function doPlayerGainXP(?xpTotal:Int):Void {
-
+	public function doPlayerGainXP(?xpGained:Int=0):Void {
+		var _player:CqPlayer = cast(Registery.player, CqPlayer);
+		xpBar.setPercent( _player.xp / _player.nextLevel() );
 	}
 }

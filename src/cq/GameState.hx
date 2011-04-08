@@ -68,6 +68,7 @@ class GameState extends HxlState {
 		player.setPickupCallback(gameUI.itemPickup);
 		player.addOnInjure(gameUI.doPlayerInjureEffect);
 		player.addOnKill(gameUI.doPlayerInjureEffect);
+		player.addOnGainXP(gameUI.doPlayerGainXP);
 
 		var self = this;
 		world.addOnNewLevel(function() {
