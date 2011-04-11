@@ -90,7 +90,6 @@ class CqInventoryDialog extends HxlSlidingDialog {
 				var item:CqInventoryItem = new CqInventoryItem(this, 2, 2);
 				item.toggleDrag(true);
 				item.zIndex = 5;
-				item.setInventoryCell(cell.cellIndex);
 				item.item = Item;
 				if ( Std.is(Item, CqSpell) ) {
 					spellSprite.setFrame(spellSheet.getSpriteIndex(Item.spriteIndex));
@@ -100,6 +99,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 					item.setIcon(itemSprite.getFramePixels());
 				}
 				add(item);
+				item.setInventoryCell(cell.cellIndex);
 				break;
 			}
 		}
@@ -442,6 +442,11 @@ class CqInventoryItem extends HxlSprite {
 	 * Sets this object as the CellObj of the target inventory cell, and places this object within that cell.
 	 **/
 	public function setInventoryCell(Cell:Int):Void {
+		_dlg.dlgSpellGrid.remove(this);
+		_dlg.remove(this);
+		zIndex = idleZIndex;
+		_dlg.add(this);
+
 		cellIndex = Cell;
 		setPos(_dlg.dlgInvGrid.getCellItemPos(Cell));
 		_dlg.dlgInvGrid.setCellObj(Cell, this);
@@ -453,6 +458,11 @@ class CqInventoryItem extends HxlSprite {
 	 * Sets this object as the CellObj of the target equipment cell, and places this object within that cell.
 	 **/
 	public function setEquipmentCell(Cell:Int):Void {
+		_dlg.dlgSpellGrid.remove(this);
+		_dlg.remove(this);
+		zIndex = idleZIndex;
+		_dlg.add(this);
+
 		cellIndex = Cell;
 		setPos(_dlg.dlgEqGrid.getCellItemPos(Cell));
 		_dlg.dlgEqGrid.setCellObj(Cell, this);
@@ -464,6 +474,11 @@ class CqInventoryItem extends HxlSprite {
 	 * Sets this object as the CellObj of the target spell cell, and places this object within that cell.
 	 **/
 	public function setSpellCell(Cell:Int):Void {
+		_dlg.dlgSpellGrid.remove(this);
+		_dlg.remove(this);
+		zIndex = idleZIndex;
+		_dlg.dlgSpellGrid.add(this);
+
 		cellIndex = Cell;
 		setPos(_dlg.dlgSpellGrid.getCellItemPos(Cell));
 		_dlg.dlgSpellGrid.setCellObj(Cell, this);
@@ -510,9 +525,10 @@ class CqInventoryItem extends HxlSprite {
 	}
 
 	override function dragStart():Void {
-		// Increase my z index, so i'm drawn above other sprites while im being dragged
+		_dlg.remove(this);
+		_dlg.dlgSpellGrid.remove(this);
 		zIndex = dragZIndex;
-		_dlg.sortMembersByZIndex();
+		_dlg.add(this);
 		super.dragStart();
 	}
 
@@ -559,8 +575,6 @@ class CqInventoryItem extends HxlSprite {
 			// If there was no eligible drop target, revert to pre drag position
 			setPos(dragStartPoint);
 		}
-		zIndex = idleZIndex;
-		_dlg.sortMembersByZIndex();
 		super.dragStop();
 	}
 }

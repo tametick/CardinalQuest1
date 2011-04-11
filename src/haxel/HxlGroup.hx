@@ -61,6 +61,13 @@ class HxlGroup extends HxlObject {
 		return NewObject;
 	}
 
+	public function has(Object:HxlObject):Bool {
+		for ( i in 0...members.length ) {
+			if ( members[i] == Object ) return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Removes an object from the group.
 	 * 

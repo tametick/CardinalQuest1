@@ -51,7 +51,7 @@ class GameUI extends HxlDialog {
 	var xpBar:HxlUIBar;
 
 	// State & helper vars
-	var currentPanel:HxlSlidingDialog;
+	public static var currentPanel:HxlSlidingDialog = null;
 
 	public override function new() {
 		super(0, 0, HxlGraphics.width, HxlGraphics.height);
@@ -168,26 +168,23 @@ class GameUI extends HxlDialog {
 		}
 		if ( Panel == null ) {
 			if ( currentPanel != null ) {
-				var self = this;
-				currentPanel.hide(function() { self.currentPanel = null; });
+				currentPanel.hide(function() { GameUI.currentPanel = null; });
 			}
 		} else {
 			if ( currentPanel == null ) {
 				currentPanel = Panel;
 				Panel.show();
 			} else {
-				var self = this;
 				if ( currentPanel != Panel ) {
 					// A view state other than main is already active.. Hide that one first before showing the selected one
 					currentPanel.hide(function() {
-						self.currentPanel = Panel;
-						self.currentPanel.show();
+						GameUI.currentPanel = Panel;
+						GameUI.currentPanel.show();
 					});
 				} else {
 					// User clicked on a view state button which is already active, switch back to main view state
 					if ( currentPanel != null ) {
-						var self = this;
-						currentPanel.hide(function() { self.currentPanel = null; });
+						currentPanel.hide(function() { GameUI.currentPanel = null; });
 						btnMainView.setActive(true);
 						btnMapView.setActive(false);
 						btnInventoryView.setActive(false);
