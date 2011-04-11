@@ -23,7 +23,7 @@ import haxel.HxlSprite;
 import haxel.HxlSpriteSheet;
 import haxel.HxlUtil;
 
-import flash.filters.GlowFilter;
+//import flash.filters.GlowFilter;
 
 class CqInventoryDialog extends HxlSlidingDialog {
 
@@ -71,17 +71,17 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		CqInventoryItem.backgroundSelectedKey = "ItemSelectedBG";
 		
 		// This snippet applies a glow filter to a BitmapData object.. whee!
-		
+		/*
 		var tmp:BitmapData = new BitmapData(70, 70, true, 0x0);
 		tmp.copyPixels(HxlGraphics.getBitmap("ItemBG"), new Rectangle(0, 0, 50, 50), new Point(10, 10), null, null, true);
-		var glow:GlowFilter = new GlowFilter(0x00ff00, 1.0, 15.0, 15.0, 1.5);
+		var glow:GlowFilter = new GlowFilter(0x00ff00, 0.8, 15.0, 15.0, 1.25);
 		tmp.applyFilter(tmp, new Rectangle(0, 0, 70, 70), new Point(0, 0), glow);
 		HxlGraphics.addBitmapData(tmp, "tester!");
 		var tmp2:HxlSprite = new HxlSprite(100, 100);
 		tmp2.loadCachedGraphic("tester!");
 		tmp2.zIndex = 20;
 		add(tmp2);
-		
+		*/
 	}
 
 	public function itemPickup(Item:CqItem):Void {
@@ -183,6 +183,7 @@ class CqEquipmentGrid extends CqInventoryGrid {
 
 		var cellBgKey:String = "EquipmentCellBG";
 		var cellBgHighlightKey:String = "EqCellBGHighlight";
+		var cellGlowKey:String = "CellGlow";
 
 		var cellSize:Int = 54;
 		var padding:Int = 8;
@@ -190,42 +191,56 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		var cell:CqEquipmentCell;
 	
 		cell = new CqEquipmentCell(SHOES, 8, 193, cellSize, cellSize, idx);
-		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
 		add(cell);
 		cells.push(cell);
 		idx++;
 
 		cell = new CqEquipmentCell(GLOVES, 8, 100, cellSize, cellSize, idx);
-		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
 		add(cell);
 		cells.push(cell);
 		idx++;
 
 		cell = new CqEquipmentCell(ARMOR, 8, 8, cellSize, cellSize, idx);
-		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
 		add(cell);
 		cells.push(cell);
 		idx++;
 
 		cell = new CqEquipmentCell(JEWELRY, 159, 193, cellSize, cellSize, idx);
-		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
 		add(cell);
 		cells.push(cell);
 		idx++;
 
 		cell = new CqEquipmentCell(WEAPON, 159, 100, cellSize, cellSize, idx);
-		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
 		add(cell);
 		cells.push(cell);
 		idx++;
 
 		cell = new CqEquipmentCell(HAT, 159, 8, cellSize, cellSize, idx);
-		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
 		add(cell);
 		cells.push(cell);
 		idx++;
 	}
 
+	public function onItemDrag(Item:CqItem):Void {
+		for( i in 0...cells.length ) {
+			var Cell:CqEquipmentCell = cast(cells[i], CqEquipmentCell);
+			if ( Item.equipSlot == Cell.equipSlot ) {
+				Cell.setGlow(true);
+			}
+		}
+	}
+
+	public function onItemDragStop():Void {
+		for ( i in 0...cells.length ) {
+			cells[i].setGlow(false);
+		}
+	}
 }
 
 class CqSpellGrid extends CqInventoryGrid {
@@ -251,6 +266,21 @@ class CqSpellGrid extends CqInventoryGrid {
 		}
 	}
 
+	public function onItemDrag(Item:CqItem):Void {
+		for( i in 0...cells.length ) {
+			var Cell:CqSpellCell = cast(cells[i], CqSpellCell);
+			if ( Item.equipSlot == Cell.equipSlot ) {
+				Cell.setGlow(true);
+			}
+		}
+	}
+
+	public function onItemDragStop():Void {
+		for ( i in 0...cells.length ) {
+			cells[i].setGlow(false);
+		}
+	}
+
 }
 
 class CqInventoryCell extends HxlDialog {
@@ -258,27 +288,37 @@ class CqInventoryCell extends HxlDialog {
 	public static var highlightedCell:CqInventoryCell = null;
 	var cellObj:CqInventoryItem;
 	var bgHighlight:HxlSprite;
+	var bgGlow:HxlSprite;
 	var isHighlighted:Bool;
 	public var cellIndex:Int;
 
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?CellIndex:Int=0) {
 		super(X, Y, Width, Height);
 		bgHighlight = null;
+		bgGlow = null;
 		cellObj = null;
 		isHighlighted = false;
 		cellIndex = CellIndex;
 	}
 
-	public function setGraphicKeys(Normal:String, ?Highlight:String=null):Void {
+	public function setGraphicKeys(Normal:String, ?Highlight:String=null, ?Glow:String=null):Void {
 		if ( bgHighlight == null ) {
 			bgHighlight = new HxlSprite(0, 0);
 			bgHighlight.zIndex = -1;
 			add(bgHighlight);
 			bgHighlight.visible = false;
 		}
+		if ( bgGlow == null ) {
+			bgGlow = new HxlSprite(-19,-19);
+			bgGlow.zIndex = -2;
+			add(bgGlow);
+			bgGlow.visible = false;
+		}
 		setBackgroundKey(Normal);
 		if ( Highlight == null ) Highlight = Normal;
 		bgHighlight.loadCachedGraphic(Highlight);
+		if ( Glow == null ) Glow = Normal;
+		bgGlow.loadCachedGraphic(Glow);
 		origin.x = Std.int(background.width / 2);
 		origin.y = Std.int(background.height / 2);
 	}
@@ -317,6 +357,14 @@ class CqInventoryCell extends HxlDialog {
 			background.visible = true;
 			bgHighlight.visible = false;
 			if ( highlightedCell == this ) highlightedCell = null;
+		}
+	}
+
+	public function setGlow(Toggle:Bool):Void {
+		if ( Toggle ) {
+			bgGlow.visible = true;
+		} else {
+			bgGlow.visible = false;
 		}
 	}
 
@@ -493,6 +541,8 @@ class CqInventoryItem extends HxlSprite {
 		_dlg.dlgSpellGrid.remove(this);
 		zIndex = dragZIndex;
 		_dlg.add(this);
+		_dlg.dlgEqGrid.onItemDrag(this.item);
+		_dlg.dlgSpellGrid.onItemDrag(this.item);
 		super.dragStart();
 	}
 
@@ -539,6 +589,9 @@ class CqInventoryItem extends HxlSprite {
 			// If there was no eligible drop target, revert to pre drag position
 			setPos(dragStartPoint);
 		}
+		_dlg.dlgEqGrid.onItemDragStop();
+		_dlg.dlgSpellGrid.onItemDragStop();
+
 		super.dragStop();
 	}
 }

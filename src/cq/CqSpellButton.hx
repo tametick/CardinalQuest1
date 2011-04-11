@@ -27,7 +27,7 @@ class CqSpellButton extends HxlDialog {
 		initialized = false;
 
 		cell = new CqSpellCell(5, 5, 54, 54, Idx);
-		cell.setGraphicKeys("EquipmentCellBG", "EqCellBGHighlight");
+		cell.setGraphicKeys("EquipmentCellBG", "EqCellBGHighlight", "CellGlow");
 		cell.zIndex = 1;
 		add(cell);
 	}

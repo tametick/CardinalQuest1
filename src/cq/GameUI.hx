@@ -15,6 +15,9 @@ import world.Player;
 import world.World;
 
 import flash.display.BitmapData;
+import flash.filters.GlowFilter;
+import flash.geom.Point;
+import flash.geom.Rectangle;
 
 import haxel.HxlButton;
 import haxel.HxlButtonContainer;
@@ -226,6 +229,18 @@ class GameUI extends HxlDialog {
 		if ( !HxlGraphics.checkBitmapCache(cellBgHighlightKey) ) {
 			HxlGraphics.addBitmapData(HxlGradient.RectData(54, 54, [0x686835, 0xADAB6B], null, Math.PI/2, 5.0), cellBgHighlightKey);
 		}
+
+		var tmp:BitmapData = new BitmapData(79, 79, true, 0x0);
+		tmp.copyPixels(HxlGraphics.getBitmap("InventoryCellBG"), new Rectangle(0, 0, 54, 54), new Point(19, 19), null, null, true);
+		var glow:GlowFilter = new GlowFilter(0x00ff00, 0.9, 15.0, 15.0, 1.6, 1, false, true);
+		tmp.applyFilter(tmp, new Rectangle(0, 0, 79, 79), new Point(0, 0), glow);
+		HxlGraphics.addBitmapData(tmp, "CellGlow");
+		/*
+		var tmp2:HxlSprite = new HxlSprite(100, 100);
+		tmp2.loadCachedGraphic("tester!");
+		tmp2.zIndex = 20;
+		add(tmp2);
+		*/
 
 	}
 
