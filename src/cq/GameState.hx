@@ -3,6 +3,7 @@ package cq;
 import haxel.HxlPoint;
 import haxel.HxlState;
 import haxel.HxlGraphics;
+import haxel.HxlSprite;
 
 import data.Registery;
 

@@ -2,6 +2,7 @@ package cq;
 
 import cq.CqActor;
 import cq.CqEffectChest;
+import cq.CqEffectInjure;
 import cq.CqFloatText;
 import cq.CqInventoryDialog;
 import cq.CqItem;
@@ -273,11 +274,19 @@ class GameUI extends HxlDialog {
 		var self = this;
 		Actor.addOnInjure(function(?dmgTotal:Int=0) { 
 			self.showDamageText(Actor, dmgTotal);
+			self.doInjureEffect(Actor);
 		});
 	}
 
 	public function doPlayerInjureEffect(?dmgTotal:Int):Void {
 		HxlGraphics.flash.start(0xffff0000, 0.3, null, true);
+	}
+
+	public function doInjureEffect(Target:CqActor):Void {
+		var eff:CqEffectInjure = new CqEffectInjure(Target.x + Target.origin.x, Target.y + Target.origin.y);
+		eff.zIndex = 6;
+		HxlGraphics.state.add(eff);
+		eff.start(true, 1.0, 10);
 	}
 
 	public function showDamageText(Actor:CqActor, Damage:Int):Void {
