@@ -34,6 +34,10 @@ class HxlObjectContainer extends HxlDialog {
 		objects = new List();
 	}
 
+	public function getObjects():List<HxlObject> {
+		return objects;
+	}
+
 	public function addObject(Obj:HxlObject):Void {
 		objects.add(Obj);
 		Obj.zIndex = 1;

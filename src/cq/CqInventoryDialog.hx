@@ -64,22 +64,15 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		spellSprite = new HxlSprite(0, 0);
 		spellSprite.loadGraphic(SpriteSpells, true, false, Configuration.tileSize, Configuration.tileSize, false, 3.0, 3.0);
 
-		var itemBg:BitmapData = HxlGradient.RectData(50, 50, [0xc1c1c1, 0x9e9e9e], null, Math.PI/2, 8.0);
-		var itemBgKey:String = "ItemBG";
-		HxlGraphics.addBitmapData(itemBg, itemBgKey);
-		CqInventoryItem.backgroundKey = itemBgKey;	
-
-		var itemSelectedBg:BitmapData = HxlGradient.RectData(50, 50, [0xEFEDBC, 0xB9B99A], null, Math.PI/2, 8.0);
-		var itemSelectedBgKey:String = "ItemSelectedBG";
-		HxlGraphics.addBitmapData(itemSelectedBg, itemSelectedBgKey);
-		CqInventoryItem.backgroundSelectedKey = itemSelectedBgKey;
-
+		CqInventoryItem.backgroundKey = "ItemBG";	
+		CqInventoryItem.backgroundSelectedKey = "ItemSelectedBG";
+		
 		// This snippet applies a glow filter to a BitmapData object.. whee!
 		/*
-		var tmp:BitmapData = new BitmapData(54, 54, true, 0x0);
-		tmp.copyPixels(HxlGraphics.getBitmap(itemBgKey), new Rectangle(0, 0, 50, 50), new Point(2, 2), null, null, true);
-		var glow:GlowFilter = new GlowFilter();
-		tmp.applyFilter(tmp, new Rectangle(0, 0, 54, 54), new Point(0, 0), glow);
+		var tmp:BitmapData = new BitmapData(70, 70, true, 0x0);
+		tmp.copyPixels(HxlGraphics.getBitmap("ItemBG"), new Rectangle(0, 0, 50, 50), new Point(10, 10), null, null, true);
+		var glow:GlowFilter = new GlowFilter(0xff0000, 1.0, 15.0, 15.0, 1.5);
+		tmp.applyFilter(tmp, new Rectangle(0, 0, 70, 70), new Point(0, 0), glow);
 		HxlGraphics.addBitmapData(tmp, "tester!");
 		var tmp2:HxlSprite = new HxlSprite(100, 100);
 		tmp2.loadCachedGraphic("tester!");
@@ -129,24 +122,9 @@ class CqInventoryGrid extends HxlDialog {
 		cells = new Array();
 
 		if ( !CreateCells ) return;
-
+		
 		var cellBgKey:String = "InventoryCellBG";
-		var cellBg:BitmapData;
-		if ( HxlGraphics.checkBitmapCache(cellBgKey) ) {
-			cellBg = HxlGraphics.getBitmap(cellBgKey);
-		} else {
-			cellBg = HxlGradient.RectData(54, 54, [0x333333, 0x555555], null, Math.PI/2, 5.0);
-			HxlGraphics.addBitmapData(cellBg, cellBgKey);
-		}
-
 		var cellBgHighlightKey:String = "CellBGHighlight";
-		var cellBgHighlight:BitmapData;
-		if ( HxlGraphics.checkBitmapCache(cellBgHighlightKey) ) {
-			cellBgHighlight = HxlGraphics.getBitmap(cellBgHighlightKey);
-		} else {
-			cellBgHighlight = HxlGradient.RectData(54, 54, [0x686835, 0xADAB6B], null, Math.PI/2, 5.0);
-			HxlGraphics.addBitmapData(cellBgHighlight, cellBgHighlightKey);
-		}
 
 		var padding:Int = 8;
 		var cellSize:Int = 54;
@@ -201,22 +179,7 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		cells = new Array();
 
 		var cellBgKey:String = "EquipmentCellBG";
-		var cellBg:BitmapData;
-		if ( HxlGraphics.checkBitmapCache(cellBgKey) ) {
-			cellBg = HxlGraphics.getBitmap(cellBgKey);
-		} else {
-			cellBg = HxlGradient.RectData(54, 54, [0x333333, 0x555555], null, Math.PI/2, 5.0);
-			HxlGraphics.addBitmapData(cellBg, cellBgKey);
-		}
-
 		var cellBgHighlightKey:String = "EqCellBGHighlight";
-		var cellBgHighlight:BitmapData;
-		if ( HxlGraphics.checkBitmapCache(cellBgHighlightKey) ) {
-			cellBgHighlight = HxlGraphics.getBitmap(cellBgHighlightKey);
-		} else {
-			cellBgHighlight = HxlGradient.RectData(54, 54, [0x686835, 0xADAB6B], null, Math.PI/2, 5.0);
-			HxlGraphics.addBitmapData(cellBgHighlight, cellBgHighlightKey);
-		}
 
 		var cellSize:Int = 54;
 		var padding:Int = 8;

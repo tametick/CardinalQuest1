@@ -31,7 +31,7 @@ class GameUI extends HxlDialog {
 
 	// Main UI containers
 	var leftButtons:HxlButtonContainer;
-	var rightButtons:HxlButtonContainer;
+	var rightButtons:HxlObjectContainer;
 
 	// View state panels
 	var panelMap:CqMapDialog;
@@ -58,7 +58,10 @@ class GameUI extends HxlDialog {
 		currentPanel = null;
 		var self = this;
 
-		// highlight button for current view (if any)
+		/**
+		 * Create and cache graphics for use by UI widgets
+		 **/
+		initUIGraphics();
 
 		/**
 		 * Create and init main containers
@@ -68,7 +71,7 @@ class GameUI extends HxlDialog {
 		leftButtons.scrollFactor.x = leftButtons.scrollFactor.y = 0;
 		add(leftButtons);
 
-		rightButtons = new HxlButtonContainer(HxlGraphics.width-84, 50, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
+		rightButtons = new HxlObjectContainer(HxlGraphics.width-84, 50, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
 		//rightButtons.setBackgroundColor(0x88555555);
 		add(rightButtons);
 
@@ -152,27 +155,27 @@ class GameUI extends HxlDialog {
 		var btn1:HxlButton = new HxlButton(0, 0, 64, 64);
 		btn1.setBackgroundColor(0xff999999, 0xffcccccc);
 		btn1.configEvent(5, true, true);
-		rightButtons.addButton(btn1);
+		rightButtons.addObject(btn1);
 		
 		var btn2:HxlButton = new HxlButton(0, 0, 64, 64);
 		btn2.setBackgroundColor(0xff999999, 0xffcccccc);
 		btn2.configEvent(5, true, true);
-		rightButtons.addButton(btn2);
+		rightButtons.addObject(btn2);
 
 		var btn3:HxlButton = new HxlButton(0, 0, 64, 64);
 		btn3.setBackgroundColor(0xff999999, 0xffcccccc);
 		btn3.configEvent(5, true, true);
-		rightButtons.addButton(btn3);
+		rightButtons.addObject(btn3);
 
 		var btn4:HxlButton = new HxlButton(0, 0, 64, 64);
 		btn4.setBackgroundColor(0xff999999, 0xffcccccc);
 		btn4.configEvent(5, true, true);
-		rightButtons.addButton(btn4);
+		rightButtons.addObject(btn4);
 
 		var btn5:HxlButton = new HxlButton(0, 0, 64, 64);
 		btn5.setBackgroundColor(0xff999999, 0xffcccccc);
 		btn5.configEvent(5, true, true);
-		rightButtons.addButton(btn5);
+		rightButtons.addObject(btn5);
 
 		xpBar = new HxlUIBar(84, 460, 472, 10);
 		xpBar.setBarColor(0xff59C65E);
@@ -220,6 +223,39 @@ class GameUI extends HxlDialog {
 				}
 			}
 		}
+	}
+
+	public function initUIGraphics():Void {
+		var cellBgKey:String = "InventoryCellBG";
+		if ( !HxlGraphics.checkBitmapCache(cellBgKey) ) {
+			HxlGraphics.addBitmapData(HxlGradient.RectData(54, 54, [0x333333, 0x555555], null, Math.PI/2, 5.0), cellBgKey);
+		}
+
+		var cellBgHighlightKey:String = "CellBGHighlight";
+		if ( !HxlGraphics.checkBitmapCache(cellBgHighlightKey) ) {
+			HxlGraphics.addBitmapData(HxlGradient.RectData(54, 54, [0x686835, 0xADAB6B], null, Math.PI/2, 5.0), cellBgHighlightKey);
+		}
+
+		var itemBgKey:String = "ItemBG";
+		if ( !HxlGraphics.checkBitmapCache(itemBgKey) ) {
+			HxlGraphics.addBitmapData(HxlGradient.RectData(50, 50, [0xc1c1c1, 0x9e9e9e], null, Math.PI/2, 8.0), itemBgKey);
+		}
+
+		var itemSelectedBgKey:String = "ItemSelectedBG";
+		if ( !HxlGraphics.checkBitmapCache(itemSelectedBgKey) ) {
+			HxlGraphics.addBitmapData(HxlGradient.RectData(50, 50, [0xEFEDBC, 0xB9B99A], null, Math.PI/2, 8.0), itemSelectedBgKey);
+		}
+
+		var cellBgKey:String = "EquipmentCellBG";
+		if ( !HxlGraphics.checkBitmapCache(cellBgKey) ) {
+			HxlGraphics.addBitmapData(HxlGradient.RectData(54, 54, [0x333333, 0x555555], null, Math.PI/2, 5.0), cellBgKey);
+		}
+
+		var cellBgHighlightKey:String = "EqCellBGHighlight";
+		if ( !HxlGraphics.checkBitmapCache(cellBgHighlightKey) ) {
+			HxlGraphics.addBitmapData(HxlGradient.RectData(54, 54, [0x686835, 0xADAB6B], null, Math.PI/2, 5.0), cellBgHighlightKey);
+		}
+
 	}
 
 	public function itemPickup(Item:CqItem):Void {
