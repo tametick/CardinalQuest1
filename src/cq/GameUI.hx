@@ -1,16 +1,17 @@
 package cq;
 
 import cq.CqActor;
-import cq.CqItem;
-import cq.CqSpell;
 import cq.CqEffectChest;
 import cq.CqFloatText;
+import cq.CqItem;
+import cq.CqSpell;
+//import cq.CqSpellButton;
 import cq.CqVitalBar;
 
 import data.Registery;
 
-import world.World;
 import world.Player;
+import world.World;
 
 import flash.display.BitmapData;
 
@@ -19,6 +20,7 @@ import haxel.HxlButtonContainer;
 import haxel.HxlDialog;
 import haxel.HxlGradient;
 import haxel.HxlGraphics;
+import haxel.HxlObjectContainer;
 import haxel.HxlSlidingDialog;
 import haxel.HxlSprite;
 import haxel.HxlText;
