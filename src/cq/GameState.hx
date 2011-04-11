@@ -66,7 +66,7 @@ class GameState extends HxlState {
 		gameUI.initChests();
 		gameUI.initHealthBars();
 		gameUI.addHealthBar(player);
-		player.setPickupCallback(gameUI.itemPickup);
+		player.addOnPickup(gameUI.itemPickup);
 		player.addOnInjure(gameUI.doPlayerInjureEffect);
 		player.addOnKill(gameUI.doPlayerInjureEffect);
 		player.addOnGainXP(gameUI.doPlayerGainXP);

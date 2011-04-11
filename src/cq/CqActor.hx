@@ -276,11 +276,11 @@ class CqPlayer extends CqActor, implements Player {
 	static var sprites = SpritePlayer.instance;
 	
 	public var inventory:Array<CqItem>;
-	var pickupCallback:Dynamic;
 	
 	public var xp:Int;
 	public var level:Int;
 
+	var onPickup:List<Dynamic>;
 	var onGainXP:List<Dynamic>;
 
 	public function new(playerClass:CqClass, ?X:Float=-1, ?Y:Float=-1) {
@@ -291,6 +291,7 @@ class CqPlayer extends CqActor, implements Player {
 		level = 1;
 		
 		onGainXP = new List();
+		onPickup = new List();
 
 		loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 2.0, 2.0);
 		faction = 0;
@@ -311,8 +312,8 @@ class CqPlayer extends CqActor, implements Player {
 		onGainXP.add(Callback);
 	}
 
-	public function setPickupCallback(Callback:Dynamic):Void {
-		pickupCallback = Callback;
+	public function addOnPickup(Callback:Dynamic):Void {
+		onPickup.add(Callback);
 	}
 
 	public function pickup(state:HxlState, item:CqItem) {
@@ -322,8 +323,8 @@ class CqPlayer extends CqActor, implements Player {
 		// add to actor inventory
 		inventory.push(item);
 
-		// perform pickup callback function (if set)
-		if ( pickupCallback != null ) pickupCallback(item);
+		// perform pickup callback functions
+		for ( Callback in onPickup ) Callback(item);
 	}
 	
 	public function gainExperience(other:CqMob) {
