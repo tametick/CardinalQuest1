@@ -86,7 +86,7 @@ class HxlTilemap extends HxlObject {
 	var _callbacks:Array<Dynamic>;
 	var _screenRows:Int;
 	var _screenCols:Int;
-	var tileGraphicName:String;
+	public var tileGraphicName:String;
 
 	var _tiles:Array<Array<HxlTile>>;
 
@@ -344,6 +344,8 @@ class HxlTilemap extends HxlObject {
 				if ( tile.bitmapRect != null && tile.visible ) {
 					if ( tile._ct == null ) {
 						HxlGraphics.buffer.copyPixels(tileBitmap, tile.bitmapRect, _flashPoint, null, null, true);
+					} else if ( tile.altBitmap != null ) {
+						HxlGraphics.buffer.copyPixels(tile.altBitmap, tmpRect, _flashPoint, null, null, true);
 					} else {
 						#if flash9
 						_mtx.identity();
@@ -372,6 +374,24 @@ class HxlTilemap extends HxlObject {
 	 */
 	public override function render():Void {
 		renderTilemap();
+	}
+
+	public function getTileBitmap(X:Int, Y:Int):BitmapData {
+		var tileBitmap:BitmapData = _pixels;
+		var tile:HxlTile = _tiles[Y][X];
+		var bmp:BitmapData = new BitmapData(_tileWidth, _tileHeight, true, 0x00ffffff);
+		var bmpRect:Rectangle = new Rectangle(0, 0, _tileWidth, _tileHeight);
+		if ( tile._ct != null ) {
+			#if flash9
+			bmp.copyPixels(tileBitmap, tile.bitmapRect, new Point(0, 0), null, null, true);
+			bmp.colorTransform(bmpRect, tile._ct);
+			#else
+			bmp.copyPixels(tileBitmap, tile.bitmapRect, new Point(0, 0), null, null, true);
+			#end
+		} else {
+			bmp.copyPixels(tileBitmap, tile.bitmapRect, new Point(0, 0), null, null, true);
+		}
+		return bmp;
 	}
 
 	/**
@@ -719,6 +739,7 @@ class HxlTile {
 	var _color:Int;
 	public var _ct:ColorTransform;
 	var _mtx:Matrix;
+	public var altBitmap:BitmapData;
 
 	public var alpha(getAlpha, setAlpha) : Float;
 	public var color(getColor, setColor) : Int;
@@ -732,6 +753,7 @@ class HxlTile {
 		_color = 0x00ffffff;
 		blend = null;
 		visible = true;
+		altBitmap = null;
 	}
 
 	/**
@@ -742,6 +764,7 @@ class HxlTile {
 	}
 	
 	public function setAlpha(Alpha:Float):Float {
+		altBitmap = null;
 		if (Alpha > 1) Alpha = 1;
 		if (Alpha < 0) Alpha = 0;
 		if (Alpha == _alpha) return Alpha;
@@ -761,6 +784,7 @@ class HxlTile {
 	}
 
 	public function setColor(Color:Int):Int {
+		altBitmap = null;
 		Color &= 0x00ffffff;
 		if (_color == Color) return Color;
 		_color = Color;

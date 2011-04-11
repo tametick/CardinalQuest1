@@ -36,10 +36,23 @@ class Tile extends HxlTile
 	
 	public function colorTo(ToColor:Int, Speed:Float):Void {
 		var self = this;
-		Actuate.update(self.colorTween, Speed, {Color: HxlUtil.colorRGB(_color)[0]}, {Color: ToColor});
+		altBitmap = null;
+		Actuate.update(self.colorTween, Speed, {Color: HxlUtil.colorRGB(_color)[0]}, {Color: ToColor})
+			.onComplete(self.captureAltBitmap);
 	}
 
 	function colorTween(params:Dynamic):Void {
 		setColor( HxlUtil.colorInt(params.Color, params.Color, params.Color) );
+	}
+
+	function captureAltBitmap():Void {
+		if ( level == null ) return;
+		var key:String = level.tileGraphicName+"-"+dataNum+"-"+_color+"-"+_alpha;
+		if ( HxlGraphics.checkBitmapCache(key) ) {
+			altBitmap = HxlGraphics.getBitmap(key);
+		} else {
+			HxlGraphics.addBitmapData(level.getTileBitmap(mapX, mapY), key);
+			altBitmap = HxlGraphics.getBitmap(key);
+		}
 	}
 }
