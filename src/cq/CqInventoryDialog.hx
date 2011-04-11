@@ -71,17 +71,17 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		CqInventoryItem.backgroundSelectedKey = "ItemSelectedBG";
 		
 		// This snippet applies a glow filter to a BitmapData object.. whee!
-		/*
+		
 		var tmp:BitmapData = new BitmapData(70, 70, true, 0x0);
 		tmp.copyPixels(HxlGraphics.getBitmap("ItemBG"), new Rectangle(0, 0, 50, 50), new Point(10, 10), null, null, true);
-		var glow:GlowFilter = new GlowFilter(0xff0000, 1.0, 15.0, 15.0, 1.5);
+		var glow:GlowFilter = new GlowFilter(0x00ff00, 1.0, 15.0, 15.0, 1.5);
 		tmp.applyFilter(tmp, new Rectangle(0, 0, 70, 70), new Point(0, 0), glow);
 		HxlGraphics.addBitmapData(tmp, "tester!");
 		var tmp2:HxlSprite = new HxlSprite(100, 100);
 		tmp2.loadCachedGraphic("tester!");
 		tmp2.zIndex = 20;
 		add(tmp2);
-		*/
+		
 	}
 
 	public function itemPickup(Item:CqItem):Void {
@@ -249,43 +249,6 @@ class CqSpellGrid extends CqInventoryGrid {
 			add(btnCell);
 			cells.push(btnCell.cell);
 		}
-		/*
-		cell = new CqEquipmentCell(SHOES, 8, 193, cellSize, cellSize, idx);
-		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
-		add(cell);
-		cells.push(cell);
-		idx++;
-
-		cell = new CqEquipmentCell(GLOVES, 8, 100, cellSize, cellSize, idx);
-		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
-		add(cell);
-		cells.push(cell);
-		idx++;
-
-		cell = new CqEquipmentCell(ARMOR, 8, 8, cellSize, cellSize, idx);
-		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
-		add(cell);
-		cells.push(cell);
-		idx++;
-
-		cell = new CqEquipmentCell(JEWELRY, 159, 193, cellSize, cellSize, idx);
-		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
-		add(cell);
-		cells.push(cell);
-		idx++;
-
-		cell = new CqEquipmentCell(WEAPON, 159, 100, cellSize, cellSize, idx);
-		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
-		add(cell);
-		cells.push(cell);
-		idx++;
-
-		cell = new CqEquipmentCell(HAT, 159, 8, cellSize, cellSize, idx);
-		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
-		add(cell);
-		cells.push(cell);
-		idx++;
-		*/
 	}
 
 }
