@@ -62,6 +62,8 @@ class CqActor extends CqObject, implements Actor {
 	// callbacks
 	var onInjure:List<Dynamic>;
 	var onKill:List<Dynamic>;
+	var onEquip:List<Dynamic>;
+	var onUnequip:List<Dynamic>;
 	
 	public function new(X:Float, Y:Float,attack:Int,defense:Int,speed:Int,spirit:Int,vitality:Int,damage:Range) {
 		super(X, Y);
@@ -85,6 +87,8 @@ class CqActor extends CqObject, implements Actor {
 
 		onInjure = new List();
 		onKill = new List();
+		onEquip = new List();
+		onUnequip = new List();
 	}
 	
 	function initBuffs(){
@@ -103,6 +107,14 @@ class CqActor extends CqObject, implements Actor {
 
 	public function addOnKill(Callback:Dynamic):Void {
 		onKill.add(Callback);
+	}
+
+	public function addOnEquip(Callback:Dynamic):Void {
+		onEquip.add(Callback);
+	}
+
+	public function addOnUnequip(Callback:Dynamic):Void {
+		onUnequip.add(Callback);
 	}
 
 	public function moveToPixel(state:HxlState, X:Float, Y:Float):Void {
