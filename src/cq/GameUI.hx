@@ -290,7 +290,7 @@ class GameUI extends HxlDialog {
 	}
 
 	public function showDamageText(Actor:CqActor, Damage:Int):Void {
-		var txt:CqFloatText = new CqFloatText(Actor.x + (Actor.width/2), Actor.y - 16, ""+Damage, 0xff2222, 18);
+		var txt:CqFloatText = new CqFloatText(Actor.x + (Actor.width/2), Actor.y - 16, ""+Damage, 0xff2222, 24);
 		txt.zIndex = 4;
 		HxlGraphics.state.add(txt);
 	}

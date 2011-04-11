@@ -64,6 +64,7 @@ class CqActor extends CqObject, implements Actor {
 	var onKill:List<Dynamic>;
 	var onEquip:List<Dynamic>;
 	var onUnequip:List<Dynamic>;
+	var onAttackMiss:List<Dynamic>;
 	
 	public function new(X:Float, Y:Float,attack:Int,defense:Int,speed:Int,spirit:Int,vitality:Int,damage:Range) {
 		super(X, Y);
@@ -89,6 +90,7 @@ class CqActor extends CqObject, implements Actor {
 		onKill = new List();
 		onEquip = new List();
 		onUnequip = new List();
+		onAttackMiss = new List();
 	}
 	
 	function initBuffs(){
@@ -115,6 +117,10 @@ class CqActor extends CqObject, implements Actor {
 
 	public function addOnUnequip(Callback:Dynamic):Void {
 		onUnequip.add(Callback);
+	}
+
+	public function addOnAttackMiss(Callback:Dynamic):Void {
+		onAttackMiss.add(Callback);
 	}
 
 	public function moveToPixel(state:HxlState, X:Float, Y:Float):Void {
@@ -220,6 +226,7 @@ class CqActor extends CqObject, implements Actor {
 				HxlLog.append("Misses you");//"<b style='color: rgb("+vars.color.join()+");'>"+vars.description[0]+"</b> misses you.");
 				trace("Misses you");
 			}
+			for ( Callback in onAttackMiss ) Callback(this, other);
 		}
 	}
 	
