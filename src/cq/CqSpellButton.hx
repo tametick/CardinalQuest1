@@ -45,25 +45,22 @@ class CqSpellButton extends HxlDialog {
 	}
 
 	function clickMouseDown(event:MouseEvent):Void {
-		if (!exists || !visible || !active ) return;
+		if (!exists || !visible || !active || GameUI.currentPanel != null ) return;
 		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
-			//if ( eventStopPropagate ) event.stopPropagation();
 			if ( cell.getCellObj() != null ) {
-				trace("Activating cell!");
-			} else {
-				trace("clickMouseDown!");
+				trace("Activating spell!!");
+				event.stopPropagation();
 			}
 		}
 	}
 
 	function clickMouseUp(event:MouseEvent):Void {
-		if (!exists || !visible || !active) return;
+		if (!exists || !visible || !active || GameUI.currentPanel != null ) return;
 		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
 			//if ( _callback != null ) _callback();
 			//if ( clickSound != null ) clickSound.play();
 			//if ( eventStopPropagate ) event.stopPropagation();
-			trace("clickMouseUp!");
-
+			event.stopPropagation();
 		}
 	}
 
