@@ -12,7 +12,6 @@ import world.Player;
 import world.GameObject;
 import world.Tile;
 
-
 import data.Registery;
 import data.Resources;
 import data.Configuration;
@@ -66,6 +65,11 @@ class CqActor extends CqObject, implements Actor {
 	var onUnequip:List<Dynamic>;
 	var onAttackMiss:List<Dynamic>;
 	
+	// effect helpers
+	var isDodging:Bool;
+	var dodgeDir:Int;
+	var dodgeCounter:Float;
+
 	public function new(X:Float, Y:Float,attack:Int,defense:Int,speed:Int,spirit:Int,vitality:Int,damage:Range) {
 		super(X, Y);
 		actionPoints = 0;
@@ -91,6 +95,10 @@ class CqActor extends CqObject, implements Actor {
 		onEquip = new List();
 		onUnequip = new List();
 		onAttackMiss = new List();
+
+		isDodging = false;
+		dodgeDir = 0;
+		dodgeCounter = 0;
 	}
 	
 	function initBuffs(){
@@ -273,6 +281,45 @@ class CqActor extends CqObject, implements Actor {
 		moveToPixel(state, positionOfTile.x, positionOfTile.y);
 		
 		return true;
+	}
+
+	public function runDodge(Dir:Int) {
+		isDodging = true;
+		dodgeCounter = 0;
+		dodgeDir = Dir;
+	}
+
+	public override function render():Void {
+		var oldX:Float = x;
+		var oldY:Float = y;
+		if ( isDodging ) {
+			var offset:Float = dodgeCounter;
+			if ( offset > 10 ) offset = 10 - (dodgeCounter - 10);
+			if ( offset < 0 ) offset = 0;
+			switch (dodgeDir) {
+				case 0:
+					y += offset;
+				case 1:
+					x -= offset;
+				case 2:
+					y -= offset;
+				case 3:
+					x += offset;
+			}
+		}
+		super.render();
+		if ( isDodging ) {
+			x = oldX;
+			y = oldY;
+		}
+	}
+
+	public override function update():Void {
+		if ( isDodging ) {
+			dodgeCounter += 2;
+			if ( dodgeCounter >= 20 ) isDodging = false;
+		}
+		super.update();
 	}
 
 }

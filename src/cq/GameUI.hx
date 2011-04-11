@@ -26,6 +26,7 @@ import haxel.HxlDialog;
 import haxel.HxlGradient;
 import haxel.HxlGraphics;
 import haxel.HxlObjectContainer;
+import haxel.HxlPoint;
 import haxel.HxlSlidingDialog;
 import haxel.HxlSprite;
 import haxel.HxlText;
@@ -276,6 +277,16 @@ class GameUI extends HxlDialog {
 			self.showDamageText(Actor, dmgTotal);
 			self.doInjureEffect(Actor);
 		});
+		Actor.addOnAttackMiss(doAttackMiss);
+	}
+
+	public function doAttackMiss(?Attacker:CqActor, ?Defender:CqActor):Void {
+		var attPos:HxlPoint = Attacker.tilePos;
+		var defPos:HxlPoint = Defender.tilePos;
+		if ( attPos.x > defPos.x ) Defender.runDodge(1); 
+		else if ( attPos.x < defPos.x ) Defender.runDodge(3); 
+		else if ( attPos.y < defPos.y ) Defender.runDodge(0); 
+		else if ( attPos.y > defPos.y ) Defender.runDodge(2);
 	}
 
 	public function doPlayerInjureEffect(?dmgTotal:Int):Void {
