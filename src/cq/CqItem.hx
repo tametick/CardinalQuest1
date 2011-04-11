@@ -15,10 +15,37 @@ import cq.CqWorld;
 
 import haxel.HxlUtil;
 
+class CqLootFactory {
+	public static function newItem(X:Float, Y:Float, typeName:String):CqItem {
+		var type = Type.createEnum(CqItemType,  typeName);
+		var item = new CqItem(X, Y, typeName.toLowerCase());
+		
+		switch(type) {
+			case WINGED_SANDLES, BOOTS:
+				item.equipSlot = CqEquipSlot.SHOES;
+			case LEATHER_ARMOR, BRESTPLATE:
+				item.equipSlot = CqEquipSlot.ARMOR;
+			case RING, AMULET:
+				item.equipSlot = CqEquipSlot.JEWELRY;
+			case CAP, HELM:
+				item.equipSlot = CqEquipSlot.HAT;
+			case GLOVE, BRACLET:
+				item.equipSlot = CqEquipSlot.GLOVES;
+			case STAFF, DAGGER, SHORT_SWORD, LONG_SWORD:
+				item.equipSlot = CqEquipSlot.WEAPON;
+			default:
+		}
+		
+		return item;
+	}
+}
+
 class CqItem extends GameObjectImpl, implements Loot {
 	public var equipSlot:CqEquipSlot;
 	public var type:Dynamic;
 	public var spriteIndex:String;
+	public var damage:Range;
+	
 	public function new(X:Float, Y:Float, typeName:String) {
 		super(X, Y);
 		
@@ -33,6 +60,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 		}
 		
 		spriteIndex = typeName;
+		damage = new Range(0, 0);
 		play("idle");
 	}
 
@@ -82,75 +110,6 @@ class CqChest extends CqItem {
 		
 		// remove chest
 		Registery.world.currentLevel.removeLootFromLevel(state, this);
-	}
-}
-
-class CqLootFactory {
-	public static function newItem(X:Float, Y:Float, typeName:String):CqItem {
-		var type = Type.createEnum(CqItemType,  typeName);
-		var item:CqItem = null;
-		
-		switch(type) {
-			case PURPLE_POTION,	GREEN_POTION, BLUE_POTION,	YELLOW_POTION, RED_POTION:
-				item = new CqConsumable(X, Y, typeName.toLowerCase());
-			case WINGED_SANDLES, BOOTS:
-				item = new CqShoes(X, Y, typeName.toLowerCase());
-			case LEATHER_ARMOR, BRESTPLATE:
-				item = new CqArmor(X, Y, typeName.toLowerCase());
-			case RING, AMULET:
-				item = new CqJewelry(X, Y, typeName.toLowerCase());
-			case CAP, HELM:
-				item = new CqHat(X, Y, typeName.toLowerCase());
-			case GLOVE, BRACLET:
-				item = new CqGloves(X, Y, typeName.toLowerCase());
-			case STAFF, DAGGER, SHORT_SWORD, LONG_SWORD:
-				item = new CqWeapon(X, Y, typeName.toLowerCase());
-			case CHEST:
-			default:
-		}
-		
-		return item;
-	}
-}
-
-class CqConsumable extends CqItem {
-
-}
-class CqShoes extends CqItem {
-	public function new(X:Float, Y:Float, typeName:String) {
-		super(X, Y, typeName);
-		equipSlot = SHOES;
-	}
-}
-class CqArmor extends CqItem {
-	public function new(X:Float, Y:Float, typeName:String) {
-		super(X, Y, typeName);
-		equipSlot = ARMOR;
-	}
-}
-class CqJewelry extends CqItem {
-	public function new(X:Float, Y:Float, typeName:String) {
-		super(X, Y, typeName);
-		equipSlot = JEWELRY;
-	}
-}
-class CqHat extends CqItem {
-	public function new(X:Float, Y:Float, typeName:String) {
-		super(X, Y, typeName);
-		equipSlot = HAT;
-	}
-}
-class CqGloves extends CqItem {
-	public function new(X:Float, Y:Float, typeName:String) {
-		super(X, Y, typeName);
-		equipSlot = GLOVES;
-	}
-}
-class CqWeapon extends CqItem {
-	public var damage:Range;
-	public function new(X:Float, Y:Float, typeName:String) {
-		super(X, Y, typeName);
-		equipSlot = WEAPON;
 	}
 }
 

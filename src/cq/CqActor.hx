@@ -47,7 +47,7 @@ class CqActor extends CqObject, implements Actor {
 	// natural damage without weapon
 	public var damage:Range;
 	
-	var equippedWeapon:CqWeapon;
+	var equippedWeapon:CqItem;
 	var equippedSpell:CqSpell;
 	
 	// changes to basic abilities (attack, defense, speed, spirit) caused by equipped items or spells
