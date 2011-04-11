@@ -77,8 +77,13 @@ class HxlObjectContainer extends HxlDialog {
 				}
 
 				Y = (height / 2) - (Obj.height / 2);
-				Obj.x = X;
-				Obj.y = Y;
+				if ( Obj._dialog ) {
+					cast(Obj, HxlDialog).targetX = X;
+					cast(Obj, HxlDialog).targetY = Y;
+				} else {
+					Obj.x = X;
+					Obj.y = Y;
+				}
 				if ( order == LEFT_TO_RIGHT ) {
 					X += Obj.width;
 				} else {
@@ -91,8 +96,13 @@ class HxlObjectContainer extends HxlDialog {
 					Y -= Obj.height;
 				}
 				X = (width / 2) - (Obj.width / 2);
-				Obj.y = Y;
-				Obj.x = X;
+				if ( Obj._dialog ) {
+					cast(Obj, HxlDialog).targetX = X;
+					cast(Obj, HxlDialog).targetY = Y;
+				} else {
+					Obj.x = X;
+					Obj.y = Y;
+				}
 				if ( order == TOP_TO_BOTTOM ) {
 					Y += Obj.height;
 				} else {

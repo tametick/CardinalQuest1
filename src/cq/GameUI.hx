@@ -3,9 +3,10 @@ package cq;
 import cq.CqActor;
 import cq.CqEffectChest;
 import cq.CqFloatText;
+import cq.CqInventoryDialog;
 import cq.CqItem;
 import cq.CqSpell;
-//import cq.CqSpellButton;
+import cq.CqSpellButton;
 import cq.CqVitalBar;
 
 import data.Registery;
@@ -31,7 +32,7 @@ class GameUI extends HxlDialog {
 
 	// Main UI containers
 	var leftButtons:HxlButtonContainer;
-	var rightButtons:HxlObjectContainer;
+	var dlgSpellGrid:CqSpellGrid;
 
 	// View state panels
 	var panelMap:CqMapDialog;
@@ -71,9 +72,10 @@ class GameUI extends HxlDialog {
 		leftButtons.scrollFactor.x = leftButtons.scrollFactor.y = 0;
 		add(leftButtons);
 
-		rightButtons = new HxlObjectContainer(HxlGraphics.width-84, 50, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
-		//rightButtons.setBackgroundColor(0x88555555);
-		add(rightButtons);
+		//dlgSpellGrid = new CqSpellGrid(HxlGraphics.width-84, 50, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
+		dlgSpellGrid = new CqSpellGrid(HxlGraphics.width-84, 50, 84, 380);
+		//dlgSpellGrid.setBackgroundColor(0x88555555);
+		add(dlgSpellGrid);
 
 		/**
 		 * View state panels
@@ -147,35 +149,7 @@ class GameUI extends HxlDialog {
 		btnLogView.configEvent(5, true, true);
 		leftButtons.addButton(btnLogView);
 
-		/**
-		 * Right side panel buttons
-		 **/
-		// these are temporary
-		
-		var btn1:HxlButton = new HxlButton(0, 0, 64, 64);
-		btn1.setBackgroundColor(0xff999999, 0xffcccccc);
-		btn1.configEvent(5, true, true);
-		rightButtons.addObject(btn1);
-		
-		var btn2:HxlButton = new HxlButton(0, 0, 64, 64);
-		btn2.setBackgroundColor(0xff999999, 0xffcccccc);
-		btn2.configEvent(5, true, true);
-		rightButtons.addObject(btn2);
-
-		var btn3:HxlButton = new HxlButton(0, 0, 64, 64);
-		btn3.setBackgroundColor(0xff999999, 0xffcccccc);
-		btn3.configEvent(5, true, true);
-		rightButtons.addObject(btn3);
-
-		var btn4:HxlButton = new HxlButton(0, 0, 64, 64);
-		btn4.setBackgroundColor(0xff999999, 0xffcccccc);
-		btn4.configEvent(5, true, true);
-		rightButtons.addObject(btn4);
-
-		var btn5:HxlButton = new HxlButton(0, 0, 64, 64);
-		btn5.setBackgroundColor(0xff999999, 0xffcccccc);
-		btn5.configEvent(5, true, true);
-		rightButtons.addObject(btn5);
+		panelInventory.dlgSpellGrid = dlgSpellGrid;
 
 		xpBar = new HxlUIBar(84, 460, 472, 10);
 		xpBar.setBarColor(0xff59C65E);

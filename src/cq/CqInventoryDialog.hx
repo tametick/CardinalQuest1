@@ -3,6 +3,7 @@ package cq;
 import cq.CqItem;
 import cq.CqResources;
 import cq.CqSpell;
+import cq.CqSpellButton;
 
 import data.Configuration;
 
@@ -15,6 +16,7 @@ import haxel.HxlDialog;
 import haxel.HxlGradient;
 import haxel.HxlGraphics;
 import haxel.HxlObject;
+import haxel.HxlObjectContainer;
 import haxel.HxlPoint;
 import haxel.HxlSlidingDialog;
 import haxel.HxlSprite;
@@ -29,6 +31,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	var dlgInfo:HxlDialog;
 	public var dlgInvGrid:CqInventoryGrid;
 	public var dlgEqGrid:CqEquipmentGrid;
+	public var dlgSpellGrid:CqSpellGrid;
 	var itemSheet:HxlSpriteSheet;
 	var itemSprite:HxlSprite;
 	var spellSheet:HxlSpriteSheet;
@@ -225,6 +228,68 @@ class CqEquipmentGrid extends CqInventoryGrid {
 
 }
 
+class CqSpellGrid extends CqInventoryGrid {
+
+	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100) {
+		super(X, Y, Width, Height, false);
+
+		cells = new Array();
+
+		var cellBgKey:String = "EquipmentCellBG";
+		var cellBgHighlightKey:String = "EqCellBGHighlight";
+
+		var btnSize:Int = 64;
+		var cellSize:Int = 54;
+		var padding:Int = 8;
+		var idx:Int = 0;
+	
+		for ( i in 0...5 ) {
+			var btnCell:CqSpellButton = new CqSpellButton(10, 10 + ((i * btnSize) + (i * 10)), btnSize, btnSize,i);
+			btnCell.setBackgroundColor(0xff999999, 0xffcccccc);
+			add(btnCell);
+			cells.push(btnCell.cell);
+		}
+		/*
+		cell = new CqEquipmentCell(SHOES, 8, 193, cellSize, cellSize, idx);
+		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+		add(cell);
+		cells.push(cell);
+		idx++;
+
+		cell = new CqEquipmentCell(GLOVES, 8, 100, cellSize, cellSize, idx);
+		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+		add(cell);
+		cells.push(cell);
+		idx++;
+
+		cell = new CqEquipmentCell(ARMOR, 8, 8, cellSize, cellSize, idx);
+		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+		add(cell);
+		cells.push(cell);
+		idx++;
+
+		cell = new CqEquipmentCell(JEWELRY, 159, 193, cellSize, cellSize, idx);
+		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+		add(cell);
+		cells.push(cell);
+		idx++;
+
+		cell = new CqEquipmentCell(WEAPON, 159, 100, cellSize, cellSize, idx);
+		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+		add(cell);
+		cells.push(cell);
+		idx++;
+
+		cell = new CqEquipmentCell(HAT, 159, 8, cellSize, cellSize, idx);
+		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+		add(cell);
+		cells.push(cell);
+		idx++;
+		*/
+	}
+
+}
+
 class CqInventoryCell extends HxlDialog {
 
 	public static var highlightedCell:CqInventoryCell = null;
@@ -331,6 +396,7 @@ class CqInventoryItem extends HxlSprite {
 	var dragZIndex:Int;
 	var cellIndex:Int;
 	public var cellEquip:Bool;
+	public var cellSpell:Bool;
 	public var item:CqItem;
 	var selected:Bool;
 
@@ -342,6 +408,7 @@ class CqInventoryItem extends HxlSprite {
 		_dlg = Dialog;
 		cellIndex = 0;
 		cellEquip = false;
+		cellSpell = false;
 		item = null;
 		zIndex = idleZIndex;
 		setSelected(false);
@@ -379,6 +446,7 @@ class CqInventoryItem extends HxlSprite {
 		setPos(_dlg.dlgInvGrid.getCellItemPos(Cell));
 		_dlg.dlgInvGrid.setCellObj(Cell, this);
 		cellEquip = false;
+		cellSpell = false;
 	}
 
 	/**
@@ -389,6 +457,18 @@ class CqInventoryItem extends HxlSprite {
 		setPos(_dlg.dlgEqGrid.getCellItemPos(Cell));
 		_dlg.dlgEqGrid.setCellObj(Cell, this);
 		cellEquip = true;
+		cellSpell = false;
+	}
+
+	/**
+	 * Sets this object as the CellObj of the target spell cell, and places this object within that cell.
+	 **/
+	public function setSpellCell(Cell:Int):Void {
+		cellIndex = Cell;
+		setPos(_dlg.dlgSpellGrid.getCellItemPos(Cell));
+		_dlg.dlgSpellGrid.setCellObj(Cell, this);
+		cellSpell = true;
+		cellEquip = false;
 	}
 
 	public function setPos(Pos:HxlPoint):Void {
@@ -442,12 +522,16 @@ class CqInventoryItem extends HxlSprite {
 			if ( CqInventoryCell.highlightedCell.getCellObj() != null ) {
 				// There was already an item in the target cell, switch places with it
 				var other:CqInventoryItem = CqInventoryCell.highlightedCell.getCellObj();
-				if ( !cellEquip ) {
-					other.setInventoryCell(cellIndex);
-				} else {
+				if ( cellEquip ) {
 					other.setEquipmentCell(cellIndex);
+				} else if ( cellSpell ) {
+					other.setSpellCell(cellIndex);
+				} else {
+					other.setInventoryCell(cellIndex);
 				}
-				if ( Std.is(CqInventoryCell.highlightedCell, CqEquipmentCell) ) {
+				if ( Std.is(CqInventoryCell.highlightedCell, CqSpellCell) ) {
+					setSpellCell(CqInventoryCell.highlightedCell.cellIndex);
+				} else if ( Std.is(CqInventoryCell.highlightedCell, CqEquipmentCell) ) {
 					setEquipmentCell(CqInventoryCell.highlightedCell.cellIndex);
 				} else {
 					setInventoryCell(CqInventoryCell.highlightedCell.cellIndex);
@@ -455,12 +539,16 @@ class CqInventoryItem extends HxlSprite {
 				cellIndex = CqInventoryCell.highlightedCell.cellIndex;
 			} else {
 				// The target cell was empty.. clear out my old cell and fill the new one
-				if ( !cellEquip ) {
-					_dlg.dlgInvGrid.setCellObj(cellIndex, null);
-				} else {
+				if ( cellEquip ) {
 					_dlg.dlgEqGrid.setCellObj(cellIndex, null);
+				} else if ( cellSpell ) {
+					_dlg.dlgSpellGrid.setCellObj(cellIndex, null);
+				} else {
+					_dlg.dlgInvGrid.setCellObj(cellIndex, null);
 				}
-				if ( Std.is(CqInventoryCell.highlightedCell, CqEquipmentCell) ) {
+				if ( Std.is(CqInventoryCell.highlightedCell, CqSpellCell) ) {
+					setSpellCell(CqInventoryCell.highlightedCell.cellIndex);
+				} else if ( Std.is(CqInventoryCell.highlightedCell, CqEquipmentCell) ) {
 					setEquipmentCell(CqInventoryCell.highlightedCell.cellIndex);
 				} else {
 					setInventoryCell(CqInventoryCell.highlightedCell.cellIndex);
