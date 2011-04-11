@@ -15,6 +15,10 @@ import cq.CqWorld;
 
 import haxel.HxlUtil;
 
+class CqSpecialEffect {
+	public var name:String;
+}
+
 class CqLootFactory {
 	public static function newItem(X:Float, Y:Float, typeName:String):CqItem {
 		var type = Type.createEnum(CqItemType,  typeName);
@@ -36,26 +40,55 @@ class CqLootFactory {
 			default:
 		}
 		
+		switch(type) {
+			case GREEN_POTION:
+				
+			case PURPLE_POTION:
+			case BLUE_POTION:
+			case YELLOW_POTION:
+			case RED_POTION:
+			
+			case BOOTS:
+			case WINGED_SANDLES:
+			
+			case LEATHER_ARMOR:
+			case BRESTPLATE:
+			
+			case RING:
+			case AMULET:
+			
+			case CAP:
+			case HELM:
+			
+			case GLOVE:
+			case BRACLET:
+			
+			case DAGGER:
+			case STAFF:
+			case SHORT_SWORD:
+			case LONG_SWORD:
+			
+			default:
+		}
+		
 		return item;
 	}
 }
 
 class CqItem extends GameObjectImpl, implements Loot {
 	public var equipSlot:CqEquipSlot;
-	public var type:Dynamic;
 	public var spriteIndex:String;
 	public var damage:Range;
+	public var buffs:Hash<String>;
 	
 	public function new(X:Float, Y:Float, typeName:String) {
 		super(X, Y);
 		
 		if (Std.is(this, CqSpell)) {
 			loadGraphic(SpriteSpells, false, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
-			type = Type.createEnum(CqSpellType,  typeName.toUpperCase());
 			addAnimation("idle", [SpriteSpells.instance.getSpriteIndex(typeName)], 0 );
 		} else {
 			loadGraphic(SpriteItems, false, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
-			type = Type.createEnum(CqItemType,  typeName.toUpperCase());
 			addAnimation("idle", [SpriteItems.instance.getSpriteIndex(typeName)], 0 );
 		}
 		

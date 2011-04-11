@@ -53,7 +53,7 @@ class CqActor extends CqObject, implements Actor {
 	// changes to basic abilities (attack, defense, speed, spirit) caused by equipped items or spells
 	public var buffs:Hash<Int>;
 	// special effects caused by magical items or spells
-	public var specialEffects:Hash<Dynamic>;
+	public var specialEffects:Hash<CqSpecialEffect>;
 	// visible effects from buffs & specialEffects
 	public var visibleEffects:Array<String>;
 	
