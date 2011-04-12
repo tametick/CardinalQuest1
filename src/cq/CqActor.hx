@@ -326,7 +326,6 @@ class CqActor extends CqObject, implements Actor {
 
 
 class CqPlayer extends CqActor, implements Player {
-	// fixme - use static method
 	static var sprites = SpritePlayer.instance;
 	
 	public var inventory:Array<CqItem>;
@@ -337,10 +336,7 @@ class CqPlayer extends CqActor, implements Player {
 	var onPickup:List<Dynamic>;
 	var onGainXP:List<Dynamic>;
 
-	public function new(playerClass:CqClass, ?X:Float = -1, ?Y:Float = -1) {
-		
-		//attack:Int,defense:Int,speed:Int,spirit:Int,vitality:Int,damage
-		
+	public function new(playerClass:CqClass, ?X:Float = -1, ?Y:Float = -1) {		
 		switch(playerClass) {
 			case FIGHTER:
 				super(X, Y, 5, 3, 3, 1, 5, new Range(1, 1));
@@ -362,9 +358,6 @@ class CqPlayer extends CqActor, implements Player {
 		loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 2.0, 2.0);
 		faction = 0;
 		inventory = new Array<CqItem>();
-		
-		
-		
 
 		play("idle");
 	}
@@ -429,8 +422,7 @@ class CqMob extends CqActor, implements Mob {
 	
 	
 	public function new(X:Float, Y:Float, typeName:String) {
-		// fixme - correct attribute according to typename
-		super(X, Y, 1, 1, 5, 0,1,new Range(1, 1));
+		super(X, Y, -1, -1, -1, -1,-1,new Range(1, 1));
 		xpValue = 1;
 		
 		loadGraphic(SpriteMonsters, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
@@ -544,7 +536,19 @@ class CqMobFactory {
 				typeName = HxlUtil.getRandomElement(SpriteMonsters.minotauers);
 		}
 		
-		return new CqMob(X, Y, typeName.toLowerCase());
+		var mob = new CqMob(X, Y, typeName.toLowerCase());
+		
+		switch(mob.type) {
+			default:
+				mob.attack = 1;
+				mob.defense = 1;
+				mob.speed = 1;
+				mob.spirit = 1;
+				mob.vitality = 1;
+				mob.damage = new Range(1,1);
+		}
+		
+		return mob;
 	}
 }
 
