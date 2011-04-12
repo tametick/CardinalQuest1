@@ -387,6 +387,13 @@ class CqActor extends CqObject, implements Actor {
 	function applyEffect(effect:CqSpecialEffectValue, other:CqActor) {
 		// todo
 		trace("applied special effect: " + effect.name);
+		
+		if (effect.name == "heal")
+			if (effect.value == "full")
+				if (other == null)
+					hp = maxHp;
+				else
+					other.hp = other.maxHp;
 	}
 }
 
