@@ -341,7 +341,7 @@ class CqActor extends CqObject, implements Actor {
 		}
 	}
 	
-	public function use(itemOrSpell:CqItem, other:CqActor) {
+	public function use(itemOrSpell:CqItem, ?other:CqActor=null) {
 		// todo
 		trace("using item");
 	}

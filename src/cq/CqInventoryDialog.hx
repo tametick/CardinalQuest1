@@ -29,8 +29,8 @@ import haxel.HxlUtil;
 
 class CqInventoryDialog extends HxlSlidingDialog {
 
-	var dlgCharacter:HxlDialog;
-	var dlgInfo:HxlDialog;
+	public var dlgCharacter:HxlDialog;
+	public var dlgInfo:HxlDialog;
 	public var dlgInvGrid:CqInventoryGrid;
 	public var dlgEqGrid:CqEquipmentGrid;
 	public var dlgSpellGrid:CqSpellGrid;
@@ -608,6 +608,23 @@ class CqInventoryItem extends HxlSprite {
 				cellIndex = CqInventoryCell.highlightedCell.cellIndex;
 			}
 		} else {
+			if ( item.consumable ) {
+				// If this item is a consumable, and was dropped on the doll, use it
+				var myX = x + origin.x;
+				var myY = y + origin.y;
+				var objX = _dlg.dlgCharacter.x;
+				var objY = _dlg.dlgCharacter.y;
+				var objW = _dlg.dlgCharacter.width;
+				var objH = _dlg.dlgCharacter.height;
+				if ( (myX >= objX) || (myX <= objX+objW) || (myY >= objY) || (myY <= objY+objH) ) {
+					cast(Registery.player, CqActor).use(item);
+					_dlg.remove(this);
+					// Clear out the inventory cell this item previously occupied
+					_dlg.dlgInvGrid.setCellObj(cellIndex, null);
+					destroy();
+					return;
+				}
+			}
 			// If there was no eligible drop target, revert to pre drag position
 			setPos(dragStartPoint);
 		}

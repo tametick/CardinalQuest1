@@ -47,17 +47,22 @@ class CqLootFactory {
 		
 		switch(type) {
 			case GREEN_POTION:
+				item.consumable = true;
 				item.specialEffects.add(new CqSpecialEffectValue("heal","full"));
 			case PURPLE_POTION:
+				item.consumable = true;
 				item.specialEffects.add(new CqSpecialEffectValue("damage","double"));
 				item.duration = 120;
 			case BLUE_POTION:
+				item.consumable = true;
 				item.buffs.set("defense", 3);
 				item.duration = 120;
 			case YELLOW_POTION:
+				item.consumable = true;
 				item.buffs.set("speed", 3);
 				item.duration = 120;
 			case RED_POTION:
+				item.consumable = true;
 				item.buffs.set("attack", 3);
 				item.duration = 120;
 			
@@ -104,6 +109,7 @@ class CqLootFactory {
 
 class CqItem extends GameObjectImpl, implements Loot {
 	public var equipSlot:CqEquipSlot;
+	public var consumable:Bool;
 	public var spriteIndex:String;
 	public var damage:Range;
 	// changes to basic abilities (attack, defense, speed, spirit)
@@ -124,6 +130,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 			addAnimation("idle", [SpriteItems.instance.getSpriteIndex(typeName)], 0 );
 		}
 		
+		consumable = false;
 		spriteIndex = typeName;
 		damage = new Range(0, 0);
 		buffs = new Hash<Int>();
