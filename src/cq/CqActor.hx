@@ -26,6 +26,12 @@ class CqTimer {
 	public var ticks:Int;
 	public var buffName:String;
 	public var buffValue:Int;
+	
+	public function new(duration:Int, buffName:String, buffValue:Int) {
+		ticks = duration;
+		this.buffName = buffName;
+		this.buffValue = buffValue;
+	}
 }
 
 class CqActor extends CqObject, implements Actor {
@@ -324,7 +330,7 @@ class CqActor extends CqObject, implements Actor {
 		// add buffs
 		if(item.buffs != null) {
 			for (buff in item.buffs.keys()) {
-				buffs.set(buff, item.buffs.get(buff));
+				buffs.set(buff, buffs.get(buff)+item.buffs.get(buff));
 			}
 		}
 	}
@@ -344,8 +350,30 @@ class CqActor extends CqObject, implements Actor {
 	public function use(itemOrSpell:CqItem, ?other:CqActor=null) {
 		// todo
 		trace("using item");
+		
+		// add buffs
+		if(itemOrSpell.buffs != null) {
+			for (buff in itemOrSpell.buffs.keys()) {
+				buffs.set(buff, buffs.get(buff) + itemOrSpell.buffs.get(buff));
+				
+				// add timer
+				if (itemOrSpell.duration > -1) {
+					timers.push(new CqTimer(itemOrSpell.duration, buff, itemOrSpell.buffs.get(buff)));
+				}
+			}
+		}
+		
+		// apply special effect
+		if(itemOrSpell.specialEffects != null){
+			for ( effect in itemOrSpell.specialEffects) {
+				applyEffect(effect);
+			}
+		}
 	}
 
+	function applyEffect(effect:CqSpecialEffectValue) {
+		trace("applied special effect: " + effect.name);
+	}
 }
 
 

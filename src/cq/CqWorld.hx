@@ -179,8 +179,10 @@ class CqLevel extends Level {
 				}
 				
 				// remove expired timers
-				for (t in expired) 
+				for (t in expired) {
 					timers.remove(t);
+					trace("removed expired timer: " + t.buffName);
+				}
 			}
 			
 			var speed = creature.speed;
