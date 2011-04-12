@@ -1,11 +1,13 @@
 package cq;
 
+import cq.CqActor;
 import cq.CqItem;
 import cq.CqResources;
 import cq.CqSpell;
 import cq.CqSpellButton;
 
 import data.Configuration;
+import data.Registery;
 
 import flash.display.BitmapData;
 import flash.events.MouseEvent;
@@ -553,34 +555,54 @@ class CqInventoryItem extends HxlSprite {
 				// There was already an item in the target cell, switch places with it
 				var other:CqInventoryItem = CqInventoryCell.highlightedCell.getCellObj();
 				if ( cellEquip ) {
+					// Moving the other item into an equipment cell
+					cast(Registery.player, CqActor).unequipItem(this.item);
 					other.setEquipmentCell(cellIndex);
+					cast(Registery.player, CqActor).equipItem(other.item);
 				} else if ( cellSpell ) {
+					// Moving the other item into a spell cell
 					other.setSpellCell(cellIndex);
+					// todo: equip spell
 				} else {
+					// Moving the other item into an inventory cell
 					other.setInventoryCell(cellIndex);
 				}
 				if ( Std.is(CqInventoryCell.highlightedCell, CqSpellCell) ) {
+					// Moving this item into a spell cell
 					setSpellCell(CqInventoryCell.highlightedCell.cellIndex);
+					// todo: equip spell
 				} else if ( Std.is(CqInventoryCell.highlightedCell, CqEquipmentCell) ) {
+					// Moving this item into an equipment cell
 					setEquipmentCell(CqInventoryCell.highlightedCell.cellIndex);
+					cast(Registery.player, CqActor).equipItem(this.item);
 				} else {
+					// Moving this item into an inventory cell
 					setInventoryCell(CqInventoryCell.highlightedCell.cellIndex);
 				}
 				cellIndex = CqInventoryCell.highlightedCell.cellIndex;
 			} else {
 				// The target cell was empty.. clear out my old cell and fill the new one
 				if ( cellEquip ) {
+					// Clearing out an equipment cell
 					_dlg.dlgEqGrid.setCellObj(cellIndex, null);
+					cast(Registery.player, CqActor).unequipItem(this.item);
 				} else if ( cellSpell ) {
+					// Clearing out a spell cell
 					_dlg.dlgSpellGrid.setCellObj(cellIndex, null);
 				} else {
+					// Clearing out an inventory cell
 					_dlg.dlgInvGrid.setCellObj(cellIndex, null);
 				}
 				if ( Std.is(CqInventoryCell.highlightedCell, CqSpellCell) ) {
+					// Moving this item into a spell cell
 					setSpellCell(CqInventoryCell.highlightedCell.cellIndex);
+					// todo: equip spell
 				} else if ( Std.is(CqInventoryCell.highlightedCell, CqEquipmentCell) ) {
+					// Moving this item into an equipment cell
 					setEquipmentCell(CqInventoryCell.highlightedCell.cellIndex);
+					cast(Registery.player, CqActor).equipItem(this.item);
 				} else {
+					// Moving this item into an inventory cell
 					setInventoryCell(CqInventoryCell.highlightedCell.cellIndex);
 				}
 				cellIndex = CqInventoryCell.highlightedCell.cellIndex;
