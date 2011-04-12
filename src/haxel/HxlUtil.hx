@@ -323,7 +323,7 @@ class HxlUtil {
 	}
 	
 	public static function randomIntInRange(min:Int, max:Int):Int {
-		return Math.floor(random() * (max-min))+min;
+		return Math.round(random() * (max-min))+min;
 	}
 	
 	public static function getRandomTile<T>(width:Int, height:Int, map:Array<Array<T>>, tileTypesToGet:Array<T>):HxlPoint {

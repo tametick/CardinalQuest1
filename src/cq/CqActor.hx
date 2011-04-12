@@ -539,13 +539,48 @@ class CqMobFactory {
 		var mob = new CqMob(X, Y, typeName.toLowerCase());
 		
 		switch(mob.type) {
-			default:
-				mob.attack = 1;
-				mob.defense = 1;
-				mob.speed = 1;
-				mob.spirit = 1;
-				mob.vitality = 1;
-				mob.damage = new Range(1,1);
+			case BANDIT_LONG_SWORDS, BANDIT_SHORT_SWORDS, BANDIT_SINGLE_LONG_SWORD, BANDIT_KNIVES:
+				mob.attack = 2;
+				mob.defense = 2;
+				mob.speed = 3;
+				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(1, 2);
+				mob.damage = new Range(1, 1);
+				mob.xpValue = 5;
+			case KOBOLD_SPEAR, KOBOLD_KNIVES, KOBOLD_MAGE:
+				mob.attack = 3;
+				mob.defense = 3;
+				mob.speed = 3;
+				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(1,4);
+				mob.damage = new Range(1, 3);
+				mob.xpValue = 10;
+			case SUCCUBUS, SUCCUBUS_STAFF, SUCCUBUS_WHIP, SUCCUBUS_SCEPTER:
+				mob.attack = 3;
+				mob.defense = 4;
+				mob.speed = 4;
+				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(2,8);
+				mob.damage = new Range(1, 3);
+				mob.xpValue = 25;
+			case SPIDER_YELLOW, SPIDER_RED, SPIDER_GRAY, SPIDER_GREEN:
+				mob.attack = 4;
+				mob.defense = 3;
+				mob.speed = 2;
+				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(3,12);
+				mob.damage = new Range(2, 8);
+				mob.xpValue = 50;
+			case WEREWOLF_GRAY, WEREWOLF_BLUE, WEREWOLF_PURPLE:
+				mob.attack = 4;
+				mob.defense = 4;
+				mob.speed = 5;
+				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(4,16);
+				mob.damage = new Range(2, 4);
+				mob.xpValue = 125;
+			case MINOTAUER, MINOTAUER_AXE, MINOTAUER_SWORD:
+				mob.attack = 5;
+				mob.defense = 3;
+				mob.speed = 4;
+				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(6,24);
+				mob.damage = new Range(2, 16);
+				mob.xpValue = 275;
 		}
 		
 		return mob;
