@@ -349,7 +349,7 @@ class CqActor extends CqObject, implements Actor {
 	
 	public function use(itemOrSpell:CqItem, ?other:CqActor=null) {
 		// todo
-		trace("using item");
+		trace("using item or spell");
 		
 		// add buffs
 		if(itemOrSpell.buffs != null) {
@@ -372,6 +372,7 @@ class CqActor extends CqObject, implements Actor {
 	}
 
 	function applyEffect(effect:CqSpecialEffectValue) {
+		// todo
 		trace("applied special effect: " + effect.name);
 	}
 }
