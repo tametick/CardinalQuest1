@@ -15,8 +15,13 @@ import cq.CqWorld;
 
 import haxel.HxlUtil;
 
-class CqSpecialEffect {
+class CqSpecialEffectValue {
 	public var name:String;
+	public var value:Dynamic;
+	public function new(name:String, value:Dynamic) {
+		this.name = name;
+		this.value = value;
+	}
 }
 
 class CqLootFactory {
@@ -42,31 +47,53 @@ class CqLootFactory {
 		
 		switch(type) {
 			case GREEN_POTION:
-				
+				item.specialEffects.add(new CqSpecialEffectValue("heal","full"));
 			case PURPLE_POTION:
+				item.specialEffects.add(new CqSpecialEffectValue("damage","double"));
+				item.duration = 120;
 			case BLUE_POTION:
+				item.buffs.set("defense", 3);
+				item.duration = 120;
 			case YELLOW_POTION:
+				item.buffs.set("speed", 3);
+				item.duration = 120;
 			case RED_POTION:
+				item.buffs.set("attack", 3);
+				item.duration = 120;
 			
 			case BOOTS:
+				item.buffs.set("speed", 1);
 			case WINGED_SANDLES:
-			
+				item.buffs.set("speed", 2);
+				
 			case LEATHER_ARMOR:
+				item.buffs.set("defense", 1);
 			case BRESTPLATE:
+				item.buffs.set("defense", 2);
 			
 			case RING:
+				item.buffs.set("spirit", 1);
 			case AMULET:
+				item.buffs.set("spirit", 2);
 			
 			case CAP:
+				item.buffs.set("life", 1);
 			case HELM:
+				item.buffs.set("life", 2);
 			
 			case GLOVE:
+				item.buffs.set("attack", 1);
 			case BRACLET:
+				item.buffs.set("attack", 2);
 			
 			case DAGGER:
+				item.damage = new Range(1, 2);
 			case STAFF:
+				item.damage = new Range(1, 3);
 			case SHORT_SWORD:
+				item.damage = new Range(1, 3);
 			case LONG_SWORD:
+				item.damage = new Range(2, 4);
 			
 			default:
 		}
@@ -79,7 +106,12 @@ class CqItem extends GameObjectImpl, implements Loot {
 	public var equipSlot:CqEquipSlot;
 	public var spriteIndex:String;
 	public var damage:Range;
-	public var buffs:Hash<String>;
+	// changes to basic abilities (attack, defense, speed, spirit)
+	public var buffs:Hash<Int>;
+	// special effects beyond changes to basic abilities
+	public var specialEffects:List<CqSpecialEffectValue>;
+	
+	public var duration:Int;
 	
 	public function new(X:Float, Y:Float, typeName:String) {
 		super(X, Y);
@@ -94,6 +126,9 @@ class CqItem extends GameObjectImpl, implements Loot {
 		
 		spriteIndex = typeName;
 		damage = new Range(0, 0);
+		buffs = new Hash<Int>();
+		specialEffects = new List<CqSpecialEffectValue>();
+		duration = -1;
 		play("idle");
 	}
 
