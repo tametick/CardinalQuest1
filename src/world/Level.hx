@@ -201,6 +201,7 @@ class Level extends HxlTilemap
 				
 				switch (tile.visibility) {
 					case Visibility.IN_SIGHT:
+						tile.visible = true;
 						if ( skipTween ) {
 							if (gradientColoring) {
 								var normTween = normalizeColor(dist, player.visionRadius, seenTween, inSightTween);
@@ -216,6 +217,7 @@ class Level extends HxlTilemap
 								cast(tile,Tile).colorTo(inSightTween, player.moveSpeed);
 						}
 					case Visibility.SEEN:
+						tile.visible = true;
 						if ( skipTween ) {
 							var seenColor = tweenToColor(seenTween);
 							tile.color = seenColor;

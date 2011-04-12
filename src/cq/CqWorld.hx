@@ -4,9 +4,6 @@ import cq.CqResources;
 import cq.CqItem;
 import cq.CqActor;
 
-import haxel.HxlPoint;
-import haxel.HxlState;
-
 import generators.BSP;
 import world.World;
 import world.Level;
@@ -15,11 +12,15 @@ import world.Loot;
 import world.Tile;
 import world.GameObject;
 
+import haxel.HxlPoint;
+import haxel.HxlState;
 import haxel.HxlUtil;
 import haxel.HxlGraphics;
 
 import data.Registery;
 import data.Configuration;
+
+import flash.geom.Rectangle;
 
 class CqObject extends GameObjectImpl {
 	public function new(X:Float, Y) {
@@ -27,7 +28,13 @@ class CqObject extends GameObjectImpl {
 		_tilePos = new HxlPoint(X / Configuration.zoomedTileSize(), Y / Configuration.zoomedTileSize());
 	}	
 }
-class CqTile extends Tile {}
+
+class CqTile extends Tile {
+	public function new(?X:Int = 0, ?Y:Int = 0, ?Rect:Rectangle = null) {
+		super(X, Y, Rect);
+		visible = false;
+	}
+}
 
 class CqLevel extends Level {
 	// fixme - use static function instead
@@ -199,7 +206,7 @@ class CqLevel extends Level {
 			}
 		}
 	}
-	
+
 }
 
 class CqWorld extends World {
