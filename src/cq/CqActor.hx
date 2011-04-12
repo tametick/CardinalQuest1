@@ -354,11 +354,24 @@ class CqActor extends CqObject, implements Actor {
 		// add buffs
 		if(itemOrSpell.buffs != null) {
 			for (buff in itemOrSpell.buffs.keys()) {
-				buffs.set(buff, buffs.get(buff) + itemOrSpell.buffs.get(buff));
+				if (other == null) {
+					// apply to self
+					
+					buffs.set(buff, buffs.get(buff) + itemOrSpell.buffs.get(buff));
 				
-				// add timer
-				if (itemOrSpell.duration > -1) {
-					timers.push(new CqTimer(itemOrSpell.duration, buff, itemOrSpell.buffs.get(buff)));
+					// add timer
+					if (itemOrSpell.duration > -1) {
+						timers.push(new CqTimer(itemOrSpell.duration, buff, itemOrSpell.buffs.get(buff)));
+					}
+				} else {
+					// apply to other
+					
+					other.buffs.set(buff, other.buffs.get(buff) + itemOrSpell.buffs.get(buff));
+				
+					// add timer
+					if (itemOrSpell.duration > -1) {
+						other.timers.push(new CqTimer(itemOrSpell.duration, buff, itemOrSpell.buffs.get(buff)));
+					}
 				}
 			}
 		}
@@ -366,12 +379,12 @@ class CqActor extends CqObject, implements Actor {
 		// apply special effect
 		if(itemOrSpell.specialEffects != null){
 			for ( effect in itemOrSpell.specialEffects) {
-				applyEffect(effect);
+				applyEffect(effect, other);
 			}
 		}
 	}
 
-	function applyEffect(effect:CqSpecialEffectValue) {
+	function applyEffect(effect:CqSpecialEffectValue, other:CqActor) {
 		// todo
 		trace("applied special effect: " + effect.name);
 	}
