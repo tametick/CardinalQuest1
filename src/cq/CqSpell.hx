@@ -7,9 +7,4 @@ class CqSpell extends CqItem {
 		super(X, Y, typeName);
 		equipSlot = SPELL;
 	}
-
-	public function use(self:CqActor, other:CqActor) {
-		// todo
-	
-	}
 }

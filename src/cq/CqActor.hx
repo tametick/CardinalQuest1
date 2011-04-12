@@ -193,7 +193,7 @@ class CqActor extends CqObject, implements Actor {
 
 			if ( Std.is(this,CqMob) && cast(this,CqMob).spell !=null && Math.random() <= 0.25 ) {
 				// Use my spell rather than apply attack damage
-				cast(this, CqMob).spell.use(this, other);
+				this.use(cast(this, CqMob).spell, other);
 				return;
 			}
 
@@ -320,15 +320,30 @@ class CqActor extends CqObject, implements Actor {
 	public function equipItem(item:CqItem):Void {
 		if (CqEquipSlot.WEAPON == item.equipSlot)
 			equippedWeapon = item;
-		
-		// todo
+
+		// add buffs
+		if(item.buffs != null) {
+			for (buff in item.buffs.keys()) {
+				buffs.set(buff, item.buffs.get(buff));
+			}
+		}
 	}
 
 	public function unequipItem(item:CqItem):Void {
 		if (item == equippedWeapon)
 			equippedWeapon = null;
 			
+		// remove buffs
+		if(item.buffs != null) {
+			for (buff in item.buffs.keys()) {
+				buffs.set(buff, buffs.get(buff)-item.buffs.get(buff));
+			}
+		}
+	}
+	
+	public function use(itemOrSpell:CqItem, other:CqActor) {
 		// todo
+		trace("using item");
 	}
 
 }
