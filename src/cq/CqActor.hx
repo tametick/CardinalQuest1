@@ -47,7 +47,6 @@ class CqActor extends CqObject, implements Actor {
 	public var damage:Range;
 	
 	var equippedWeapon:CqItem;
-	var equippedSpell:CqSpell;
 	
 	// changes to basic abilities (attack, defense, speed, spirit) caused by equipped items or spells
 	public var buffs:Hash<Int>;
@@ -192,14 +191,10 @@ class CqActor extends CqObject, implements Actor {
 		if (Math.random() < atk / (atk + def)) {
 			// Hit
 
-			if ( Std.is(other,CqMob) && other.equippedSpell!=null && Math.random() <= 0.25 ) {
+			if ( Std.is(this,CqMob) && cast(this,CqMob).spell !=null && Math.random() <= 0.25 ) {
 				// Use my spell rather than apply attack damage
-			  /*Special()[vars.special](this);
-				if(vars.special == "berserk")
-					messageLog.append("<b style='color: rgb("+vars.color.join()+");'>"+vars.description[0]+"</b> <i>"+vars.special+"s</i>!");
-				else
-					messageLog.append("<b style='color: rgb("+vars.color.join()+");'>"+vars.description[0]+"</b> <i>"+vars.special+"s</i> you!");
-				return;*/
+				cast(this, CqMob).spell.use(this, other);
+				return;
 			}
 
 			var dmgMultipler = buffs.get("damageMultipler");
@@ -428,6 +423,7 @@ class CqMob extends CqActor, implements Mob {
 	static var sprites = SpriteMonsters.instance;
 	public var type:CqMobType;
 	public var xpValue:Int;
+	public var spell:CqSpell;
 	var aware:Int;
 	
 	

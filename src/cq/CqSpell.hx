@@ -8,4 +8,8 @@ class CqSpell extends CqItem {
 		equipSlot = SPELL;
 	}
 
+	public function use(self:CqActor, other:CqActor) {
+		// todo
+	
+	}
 }
