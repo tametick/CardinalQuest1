@@ -317,14 +317,18 @@ class CqActor extends CqObject, implements Actor {
 		super.update();
 	}
 
-	public function equipItem(Item:CqItem):Void {
+	public function equipItem(item:CqItem):Void {
+		if (CqEquipSlot.WEAPON == item.equipSlot)
+			equippedWeapon = item;
+		
 		// todo
-		trace("Equipping item..");
 	}
 
-	public function unequipItem(Item:CqItem):Void {
+	public function unequipItem(item:CqItem):Void {
+		if (item == equippedWeapon)
+			equippedWeapon = null;
+			
 		// todo
-		trace("Unequipping item..");
 	}
 
 }
