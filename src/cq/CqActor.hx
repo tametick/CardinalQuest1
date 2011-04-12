@@ -337,9 +337,21 @@ class CqPlayer extends CqActor, implements Player {
 	var onPickup:List<Dynamic>;
 	var onGainXP:List<Dynamic>;
 
-	public function new(playerClass:CqClass, ?X:Float=-1, ?Y:Float=-1) {
-		// fixme - accorrect attributes
-		super(X, Y, 1, 1, 5, 5,5,new Range(1, 1));
+	public function new(playerClass:CqClass, ?X:Float = -1, ?Y:Float = -1) {
+		
+		//attack:Int,defense:Int,speed:Int,spirit:Int,vitality:Int,damage
+		
+		switch(playerClass) {
+			case FIGHTER:
+				super(X, Y, 5, 3, 3, 1, 5, new Range(1, 1));
+				addAnimation("idle", [sprites.getSpriteIndex("fighter")], 0 );
+			case WIZARD:
+				super(X, Y, 2, 3, 4, 5, 3, new Range(1, 1));
+				addAnimation("idle", [sprites.getSpriteIndex("wizard")], 0 );
+			case THIEF:
+				super(X, Y, 3, 4, 5, 3, 2, new Range(1, 1));
+				addAnimation("idle", [sprites.getSpriteIndex("thief")], 0 );
+		}
 		
 		xp = 0;
 		level = 1;
@@ -351,14 +363,9 @@ class CqPlayer extends CqActor, implements Player {
 		faction = 0;
 		inventory = new Array<CqItem>();
 		
-		switch(playerClass) {
-			case FIGHTER:
-				addAnimation("idle", [sprites.getSpriteIndex("fighter")], 0 );
-			case WIZARD:
-				addAnimation("idle", [sprites.getSpriteIndex("wizard")], 0 );
-			case THIEF:
-				addAnimation("idle", [sprites.getSpriteIndex("thief")], 0 );
-		}
+		
+		
+
 		play("idle");
 	}
 
