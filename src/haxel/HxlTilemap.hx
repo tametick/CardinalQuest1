@@ -663,16 +663,22 @@ class HxlTilemap extends HxlObject {
 		*/
 	}
 
-	function updateTileGraphic(X:Int, Y:Int, Data:Int) {
+	public function updateTileGraphic(X:Int, Y:Int, Data:Int) {
 		var tile:HxlTile = getTile(X,Y);
-		if ( tile == null ) return;
+		if ( tile == null ) 
+			return;
+			
 		tile.dataNum = Data;
+		tile.altBitmap = null;
+		
 		if ( Data == 0 ) {
 			tile.bitmapRect = null;
 			return;
 		}
+		
 		var rx:Int = (Data - startingIndex) * _tileWidth;
 		var ry:Int = 0;
+		
 		if (rx >= _pixels.width) {
 			ry = Std.int(rx/_pixels.width)*_tileHeight;
 			rx %= _pixels.width;
