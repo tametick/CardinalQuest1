@@ -14,9 +14,11 @@ class CqEffectChest extends HxlEmitter {
 
 	public function new(?X:Float=0, ?Y:Float=0) {
 		super(X, Y);
-		
-		var bmp:BitmapData = HxlGradient.RectData(12, 12, [0xe1e1e1, 0x5e5e5e], [0.7, 0.55], Math.PI/2, 12.0);
-		HxlGraphics.addBitmapData(bmp, "ChestEffectParticle");
+	
+		if ( !HxlGraphics.checkBitmapCache("ChestEffectParticle") {
+			var bmp:BitmapData = HxlGradient.RectData(12, 12, [0xe1e1e1, 0x5e5e5e], [0.7, 0.55], Math.PI/2, 12.0);
+			HxlGraphics.addBitmapData(bmp, "ChestEffectParticle");
+		}
 		setAlphaVelocity(-5, -2);
 		gravity = 0.0;
 		makeSprites();
