@@ -103,7 +103,7 @@ class BSP
 		return neighbours;
 	}
 	
-	static function drawCorridor(map:Array<Array<Int>>, corridor:Corridor, wallIndex:Int, floorIndex:Int, doorIndex:Int) {
+	static function drawCorridor(map:Array<Array<Int>>, corridor:Corridor, wallIndex:Int, floorIndex:Int) {
 		var start = corridor.r0.getCenter();
 		var end = corridor.r1.getCenter();
 		
@@ -122,9 +122,7 @@ class BSP
 			var stepsTaken = 0;
 			while (x < end.x) {
 				var neighbours = numberOfNeighbours(map, x, y - 1, floorIndex);
-			/*	if (neighbours == 1 || neighbours == 2)
-					map[y][x] = doorIndex;
-				else */if(map[y][x]==wallIndex)
+				if(map[y][x]==wallIndex)
 					map[y][x] = -1;
 					
 				if (isZ && stepsTaken >= dx / 2 - 1) {
@@ -150,9 +148,7 @@ class BSP
 			var stepsTaken = 0;
 			while (y < end.y) {
 				var neighbours = numberOfNeighbours(map, x, y, floorIndex);
-				/*if (neighbours == 1 || neighbours == 2)
-					map[y][x] = doorIndex;
-				else */if(map[y][x]==wallIndex)
+				if(map[y][x]==wallIndex)
 					map[y][x] = -1;
 				
 				if (isZ && stepsTaken >= dy / 2 -1) {
@@ -167,6 +163,54 @@ class BSP
 				y += step;
 				stepsTaken++;
 			}
+		}
+	}
+	
+	static function createDoors(map:Array<Array<Int>>, wallIndex:Int, floorIndex:Int):Array<Point> { 
+		var doors = new Array<Point>();
+		var w = wallIndex;
+		var f = floorIndex;
+		
+		var up =   [[-1,f,-1],
+					[w, f, w],
+					[f, f, f]];
+					
+		var down = [[f, f, f],
+					[w, f, w],
+					[-1,f,-1]];
+					
+		var right= [[f, w,-1],
+					[f, f, f],
+					[f, w,-1]];
+					
+		var left = [[-1,w, f],
+					[f, f, f],
+					[-1,w, f]];
+
+		function is(a:Int, b:Int) {
+			return a == b || a == -1 || b == -1;
+		}
+					
+		var height = map.length;
+		var width = map[0].length;
+		for (pattern in [up,down,right,left]) {
+			for (y in 0...height-3) {
+				for (x in 0...width-3) {
+					if (is(map[y][x],pattern[0][0]) && is(map[y][x+1],pattern[0][1]) && is(map[y][x+2],pattern[0][2]) &&
+						is(map[y+1][x],pattern[1][0]) && is(map[y+1][x+1],pattern[1][1]) && is(map[y+1][x+2],pattern[1][2]) &&
+						is(map[y+2][x],pattern[2][0]) && is(map[y+2][x+1],pattern[2][1]) && is(map[y+2][x+2],pattern[2][2])
+					)
+						doors.push(new Point(x + 1, y + 1));
+				}
+			}
+		}
+		
+		return doors;
+	}
+	
+	static function drawDoors(map:Array<Array<Int>>, doors:Array<Point>, doorIndex:Int) { 
+		for (door in doors) {
+			map[door.y][door.x] = doorIndex;
 		}
 	}
 	
@@ -287,7 +331,7 @@ class BSP
 			
 		// insert corridors into map
 		for (corridor in corridors)
-			drawCorridor(map, corridor, wallIndex, floorIndex, doorIndex);
+			drawCorridor(map, corridor, wallIndex, floorIndex);
 						
 		// mark corridors as floor
 		for (y in 0...map.length)
@@ -295,6 +339,10 @@ class BSP
 				if ( map[y][x] == -1 )
 					map[y][x] = floorIndex;
 					
+		// add doors
+		var doors = createDoors(map, wallIndex, floorIndex);
+		drawDoors(map, doors, doorIndex);
+			
 		return map;
 	}
 	

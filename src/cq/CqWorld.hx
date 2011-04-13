@@ -37,7 +37,6 @@ class CqTile extends Tile {
 }
 
 class CqLevel extends Level {
-	// fixme - use static function instead
 	static var tiles = SpriteTiles.instance;
 	static var itemSprites = SpriteItems.instance;
 
