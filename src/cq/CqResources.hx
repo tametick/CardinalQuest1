@@ -69,6 +69,8 @@ class SpriteTiles extends HxlSpriteSheet {
 	public var walkableAndSeeThroughTiles:Array<Int>;
 	public var solidAndBlockingTiles:Array<Int>;
 	public var stairsDown:Array<Int>;
+	public var doors:Array<Int>;
+	public var openDoors:Array<Int>;
 	public function new() { 
 		spriteNames = [
 			["red_up","red_down","red_floor0","red_floor1","red_wall0","red_wall1","red_wall2","red_wall3","red_wall4","red_door_close","red_door_open"], 
@@ -86,8 +88,11 @@ class SpriteTiles extends HxlSpriteSheet {
 			getSpriteIndex("red_floor0"), getSpriteIndex("blue_floor0"), getSpriteIndex("brown_floor0"),
 			getSpriteIndex("red_floor1"), getSpriteIndex("blue_floor1"), getSpriteIndex("brown_floor1"),
 			getSpriteIndex("red_down"), getSpriteIndex("blue_down"), getSpriteIndex("brown_down"),
+			getSpriteIndex("red_door_open"), getSpriteIndex("blue_door_open"), getSpriteIndex("brown_door_open"),
 		];
 		stairsDown = [getSpriteIndex("red_down"), getSpriteIndex("blue_down"), getSpriteIndex("brown_down")];
+		doors = [getSpriteIndex("red_door_close"), getSpriteIndex("blue_door_close"), getSpriteIndex("brown_door_close")];
+		openDoors = [getSpriteIndex("red_door_open"), getSpriteIndex("blue_door_open"), getSpriteIndex("brown_door_open")];
 		
 		if (!inited) {
 			Resources.walkableTiles = Resources.walkableTiles.concat(walkableAndSeeThroughTiles);

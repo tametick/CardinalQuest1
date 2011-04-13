@@ -3,6 +3,7 @@ package cq;
 import haxel.HxlPoint;
 import haxel.HxlState;
 import haxel.HxlGraphics;
+import haxel.HxlUtil;
 import haxel.HxlSprite;
 
 import data.Registery;
@@ -13,6 +14,7 @@ import world.Player;
 import cq.CqActor;
 import cq.CqWorld;
 import cq.CqItem;
+import cq.CqResources;
 
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
@@ -92,9 +94,15 @@ class GameState extends HxlState {
 			return;
 		
 		var targetTile = world.currentLevel.getTargetAccordingToKeyPress();
-		if ( targetTile != null ) {
-			// move or attack
-			Registery.player.actInDirection(this,targetTile);
+		if (targetTile != null) {
+			var tile = cast(world.currentLevel.getTile(Std.int(Registery.player.tilePos.x + targetTile.x), Std.int(Registery.player.tilePos.y + targetTile.y)),CqTile);
+			if ( !world.currentLevel.isBlockingMovement(Std.int(player.tilePos.x+targetTile.x), Std.int(player.tilePos.y+targetTile.y)) ) {
+				// move or attack
+				Registery.player.actInDirection(this, targetTile);
+			} else if(HxlUtil.contains(SpriteTiles.instance.doors,tile.dataNum)){
+				// open door
+				openDoor(tile);
+			}
 		} else {
 			// other keyboard actions?
 			return;
@@ -104,18 +112,28 @@ class GameState extends HxlState {
 	}
 
 	override function onMouseDown(event:MouseEvent) {
+		var level = Registery.world.currentLevel;
 		if (Registery.player.isMoving)
 			return;
 		
 		var dx = HxlGraphics.mouse.x - Registery.player.x;
 		var dy = HxlGraphics.mouse.y - Registery.player.y;		
-		var targetTile:HxlPoint = Registery.world.currentLevel.getTargetAccordingToMousePosition(dx,dy);
+		var targetTile:HxlPoint = level.getTargetAccordingToMousePosition(dx, dy);
+		var tile = cast(level.getTile(Std.int(Registery.player.tilePos.x + targetTile.x), Std.int(Registery.player.tilePos.y + targetTile.y)),CqTile);
 		
-		if (targetTile != null) {
+		if ( !level.isBlockingMovement(Std.int(Registery.player.tilePos.x+targetTile.x), Std.int(Registery.player.tilePos.y+targetTile.y)) ) {
 			// move or attack in chosen tile
 			Registery.player.actInDirection(this,targetTile);
+		} else if(HxlUtil.contains(SpriteTiles.instance.doors,tile.dataNum)){
+			// open door
+			openDoor(tile);
 		}
 		
 		passTurn();
+	}
+	
+	function openDoor(tile:CqTile) {
+		// fix me 
+		Registery.world.currentLevel.updateTileGraphic(tile.mapX, tile.mapY, SpriteTiles.instance.openDoors[0]);
 	}
 }
