@@ -74,6 +74,10 @@ class CqActor extends CqObject, implements Actor {
 	var isDodging:Bool;
 	var dodgeDir:Int;
 	var dodgeCounter:Float;
+	var bobDir:Int;
+	var bobCounter:Float;
+	var bobCounterInc:Float;
+	var bobMult:Float;
 
 	public function new(X:Float, Y:Float,attack:Int,defense:Int,speed:Int,spirit:Int,vitality:Int,damage:Range) {
 		super(X, Y);
@@ -104,6 +108,10 @@ class CqActor extends CqObject, implements Actor {
 		isDodging = false;
 		dodgeDir = 0;
 		dodgeCounter = 0;
+		bobDir = 0;
+		bobCounter = 0.0;
+		bobCounterInc = 0.1;
+		bobMult = 5.0;
 	}
 	
 	function initBuffs(){
@@ -138,6 +146,11 @@ class CqActor extends CqObject, implements Actor {
 
 	public function moveToPixel(state:HxlState, X:Float, Y:Float):Void {
 		isMoving = true;
+		if ( Y < y ) bobDir = 0;
+		else if ( X > x ) bobDir = 1;
+		else if ( Y > y ) bobDir = 2;
+		else if ( X < x ) bobDir = 3;
+		bobCounter = 0.0;
 		Actuate.tween(this, moveSpeed, { x: X, y: Y } ).onComplete(moveStop,[state]);
 	}
 	
@@ -293,7 +306,12 @@ class CqActor extends CqObject, implements Actor {
 	public override function render():Void {
 		var oldX:Float = x;
 		var oldY:Float = y;
-		if ( isDodging ) {
+		if ( isMoving ) {
+			var offset:Float = Math.sin(bobCounter) * bobMult;
+			if ( bobDir == 0 || bobDir == 2 ) x += offset;
+			else y -= offset;
+			bobCounter += bobCounterInc;
+		} else if ( isDodging ) {
 			var offset:Float = dodgeCounter;
 			if ( offset > 10 ) offset = 10 - (dodgeCounter - 10);
 			if ( offset < 0 ) offset = 0;
