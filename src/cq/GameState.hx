@@ -6,6 +6,7 @@ import haxel.HxlGraphics;
 import haxel.HxlUtil;
 import haxel.HxlSprite;
 
+import data.Configuration;
 import data.Registery;
 
 import world.World;
@@ -82,33 +83,8 @@ class GameState extends HxlState {
 	}
 	
 	override function onKeyDown(event:KeyboardEvent) {		
-		if ( HxlGraphics.keys.ESCAPE ) {
+		if ( HxlGraphics.keys.ESCAPE )
 			HxlGraphics.pushState(new MainMenuState());
-			return;
-		}
-		
-		var player = Registery.player;
-		var world = Registery.world;
-		
-		if (player.isMoving)
-			return;
-		
-		var targetTile = world.currentLevel.getTargetAccordingToKeyPress();
-		if (targetTile != null) {
-			var tile = cast(world.currentLevel.getTile(Std.int(Registery.player.tilePos.x + targetTile.x), Std.int(Registery.player.tilePos.y + targetTile.y)),CqTile);
-			if ( !world.currentLevel.isBlockingMovement(Std.int(player.tilePos.x+targetTile.x), Std.int(player.tilePos.y+targetTile.y)) ) {
-				// move or attack
-				Registery.player.actInDirection(this, targetTile);
-			} else if(HxlUtil.contains(SpriteTiles.instance.doors,tile.dataNum)){
-				// open door
-				openDoor(tile);
-			}
-		} else {
-			// other keyboard actions?
-			return;
-		}
-	
-		passTurn();
 	}
 
 	override function onMouseDown(event:MouseEvent) {
@@ -116,12 +92,14 @@ class GameState extends HxlState {
 		if (Registery.player.isMoving)
 			return;
 		
-		var dx = HxlGraphics.mouse.x - Registery.player.x;
-		var dy = HxlGraphics.mouse.y - Registery.player.y;		
+		var dx = HxlGraphics.mouse.x - (Registery.player.x+Configuration.zoomedTileSize()/2);
+		var dy = HxlGraphics.mouse.y - (Registery.player.y+Configuration.zoomedTileSize()/2);
 		var target:HxlPoint = level.getTargetAccordingToMousePosition(dx, dy);
 		var tile = getPlayerTile(target);
 		
-		if ( !isBlockingMovement(target) ) {
+		if(Math.abs(dx)<Configuration.zoomedTileSize()/2 && Math.abs(dy)<Configuration.zoomedTileSize()/2) {
+			// wait
+		} else if ( !isBlockingMovement(target) ) {
 			// move or attack in chosen tile
 			Registery.player.actInDirection(this,target);
 		} else if(HxlUtil.contains(SpriteTiles.instance.doors,tile.dataNum)){
