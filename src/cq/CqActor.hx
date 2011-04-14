@@ -539,7 +539,12 @@ class CqMob extends CqActor, implements Mob {
 			
 		var direction = HxlUtil.getRandomElement(directions);
 
-		return actInDirection(state,direction);
+		if(direction!=null)
+			return actInDirection(state, direction);
+		else {
+			// fixme - mobs is stuck
+			return true;
+		}
 	}
 	
 	static function isBlocking(p:HxlPoint):Bool {

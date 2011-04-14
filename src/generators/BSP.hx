@@ -208,9 +208,25 @@ class BSP
 		return doors;
 	}
 	
+	// doesn't check bounds!
+	static function countAdjunct(map:Array<Array<Int>>, y:Int, x:Int, doorIndex:Int) {
+		var c = 0;
+		if (map[y-1][x] == doorIndex)
+			c++;
+		if (map[y+1][x] == doorIndex)
+			c++;
+		if (map[y][x-1] == doorIndex)
+			c++;
+		if (map[y][x+1] == doorIndex)
+			c++;
+			
+		return c;
+	}
+	
 	static function drawDoors(map:Array<Array<Int>>, doors:Array<Point>, doorIndex:Int) { 
 		for (door in doors) {
-			map[door.y][door.x] = doorIndex;
+			if(countAdjunct(map, door.y, door.x, doorIndex)==0)
+				map[door.y][door.x] = doorIndex;
 		}
 	}
 	
