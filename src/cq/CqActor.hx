@@ -545,6 +545,7 @@ class CqMob extends CqActor, implements Mob {
 		faction = 1;
 		aware = 0;
 		type = Type.createEnum(CqMobType,  typeName.toUpperCase());
+		visible = false;
 		
 		addAnimation("idle", [sprites.getSpriteIndex(typeName)], 0 );
 		play("idle");

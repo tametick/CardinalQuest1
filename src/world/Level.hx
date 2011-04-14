@@ -8,6 +8,7 @@ import haxel.HxlTilemap;
 import haxel.HxlState;
 import haxel.HxlGraphics;
 import haxel.HxlUtil;
+import haxel.HxlSprite;
 
 import data.Registery;
 
@@ -175,8 +176,9 @@ class Level extends HxlTilemap
 		for ( x in left...right+1 ) {
 			for ( y in top...bottom+1 ) {
 				tile = getTile(x, y);
-				if ( tile.visibility == Visibility.IN_SIGHT ) 
+				if ( tile.visibility == Visibility.IN_SIGHT ) {
 					tile.visibility = Visibility.SEEN;
+				}
 			}
 		}
 
@@ -202,6 +204,12 @@ class Level extends HxlTilemap
 				switch (tile.visibility) {
 					case Visibility.IN_SIGHT:
 						tile.visible = true;
+						
+						for (loot in cast(tile, Tile).loots)
+							cast(loot,HxlSprite).visible = true;
+						for (actor in cast(tile, Tile).actors)
+							cast(actor,HxlSprite).visible = true;
+						
 						if ( skipTween ) {
 							if (gradientColoring) {
 								var normTween = normalizeColor(dist, player.visionRadius, seenTween, inSightTween);
@@ -218,6 +226,12 @@ class Level extends HxlTilemap
 						}
 					case Visibility.SEEN:
 						tile.visible = true;
+						
+						for (loot in cast(tile, Tile).loots)
+							cast(loot,HxlSprite).visible = false;
+						for (actor in cast(tile, Tile).actors)
+							cast(actor,HxlSprite).visible = false;
+						
 						if ( skipTween ) {
 							var seenColor = tweenToColor(seenTween);
 							tile.color = seenColor;

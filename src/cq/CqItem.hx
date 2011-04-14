@@ -163,6 +163,7 @@ class CqChest extends CqItem {
 	public function new(X:Float, Y:Float) {
 		super(X, Y,"chest");
 		onBust = new List();
+		visible = false;
 	}
 	
 	public function addOnBust(Callback:Dynamic):Void {
