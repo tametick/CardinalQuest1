@@ -90,12 +90,27 @@ class CqCharacterDialog extends HxlSlidingDialog {
 
 	public function updateText():Void {
 		var _player:CqPlayer = cast(Registery.player, CqPlayer);
-		valHealth.text = ""+(_player.hp + _player.buffs.get("life"))+" / "+_player.maxHp;
-		valAttack.text = ""+(_player.attack + _player.buffs.get("attack"));
-		valDefense.text = ""+(_player.defense + _player.buffs.get("defense"));
-		valSpeed.text = ""+(_player.speed + _player.buffs.get("speed"));
-		valSpirit.text = ""+(_player.spirit + _player.buffs.get("spirit"));
-		valVitality.text = ""+(_player.vitality + _player.buffs.get("vitality"));
+		valHealth.text = "" + _player.hp +"/" + _player.maxHp;
+		if(_player.buffs.get("life")!=0)
+			valHealth.text += " + " + _player.buffs.get("life");
+		
+		valAttack.text = "" + _player.attack;
+		if(_player.buffs.get("attack")!=0)
+			valAttack.text += " + " + _player.buffs.get("attack");
+		
+		valDefense.text = "" + _player.defense;
+		if(_player.buffs.get("defense")!=0)
+		valDefense.text += " + " + _player.buffs.get("defense");
+		
+		valSpeed.text = "" + _player.speed;
+		if(_player.buffs.get("speed")!=0)
+			valSpeed.text += " + " + _player.buffs.get("speed");
+		
+		valSpirit.text = "" + _player.spirit;
+		if(_player.buffs.get("spirit")!=0)
+			valSpirit.text += " + " + _player.buffs.get("spirit");
+		
+		valVitality.text = ""+_player.vitality;
 	}
 
 }
