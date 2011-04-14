@@ -146,6 +146,7 @@ class CqInventoryGrid extends HxlDialog {
 				cells.push(cell);
 			}
 		}
+		cells[cells.length-1].dropCell = true;
 	}
 
 	public function getCellItemPos(Cell:Int):HxlPoint {
@@ -293,6 +294,7 @@ class CqInventoryCell extends HxlDialog {
 	var bgGlow:HxlSprite;
 	var isHighlighted:Bool;
 	public var cellIndex:Int;
+	public var dropCell:Bool;
 
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?CellIndex:Int=0) {
 		super(X, Y, Width, Height);
@@ -301,6 +303,7 @@ class CqInventoryCell extends HxlDialog {
 		cellObj = null;
 		isHighlighted = false;
 		cellIndex = CellIndex;
+		dropCell = false;
 	}
 
 	public function setGraphicKeys(Normal:String, ?Highlight:String=null, ?Glow:String=null):Void {
@@ -603,7 +606,18 @@ class CqInventoryItem extends HxlSprite {
 					cast(Registery.player, CqActor).equipItem(this.item);
 				} else {
 					// Moving this item into an inventory cell
-					setInventoryCell(CqInventoryCell.highlightedCell.cellIndex);
+					if ( CqInventoryCell.highlightedCell.dropCell ) {
+						// This item is being dropped
+						_dlg.remove(this);
+						this.item.setTilePos(Registery.player.getTilePos());
+						this.item.visible = true;
+						this.item.alpha = 1.0;
+						Registery.world.currentLevel.addLootToLevel(HxlGraphics.state, this.item);
+						destroy();
+						return;
+					} else {
+						setInventoryCell(CqInventoryCell.highlightedCell.cellIndex);
+					}
 				}
 				cellIndex = CqInventoryCell.highlightedCell.cellIndex;
 			}
