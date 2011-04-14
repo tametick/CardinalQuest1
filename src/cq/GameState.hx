@@ -97,7 +97,13 @@ class GameState extends HxlState {
 		var target:HxlPoint = level.getTargetAccordingToMousePosition(dx, dy);
 		var tile = getPlayerTile(target);
 		
-		if(Math.abs(dx)<Configuration.zoomedTileSize()/2 && Math.abs(dy)<Configuration.zoomedTileSize()/2) {
+		if (Math.abs(dx) < Configuration.zoomedTileSize() / 2 && Math.abs(dy) < Configuration.zoomedTileSize() / 2) {
+			tile = getPlayerTile(new HxlPoint(0, 0));
+			if (HxlUtil.contains(SpriteTiles.instance.stairsDown, tile.dataNum)) {
+				// descend
+				Registery.world.goToNextLevel(this);
+			}
+			
 			// wait
 		} else if ( !isBlockingMovement(target) ) {
 			// move or attack in chosen tile
