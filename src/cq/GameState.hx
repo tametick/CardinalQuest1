@@ -118,19 +118,44 @@ class GameState extends HxlState {
 		
 		var dx = HxlGraphics.mouse.x - Registery.player.x;
 		var dy = HxlGraphics.mouse.y - Registery.player.y;		
-		var targetTile:HxlPoint = level.getTargetAccordingToMousePosition(dx, dy);
-		var tile = cast(level.getTile(Std.int(Registery.player.tilePos.x + targetTile.x), Std.int(Registery.player.tilePos.y + targetTile.y)),CqTile);
+		var target:HxlPoint = level.getTargetAccordingToMousePosition(dx, dy);
+		var tile = getPlayerTile(target);
 		
-		if ( !level.isBlockingMovement(Std.int(Registery.player.tilePos.x+targetTile.x), Std.int(Registery.player.tilePos.y+targetTile.y)) ) {
+		if ( !isBlockingMovement(target) ) {
 			// move or attack in chosen tile
-			Registery.player.actInDirection(this,targetTile);
+			Registery.player.actInDirection(this,target);
 		} else if(HxlUtil.contains(SpriteTiles.instance.doors,tile.dataNum)){
 			// open door
 			openDoor(tile);
+		} else if(!(dx==0 && dy==0)){
+			// slide
+			if (Math.abs(dx) > Math.abs(dy))
+				dx = 0;
+			else
+				dy = 0;
+			
+			target = level.getTargetAccordingToMousePosition(dx, dy);
+			tile = getPlayerTile(target);
+			if ( !isBlockingMovement(target) )
+				Registery.player.actInDirection(this,target);
+			else if (HxlUtil.contains(SpriteTiles.instance.doors, tile.dataNum))
+				openDoor(tile);
+				
 		}
+		
 		
 		passTurn();
 	}
+	
+	private function isBlockingMovement(target:HxlPoint):Bool{
+		return Registery.world.currentLevel.isBlockingMovement(Std.int(Registery.player.tilePos.x + target.x), Std.int(Registery.player.tilePos.y + target.y));
+	}
+	
+	
+	function getPlayerTile(target:HxlPoint):CqTile {
+		return cast(Registery.world.currentLevel.getTile(Std.int(Registery.player.tilePos.x + target.x), Std.int(Registery.player.tilePos.y + target.y)), CqTile);
+	}
+	
 	
 	function openDoor(tile:CqTile) {
 		// fix me 
