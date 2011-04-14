@@ -310,8 +310,7 @@ class CqActor extends CqObject, implements Actor {
 		var oldY:Float = y;
 		if ( isMoving ) {
 			var offset:Float = Math.sin(bobCounter) * bobMult;
-			if ( bobDir == 0 || bobDir == 2 ) x += offset;
-			else y -= offset;
+			y -= offset;
 			bobCounter += bobCounterInc;
 		} else if ( isDodging ) {
 			var offset:Float = dodgeCounter;
