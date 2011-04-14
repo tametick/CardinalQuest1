@@ -340,9 +340,13 @@ class CqActor extends CqObject, implements Actor {
 		super.update();
 	}
 
+	function updateSprite(){ }
+	
 	public function equipItem(item:CqItem):Void {
-		if (CqEquipSlot.WEAPON == item.equipSlot)
+		if (CqEquipSlot.WEAPON == item.equipSlot) {
 			equippedWeapon = item;
+			updateSprite();
+		}
 
 		// add buffs
 		if(item.buffs != null) {
@@ -355,8 +359,10 @@ class CqActor extends CqObject, implements Actor {
 	}
 
 	public function unequipItem(item:CqItem):Void {
-		if (item == equippedWeapon)
+		if (item == equippedWeapon) {
 			equippedWeapon = null;
+			updateSprite();
+		}
 			
 		// remove buffs
 		if(item.buffs != null) {
@@ -438,12 +444,24 @@ class CqPlayer extends CqActor, implements Player {
 			case FIGHTER:
 				super(X, Y, 5, 3, 3, 1, 5, new Range(1, 1));
 				addAnimation("idle", [sprites.getSpriteIndex("fighter")], 0 );
+				addAnimation("idle_dagger", [sprites.getSpriteIndex("fighter_dagger")], 0 );
+				addAnimation("idle_short_sword", [sprites.getSpriteIndex("fighter_short_sword")], 0 );
+				addAnimation("idle_long_sword", [sprites.getSpriteIndex("fighter_long_sword")], 0 );
+				addAnimation("idle_staff", [sprites.getSpriteIndex("fighter_staff")], 0 );
 			case WIZARD:
 				super(X, Y, 2, 3, 4, 5, 3, new Range(1, 1));
 				addAnimation("idle", [sprites.getSpriteIndex("wizard")], 0 );
+				addAnimation("idle_dagger", [sprites.getSpriteIndex("wizard_dagger")], 0 );
+				addAnimation("idle_short_sword", [sprites.getSpriteIndex("wizard_short_sword")], 0 );
+				addAnimation("idle_long_sword", [sprites.getSpriteIndex("wizard_long_sword")], 0 );
+				addAnimation("idle_staff", [sprites.getSpriteIndex("wizard_staff")], 0 );
 			case THIEF:
 				super(X, Y, 3, 4, 5, 3, 2, new Range(1, 1));
 				addAnimation("idle", [sprites.getSpriteIndex("thief")], 0 );
+				addAnimation("idle_dagger", [sprites.getSpriteIndex("thief_dagger")], 0 );
+				addAnimation("idle_short_sword", [sprites.getSpriteIndex("thief_short_sword")], 0 );
+				addAnimation("idle_long_sword", [sprites.getSpriteIndex("thief_long_sword")], 0 );
+				addAnimation("idle_staff", [sprites.getSpriteIndex("thief_staff")], 0 );
 		}
 		
 		xp = 0;
@@ -467,6 +485,10 @@ class CqPlayer extends CqActor, implements Player {
 		onPickup.add(Callback);
 	}
 
+	override function updateSprite() { 
+		play("idle_"+equippedWeapon.spriteIndex);
+	}
+	
 	public function pickup(state:HxlState, item:CqItem) {
 		// remove item from map
 		Registery.world.currentLevel.removeLootFromLevel(state, item);
