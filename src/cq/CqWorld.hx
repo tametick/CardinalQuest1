@@ -97,12 +97,23 @@ class CqLevel extends Level {
 		}
 	}
 	
+	function chestsNearby(pos:HxlPoint):Int {
+		var chests = 0;
+		
+		for (chest in loots) {
+			if (HxlUtil.distance(chest.tilePos, pos) < 5)
+				chests ++;
+		}
+		
+		return chests;
+	}
+	
 	function addChests(numberOfChests:Int) {
 		for (c in 0...numberOfChests){
 			var pos; 
 			do {
 				pos = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
-			} while (cast(getTile(pos.x, pos.y), CqTile).loots.length > 0);
+			} while (chestsNearby(pos)>0);
 			
 			createAndaddChest(pos);
 		}
