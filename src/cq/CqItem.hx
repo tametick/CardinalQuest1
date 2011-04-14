@@ -121,6 +121,8 @@ class CqItem extends GameObjectImpl, implements Loot {
 	
 	public function new(X:Float, Y:Float, typeName:String) {
 		super(X, Y);
+
+		zIndex = 1;
 		
 		if (Std.is(this, CqSpell)) {
 			loadGraphic(SpriteSpells, false, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);

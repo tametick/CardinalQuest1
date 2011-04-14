@@ -85,6 +85,9 @@ class CqActor extends CqObject, implements Actor {
 	
 	public function new(X:Float, Y:Float,attack:Int,defense:Int,speed:Int,spirit:Int,vitality:Int,damage:Range) {
 		super(X, Y);
+
+		zIndex = 3;
+
 		actionPoints = 0;
 		moveSpeed = 0.15;
 		visionRadius = 8.2;
