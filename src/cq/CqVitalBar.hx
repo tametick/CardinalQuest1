@@ -21,7 +21,8 @@ class CqVitalBar extends HxlUIBar {
 	}
 
 	public function updateValue(?dmgTotal:Int=0):Void {
-		setPercent(actor.hp / actor.maxHp);
+		setPercent((actor.hp + actor.buffs.get("life")) / 
+				   (actor.maxHp + actor.buffs.get("life")));
 		if ( !Std.is(actor, CqPlayer) ) {
 			if ( actor.hp >= actor.maxHp ) {
 				visible = false;
@@ -41,6 +42,7 @@ class CqHealthBar extends CqVitalBar {
 
 	public function new(Actor:CqActor, ?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0) {
 		super(Actor, X, Y, Width, Height);
+		actor.healthBar = this;
 		setFrameColor(0xff444444);
 		setInteriorColor(0xff000000);
 		setBarColor(0xffff0000);

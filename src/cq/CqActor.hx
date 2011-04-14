@@ -20,6 +20,8 @@ import cq.CqResources;
 import cq.CqItem;
 import cq.CqWorld;
 
+import cq.CqVitalBar;
+
 import com.eclecticdesignstudio.motion.Actuate;
 
 class CqTimer {
@@ -79,6 +81,8 @@ class CqActor extends CqObject, implements Actor {
 	var bobCounterInc:Float;
 	var bobMult:Float;
 
+	public var healthBar:CqHealthBar;
+	
 	public function new(X:Float, Y:Float,attack:Int,defense:Int,speed:Int,spirit:Int,vitality:Int,damage:Range) {
 		super(X, Y);
 		actionPoints = 0;
@@ -343,7 +347,9 @@ class CqActor extends CqObject, implements Actor {
 		// add buffs
 		if(item.buffs != null) {
 			for (buff in item.buffs.keys()) {
-				buffs.set(buff, buffs.get(buff)+item.buffs.get(buff));
+				buffs.set(buff, buffs.get(buff) + item.buffs.get(buff));
+				if (buff == "life")
+					healthBar.updateValue();
 			}
 		}
 	}
@@ -355,7 +361,9 @@ class CqActor extends CqObject, implements Actor {
 		// remove buffs
 		if(item.buffs != null) {
 			for (buff in item.buffs.keys()) {
-				buffs.set(buff, buffs.get(buff)-item.buffs.get(buff));
+				buffs.set(buff, buffs.get(buff) - item.buffs.get(buff));
+				if (buff == "life")
+					healthBar.updateValue();
 			}
 		}
 	}
@@ -403,10 +411,13 @@ class CqActor extends CqObject, implements Actor {
 		
 		if (effect.name == "heal")
 			if (effect.value == "full")
-				if (other == null)
+				if (other == null) {
 					hp = maxHp;
-				else
+					healthBar.updateValue();
+				}else {
 					other.hp = other.maxHp;
+					other.healthBar.updateValue();
+				}
 	}
 }
 
@@ -487,8 +498,7 @@ class CqPlayer extends CqActor, implements Player {
 		trace("level: " + (++level));
 		maxHp += vitality;
 		hp = maxHp;
-		
-		// todo - update hp bar
+		healthBar.updateValue();
 	}
 	
 	public override function moveStop(state:HxlState):Void {
