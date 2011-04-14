@@ -99,7 +99,11 @@ class GameState extends HxlState {
 		
 		if (Math.abs(dx) < Configuration.zoomedTileSize() / 2 && Math.abs(dy) < Configuration.zoomedTileSize() / 2) {
 			tile = getPlayerTile(new HxlPoint(0, 0));
-			if (HxlUtil.contains(SpriteTiles.instance.stairsDown, tile.dataNum)) {
+			 if (tile.loots.length > 0) {
+				 // pickup item
+				var item = cast(tile.loots[tile.loots.length - 1], CqItem);
+				cast(Registery.player, CqPlayer).pickup(this, item);
+			} else if (HxlUtil.contains(SpriteTiles.instance.stairsDown, tile.dataNum)) {
 				// descend
 				Registery.world.goToNextLevel(this);
 			}

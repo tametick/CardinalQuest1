@@ -279,13 +279,8 @@ class CqActor extends CqObject, implements Actor {
 			if (Std.is(loot, CqChest)) {
 				// bust chest & don't move
 				attackObject(state, loot);
-				
 				// end turn
 				return true;
-			} else {
-				// pickup item
-				var item = cast(loot, CqItem);
-				cast(this, CqPlayer).pickup(state, item);
 			}
 		}
 		
