@@ -55,6 +55,12 @@ class HxlButton extends HxlGroup {
 	var eventUseCapture:Bool;
 	var eventStopPropagate:Bool;
 
+	// effect helpers
+	var effectTimer:HxlTimer;
+	var flashCount:Int;
+	var flashRate:Float;
+	var _flash:Bool;
+
 	/**
 	 * Creates a new <code>HxlButton</code> object with a gray background
 	 * and a callback function on the UI thread.
@@ -93,6 +99,11 @@ class HxlButton extends HxlGroup {
 		eventPriority = 0;
 		eventUseCapture = false;
 		eventStopPropagate = false;
+
+		effectTimer = new HxlTimer();
+		flashCount = 0;
+		flashRate = 0.075;
+		_flash = false;
 	}
 
 	public function setEventPriority(Priority:Int):Void {
@@ -249,6 +260,11 @@ class HxlButton extends HxlGroup {
 		return On;
 	}
 
+	public function doFlash():Void {
+		effectTimer.reset();
+		flashCount = 11;
+	}
+
 	/**
 	 * Called by the game state when state is changed (if this object belongs to the state)
 	 */
@@ -276,7 +292,17 @@ class HxlButton extends HxlGroup {
 			_off.visible = true;
 			if (_offT != null) _offT.visible = true;
 		}
-		if ( _isActive ) {
+		if ( flashCount > 0 && effectTimer.delta() > flashRate ) {
+			if ( flashCount % 2 == 1 ) {
+				_flash = true;
+			} else _flash = false;
+			flashCount--;
+			effectTimer.reset();
+			if ( flashCount == 0 ) {
+				_flash = false;
+			}
+		}
+		if ( _isActive || _flash ) {
 			_off.visible = false;
 			if (_offT != null) _offT.visible = false;
 			_on.visible = true;
