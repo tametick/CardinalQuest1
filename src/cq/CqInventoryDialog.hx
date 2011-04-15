@@ -23,6 +23,7 @@ import haxel.HxlPoint;
 import haxel.HxlSlidingDialog;
 import haxel.HxlSprite;
 import haxel.HxlSpriteSheet;
+import haxel.HxlText;
 import haxel.HxlUtil;
 
 //import flash.filters.GlowFilter;
@@ -87,6 +88,12 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	}
 
 	public function itemPickup(Item:CqItem):Void {
+		for ( cell in dlgInvGrid.cells ) {
+			if ( cell.getCellObj() != null && cell.getCellObj().item == Item ) {
+				cell.getCellObj().updateIcon();
+				return;
+			}
+		}
 		for ( cell in dlgInvGrid.cells ) {
 			if ( cell.getCellObj() == null ) {
 				var item:CqInventoryItem = new CqInventoryItem(this, 2, 2);
@@ -415,6 +422,8 @@ class CqInventoryItem extends HxlSprite {
 	public var cellSpell:Bool;
 	public var item:CqItem;
 	var selected:Bool;
+	//var stackText:HxlText;
+	//var stackSize:Int;
 
 	public function new(Dialog:CqInventoryDialog, ?X:Float=0, ?Y:Float=0) {
 		super(X, Y);
@@ -428,6 +437,7 @@ class CqInventoryItem extends HxlSprite {
 		item = null;
 		zIndex = idleZIndex;
 		setSelected(false);
+		//stackSize = 1;
 	}
 
 	public function setSelected(Toggle:Bool):Void {
@@ -443,6 +453,10 @@ class CqInventoryItem extends HxlSprite {
 		}
 	}
 
+	public function updateIcon():Void {
+		setIcon(icon);
+	}
+
 	public function setIcon(Icon:BitmapData):Void {
 		icon = new BitmapData(Icon.width, Icon.height, true, 0x0);
 		icon.copyPixels(Icon, new Rectangle(0, 0, Icon.width, Icon.height), new Point(0,0), null, null, true);
@@ -451,6 +465,12 @@ class CqInventoryItem extends HxlSprite {
 		var temp:BitmapData = new BitmapData(background.width, background.height, true, 0x0);
 		temp.copyPixels(background, new Rectangle(0, 0, background.width, background.height), new Point(0, 0), null, null, true);
 		temp.copyPixels(icon, new Rectangle(0, 0, icon.width, icon.height), new Point(X, Y), null, null, true);
+		if ( item.stackSize > 1 ) {
+			var txt:HxlText = new HxlText(0, 0, Std.int(width), ""+item.stackSize);
+			txt.setProperties(false, false, false);
+			txt.setFormat(null, 18, 0xffffff, "right", 0x010101);
+			temp.copyPixels(txt.pixels, new Rectangle(0, 0, txt.width, txt.height), new Point(0, (height-2-txt.height)), null, null, true);
+		}
 		pixels = temp;
 	}
 

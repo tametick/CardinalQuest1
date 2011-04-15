@@ -496,10 +496,24 @@ class CqPlayer extends CqActor, implements Player {
 		Registery.world.currentLevel.removeLootFromLevel(state, item);
 		item.doPickupEffect();	
 		// add to actor inventory
-		inventory.push(item);
-
-		// perform pickup callback functions
-		for ( Callback in onPickup ) Callback(item);
+		// if this item has a max stack size greater than 1, lets see if we already have the same item in inventory
+		var added:Bool = false;
+		if ( item.stackSizeMax > 1 ) {
+			for ( i in 0 ... inventory.length ) {
+				if ( inventory[i].spriteIndex == item.spriteIndex && inventory[i].stackSize < inventory[i].stackSizeMax ) {
+					added = true;
+					inventory[i].stackSize++;
+					// perform pickup callback functions
+					for ( Callback in onPickup ) Callback(inventory[i]);
+					break;
+				}
+			}
+		}
+		if ( !added ) {
+			inventory.push(item);
+			// perform pickup callback functions
+			for ( Callback in onPickup ) Callback(item);
+		}
 	}
 	
 	public function gainExperience(other:CqMob) {

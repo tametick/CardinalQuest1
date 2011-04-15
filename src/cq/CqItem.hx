@@ -26,9 +26,12 @@ class CqSpecialEffectValue {
 
 class CqLootFactory {
 	public static function newItem(X:Float, Y:Float, typeName:String):CqItem {
+
+		typeName = "GREEN_POTION";
+
 		var type = Type.createEnum(CqItemType,  typeName);
 		var item = new CqItem(X, Y, typeName.toLowerCase());
-		
+
 		switch(type) {
 			case WINGED_SANDLES, BOOTS:
 				item.equipSlot = CqEquipSlot.SHOES;
@@ -73,6 +76,7 @@ class CqLootFactory {
 			
 			case BOOTS:
 				item.buffs.set("speed", 1);
+
 			case WINGED_SANDLES:
 				item.buffs.set("speed", 2);
 				
