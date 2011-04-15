@@ -49,22 +49,27 @@ class CqLootFactory {
 			case GREEN_POTION:
 				item.consumable = true;
 				item.specialEffects.add(new CqSpecialEffectValue("heal","full"));
+				item.stackSizeMax = 20;
 			case PURPLE_POTION:
 				item.consumable = true;
 				item.specialEffects.add(new CqSpecialEffectValue("damage","double"));
 				item.duration = 120;
+				item.stackSizeMax = 20;			
 			case BLUE_POTION:
 				item.consumable = true;
 				item.buffs.set("defense", 3);
 				item.duration = 120;
+				item.stackSizeMax = 20;
 			case YELLOW_POTION:
 				item.consumable = true;
 				item.buffs.set("speed", 3);
 				item.duration = 120;
+				item.stackSizeMax = 20;
 			case RED_POTION:
 				item.consumable = true;
 				item.buffs.set("attack", 3);
 				item.duration = 120;
+				item.stackSizeMax = 20;
 			
 			case BOOTS:
 				item.buffs.set("speed", 1);
@@ -118,6 +123,8 @@ class CqItem extends GameObjectImpl, implements Loot {
 	public var specialEffects:List<CqSpecialEffectValue>;
 	
 	public var duration:Int;
+	public var stackSize:Int;
+	public var stackSizeMax:Int;
 	
 	public function new(X:Float, Y:Float, typeName:String) {
 		super(X, Y);
@@ -139,6 +146,8 @@ class CqItem extends GameObjectImpl, implements Loot {
 		specialEffects = new List<CqSpecialEffectValue>();
 		duration = -1;
 		play("idle");
+		stackSize = 1;
+		stackSizeMax = 1;
 	}
 
 	public function doPickupEffect():Void {
