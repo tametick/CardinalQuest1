@@ -652,11 +652,16 @@ class CqInventoryItem extends HxlSprite {
 				var objH = _dlg.dlgCharacter.height;
 				if ( (myX >= objX) || (myX <= objX+objW) || (myY >= objY) || (myY <= objY+objH) ) {
 					cast(Registery.player, CqActor).use(item);
-					_dlg.remove(this);
-					// Clear out the inventory cell this item previously occupied
-					_dlg.dlgInvGrid.setCellObj(cellIndex, null);
-					destroy();
-					return;
+					item.stackSize--;
+					if ( item.stackSize <= 0 ) {
+						_dlg.remove(this);
+						// Clear out the inventory cell this item previously occupied
+						_dlg.dlgInvGrid.setCellObj(cellIndex, null);
+						destroy();
+						return;
+					} else {
+						updateIcon();
+					}
 				}
 			}
 			// If there was no eligible drop target, revert to pre drag position
