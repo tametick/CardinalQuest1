@@ -634,6 +634,7 @@ class CqInventoryItem extends HxlSprite {
 						this.item.alpha = 1.0;
 						Registery.world.currentLevel.addLootToLevel(HxlGraphics.state, this.item);
 						destroy();
+						cast(Registery.player, CqPlayer).removeInventory(this.item);
 						return;
 					} else {
 						setInventoryCell(CqInventoryCell.highlightedCell.cellIndex);
@@ -658,6 +659,7 @@ class CqInventoryItem extends HxlSprite {
 						// Clear out the inventory cell this item previously occupied
 						_dlg.dlgInvGrid.setCellObj(cellIndex, null);
 						destroy();
+						cast(Registery.player, CqPlayer).removeInventory(this.item);
 						return;
 					} else {
 						updateIcon();

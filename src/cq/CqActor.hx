@@ -515,7 +515,15 @@ class CqPlayer extends CqActor, implements Player {
 			for ( Callback in onPickup ) Callback(item);
 		}
 	}
-	
+
+	public function removeInventory(item:CqItem):Void {
+		for ( i in 0 ... inventory.length ) {
+			if ( inventory[i] == item ) {
+				inventory.splice(i, 1);
+			}
+		}
+	}
+
 	public function gainExperience(other:CqMob) {
 		// todo: the amount of xp gained should be passed to this method
 		var xpGained:Int = 1;
