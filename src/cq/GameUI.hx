@@ -156,7 +156,7 @@ class GameUI extends HxlDialog {
 
 		panelInventory.dlgSpellGrid = dlgSpellGrid;
 
-		xpBar = new HxlUIBar(84, 460, 472, 10);
+		xpBar = new HxlUIBar(84, 10, 472, 10);
 		xpBar.setBarColor(0xff59C65E);
 		add(xpBar);
 
