@@ -194,7 +194,8 @@ class CqChest extends CqItem {
 		// create random item
 		var type = null;
 		do {
-			type = HxlUtil.getRandomElement(Type.getEnumConstructs(CqItemType)); 
+			// doubling chance of getting a potion
+			type = HxlUtil.getRandomElement(Type.getEnumConstructs(CqItemType).concat(["PURPLE_POTION","GREEN_POTION","BLUE_POTION","YELLOW_POTION","RED_POTION"])); 
 		} while (type == "CHEST");
 		var item = CqLootFactory.newItem(x, y, type);		
 		
