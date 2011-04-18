@@ -53,7 +53,7 @@ class CqLootFactory {
 				item.stackSizeMax = 20;
 			case PURPLE_POTION:
 				item.consumable = true;
-				item.specialEffects.add(new CqSpecialEffectValue("damage","double"));
+				item.specialEffects.add(new CqSpecialEffectValue("damageMultipler","double"));
 				item.duration = 120;
 				item.stackSizeMax = 20;			
 			case BLUE_POTION:
