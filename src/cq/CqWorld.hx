@@ -56,6 +56,7 @@ class CqLevel extends Level {
 		
 		loadMap(newMapData, SpriteTiles, Configuration.tileSize, Configuration.tileSize, 2.0, 2.0);
 	
+		// todo - remove & do in fov instead
 		// We're going to disable rendering of tiles which will never be visible
 		for ( Y in 0...heightInTiles ) {
 			for ( X in 0...widthInTiles ) {

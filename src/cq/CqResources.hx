@@ -124,9 +124,17 @@ class SpriteSpells extends HxlSpriteSheet {
 }
 class SpriteDecorations extends HxlSpriteSheet { 
 	public static var instance = new SpriteDecorations();
+	
+	public static var wall = ["pic0", "pic1", "wall_pile", "wall_skull", "wall_skeleton", "tapestry0", "tapestry1", "tapestry2", "tapestry3", "crack0", "crack1", "wall_blood0", "wall_blood1", "wall_green_blood0", "wall_green_blood1", "wall_green_blood2"];
+	public static var floor = ["floor_pile", "floor_skulls", "floor_skeleton", "floor_crack0", "floor_crack1", "floor_crack2", "floor_blood0", "floor_blood1", "floor_blood2", "floor_green_blood0", "floor_green_blood1", "floor_green_blood2", "rocks0", "rocks1", "baricade0", "baricade1", "baricade2"];
+	
+	// requires special handling for generating good looking carpet strips
+	public static var carpet = ["carpet0", "carpet1", "carpet2", "carpet3"];
+	
 	public function new() {
 		spriteNames = [
-			[]
+			wall.concat(["blank0", "blank1", "blank2", "blank3", "blank4"]),
+			floor.concat(carpet)
 		];
 		super(0);
 	} 
