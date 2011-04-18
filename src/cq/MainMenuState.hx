@@ -43,7 +43,7 @@ class MainMenuState extends HxlState
 			btnResumeGame.setHoverFormat(null, 40, 0xffff00, "center");
 			menu.addItem(btnResumeGame);
 			btnResumeGame.setCallback(function() { self.changeState(null); });
-			buttonY += 40;
+			buttonY += 50;
 		}
 
 		var btnNewGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "New Game");
@@ -52,7 +52,7 @@ class MainMenuState extends HxlState
 		menu.addItem(btnNewGame);
 		btnNewGame.setCallback(function() { self.changeState(CreateCharState); });
 
-		buttonY += 40;
+		buttonY += 50;
 
 		var btnCredits:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Credits");
 		btnCredits.setNormalFormat(null, 40, 0xffffff, "center");
