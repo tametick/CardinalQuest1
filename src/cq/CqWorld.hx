@@ -4,6 +4,7 @@ import cq.CqResources;
 import cq.CqItem;
 import cq.CqActor;
 
+
 import generators.BSP;
 import world.World;
 import world.Level;
@@ -16,6 +17,7 @@ import haxel.HxlPoint;
 import haxel.HxlState;
 import haxel.HxlUtil;
 import haxel.HxlGraphics;
+import haxel.HxlLog;
 
 import data.Registery;
 import data.Configuration;
@@ -233,7 +235,7 @@ class CqLevel extends Level {
 				// remove expired timers
 				for (t in expired) {
 					timers.remove(t);
-					trace("removed expired timer: " + t.buffName);
+					HxlLog.append("removed expired timer: " + t.buffName);
 				}
 			}
 			

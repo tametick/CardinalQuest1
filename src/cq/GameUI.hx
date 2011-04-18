@@ -58,6 +58,7 @@ class GameUI extends HxlDialog {
 	// State & helper vars
 	public static var currentPanel:HxlSlidingDialog = null;
 
+	
 	public override function new() {
 		super(0, 0, HxlGraphics.width, HxlGraphics.height);
 

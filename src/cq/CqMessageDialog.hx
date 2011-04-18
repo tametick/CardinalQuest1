@@ -9,13 +9,12 @@ import haxel.HxlGraphics;
 import haxel.HxlSlidingDialog;
 import haxel.HxlSprite;
 import haxel.HxlTextContainer;
+import haxel.HxlLog;
 
-class CqMessageDialog extends HxlSlidingDialog {
-
+class CqMessageDialog extends HxlSlidingDialog, implements HxlLogViewer {
 	var textBox:HxlTextContainer;
 
-	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0)
-	{
+	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0) {
 		// Size: 472 x 480
 		super(X, Y, Width, Height, Direction);
 
@@ -27,11 +26,12 @@ class CqMessageDialog extends HxlSlidingDialog {
 		textBox.maxLines = 100;
 		textBox.setFormat(null, 16, 0xffffff, "left", 0x010101);
 		add(textBox);
-		textBox.addText("Test 1..");
-		textBox.addText("Test 2..");
-		for ( i in 0...100 ) {
-			textBox.addText("Test "+i+"..");
-		}
+		
+		HxlLog.logViewer = this;
+	}
+	
+	public function append(message:String) {
+		textBox.addText(message);
 	}
 
 }

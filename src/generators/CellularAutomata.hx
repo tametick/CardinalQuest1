@@ -168,11 +168,4 @@ class CellularAutomata
 		else 
 			return getCaveMap();
 	}
-	
-	
-	public static function main() {
-		var ca  = new CellularAutomata(20, 20,1,8);
-		var cave = ca.getCaveMap();
-		trace("\n"+convertMatrixToStr(cave));
-	}
 }

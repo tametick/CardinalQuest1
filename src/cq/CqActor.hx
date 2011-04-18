@@ -177,10 +177,8 @@ class CqActor extends CqObject, implements Actor {
 	function injureActor(other:CqActor, dmgTotal:Int) {
 		if (this == cast(Registery.player,CqPlayer)) {
 			HxlLog.append("You hit");
-			trace("You hit");
 		} else {
 			HxlLog.append("Hit you");
-			trace("Hit you");
 		}
 		other.doInjure(dmgTotal);
 	}
@@ -197,13 +195,11 @@ class CqActor extends CqObject, implements Actor {
 			var mob = cast(other, CqMob);
 			
 			HxlLog.append("You kill");
-			trace("You kill");
 			cast(this, CqPlayer).gainExperience(mob);
 			// remove other
 			Registery.world.currentLevel.removeMobFromLevel(state, mob);
 		} else {
 			HxlLog.append("kill you");
-			trace("kill you");
 		}
 	}
 
@@ -250,10 +246,8 @@ class CqActor extends CqObject, implements Actor {
 			// Miss
 			if (this == cast(Registery.player,CqPlayer)) {
 				HxlLog.append("You miss");//<b style='color: rgb("+other.vars.color.join()+");'>"+other.vars.description[0]+"</b>.");
-				trace("You miss");
 			} else {
 				HxlLog.append("Misses you");//"<b style='color: rgb("+vars.color.join()+");'>"+vars.description[0]+"</b> misses you.");
-				trace("Misses you");
 			}
 			for ( Callback in onAttackMiss ) Callback(this, other);
 		}
@@ -378,7 +372,7 @@ class CqActor extends CqObject, implements Actor {
 	
 	public function use(itemOrSpell:CqItem, ?other:CqActor=null) {
 		// todo
-		trace("using item or spell");
+		HxlLog.append("using item or spell");
 		
 		// add buffs
 		if(itemOrSpell.buffs != null) {
@@ -414,8 +408,7 @@ class CqActor extends CqObject, implements Actor {
 	}
 
 	function applyEffect(effect:CqSpecialEffectValue, other:CqActor) {
-		// todo
-		trace("applied special effect: " + effect.name);
+		HxlLog.append("applied special effect: " + effect.name);
 		
 		if (effect.name == "heal")
 			if (effect.value == "full")
@@ -526,7 +519,7 @@ class CqPlayer extends CqActor, implements Player {
 
 	public function gainExperience(other:CqMob) {
 		// todo: the amount of xp gained should be passed to this method
-		trace("gained " + other.xpValue + " xp");
+		HxlLog.append("gained " + other.xpValue + " xp");
 		cast(this, CqPlayer).xp += other.xpValue;
 		
 		if (xp >= nextLevel())
@@ -540,7 +533,7 @@ class CqPlayer extends CqActor, implements Player {
 	}
 	
 	function gainLevel() {
-		trace("level: " + (++level));
+		HxlLog.append("level: " + (++level));
 		maxHp += vitality;
 		hp = maxHp;
 		healthBar.updateValue();

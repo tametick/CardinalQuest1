@@ -15,6 +15,7 @@ import haxel.HxlButton;
 import haxel.HxlDialog;
 import haxel.HxlGraphics;
 import haxel.HxlObjectContainer;
+import haxel.HxlLog;
 
 class CqSpellButton extends HxlDialog {
 
@@ -48,7 +49,7 @@ class CqSpellButton extends HxlDialog {
 		if (!exists || !visible || !active || GameUI.currentPanel != null ) return;
 		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
 			if ( cell.getCellObj() != null ) {
-				trace("Activating spell!!");
+				HxlLog.append("Activating spell!!");
 				event.stopPropagation();
 			}
 		}
