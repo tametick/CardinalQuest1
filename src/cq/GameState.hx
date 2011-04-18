@@ -6,6 +6,8 @@ import haxel.HxlGraphics;
 import haxel.HxlUtil;
 import haxel.HxlSprite;
 
+import flash.Lib.
+
 import data.Configuration;
 import data.Registery;
 
@@ -146,7 +148,7 @@ class GameState extends HxlState {
 	
 	
 	function openDoor(tile:CqTile) {
-		// fix me 
-		Registery.world.currentLevel.updateTileGraphic(tile.mapX, tile.mapY, SpriteTiles.instance.openDoors[0]);
+		var col = cast(Registery.world.currentLevel, CqLevel).getColor();
+		Registery.world.currentLevel.updateTileGraphic(tile.mapX, tile.mapY, SpriteTiles.instance.getSpriteIndex(col+"_door_open"));
 	}
 }

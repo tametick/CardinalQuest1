@@ -40,6 +40,15 @@ class CqLevel extends Level {
 	static var tiles = SpriteTiles.instance;
 	static var itemSprites = SpriteItems.instance;
 
+	public function getColor():String {
+		if (index < 4)
+			return "blue";
+		else if (index < 8)
+			return "brown";
+		else
+			return "red";
+	}
+	
 	public function new(index:Int) {
 		super(index);
 		tileClass = CqTile;
@@ -75,7 +84,9 @@ class CqLevel extends Level {
 					default:
 				}
 				
-				newMapData[y][x] =  tiles.getSpriteIndex("red_"+suffix);
+				var prefix = getColor()+"_";
+				
+				newMapData[y][x] =  tiles.getSpriteIndex(prefix+suffix);
 			}
 		}
 		
