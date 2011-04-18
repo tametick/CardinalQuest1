@@ -678,6 +678,8 @@ class CqInventoryItem extends HxlSprite {
 						Registery.world.currentLevel.addLootToLevel(HxlGraphics.state, this.item);
 						destroy();
 						cast(Registery.player, CqPlayer).removeInventory(this.item);
+						_dlg.dlgEqGrid.onItemDragStop();
+						_dlg.dlgSpellGrid.onItemDragStop();
 						return;
 					} else {
 						setInventoryCell(CqInventoryCell.highlightedCell.cellIndex);
@@ -703,6 +705,8 @@ class CqInventoryItem extends HxlSprite {
 						_dlg.dlgInvGrid.setCellObj(cellIndex, null);
 						destroy();
 						cast(Registery.player, CqPlayer).removeInventory(this.item);
+						_dlg.dlgEqGrid.onItemDragStop();
+						_dlg.dlgSpellGrid.onItemDragStop();
 						return;
 					} else {
 						updateIcon();
