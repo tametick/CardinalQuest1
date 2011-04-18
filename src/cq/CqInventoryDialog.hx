@@ -2,6 +2,7 @@ package cq;
 
 import cq.CqActor;
 import cq.CqItem;
+import cq.CqPotionButton;
 import cq.CqResources;
 import cq.CqSpell;
 import cq.CqSpellButton;
@@ -35,6 +36,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	public var dlgInvGrid:CqInventoryGrid;
 	public var dlgEqGrid:CqEquipmentGrid;
 	public var dlgSpellGrid:CqSpellGrid;
+	public var dlgPotionGrid:CqPotionGrid;
 	var itemSheet:HxlSpriteSheet;
 	var itemSprite:HxlSprite;
 	var spellSheet:HxlSpriteSheet;
@@ -279,6 +281,47 @@ class CqSpellGrid extends CqInventoryGrid {
 	public function onItemDrag(Item:CqItem):Void {
 		for( i in 0...cells.length ) {
 			var Cell:CqSpellCell = cast(cells[i], CqSpellCell);
+			if ( Item.equipSlot == Cell.equipSlot ) {
+				Cell.setGlow(true);
+			}
+		}
+	}
+
+	public function onItemDragStop():Void {
+		for ( i in 0...cells.length ) {
+			cells[i].setGlow(false);
+		}
+	}
+
+}
+
+class CqPotionGrid extends CqInventoryGrid {
+
+	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100) {
+		super(X, Y, Width, Height, false);
+
+		cells = new Array();
+
+		var cellBgKey:String = "EquipmentCellBG";
+		var cellBgHighlightKey:String = "EqCellBGHighlight";
+
+		var btnSize:Int = 64;
+		var cellSize:Int = 54;
+		var padding:Int = 8;
+		var idx:Int = 0;
+	
+		for ( i in 0...5 ) {
+			var btnCell:CqPotionButton = new CqPotionButton(10 + ((i * btnSize) + (i * 10)), 10, btnSize, btnSize,i);
+
+			btnCell.setBackgroundColor(0xff999999, 0xffcccccc);
+			add(btnCell);
+			cells.push(btnCell.cell);
+		}
+	}
+
+	public function onItemDrag(Item:CqItem):Void {
+		for( i in 0...cells.length ) {
+			var Cell:CqPotionCell = cast(cells[i], CqPotionCell);
 			if ( Item.equipSlot == Cell.equipSlot ) {
 				Cell.setGlow(true);
 			}

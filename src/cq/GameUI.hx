@@ -6,6 +6,7 @@ import cq.CqEffectInjure;
 import cq.CqFloatText;
 import cq.CqInventoryDialog;
 import cq.CqItem;
+import cq.CqPotionButton;
 import cq.CqSpell;
 import cq.CqSpellButton;
 import cq.CqVitalBar;
@@ -38,6 +39,7 @@ class GameUI extends HxlDialog {
 	// Main UI containers
 	var leftButtons:HxlButtonContainer;
 	var dlgSpellGrid:CqSpellGrid;
+	var dlgPotionGrid:CqPotionGrid;
 
 	// View state panels
 	var panelMap:CqMapDialog;
@@ -73,15 +75,16 @@ class GameUI extends HxlDialog {
 		/**
 		 * Create and init main containers
 		 **/
-		leftButtons = new HxlButtonContainer(0, 50, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
+		leftButtons = new HxlButtonContainer(0, 30, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
 		//leftButtons.setBackgroundColor(0x99555555, 10);
 		leftButtons.scrollFactor.x = leftButtons.scrollFactor.y = 0;
 		add(leftButtons);
 
-		//dlgSpellGrid = new CqSpellGrid(HxlGraphics.width-84, 50, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
-		dlgSpellGrid = new CqSpellGrid(HxlGraphics.width-84, 50, 84, 380);
-		//dlgSpellGrid.setBackgroundColor(0x88555555);
+		dlgSpellGrid = new CqSpellGrid(HxlGraphics.width-84, 30, 84, 380);
 		add(dlgSpellGrid);
+
+		dlgPotionGrid = new CqPotionGrid(130, HxlGraphics.height-84, 380, 84);
+		add(dlgPotionGrid);
 
 		/**
 		 * View state panels
@@ -250,6 +253,9 @@ class GameUI extends HxlDialog {
 	public function itemPickup(Item:CqItem):Void {
 		panelInventory.itemPickup(Item);
 		btnInventoryView.doFlash();
+
+
+		
 	}
 
 	public function initChests():Void {

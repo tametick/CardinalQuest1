@@ -5,15 +5,23 @@ import com.eclecticdesignstudio.motion.easing.Cubic;
 
 import data.Configuration;
 import data.Registery;
+
+import haxel.HxlSprite;
 import haxel.HxlState;
 import haxel.HxlGraphics;
+import haxel.HxlUtil;
+
 import world.Loot;
 import world.GameObject;
+
 import cq.CqConfiguration;
 import cq.CqResources;
 import cq.CqWorld;
 
-import haxel.HxlUtil;
+import flash.display.BitmapData;
+import flash.filters.GlowFilter;
+import flash.geom.Point;
+import flash.geom.Rectangle;
 
 class CqSpecialEffectValue {
 	public var name:String;
@@ -43,6 +51,8 @@ class CqLootFactory {
 				item.equipSlot = CqEquipSlot.GLOVES;
 			case STAFF, DAGGER, SHORT_SWORD, LONG_SWORD:
 				item.equipSlot = CqEquipSlot.WEAPON;
+			case GREEN_POTION, PURPLE_POTION, BLUE_POTION, YELLOW_POTION, RED_POTION:
+				item.equipSlot = CqEquipSlot.POTION;
 			default:
 		}
 		
@@ -127,7 +137,12 @@ class CqItem extends GameObjectImpl, implements Loot {
 	public var duration:Int;
 	public var stackSize:Int;
 	public var stackSizeMax:Int;
-	
+
+	var isGlowing:Bool;
+	var glowSpriteKey:String;
+	var glowSprite:BitmapData;
+	var glowRect:Rectangle;
+
 	public function new(X:Float, Y:Float, typeName:String) {
 		super(X, Y);
 
@@ -140,7 +155,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 			loadGraphic(SpriteItems, false, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 			addAnimation("idle", [SpriteItems.instance.getSpriteIndex(typeName)], 0 );
 		}
-		
+	
 		consumable = false;
 		spriteIndex = typeName;
 		damage = new Range(0, 0);
@@ -150,6 +165,36 @@ class CqItem extends GameObjectImpl, implements Loot {
 		play("idle");
 		stackSize = 1;
 		stackSizeMax = 1;
+
+		isGlowing = false;
+		glowSpriteKey = "ItemGlow-"+typeName;
+		if ( HxlGraphics.checkBitmapCache(glowSpriteKey) ) {
+			glowSprite = HxlGraphics.getBitmap(glowSpriteKey);
+		} else {
+			var tmp:BitmapData = new BitmapData(48, 48, true, 0x0);
+			tmp.copyPixels(getFramePixels(), new Rectangle(0, 0, 32, 32), new Point(8, 8), null, null, true);
+			var glow:GlowFilter = new GlowFilter(0xffea00, 0.9, 16.0, 16.0, 1.6, 1, false, false);
+			glowRect = new Rectangle(0, 0, 48, 48);
+			tmp.applyFilter(tmp, glowRect, new Point(0, 0), glow);
+			HxlGraphics.addBitmapData(tmp, glowSpriteKey);
+			glowSprite = tmp;
+			glow = null;
+		}
+	}
+
+	public function setGlow(Toggle:Bool):Void {
+		isGlowing = Toggle;
+	}
+
+	override function renderSprite():Void {
+		if ( !isGlowing ) {
+			super.renderSprite();
+			return;
+		}
+		getScreenXY(_point);
+		_flashPoint.x = _point.x - 8;
+		_flashPoint.y = _point.y - 8;
+		HxlGraphics.buffer.copyPixels(glowSprite, glowRect, _flashPoint, null, null, true);
 	}
 
 	public function doPickupEffect():Void {
@@ -248,4 +293,5 @@ enum CqEquipSlot {
 	GLOVES;
 	WEAPON;
 	SPELL;
+	POTION;
 }

@@ -435,6 +435,8 @@ class CqPlayer extends CqActor, implements Player {
 	var onPickup:List<Dynamic>;
 	var onGainXP:List<Dynamic>;
 
+	var lastTile:HxlPoint;
+
 	public function new(playerClass:CqClass, ?X:Float = -1, ?Y:Float = -1) {		
 		switch(playerClass) {
 			case FIGHTER:
@@ -471,6 +473,8 @@ class CqPlayer extends CqActor, implements Player {
 		inventory = new Array<CqItem>();
 
 		play("idle");
+
+		lastTile = null;
 	}
 
 	public function addOnGainXP(Callback:Dynamic):Void {
@@ -540,9 +544,38 @@ class CqPlayer extends CqActor, implements Player {
 		healthBar.updateValue();
 	}
 	
+	public override function actInDirection(state:HxlState, targetTile:HxlPoint):Bool {
+		lastTile = tilePos;
+		return super.actInDirection(state, targetTile);
+	}
+
 	public override function moveStop(state:HxlState):Void {
 		super.moveStop(state);
-		var currentTileIndex = cast(Registery.world.currentLevel.getTile(Std.int(tilePos.x), Std.int(tilePos.y)), Tile).dataNum;
+		var currentTile = cast(Registery.world.currentLevel.getTile(Std.int(tilePos.x), Std.int(tilePos.y)), Tile);
+		var currentTileIndex = currentTile.dataNum;
+		if ( currentTile.loots.length > 0 ) {
+			var item = cast(currentTile.loots[currentTile.loots.length-1], CqItem);
+			item.setGlow(true);
+		}
+	}
+
+	public override function moveToPixel(state:HxlState, X:Float, Y:Float):Void {
+		if ( lastTile != null ) {
+			if ( Registery.world.currentLevel.getTile(Std.int(lastTile.x), Std.int(lastTile.y)) != null ) {
+				var tile = cast(Registery.world.currentLevel.getTile(Std.int(lastTile.x), Std.int(lastTile.y)), Tile);
+				if ( tile.loots.length > 0 ) {
+					for ( item in tile.loots ) cast(item, CqItem).setGlow(false);
+				}
+			}
+		}
+		super.moveToPixel(state, X, Y);
+		isMoving = true;
+		if ( Y < y ) bobDir = 0;
+		else if ( X > x ) bobDir = 1;
+		else if ( Y > y ) bobDir = 2;
+		else if ( X < x ) bobDir = 3;
+		bobCounter = 0.0;
+		Actuate.tween(this, moveSpeed, { x: X, y: Y } ).onComplete(moveStop,[state]);
 	}
 }
 
