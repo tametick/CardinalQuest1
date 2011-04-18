@@ -6,8 +6,6 @@ import haxel.HxlGraphics;
 import haxel.HxlUtil;
 import haxel.HxlSprite;
 
-import flash.Lib.
-
 import data.Configuration;
 import data.Registery;
 
