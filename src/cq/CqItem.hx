@@ -35,7 +35,7 @@ class CqSpecialEffectValue {
 class CqLootFactory {
 	public static function newItem(X:Float, Y:Float, typeName:String):CqItem {
 
-		typeName = "GREEN_POTION";
+		//typeName = "GREEN_POTION";
 		var type = Type.createEnum(CqItemType,  typeName);
 		var item = new CqItem(X, Y, typeName.toLowerCase());
 

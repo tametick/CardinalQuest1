@@ -59,9 +59,9 @@ class CqPotionButton extends HxlDialog {
 				event.stopPropagation();
 				cast(Registery.player, CqActor).use(item);
 				item.stackSize--;
-				trace("stackSize: "+item.stackSize);
 				if ( item.stackSize <= 0 ) {
 					_dlg.remove(cellObj);
+					cell.setCellObj(null);
 					cellObj.destroy();
 					cast(Registery.player, CqPlayer).removeInventory(item);
 				} else {

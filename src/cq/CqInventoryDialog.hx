@@ -97,6 +97,14 @@ class CqInventoryDialog extends HxlSlidingDialog {
 				return;
 			}
 		}
+		if ( Item.equipSlot == POTION ) {
+			for ( cell in dlgPotionGrid.cells ) {
+				if ( cell.getCellObj() != null && cell.getCellObj().item == Item ) {
+					cell.getCellObj().updateIcon();
+					return;
+				}
+			}
+		}
 		for ( cell in dlgInvGrid.cells ) {
 			if ( cell.getCellObj() == null ) {
 				var item:CqInventoryItem = new CqInventoryItem(this, 2, 2);
