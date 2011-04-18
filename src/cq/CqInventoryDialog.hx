@@ -160,6 +160,13 @@ class CqInventoryGrid extends HxlDialog {
 		cells[cells.length-1].dropCell = true;
 	}
 
+	public function getOpenCellIndex():Int {
+		for ( i in 0...cells.length ) {
+			if ( cells[i].getCellObj() == null ) return i;
+		}
+		return -1;
+	}
+
 	public function getCellItemPos(Cell:Int):HxlPoint {
 		if ( !initialized ) {
 			return new HxlPoint(x + cells[Cell].x + 2, y + cells[Cell].y + 2);
@@ -541,11 +548,17 @@ class CqInventoryItem extends HxlSprite {
 	/**
 	 * Sets this object as the CellObj of the target equipment cell, and places this object within that cell.
 	 **/
-	public function setEquipmentCell(Cell:Int):Void {
+	public function setEquipmentCell(Cell:Int):Bool {
 		_dlg.dlgSpellGrid.remove(this);
 		_dlg.remove(this);
 		zIndex = idleZIndex;
 		_dlg.add(this);
+
+		if ( cast(_dlg.dlgEqGrid.cells[Cell], CqEquipmentCell).equipSlot != this.item.equipSlot ) {
+			Cell = _dlg.dlgInvGrid.getOpenCellIndex();
+			setInventoryCell(Cell);
+			return false;
+		}
 
 		cellIndex = Cell;
 		setPos(_dlg.dlgEqGrid.getCellItemPos(Cell));
@@ -553,40 +566,55 @@ class CqInventoryItem extends HxlSprite {
 		cellEquip = true;
 		cellSpell = false;
 		cellPotion = false;
+		return true;
 	}
 
 	/**
 	 * Sets this object as the CellObj of the target spell cell, and places this object within that cell.
 	 **/
-	public function setSpellCell(Cell:Int):Void {
+	public function setSpellCell(Cell:Int):Bool {
 		_dlg.dlgSpellGrid.remove(this);
 		_dlg.remove(this);
 		zIndex = idleZIndex;
-		_dlg.dlgSpellGrid.add(this);
 
+		if ( cast(_dlg.dlgSpellGrid.cells[Cell], CqEquipmentCell).equipSlot != this.item.equipSlot ) {
+			Cell = _dlg.dlgInvGrid.getOpenCellIndex();
+			setInventoryCell(Cell);
+			return false;
+		}
+
+		_dlg.dlgSpellGrid.add(this);
 		cellIndex = Cell;
 		setPos(_dlg.dlgSpellGrid.getCellItemPos(Cell));
 		_dlg.dlgSpellGrid.setCellObj(Cell, this);
 		cellSpell = true;
 		cellEquip = false;
 		cellPotion = false;
+		return true;
 	}
 
 	/**
 	 * Sets this object as the CellObj of the target potion cell, and places this object within that cell.
 	 **/
-	public function setPotionCell(Cell:Int):Void {
+	public function setPotionCell(Cell:Int):Bool {
 		_dlg.dlgPotionGrid.remove(this);
 		_dlg.remove(this);
 		zIndex = idleZIndex;
-		_dlg.dlgPotionGrid.add(this);
 
+		if ( cast(_dlg.dlgPotionGrid.cells[Cell], CqEquipmentCell).equipSlot != this.item.equipSlot ) {
+			Cell = _dlg.dlgInvGrid.getOpenCellIndex();
+			setInventoryCell(Cell);
+			return false;
+		}
+
+		_dlg.dlgPotionGrid.add(this);
 		cellIndex = Cell;
 		setPos(_dlg.dlgPotionGrid.getCellItemPos(Cell));
 		_dlg.dlgPotionGrid.setCellObj(Cell, this);
 		cellSpell = false;
 		cellEquip = false;
 		cellPotion = true;
+		return true;
 	}
 	public function setPos(Pos:HxlPoint):Void {
 		x = Pos.x;
@@ -647,8 +675,7 @@ class CqInventoryItem extends HxlSprite {
 				if ( cellEquip ) {
 					// Moving the other item into an equipment cell
 					cast(Registery.player, CqActor).unequipItem(this.item);
-					other.setEquipmentCell(cellIndex);
-					cast(Registery.player, CqActor).equipItem(other.item);
+					if ( other.setEquipmentCell(cellIndex) ) cast(Registery.player, CqActor).equipItem(other.item);
 				} else if ( cellSpell ) {
 					// Moving the other item into a spell cell
 					other.setSpellCell(cellIndex);
