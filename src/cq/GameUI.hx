@@ -84,6 +84,7 @@ class GameUI extends HxlDialog {
 		add(dlgSpellGrid);
 
 		dlgPotionGrid = new CqPotionGrid(130, HxlGraphics.height-84, 380, 84);
+		dlgPotionGrid.zIndex = 99;
 		add(dlgPotionGrid);
 
 		/**
@@ -94,7 +95,8 @@ class GameUI extends HxlDialog {
 		panelMap.zIndex = 2;
 		add(panelMap);
 
-		panelInventory = new CqInventoryDialog(84, 0, 472, 480);
+		// -62 472x480
+		panelInventory = new CqInventoryDialog(84, 0, 472, 400);
 		panelInventory.setBackgroundColor(0xffBC9A9A);
 		panelInventory.zIndex = 2;
 		add(panelInventory);

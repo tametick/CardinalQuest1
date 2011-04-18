@@ -58,8 +58,9 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		dlgInfo.setBackgroundColor(0xff555555);
 		add(dlgInfo);
 
-		dlgInvGrid = new CqInventoryGrid(10, 275, 452, 195);
-		dlgInvGrid.setBackgroundColor(0xff999999);
+		// 452x195
+		dlgInvGrid = new CqInventoryGrid(10, 275, 452, 117);
+		//dlgInvGrid.setBackgroundColor(0xff999999);
 		add(dlgInvGrid);
 
 		itemSheet = SpriteItems.instance;
@@ -140,16 +141,17 @@ class CqInventoryGrid extends HxlDialog {
 		var cellBgKey:String = "InventoryCellBG";
 		var cellBgHighlightKey:String = "CellBGHighlight";
 
-		var padding:Int = 8;
+		var paddingX:Float = 12.3;
+		var paddingY:Float = 8;
 		var cellSize:Int = 54;
-		var offsetX:Int = 5;
+		var offsetX:Int = 0;
 
-		var rows:Int = 3;
+		var rows:Int = 2;
 		var cols:Int = 7;
 		for ( row in 0...rows ) {
 			for ( col in 0...cols ) {
 				var idx:Int = cells.length;
-				var cell:CqInventoryCell = new CqInventoryCell( offsetX + ((col+1) * padding) + (col * cellSize), ((row+1) * padding) + (row * cellSize), cellSize, cellSize, idx);
+				var cell:CqInventoryCell = new CqInventoryCell( offsetX + ((col) * paddingX) + (col * cellSize), ((row) * paddingY) + (row * cellSize), cellSize, cellSize, idx);
 				cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
 				add(cell);
 				cells.push(cell);
