@@ -199,7 +199,8 @@ class CqActor extends CqObject, implements Actor {
 			// remove other
 			Registery.world.currentLevel.removeMobFromLevel(state, mob);
 		} else {
-			HxlLog.append("kill you");
+			HxlLog.append("kills you");
+			// todo = game over screen
 		}
 	}
 
