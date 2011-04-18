@@ -672,10 +672,14 @@ class CqInventoryItem extends HxlSprite {
 					if ( CqInventoryCell.highlightedCell.dropCell ) {
 						// This item is being dropped
 						_dlg.remove(this);
-						this.item.setTilePos(Registery.player.getTilePos());
+						var itemTilePos = Registery.player.getTilePos();
+						this.item.setTilePos(itemTilePos);
 						this.item.visible = true;
 						this.item.alpha = 1.0;
 						Registery.world.currentLevel.addLootToLevel(HxlGraphics.state, this.item);
+						var positionOfTile:HxlPoint = Registery.world.currentLevel.getPixelPositionOfTile(itemTilePos.x, itemTilePos.y);
+						this.item.x = positionOfTile.x;
+						this.item.y = positionOfTile.y;
 						destroy();
 						cast(Registery.player, CqPlayer).removeInventory(this.item);
 						_dlg.dlgEqGrid.onItemDragStop();
