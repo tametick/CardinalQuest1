@@ -465,6 +465,7 @@ class CqInventoryItem extends HxlSprite {
 	var cellIndex:Int;
 	public var cellEquip:Bool;
 	public var cellSpell:Bool;
+	public var cellPotion:Bool;
 	public var item:CqItem;
 	var selected:Bool;
 	//var stackText:HxlText;
@@ -479,6 +480,7 @@ class CqInventoryItem extends HxlSprite {
 		cellIndex = 0;
 		cellEquip = false;
 		cellSpell = false;
+		cellPotion = false;
 		item = null;
 		zIndex = idleZIndex;
 		setSelected(false);
@@ -533,6 +535,7 @@ class CqInventoryItem extends HxlSprite {
 		_dlg.dlgInvGrid.setCellObj(Cell, this);
 		cellEquip = false;
 		cellSpell = false;
+		cellPotion = false;
 	}
 
 	/**
@@ -549,6 +552,7 @@ class CqInventoryItem extends HxlSprite {
 		_dlg.dlgEqGrid.setCellObj(Cell, this);
 		cellEquip = true;
 		cellSpell = false;
+		cellPotion = false;
 	}
 
 	/**
@@ -565,8 +569,25 @@ class CqInventoryItem extends HxlSprite {
 		_dlg.dlgSpellGrid.setCellObj(Cell, this);
 		cellSpell = true;
 		cellEquip = false;
+		cellPotion = false;
 	}
 
+	/**
+	 * Sets this object as the CellObj of the target potion cell, and places this object within that cell.
+	 **/
+	public function setPotionCell(Cell:Int):Void {
+		_dlg.dlgPotionGrid.remove(this);
+		_dlg.remove(this);
+		zIndex = idleZIndex;
+		_dlg.dlgPotionGrid.add(this);
+
+		cellIndex = Cell;
+		setPos(_dlg.dlgPotionGrid.getCellItemPos(Cell));
+		_dlg.dlgPotionGrid.setCellObj(Cell, this);
+		cellSpell = false;
+		cellEquip = false;
+		cellPotion = true;
+	}
 	public function setPos(Pos:HxlPoint):Void {
 		x = Pos.x;
 		y = Pos.y;
@@ -613,6 +634,7 @@ class CqInventoryItem extends HxlSprite {
 		_dlg.add(this);
 		_dlg.dlgEqGrid.onItemDrag(this.item);
 		_dlg.dlgSpellGrid.onItemDrag(this.item);
+		_dlg.dlgPotionGrid.onItemDrag(this.item);
 		super.dragStart();
 	}
 
@@ -631,6 +653,9 @@ class CqInventoryItem extends HxlSprite {
 					// Moving the other item into a spell cell
 					other.setSpellCell(cellIndex);
 					// todo: equip spell
+				} else if ( cellPotion ) {
+					// Moving the other item into a potion cell
+					other.setPotionCell(cellIndex);
 				} else {
 					// Moving the other item into an inventory cell
 					other.setInventoryCell(cellIndex);
@@ -639,6 +664,9 @@ class CqInventoryItem extends HxlSprite {
 					// Moving this item into a spell cell
 					setSpellCell(CqInventoryCell.highlightedCell.cellIndex);
 					// todo: equip spell
+				} else if ( Std.is(CqInventoryCell.highlightedCell, CqPotionCell) ) {
+					// Moving this item into a potion cell
+					setPotionCell(CqInventoryCell.highlightedCell.cellIndex);
 				} else if ( Std.is(CqInventoryCell.highlightedCell, CqEquipmentCell) ) {
 					// Moving this item into an equipment cell
 					setEquipmentCell(CqInventoryCell.highlightedCell.cellIndex);
@@ -657,6 +685,9 @@ class CqInventoryItem extends HxlSprite {
 				} else if ( cellSpell ) {
 					// Clearing out a spell cell
 					_dlg.dlgSpellGrid.setCellObj(cellIndex, null);
+				} else if ( cellPotion ) {
+					// Clearing out a potion cell
+					_dlg.dlgPotionGrid.setCellObj(cellIndex, null);
 				} else {
 					// Clearing out an inventory cell
 					_dlg.dlgInvGrid.setCellObj(cellIndex, null);
@@ -665,12 +696,14 @@ class CqInventoryItem extends HxlSprite {
 					// Moving this item into a spell cell
 					setSpellCell(CqInventoryCell.highlightedCell.cellIndex);
 					// todo: equip spell
+				} else if ( Std.is(CqInventoryCell.highlightedCell, CqPotionCell) ) {
+					// Moving this item into a potion cell
+					setPotionCell(CqInventoryCell.highlightedCell.cellIndex);
 				} else if ( Std.is(CqInventoryCell.highlightedCell, CqEquipmentCell) ) {
 					// Moving this item into an equipment cell
 					setEquipmentCell(CqInventoryCell.highlightedCell.cellIndex);
 					cast(Registery.player, CqActor).equipItem(this.item);
 				} else {
-					// Moving this item into an inventory cell
 					if ( CqInventoryCell.highlightedCell.dropCell ) {
 						// This item is being dropped
 						_dlg.remove(this);
@@ -686,6 +719,7 @@ class CqInventoryItem extends HxlSprite {
 						cast(Registery.player, CqPlayer).removeInventory(this.item);
 						_dlg.dlgEqGrid.onItemDragStop();
 						_dlg.dlgSpellGrid.onItemDragStop();
+						_dlg.dlgPotionGrid.onItemDragStop();
 						return;
 					} else {
 						setInventoryCell(CqInventoryCell.highlightedCell.cellIndex);
@@ -713,6 +747,7 @@ class CqInventoryItem extends HxlSprite {
 						cast(Registery.player, CqPlayer).removeInventory(this.item);
 						_dlg.dlgEqGrid.onItemDragStop();
 						_dlg.dlgSpellGrid.onItemDragStop();
+						_dlg.dlgPotionGrid.onItemDragStop();
 						return;
 					} else {
 						updateIcon();
@@ -724,7 +759,7 @@ class CqInventoryItem extends HxlSprite {
 		}
 		_dlg.dlgEqGrid.onItemDragStop();
 		_dlg.dlgSpellGrid.onItemDragStop();
-
+		_dlg.dlgPotionGrid.onItemDragStop();
 		super.dragStop();
 	}
 }
