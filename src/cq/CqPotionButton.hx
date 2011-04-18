@@ -1,9 +1,12 @@
 package cq;
 
+import cq.CqActor;
 import cq.GameUI;
 import cq.CqInventoryDialog;
 import cq.CqItem;
 import cq.CqResources;
+
+import data.Registery;
 
 import flash.display.BitmapData;
 import flash.events.MouseEvent;
@@ -20,8 +23,10 @@ class CqPotionButton extends HxlDialog {
 
 	var _initialized:Bool;
 	public var cell:CqPotionCell;
+	var _dlg:CqPotionGrid;
 
-	public function new(X:Int,Y:Int,?Width:Int=100,?Height:Int=20,?Idx:Int=0) {
+	public function new(Grid:CqPotionGrid, X:Int,Y:Int,?Width:Int=100,?Height:Int=20,?Idx:Int=0) {
+		_dlg = Grid; 
 		super(X, Y, Width, Height);
 
 		initialized = false;
@@ -48,8 +53,20 @@ class CqPotionButton extends HxlDialog {
 		if (!exists || !visible || !active || GameUI.currentPanel != null ) return;
 		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
 			if ( cell.getCellObj() != null ) {
+				var cellObj = cell.getCellObj();
+				var item:CqItem = cellObj.item;
 				HxlLog.append("Activating spell!!");
 				event.stopPropagation();
+				cast(Registery.player, CqActor).use(item);
+				item.stackSize--;
+				trace("stackSize: "+item.stackSize);
+				if ( item.stackSize <= 0 ) {
+					_dlg.remove(cellObj);
+					cellObj.destroy();
+					cast(Registery.player, CqPlayer).removeInventory(item);
+				} else {
+					cell.getCellObj().updateIcon();
+				}
 			}
 		}
 	}

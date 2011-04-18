@@ -320,7 +320,7 @@ class CqPotionGrid extends CqInventoryGrid {
 		var idx:Int = 0;
 	
 		for ( i in 0...5 ) {
-			var btnCell:CqPotionButton = new CqPotionButton(10 + ((i * btnSize) + (i * 10)), 10, btnSize, btnSize,i);
+			var btnCell:CqPotionButton = new CqPotionButton(this, 10 + ((i * btnSize) + (i * 10)), 10, btnSize, btnSize,i);
 
 			btnCell.setBackgroundColor(0xff999999, 0xffcccccc);
 			add(btnCell);
@@ -466,7 +466,7 @@ class CqInventoryItem extends HxlSprite {
 	public static var selectedItem:CqInventoryItem = null;
 	var background:BitmapData;
 	var icon:BitmapData;
-	var _dlg:CqInventoryDialog;
+	public var _dlg:CqInventoryDialog;
 	var idleZIndex:Int;
 	var dragZIndex:Int;
 	var cellIndex:Int;
