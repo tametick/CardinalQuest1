@@ -71,7 +71,9 @@ class SpriteTiles extends HxlSpriteSheet {
 	public var stairsDown:Array<Int>;
 	public var doors:Array<Int>;
 	public var openDoors:Array<Int>;
+	
 	public function new() { 
+		// important: one color-scheme per line (used implicitly in level generator)
 		spriteNames = [
 			["red_up","red_down","red_floor0","red_floor1","red_wall0","red_wall1","red_wall2","red_wall3","red_wall4","red_door_close","red_door_open"], 
 			["blue_up", "blue_down", "blue_floor0", "blue_floor1", "blue_wall0", "blue_wall1", "blue_wall2", "blue_wall3", "blue_wall4", "blue_door_close", "blue_door_open"], 

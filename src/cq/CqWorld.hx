@@ -43,8 +43,13 @@ class CqLevel extends Level {
 	public function new(index:Int) {
 		super(index);
 		tileClass = CqTile;
-				
-		var newMapData = BSP.getBSPMap(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), tiles.getSpriteIndex("red_wall4"), tiles.getSpriteIndex("red_floor0"), tiles.getSpriteIndex("red_door_close"));
+		
+		var tmpWall = tiles.getSpriteIndex("red_wall4");
+		var tmpFloor = tiles.getSpriteIndex("red_floor0");
+		var tmpDoor = tiles.getSpriteIndex("red_door_close");
+		var tmpDown = tiles.getSpriteIndex("red_down");
+		
+		var newMapData = BSP.getBSPMap(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), tmpWall, tmpFloor, tmpDoor);
 
 		startingLocation = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
 		var stairsDown:HxlPoint;
@@ -52,11 +57,39 @@ class CqLevel extends Level {
 			stairsDown = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
 		} while (HxlUtil.distance(stairsDown, startingLocation) < 10);
 		
-		newMapData[Std.int(stairsDown.y)][Std.int(stairsDown.x)] = tiles.getSpriteIndex("red_down");
+		newMapData[Std.int(stairsDown.y)][Std.int(stairsDown.x)] = tmpDown;
+		
+
+		for (y in 0...newMapData.length) {
+			for (x in 0...newMapData[0].length) {
+				var suffix = "";
+				switch(newMapData[y][x]) {
+					case tmpWall:
+						suffix = "wall"+(1+HxlUtil.randomInt(3));
+					case tmpFloor:
+						suffix = "floor0";
+					case tmpDoor:
+						suffix = "door_close";
+					case tmpDown:
+						suffix = "down";
+					default:
+				}
+				
+				newMapData[y][x] =  tiles.getSpriteIndex("red_"+suffix);
+			}
+		}
 		
 		loadMap(newMapData, SpriteTiles, Configuration.tileSize, Configuration.tileSize, 2.0, 2.0);
 	
 		// todo - remove & do in fov instead
+		markInvisible();
+
+		addChests(CqConfiguration.chestsPerLevel);
+		addSpells(CqConfiguration.spellsPerLevel);
+		addMobs(CqConfiguration.mobsPerLevel);
+	}
+	
+	private function markInvisible() {
 		// We're going to disable rendering of tiles which will never be visible
 		for ( Y in 0...heightInTiles ) {
 			for ( X in 0...widthInTiles ) {
@@ -81,11 +114,8 @@ class CqLevel extends Level {
 				}
 			}
 		}
-
-		addChests(CqConfiguration.chestsPerLevel);
-		addSpells(CqConfiguration.spellsPerLevel);
-		addMobs(CqConfiguration.mobsPerLevel);
 	}
+	
 	
 	function addSpells(numberOfSpells:Int) {
 		for (s in 0...numberOfSpells){

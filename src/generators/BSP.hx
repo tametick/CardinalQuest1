@@ -361,11 +361,4 @@ class BSP
 			
 		return map;
 	}
-	
-	public static function main() {
-		var mapSize = 30;
-		var map = getBSPMap(mapSize, mapSize, 0, 1, 5);
-		for (y in 0...mapSize)
-			trace(map[y]);
-	}
 }
