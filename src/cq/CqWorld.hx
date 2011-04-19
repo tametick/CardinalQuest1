@@ -36,6 +36,16 @@ class CqTile extends Tile {
 		super(X, Y, Rect);
 		visible = false;
 	}
+	
+/*	
+ *  todo = remder decorations
+	override function render():Void {
+		super.render();
+		if ( decorations.length!=0 ) {
+			...
+		}
+	}
+ */
 }
 
 class CqLevel extends Level {

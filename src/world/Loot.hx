@@ -1,6 +1,5 @@
 package world;
 
-interface Loot implements GameObject
-{
+interface Loot implements GameObject {
 	
 }

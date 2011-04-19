@@ -17,6 +17,7 @@ class Tile extends HxlTile
 {
 	public var actors:Array<Actor>;
 	public var loots:Array<Loot>;
+	public var decorations:Array<Decoration>;
 	public var level:Level;
 	
 	override public function isBlockingMovement():Bool {
@@ -32,6 +33,7 @@ class Tile extends HxlTile
 		
 		actors = new Array<Actor>();
 		loots = new Array<Loot>();
+		decorations = new Array<Decoration>();
 	}
 	
 	public function colorTo(ToColor:Int, Speed:Float):Void {
