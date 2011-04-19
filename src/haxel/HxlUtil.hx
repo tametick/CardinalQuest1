@@ -311,8 +311,8 @@ class HxlUtil {
 		return line;
 	}
 	
-	public static function contains<T>(array:Array<T>, element:T):Bool {
-		for (e in array)
+	public static function contains<T>(itr:Iterator<T>, element:T):Bool {
+		for (e in itr)
 			if (e == element)
 				return true;
 		return false;
@@ -331,7 +331,7 @@ class HxlUtil {
 		do {
 			x = randomInt(width);
 			y = randomInt(height);
-		} while ( !contains(tileTypesToGet, map[y][x]) );
+		} while ( !contains(tileTypesToGet.iterator(), map[y][x]) );
 		
 		return new HxlPoint(x,y);
 	}
@@ -360,7 +360,7 @@ class HxlUtil {
 		var n = 0;
 		for (y in 1...height-1)
 			for (x in 1...width-1)
-				if (HxlUtil.contains(tilesToCount, map[y][x]))
+				if (HxlUtil.contains(tilesToCount.iterator(), map[y][x]))
 					n++;
 		
 		return n;

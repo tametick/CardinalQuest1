@@ -92,7 +92,7 @@ class CqMapDialog extends HxlSlidingDialog {
 					graph.beginFill(Color);
 					graph.drawRect( (X * cellSize.x), (Y * cellSize.y), cellSize.x, cellSize.y );
 					graph.endFill();
-					if ( HxlUtil.contains(SpriteTiles.instance.stairsDown, tiles[Y][X].dataNum) ) {
+					if ( HxlUtil.contains(SpriteTiles.instance.stairsDown.iterator(), tiles[Y][X].dataNum) ) {
 						// Draw stairs
 						var dx:Float = X * cellSize.x + 2;
 						var dy:Float = Y * cellSize.y + 2;

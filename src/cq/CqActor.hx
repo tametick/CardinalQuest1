@@ -28,11 +28,13 @@ class CqTimer {
 	public var ticks:Int;
 	public var buffName:String;
 	public var buffValue:Int;
+	public var specialEffect:CqSpecialEffectValue;
 	
-	public function new(duration:Int, buffName:String, buffValue:Int) {
+	public function new(duration:Int, buffName:String, buffValue:Int, specialEffect:CqSpecialEffectValue) {
 		ticks = duration;
 		this.buffName = buffName;
 		this.buffValue = buffValue;
+		this.specialEffect = specialEffect;
 	}
 }
 
@@ -59,7 +61,7 @@ class CqActor extends CqObject, implements Actor {
 	// changes to basic abilities (attack, defense, speed, spirit) caused by equipped items or spells
 	public var buffs:Hash<Int>;
 	// special effects beyond changes to basic abilities, caused by magical items or spells
-	public var specialEffects:Array<CqSpecialEffectValue>;
+	public var specialEffects:Hash<CqSpecialEffectValue>;
 	// visible effects from buffs & specialEffects
 	public var visibleEffects:Array<String>;
 	
@@ -102,7 +104,6 @@ class CqActor extends CqObject, implements Actor {
 		hp = maxHp;
 		
 		initBuffs();
-		specialEffects = new Array<CqSpecialEffectValue>();
 		visibleEffects = new Array<String>();
 		timers = new Array<CqTimer>();
 
@@ -125,10 +126,12 @@ class CqActor extends CqObject, implements Actor {
 		buffs = new Hash<Int>();
 		buffs.set("attack",0);
 		buffs.set("defense",0);
-		buffs.set("damageMultipler", 1);
 		buffs.set("life", 0);
 		buffs.set("speed", 0);
-		buffs.set("spirit",0);
+		buffs.set("spirit", 0);
+		
+		specialEffects = new Hash<CqSpecialEffectValue>();
+		specialEffects.set("damage multipler", new CqSpecialEffectValue("damage multipler","1"));
 	}
 
 	public function addOnInjure(Callback:Dynamic):Void {
@@ -220,7 +223,10 @@ class CqActor extends CqObject, implements Actor {
 				return;
 			}
 
-			var dmgMultipler = buffs.get("damageMultipler");
+			var dmgMultipler:Int = 1;
+			if(specialEffects.get("damage multipler")!=null)
+				dmgMultipler =  Std.parseInt(specialEffects.get("damage multipler").value);
+			
 			var dmgTotal:Int;
 
 			if (equippedWeapon!=null) {
@@ -386,7 +392,7 @@ class CqActor extends CqObject, implements Actor {
 				
 					// add timer
 					if (itemOrSpell.duration > -1) {
-						timers.push(new CqTimer(itemOrSpell.duration, buff, itemOrSpell.buffs.get(buff)));
+						timers.push(new CqTimer(itemOrSpell.duration, buff, itemOrSpell.buffs.get(buff),null));
 					}
 				} else {
 					GameUI.showEffectText(other, "+" + itemOrSpell.buffs.get(buff) + " " + buff, 0x00ff00);
@@ -396,7 +402,7 @@ class CqActor extends CqObject, implements Actor {
 				
 					// add timer
 					if (itemOrSpell.duration > -1) {
-						other.timers.push(new CqTimer(itemOrSpell.duration, buff, itemOrSpell.buffs.get(buff)));
+						other.timers.push(new CqTimer(itemOrSpell.duration, buff, itemOrSpell.buffs.get(buff),null));
 					}
 				}
 			}
@@ -407,7 +413,12 @@ class CqActor extends CqObject, implements Actor {
 			for ( effect in itemOrSpell.specialEffects) {
 				applyEffect(effect, other);
 				
-				// todo - text
+				if (itemOrSpell.duration > -1) {
+					if (other == null)
+						timers.push(new CqTimer(itemOrSpell.duration, null, -1, effect));
+					else
+						other.timers.push(new CqTimer(itemOrSpell.duration, null, -1, effect));
+				}
 			}
 		}
 	}
@@ -415,17 +426,28 @@ class CqActor extends CqObject, implements Actor {
 	function applyEffect(effect:CqSpecialEffectValue, other:CqActor) {
 		HxlLog.append("applied special effect: " + effect.name);
 		
-		if (effect.name == "heal")
+		if (effect.name == "heal") {
 			if (effect.value == "full")
 				if (other == null) {
 					healthBar.visible = true;
 					hp = maxHp;
 					healthBar.updateValue();
+					GameUI.showEffectText(other, "Healed", 0x0000ff);
 				}else {
 					healthBar.visible = true;
 					other.hp = other.maxHp;
 					other.healthBar.updateValue();
+					GameUI.showEffectText(other, "Healed", 0x0000ff);
 				}
+		} else {
+			if (other == null) {
+				specialEffects.set(effect.name, effect);
+				GameUI.showEffectText(this, "" + effect.name+ ": " + effect.value, 0x0000ff);
+			} else {
+				other.specialEffects.set(effect.name, effect);
+				GameUI.showEffectText(other, "" + effect.name+ ": " + effect.value, 0x0000ff);
+			}
+		}
 	}
 }
 

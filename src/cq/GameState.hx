@@ -103,7 +103,7 @@ class GameState extends HxlState {
 				 // pickup item
 				var item = cast(tile.loots[tile.loots.length - 1], CqItem);
 				cast(Registery.player, CqPlayer).pickup(this, item);
-			} else if (HxlUtil.contains(SpriteTiles.instance.stairsDown, tile.dataNum)) {
+			} else if (HxlUtil.contains(SpriteTiles.instance.stairsDown.iterator(), tile.dataNum)) {
 				// descend
 				Registery.world.goToNextLevel(this);
 			}
@@ -112,7 +112,7 @@ class GameState extends HxlState {
 		} else if ( !isBlockingMovement(target) ) {
 			// move or attack in chosen tile
 			Registery.player.actInDirection(this,target);
-		} else if(HxlUtil.contains(SpriteTiles.instance.doors,tile.dataNum)){
+		} else if(HxlUtil.contains(SpriteTiles.instance.doors.iterator(),tile.dataNum)){
 			// open door
 			openDoor(tile);
 		} else if(!(dx==0 && dy==0)){
@@ -126,7 +126,7 @@ class GameState extends HxlState {
 			tile = getPlayerTile(target);
 			if ( !isBlockingMovement(target) )
 				Registery.player.actInDirection(this,target);
-			else if (HxlUtil.contains(SpriteTiles.instance.doors, tile.dataNum))
+			else if (HxlUtil.contains(SpriteTiles.instance.doors.iterator(), tile.dataNum))
 				openDoor(tile);
 				
 		}

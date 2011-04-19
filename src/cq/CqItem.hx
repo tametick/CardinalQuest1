@@ -35,7 +35,7 @@ class CqSpecialEffectValue {
 class CqLootFactory {
 	public static function newItem(X:Float, Y:Float, typeName:String):CqItem {
 
-		//typeName = "GREEN_POTION";
+		typeName = "PURPLE_POTION";
 		var type = Type.createEnum(CqItemType,  typeName);
 		var item = new CqItem(X, Y, typeName.toLowerCase());
 
@@ -64,7 +64,7 @@ class CqLootFactory {
 				item.stackSizeMax = 20;
 			case PURPLE_POTION:
 				item.consumable = true;
-				item.specialEffects.add(new CqSpecialEffectValue("damageMultipler","double"));
+				item.specialEffects.add(new CqSpecialEffectValue("damage multipler","2"));
 				item.duration = 120;
 				item.stackSizeMax = 20;			
 			case BLUE_POTION:

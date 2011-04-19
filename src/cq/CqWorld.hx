@@ -106,7 +106,7 @@ class CqLevel extends Level {
 		// We're going to disable rendering of tiles which will never be visible
 		for ( Y in 0...heightInTiles ) {
 			for ( X in 0...widthInTiles ) {
-				if ( HxlUtil.contains(tiles.solidAndBlockingTiles, _tiles[Y][X].dataNum) ) {
+				if ( HxlUtil.contains(tiles.solidAndBlockingTiles.iterator(), _tiles[Y][X].dataNum) ) {
 					var pass:Bool = true;
 					var ty:Int = Y - 1;
 					while ( ty <= Y + 1 ) {
@@ -114,7 +114,7 @@ class CqLevel extends Level {
 							var tx:Int = X - 1;
 							while ( tx <= X + 1 ) {
 								if ( tx >= 0 && tx < widthInTiles ) {
-									if ( !HxlUtil.contains(tiles.solidAndBlockingTiles, _tiles[ty][tx].dataNum) ) pass = false;
+									if ( !HxlUtil.contains(tiles.solidAndBlockingTiles.iterator(), _tiles[ty][tx].dataNum) ) pass = false;
 									if ( !pass ) break;
 								}
 								tx++;
@@ -213,7 +213,9 @@ class CqLevel extends Level {
 			
 		for (creature in creatures) {
 			var buffs = creature.buffs;
+			var specialEffects = creature.specialEffects;
 			var visibleEffects = creature.visibleEffects;
+			
 			// remove timed out buffs & visibleEffects
 			var timers = creature.timers;
 			if (timers.length>0) {
@@ -221,17 +223,25 @@ class CqLevel extends Level {
 				for (t in timers) {
 					t.ticks--;
 					if (t.ticks == 0) {
-						// reduce buff
-						var newVal = buffs.get(t.buffName) - t.buffValue;
-						buffs.set(t.buffName, newVal);
-						GameUI.showEffectText(creature, "-" + t.buffValue+ " " + t.buffName , 0xff0000);
-						if(HxlUtil.contains(visibleEffects, t.buffName)) {
+						if(t.buffName!= null) {
+							// reduce buff
+							var newVal = buffs.get(t.buffName) - t.buffValue;
+							buffs.set(t.buffName, newVal);
+							GameUI.showEffectText(creature, "-" + t.buffValue+ " " + t.buffName , 0xff0000);
+						} 
+						
+						if(HxlUtil.contains(visibleEffects.iterator(), t.buffName)) {
 							// remove visibleEffect
 							creature.visibleEffects.remove(t.buffName);
-							
-							// todo - remove special effects
-							//GameUI.showEffectText(creature, "-" + t.buffValue+ " " + t.buffName , 0xff0000);
 						}
+						
+						if (HxlUtil.contains(specialEffects.iterator(), t.specialEffect)) {
+							var currentEffect = specialEffects.get(t.specialEffect.name);
+							currentEffect.value = currentEffect.value / t.specialEffect.value;
+							
+							GameUI.showEffectText(creature, "" + t.specialEffect.name+ ": " + t.specialEffect.value, 0xff0000);
+						}
+						
 						expired.push(t);
 					}
 				}
