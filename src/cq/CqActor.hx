@@ -535,7 +535,14 @@ class CqPlayer extends CqActor, implements Player {
 		for ( Callback in onGainXP ) Callback(other.xpValue);
 	}
 	
-	public function nextLevel() {
+	public function currentLevel():Float {
+		if (level == 1)
+			return 0;
+		else 
+			return 50 * Math.pow(2, level-1);
+	}
+	
+	public function nextLevel():Float {
 		return 50 * Math.pow(2, level);
 	}
 	

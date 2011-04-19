@@ -318,6 +318,6 @@ class GameUI extends HxlDialog {
 	
 	public function doPlayerGainXP(?xpGained:Int=0):Void {
 		var _player:CqPlayer = cast(Registery.player, CqPlayer);
-		xpBar.setPercent( _player.xp / _player.nextLevel() );
+		xpBar.setPercent( (_player.xp-_player.currentLevel()) / (_player.nextLevel()-_player.currentLevel()) );
 	}
 }

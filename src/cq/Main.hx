@@ -29,8 +29,8 @@ class Game extends HxlGame {
 		Configuration.tileSize = 16;
 		Configuration.zoom = 2.0;
 		
-		//super(640, 480, SplashState, 1, "Geo");
-		super(640, 480, GameState, 1, "Geo");
+		super(640, 480, SplashState, 1, "Geo");
+		//super(640, 480, GameState, 1, "Geo");
 		HxlState.bgColor = 0xFF000000;
 	}
 }
