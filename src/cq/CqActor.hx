@@ -530,7 +530,13 @@ class CqPlayer extends CqActor, implements Player {
 			for ( i in 0 ... inventory.length ) {
 				if ( inventory[i].spriteIndex == item.spriteIndex && inventory[i].stackSize < inventory[i].stackSizeMax ) {
 					added = true;
-					inventory[i].stackSize++;
+					inventory[i].stackSize += item.stackSize;
+					if ( inventory[i].stackSize > inventory[i].stackSizeMax ) {
+						added = false;
+						var diff = inventory[i].stackSize - inventory[i].stackSizeMax;
+						inventory[i].stackSize = inventory[i].stackSizeMax;
+						item.stackSize = diff;
+					}
 					// perform pickup callback functions
 					for ( Callback in onPickup ) Callback(inventory[i]);
 					break;
