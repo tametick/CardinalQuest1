@@ -432,7 +432,7 @@ class CqActor extends CqObject, implements Actor {
 					healthBar.visible = true;
 					hp = maxHp;
 					healthBar.updateValue();
-					GameUI.showEffectText(other, "Healed", 0x0000ff);
+					GameUI.showEffectText(this, "Healed", 0x0000ff);
 				}else {
 					healthBar.visible = true;
 					other.hp = other.maxHp;
