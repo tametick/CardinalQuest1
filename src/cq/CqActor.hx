@@ -541,6 +541,7 @@ class CqPlayer extends CqActor, implements Player {
 	
 	function gainLevel() {
 		HxlLog.append("level: " + (++level));
+		healthBar.visible = true;
 		maxHp += vitality;
 		hp = maxHp;
 		healthBar.updateValue();
@@ -632,6 +633,10 @@ class CqMob extends CqActor, implements Mob {
 	function actAware(state:HxlState):Bool {
 		var line = HxlUtil.getLine(tilePos, Registery.player.tilePos, isBlocking);
 		var dest = line[1];
+		
+		if (dest == null)
+			return true;
+		
 		var dx = dest.x - tilePos.x;
 		var dy = dest.y - tilePos.y;
 		
