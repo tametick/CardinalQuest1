@@ -55,7 +55,7 @@ class CqPotionButton extends HxlDialog {
 			if ( cell.getCellObj() != null ) {
 				var cellObj = cell.getCellObj();
 				var item:CqItem = cellObj.item;
-				HxlLog.append("Activating spell!!");
+				HxlLog.append("Using potion");
 				event.stopPropagation();
 				cast(Registery.player, CqActor).use(item);
 				item.stackSize--;

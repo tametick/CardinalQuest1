@@ -311,7 +311,11 @@ class GameUI extends HxlDialog {
 	}
 
 	public function showDamageText(Actor:CqActor, Damage:Int):Void {
-		var txt:CqFloatText = new CqFloatText(Actor.x + (Actor.width/2), Actor.y - 16, ""+Damage, 0xff2222, 24);
+		showEffectText(Actor, ""+Damage, 0xff2222);
+	}
+	
+	public static function showEffectText(actor:CqActor, text:String, color:Int) {
+		var txt:CqFloatText = new CqFloatText(actor.x + (actor.width/2), actor.y - 16, text, color, 24);
 		txt.zIndex = 4;
 		HxlGraphics.state.add(txt);
 	}

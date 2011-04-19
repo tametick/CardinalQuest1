@@ -224,9 +224,13 @@ class CqLevel extends Level {
 						// reduce buff
 						var newVal = buffs.get(t.buffName) - t.buffValue;
 						buffs.set(t.buffName, newVal);
+						GameUI.showEffectText(creature, "-" + t.buffValue+ " " + t.buffName , 0xff0000);
 						if(HxlUtil.contains(visibleEffects, t.buffName)) {
 							// remove visibleEffect
 							creature.visibleEffects.remove(t.buffName);
+							
+							// todo - remove special effects
+							//GameUI.showEffectText(creature, "-" + t.buffValue+ " " + t.buffName , 0xff0000);
 						}
 						expired.push(t);
 					}

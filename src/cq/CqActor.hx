@@ -19,7 +19,7 @@ import data.Configuration;
 import cq.CqResources;
 import cq.CqItem;
 import cq.CqWorld;
-
+import cq.GameUI;
 import cq.CqVitalBar;
 
 import com.eclecticdesignstudio.motion.Actuate;
@@ -216,7 +216,7 @@ class CqActor extends CqObject, implements Actor {
 
 			if ( Std.is(this,CqMob) && cast(this,CqMob).spell !=null && Math.random() <= 0.25 ) {
 				// Use my spell rather than apply attack damage
-				this.use(cast(this, CqMob).spell, other);
+				use(cast(this, CqMob).spell, other);
 				return;
 			}
 
@@ -379,8 +379,9 @@ class CqActor extends CqObject, implements Actor {
 		if(itemOrSpell.buffs != null) {
 			for (buff in itemOrSpell.buffs.keys()) {
 				if (other == null) {
-					// apply to self
+					GameUI.showEffectText(this, "+" + itemOrSpell.buffs.get(buff) + " " + buff, 0x00ff00);
 					
+					// apply to self
 					buffs.set(buff, buffs.get(buff) + itemOrSpell.buffs.get(buff));
 				
 					// add timer
@@ -388,8 +389,9 @@ class CqActor extends CqObject, implements Actor {
 						timers.push(new CqTimer(itemOrSpell.duration, buff, itemOrSpell.buffs.get(buff)));
 					}
 				} else {
-					// apply to other
+					GameUI.showEffectText(other, "+" + itemOrSpell.buffs.get(buff) + " " + buff, 0x00ff00);
 					
+					// apply to other
 					other.buffs.set(buff, other.buffs.get(buff) + itemOrSpell.buffs.get(buff));
 				
 					// add timer
@@ -404,6 +406,8 @@ class CqActor extends CqObject, implements Actor {
 		if(itemOrSpell.specialEffects != null){
 			for ( effect in itemOrSpell.specialEffects) {
 				applyEffect(effect, other);
+				
+				// todo - text
 			}
 		}
 	}
