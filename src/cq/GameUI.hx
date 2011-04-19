@@ -310,7 +310,10 @@ class GameUI extends HxlDialog {
 	}
 
 	public function doPlayerInjureEffect(?dmgTotal:Int):Void {
-		HxlGraphics.flash.start(0xffff0000, 0.3, null, true);
+		var player = cast(Registery.player, CqActor);
+		if ( (player.hp / player.maxHp) <= 0.2 ) {
+			HxlGraphics.flash.start(0xffff0000, 0.2, null, true);
+		}
 	}
 
 	public function doInjureEffect(Target:CqActor):Void {
