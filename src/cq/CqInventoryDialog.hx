@@ -27,8 +27,6 @@ import haxel.HxlSpriteSheet;
 import haxel.HxlText;
 import haxel.HxlUtil;
 
-//import flash.filters.GlowFilter;
-
 class CqInventoryDialog extends HxlSlidingDialog {
 
 	public var dlgCharacter:HxlDialog;
@@ -60,7 +58,6 @@ class CqInventoryDialog extends HxlSlidingDialog {
 
 		// 452x195
 		dlgInvGrid = new CqInventoryGrid(10, 275, 452, 117);
-		//dlgInvGrid.setBackgroundColor(0xff999999);
 		add(dlgInvGrid);
 
 		itemSheet = SpriteItems.instance;
@@ -75,19 +72,6 @@ class CqInventoryDialog extends HxlSlidingDialog {
 
 		CqInventoryItem.backgroundKey = "ItemBG";	
 		CqInventoryItem.backgroundSelectedKey = "ItemSelectedBG";
-		
-		// This snippet applies a glow filter to a BitmapData object.. whee!
-		/*
-		var tmp:BitmapData = new BitmapData(70, 70, true, 0x0);
-		tmp.copyPixels(HxlGraphics.getBitmap("ItemBG"), new Rectangle(0, 0, 50, 50), new Point(10, 10), null, null, true);
-		var glow:GlowFilter = new GlowFilter(0x00ff00, 0.8, 15.0, 15.0, 1.25);
-		tmp.applyFilter(tmp, new Rectangle(0, 0, 70, 70), new Point(0, 0), glow);
-		HxlGraphics.addBitmapData(tmp, "tester!");
-		var tmp2:HxlSprite = new HxlSprite(100, 100);
-		tmp2.loadCachedGraphic("tester!");
-		tmp2.zIndex = 20;
-		add(tmp2);
-		*/
 	}
 
 	public function itemPickup(Item:CqItem):Void {
@@ -148,6 +132,8 @@ class CqInventoryGrid extends HxlDialog {
 		
 		var cellBgKey:String = "InventoryCellBG";
 		var cellBgHighlightKey:String = "CellBGHighlight";
+		var dropCellBgKey:String = "DropCellBG";
+		var dropCellBgHighlightKey:String = "DropCellBGHighlight";
 
 		var paddingX:Float = 12.3;
 		var paddingY:Float = 8;
@@ -165,7 +151,10 @@ class CqInventoryGrid extends HxlDialog {
 				cells.push(cell);
 			}
 		}
-		cells[cells.length-1].dropCell = true;
+		var dropCell = cells[cells.length - 1];
+		dropCell.dropCell = true;
+		dropCell.setGraphicKeys(dropCellBgKey, dropCellBgHighlightKey);
+		
 	}
 
 	public function getOpenCellIndex():Int {
@@ -380,16 +369,24 @@ class CqInventoryCell extends HxlDialog {
 			add(bgHighlight);
 			bgHighlight.visible = false;
 		}
+		
 		if ( bgGlow == null ) {
 			bgGlow = new HxlSprite(-19,-19);
 			bgGlow.zIndex = -2;
 			add(bgGlow);
 			bgGlow.visible = false;
 		}
+		
 		setBackgroundKey(Normal);
-		if ( Highlight == null ) Highlight = Normal;
+		
+		if ( Highlight == null ) 
+			Highlight = Normal;
+			
 		bgHighlight.loadCachedGraphic(Highlight);
-		if ( Glow == null ) Glow = Normal;
+		
+		if ( Glow == null ) 
+			Glow = Normal;
+			
 		bgGlow.loadCachedGraphic(Glow);
 		origin.x = Std.int(background.width / 2);
 		origin.y = Std.int(background.height / 2);

@@ -212,10 +212,20 @@ class GameUI extends HxlDialog {
 		if ( !HxlGraphics.checkBitmapCache(cellBgKey) ) {
 			HxlGraphics.addBitmapData(HxlGradient.RectData(54, 54, [0x333333, 0x555555], null, Math.PI/2, 5.0), cellBgKey);
 		}
+		
+		var cellBgKey:String = "DropCellBG";
+		if ( !HxlGraphics.checkBitmapCache(cellBgKey) ) {
+			HxlGraphics.addBitmapData(HxlGradient.RectData(54, 54, [0x883333, 0xcc5555], null, Math.PI/2, 5.0), cellBgKey);
+		}
 
 		var cellBgHighlightKey:String = "CellBGHighlight";
 		if ( !HxlGraphics.checkBitmapCache(cellBgHighlightKey) ) {
 			HxlGraphics.addBitmapData(HxlGradient.RectData(54, 54, [0x686835, 0xADAB6B], null, Math.PI/2, 5.0), cellBgHighlightKey);
+		}
+		
+		var cellBgHighlightKey:String = "DropCellBGHighlight";
+		if ( !HxlGraphics.checkBitmapCache(cellBgHighlightKey) ) {
+			HxlGraphics.addBitmapData(HxlGradient.RectData(54, 54, [0x996835, 0xFDAB6B], null, Math.PI/2, 5.0), cellBgHighlightKey);
 		}
 
 		var itemBgKey:String = "ItemBG";
