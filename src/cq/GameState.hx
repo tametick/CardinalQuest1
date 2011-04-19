@@ -22,10 +22,13 @@ import flash.events.MouseEvent;
 
 class GameState extends HxlState {
 	var gameUI:GameUI;
+	public var chosenClass:CqClass;
 
 	public override function create():Void {
 		super.create();		
 		
+		chosenClass = FIGHTER;
+
 		HxlGraphics.fade.start(false, 0x00000000, 0.25);
 		//loadingBox = new HxlLoadingBox();
 		//add(loadingBox);
@@ -55,7 +58,7 @@ class GameState extends HxlState {
 	override function init() {
 		// populating the registry = might need to move this somewhere else
 		var world = new CqWorld();
-		var player = new CqPlayer(CqClass.FIGHTER);
+		var player = new CqPlayer(chosenClass);
 		Registery.world = world;
 		Registery.player = player;
 		

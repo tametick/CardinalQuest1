@@ -1,10 +1,23 @@
 package cq;
 
+import com.eclecticdesignstudio.motion.Actuate;
+import com.eclecticdesignstudio.motion.easing.Elastic;
+
+import cq.CqActor;
 import cq.CqResources;
+
+import data.Configuration;
+
+import flash.display.BitmapData;
+import flash.display.Shape;
+import flash.geom.Point;
+import flash.geom.Rectangle;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
+
 import haxel.HxlButton;
 import haxel.HxlGraphics;
+import haxel.HxlSprite;
 import haxel.HxlState;
 import haxel.HxlText;
 
@@ -12,6 +25,14 @@ class CreateCharState extends HxlState
 {
 	var fadeTime:Float;
 	var state:Int;
+	var btnFighter:HxlButton;
+	var btnThief:HxlButton;
+	var btnWizard:HxlButton;
+	var txtFighter:HxlText;
+	var txtThief:HxlText;
+	var txtWizard:HxlText;
+	var selectBox:HxlSprite;
+	var curClass:CqClass;
 
 	public override function create():Void {
 		super.create();
@@ -33,9 +54,77 @@ class CreateCharState extends HxlState
 			self.gotoState(GameState);
 		});
 
+		var playerSprites = SpritePlayer.instance;
+		var self = this;
+
+		var sprFighter = new HxlSprite(0, 0);
+		sprFighter.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 4.0, 4.0);
+		sprFighter.setFrame(playerSprites.getSpriteIndex("fighter"));
+		btnFighter = new HxlButton(138, 175);
+		btnFighter.loadGraphic(sprFighter);
+		add(btnFighter);
+		btnFighter.setCallback(function() { self.changeSelection(FIGHTER); });
+		txtFighter = new HxlText(95, 250, 150, "Fighter");
+		txtFighter.setFormat(null, 26, 0xffffff, "center", 0x010101);
+		add(txtFighter);
+
+		var sprThief = new HxlSprite(0, 0);
+		sprThief.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 4.0, 4.0);
+		sprThief.setFrame(playerSprites.getSpriteIndex("thief"));
+		btnThief = new HxlButton(288, 175);
+		btnThief.loadGraphic(sprThief);
+		add(btnThief);
+		btnThief.setCallback(function() { self.changeSelection(THIEF); });
+		txtThief = new HxlText(245, 250, 150, "Thief");
+		txtThief.setFormat(null, 26, 0xffffff, "center", 0x010101);
+		add(txtThief);
+
+		var sprWizard = new HxlSprite(0, 0);
+		sprWizard.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 4.0, 4.0);
+		sprWizard.setFrame(playerSprites.getSpriteIndex("wizard"));
+		btnWizard = new HxlButton(438, 175);
+		btnWizard.loadGraphic(sprWizard);
+		add(btnWizard);
+		btnWizard.setCallback(function() { self.changeSelection(WIZARD); });
+		txtWizard = new HxlText(395, 250, 150, "Wizard");
+		txtWizard.setFormat(null, 26, 0xffffff, "center", 0x010101);
+		add(txtWizard);
+
+		selectBox = new HxlSprite(105, 160);
+		if ( !HxlGraphics.checkBitmapCache("CharCreateSelector") ) {
+			var target:Shape = new Shape();
+			target.graphics.lineStyle(5, 0xffffff00);
+			target.graphics.beginFill(0x00000000, 0.0);
+			target.graphics.drawRoundRect(2.5, 2.5, 125, 125, 15.0, 15.0);
+			target.graphics.endFill();
+			var bmp:BitmapData = new BitmapData(130, 130, true, 0x0);
+			bmp.draw(target);
+			selectBox.width = selectBox.height = 130;
+			selectBox.pixels = bmp;
+		} else {
+			selectBox.loadCachedGraphic("CharCreateSelector");
+		}
+		add(selectBox);
+
+		curClass = FIGHTER;
+
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime, function() {
 			self.state = 1;
 		});
+	}
+
+	function changeSelection(Target:CqClass) {
+		if ( Target == curClass ) return;
+		curClass = Target;
+		var targetX:Float = 0;
+		if ( curClass == FIGHTER ) {
+			targetX = 105;
+		} else if ( curClass == THIEF ) {
+			targetX = 255;
+		} else if ( curClass == WIZARD ) {
+			targetX = 405;
+		}
+		Actuate.tween(selectBox, 0.25, { x: targetX }).ease(Elastic.easeOut);
 	}
 
 	public override function update():Void {
@@ -51,9 +140,11 @@ class CreateCharState extends HxlState
 	function gotoState(TargetState:Class<HxlState>) {
 		if ( state != 1 ) return;
 		state = 0;
+		var self = this;
 		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
 			var newState = Type.createInstance(TargetState, []);
 			HxlGraphics.state = newState;
+			if ( TargetState == GameState ) cast(newState, GameState).chosenClass = self.curClass;
 		}, true);
 	}
 }
