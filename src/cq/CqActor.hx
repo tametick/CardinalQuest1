@@ -5,6 +5,7 @@ import haxel.HxlState;
 import haxel.HxlUtil;
 import haxel.HxlPoint;
 import haxel.HxlUIBar;
+import haxel.HxlGraphics;
 
 import world.Mob;
 import world.Actor;
@@ -204,6 +205,7 @@ class CqActor extends CqObject, implements Actor {
 		} else {
 			HxlLog.append("kills you");
 			// todo = game over screen
+			HxlGraphics.pushState(new GameOverState());
 		}
 	}
 
