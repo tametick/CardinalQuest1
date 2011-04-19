@@ -20,22 +20,11 @@ class CqVitalBar extends HxlUIBar {
 		updateValue();
 	}
 
-	public function updateValue(?dmgTotal:Int=0):Void {
-		setPercent((actor.hp + actor.buffs.get("life")) / 
-				   (actor.maxHp + actor.buffs.get("life")));
-		if ( !Std.is(actor, CqPlayer) ) {
-			if ( actor.hp >= actor.maxHp ) {
-				visible = false;
-			} else {
-				visible = true;
-			}
-		}
-	}
-
 	public override function update():Void {
 		super.update();		
 	}
 
+	public function updateValue(?dmgTotal:Int = 0) { }
 }
 
 class CqHealthBar extends CqVitalBar {
@@ -46,7 +35,23 @@ class CqHealthBar extends CqVitalBar {
 		setFrameColor(0xff444444);
 		setInteriorColor(0xff000000);
 		setBarColor(0xffff0000);
-		setPercent(1.0);
+		setPercentToHp();
 	}
 
+	public override function updateValue(?dmgTotal:Int=0) {
+		setPercentToHp();
+		if ( !Std.is(actor, CqPlayer) ) {
+			if ( actor.hp >= actor.maxHp ) {
+				visible = false;
+			} else {
+				visible = true;
+			}
+		}
+	}
+	
+	private function setPercentToHp() {
+		setPercent((actor.hp + actor.buffs.get("life")) / 
+				   (actor.maxHp + actor.buffs.get("life")));
+	}
+	
 }
