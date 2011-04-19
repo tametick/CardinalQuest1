@@ -414,9 +414,11 @@ class CqActor extends CqObject, implements Actor {
 		if (effect.name == "heal")
 			if (effect.value == "full")
 				if (other == null) {
+					healthBar.visible = true;
 					hp = maxHp;
 					healthBar.updateValue();
 				}else {
+					healthBar.visible = true;
 					other.hp = other.maxHp;
 					other.healthBar.updateValue();
 				}
