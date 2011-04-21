@@ -4,6 +4,7 @@ import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;
 
 import data.Configuration;
+import data.Resources;
 import data.Registery;
 
 import haxel.HxlSprite;
@@ -33,8 +34,35 @@ class CqSpecialEffectValue {
 }
 
 class CqLootFactory {
+	static function initDescriptions() {
+		Resources.descriptions = new Hash<String>();
+		Resources.descriptions.set("Healing potion", "A small vial containing fragrant, red salve. Restores life when applied.");
+		Resources.descriptions.set("Coca-leaf cocktail","This mysterious beverage grants great speed when quaffed.");
+		Resources.descriptions.set("elixir of the elephant","This elixir temporarily protects the drinker's body with a thick hide.");
+		Resources.descriptions.set("elixir of the hawk","This elixir temporarily grants ultra-human eyesight and reflexes.");
+		Resources.descriptions.set("elixir of the lion","This elixir temporarily strengthens the drinker immensely.");
+		Resources.descriptions.set("boots of escape", "These finely crafted leather boots allow the wearer to run with great speed.");
+		Resources.descriptions.set("Hermes' sandals","These winged sandals are made of imperishable gold and allow the wearer to move as swiftly as any bird.");
+		Resources.descriptions.set("leather armor","This armor is made of leather that was boiled in wax for extra toughness.");
+		Resources.descriptions.set("breastplate", "This breastplate is made of iron and offers excellent protection to vital organs without limiting mobility.");
+		Resources.descriptions.set("ring of wisdom","This small silver ring imbues its wearer with uncanny wisdom.");
+		Resources.descriptions.set("amulet of enlightenment","Enlightenment permeates this simple looking amulet, granting its wearer the spirit of the gods.");
+		Resources.descriptions.set("cap of endurance", "This steel skullcap protects the head without restricting the wearer's ability to wear fashionable hats.");
+		Resources.descriptions.set("helm of hardiness", "This helm is crafted by dwarven smiths in the Roshaggon mines, using an alloy jealously kept secret.");
+		Resources.descriptions.set("gloves of dexterity","The swiftness of hand these gloves enable allow their wearer to perform better in battle.");
+		Resources.descriptions.set("Achilles' bracer","This magical bronze bracer contains within it the great warrior's spirit.");
+		Resources.descriptions.set("short sword", "A one handed hilt attached to a thrusting blade approximately 60cm in length.");
+		Resources.descriptions.set("long sword","Long swords have long cruciform hilts with grips and  double-edged blades over one meter long.");
+		Resources.descriptions.set("staff","a shaft of hardwood with metal tips.");
+		Resources.descriptions.set("dagger", "a double-edged blade used for stabbing or thrusting.");
+	}
+	
 	public static function newItem(X:Float, Y:Float, typeName:String):CqItem {
 
+		if (Resources.descriptions == null) {
+			initDescriptions();
+		}
+		
 		//typeName = "PURPLE_POTION";
 		var type = Type.createEnum(CqItemType,  typeName);
 		var item = new CqItem(X, Y, typeName.toLowerCase());
@@ -59,63 +87,82 @@ class CqLootFactory {
 		
 		switch(type) {
 			case GREEN_POTION:
+				item.name = "Elixir of the hawk";
 				item.consumable = true;
 				item.buffs.set("attack", 3);
 				item.stackSizeMax = 20;
 			case PURPLE_POTION:
+				item.name = "Elixir of the lion";
 				item.consumable = true;
 				item.specialEffects.add(new CqSpecialEffectValue("damage multipler","2"));
 				item.duration = 120;
 				item.stackSizeMax = 20;			
 			case BLUE_POTION:
+				item.name = "Elixir of the elephant";
 				item.consumable = true;
 				item.buffs.set("defense", 3);
 				item.duration = 120;
 				item.stackSizeMax = 20;
 			case YELLOW_POTION:
+				item.name = "Coca-leaf cocktail";
 				item.consumable = true;
 				item.buffs.set("speed", 3);
 				item.duration = 120;
 				item.stackSizeMax = 20;
 			case RED_POTION:
+				item.name ="Healing potion";
 				item.consumable = true;
 				item.specialEffects.add(new CqSpecialEffectValue("heal","full"));
 				item.duration = 120;
 				item.stackSizeMax = 20;
 			
 			case BOOTS:
+				item.name ="Boots of escape";
 				item.buffs.set("speed", 1);
 
 			case WINGED_SANDLES:
+				item.name =	"Hermes' sandals";
 				item.buffs.set("speed", 2);
 				
 			case LEATHER_ARMOR:
+				item.name ="Leather armor";
 				item.buffs.set("defense", 1);
 			case BRESTPLATE:
+				item.name ="Breastplate";
 				item.buffs.set("defense", 2);
 			
 			case RING:
+				item.name ="Ring of wisdom";
 				item.buffs.set("spirit", 1);
 			case AMULET:
+				item.name ="Amulet of enlightenment";
 				item.buffs.set("spirit", 2);
 			
 			case CAP:
+				item.name ="Cap of endurance";
 				item.buffs.set("life", 1);
 			case HELM:
+				item.name ="Helm of hardiness";
 				item.buffs.set("life", 2);
 			
 			case GLOVE:
+				item.name ="Gloves of dexterity";
 				item.buffs.set("attack", 1);
 			case BRACLET:
+				item.name ="Achilles' bracer";
 				item.buffs.set("attack", 2);
 			
 			case DAGGER:
+				item.name ="Dagger";
 				item.damage = new Range(1, 2);
 			case STAFF:
+				item.name ="Staff";
 				item.damage = new Range(1, 3);
 			case SHORT_SWORD:
+				item.name ="Short sword";
 				item.damage = new Range(1, 3);
 			case LONG_SWORD:
+				item.name ="Long sword";
 				item.damage = new Range(2, 4);
 			
 			default:
@@ -126,6 +173,8 @@ class CqLootFactory {
 }
 
 class CqItem extends GameObjectImpl, implements Loot {
+	public var name:String;
+	
 	public var equipSlot:CqEquipSlot;
 	public var consumable:Bool;
 	public var spriteIndex:String;
