@@ -371,14 +371,14 @@ class CqInventoryCell extends HxlDialog {
 	public function setGraphicKeys(Normal:String, ?Highlight:String=null, ?Glow:String=null):Void {
 		if ( bgHighlight == null ) {
 			bgHighlight = new HxlSprite(0, 0);
-			bgHighlight.zIndex = -1;
+			bgHighlight.zIndex = -2;
 			add(bgHighlight);
 			bgHighlight.visible = false;
 		}
 		
 		if ( bgGlow == null ) {
 			bgGlow = new HxlSprite(-19,-19);
-			bgGlow.zIndex = -2;
+			bgGlow.zIndex = -3;
 			add(bgGlow);
 			bgGlow.visible = false;
 		}
@@ -396,6 +396,13 @@ class CqInventoryCell extends HxlDialog {
 		bgGlow.loadCachedGraphic(Glow);
 		origin.x = Std.int(background.width / 2);
 		origin.y = Std.int(background.height / 2);
+		
+		if ( dropCell ) {
+			var droptext:HxlText = new HxlText(0, 18, Std.int(width), "Drop");
+			droptext.setFormat(null, 18, 0xffffff, "center", 0x010101);
+			droptext.zIndex = -1;
+			add(droptext);
+		}
 	}
 
 	public override function update():Void {

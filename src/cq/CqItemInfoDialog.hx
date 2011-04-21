@@ -69,7 +69,8 @@ class CqItemInfoDialog extends HxlDialog {
 			if ( _item.damage.end > 0 ) {
 				statStr += "" + _item.damage.start + " - " + _item.damage.end + " Damage\n";
 			}
-			// display special effects
+			// todo: display special effects
+			// display item buffs
 			if ( Lambda.count(_item.buffs) > 0 ) {
 				var str = "";
 				for ( key in _item.buffs.keys() ) {
