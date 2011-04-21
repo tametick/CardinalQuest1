@@ -2,6 +2,8 @@ package haxel;
 
 import flash.display.Bitmap;
 import flash.events.MouseEvent;
+import flash.ui.Mouse;
+import flash.ui.MouseCursor;
 
 import haxel.HxlPoint;
 import haxel.HxlSprite;
@@ -79,6 +81,13 @@ class HxlMouse {
 		} else {
 			load(null);
 		}
+	}
+
+	/**
+	 * Sets the system mouse cursor. Valid arguments are: 'auto', 'ibeam', 'hand', 'button' and 'arrow'.
+	 **/
+	public function set(Cursor:String="auto"):Void {
+		Reflect.setField(flash.ui.Mouse, "cursor", Cursor);	
 	}
 
 	/**

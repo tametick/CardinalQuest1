@@ -13,7 +13,7 @@ class HxlMenu extends HxlDialog
 	var _selectSound:HxlSound;
 	var inputEnabled:Bool;
 	var currentItem:Int;
-	
+
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0) {
 		super(X, Y, Width, Height);
 

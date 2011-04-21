@@ -7,6 +7,9 @@ import haxel.HxlMenuItem;
 import haxel.HxlState;
 import haxel.HxlText;
 import haxel.HxlTimer;
+import flash.ui.Mouse;
+import flash.ui.MouseCursor;
+
 
 class MainMenuState extends HxlState
 {
@@ -76,6 +79,7 @@ class MainMenuState extends HxlState
 			return;
 		}
 		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
+			flash.ui.Mouse.cursor = MouseCursor.AUTO;
 			var newState = Type.createInstance(TargetState, []);
 			if ( self.stackId == 0 ) {
 				HxlGraphics.state = newState;

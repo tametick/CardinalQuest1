@@ -4,6 +4,8 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 
+import haxel.HxlGraphics;
+
 #if flash9
 import flash.text.AntiAliasType;
 import flash.text.GridFitType;
@@ -15,6 +17,7 @@ class HxlMenuItem extends HxlText
 	var normalFormat:TextFormat;
 	var hoverFormat:TextFormat;
 	var showHover:Bool;
+	var _mouseHover:Bool;
 
 	public var itemCallback(getCallback, setCallback):Dynamic;
 	var _itemCallback:Dynamic;
@@ -25,6 +28,7 @@ class HxlMenuItem extends HxlText
 		hoverFormat = dtfCopy();
 		showHover = false;
 		_itemCallback = function() {};
+		_mouseHover = false;
 	}
 
 	public function setHover(Hover:Bool=false):Void {
@@ -71,4 +75,14 @@ class HxlMenuItem extends HxlText
 		return _itemCallback;
 	}
 
+	public override function update():Void {
+		super.update();
+		if ( visible && !_mouseHover && overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y) ) {
+			HxlGraphics.mouse.set("button");
+			_mouseHover = true;
+		} else if ( !visible || (_mouseHover && !overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) ) {
+			HxlGraphics.mouse.set("auto");
+			_mouseHover = false;
+		}
+	}
 }
