@@ -64,8 +64,13 @@ class CqItemInfoDialog extends HxlDialog {
 		} else {
 			itemSprite.setFrame(itemSheet.getSpriteIndex(Item.spriteIndex));
 			_icon.pixels = itemSprite.getFramePixels();
+			var statStr:String = "";
+			// display weapon damage
+			if ( _item.damage.end > 0 ) {
+				statStr += "" + _item.damage.start + " - " + _item.damage.end + " Damage\n";
+			}
+			// display special effects
 			if ( Lambda.count(_item.buffs) > 0 ) {
-				_itemStats.y = _itemDesc.y + _itemDesc.height + 10;
 				var str = "";
 				for ( key in _item.buffs.keys() ) {
 					if ( _item.buffs.get(key) > 0 ) str += "+";
@@ -73,7 +78,11 @@ class CqItemInfoDialog extends HxlDialog {
 					var keyname:String = key.substr(0,1).toUpperCase() + key.substr(1);
 					str += "" + _item.buffs.get(key) + " " + keyname + "\n";
 				}
-				_itemStats.text = str;
+				statStr += str;
+			}
+			if ( statStr != "" ) {
+				_itemStats.y = _itemDesc.y + _itemDesc.height + 10;
+				_itemStats.text = statStr;
 				_itemStats.visible = true;
 			}
 			
