@@ -145,6 +145,7 @@ class HxlDialog extends HxlGroup
 					o.update();
 					HxlGraphics.numUpdates++;
 				}
+				// todo
 				/*
 				if (moved && o.solid) {
 					o.colHullX.width += ((mx>0)?mx:-mx);

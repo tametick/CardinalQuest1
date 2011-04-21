@@ -38,10 +38,10 @@ class CqTile extends Tile {
 	}
 	
 /*	
- *  todo = remder decorations
+ *  todo = render decorations
 	override function render():Void {
 		super.render();
-		if ( decorations.length!=0 ) {
+		if ( decorations.length>0 ) {
 			...
 		}
 	}
@@ -104,7 +104,7 @@ class CqLevel extends Level {
 		
 		loadMap(newMapData, SpriteTiles, Configuration.tileSize, Configuration.tileSize, 2.0, 2.0);
 	
-		// todo - remove & do in fov instead
+		// mark as visible in fov
 		markInvisible();
 
 		addChests(CqConfiguration.chestsPerLevel);
@@ -112,29 +112,10 @@ class CqLevel extends Level {
 		addMobs(CqConfiguration.mobsPerLevel);
 	}
 	
-	private function markInvisible() {
-		// We're going to disable rendering of tiles which will never be visible
+	function markInvisible() {
 		for ( Y in 0...heightInTiles ) {
 			for ( X in 0...widthInTiles ) {
-				if ( HxlUtil.contains(tiles.solidAndBlockingTiles.iterator(), _tiles[Y][X].dataNum) ) {
-					var pass:Bool = true;
-					var ty:Int = Y - 1;
-					while ( ty <= Y + 1 ) {
-						if ( ty >= 0 && ty < heightInTiles ) {
-							var tx:Int = X - 1;
-							while ( tx <= X + 1 ) {
-								if ( tx >= 0 && tx < widthInTiles ) {
-									if ( !HxlUtil.contains(tiles.solidAndBlockingTiles.iterator(), _tiles[ty][tx].dataNum) ) pass = false;
-									if ( !pass ) break;
-								}
-								tx++;
-							}
-						}
-						if ( !pass ) break;
-						ty++;
-					}
-					if ( pass ) _tiles[Y][X].visible = false;
-				}
+				_tiles[Y][X].visible = false;
 			}
 		}
 	}
