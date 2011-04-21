@@ -132,9 +132,7 @@ class HxlGame extends Sprite {
 	 * @param	State		The class name of the state you want (e.g. PlayState)
 	 */
 	public function switchState(State:HxlState, ?Push:Bool=false):Void { 
-		//Basic reset stuff
-		//HxlGraphics.panel.hide();
-		//Swap the new state for the old one and dispose of it
+		// Swap the new state for the old one and dispose of it
 		_screen.addChild(State);
 		state = State;
 		if (state != null) {
@@ -169,7 +167,6 @@ class HxlGame extends Sprite {
 				_screen.y = 0;
 				State.stackId = 0;
 				stateStack.push(State);
-				//_screen.swapChildren(State,state);
 			}
 		} else {
 			HxlGraphics.unfollow();
@@ -184,13 +181,16 @@ class HxlGame extends Sprite {
 			stateStack.push(State);
 		}
 		state.scaleX = state.scaleY = _zoom;
-		//Finally, create the new state
+		
+		// Finally, create the new state
 		state.create();
 		state.isStacked = false;
 	}
 
 	public function popState():Void {
-		if ( stateStack.length <= 1 ) return;
+		if ( stateStack.length <= 1 ) 
+			return;
+			
 		var State:HxlState = stateStack.pop();
 		State.destroy();
 		_screen.removeChild(State);
@@ -205,11 +205,11 @@ class HxlGame extends Sprite {
 		_screen.y = 0;
 		state = State;
 		state.isStacked = false;
-		//state.scaleX = state.scaleY = _zoom;
 	}
 
 	function onKeyUp(event:KeyboardEvent):Void {
-		if ((event.keyCode == 192) || (event.keyCode == 220)) {//FOR ZE GERMANZ
+		// todo: use HxlKeyboard constants instead of keycodes
+		if ((event.keyCode == 192) || (event.keyCode == 220)) {
 			console.toggle();
 			return;
 		}
@@ -460,6 +460,7 @@ class HxlGame extends Sprite {
 			_screen.x = HxlGraphics.quake.x;
 			_screen.y = HxlGraphics.quake.y;
 		}
+		
 		//Keep track of how long it took to update everything
 		var updateMark:Int = Lib.getTimer();
 		console.mtrUpdate.add(updateMark-mark);
@@ -467,8 +468,8 @@ class HxlGame extends Sprite {
 		HxlGraphics.buffer.lock();
 		state.preProcess();
 
+		// todo
 		// rough state stack rendering code, not currently working..
-		
 		if ( stateStack.length > 1 ) {
 			var startState:Int = 0;
 			for ( i in 0...stateStack.length ) {
