@@ -249,6 +249,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 
 	public function doPickupEffect():Void {
 		HxlGraphics.state.add(this);
+		setGlow(false);
 		var self = this;
 		var oldX = x;
 		var oldY = y;
