@@ -60,7 +60,7 @@ class CqLootFactory {
 		switch(type) {
 			case GREEN_POTION:
 				item.consumable = true;
-				item.specialEffects.add(new CqSpecialEffectValue("heal","full"));
+				item.buffs.set("attack", 3);
 				item.stackSizeMax = 20;
 			case PURPLE_POTION:
 				item.consumable = true;
@@ -79,7 +79,7 @@ class CqLootFactory {
 				item.stackSizeMax = 20;
 			case RED_POTION:
 				item.consumable = true;
-				item.buffs.set("attack", 3);
+				item.specialEffects.add(new CqSpecialEffectValue("heal","full"));
 				item.duration = 120;
 				item.stackSizeMax = 20;
 			
