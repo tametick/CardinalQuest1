@@ -559,7 +559,6 @@ class CqPlayer extends CqActor, implements Player {
 	}
 
 	public function gainExperience(other:CqMob) {
-		// todo: the amount of xp gained should be passed to this method
 		HxlLog.append("gained " + other.xpValue + " xp");
 		cast(this, CqPlayer).xp += other.xpValue;
 		
@@ -581,7 +580,9 @@ class CqPlayer extends CqActor, implements Player {
 	}
 	
 	function gainLevel() {
-		HxlLog.append("level: " + (++level));
+		level++;
+		HxlLog.append("Level " + level);
+		GameUI.showEffectText(this, "Level " + level, 0xFFFF66);
 		healthBar.visible = true;
 		maxHp += vitality;
 		hp = maxHp;
