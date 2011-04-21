@@ -2,6 +2,7 @@ package cq;
 
 import cq.CqActor;
 import cq.CqResources;
+import cq.CqWorld;
 import data.Registery;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
@@ -74,6 +75,11 @@ class CqMapDialog extends HxlSlidingDialog {
 		var DoorSightColor:Int = 0x8E6B5D;
 		var DoorSeenColor:Int = 0x563A2F;
 		var playerColor:Int = 0xFFFED2;
+		var mobColor:Int = 0xFF3333;
+
+		var player = cast(Registery.player, CqActor);
+		var playerPos = player.getTilePos();
+
 		graph.clear();
 		for ( Y in 0...mapH ) {
 			for ( X in 0...mapW ) {
@@ -117,13 +123,27 @@ class CqMapDialog extends HxlSlidingDialog {
 							graph.endFill();			
 						}
 					}
+					// Render player position
 					var playerPos = cast(Registery.player, CqActor).getTilePos();
 					if ( playerPos.x == X && playerPos.y == Y ) {
 						var dx:Float = (X * cellSize.x) + (cellSize.x / 2);
 						var dy:Float = (Y * cellSize.y) + (cellSize.y / 2);
 						graph.beginFill(playerColor);
-						graph.drawCircle(dx, dy, (cellSize.x / 2));
+						graph.drawCircle(dx, dy, (cellSize.x / 2) - 1);
 						graph.endFill();
+					} else if ( tiles[Y][X].visibility == Visibility.IN_SIGHT ) {
+						// Render Mobs
+						var tile = cast(tiles[Y][X], CqTile);
+						if ( tile.actors.length > 0 ) {
+							var other = cast(tile.actors[tile.actors.length-1], CqActor);
+							if ( other.faction != player.faction ) {
+								var dx:Float = (X * cellSize.x) + (cellSize.x / 2);
+								var dy:Float = (Y * cellSize.y) + (cellSize.y / 2);
+								graph.beginFill(mobColor);
+								graph.drawCircle(dx, dy, (cellSize.x / 2) - 1);
+								graph.endFill();
+							}
+						}
 					}
 				}
 			}
