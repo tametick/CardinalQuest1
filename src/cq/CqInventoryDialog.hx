@@ -743,8 +743,8 @@ class CqInventoryItem extends HxlSprite {
 						this.item.setTilePos(itemTilePos);
 						this.item.visible = true;
 						this.item.alpha = 1.0;
-						Registery.world.currentLevel.addLootToLevel(HxlGraphics.state, this.item);
-						var positionOfTile:HxlPoint = Registery.world.currentLevel.getPixelPositionOfTile(itemTilePos.x, itemTilePos.y);
+						Registery.level.addLootToLevel(HxlGraphics.state, this.item);
+						var positionOfTile:HxlPoint = Registery.level.getPixelPositionOfTile(itemTilePos.x, itemTilePos.y);
 						this.item.x = positionOfTile.x;
 						this.item.y = positionOfTile.y;
 						destroy();

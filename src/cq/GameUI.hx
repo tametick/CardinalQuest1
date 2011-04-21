@@ -271,7 +271,7 @@ class GameUI extends HxlDialog {
 	}
 
 	public function initChests():Void {
-		for ( Item in Registery.world.currentLevel.loots ) {
+		for ( Item in Registery.level.loots ) {
 			if ( Std.is(Item, CqChest) ) {
 				cast(Item, CqChest).addOnBust(function(Target:CqChest) {
 					var eff:CqEffectChest = new CqEffectChest(Target.x + Target.origin.x, Target.y + Target.origin.y);
@@ -284,7 +284,7 @@ class GameUI extends HxlDialog {
 	}
 
 	public function initHealthBars():Void {
-		for ( actor in Registery.world.currentLevel.mobs ) {
+		for ( actor in Registery.level.mobs ) {
 			addHealthBar(cast(actor, CqActor));
 		}
 	}

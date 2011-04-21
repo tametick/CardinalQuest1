@@ -50,7 +50,7 @@ class GameObjectImpl extends HxlSprite, implements GameObject
 	public function setTilePos(TilePos:HxlPoint):HxlPoint {
 		// remove from old tile
 		if (_tilePos != null) {
-			var tile = Registery.world.currentLevel.getTile(_tilePos.x, _tilePos.y);
+			var tile = Registery.level.getTile(_tilePos.x, _tilePos.y);
 			if (tile != null)
 				if(Std.is(this,Actor))
 					tile.actors.remove(this);
@@ -62,9 +62,9 @@ class GameObjectImpl extends HxlSprite, implements GameObject
 		_tilePos = TilePos;
 
 		if(Std.is(this,Actor))
-			Registery.world.currentLevel.getTile(_tilePos.x, _tilePos.y).actors.push(this);
+			Registery.level.getTile(_tilePos.x, _tilePos.y).actors.push(this);
 		else if (Std.is(this, Loot))
-			Registery.world.currentLevel.getTile(_tilePos.x, _tilePos.y).loots.push(this);
+			Registery.level.getTile(_tilePos.x, _tilePos.y).loots.push(this);
 		
 		return TilePos;
 	}

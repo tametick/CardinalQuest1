@@ -32,8 +32,6 @@ class GameState extends HxlState {
 		HxlGraphics.fade.start(false, 0x00000000, 0.25);
 		//loadingBox = new HxlLoadingBox();
 		//add(loadingBox);
-
-		//HxlGraphics.pushState(new MainMenuState());
 	}
 	
 	public override function update() {
@@ -45,7 +43,7 @@ class GameState extends HxlState {
 	
 	function passTurn() {
 		var player = cast(Registery.player, CqPlayer);
-		var level = cast(Registery.world.currentLevel, CqLevel);
+		var level = cast(Registery.level, CqLevel);
 		
 		level.updateFieldOfView();
 		player.actionPoints = 0;
@@ -56,7 +54,7 @@ class GameState extends HxlState {
 	}
 
 	override function init() {
-		// populating the registry = might need to move this somewhere else
+		// populating the registry
 		var world = new CqWorld();
 		var player = new CqPlayer(chosenClass);
 		Registery.world = world;
@@ -91,7 +89,7 @@ class GameState extends HxlState {
 	}
 
 	override function onMouseDown(event:MouseEvent) {
-		var level = Registery.world.currentLevel;
+		var level = Registery.level;
 		if (Registery.player.isMoving)
 			return;
 		
@@ -139,17 +137,17 @@ class GameState extends HxlState {
 	}
 	
 	private function isBlockingMovement(target:HxlPoint):Bool{
-		return Registery.world.currentLevel.isBlockingMovement(Std.int(Registery.player.tilePos.x + target.x), Std.int(Registery.player.tilePos.y + target.y));
+		return Registery.level.isBlockingMovement(Std.int(Registery.player.tilePos.x + target.x), Std.int(Registery.player.tilePos.y + target.y));
 	}
 	
 	
 	function getPlayerTile(target:HxlPoint):CqTile {
-		return cast(Registery.world.currentLevel.getTile(Std.int(Registery.player.tilePos.x + target.x), Std.int(Registery.player.tilePos.y + target.y)), CqTile);
+		return cast(Registery.level.getTile(Std.int(Registery.player.tilePos.x + target.x), Std.int(Registery.player.tilePos.y + target.y)), CqTile);
 	}
 	
 	
 	function openDoor(tile:CqTile) {
-		var col = cast(Registery.world.currentLevel, CqLevel).getColor();
-		Registery.world.currentLevel.updateTileGraphic(tile.mapX, tile.mapY, SpriteTiles.instance.getSpriteIndex(col+"_door_open"));
+		var col = cast(Registery.level, CqLevel).getColor();
+		Registery.level.updateTileGraphic(tile.mapX, tile.mapY, SpriteTiles.instance.getSpriteIndex(col+"_door_open"));
 	}
 }

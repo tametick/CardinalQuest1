@@ -246,10 +246,10 @@ class CqChest extends CqItem {
 		var item = CqLootFactory.newItem(x, y, type);		
 		
 		// add item to level
-		Registery.world.currentLevel.addLootToLevel(state, item);
+		Registery.level.addLootToLevel(state, item);
 		
 		// remove chest
-		Registery.world.currentLevel.removeLootFromLevel(state, this);
+		Registery.level.removeLootFromLevel(state, this);
 	}
 }
 

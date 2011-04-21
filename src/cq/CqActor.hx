@@ -201,7 +201,7 @@ class CqActor extends CqObject, implements Actor {
 			HxlLog.append("You kill");
 			cast(this, CqPlayer).gainExperience(mob);
 			// remove other
-			Registery.world.currentLevel.removeMobFromLevel(state, mob);
+			Registery.level.removeMobFromLevel(state, mob);
 		} else {
 			HxlLog.append("kills you");
 			// todo = game over screen
@@ -265,11 +265,11 @@ class CqActor extends CqObject, implements Actor {
 	public function actInDirection(state:HxlState, targetTile:HxlPoint):Bool {
 		var targetX = tilePos.x + targetTile.x;
 		var targetY = tilePos.y + targetTile.y;
-		var world = Registery.world;
+		var level = Registery.level;
 		
-		var tile = cast(world.currentLevel.getTile(targetX,  targetY),CqTile);
+		var tile = cast(level.getTile(targetX,  targetY),CqTile);
 		
-		if (world.currentLevel.isBlockingMovement(Math.round(targetX),  Math.round(targetY)))
+		if (level.isBlockingMovement(Math.round(targetX),  Math.round(targetY)))
 			return false;
 		
 		if (tile.actors.length > 0) {
@@ -296,7 +296,7 @@ class CqActor extends CqObject, implements Actor {
 		
 		isMoving = true;
 		setTilePos(new HxlPoint(targetX, targetY));
-		var positionOfTile:HxlPoint = world.currentLevel.getPixelPositionOfTile(Math.round(tilePos.x), Math.round(tilePos.y));
+		var positionOfTile:HxlPoint = level.getPixelPositionOfTile(Math.round(tilePos.x), Math.round(tilePos.y));
 		moveToPixel(state, positionOfTile.x, positionOfTile.y);
 		
 		return true;
@@ -521,7 +521,7 @@ class CqPlayer extends CqActor, implements Player {
 	
 	public function pickup(state:HxlState, item:CqItem) {
 		// remove item from map
-		Registery.world.currentLevel.removeLootFromLevel(state, item);
+		Registery.level.removeLootFromLevel(state, item);
 		item.doPickupEffect();	
 		// add to actor inventory
 		// if this item has a max stack size greater than 1, lets see if we already have the same item in inventory
@@ -595,7 +595,7 @@ class CqPlayer extends CqActor, implements Player {
 
 	public override function moveStop(state:HxlState):Void {
 		super.moveStop(state);
-		var currentTile = cast(Registery.world.currentLevel.getTile(Std.int(tilePos.x), Std.int(tilePos.y)), Tile);
+		var currentTile = cast(Registery.level.getTile(Std.int(tilePos.x), Std.int(tilePos.y)), Tile);
 		var currentTileIndex = currentTile.dataNum;
 		if ( currentTile.loots.length > 0 ) {
 			var item = cast(currentTile.loots[currentTile.loots.length-1], CqItem);
@@ -605,8 +605,8 @@ class CqPlayer extends CqActor, implements Player {
 
 	public override function moveToPixel(state:HxlState, X:Float, Y:Float):Void {
 		if ( lastTile != null ) {
-			if ( Registery.world.currentLevel.getTile(Std.int(lastTile.x), Std.int(lastTile.y)) != null ) {
-				var tile = cast(Registery.world.currentLevel.getTile(Std.int(lastTile.x), Std.int(lastTile.y)), Tile);
+			if ( Registery.level.getTile(Std.int(lastTile.x), Std.int(lastTile.y)) != null ) {
+				var tile = cast(Registery.level.getTile(Std.int(lastTile.x), Std.int(lastTile.y)), Tile);
 				if ( tile.loots.length > 0 ) {
 					for ( item in tile.loots ) cast(item, CqItem).setGlow(false);
 				}
@@ -647,13 +647,13 @@ class CqMob extends CqActor, implements Mob {
 	
 	function actUnaware(state:HxlState):Bool {
 		var directions = [];
-		if (!Registery.world.currentLevel.isBlockingMovement(Std.int(tilePos.x + 1), Std.int(tilePos.y)))
+		if (!Registery.level.isBlockingMovement(Std.int(tilePos.x + 1), Std.int(tilePos.y)))
 			directions.push(new HxlPoint(1, 0));
-		if (!Registery.world.currentLevel.isBlockingMovement(Std.int(tilePos.x - 1), Std.int(tilePos.y)))
+		if (!Registery.level.isBlockingMovement(Std.int(tilePos.x - 1), Std.int(tilePos.y)))
 			directions.push(new HxlPoint(-1, 0));
-		if (!Registery.world.currentLevel.isBlockingMovement(Std.int(tilePos.x), Std.int(tilePos.y+1)))
+		if (!Registery.level.isBlockingMovement(Std.int(tilePos.x), Std.int(tilePos.y+1)))
 			directions.push(new HxlPoint(0, 1));
-		if (!Registery.world.currentLevel.isBlockingMovement(Std.int(tilePos.x), Std.int(tilePos.y-1)))
+		if (!Registery.level.isBlockingMovement(Std.int(tilePos.x), Std.int(tilePos.y-1)))
 			directions.push(new HxlPoint(0, -1));
 			
 		var direction = HxlUtil.getRandomElement(directions);
@@ -667,8 +667,8 @@ class CqMob extends CqActor, implements Mob {
 	}
 	
 	static function isBlocking(p:HxlPoint):Bool {
-		if ( p.x < 0 || p.y < 0 || p.x >= Registery.world.currentLevel.widthInTiles || p.y >= Registery.world.currentLevel.heightInTiles ) return true;
-		return Registery.world.currentLevel.getTile(Math.round(p.x), Math.round(p.y)).isBlockingView();
+		if ( p.x < 0 || p.y < 0 || p.x >= Registery.level.widthInTiles || p.y >= Registery.level.heightInTiles ) return true;
+		return Registery.level.getTile(Math.round(p.x), Math.round(p.y)).isBlockingView();
 	}
 	
 	function actAware(state:HxlState):Bool {

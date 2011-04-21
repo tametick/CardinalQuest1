@@ -50,8 +50,8 @@ class CqMapDialog extends HxlSlidingDialog {
 
 	function init():Void {
 		cellSize = new HxlPoint();
-		cellSize.x = Math.floor(mapSize.x / Registery.world.currentLevel.widthInTiles);
-		cellSize.y = Math.floor(mapSize.y / Registery.world.currentLevel.heightInTiles);
+		cellSize.x = Math.floor(mapSize.x / Registery.level.widthInTiles);
+		cellSize.y = Math.floor(mapSize.y / Registery.level.heightInTiles);
 	}
 
 	public override function show(?ShowCallback:Dynamic=null):Void {
@@ -60,9 +60,9 @@ class CqMapDialog extends HxlSlidingDialog {
 	}
 
 	public function updateMap():Void {
-		var tiles:Array<Array<HxlTile>> = Registery.world.currentLevel.getTiles();
-		var mapW:Int = Registery.world.currentLevel.widthInTiles;
-		var mapH:Int = Registery.world.currentLevel.heightInTiles;
+		var tiles:Array<Array<HxlTile>> = Registery.level.getTiles();
+		var mapW:Int = Registery.level.widthInTiles;
+		var mapH:Int = Registery.level.heightInTiles;
 		var graph = mapShape.graphics;
 		var Color:Int = 0x339933;
 		var SightColor:Int = 0x339933;
@@ -81,12 +81,12 @@ class CqMapDialog extends HxlSlidingDialog {
 				//if ( tiles[Y][X].visibility == Visibility.SEEN || tiles[Y][X].visibility != Visibility.IN_SIGHT) {
 				if ( tiles[Y][X].visibility == Visibility.SEEN ) {
 								Color = SeenColor;
-					if ( Registery.world.currentLevel.isBlockingMovement(X, Y) ) {
+					if ( Registery.level.isBlockingMovement(X, Y) ) {
 						Color = WallSeenColor;
 					}
 				} else if ( tiles[Y][X].visibility == Visibility.IN_SIGHT ) {
 					Color = SightColor;
-					if ( Registery.world.currentLevel.isBlockingMovement(X, Y) ) {
+					if ( Registery.level.isBlockingMovement(X, Y) ) {
 						Color = WallSightColor;
 					}
 				}
