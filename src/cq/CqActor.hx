@@ -1,5 +1,7 @@
 package cq;
 
+import com.eclecticdesignstudio.motion.Actuate;
+
 import haxel.HxlLog;
 import haxel.HxlState;
 import haxel.HxlUtil;
@@ -202,6 +204,7 @@ class CqActor extends CqObject, implements Actor {
 			cast(this, CqPlayer).gainExperience(mob);
 			// remove other
 			Registery.level.removeMobFromLevel(state, mob);
+			mob.doDeathEffect();
 		} else {
 			HxlLog.append("kills you");
 			// todo = game over screen
@@ -630,8 +633,7 @@ class CqMob extends CqActor, implements Mob {
 	public var xpValue:Int;
 	public var spell:CqSpell;
 	var aware:Int;
-	
-	
+		
 	public function new(X:Float, Y:Float, typeName:String) {
 		super(X, Y, -1, -1, -1, -1,-1,new Range(1, 1));
 		xpValue = 1;
@@ -711,6 +713,19 @@ class CqMob extends CqActor, implements Mob {
 			return actAware(state);
 		else
 			return actUnaware(state);
+	}
+
+	public function doDeathEffect():Void {
+		HxlGraphics.state.add(this);
+		var self = this;
+		angularVelocity = -200;
+		scaleVelocity.x = scaleVelocity.y = -1.2;
+		Actuate.update(function(params:Dynamic) {
+			self.alpha = params.Alpha;
+		}, 0.5, {Alpha: 1.0}, {Alpha: 0.0}).onComplete(function() {
+			HxlGraphics.state.remove(self);
+			self.destroy();
+		});
 	}
 }
 

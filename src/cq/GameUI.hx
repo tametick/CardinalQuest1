@@ -264,10 +264,7 @@ class GameUI extends HxlDialog {
 
 	public function itemPickup(Item:CqItem):Void {
 		panelInventory.itemPickup(Item);
-		btnInventoryView.doFlash();
-
-
-		
+		btnInventoryView.doFlash();		
 	}
 
 	public function initChests():Void {
