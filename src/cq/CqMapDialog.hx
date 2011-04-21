@@ -1,5 +1,6 @@
 package cq;
 
+import cq.CqActor;
 import cq.CqResources;
 import data.Registery;
 import flash.display.Bitmap;
@@ -72,6 +73,7 @@ class CqMapDialog extends HxlSlidingDialog {
 		var StairsColor:Int = 0xffffff;
 		var DoorSightColor:Int = 0x8E6B5D;
 		var DoorSeenColor:Int = 0x563A2F;
+		var playerColor:Int = 0xFFFED2;
 		graph.clear();
 		for ( Y in 0...mapH ) {
 			for ( X in 0...mapW ) {
@@ -104,15 +106,24 @@ class CqMapDialog extends HxlSlidingDialog {
 						graph.lineTo(dx + ((cellSize.x - 4) / 2), dy + (cellSize.y - 4));
 						graph.lineTo(dx, dy);
 						graph.endFill();
-					} else if ( HxlUtil.contains(SpriteTiles.instance.doors.iterator(), tiles[Y][X].dataNum) ) { // Draw doors
-						// Dont draw open doors
+					} else if ( HxlUtil.contains(SpriteTiles.instance.doors.iterator(), tiles[Y][X].dataNum) ) { 
+						// Draw doors
 						if ( !HxlUtil.contains(SpriteTiles.instance.openDoors.iterator(), tiles[Y][X].dataNum) ) {
+							// Dont draw open doors
 							if ( tiles[Y][X].visibility == Visibility.SEEN ) Color = DoorSeenColor;
 							else Color = DoorSightColor;
 							graph.beginFill(Color);
 							graph.drawRect( (X * cellSize.x), (Y * cellSize.y), cellSize.x, cellSize.y );
 							graph.endFill();			
 						}
+					}
+					var playerPos = cast(Registery.player, CqActor).getTilePos();
+					if ( playerPos.x == X && playerPos.y == Y ) {
+						var dx:Float = (X * cellSize.x) + (cellSize.x / 2);
+						var dy:Float = (Y * cellSize.y) + (cellSize.y / 2);
+						graph.beginFill(playerColor);
+						graph.drawCircle(dx, dy, (cellSize.x / 2));
+						graph.endFill();
 					}
 				}
 			}
