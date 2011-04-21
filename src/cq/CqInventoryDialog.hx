@@ -2,6 +2,7 @@ package cq;
 
 import cq.CqActor;
 import cq.CqItem;
+import cq.CqItemInfoDialog;
 import cq.CqPotionButton;
 import cq.CqResources;
 import cq.CqSpell;
@@ -30,7 +31,7 @@ import haxel.HxlUtil;
 class CqInventoryDialog extends HxlSlidingDialog {
 
 	public var dlgCharacter:HxlDialog;
-	public var dlgInfo:HxlDialog;
+	public var dlgInfo:CqItemInfoDialog;
 	public var dlgInvGrid:CqInventoryGrid;
 	public var dlgEqGrid:CqEquipmentGrid;
 	public var dlgSpellGrid:CqSpellGrid;
@@ -52,7 +53,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		dlgEqGrid = new CqEquipmentGrid(0, 0, 221, 255);
 		dlgCharacter.add(dlgEqGrid);
 
-		dlgInfo = new HxlDialog(241, 10, 221, 255);
+		dlgInfo = new CqItemInfoDialog(241, 10, 221, 255);
 		dlgInfo.setBackgroundColor(0xff555555);
 		add(dlgInfo);
 
@@ -64,11 +65,15 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		var itemSheetKey:String = "ItemIconSheet";
 		itemSprite = new HxlSprite(0, 0);
 		itemSprite.loadGraphic(SpriteItems, true, false, Configuration.tileSize, Configuration.tileSize, false, 3.0, 3.0);
+		dlgInfo.itemSheet = itemSheet;
+		dlgInfo.itemSprite = itemSprite;
 
 		spellSheet = SpriteSpells.instance;
 		var spellSheetKey:String = "SpellIconSheet";
 		spellSprite = new HxlSprite(0, 0);
 		spellSprite.loadGraphic(SpriteSpells, true, false, Configuration.tileSize, Configuration.tileSize, false, 3.0, 3.0);
+		dlgInfo.spellSheet = spellSheet;
+		dlgInfo.spellSprite = spellSprite;
 
 		CqInventoryItem.backgroundKey = "ItemBG";	
 		CqInventoryItem.backgroundSelectedKey = "ItemSelectedBG";
@@ -115,6 +120,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 			CqInventoryItem.selectedItem.setSelected(false);
 			CqInventoryItem.selectedItem = null;
 		}
+		dlgInfo.clearInfo();
 	}
 
 }
@@ -505,6 +511,7 @@ class CqInventoryItem extends HxlSprite {
 			loadCachedGraphic(backgroundSelectedKey);
 			background = HxlGraphics.getBitmap(backgroundSelectedKey);
 			if ( icon != null ) setIcon(icon);
+			_dlg.dlgInfo.setItem(item);
 		} else {
 			loadCachedGraphic(backgroundKey);
 			background = HxlGraphics.getBitmap(backgroundKey);
@@ -752,6 +759,7 @@ class CqInventoryItem extends HxlSprite {
 						_dlg.dlgEqGrid.onItemDragStop();
 						_dlg.dlgSpellGrid.onItemDragStop();
 						_dlg.dlgPotionGrid.onItemDragStop();
+						_dlg.dlgInfo.clearInfo();
 						return;
 					} else {
 						setInventoryCell(CqInventoryCell.highlightedCell.cellIndex);

@@ -38,23 +38,23 @@ class CqLootFactory {
 		Resources.descriptions = new Hash<String>();
 		Resources.descriptions.set("Healing potion", "A small vial containing fragrant, red salve. Restores life when applied.");
 		Resources.descriptions.set("Coca-leaf cocktail","This mysterious beverage grants great speed when quaffed.");
-		Resources.descriptions.set("elixir of the elephant","This elixir temporarily protects the drinker's body with a thick hide.");
-		Resources.descriptions.set("elixir of the hawk","This elixir temporarily grants ultra-human eyesight and reflexes.");
-		Resources.descriptions.set("elixir of the lion","This elixir temporarily strengthens the drinker immensely.");
-		Resources.descriptions.set("boots of escape", "These finely crafted leather boots allow the wearer to run with great speed.");
+		Resources.descriptions.set("Elixir of the elephant","This elixir temporarily protects the drinker's body with a thick hide.");
+		Resources.descriptions.set("Elixir of the hawk","This elixir temporarily grants ultra-human eyesight and reflexes.");
+		Resources.descriptions.set("Elixir of the lion","This elixir temporarily strengthens the drinker immensely.");
+		Resources.descriptions.set("Boots of escape", "These finely crafted leather boots allow the wearer to run with great speed.");
 		Resources.descriptions.set("Hermes' sandals","These winged sandals are made of imperishable gold and allow the wearer to move as swiftly as any bird.");
-		Resources.descriptions.set("leather armor","This armor is made of leather that was boiled in wax for extra toughness.");
-		Resources.descriptions.set("breastplate", "This breastplate is made of iron and offers excellent protection to vital organs without limiting mobility.");
-		Resources.descriptions.set("ring of wisdom","This small silver ring imbues its wearer with uncanny wisdom.");
-		Resources.descriptions.set("amulet of enlightenment","Enlightenment permeates this simple looking amulet, granting its wearer the spirit of the gods.");
-		Resources.descriptions.set("cap of endurance", "This steel skullcap protects the head without restricting the wearer's ability to wear fashionable hats.");
-		Resources.descriptions.set("helm of hardiness", "This helm is crafted by dwarven smiths in the Roshaggon mines, using an alloy jealously kept secret.");
-		Resources.descriptions.set("gloves of dexterity","The swiftness of hand these gloves enable allow their wearer to perform better in battle.");
+		Resources.descriptions.set("Leather armor","This armor is made of leather that was boiled in wax for extra toughness.");
+		Resources.descriptions.set("Breastplate", "This breastplate is made of iron and offers excellent protection to vital organs without limiting mobility.");
+		Resources.descriptions.set("Ring of wisdom","This small silver ring imbues its wearer with uncanny wisdom.");
+		Resources.descriptions.set("Amulet of enlightenment","Enlightenment permeates this simple looking amulet, granting its wearer the spirit of the gods.");
+		Resources.descriptions.set("Cap of endurance", "This steel skullcap protects the head without restricting the wearer's ability to wear fashionable hats.");
+		Resources.descriptions.set("Helm of hardiness", "This helm is crafted by dwarven smiths in the Roshaggon mines, using an alloy jealously kept secret.");
+		Resources.descriptions.set("Gloves of dexterity","The swiftness of hand these gloves enable allow their wearer to perform better in battle.");
 		Resources.descriptions.set("Achilles' bracer","This magical bronze bracer contains within it the great warrior's spirit.");
-		Resources.descriptions.set("short sword", "A one handed hilt attached to a thrusting blade approximately 60cm in length.");
-		Resources.descriptions.set("long sword","Long swords have long cruciform hilts with grips and  double-edged blades over one meter long.");
-		Resources.descriptions.set("staff","a shaft of hardwood with metal tips.");
-		Resources.descriptions.set("dagger", "a double-edged blade used for stabbing or thrusting.");
+		Resources.descriptions.set("Short sword", "A one handed hilt attached to a thrusting blade approximately 60cm in length.");
+		Resources.descriptions.set("Long sword","Long swords have long cruciform hilts with grips and  double-edged blades over one meter long.");
+		Resources.descriptions.set("Staff","a shaft of hardwood with metal tips.");
+		Resources.descriptions.set("Dagger", "a double-edged blade used for stabbing or thrusting.");
 	}
 	
 	public static function newItem(X:Float, Y:Float, typeName:String):CqItem {
