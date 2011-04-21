@@ -21,7 +21,7 @@ class HxlConsole extends Sprite {
 
 	var _max_lines : Int;
 
-	var _console : Sprite;
+	var console : Sprite;
 	var _lines : Array<String>;
 	var _text : TextField;
 	var _fpsDisplay:TextField;
@@ -47,7 +47,7 @@ class HxlConsole extends Sprite {
 		_max_lines = 256; 
 		super();
 		
-		if ( DefaultFont == null ) DefaultFont = HxlGraphics.defaultFont;
+		if ( DefaultFont == null ) DefaultFont = HxlGraphics._defaultFont;
 		
 		visible = false;
 		x = X*Zoom;

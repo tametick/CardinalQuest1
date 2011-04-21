@@ -29,15 +29,7 @@ import flash.ui.Mouse;
 import flash.utils.Timer;
 #end
 
-//import Game1;
-
 class HxlGame extends Sprite {
-
-	/*[Embed(source="data/beep.mp3")]*/ 
-	/*[Embed(source="data/flixel.mp3")]*/ 
-	var SndFlixel:Class<Sound>;
-	var SndBeep:Class<Sound>;
-
 	/**
 	 * Sets 0, -, and + to control the global volume and P to pause.
 	 * @default true
@@ -48,40 +40,41 @@ class HxlGame extends Sprite {
 	 * Override with your own <code>HxlLayer</code> for hot custom pause action!
 	 * Defaults to <code>data.HxlPause</code>.
 	 */
-	public var pause:HxlGroup;	// initialization stuff
-
-	public var _created:Bool;
-	public var _iState:Class<HxlState>;
+	public var pause:HxlGroup;	
+	
+	// initialization stuff
+	var _created:Bool;
+	var _iState:Class<HxlState>;
 
 	// game timer stuff
-	public var _elapsed:Float;
-	public var _total:Int;
-	public var _framerate:Int;
-	public var _frameratePaused:Int;
+	public var framerate:Int;
+	public var frameratePaused:Int;
+	var _elapsed:Float;
+	var _total:Int;
 
 	// basic display stuff
-	public var _screen:Sprite;
-	public var _state:HxlState;
-	public var _buffer:Bitmap;
-	public var _zoom:Int;
-	public var _gameXOffset:Int;
-	public var _gameYOffset:Int;
-	public var _frame:Class<Bitmap>;
-	public var _zeroPoint:Point;
-	public var stateStack:Array<HxlState>;
+	public var state:HxlState;
+	var _screen:Sprite;
+	var _buffer:Bitmap;
+	var _zoom:Int;
+	var _gameXOffset:Int;
+	var _gameYOffset:Int;
+	var _frame:Class<Bitmap>;
+	var _zeroPoint:Point;
+	var stateStack:Array<HxlState>;
 
 	// basic update stuff
-	public var _paused:Bool;
-	public var _autoPause:Bool;
+	public var paused:Bool;
+	var _autoPause:Bool;
 
 	// misc objects and helpers
-	public var _console:HxlConsole;
+	public var console:HxlConsole;
 
 	//Pause screen, sound tray, support panel, dev console, and special effects objects
-	public var _soundTray:Sprite;
-	public var _soundTrayTimer:Float;
-	public var _soundTrayBars:Array<Bitmap>;
-	public var defaultFont:String;
+	var _soundTray:Sprite;
+	var _soundTrayTimer:Float;
+	var _soundTrayBars:Array<Bitmap>;
+	var _defaultFont:String;
 
 	public function new(GameSizeX:Int, GameSizeY:Int, InitialState:Class<HxlState>, ?Zoom:Int=1, ?DefaultFont:String="system") {
 		super();
@@ -89,12 +82,12 @@ class HxlGame extends Sprite {
 		HxlState.bgColor = 0xff000000;
 		HxlGraphics.setGameData(this, GameSizeX, GameSizeY, Zoom);
 		HxlTimer.setGameData(this);
-		defaultFont = DefaultFont;
-		HxlGraphics.defaultFont = DefaultFont;
+		_defaultFont = DefaultFont;
+		HxlGraphics._defaultFont = DefaultFont;
 		_elapsed = 0;
 		_total = 0;
 		pause = new HxlPause();
-		_state = null;
+		state = null;
 		_iState = InitialState;
 		_zeroPoint = new Point();
 		stateStack = new Array();
@@ -104,7 +97,7 @@ class HxlGame extends Sprite {
 		_frame = null;
 		_gameXOffset = 0;
 		_gameYOffset = 0;
-		_paused = false;
+		paused = false;
 		_autoPause = true;
 		_created = false;
 		addEventListener(Event.ENTER_FRAME, create);
@@ -143,8 +136,8 @@ class HxlGame extends Sprite {
 		//HxlGraphics.panel.hide();
 		//Swap the new state for the old one and dispose of it
 		_screen.addChild(State);
-		_state = State;
-		if (_state != null) {
+		state = State;
+		if (state != null) {
 			if ( Push ) {
 				State.stackId = stateStack.length;
 				stateStack[stateStack.length-1].isStacked = true;
@@ -176,7 +169,7 @@ class HxlGame extends Sprite {
 				_screen.y = 0;
 				State.stackId = 0;
 				stateStack.push(State);
-				//_screen.swapChildren(State,_state);
+				//_screen.swapChildren(State,state);
 			}
 		} else {
 			HxlGraphics.unfollow();
@@ -190,10 +183,10 @@ class HxlGame extends Sprite {
 			State.stackId = 0;
 			stateStack.push(State);
 		}
-		_state.scaleX = _state.scaleY = _zoom;
+		state.scaleX = state.scaleY = _zoom;
 		//Finally, create the new state
-		_state.create();
-		_state.isStacked = false;
+		state.create();
+		state.isStacked = false;
 	}
 
 	public function popState():Void {
@@ -210,17 +203,17 @@ class HxlGame extends Sprite {
 		HxlGraphics.quake.stop();
 		_screen.x = 0;
 		_screen.y = 0;
-		_state = State;
-		_state.isStacked = false;
-		//_state.scaleX = _state.scaleY = _zoom;
+		state = State;
+		state.isStacked = false;
+		//state.scaleX = state.scaleY = _zoom;
 	}
 
 	function onKeyUp(event:KeyboardEvent):Void {
 		if ((event.keyCode == 192) || (event.keyCode == 220)) {//FOR ZE GERMANZ
-			_console.toggle();
+			console.toggle();
 			return;
 		}
-		_console.log(""+event.keyCode);
+		console.log(""+event.keyCode);
 		if (useDefaultHotKeys) {
 			var c:Int = event.keyCode;
 			var code:String = String.fromCharCode(event.charCode);
@@ -259,8 +252,8 @@ class HxlGame extends Sprite {
 		//if(!HxlGraphics.panel.visible) flash.ui.Mouse.hide();
 		#end
 		HxlGraphics.resetInput();
-		_paused = false;
-		stage.frameRate = _framerate;
+		paused = false;
+		stage.frameRate = framerate;
 		Actuate.resumeAll();
 	}
 	
@@ -275,8 +268,8 @@ class HxlGame extends Sprite {
 		#if flash9
 		//flash.ui.Mouse.show();
 		#end
-		_paused = true;
-		stage.frameRate = _frameratePaused;
+		paused = true;
+		stage.frameRate = frameratePaused;
 		Actuate.pauseAll();
 	}
 
@@ -308,7 +301,7 @@ class HxlGame extends Sprite {
 		//Set up the view window and double buffering
 		stage.scaleMode = StageScaleMode.NO_SCALE;
         stage.align = StageAlign.TOP_LEFT;
-        stage.frameRate = _framerate;
+        stage.frameRate = framerate;
 
 		_screen = new Sprite();
 		addChild(_screen);
@@ -320,9 +313,9 @@ class HxlGame extends Sprite {
 		HxlGraphics.buffer = tmp.bitmapData;
 
 		// Initialize console
-		_console = new HxlConsole(0, 0, _zoom, defaultFont);
-		_console.log("console created!");
-		addChild(_console);
+		console = new HxlConsole(0, 0, _zoom, _defaultFont);
+		console.log("console created!");
+		addChild(console);
 
 		// Initialize input event listeners
 		stage.addEventListener(KeyboardEvent.KEY_DOWN, HxlGraphics.keys.handleKeyDown);
@@ -405,7 +398,7 @@ class HxlGame extends Sprite {
 		//Frame timing
 		var ems:Int = mark - _total;
 		_elapsed = ems/1000;
-		_console.mtrTotal.add(ems);
+		console.mtrTotal.add(ems);
 		_total = mark;
 		
 		HxlGraphics.elapsed = _elapsed;
@@ -439,8 +432,8 @@ class HxlGame extends Sprite {
 		}
 
 		// Animate HUD elements
-		if ( _console.visible ) {
-			_console.update();
+		if ( console.visible ) {
+			console.update();
 		}
 
 		// State updating
@@ -449,12 +442,12 @@ class HxlGame extends Sprite {
 		HxlGraphics.updateInput();
 		HxlGraphics.updateSounds();
 
-		if ( _paused ) {
+		if ( paused ) {
 			pause.update();
 		} else {
 			// Update camera and game state
 			HxlGraphics.doFollow();
-			_state.update();
+			state.update();
 
 			// Update special effects
 			if ( HxlGraphics.flash.exists ) {
@@ -469,10 +462,10 @@ class HxlGame extends Sprite {
 		}
 		//Keep track of how long it took to update everything
 		var updateMark:Int = Lib.getTimer();
-		_console.mtrUpdate.add(updateMark-mark);
+		console.mtrUpdate.add(updateMark-mark);
 
 		HxlGraphics.buffer.lock();
-		_state.preProcess();
+		state.preProcess();
 
 		// rough state stack rendering code, not currently working..
 		
@@ -481,7 +474,7 @@ class HxlGame extends Sprite {
 			for ( i in 0...stateStack.length ) {
 				if ( stateStack[i].stackBlockRender ) startState = i;
 			}
-			if ( startState != _state.stackId ) {
+			if ( startState != state.stackId ) {
 				for ( i in startState...stateStack.length-1 ) {
 					stateStack[i].render();
 				}
@@ -489,7 +482,7 @@ class HxlGame extends Sprite {
 		}
 		
 
-		_state.render();
+		state.render();
 		
 		if ( HxlGraphics.flash.exists ) {
 			HxlGraphics.flash.render();
@@ -498,12 +491,12 @@ class HxlGame extends Sprite {
 			HxlGraphics.fade.render();
 		}
 
-		_state.postProcess();
-		if ( _paused ) {
+		state.postProcess();
+		if ( paused ) {
 			pause.render();
 		}
 		HxlGraphics.buffer.unlock();
-		_console.mtrRender.add(Lib.getTimer()-updateMark);
+		console.mtrRender.add(Lib.getTimer()-updateMark);
 	}
 
 }

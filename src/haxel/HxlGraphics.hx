@@ -183,7 +183,7 @@ class HxlGraphics {
 	 **/
 	public static var autoZSort:Bool = true;
 	
-	public static var defaultFont:String = "system";
+	public static var _defaultFont:String = "system";
 
 	public function new() { }
 
@@ -230,8 +230,8 @@ class HxlGraphics {
 	 * @param	Data		Anything you want to log to the console.
 	 */
 	public static function log(Data:Dynamic):Void {
-		if ((_game != null) && (_game._console != null)) {
-			_game._console.log((Data == null)?"ERROR: null object":Data.toString());
+		if ((_game != null) && (_game.console != null)) {
+			_game.console.log((Data == null)?"ERROR: null object":Data.toString());
 		}
 	}
 
@@ -497,8 +497,8 @@ class HxlGraphics {
 	 */
 	public static function getStage():Stage {
 		//trace("Getting stage..");
-		if ((_game._state != null)  && (_game._state.parent != null)) {
-			return _game._state.parent.stage;
+		if ((_game.state != null)  && (_game.state.parent != null)) {
+			return _game.state.parent.stage;
 		}
 		//trace("no stage!");
 		return null;
@@ -508,15 +508,15 @@ class HxlGraphics {
 	 * The game and SWF framerate; default is 60.
 	 */
 	public static function getFramerate():Int {
-		return _game._framerate;
+		return _game.framerate;
 	}
 	
 	/**
 	 * @private
 	 */
 	public static function setFramerate(Framerate:Int):Int {
-		_game._framerate = Framerate;
-		if (!_game._paused && (_game.stage != null)) {
+		_game.framerate = Framerate;
+		if (!_game.paused && (_game.stage != null)) {
 			_game.stage.frameRate = Framerate;
 		}
 		return Framerate;
@@ -526,7 +526,7 @@ class HxlGraphics {
 	 * The game and SWF framerate while paused; default is 10.
 	 */
 	public static function getFrameratePaused():Int {
-		return _game._frameratePaused;
+		return _game.frameratePaused;
 	}
 	
 	/**
@@ -535,8 +535,8 @@ class HxlGraphics {
 	public static function setFrameratePaused(Framerate:Int):Int{
 		return Framerate;
 		
-		_game._frameratePaused = Framerate;
-		if(_game._paused && (_game.stage != null))
+		_game.frameratePaused = Framerate;
+		if(_game.paused && (_game.stage != null))
 			_game.stage.frameRate = Framerate;
 		return Framerate;
 	}
@@ -789,7 +789,7 @@ class HxlGraphics {
 	 * Safely access the current game state.
 	 */
 	public static function getState():HxlState {
-		return _game._state;
+		return _game.state;
 	}
 	
 	public static function setState(State:HxlState):HxlState {

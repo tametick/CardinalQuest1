@@ -35,7 +35,7 @@ class HxlTextContainer extends HxlDialog {
 		super(X, Y, Width, Height);
 
 		_padding = Padding;
-		if ( DefaultFont == null ) DefaultFont = HxlGraphics.defaultFont;
+		if ( DefaultFont == null ) DefaultFont = HxlGraphics._defaultFont;
 		fontName = DefaultFont;
 		fontSize = 10;
 		fontColor = 0xffffff;

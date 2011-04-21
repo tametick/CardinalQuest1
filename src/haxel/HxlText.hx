@@ -58,7 +58,7 @@ class HxlText extends HxlSprite {
 		_tf.multiline = true;
 		_tf.wordWrap = true;
 		_tf.text = Text;
-		if ( FontName == null ) FontName = HxlGraphics.defaultFont;
+		if ( FontName == null ) FontName = HxlGraphics._defaultFont;
 		var tf:TextFormat = new TextFormat(FontName,8,0xffffff);
 		_tf.defaultTextFormat = tf;
 		_tf.setTextFormat(tf);
