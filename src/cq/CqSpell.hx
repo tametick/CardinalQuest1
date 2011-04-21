@@ -7,5 +7,6 @@ class CqSpell extends CqItem {
 		super(X, Y, typeName);
 		equipSlot = SPELL;
 		visible = false;
+		name = "Spell name not available";
 	}
 }

@@ -119,6 +119,9 @@ class HxlText extends HxlSprite {
 	 * @private
 	 */
 	public function setText(Text:String):String {
+		if (Text == null)
+			Text = "";
+		
 		var ot:String = _tf.text;
 		_tf.text = Text;
 		if (_tf.text != ot) {
