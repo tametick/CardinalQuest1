@@ -115,7 +115,7 @@ class AStar
 						n.g = node.g + n.cost;
 					}
 				}
-				visit (n);
+				//visit (n);
 			}
 			
 			
