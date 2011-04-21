@@ -70,8 +70,8 @@ class CqMapDialog extends HxlSlidingDialog {
 		var WallSightColor:Int = 0x333399;
 		var WallSeenColor:Int = 0x111166;
 		var StairsColor:Int = 0xffffff;
-		var DoorSightColor:Int = 0xD35C0D;
-		var DoorSeenColor:Int = 0x8D3E14;
+		var DoorSightColor:Int = 0x8E6B5D;
+		var DoorSeenColor:Int = 0x563A2F;
 		graph.clear();
 		for ( Y in 0...mapH ) {
 			for ( X in 0...mapW ) {
@@ -104,12 +104,15 @@ class CqMapDialog extends HxlSlidingDialog {
 						graph.lineTo(dx + ((cellSize.x - 4) / 2), dy + (cellSize.y - 4));
 						graph.lineTo(dx, dy);
 						graph.endFill();
-					} else if ( HxlUtil.contains(SpriteTiles.instance.doors.iterator(), tiles[Y][X].dataNum) ) {
-						if ( tiles[Y][X].visibility == Visibility.SEEN ) Color = DoorSeenColor;
-						else Color = DoorSightColor;
-						graph.beginFill(Color);
-						graph.drawRect( (X * cellSize.x), (Y * cellSize.y), cellSize.x, cellSize.y );
-						graph.endFill();			
+					} else if ( HxlUtil.contains(SpriteTiles.instance.doors.iterator(), tiles[Y][X].dataNum) ) { // Draw doors
+						// Dont draw open doors
+						if ( !HxlUtil.contains(SpriteTiles.instance.openDoors.iterator(), tiles[Y][X].dataNum) ) {
+							if ( tiles[Y][X].visibility == Visibility.SEEN ) Color = DoorSeenColor;
+							else Color = DoorSightColor;
+							graph.beginFill(Color);
+							graph.drawRect( (X * cellSize.x), (Y * cellSize.y), cellSize.x, cellSize.y );
+							graph.endFill();			
+						}
 					}
 				}
 			}
