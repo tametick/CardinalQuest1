@@ -22,12 +22,12 @@ class CqFloatText extends HxlText {
 		x -= _pixels.width / 2;
 		y -= _pixels.height / 2;
 		var self = this;
-		Actuate.tween(this, 0.4, {y: y - 20})
+		Actuate.tween(this, 0.8, {y: y - 20})
 			.ease(Cubic.easeOut)
 			.onComplete(function() {
 				Actuate.update(function(params:Dynamic) {
 					self.alpha = params.Alpha;
-				}, 0.5, {Alpha: 1.0}, {Alpha: 0.0}).onComplete(function() { self.destroy(); });
+				}, 1.0, {Alpha: 1.0}, {Alpha: 0.0}).onComplete(function() { self.destroy(); });
 			});
 	}
 
