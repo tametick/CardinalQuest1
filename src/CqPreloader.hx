@@ -4,8 +4,13 @@ import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import flash.display.Sprite;
 import flash.display.Shape;
+import flash.display.Bitmap;
+import flash.display.BitmapData;
 import flash.events.Event;
+import flash.events.MouseEvent;
 import flash.text.TextField;
+import flash.text.TextFormat;
+import flash.text.TextFormatAlign;
 import flash.system.LoaderContext;
 import flash.system.ApplicationDomain;
 import flash.utils.ByteArray;
@@ -32,7 +37,7 @@ class CqPreloader extends MovieClip {
 	}
 	
 	function invalidUrl() {
-		tmp = new Bitmap(new BitmapData(stage.stageWidth,stage.stageHeight,true,0xFFFFFFFF));
+		var tmp = new Bitmap(new BitmapData(stage.stageWidth,stage.stageHeight,true,0xFFFFFFFF));
 		addChild(tmp);
 
 		var fmt:TextFormat = new TextFormat();
@@ -55,6 +60,10 @@ class CqPreloader extends MovieClip {
 
 		txt.addEventListener(MouseEvent.CLICK,goToMyURL);
 		tmp.addEventListener(MouseEvent.CLICK,goToMyURL);
+	}
+	
+	function goToMyURL(p:Dynamic) {
+		//todo
 	}
 	
 	public function new()
