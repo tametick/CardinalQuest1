@@ -35,7 +35,8 @@ class CqSpecialEffectValue {
 
 class CqLootFactory {
 	static function initDescriptions() {
-		Resources.descriptions = new Hash<String>();
+		if(Resources.descriptions==null)
+			Resources.descriptions = new Hash<String>();
 		Resources.descriptions.set("Healing potion", "A small vial containing fragrant, red salve. Restores life when applied.");
 		Resources.descriptions.set("Coca-leaf cocktail","This mysterious beverage grants great speed when quaffed.");
 		Resources.descriptions.set("Elixir of the elephant","This elixir temporarily protects the drinker's body with a thick hide.");
@@ -58,12 +59,8 @@ class CqLootFactory {
 	}
 	
 	public static function newItem(X:Float, Y:Float, typeName:String):CqItem {
-
-		if (Resources.descriptions == null) {
-			initDescriptions();
-		}
+		initDescriptions();
 		
-		//typeName = "PURPLE_POTION";
 		var type = Type.createEnum(CqItemType,  typeName);
 		var item = new CqItem(X, Y, typeName.toLowerCase());
 
@@ -324,16 +321,6 @@ enum CqItemType {
 	YELLOW_POTION;
 	RED_POTION;
 	HELM;
-}
-
-enum CqSpellType {
-	FREEZE; 
-	FIREBALL; 
-	BERSERK; 
-	ENFEEBLE_MONSTER; 
-	BLESS_WEAPON; 
-	HASTE; 
-	SHADOW_WALK;
 }
 
 enum CqEquipSlot {

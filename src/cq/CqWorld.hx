@@ -2,6 +2,7 @@ package cq;
 
 import cq.CqResources;
 import cq.CqItem;
+import cq.CqSpell;
 import cq.CqActor;
 
 
@@ -167,7 +168,7 @@ class CqLevel extends Level {
 
 	function createAndaddSpell(pos:HxlPoint) {
 		var pixelPos = getPixelPositionOfTile(pos.x, pos.y);
-		var spell = new CqSpell(pixelPos.x, pixelPos.y, HxlUtil.getRandomElement(SpriteSpells.instance.spriteNames[0]));
+		var spell = CqSpellFactory.newSpell(pixelPos.x, pixelPos.y, HxlUtil.getRandomElement(SpriteSpells.instance.spriteNames[0]).toUpperCase());
 		
 		// add to level loot list
 		loots.push(spell);
