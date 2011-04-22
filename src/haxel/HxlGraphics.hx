@@ -43,7 +43,7 @@ class HxlGraphics {
 	/**
 	 * Whether you are running in Debug or Release mode.
 	 */
-	public static var debug:Bool;
+	//public static var debug:Bool;
 
 	/**
 	 * Width of the screen in game pixels.

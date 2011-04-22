@@ -60,7 +60,7 @@ class HxlPreloader extends MovieClip {
 
 	function isInvalidUrl():Bool {
 		var tmp:Bitmap;
-		if (!HxlGraphics.debug && (myUrl != null) && (root.loaderInfo.url.indexOf(myUrl) < 0)) {
+		if ((myUrl != null) && (root.loaderInfo.url.indexOf(myUrl) < 0)) {
 			tmp = new Bitmap(new BitmapData(stage.stageWidth,stage.stageHeight,true,0xFFFFFFFF));
 			addChild(tmp);
 			

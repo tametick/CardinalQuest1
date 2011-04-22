@@ -41,24 +41,6 @@ class CqPreloader extends MovieClip {
 		
 		var tmp = new Bitmap(new BitmapData(stage.stageWidth,stage.stageHeight,true,0xFFFFFFFF));
 		addChild(tmp);
-	
-		/*
-		var fmt:TextFormat = new TextFormat();
-		fmt.color = 0x000000;
-		fmt.size = 16;
-		fmt.align = TextFormatAlign.CENTER;
-		fmt.bold = true;
-		fmt.font = "system";
-
-		var txt:TextField = new TextField();
-		txt.width = tmp.width-16;
-		txt.height = tmp.height-16;
-		txt.y = 8;
-		txt.multiline = true;
-		txt.wordWrap = true;
-		txt.embedFonts = true;
-		txt.defaultTextFormat = fmt;
-		*/
 
 		var txt:TextField = new TextField();
 		txt.width = tmp.width - 16;
@@ -89,11 +71,6 @@ class CqPreloader extends MovieClip {
 	public function new()
 	{
 		super();
-	
-		if (!Configuration.debug && (root.loaderInfo.url.indexOf(url) < 0))  {
-			invalidUrl();
-			return;
-		}
 		initialized = false;
 
 		tf=new TextField();
@@ -128,7 +105,7 @@ class CqPreloader extends MovieClip {
 		//haxe.Log.setColor(0xffffff);
 		if ( !initialized ) {
 			initialized = true;
-			if (!HxlGraphics.debug && (root.loaderInfo.url.indexOf(url) < 0))  {
+			if (!Configuration.debug && (root.loaderInfo.url.indexOf(url) < 0))  {
 				invalidUrl();
 				return;
 			}
@@ -137,8 +114,7 @@ class CqPreloader extends MovieClip {
 		var percent = Math.floor((root.loaderInfo.bytesLoaded / root.loaderInfo.bytesTotal)*100);
 		tf.text= percent +' %';
 		progressBar.scaleX = 1.0 * (percent/100);
-		if(percent==100)
-		{
+		if(percent==100) {
 			removeChild(tf);
 			removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			loader=new Loader();
