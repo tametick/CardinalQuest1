@@ -1,7 +1,7 @@
 package cq;
 
 import com.eclecticdesignstudio.motion.Actuate;
-import com.eclecticdesignstudio.motion.easing.Elastic;
+import com.eclecticdesignstudio.motion.easing.Cubic;
 
 import cq.CqActor;
 import cq.CqResources;
@@ -124,7 +124,7 @@ class CreateCharState extends HxlState
 		} else if ( curClass == WIZARD ) {
 			targetX = 405;
 		}
-		Actuate.tween(selectBox, 0.25, { x: targetX }).ease(Elastic.easeOut);
+		Actuate.tween(selectBox, 0.25, { x: targetX }).ease(Cubic.easeOut);
 	}
 
 	public override function update():Void {
