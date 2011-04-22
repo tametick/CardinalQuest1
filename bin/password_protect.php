@@ -56,7 +56,7 @@ $LOGIN_INFORMATION = array(
 define('USE_USERNAME', false);
 
 // User will be redirected to this page after logout
-define('LOGOUT_URL', 'http://www.example.com/');
+define('LOGOUT_URL', 'http://www.tametick.com/');
 
 // time out after NN minutes of inactivity. Set to 0 to not timeout
 define('TIMEOUT_MINUTES', 0);
