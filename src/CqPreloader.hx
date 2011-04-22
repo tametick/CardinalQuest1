@@ -30,16 +30,18 @@ class CqPreloader extends MovieClip {
 	var ctx : LoaderContext;
 	var progressBarBG:Shape;
 	var progressBar:Shape;
-	
+	var initialized:Bool;	
 
 	public static function main() {
 		Lib.current.addChild(new CqPreloader());
 	}
 	
 	function invalidUrl() {
+		
 		var tmp = new Bitmap(new BitmapData(stage.stageWidth,stage.stageHeight,true,0xFFFFFFFF));
 		addChild(tmp);
-
+	
+		/*
 		var fmt:TextFormat = new TextFormat();
 		fmt.color = 0x000000;
 		fmt.size = 16;
@@ -55,11 +57,28 @@ class CqPreloader extends MovieClip {
 		txt.wordWrap = true;
 		txt.embedFonts = true;
 		txt.defaultTextFormat = fmt;
-		txt.text = "Hi there!  It looks like somebody copied this game without my permission.  Just click anywhere, or copy-paste this URL into your browser.\n\n"+url+"\n\nto play the game at my site.  Thanks, and have fun!";
-		addChild(txt);
+		*/
 
+		var txt:TextField = new TextField();
+		txt.width = tmp.width - 16;
+		txt.y = 8;
+		#if flash
+		txt.embedFonts = false;
+		#else
+		#end
+		txt.multiline = true;
+		txt.wordWrap = true;
+		txt.text = "Hi there!  It looks like somebody copied this game without my permission.  Just click anywhere, or copy-paste this URL into your browser.\n\n"+url+"\n\nto play the game at my site.  Thanks, and have fun!";
+		var fmt:TextFormat = new TextFormat("system",16,0x000000);
+		txt.defaultTextFormat = fmt;
+		txt.setTextFormat(fmt);
+		addChild(txt);
 		txt.addEventListener(MouseEvent.CLICK,goToMyURL);
 		tmp.addEventListener(MouseEvent.CLICK,goToMyURL);
+
+		// Stop listening for onEnterFrame events (halts further loading)
+		removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+
 	}
 	
 	function goToMyURL(p:Dynamic) {
@@ -69,12 +88,13 @@ class CqPreloader extends MovieClip {
 	public function new()
 	{
 		super();
-		
-		if (!HxlGraphics.debug && (root.loaderInfo.url.indexOf(url) < 0))  {
-			invalidUrl();
-			return;
-		}
-		
+	
+		//if (!HxlGraphics.debug && (root.loaderInfo.url.indexOf(url) < 0))  {
+		//	invalidUrl();
+		//	return;
+		//}
+		initialized = false;
+
 		tf=new TextField();
 		tf.x=260;
 		tf.y=200;
@@ -104,6 +124,15 @@ class CqPreloader extends MovieClip {
 	}
 	private function onEnterFrame(event:Event):Void
 	{
+		//haxe.Log.setColor(0xffffff);
+		if ( !initialized ) {
+			initialized = true;
+			if (!HxlGraphics.debug && (root.loaderInfo.url.indexOf(url) < 0))  {
+				invalidUrl();
+				return;
+			}
+		}
+
 		var percent = Math.floor((root.loaderInfo.bytesLoaded / root.loaderInfo.bytesTotal)*100);
 		tf.text= percent +' %';
 		progressBar.scaleX = 1.0 * (percent/100);
