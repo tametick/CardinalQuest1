@@ -1,6 +1,7 @@
 package cq;
 import haxel.HxlPreloader;
 import haxel.HxlGame;
+import haxel.HxlGraphics;
 import haxel.HxlState;
 import cq.CqResources;
 import data.Configuration;
@@ -9,6 +10,9 @@ import flash.Lib;
 
 class Main {
 	public static function main() {
+		// set to false before releasing
+		HxlGraphics.debug = true;
+		
 		#if flash9
 		haxe.Log.setColor(0xffffff);
 		new Main();
@@ -30,8 +34,11 @@ class Game extends HxlGame {
 		Configuration.zoom = 2.0;
 		HxlState.bgColor = 0xFF000000;
 		
-		//super(640, 480, SplashState, 1, "Geo");
-		super(640, 480, GameState, 1, "Geo");
+		
+		if(HxlGraphics.debug)
+			super(640, 480, GameState, 1, "Geo");
+		else
+			super(640, 480, SplashState, 1, "Geo");
 
 	}
 }

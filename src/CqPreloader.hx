@@ -10,28 +10,63 @@ import flash.system.LoaderContext;
 import flash.system.ApplicationDomain;
 import flash.utils.ByteArray;
 import flash.Lib;
+import flash.external.ExternalInterface;
+
 
 import cq.Main;
+import haxel.HxlGraphics;
 
 class MovieBytes extends ByteArray{}
 
-class CqPreloader extends MovieClip
-{
+class CqPreloader extends MovieClip {
+	static var url = "tametick.com";
 	var tf:TextField;
 	var loader:Loader;
 	var ctx : LoaderContext;
 	var progressBarBG:Shape;
 	var progressBar:Shape;
+	
 
-	public static function main()
-	{
+	public static function main() {
 		Lib.current.addChild(new CqPreloader());
 	}
+	
+	function invalidUrl() {
+		tmp = new Bitmap(new BitmapData(stage.stageWidth,stage.stageHeight,true,0xFFFFFFFF));
+		addChild(tmp);
+
+		var fmt:TextFormat = new TextFormat();
+		fmt.color = 0x000000;
+		fmt.size = 16;
+		fmt.align = TextFormatAlign.CENTER;
+		fmt.bold = true;
+		fmt.font = "system";
+
+		var txt:TextField = new TextField();
+		txt.width = tmp.width-16;
+		txt.height = tmp.height-16;
+		txt.y = 8;
+		txt.multiline = true;
+		txt.wordWrap = true;
+		txt.embedFonts = true;
+		txt.defaultTextFormat = fmt;
+		txt.text = "Hi there!  It looks like somebody copied this game without my permission.  Just click anywhere, or copy-paste this URL into your browser.\n\n"+url+"\n\nto play the game at my site.  Thanks, and have fun!";
+		addChild(txt);
+
+		txt.addEventListener(MouseEvent.CLICK,goToMyURL);
+		tmp.addEventListener(MouseEvent.CLICK,goToMyURL);
+	}
+	
 	public function new()
 	{
 		super();
+		
+		if (!HxlGraphics.debug && (root.loaderInfo.url.indexOf(url) < 0))  {
+			invalidUrl();
+			return;
+		}
+		
 		tf=new TextField();
-		//tf.border=true;
 		tf.x=260;
 		tf.y=200;
 		tf.width=200;
@@ -71,10 +106,6 @@ class CqPreloader extends MovieClip
 			ctx = new LoaderContext(false, new ApplicationDomain(), null);
 			loader.loadBytes(new MovieBytes(), ctx);
 			addChild(loader);
-/*			tf.text='100% (test online to see preloader)';
-			setChildIndex(tf,numChildren-1);
-			tf.x=400;
-			tf.y=50; */
 			cast(this.parent,MovieClip).stop();
 
 		}
