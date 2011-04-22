@@ -20,6 +20,7 @@ import flash.external.ExternalInterface;
 
 import cq.Main;
 import haxel.HxlGraphics;
+import data.Configuration;
 
 class MovieBytes extends ByteArray{}
 
@@ -89,10 +90,10 @@ class CqPreloader extends MovieClip {
 	{
 		super();
 	
-		//if (!HxlGraphics.debug && (root.loaderInfo.url.indexOf(url) < 0))  {
-		//	invalidUrl();
-		//	return;
-		//}
+		if (!Configuration.debug && (root.loaderInfo.url.indexOf(url) < 0))  {
+			invalidUrl();
+			return;
+		}
 		initialized = false;
 
 		tf=new TextField();
