@@ -169,6 +169,7 @@ class GameUI extends HxlDialog {
 	}
 
 	function showPanel(Panel:HxlSlidingDialog, ?Button:HxlButton=null):Void {
+		if ( HxlGraphics.mouse.dragSprite != null ) return;
 		if ( Button != null ) {
 			btnMainView.setActive(false);
 			btnMapView.setActive(false);
