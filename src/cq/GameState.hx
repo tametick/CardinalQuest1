@@ -76,6 +76,7 @@ class GameState extends HxlState {
 		player.addOnKill(gameUI.doPlayerInjureEffect);
 		player.addOnGainXP(gameUI.doPlayerGainXP);
 		//player.addOnMove(function(_player) { trace("moved!"); trace(_player.getTilePos()); });
+		player.addOnMove(gameUI.checkTileItems);
 
 		var self = this;
 		world.addOnNewLevel(function() {

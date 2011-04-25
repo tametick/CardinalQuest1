@@ -30,6 +30,7 @@ import haxel.HxlUtil;
 
 class CqInventoryDialog extends HxlSlidingDialog {
 
+	public var gameui:GameUI;
 	public var dlgCharacter:HxlDialog;
 	public var dlgInfo:CqItemInfoDialog;
 	public var dlgInvGrid:CqInventoryGrid;
@@ -41,10 +42,12 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	var spellSheet:HxlSpriteSheet;
 	var spellSprite:HxlSprite;
 
-	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0)
+	public function new(_GameUI:GameUI, ?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0)
 	{
 		// Size: 472 x 480
 		super(X, Y, Width, Height, Direction);
+
+		gameui = _GameUI;
 
 		dlgCharacter = new HxlDialog(10, 10, 221, 255);
 		dlgCharacter.setBackgroundColor(0xff555555);
@@ -767,6 +770,8 @@ class CqInventoryItem extends HxlSprite {
 						_dlg.dlgSpellGrid.onItemDragStop();
 						_dlg.dlgPotionGrid.onItemDragStop();
 						_dlg.dlgInfo.clearInfo();
+						// Update 'pick up items' button
+						_dlg.gameui.checkTileItems(cast(Registery.player, CqActor));
 						return;
 					} else {
 						setInventoryCell(CqInventoryCell.highlightedCell.cellIndex);

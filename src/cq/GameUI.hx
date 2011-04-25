@@ -14,6 +14,7 @@ import cq.CqVitalBar;
 import data.Registery;
 
 import world.Player;
+import world.Tile;
 import world.World;
 
 import flash.display.BitmapData;
@@ -95,7 +96,7 @@ class GameUI extends HxlDialog {
 		add(panelMap);
 
 		// -62 472x480
-		panelInventory = new CqInventoryDialog(84, 0, 472, 400);
+		panelInventory = new CqInventoryDialog(this, 84, 0, 472, 400);
 		panelInventory.setBackgroundColor(0xffBC9A9A);
 		panelInventory.zIndex = 2;
 		add(panelInventory);
@@ -163,6 +164,7 @@ class GameUI extends HxlDialog {
 		btnPickup.setBackgroundColor(0xff999999, 0xffcccccc);
 		btnPickup.loadText(new HxlText(0, 13, 120, "Pick Up Items", true, "Geo").setFormat("Geo", 18, 0xffffff, "center", 0x010101));
 		btnPickup.configEvent(5, true, true);
+		btnPickup.visible = false;
 		add(btnPickup);
 
 		panelInventory.dlgSpellGrid = dlgSpellGrid;
@@ -269,9 +271,20 @@ class GameUI extends HxlDialog {
 
 	}
 
+	public function checkTileItems(Player:CqActor):Void {
+		var curPos:HxlPoint = Player.getTilePos();
+		var curTile = cast(Registery.level.getTile(Std.int(curPos.x), Std.int(curPos.y)), Tile);
+		if ( curTile.loots.length > 0 ) {
+			btnPickup.visible = true;
+		} else {
+			btnPickup.visible = false;
+		}
+	}
+
 	public function itemPickup(Item:CqItem):Void {
 		panelInventory.itemPickup(Item);
 		btnInventoryView.doFlash();		
+		checkTileItems(cast(Registery.player, CqActor));
 	}
 
 	public function initChests():Void {
