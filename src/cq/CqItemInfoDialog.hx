@@ -61,6 +61,8 @@ class CqItemInfoDialog extends HxlDialog {
 		if ( Std.is(Item, CqSpell) ) {
 			spellSprite.setFrame(spellSheet.getSpriteIndex(Item.spriteIndex));
 			_icon.pixels = spellSprite.getFramePixels();
+			_itemStats.text = "";
+			_itemStats.visible = false;
 		} else {
 			itemSprite.setFrame(itemSheet.getSpriteIndex(Item.spriteIndex));
 			_icon.pixels = itemSprite.getFramePixels();
@@ -69,7 +71,14 @@ class CqItemInfoDialog extends HxlDialog {
 			if ( _item.damage.end > 0 ) {
 				statStr += "" + _item.damage.start + " - " + _item.damage.end + " Damage\n";
 			}
-			// todo: display special effects
+			// display special effects
+			if ( _item.specialEffects.length > 0 ) {
+				var str = "";
+				for ( effect in _item.specialEffects ) {
+					str += "" + effect.value + " " + effect.name + "\n";
+				}
+				statStr += str;
+			}
 			// display item buffs
 			if ( Lambda.count(_item.buffs) > 0 ) {
 				var str = "";
@@ -85,8 +94,7 @@ class CqItemInfoDialog extends HxlDialog {
 				_itemStats.y = _itemDesc.y + _itemDesc.height + 10;
 				_itemStats.text = statStr;
 				_itemStats.visible = true;
-			}
-			
+			}			
 		}
 		_itemName.visible = true;
 		_itemDesc.visible = true;
