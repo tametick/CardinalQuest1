@@ -276,6 +276,13 @@ class GameUI extends HxlDialog {
 		var curTile = cast(Registery.level.getTile(Std.int(curPos.x), Std.int(curPos.y)), Tile);
 		if ( curTile.loots.length > 0 ) {
 			btnPickup.visible = true;
+			/*
+			trace(curTile.loots.length);
+			for( loot in curTile.loots ) {
+				var item = cast(loot, CqItem);
+				trace(item.name);
+			}
+			*/
 		} else {
 			btnPickup.visible = false;
 		}

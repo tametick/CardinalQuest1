@@ -10,6 +10,7 @@ import cq.CqSpellButton;
 
 import data.Configuration;
 import data.Registery;
+import world.Tile;
 
 import flash.display.BitmapData;
 import flash.events.MouseEvent;
@@ -757,9 +758,11 @@ class CqInventoryItem extends HxlSprite {
 						// This item is being dropped
 						_dlg.remove(this);
 						var itemTilePos = Registery.player.getTilePos();
-						this.item.setTilePos(itemTilePos);
+						
+						//this.item.setTilePos(itemTilePos);
 						this.item.visible = true;
 						this.item.alpha = 1.0;
+
 						Registery.level.addLootToLevel(HxlGraphics.state, this.item);
 						var positionOfTile:HxlPoint = Registery.level.getPixelPositionOfTile(itemTilePos.x, itemTilePos.y);
 						this.item.x = positionOfTile.x;
