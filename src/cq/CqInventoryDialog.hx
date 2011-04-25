@@ -759,11 +759,15 @@ class CqInventoryItem extends HxlSprite {
 						_dlg.remove(this);
 						var itemTilePos = Registery.player.getTilePos();
 						
-						//this.item.setTilePos(itemTilePos);
+						//var tile = cast(Registery.level.getTile(itemTilePos.x, itemTilePos.y), Tile);
+						//trace("1) loot: " + tile.loots.length );
+						this.item.setTilePos(itemTilePos);
 						this.item.visible = true;
 						this.item.alpha = 1.0;
-
-						Registery.level.addLootToLevel(HxlGraphics.state, this.item);
+						//trace("2) loot: " + tile.loots.length );
+						//Registery.level.addLootToLevel(HxlGraphics.state, this.item);
+						HxlGraphics.state.add(this.item);
+						//trace("3) loot: " + tile.loots.length );
 						var positionOfTile:HxlPoint = Registery.level.getPixelPositionOfTile(itemTilePos.x, itemTilePos.y);
 						this.item.x = positionOfTile.x;
 						this.item.y = positionOfTile.y;
@@ -775,6 +779,7 @@ class CqInventoryItem extends HxlSprite {
 						_dlg.dlgInfo.clearInfo();
 						// Update 'pick up items' button
 						_dlg.gameui.checkTileItems(cast(Registery.player, CqActor));
+						//trace("4) loot: " + tile.loots.length );
 						return;
 					} else {
 						setInventoryCell(CqInventoryCell.highlightedCell.cellIndex);
