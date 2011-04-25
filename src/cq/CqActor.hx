@@ -76,6 +76,7 @@ class CqActor extends CqObject, implements Actor {
 	var onEquip:List<Dynamic>;
 	var onUnequip:List<Dynamic>;
 	var onAttackMiss:List<Dynamic>;
+	var onMove:List<Dynamic>;
 	
 	// effect helpers
 	var isDodging:Bool;
@@ -115,6 +116,7 @@ class CqActor extends CqObject, implements Actor {
 		onEquip = new List();
 		onUnequip = new List();
 		onAttackMiss = new List();
+		onMove = new List();
 
 		isDodging = false;
 		dodgeDir = 0;
@@ -157,6 +159,10 @@ class CqActor extends CqObject, implements Actor {
 		onAttackMiss.add(Callback);
 	}
 
+	public function addOnMove(Callback:Dynamic):Void {
+		onMove.add(Callback);
+	}
+
 	public function moveToPixel(state:HxlState, X:Float, Y:Float):Void {
 		isMoving = true;
 		if ( Y < y ) bobDir = 0;
@@ -165,6 +171,7 @@ class CqActor extends CqObject, implements Actor {
 		else if ( X < x ) bobDir = 3;
 		bobCounter = 0.0;
 		Actuate.tween(this, moveSpeed, { x: X, y: Y } ).onComplete(moveStop,[state]);
+		for (Callback in onMove ) Callback(this);
 	}
 	
 	public function moveStop(state:HxlState):Void {

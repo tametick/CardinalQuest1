@@ -56,10 +56,10 @@ class GameUI extends HxlDialog {
 
 	// Misc UI elements
 	var xpBar:HxlUIBar;
+	var btnPickup:HxlButton;
 
 	// State & helper vars
 	public static var currentPanel:HxlSlidingDialog = null;
-
 	
 	public override function new() {
 		super(0, 0, HxlGraphics.width, HxlGraphics.height);
@@ -158,6 +158,12 @@ class GameUI extends HxlDialog {
 		});
 		btnLogView.configEvent(5, true, true);
 		leftButtons.addButton(btnLogView);
+
+		btnPickup = new HxlButton(HxlGraphics.width - 130, HxlGraphics.height - 68, 120, 52);
+		btnPickup.setBackgroundColor(0xff999999, 0xffcccccc);
+		btnPickup.loadText(new HxlText(0, 13, 120, "Pick Up Items", true, "Geo").setFormat("Geo", 18, 0xffffff, "center", 0x010101));
+		btnPickup.configEvent(5, true, true);
+		add(btnPickup);
 
 		panelInventory.dlgSpellGrid = dlgSpellGrid;
 		panelInventory.dlgPotionGrid = dlgPotionGrid;
