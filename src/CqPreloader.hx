@@ -22,7 +22,8 @@ import cq.Main;
 import haxel.HxlGraphics;
 import data.Configuration;
 
-class MovieBytes extends ByteArray{}
+class MovieBytes extends ByteArray {
+}
 
 class CqPreloader extends MovieClip {
 	static var url = "tametick.com";

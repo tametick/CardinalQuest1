@@ -4,20 +4,26 @@ import cq.CqItem;
 import data.Resources;
 
 class CqSpellFactory {
+	static var inited = false;
 	static function initDescriptions() {
 		if(Resources.descriptions==null)
 			Resources.descriptions = new Hash<String>();
 		
-		Resources.descriptions.set("Freeze", "description 1");
-		Resources.descriptions.set("Fireball", "description 2");
-		Resources.descriptions.set("Berserk", "description 3");
-		Resources.descriptions.set("Enfeeble monster", "description 4");
-		Resources.descriptions.set("Bless weapon", "description 5");
-		Resources.descriptions.set("Haste", "description 6 ");
-		Resources.descriptions.set("Shadow walk", "description 7");
+		Resources.descriptions.set("Freeze", "Freezes monsters in place for a short duration.");
+		Resources.descriptions.set("Fireball", "Hurls a ball of fire that explodes on impact.");
+		Resources.descriptions.set("Berserk", "Induces berserk rage that greatly increases strength and speed.");
+		Resources.descriptions.set("Enfeeble monster", "Weakens monsters and renders them less dangerous.");
+		Resources.descriptions.set("Bless weapon", "Blesses the currently wielded weapon, providing a temporary boost to its effectivness.");
+		Resources.descriptions.set("Haste", "Turns the caster fast and nimble.");
+		Resources.descriptions.set("Shadow walk", "Renders the caster invisible for a few seconds.");
 	}
 	
 	public static function newSpell(X:Float, Y:Float, typeName:String):CqSpell {
+		if(!inited) {
+			initDescriptions();
+			inited = true;
+		}
+		
 		var type = Type.createEnum(CqSpellType,  typeName);
 		var spell = new CqSpell(X, Y, typeName.toLowerCase());
 		

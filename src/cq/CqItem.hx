@@ -34,6 +34,7 @@ class CqSpecialEffectValue {
 }
 
 class CqLootFactory {
+	static var inited = false;
 	static function initDescriptions() {
 		if(Resources.descriptions==null)
 			Resources.descriptions = new Hash<String>();
@@ -59,7 +60,10 @@ class CqLootFactory {
 	}
 	
 	public static function newItem(X:Float, Y:Float, typeName:String):CqItem {
-		initDescriptions();
+		if(!inited) {
+			initDescriptions();
+			inited = true;
+		}
 		
 		var type = Type.createEnum(CqItemType,  typeName);
 		var item = new CqItem(X, Y, typeName.toLowerCase());
