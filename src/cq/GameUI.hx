@@ -163,6 +163,9 @@ class GameUI extends HxlDialog {
 		btnPickup = new HxlButton(HxlGraphics.width - 130, HxlGraphics.height - 68, 120, 52);
 		btnPickup.setBackgroundColor(0xff999999, 0xffcccccc);
 		btnPickup.loadText(new HxlText(0, 13, 120, "Pick Up Items", true, "Geo").setFormat("Geo", 18, 0xffffff, "center", 0x010101));
+		btnPickup.setCallback(function() {
+			self.btnPickupPressed();
+		});
 		btnPickup.configEvent(5, true, true);
 		btnPickup.visible = false;
 		add(btnPickup);
@@ -269,6 +272,16 @@ class GameUI extends HxlDialog {
 		add(tmp2);
 		*/
 
+	}
+
+	public function btnPickupPressed():Void {
+		var player:CqPlayer = cast(Registery.player, CqPlayer);
+		var curPos:HxlPoint = player.getTilePos();
+		var tile = cast(Registery.level.getTile(Std.int(curPos.x), Std.int(curPos.y)), Tile);
+		if ( tile.loots.length > 0 ) {
+			var item = cast(tile.loots[tile.loots.length - 1], CqItem);
+			player.pickup(HxlGraphics.state, item);
+		}
 	}
 
 	public function checkTileItems(Player:CqActor):Void {
