@@ -36,6 +36,8 @@ class CreateCharState extends HxlState
 
 	public override function create():Void {
 		super.create();
+		
+		CqMobFactory.initDescriptions();
 
 		fadeTime = 0.5;
 		state = 0;

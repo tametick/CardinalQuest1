@@ -6,6 +6,9 @@ import data.Resources;
 class CqSpellFactory {
 	static var inited = false;
 	static function initDescriptions() {
+		if (inited)
+			return;
+		
 		if(Resources.descriptions==null)
 			Resources.descriptions = new Hash<String>();
 		
@@ -16,13 +19,12 @@ class CqSpellFactory {
 		Resources.descriptions.set("Bless weapon", "Blesses the currently wielded weapon, providing a temporary boost to its effectivness.");
 		Resources.descriptions.set("Haste", "Turns the caster fast and nimble.");
 		Resources.descriptions.set("Shadow walk", "Renders the caster invisible for a few seconds.");
+		
+		inited = true;
 	}
 	
 	public static function newSpell(X:Float, Y:Float, typeName:String):CqSpell {
-		if(!inited) {
-			initDescriptions();
-			inited = true;
-		}
+		initDescriptions();
 		
 		var type = Type.createEnum(CqSpellType,  typeName);
 		var spell = new CqSpell(X, Y, typeName.toLowerCase());

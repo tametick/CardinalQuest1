@@ -36,6 +36,9 @@ class CqSpecialEffectValue {
 class CqLootFactory {
 	static var inited = false;
 	static function initDescriptions() {
+		if (inited)
+			return;
+		
 		if(Resources.descriptions==null)
 			Resources.descriptions = new Hash<String>();
 		Resources.descriptions.set("Healing potion", "A small vial containing fragrant, red salve. Restores life when applied.");
@@ -57,13 +60,12 @@ class CqLootFactory {
 		Resources.descriptions.set("Long sword","Long swords have long cruciform hilts with grips and  double-edged blades over one meter long.");
 		Resources.descriptions.set("Staff","a shaft of hardwood with metal tips.");
 		Resources.descriptions.set("Dagger", "a double-edged blade used for stabbing or thrusting.");
+		
+		inited = true;
 	}
 	
 	public static function newItem(X:Float, Y:Float, typeName:String):CqItem {
-		if(!inited) {
-			initDescriptions();
-			inited = true;
-		}
+		initDescriptions();
 		
 		var type = Type.createEnum(CqItemType,  typeName);
 		var item = new CqItem(X, Y, typeName.toLowerCase());

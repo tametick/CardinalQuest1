@@ -737,7 +737,24 @@ class CqMob extends CqActor, implements Mob {
 }
 
 class CqMobFactory {	
+	static var inited = false;
+	
+	public static function initDescriptions() {
+		if (inited)
+			return;
+		
+		if(Resources.descriptions==null)
+			Resources.descriptions = new Hash<String>();
+		Resources.descriptions.set("Fighter", "A mighty warrior, possesing unparralleld strength and vigor.");
+		Resources.descriptions.set("Wizard", "A wise mage who masterd the secrets of magic.");
+		Resources.descriptions.set("thief", "A cunning and agile rogue, his speed allows for a swift escape.");
+		
+		inited = true;
+	}
+	
 	public static function newMobFromLevel(X:Float, Y:Float, level:Int):CqMob {
+		initDescriptions();
+		
 		var typeName = null;
 		switch(level+1) {
 			case 1,2:
