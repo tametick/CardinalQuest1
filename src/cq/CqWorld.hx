@@ -282,6 +282,7 @@ class CqWorld extends World {
 		super();
 		
 		onNewLevel = new List();
+		CqSpellFactory.remainingSpells = SpriteSpells.instance.spriteNames[0];
 		goToLevel(currentLevelIndex);
 	}
 

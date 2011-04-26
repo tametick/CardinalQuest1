@@ -9,6 +9,8 @@ import data.Resources;
 
 class CqSpellFactory {
 	static var inited = false;
+	public static var remainingSpells:Array<String>;
+	
 	static function initDescriptions() {
 		if (inited)
 			return;
@@ -28,7 +30,17 @@ class CqSpellFactory {
 	}
 	
 	public static function newRandomSpell(X:Float, Y:Float) {
-		return newSpell(X, Y, HxlUtil.getRandomElement(SpriteSpells.instance.spriteNames[0]).toUpperCase());
+		if (remainingSpells.length < 1){
+			trace("todo: add more spells");
+			return null;
+		}
+		
+		var newSpellName = HxlUtil.getRandomElement(remainingSpells);
+		// every spell is only given once
+		remainingSpells.remove(newSpellName);
+		
+		initDescriptions();
+		return newSpell(X, Y, newSpellName.toUpperCase());
 	}
 	
 	public static function newSpell(X:Float, Y:Float, typeName:String):CqSpell {
@@ -45,9 +57,6 @@ class CqSpellFactory {
 }
 
 class CqSpell extends CqItem {
-	
-	
-	
 	public function new(X:Float, Y:Float, typeName:String) {
 		super(X, Y, typeName);
 		equipSlot = SPELL;
