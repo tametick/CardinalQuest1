@@ -5,11 +5,14 @@ import cq.CqInventoryDialog;
 import cq.CqItem;
 import cq.CqResources;
 import cq.CqSpell;
+import cq.CqActor;
 
 import flash.display.BitmapData;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
+
+import data.Registery;
 
 import haxel.HxlButton;
 import haxel.HxlDialog;
@@ -47,9 +50,13 @@ class CqSpellButton extends HxlDialog {
 
 	function clickMouseDown(event:MouseEvent):Void {
 		if (!exists || !visible || !active || GameUI.currentPanel != null ) return;
-		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
-			if ( cell.getCellObj() != null ) {
+		if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
+			var spell = cell.getCellObj();
+			if ( spell != null ) {
 				HxlLog.append("Activating spell!!");
+				// todo - handle spells that require a target
+				
+				cast(Registery.player,CqPlayer).use(spell.item, null);
 				event.stopPropagation();
 			}
 		}

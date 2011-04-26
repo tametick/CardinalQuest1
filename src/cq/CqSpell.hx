@@ -52,6 +52,16 @@ class CqSpellFactory {
 		spell.name = StringTools.replace(typeName.toLowerCase(), "_", " ");
 		spell.name = spell.name.substr(0, 1).toUpperCase() + spell.name.substr(1);
 		
+		switch(type) {
+			case FREEZE:
+			case FIREBALL:
+			case BERSERK:
+			case ENFEEBLE_MONSTER:
+			case BLESS_WEAPON:
+			case HASTE:
+			case SHADOW_WALK:
+		}
+		
 		return spell;
 	}
 }
