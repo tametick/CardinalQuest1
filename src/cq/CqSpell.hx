@@ -35,7 +35,9 @@ class CqSpellFactory {
 			return null;
 		}
 		
+		//var newSpellName = "berserk";
 		var newSpellName = HxlUtil.getRandomElement(remainingSpells);
+		
 		// every spell is only given once
 		remainingSpells.remove(newSpellName);
 		
@@ -54,9 +56,15 @@ class CqSpellFactory {
 		
 		switch(type) {
 			case FREEZE:
+				spell.targetsOther = true;
 			case FIREBALL:
+				spell.targetsOther = true;
 			case BERSERK:
+				spell.duration = 60;
+				spell.buffs.set("attack", 3);
+				spell.buffs.set("speed", 3);
 			case ENFEEBLE_MONSTER:
+				spell.targetsOther = true;
 			case BLESS_WEAPON:
 			case HASTE:
 			case SHADOW_WALK:
@@ -67,6 +75,7 @@ class CqSpellFactory {
 }
 
 class CqSpell extends CqItem {
+	public var targetsOther:Bool;
 	public function new(X:Float, Y:Float, typeName:String) {
 		super(X, Y, typeName);
 		equipSlot = SPELL;
