@@ -7,6 +7,7 @@ import cq.CqActor;
 import cq.CqResources;
 
 import data.Configuration;
+import data.Resources;
 
 import flash.display.BitmapData;
 import flash.display.Shape;
@@ -31,6 +32,7 @@ class CreateCharState extends HxlState
 	var txtFighter:HxlText;
 	var txtThief:HxlText;
 	var txtWizard:HxlText;
+	var txtDesc:HxlText;
 	var selectBox:HxlSprite;
 	var curClass:CqClass;
 
@@ -108,6 +110,11 @@ class CreateCharState extends HxlState
 		}
 		add(selectBox);
 
+		txtDesc = new HxlText(30, 325, HxlGraphics.width - 60);
+		txtDesc.setFormat(null, 22, 0xffffff, "center", 0x010101);
+		add(txtDesc);
+		txtDesc.text = Resources.descriptions.get("Fighter");
+
 		curClass = FIGHTER;
 
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime, function() {
@@ -121,10 +128,13 @@ class CreateCharState extends HxlState
 		var targetX:Float = 0;
 		if ( curClass == FIGHTER ) {
 			targetX = 105;
+			txtDesc.text = Resources.descriptions.get("Fighter");
 		} else if ( curClass == THIEF ) {
 			targetX = 255;
+			txtDesc.text = Resources.descriptions.get("Thief");
 		} else if ( curClass == WIZARD ) {
 			targetX = 405;
+			txtDesc.text = Resources.descriptions.get("Wizard");
 		}
 		Actuate.tween(selectBox, 0.25, { x: targetX }).ease(Cubic.easeOut);
 	}

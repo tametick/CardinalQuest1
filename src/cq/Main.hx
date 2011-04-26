@@ -35,7 +35,8 @@ class Game extends HxlGame {
 		if(Configuration.debug)
 			super(640, 480, GameState, 1, "Geo");
 		else
-			super(640, 480, SplashState, 1, "Geo");
+			super(640, 480, CreateCharState, 1, "Geo");
+			//super(640, 480, SplashState, 1, "Geo");
 
 	}
 }
