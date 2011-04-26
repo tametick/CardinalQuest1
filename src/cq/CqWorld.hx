@@ -168,7 +168,7 @@ class CqLevel extends Level {
 
 	function createAndaddSpell(pos:HxlPoint) {
 		var pixelPos = getPixelPositionOfTile(pos.x, pos.y);
-		var spell = CqSpellFactory.newSpell(pixelPos.x, pixelPos.y, HxlUtil.getRandomElement(SpriteSpells.instance.spriteNames[0]).toUpperCase());
+		var spell = CqSpellFactory.newRandomSpell(pixelPos.x, pixelPos.y);
 		
 		// add to level loot list
 		loots.push(spell);
@@ -215,6 +215,7 @@ class CqLevel extends Level {
 				for (t in timers) {
 					t.ticks--;
 					if (t.ticks == 0) {
+						
 						if(t.buffName!= null) {
 							// reduce buff
 							var newVal = buffs.get(t.buffName) - t.buffValue;

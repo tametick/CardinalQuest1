@@ -94,6 +94,7 @@ class CqLootFactory {
 				item.consumable = true;
 				item.buffs.set("attack", 3);
 				item.stackSizeMax = 20;
+				item.duration = 120;
 			case PURPLE_POTION:
 				item.name = "Elixir of the lion";
 				item.consumable = true;
@@ -116,7 +117,6 @@ class CqLootFactory {
 				item.name ="Healing potion";
 				item.consumable = true;
 				item.specialEffects.add(new CqSpecialEffectValue("heal","full"));
-				item.duration = 120;
 				item.stackSizeMax = 20;
 			
 			case BOOTS:

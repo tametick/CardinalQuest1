@@ -1,6 +1,10 @@
 package cq;
 
+import haxel.HxlUtil;
+
 import cq.CqItem;
+import cq.CqResources;
+
 import data.Resources;
 
 class CqSpellFactory {
@@ -21,6 +25,10 @@ class CqSpellFactory {
 		Resources.descriptions.set("Shadow walk", "Renders the caster invisible for a few seconds.");
 		
 		inited = true;
+	}
+	
+	public static function newRandomSpell(X:Float, Y:Float) {
+		return newSpell(X, Y, HxlUtil.getRandomElement(SpriteSpells.instance.spriteNames[0]).toUpperCase());
 	}
 	
 	public static function newSpell(X:Float, Y:Float, typeName:String):CqSpell {
