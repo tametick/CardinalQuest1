@@ -396,8 +396,10 @@ class CqActor extends CqObject, implements Actor {
 		// add buffs
 		if(itemOrSpell.buffs != null) {
 			for (buff in itemOrSpell.buffs.keys()) {
+				var val = itemOrSpell.buffs.get(buff);
+				var text = val>0?"+":"" + val + " " + buff;
 				if (other == null) {
-					GameUI.showEffectText(this, "+" + itemOrSpell.buffs.get(buff) + " " + buff, 0x00ff00);
+					GameUI.showEffectText(this,text, 0x00ff00);
 					
 					// apply to self
 					buffs.set(buff, buffs.get(buff) + itemOrSpell.buffs.get(buff));
@@ -407,7 +409,7 @@ class CqActor extends CqObject, implements Actor {
 						timers.push(new CqTimer(itemOrSpell.duration, buff, itemOrSpell.buffs.get(buff),null));
 					}
 				} else {
-					GameUI.showEffectText(other, "+" + itemOrSpell.buffs.get(buff) + " " + buff, 0x00ff00);
+					GameUI.showEffectText(other, text, 0x00ff00);
 					
 					// apply to other
 					other.buffs.set(buff, other.buffs.get(buff) + itemOrSpell.buffs.get(buff));
