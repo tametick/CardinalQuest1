@@ -169,11 +169,15 @@ class CqLevel extends Level {
 	function createAndaddSpell(pos:HxlPoint) {
 		var pixelPos = getPixelPositionOfTile(pos.x, pos.y);
 		var spell = CqSpellFactory.newRandomSpell(pixelPos.x, pixelPos.y);
-		
-		// add to level loot list
-		loots.push(spell);
-		// add to tile loot list
-		cast(getTile(pos.x, pos.y), CqTile).loots.push(spell);
+			
+		// todo - the null check is because not all spells are there yet
+		if(spell!=null){
+			// add to level loot list
+			loots.push(spell);
+
+			// add to tile loot list
+			cast(getTile(pos.x, pos.y), CqTile).loots.push(spell);
+		}
 	}
 	function createAndaddChest(pos:HxlPoint) {
 		var pixelPos = getPixelPositionOfTile(pos.x, pos.y);
