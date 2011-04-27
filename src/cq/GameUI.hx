@@ -9,8 +9,10 @@ import cq.CqItem;
 import cq.CqPotionButton;
 import cq.CqSpell;
 import cq.CqSpellButton;
+import cq.CqWorld;
 import cq.CqVitalBar;
 
+import data.Configuration;
 import data.Registery;
 
 import world.Player;
@@ -58,14 +60,28 @@ class GameUI extends HxlDialog {
 	// Misc UI elements
 	var xpBar:HxlUIBar;
 	var btnPickup:HxlButton;
+	var targetSprite:HxlSprite;
+	var targetText:HxlText;
 
 	// State & helper vars
 	public static var currentPanel:HxlSlidingDialog = null;
+	public static var isTargeting:Bool = false;
+	public static var targetString:String = "";
+	public static var targetSpell:CqSpell = null;
+	var targetLastPos:HxlPoint;
+	public static var instance:GameUI = null;
 	
 	public override function new() {
 		super(0, 0, HxlGraphics.width, HxlGraphics.height);
 
+		isTargeting = false;
+		targetLastPos = null;
+		targetString = "";
+		targetSpell = null;
 		currentPanel = null;
+		targetSprite = null;
+		targetText = null;
+		GameUI.instance = this;
 		var self = this;
 
 		/**
@@ -181,6 +197,9 @@ class GameUI extends HxlDialog {
 
 	function showPanel(Panel:HxlSlidingDialog, ?Button:HxlButton=null):Void {
 		if ( HxlGraphics.mouse.dragSprite != null ) return;
+		// If user was in targeting mode, cancel it
+		if ( GameUI.isTargeting ) GameUI.setTargeting(false);
+
 		if ( Button != null ) {
 			btnMainView.setActive(false);
 			btnMapView.setActive(false);
@@ -373,5 +392,82 @@ class GameUI extends HxlDialog {
 	public function doPlayerGainXP(?xpGained:Int=0):Void {
 		var _player:CqPlayer = cast(Registery.player, CqPlayer);
 		xpBar.setPercent( (_player.xp-_player.currentLevel()) / (_player.nextLevel()-_player.currentLevel()) );
+	}
+
+	public static function setTargeting(Toggle:Bool, ?TargetText:String=null):Void {
+		isTargeting = Toggle;
+		if ( TargetText != null ) {
+			targetString = TargetText + ": Select A Target";
+		}
+		if ( !Toggle ) {
+			if ( instance.targetSprite != null ) instance.targetSprite.visible = false;
+			if ( instance.targetText != null ) instance.targetText.visible = false;
+			if ( targetSpell != null ) targetSpell = null;
+		}
+	}
+
+	public static function setTargetingSpell(Spell:CqSpell):Void {
+		targetSpell = Spell;
+	}
+
+	public function updateTargeting():Void {
+		if ( targetSprite == null ) {
+			targetSprite = new HxlSprite(0, 0);
+			targetSprite.createGraphic(Configuration.zoomedTileSize(), Configuration.zoomedTileSize(), 0x88ffffff, false, "targetSprite");
+			targetSprite.zIndex = 1;
+			targetSprite.color = 0x00ff00;
+			HxlGraphics.state.add(targetSprite);
+			targetLastPos = null;
+		} else if ( targetSprite.visible == false ) targetSprite.visible = true;
+		if ( targetText == null && GameUI.targetString != "" ) {
+			targetText = new HxlText( 80, HxlGraphics.height - 130, HxlGraphics.width - 160, GameUI.targetString );
+			targetText.setFormat(null, 24, 0xffffff, "center", 0x010101);
+			targetText.zIndex = -1;
+			add(targetText);
+		} else if ( targetText.visible == false ) targetText.visible = true;
+		var targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
+		var targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
+
+		if ( targetLastPos == null || targetLastPos.x != targetX || targetLastPos.y != targetY ) {
+			var worldPos:HxlPoint = Registery.level.getTilePos(Std.int(targetX), Std.int(targetY));
+			targetSprite.x = worldPos.x;
+			targetSprite.y = worldPos.y;
+
+			var tile:CqTile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)), CqTile);
+			//tile.color = 0xbbffbb;
+			if ( tile == null || tile.actors.length <= 0 ) {
+				targetSprite.color = 0xff0000;
+			} else {
+				if ( cast(tile.actors[0], CqActor).faction != 0 ) {
+					targetSprite.color = 0x00ff00;
+				} else {
+					targetSprite.color = 0xff0000;
+				}
+			}
+
+			if ( targetLastPos == null ) targetLastPos = new HxlPoint();
+			targetLastPos.x = targetX;
+			targetLastPos.y = targetY;
+		}
+	}
+
+	public function targetingMouseDown():Void {
+		if ( targetSpell == null ) {
+			GameUI.setTargeting(false);
+		}
+		var targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
+		var targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
+		var tile:CqTile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)), CqTile);
+		if ( tile == null || tile.actors.length <= 0 ) {
+			GameUI.setTargeting(false);
+		} else {
+			if ( cast(tile.actors[0], CqActor).faction != 0 ) {
+				cast(Registery.player, CqPlayer).use(targetSpell, cast(tile.actors[0], CqActor));
+				GameUI.setTargeting(false);
+			} else {
+				GameUI.setTargeting(false);
+			}
+		}
+
 	}
 }

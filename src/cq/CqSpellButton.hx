@@ -51,12 +51,18 @@ class CqSpellButton extends HxlDialog {
 	function clickMouseDown(event:MouseEvent):Void {
 		if (!exists || !visible || !active || GameUI.currentPanel != null ) return;
 		if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
-			var spell = cell.getCellObj();
-			if ( spell != null ) {
+			var spellObj = cell.getCellObj();
+			if ( spellObj != null ) {
 				HxlLog.append("Activating spell!!");
-				// todo - handle spells that require a target
-				
-				cast(Registery.player,CqPlayer).use(spell.item, null);
+				var spell = cast(spellObj.item, CqSpell);
+
+				if ( spell.targetsOther ) {
+					GameUI.setTargeting(true, spell.name);
+					GameUI.setTargetingSpell(spell);
+				} else {
+					cast(Registery.player,CqPlayer).use(spellObj.item, null);
+				}
+
 				event.stopPropagation();
 			}
 		}

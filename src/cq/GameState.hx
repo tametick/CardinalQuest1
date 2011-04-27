@@ -38,7 +38,9 @@ class GameState extends HxlState {
 		super.update();	
 		if ( initialized < 1 ) 
 			return;
-				
+		if ( GameUI.isTargeting ) {
+			gameUI.updateTargeting();
+		}
 	}
 	
 	function passTurn() {
@@ -90,15 +92,23 @@ class GameState extends HxlState {
 	}
 	
 	override function onKeyDown(event:KeyboardEvent) {		
-		if ( HxlGraphics.keys.ESCAPE )
+		if ( HxlGraphics.keys.ESCAPE ) {
+			// If user was in targeting mode, cancel it
+			if ( GameUI.isTargeting ) GameUI.setTargeting(false);
 			HxlGraphics.pushState(new MainMenuState());
+		}
 	}
 
 	override function onMouseDown(event:MouseEvent) {
 		var level = Registery.level;
 		if (Registery.player.isMoving)
 			return;
-		
+	
+		if ( GameUI.isTargeting ) {
+			gameUI.targetingMouseDown();
+			return;
+		}
+
 		var dx = HxlGraphics.mouse.x - (Registery.player.x+Configuration.zoomedTileSize()/2);
 		var dy = HxlGraphics.mouse.y - (Registery.player.y+Configuration.zoomedTileSize()/2);
 		var target:HxlPoint = level.getTargetAccordingToMousePosition(dx, dy);

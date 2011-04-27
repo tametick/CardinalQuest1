@@ -309,7 +309,8 @@ class CqWorld extends World {
 		
 		currentLevelIndex++;
 		goToLevel(currentLevelIndex);
-		
+
+		currentLevel.zIndex = -1;	
 		state.add(currentLevel);
 		currentLevel.updateFieldOfView(true);
 		doOnNewLevel();
