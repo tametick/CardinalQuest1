@@ -727,7 +727,9 @@ class CqMob extends CqActor, implements Mob {
 	public function act(state:HxlState):Bool {
 		updateAwarness();
 		
-		if (aware>0)
+		var invisible = cast(Registery.player, CqPlayer).specialEffects.get("invisible");
+		
+		if (aware>0 && invisible==null)
 			return actAware(state);
 		else
 			return actUnaware(state);
