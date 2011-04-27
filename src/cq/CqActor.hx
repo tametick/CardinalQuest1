@@ -433,6 +433,17 @@ class CqActor extends CqObject, implements Actor {
 				}
 			}
 		}
+		
+		// apply damage
+		if (itemOrSpell.damage != null) {
+			var dmg = HxlUtil.randomIntInRange(itemOrSpell.damage.start, itemOrSpell.damage.end);
+			if (other == null) {
+				injureActor(this, dmg);
+			} else {
+				injureActor(other, dmg);
+			}
+		}
+		
 	}
 
 	function applyEffect(effect:CqSpecialEffectValue, other:CqActor) {

@@ -54,11 +54,9 @@ class GameState extends HxlState {
 	}
 
 	override function init() {
-		// populating the registry
-		var world = new CqWorld();
-		var player = new CqPlayer(chosenClass);
-		Registery.world = world;
-		Registery.player = player;
+		initRegistry();
+		var world = cast(Registery.world,CqWorld);
+		var player = cast(Registery.player,CqPlayer);
 		
 		add(world.currentLevel);
 		
@@ -83,6 +81,12 @@ class GameState extends HxlState {
 			self.gameUI.initHealthBars();
 			self.gameUI.addHealthBar(player);
 		});
+	}
+	
+	public function initRegistry(){
+		// populating the registry
+		Registery.world = new CqWorld();
+		Registery.player = new CqPlayer(chosenClass);
 	}
 	
 	override function onKeyDown(event:KeyboardEvent) {		

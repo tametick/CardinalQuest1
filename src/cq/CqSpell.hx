@@ -57,17 +57,28 @@ class CqSpellFactory {
 		switch(type) {
 			case FREEZE:
 				spell.targetsOther = true;
+				spell.duration = 120;
+				spell.buffs.set("speed", -3);
 			case FIREBALL:
 				spell.targetsOther = true;
+				spell.damage = new Range(1, 6);
 			case BERSERK:
 				spell.duration = 60;
 				spell.buffs.set("attack", 3);
 				spell.buffs.set("speed", 3);
 			case ENFEEBLE_MONSTER:
 				spell.targetsOther = true;
+				spell.duration = 120;
+				spell.buffs.set("attack", -3);
 			case BLESS_WEAPON:
+				spell.duration = 120;
+				spell.buffs.set("attack", 3);
 			case HASTE:
+				spell.duration = 120;
+				spell.buffs.set("speed", 3);
 			case SHADOW_WALK:
+				spell.duration = 120;
+				spell.specialEffects.add(new CqSpecialEffectValue("invisible","true"));
 		}
 		
 		return spell;
