@@ -397,7 +397,7 @@ class CqActor extends CqObject, implements Actor {
 		if(itemOrSpell.buffs != null) {
 			for (buff in itemOrSpell.buffs.keys()) {
 				var val = itemOrSpell.buffs.get(buff);
-				var text = val>0?"+":"" + val + " " + buff;
+				var text = (val>0?"+":"") + val + " " + buff;
 				if (other == null) {
 					GameUI.showEffectText(this,text, 0x00ff00);
 					
@@ -437,7 +437,7 @@ class CqActor extends CqObject, implements Actor {
 		}
 		
 		// apply damage
-		if (itemOrSpell.damage != null) {
+		if (itemOrSpell.damage != null && itemOrSpell.damage.end>0 ) {
 			var dmg = HxlUtil.randomIntInRange(itemOrSpell.damage.start, itemOrSpell.damage.end);
 			if (other == null) {
 				injureActor(this, dmg);
