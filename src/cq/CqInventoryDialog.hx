@@ -273,6 +273,8 @@ class CqEquipmentGrid extends CqInventoryGrid {
 
 class CqSpellGrid extends CqInventoryGrid {
 
+	public var buttons:Array<CqSpellButton>;
+
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100) {
 		super(X, Y, Width, Height, false);
 
@@ -285,12 +287,13 @@ class CqSpellGrid extends CqInventoryGrid {
 		var cellSize:Int = 54;
 		var padding:Int = 8;
 		var idx:Int = 0;
-	
+		buttons = new Array();
 		for ( i in 0...5 ) {
 			var btnCell:CqSpellButton = new CqSpellButton(10, 10 + ((i * btnSize) + (i * 10)), btnSize, btnSize,i);
 			btnCell.setBackgroundColor(0xff999999, 0xffcccccc);
 			add(btnCell);
 			cells.push(btnCell.cell);
+			buttons.push(btnCell);
 		}
 	}
 
@@ -702,6 +705,7 @@ class CqInventoryItem extends HxlSprite {
 				} else if ( cellSpell ) {
 					// Moving the other item into a spell cell
 					other.setSpellCell(cellIndex);
+					GameUI.instance.updateCharge();
 					// todo: equip spell
 				} else if ( cellPotion ) {
 					// Moving the other item into a potion cell
@@ -735,6 +739,7 @@ class CqInventoryItem extends HxlSprite {
 				} else if ( cellSpell ) {
 					// Clearing out a spell cell
 					_dlg.dlgSpellGrid.setCellObj(cellIndex, null);
+					GameUI.instance.updateCharge();
 				} else if ( cellPotion ) {
 					// Clearing out a potion cell
 					_dlg.dlgPotionGrid.setCellObj(cellIndex, null);
@@ -745,6 +750,7 @@ class CqInventoryItem extends HxlSprite {
 				if ( Std.is(CqInventoryCell.highlightedCell, CqSpellCell) ) {
 					// Moving this item into a spell cell
 					setSpellCell(CqInventoryCell.highlightedCell.cellIndex);
+					GameUI.instance.updateCharge();
 					// todo: equip spell
 				} else if ( Std.is(CqInventoryCell.highlightedCell, CqPotionCell) ) {
 					// Moving this item into a potion cell

@@ -19,8 +19,13 @@ import world.Player;
 import world.Tile;
 import world.World;
 
+import flash.display.Bitmap;
 import flash.display.BitmapData;
+import flash.display.Graphics;
+import flash.display.Shape;
 import flash.filters.GlowFilter;
+import flash.geom.ColorTransform;
+import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
@@ -194,6 +199,49 @@ class GameUI extends HxlDialog {
 		add(xpBar);
 
 	}
+
+	public function updateCharge():Void {
+		var player = cast(Registery.player, CqPlayer);
+		var end:Float = (((Math.PI / 2) * 3) - (-(Math.PI/2))) * (player.spiritPoints / 360);
+		end = ((Math.PI / 2) * 3) - end;
+		var shape:Shape = new Shape();
+		var G = shape.graphics;
+		G.beginFill(0x88ff0000);
+		GameUI.drawChargeArc(G, 27, 27, -(Math.PI/2), end, 47, -1);
+		G.endFill();
+		var bmp:Bitmap = new Bitmap(HxlGraphics.getBitmap("EquipmentCellBG"));
+		shape.mask = bmp;
+		var bmpdata:BitmapData = new BitmapData(94, 94, true, 0x0);
+		var ctrans:ColorTransform = new ColorTransform();
+		ctrans.alphaMultiplier = 0.5;
+		bmpdata.draw(shape, null, ctrans);
+		HxlGraphics.addBitmapData(bmpdata, "chargeRadial", true);
+
+		for ( btn in dlgSpellGrid.buttons ) {
+			btn.updateChargeSprite("chargeRadial");
+		}
+	}
+
+	public static function drawChargeArc(G:Graphics, centerX:Float, centerY:Float, startAngle:Float, endAngle:Float, radius:Float, direction:Int):Void {
+		var difference:Float = Math.abs(endAngle - startAngle);
+		var divisions:Int = Math.floor(difference / (Math.PI / 4))+1;
+		var span:Float = direction * difference / (2 * divisions);
+		var controlRadius:Float = radius / Math.cos(span);
+		//G.moveTo(centerX + (Math.cos(startAngle)*radius), centerY + Math.sin(startAngle)*radius);
+		G.moveTo(centerX, centerY);
+		G.lineTo(centerX + (Math.cos(startAngle)*radius), centerY + Math.sin(startAngle)*radius);
+		var controlPoint:Point;
+		var anchorPoint:Point;
+		for ( i in 0...divisions ) {
+			endAngle = startAngle + span;
+			startAngle = endAngle + span;
+			controlPoint = new Point(centerX+Math.cos(endAngle)*controlRadius, centerY+Math.sin(endAngle)*controlRadius);
+			anchorPoint = new Point(centerX+Math.cos(startAngle)*radius, centerY+Math.sin(startAngle)*radius);
+			G.curveTo( controlPoint.x, controlPoint.y, anchorPoint.x, anchorPoint.y );
+		}
+		G.lineTo(centerX, centerY);
+	}
+
 
 	function showPanel(Panel:HxlSlidingDialog, ?Button:HxlButton=null):Void {
 		if ( HxlGraphics.mouse.dragSprite != null ) return;
@@ -462,7 +510,10 @@ class GameUI extends HxlDialog {
 			GameUI.setTargeting(false);
 		} else {
 			if ( cast(tile.actors[0], CqActor).faction != 0 ) {
-				cast(Registery.player, CqPlayer).use(targetSpell, cast(tile.actors[0], CqActor));
+				var player = cast(Registery.player, CqPlayer);
+				player.use(targetSpell, cast(tile.actors[0], CqActor));
+				player.spiritPoints = 0;
+				GameUI.instance.updateCharge();
 				GameUI.setTargeting(false);
 			} else {
 				GameUI.setTargeting(false);

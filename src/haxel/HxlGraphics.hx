@@ -460,7 +460,7 @@ class HxlGraphics {
 
 	}
 
-	public static function addBitmapData(Graphic:BitmapData, ?Key:String=null):BitmapData {
+	public static function addBitmapData(Graphic:BitmapData, ?Key:String=null, ?Force:Bool=false):BitmapData {
 		var key:String = Key;
 		if(key == null) {
 			key = "data-"+Graphic.width+"x"+Graphic.height;
@@ -473,7 +473,7 @@ class HxlGraphics {
 				key = ukey;
 			}
 		}
-		if ( !checkBitmapCache(key) ) {
+		if ( !checkBitmapCache(key) || Force ) {
 			var bd:BitmapData = new BitmapData( Graphic.width, Graphic.height, true, 0x00000000 );
 			bd.draw(Graphic);
 			Reflect.setField(_cache, key, bd);
