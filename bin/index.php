@@ -25,26 +25,28 @@
 		swfobject.embedSWF("cq-index.swf", "altContent", 640, 480, "10", "expressInstall.swf", flashvars, params, attributes);
 	</script>
 	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', 'UA-3582984-5']);
-		_gaq.push(['_trackPageview']);
 
-		(function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-3582984-6']);
+	  _gaq.push(['_trackPageview']);
+
+	  (function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+
 	</script>
 	<link href='http://fonts.googleapis.com/css?family=Geo' rel='stylesheet' type='text/css'>
 	<style type="text/css">
 		body { 
-			min-width: 720px;
-			background-color:#013220;
+			min-width: 640px;
+			background-color:#202020;
 			font-family: 'Geo', Helvetica, sans-serif;
 			color:#dddddd;
 		}
 		#wrapper {
-			width: 720px;
+			width: 640px;
 			margin-left: auto;
 			margin-right: auto;
 		}
@@ -59,7 +61,7 @@
 </head>
 <body>
 	<div id="wrapper">
-		<h1>Cardinal Quest - Alpha 0.2</h1>
+		<h1>Cardinal Quest 0.2</h1>
 		<div id="altContent">
 			<p>Flash player not found!</p>
 			<p><a href="http://www.adobe.com/go/getflashplayer"><img 
