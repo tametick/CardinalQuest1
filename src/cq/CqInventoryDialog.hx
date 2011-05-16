@@ -84,12 +84,15 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	}
 
 	public function itemPickup(Item:CqItem):Void {
+		// if item already in inventory (?)
 		for ( cell in dlgInvGrid.cells ) {
 			if ( cell.getCellObj() != null && cell.getCellObj().item == Item ) {
 				cell.getCellObj().updateIcon();
 				return;
 			}
 		}
+
+		// because of stacking (?)
 		if ( Item.equipSlot == POTION ) {
 			for ( cell in dlgPotionGrid.cells ) {
 				if ( cell.getCellObj() != null && cell.getCellObj().item == Item ) {
@@ -98,24 +101,34 @@ class CqInventoryDialog extends HxlSlidingDialog {
 				}
 			}
 		}
+
+		
+		var emptyCell:CqInventoryCell = null;
 		for ( cell in dlgInvGrid.cells ) {
-			if ( cell.getCellObj() == null ) {
-				var item:CqInventoryItem = new CqInventoryItem(this, 2, 2);
-				item.toggleDrag(true);
-				item.zIndex = 5;
-				item.item = Item;
-				if ( Std.is(Item, CqSpell) ) {
-					spellSprite.setFrame(spellSheet.getSpriteIndex(Item.spriteIndex));
-					item.setIcon(spellSprite.getFramePixels());
-				} else {
-					itemSprite.setFrame(itemSheet.getSpriteIndex(Item.spriteIndex));
-					item.setIcon(itemSprite.getFramePixels());
-				}
-				add(item);
-				item.setInventoryCell(cell.cellIndex);
+			if ( cell.getCellObj() == null && !cell.dropCell ) {
+				emptyCell = cell;
 				break;
 			}
 		}
+		
+		if(emptyCell != null ){
+			var item:CqInventoryItem = new CqInventoryItem(this, 2, 2);
+			item.toggleDrag(true);
+			item.zIndex = 5;
+			item.item = Item;
+			if ( Std.is(Item, CqSpell) ) {
+				spellSprite.setFrame(spellSheet.getSpriteIndex(Item.spriteIndex));
+				item.setIcon(spellSprite.getFramePixels());
+			} else {
+				itemSprite.setFrame(itemSheet.getSpriteIndex(Item.spriteIndex));
+				item.setIcon(itemSprite.getFramePixels());
+			}
+			add(item);
+			item.setInventoryCell(emptyCell.cellIndex);
+		} else {
+			// todo - no romm in inventory, prevent pick up!
+		}
+		
 	}
 
 	public override function hide(?HideCallback:Dynamic=null):Void {
@@ -786,7 +799,9 @@ class CqInventoryItem extends HxlSprite {
 						_dlg.dlgSpellGrid.onItemDragStop();
 						_dlg.dlgPotionGrid.onItemDragStop();
 						_dlg.dlgInfo.clearInfo();
-						_dlg.gameui.checkTileItems(cast(Registery.player, CqActor));
+						
+						//_dlg.gameui.checkTileItems(cast(Registery.player, CqActor));
+						
 						return;
 					} else {
 						setInventoryCell(CqInventoryCell.highlightedCell.cellIndex);
