@@ -88,21 +88,14 @@ class CqActor extends CqObject, implements Actor {
 	var bobMult:Float;
 
 	public var healthBar:CqHealthBar;
-	
-	public function new(X:Float, Y:Float,attack:Int,defense:Int,speed:Int,spirit:Int,vitality:Int,damage:Range) {
+	public function new(X:Float, Y:Float) {
 		super(X, Y);
 
 		zIndex = 3;
 
 		actionPoints = 0;
 		moveSpeed = 0.15;
-		visionRadius = 8.2;
-		this.attack = attack;
-		this.defense = defense;
-		this.damage = damage;
-		this.speed = speed;
-		this.spirit = spirit;
-		this.vitality = vitality;
+		visionRadius = 8.2
 		
 		maxHp = vitality;
 		hp = maxHp;
@@ -494,27 +487,35 @@ class CqPlayer extends CqActor, implements Player {
 	public function new(playerClass:CqClass, ?X:Float = -1, ?Y:Float = -1) {		
 		switch(playerClass) {
 			case FIGHTER:
-				super(X, Y, 5, 3, 3, 1, 5, new Range(1, 1));
-				addAnimation("idle", [sprites.getSpriteIndex("fighter")], 0 );
-				addAnimation("idle_dagger", [sprites.getSpriteIndex("fighter_dagger")], 0 );
-				addAnimation("idle_short_sword", [sprites.getSpriteIndex("fighter_short_sword")], 0 );
-				addAnimation("idle_long_sword", [sprites.getSpriteIndex("fighter_long_sword")], 0 );
-				addAnimation("idle_staff", [sprites.getSpriteIndex("fighter_staff")], 0 );
+				attack = 5;
+				defense = 3;
+				speed = 3;
+				spirit = 1;
+				vitality = 5;
+				damage = new Range(1, 1);
 			case WIZARD:
-				super(X, Y, 2, 3, 4, 5, 3, new Range(1, 1));
-				addAnimation("idle", [sprites.getSpriteIndex("wizard")], 0 );
-				addAnimation("idle_dagger", [sprites.getSpriteIndex("wizard_dagger")], 0 );
-				addAnimation("idle_short_sword", [sprites.getSpriteIndex("wizard_short_sword")], 0 );
-				addAnimation("idle_long_sword", [sprites.getSpriteIndex("wizard_long_sword")], 0 );
-				addAnimation("idle_staff", [sprites.getSpriteIndex("wizard_staff")], 0 );
+				attack = 2;
+				defense = 3;
+				speed = 4;
+				spirit = 5;
+				vitality = 3;
+				damage = new Range(1, 1);
 			case THIEF:
-				super(X, Y, 3, 4, 5, 3, 2, new Range(1, 1));
-				addAnimation("idle", [sprites.getSpriteIndex("thief")], 0 );
-				addAnimation("idle_dagger", [sprites.getSpriteIndex("thief_dagger")], 0 );
-				addAnimation("idle_short_sword", [sprites.getSpriteIndex("thief_short_sword")], 0 );
-				addAnimation("idle_long_sword", [sprites.getSpriteIndex("thief_long_sword")], 0 );
-				addAnimation("idle_staff", [sprites.getSpriteIndex("thief_staff")], 0 );
+				attack = 3;
+				defense = 4;
+				speed = 5;
+				spirit = 3;
+				vitality = 2;
+				damage = new Range(1, 1);
 		}
+		
+		super(X, Y);
+		
+		addAnimation("idle", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase())], 0 );
+		addAnimation("idle_dagger", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase() + "_dagger")], 0 );
+		addAnimation("idle_short_sword", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase() + "_short_sword")], 0 );
+		addAnimation("idle_long_sword", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase() + "_long_sword")], 0 );
+		addAnimation("idle_staff", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase() + "_staff")], 0 );
 		
 		xp = 0;
 		level = 1;
@@ -659,7 +660,7 @@ class CqMob extends CqActor, implements Mob {
 	var aware:Int;
 		
 	public function new(X:Float, Y:Float, typeName:String) {
-		super(X, Y, -1, -1, -1, -1,-1,new Range(1, 1));
+		super(X, Y);
 		xpValue = 1;
 		
 		loadGraphic(SpriteMonsters, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
