@@ -160,10 +160,18 @@ class CqLevel extends Level {
 			var pos; 
 			do {
 				pos = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
-			} while (cast(getTile(pos.x, pos.y), CqTile).actors.length > 0 && cast(getTile(pos.x, pos.y), CqTile).loots.length > 0 && startingLocation.intEquals(pos));
+			} while (!isValidMobPosition(pos));
 			
 			createAndaddMob(pos, index);
 		}
+	}
+	
+	function isValidMobPosition(pos:HxlPoint):Bool {
+		var numberOfActors = cast(getTile(pos.x, pos.y), CqTile).actors.length;
+		var numberOfLoot = cast(getTile(pos.x, pos.y), CqTile).loots.length;
+		var distFromPlayer = HxlUtil.distance(pos, startingLocation);
+		
+		return (numberOfActors == 0 && numberOfLoot == 0 && distFromPlayer >= 5);
 	}
 
 	function createAndaddSpell(pos:HxlPoint) {
