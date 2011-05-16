@@ -40,7 +40,10 @@ class GameState extends HxlState {
 			return;
 		if ( GameUI.isTargeting ) {
 			gameUI.updateTargeting();
+		} else if(isPlayerActing){
+			act();
 		}
+		
 	}
 	
 	function passTurn() {
@@ -99,16 +102,32 @@ class GameState extends HxlState {
 		}
 	}
 
+	var isPlayerActing:Bool;
 	override function onMouseDown(event:MouseEvent) {
-		var level = Registery.level;
-		if (Registery.player.isMoving)
-			return;
-	
 		if ( GameUI.isTargeting ) {
 			gameUI.targetingMouseDown();
 			return;
 		}
+		
+		isPlayerActing = true;
 
+	}
+	
+	override function onMouseUp(event:MouseEvent) {
+		isPlayerActing = false;
+	}
+	
+	private function act():Void 
+	{
+		if ( GameUI.isTargeting ) {
+			//gameUI.targetingMouseDown();
+			return;
+		}
+		
+		var level = Registery.level;
+		if (Registery.player.isMoving)
+			return;
+		
 		var dx = HxlGraphics.mouse.x - (Registery.player.x+Configuration.zoomedTileSize()/2);
 		var dy = HxlGraphics.mouse.y - (Registery.player.y+Configuration.zoomedTileSize()/2);
 		var target:HxlPoint = level.getTargetAccordingToMousePosition(dx, dy);
@@ -151,6 +170,7 @@ class GameState extends HxlState {
 		
 		passTurn();
 	}
+	
 	
 	private function isBlockingMovement(target:HxlPoint):Bool{
 		return Registery.level.isBlockingMovement(Std.int(Registery.player.tilePos.x + target.x), Std.int(Registery.player.tilePos.y + target.y));
