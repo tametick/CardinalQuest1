@@ -24,7 +24,9 @@ class CqVitalBar extends HxlUIBar {
 		super.update();		
 	}
 
-	public function updateValue(?dmgTotal:Int = 0) { }
+	public function updateValue(?dmgTotal:Int = 0) { 
+		
+	}
 }
 
 class CqHealthBar extends CqVitalBar {
@@ -41,6 +43,7 @@ class CqHealthBar extends CqVitalBar {
 	public override function updateValue(?dmgTotal:Int=0) {
 		setPercentToHp();
 		if ( !Std.is(actor, CqPlayer) ) {
+			// todo: huh??? what does this check suppose to mean?
 			if ( actor.hp >= actor.maxHp ) {
 				visible = false;
 			} else {
