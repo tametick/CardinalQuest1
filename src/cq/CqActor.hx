@@ -596,7 +596,7 @@ class CqPlayer extends CqActor, implements Player {
 	public function pickup(state:HxlState, item:CqItem) {
 		// remove item from map
 		Registery.level.removeLootFromLevel(state, item);
-		item.doPickupEffect();	
+		item.doPickupEffect(); //todo: Find out if this should be apart of give()
 		give(item);
 	}
 
