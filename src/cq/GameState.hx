@@ -147,7 +147,12 @@ class GameState extends HxlState {
 			// wait
 		} else if ( !isBlockingMovement(target) ) {
 			// move or attack in chosen tile
-			Registery.player.actInDirection(this,target);
+			Registery.player.actInDirection(this, target);
+			
+			// if player just attacked don't continue moving
+			if (cast(Registery.player, CqPlayer).justAttacked)
+				isPlayerActing = false;
+				
 		} else if(HxlUtil.contains(SpriteTiles.instance.doors.iterator(),tile.dataNum)){
 			// open door
 			openDoor(tile);

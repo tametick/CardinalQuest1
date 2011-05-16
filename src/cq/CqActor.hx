@@ -87,6 +87,8 @@ class CqActor extends CqObject, implements Actor {
 	var bobCounterInc:Float;
 	var bobMult:Float;
 
+	public var justAttacked:Bool;
+	
 	public var healthBar:CqHealthBar;
 	public function new(X:Float, Y:Float) {
 		super(X, Y);
@@ -266,6 +268,8 @@ class CqActor extends CqObject, implements Actor {
 	}
 	
 	public function actInDirection(state:HxlState, targetTile:HxlPoint):Bool {
+		justAttacked = false;
+		
 		var targetX = tilePos.x + targetTile.x;
 		var targetY = tilePos.y + targetTile.y;
 		var level = Registery.level;
@@ -281,6 +285,7 @@ class CqActor extends CqObject, implements Actor {
 			// attack enemy actor
 			if(other.faction != faction) {
 				attackOther(state, other);
+				justAttacked = true;
 				// end turn
 				return true;
 			} else
@@ -292,6 +297,7 @@ class CqActor extends CqObject, implements Actor {
 			if (Std.is(loot, CqChest)) {
 				// bust chest & don't move
 				attackObject(state, loot);
+				justAttacked = true;
 				// end turn
 				return true;
 			}
