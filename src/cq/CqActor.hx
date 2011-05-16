@@ -95,7 +95,7 @@ class CqActor extends CqObject, implements Actor {
 
 		actionPoints = 0;
 		moveSpeed = 0.15;
-		visionRadius = 8.2
+		visionRadius = 8.2;
 		
 		maxHp = vitality;
 		hp = maxHp;
@@ -484,7 +484,8 @@ class CqPlayer extends CqActor, implements Player {
 
 	var lastTile:HxlPoint;
 
-	public function new(playerClass:CqClass, ?X:Float = -1, ?Y:Float = -1) {		
+	public function new(playerClass:CqClass, ?X:Float = -1, ?Y:Float = -1) {
+		super(X, Y);
 		switch(playerClass) {
 			case FIGHTER:
 				attack = 5;
@@ -508,8 +509,6 @@ class CqPlayer extends CqActor, implements Player {
 				vitality = 2;
 				damage = new Range(1, 1);
 		}
-		
-		super(X, Y);
 		
 		addAnimation("idle", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase())], 0 );
 		addAnimation("idle_dagger", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase() + "_dagger")], 0 );
