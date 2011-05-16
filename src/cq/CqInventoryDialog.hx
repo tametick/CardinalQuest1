@@ -405,7 +405,7 @@ class CqInventoryCell extends HxlDialog {
 		origin.y = Std.int(background.height / 2);
 		
 		if ( dropCell ) {
-			var droptext:HxlText = new HxlText(0, 18, Std.int(width), "Drop");
+			var droptext:HxlText = new HxlText(0, 18, Std.int(width), "X");
 			droptext.setFormat(null, 18, 0xffffff, "center", 0x010101);
 			droptext.zIndex = -1;
 			add(droptext);
@@ -763,29 +763,26 @@ class CqInventoryItem extends HxlSprite {
 					if ( CqInventoryCell.highlightedCell.dropCell ) {
 						// This item is being dropped
 						_dlg.remove(this);
-						var itemTilePos = Registery.player.getTilePos();
 						
-						//var tile = cast(Registery.level.getTile(itemTilePos.x, itemTilePos.y), Tile);
-						//trace("1) loot: " + tile.loots.length );
-						this.item.setTilePos(itemTilePos);
-						this.item.visible = true;
-						this.item.alpha = 1.0;
-						//trace("2) loot: " + tile.loots.length );
-						//Registery.level.addLootToLevel(HxlGraphics.state, this.item);
+						/*
+						var itemTilePos = Registery.player.getTilePos();
+						item.setTilePos(itemTilePos);
+						item.visible = true;
+						item.alpha = 1.0;
 						HxlGraphics.state.add(this.item);
-						//trace("3) loot: " + tile.loots.length );
 						var positionOfTile:HxlPoint = Registery.level.getPixelPositionOfTile(itemTilePos.x, itemTilePos.y);
 						this.item.x = positionOfTile.x;
 						this.item.y = positionOfTile.y;
+						*/
+						
 						destroy();
+						
 						cast(Registery.player, CqPlayer).removeInventory(this.item);
 						_dlg.dlgEqGrid.onItemDragStop();
 						_dlg.dlgSpellGrid.onItemDragStop();
 						_dlg.dlgPotionGrid.onItemDragStop();
 						_dlg.dlgInfo.clearInfo();
-						// Update 'pick up items' button
 						_dlg.gameui.checkTileItems(cast(Registery.player, CqActor));
-						//trace("4) loot: " + tile.loots.length );
 						return;
 					} else {
 						setInventoryCell(CqInventoryCell.highlightedCell.cellIndex);
