@@ -35,23 +35,22 @@ class CqSpellFactory {
 			return null;
 		}
 		
-		//var newSpellName = "berserk";
 		var newSpellName = HxlUtil.getRandomElement(remainingSpells);
 		
 		// every spell is only given once
 		remainingSpells.remove(newSpellName);
 		
 		initDescriptions();
-		return newSpell(X, Y, newSpellName.toUpperCase());
+		return newSpell(X, Y, Type.createEnum(CqSpellType,  newSpellName.toUpperCase()));
 	}
 	
-	public static function newSpell(X:Float, Y:Float, typeName:String):CqSpell {
+	public static function newSpell(X:Float, Y:Float, type:CqSpellType):CqSpell {
 		initDescriptions();
 		
-		var type = Type.createEnum(CqSpellType,  typeName);
-		var spell = new CqSpell(X, Y, typeName.toLowerCase());
+		var typeName:String = Type.enumConstructor(type).toLowerCase();
+		var spell = new CqSpell(X, Y, type);
 		
-		spell.name = StringTools.replace(typeName.toLowerCase(), "_", " ");
+		spell.name = StringTools.replace(typeName, "_", " ");
 		spell.name = spell.name.substr(0, 1).toUpperCase() + spell.name.substr(1);
 		
 		switch(type) {
@@ -87,8 +86,8 @@ class CqSpellFactory {
 
 class CqSpell extends CqItem {
 	public var targetsOther:Bool;
-	public function new(X:Float, Y:Float, typeName:String) {
-		super(X, Y, typeName);
+	public function new(X:Float, Y:Float, type:CqSpellType) {
+		super(X, Y, type);
 		equipSlot = SPELL;
 		visible = false;
 	}
