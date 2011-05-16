@@ -539,7 +539,10 @@ class CqPlayer extends CqActor, implements Player {
 	}
 
 	override function updateSprite() { 
-		play("idle_"+equippedWeapon.spriteIndex);
+		if (equippedWeapon == null)
+			play("idle");
+		else
+			play("idle_"+equippedWeapon.spriteIndex);
 	}
 	
 	public function pickup(state:HxlState, item:CqItem) {
