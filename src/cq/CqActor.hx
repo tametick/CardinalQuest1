@@ -452,18 +452,19 @@ class CqActor extends CqObject, implements Actor {
 		HxlLog.append("applied special effect: " + effect.name);
 		
 		if (effect.name == "heal") {
-			if (effect.value == "full")
+			if (effect.value == "full"){
 				if (other == null) {
 					healthBar.visible = true;
 					hp = maxHp;
 					healthBar.updateValue();
 					GameUI.showEffectText(this, "Healed", 0x0000ff);
-				}else {
+				} else {
 					healthBar.visible = true;
 					other.hp = other.maxHp;
 					other.healthBar.updateValue();
 					GameUI.showEffectText(other, "Healed", 0x0000ff);
 				}
+			}
 		} else {
 			if (other == null) {
 				specialEffects.set(effect.name, effect);

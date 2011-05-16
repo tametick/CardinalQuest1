@@ -67,6 +67,7 @@ class CqLootFactory {
 	public static function newItem(X:Float, Y:Float, typeName:String):CqItem {
 		initDescriptions();
 		
+		//typeName = "RED_POTION";
 		var type = Type.createEnum(CqItemType,  typeName);
 		var item = new CqItem(X, Y, typeName.toLowerCase());
 
