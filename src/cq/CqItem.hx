@@ -64,12 +64,10 @@ class CqLootFactory {
 		inited = true;
 	}
 	
-	public static function newItem(X:Float, Y:Float, typeName:String):CqItem {
+	public static function newItem(X:Float, Y:Float, type:CqItemType):CqItem {
 		initDescriptions();
-		
-		//typeName = "RED_POTION";
-		var type = Type.createEnum(CqItemType,  typeName);
-		var item = new CqItem(X, Y, typeName.toLowerCase());
+
+		var item = new CqItem(X, Y, type);
 
 		switch(type) {
 			case WINGED_SANDLES, BOOTS:
@@ -197,17 +195,21 @@ class CqItem extends GameObjectImpl, implements Loot {
 	var glowSprite:BitmapData;
 	var glowRect:Rectangle;
 
-	public function new(X:Float, Y:Float, typeName:String) {
+	public function new(X:Float, Y:Float, type:Dynamic) {
 		super(X, Y);
-
+		var typeName:String = Type.enumConstructor(type).toLowerCase();
 		zIndex = 1;
 		
+		//this is a terrible, terrible work-around, but it'll do for now
 		if (Std.is(this, CqSpell)) {
 			loadGraphic(SpriteSpells, false, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 			addAnimation("idle", [SpriteSpells.instance.getSpriteIndex(typeName)], 0 );
-		} else {
+		} else if (Std.is(this, CqItem)) {
 			loadGraphic(SpriteItems, false, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 			addAnimation("idle", [SpriteItems.instance.getSpriteIndex(typeName)], 0 );
+		} else {
+			//BOOM!
+			throw "Invalid Item/Spell type provided";
 		}
 	
 		consumable = false;
@@ -278,7 +280,7 @@ class CqChest extends CqItem {
 	var onBust:List<Dynamic>;
 
 	public function new(X:Float, Y:Float) {
-		super(X, Y,"chest");
+		super(X, Y, CqItemType.CHEST);
 		onBust = new List();
 		visible = false;
 	}
@@ -292,12 +294,13 @@ class CqChest extends CqItem {
 		for ( Callback in onBust ) Callback(this);
 
 		// create random item
-		var type = null;
+		var typeName = null;
 		do {
 			// doubling chance of getting a potion
-			type = HxlUtil.getRandomElement(Type.getEnumConstructs(CqItemType).concat(["PURPLE_POTION","GREEN_POTION","BLUE_POTION","YELLOW_POTION","RED_POTION"])); 
-		} while (type == "CHEST");
-		var item = CqLootFactory.newItem(x, y, type);		
+			typeName = HxlUtil.getRandomElement(Type.getEnumConstructs(CqItemType).concat(["PURPLE_POTION","GREEN_POTION","BLUE_POTION","YELLOW_POTION","RED_POTION"])); 
+		} while (typeName == "CHEST");
+		
+		var item = CqLootFactory.newItem(x, y, Type.createEnum(CqItemType,  typeName));		
 		
 		// add item to level
 		Registery.level.addLootToLevel(state, item);
