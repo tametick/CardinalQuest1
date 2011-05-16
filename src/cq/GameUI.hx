@@ -362,6 +362,11 @@ class GameUI extends HxlDialog {
 	}
 
 	public function itemPickup(Item:CqItem):Void {
+		if (panelInventory.getEmptyCell() == null) {
+			// todo - show visual/audio feedback that inv is full
+			return;
+		}
+		
 		panelInventory.itemPickup(Item);
 		btnInventoryView.doFlash();		
 		checkTileItems(cast(Registery.player, CqActor));

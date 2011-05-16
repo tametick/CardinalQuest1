@@ -101,15 +101,8 @@ class CqInventoryDialog extends HxlSlidingDialog {
 				}
 			}
 		}
-
 		
-		var emptyCell:CqInventoryCell = null;
-		for ( cell in dlgInvGrid.cells ) {
-			if ( cell.getCellObj() == null && !cell.dropCell ) {
-				emptyCell = cell;
-				break;
-			}
-		}
+		var emptyCell:CqInventoryCell = getEmptyCell();
 		
 		if(emptyCell != null ){
 			var item:CqInventoryItem = new CqInventoryItem(this, 2, 2);
@@ -126,10 +119,23 @@ class CqInventoryDialog extends HxlSlidingDialog {
 			add(item);
 			item.setInventoryCell(emptyCell.cellIndex);
 		} else {
-			// todo - no romm in inventory, prevent pick up!
+			throw "no room in inventory, should not happen because pick up should have not been allowed!";
 		}
 		
 	}
+	
+	public function getEmptyCell():CqInventoryCell {
+		var emptyCell:CqInventoryCell = null;
+		for ( cell in dlgInvGrid.cells ) {
+			if ( cell.getCellObj() == null && !cell.dropCell ) {
+				emptyCell = cell;
+				break;
+			}
+		}
+		
+		return emptyCell;
+	}
+	
 
 	public override function hide(?HideCallback:Dynamic=null):Void {
 		super.hide(HideCallback);
