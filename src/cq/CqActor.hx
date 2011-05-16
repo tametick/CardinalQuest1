@@ -556,35 +556,48 @@ class CqPlayer extends CqActor, implements Player {
 			play("idle_"+equippedWeapon.spriteIndex);
 	}
 	
+	//give item via script/etc
+	public function give(?item:CqItem, ?itemType:CqItemType) {
+		if (item != null) {
+			// add to actor inventory
+			// if this item has a max stack size greater than 1, lets see if we already have the same item in inventory
+			var added:Bool = false;
+			if ( item.stackSizeMax > 1 ) {
+				for ( i in 0 ... inventory.length ) {
+					if ( inventory[i].spriteIndex == item.spriteIndex && inventory[i].stackSize < inventory[i].stackSizeMax ) {
+						added = true;
+						inventory[i].stackSize += item.stackSize;
+						if ( inventory[i].stackSize > inventory[i].stackSizeMax ) {
+							added = false;
+							var diff = inventory[i].stackSize - inventory[i].stackSizeMax;
+							inventory[i].stackSize = inventory[i].stackSizeMax;
+							item.stackSize = diff;
+						}
+						// perform pickup callback functions
+						for ( Callback in onPickup ) Callback(inventory[i]);
+						break;
+					}
+				}
+			}
+			if ( !added ) {
+				inventory.push(item);
+				// perform pickup callback functions
+				for ( Callback in onPickup ) Callback(item);
+			}
+			return;
+		}
+		
+		if (itemType != null) {
+			give(CqLootFactory.newItem(-1, -1, itemType));
+		}
+	}
+	
+	//pickup item from map
 	public function pickup(state:HxlState, item:CqItem) {
 		// remove item from map
 		Registery.level.removeLootFromLevel(state, item);
 		item.doPickupEffect();	
-		// add to actor inventory
-		// if this item has a max stack size greater than 1, lets see if we already have the same item in inventory
-		var added:Bool = false;
-		if ( item.stackSizeMax > 1 ) {
-			for ( i in 0 ... inventory.length ) {
-				if ( inventory[i].spriteIndex == item.spriteIndex && inventory[i].stackSize < inventory[i].stackSizeMax ) {
-					added = true;
-					inventory[i].stackSize += item.stackSize;
-					if ( inventory[i].stackSize > inventory[i].stackSizeMax ) {
-						added = false;
-						var diff = inventory[i].stackSize - inventory[i].stackSizeMax;
-						inventory[i].stackSize = inventory[i].stackSizeMax;
-						item.stackSize = diff;
-					}
-					// perform pickup callback functions
-					for ( Callback in onPickup ) Callback(inventory[i]);
-					break;
-				}
-			}
-		}
-		if ( !added ) {
-			inventory.push(item);
-			// perform pickup callback functions
-			for ( Callback in onPickup ) Callback(item);
-		}
+		give(item);
 	}
 
 	public function removeInventory(item:CqItem):Void {
