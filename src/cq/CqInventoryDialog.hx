@@ -698,10 +698,12 @@ class CqInventoryItem extends HxlSprite {
 			if ( CqInventoryCell.highlightedCell.getCellObj() != null ) {
 				// There was already an item in the target cell, switch places with it
 				var other:CqInventoryItem = CqInventoryCell.highlightedCell.getCellObj();
+				
 				if ( cellEquip ) {
 					// Moving the other item into an equipment cell
 					cast(Registery.player, CqActor).unequipItem(this.item);
-					if ( other.setEquipmentCell(cellIndex) ) cast(Registery.player, CqActor).equipItem(other.item);
+					if ( other.setEquipmentCell(cellIndex) && other!=this) 
+						cast(Registery.player, CqActor).equipItem(other.item);
 				} else if ( cellSpell ) {
 					// Moving the other item into a spell cell
 					other.setSpellCell(cellIndex);
@@ -714,6 +716,7 @@ class CqInventoryItem extends HxlSprite {
 					// Moving the other item into an inventory cell
 					other.setInventoryCell(cellIndex);
 				}
+				
 				if ( Std.is(CqInventoryCell.highlightedCell, CqSpellCell) ) {
 					// Moving this item into a spell cell
 					setSpellCell(CqInventoryCell.highlightedCell.cellIndex);
@@ -729,6 +732,7 @@ class CqInventoryItem extends HxlSprite {
 					// Moving this item into an inventory cell
 					setInventoryCell(CqInventoryCell.highlightedCell.cellIndex);
 				}
+				
 				cellIndex = CqInventoryCell.highlightedCell.cellIndex;
 			} else {
 				// The target cell was empty.. clear out my old cell and fill the new one
