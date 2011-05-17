@@ -120,6 +120,13 @@ class CqInventoryDialog extends HxlSlidingDialog {
 			//HxlGraphics.log("Checking for free slots..");
 			if ( Item.equipSlot == POTION ) {
 			} else if ( Item.equipSlot == SPELL ) {
+				for ( cell in dlgSpellGrid.cells ) {
+					if ( cell.getCellObj() == null ) {
+						uiItem.setSpellCell(cell.cellIndex);
+						GameUI.instance.updateCharge();
+						return;
+					}
+				}
 			} else {
 				for ( cell in dlgEqGrid.cells ) {
 					if ( cell.getCellObj() == null && cast(cell, CqEquipmentCell).equipSlot == Item.equipSlot ) {
@@ -360,6 +367,15 @@ class CqSpellGrid extends CqInventoryGrid {
 			cells.push(btnCell.cell);
 			buttons.push(btnCell);
 		}
+	}
+
+	public override function getCellItemPos(Cell:Int):HxlPoint {
+		if ( !initialized ) {
+			//return new HxlPoint(x + cells[Cell].x + 2, y + cells[Cell].y + 2);
+			return new HxlPoint(cells[Cell].x + 12, cells[Cell].y + 12);
+
+		}
+		return new HxlPoint(cells[Cell].x + 2, cells[Cell].y + 2);
 	}
 
 	public function onItemDrag(Item:CqItem):Void {

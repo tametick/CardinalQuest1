@@ -36,7 +36,7 @@ class GameState extends HxlState {
 	}
 	
 	public override function update() {
-		super.update();	
+		super.update();
 		if ( initialized < 1 ) 
 			return;
 		if ( GameUI.isTargeting ) {

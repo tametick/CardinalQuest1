@@ -200,6 +200,11 @@ class GameUI extends HxlDialog {
 
 	}
 
+	public override function update():Void {
+		super.update();
+		updateCharge();
+	}
+
 	public function updateCharge():Void {
 		var player = cast(Registery.player, CqPlayer);
 		var end:Float = (((Math.PI / 2) * 3) - (-(Math.PI/2))) * (player.spiritPoints / 360);
