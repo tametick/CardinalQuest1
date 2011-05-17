@@ -102,22 +102,45 @@ class CqInventoryDialog extends HxlSlidingDialog {
 			}
 		}
 		
-		var emptyCell:CqInventoryCell = getEmptyCell();
-		
-		if(emptyCell != null ){
-			var item:CqInventoryItem = new CqInventoryItem(this, 2, 2);
-			item.toggleDrag(true);
-			item.zIndex = 5;
-			item.item = Item;
-			if ( Std.is(Item, CqSpell) ) {
-				spellSprite.setFrame(spellSheet.getSpriteIndex(Item.spriteIndex));
-				item.setIcon(spellSprite.getFramePixels());
+		var uiItem:CqInventoryItem = new CqInventoryItem(this, 2, 2);
+		uiItem.toggleDrag(true);
+		uiItem.zIndex = 5;
+		uiItem.item = Item;
+		if ( Std.is(Item, CqSpell) ) {
+			spellSprite.setFrame(spellSheet.getSpriteIndex(Item.spriteIndex));
+			uiItem.setIcon(spellSprite.getFramePixels());
+		} else {
+			itemSprite.setFrame(itemSheet.getSpriteIndex(Item.spriteIndex));
+			uiItem.setIcon(itemSprite.getFramePixels());
+		}
+		add(uiItem);
+
+		// If this uiItem is equippable, and affiliated slot is open, auto equip it
+		if ( Item.equipSlot != null ) {
+			//HxlGraphics.log("Checking for free slots..");
+			if ( Item.equipSlot == POTION ) {
+			} else if ( Item.equipSlot == SPELL ) {
 			} else {
-				itemSprite.setFrame(itemSheet.getSpriteIndex(Item.spriteIndex));
-				item.setIcon(itemSprite.getFramePixels());
+				for ( cell in dlgEqGrid.cells ) {
+					if ( cell.getCellObj() == null && cast(cell, CqEquipmentCell).equipSlot == Item.equipSlot ) {
+						uiItem.setEquipmentCell(cell.cellIndex);
+						if ( !cast(cell, CqEquipmentCell).eqCellInit ) {
+							// Mysterious things happen with positioning before the ui
+							// stuff gets updated for the first time.. just accommodate for it
+							// now.
+							uiItem.x = uiItem.x + 10;
+							uiItem.y = uiItem.y + 10;
+						}
+						cast(Registery.player, CqActor).equipItem(Item);
+						return;
+					}
+				}
 			}
-			add(item);
-			item.setInventoryCell(emptyCell.cellIndex);
+		}
+
+		var emptyCell:CqInventoryCell = getEmptyCell();
+		if(emptyCell != null ){
+			uiItem.setInventoryCell(emptyCell.cellIndex);
 		} else {
 			throw "no room in inventory, should not happen because pick up should have not been allowed!";
 		}
@@ -223,10 +246,13 @@ class CqInventoryGrid extends HxlDialog {
 
 class CqEquipmentGrid extends CqInventoryGrid {
 
+	private var eqGridInit:Bool;
+
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100) {
 		super(X, Y, Width, Height, false);
 
 		cells = new Array();
+		eqGridInit = false;
 
 		var cellBgKey:String = "EquipmentCellBG";
 		var cellBgHighlightKey:String = "EqCellBGHighlight";
@@ -274,6 +300,14 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		idx++;
 	}
 
+	public override function getCellItemPos(Cell:Int):HxlPoint {
+		if ( !initialized ) {
+			return new HxlPoint(x + cells[Cell].x + 2, y + cells[Cell].y + 2);
+		}
+		return new HxlPoint(cells[Cell].x + 2, cells[Cell].y + 2);
+
+	}
+
 	public function onItemDrag(Item:CqItem):Void {
 		for( i in 0...cells.length ) {
 			var Cell:CqEquipmentCell = cast(cells[i], CqEquipmentCell);
@@ -286,6 +320,18 @@ class CqEquipmentGrid extends CqInventoryGrid {
 	public function onItemDragStop():Void {
 		for ( i in 0...cells.length ) {
 			cells[i].setGlow(false);
+		}
+	}
+
+	public override function update():Void {
+		super.update();
+		if ( !eqGridInit ) {
+			eqGridInit = true;
+			for( cell in cells ) {
+				if ( cell.getCellObj() != null ) {
+					//cell.getCellObj().setEquipmentCell(cell.cellIndex);
+				}
+			}
 		}
 	}
 }
@@ -490,15 +536,24 @@ class CqEquipmentCell extends CqInventoryCell {
 
 	public static var highlightedCell:CqInventoryCell = null;
 	public var equipSlot:CqEquipSlot; // This should be read only
+	public var eqCellInit:Bool;
 
 	public function new(EquipSlot:CqEquipSlot, ?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?CellIndex:Int=0) {
 		super(X, Y, Width, Height, CellIndex);
 		equipSlot = EquipSlot;
+		eqCellInit = false;
 	}
 
 	override function setHighlighted(Toggle:Bool):Void {
 		if ( Toggle && cast(HxlGraphics.mouse.dragSprite, CqInventoryItem).item.equipSlot != equipSlot ) return; 
 		super.setHighlighted(Toggle);
+	}
+
+	public override function update():Void {
+		super.update();
+		if ( !eqCellInit ) {
+			eqCellInit = true;
+		}
 	}
 
 }

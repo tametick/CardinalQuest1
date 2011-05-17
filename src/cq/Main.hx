@@ -31,7 +31,7 @@ class Game extends HxlGame {
 		Configuration.zoom = 2.0;
 		HxlState.bgColor = 0xFF000000;
 		
-		
+		Configuration.debug = true;	
 		if(Configuration.debug)
 			super(640, 480, GameState, 1, "Geo");
 		else

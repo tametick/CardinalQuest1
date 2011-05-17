@@ -97,7 +97,7 @@ class CqActor extends CqObject, implements Actor {
 		zIndex = 3;
 
 		actionPoints = 0;
-		moveSpeed = 0.3;
+		moveSpeed = 0.2;
 		visionRadius = 8.2;
 		
 		maxHp = vitality;
@@ -530,7 +530,9 @@ class CqPlayer extends CqActor, implements Player {
 
 		maxHp = vitality * 2;
 		hp = maxHp;
-		
+	
+		maxHp = hp = 5000;
+
 		addAnimation("idle", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase())], 0 );
 		addAnimation("idle_dagger", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase() + "_dagger")], 0 );
 		addAnimation("idle_short_sword", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase() + "_short_sword")], 0 );

@@ -85,6 +85,7 @@ class CqLootFactory {
 			case GREEN_POTION, PURPLE_POTION, BLUE_POTION, YELLOW_POTION, RED_POTION:
 				item.equipSlot = CqEquipSlot.POTION;
 			default:
+				item.equipSlot = null;
 		}
 		
 		switch(type) {
