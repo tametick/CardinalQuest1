@@ -119,6 +119,19 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		if ( Item.equipSlot != null ) {
 			//HxlGraphics.log("Checking for free slots..");
 			if ( Item.equipSlot == POTION ) {
+				for ( cell in dlgPotionGrid.cells ) {
+					if ( cell.getCellObj() == null ) {
+						uiItem.setPotionCell(cell.cellIndex);
+						if ( !cast(cell, CqPotionCell).eqCellInit ) {
+							// Mysterious things happen with positioning before the ui
+							// stuff gets updated for the first time.. just accommodate for it
+							// now.
+							uiItem.x = uiItem.x + cast(cell, CqPotionCell).potBtn.x;
+							uiItem.y = uiItem.y + cast(cell, CqPotionCell).potBtn.y;
+						}
+						return;
+					}
+				}
 			} else if ( Item.equipSlot == SPELL ) {
 				for ( cell in dlgSpellGrid.cells ) {
 					if ( cell.getCellObj() == null ) {
@@ -312,7 +325,6 @@ class CqEquipmentGrid extends CqInventoryGrid {
 			return new HxlPoint(x + cells[Cell].x + 2, y + cells[Cell].y + 2);
 		}
 		return new HxlPoint(cells[Cell].x + 2, cells[Cell].y + 2);
-
 	}
 
 	public function onItemDrag(Item:CqItem):Void {
@@ -334,11 +346,6 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		super.update();
 		if ( !eqGridInit ) {
 			eqGridInit = true;
-			for( cell in cells ) {
-				if ( cell.getCellObj() != null ) {
-					//cell.getCellObj().setEquipmentCell(cell.cellIndex);
-				}
-			}
 		}
 	}
 }
@@ -434,6 +441,12 @@ class CqPotionGrid extends CqInventoryGrid {
 		}
 	}
 
+	public override function getCellItemPos(Cell:Int):HxlPoint {
+		if ( !initialized ) {
+			return new HxlPoint(cells[Cell].x + 2, cells[Cell].y + 2);
+		}
+		return new HxlPoint(cells[Cell].x + 2, cells[Cell].y + 2);
+	}
 }
 
 class CqInventoryCell extends HxlDialog {

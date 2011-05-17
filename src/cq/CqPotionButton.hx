@@ -31,7 +31,7 @@ class CqPotionButton extends HxlDialog {
 
 		initialized = false;
 
-		cell = new CqPotionCell(5, 5, 54, 54, Idx);
+		cell = new CqPotionCell(this, 5, 5, 54, 54, Idx);
 		cell.setGraphicKeys("EquipmentCellBG", "EqCellBGHighlight", "CellGlow");
 		cell.zIndex = 1;
 		add(cell);
@@ -85,9 +85,11 @@ class CqPotionButton extends HxlDialog {
 class CqPotionCell extends CqEquipmentCell {
 
 	public static var highlightedCell:CqInventoryCell = null;
+	public var potBtn:CqPotionButton;
 
-	public function new(X:Int,Y:Int,?Width:Int=100,?Height:Int=20, ?Idx:Int=0) {
+	public function new(Btn:CqPotionButton, X:Int,Y:Int,?Width:Int=100,?Height:Int=20, ?Idx:Int=0) {
 		super(POTION, X, Y, Width, Height, Idx);
+		potBtn = Btn;
 	}
 
 }
