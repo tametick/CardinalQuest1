@@ -52,6 +52,19 @@ class SpriteMonsters extends HxlSpriteSheet {
 	} 
 }
 
+class SpriteExtraMonsters extends HxlSpriteSheet { 	
+	public static var instance = new SpriteExtraMonsters();
+	public static var apes = ["ape_blue", "ape_black", "ape_red","ape_white"];
+	public static var elementeals= ["elemental_green", "elemental_white", "elemental_red", "elemental_blue"];
+	public function new() {
+		spriteNames = [
+			apes,
+			elementeals
+		];
+		super(0);
+	} 
+}
+
 class SpritePlayer extends HxlSpriteSheet { 
 	public static var instance = new SpritePlayer();
 	public function new() { 

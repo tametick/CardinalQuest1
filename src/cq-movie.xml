@@ -26,6 +26,10 @@
 
 	<DefineFont id="8" file="../rsrc/cq/Geo-Regular.ttf" />
 	<SymbolClass id="8" class="cq.FontGeo" />
+
+	
+	<DefineBitsJPEG id="9" file="../rsrc/cq/extra-monsters.png" />
+	<SymbolClass id="9" class="cq.SpriteExtraMonsters" />
 	
 	<DefineABC file="../bin/cq-movie.swf" isBoot="true" />
 	<SymbolClass id="0" class="flash.Boot"/>

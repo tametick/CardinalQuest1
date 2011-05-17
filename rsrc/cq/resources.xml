@@ -6,6 +6,7 @@
 		<bitmap id="cq.SpriteEffects" import="effects.png"/>
 		<bitmap id="cq.SpriteItems" import="items.png"/>
 		<bitmap id="cq.SpriteMonsters" import="monsters.png"/>
+		<bitmap id="cq.SpriteExtraMonsters" import="extra-monsters.png"/>
 		<bitmap id="cq.SpritePlayer" import="player.png"/>
 		<bitmap id="cq.SpriteTiles" import="tiles.png"/>
 		<bitmap id="cq.SpriteSpells" import="spells.png"/>
