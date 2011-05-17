@@ -440,9 +440,19 @@ class CqActor extends CqObject, implements Actor {
 		if (itemOrSpell.damage != null && itemOrSpell.damage.end>0 ) {
 			var dmg = HxlUtil.randomIntInRange(itemOrSpell.damage.start, itemOrSpell.damage.end);
 			if (other == null) {
-				injureActor(this, dmg);
+				hp -= dmg;
+				var lif = hp + buffs.get("life");
+				if (lif > 0)
+					injureActor(this, dmg);
+				else
+					killActor(HxlGraphics.state,this,dmg);
 			} else {
-				injureActor(other, dmg);
+				other.hp -= dmg;
+				var lif = other.hp + other.buffs.get("life");
+				if (lif > 0)
+					injureActor(other, dmg);
+				else
+					killActor(HxlGraphics.state,other,dmg);
 			}
 		}
 		
