@@ -21,6 +21,7 @@ import data.Configuration;
 
 import cq.CqResources;
 import cq.CqItem;
+import cq.CqSpell;
 import cq.CqWorld;
 import cq.GameUI;
 import cq.CqVitalBar;
@@ -557,7 +558,7 @@ class CqPlayer extends CqActor, implements Player {
 	}
 	
 	//give item via script/etc
-	public function give(?item:CqItem, ?itemType:CqItemType) {
+	public function give(?item:CqItem, ?itemType:CqItemType, ?spellType:CqSpellType) {
 		if (item != null) {
 			// add to actor inventory
 			// if this item has a max stack size greater than 1, lets see if we already have the same item in inventory
@@ -574,7 +575,8 @@ class CqPlayer extends CqActor, implements Player {
 							item.stackSize = diff;
 						}
 						// perform pickup callback functions
-						for ( Callback in onPickup ) Callback(inventory[i]);
+						for ( Callback in onPickup ) 
+							Callback(inventory[i]);
 						break;
 					}
 				}
@@ -582,13 +584,14 @@ class CqPlayer extends CqActor, implements Player {
 			if ( !added ) {
 				inventory.push(item);
 				// perform pickup callback functions
-				for ( Callback in onPickup ) Callback(item);
+				for ( Callback in onPickup ) 
+					Callback(item);
 			}
 			return;
-		}
-		
-		if (itemType != null) {
+		} else if (itemType != null) {
 			give(CqLootFactory.newItem(-1, -1, itemType));
+		} else if (spellType != null) {
+			give(CqSpellFactory.newSpell(-1, -1, spellType));
 		}
 	}
 	

@@ -15,6 +15,7 @@ import world.Player;
 import cq.CqActor;
 import cq.CqWorld;
 import cq.CqItem;
+import cq.CqSpell;
 import cq.CqResources;
 
 import flash.events.KeyboardEvent;
@@ -80,6 +81,29 @@ class GameState extends HxlState {
 		player.addOnKill(gameUI.doPlayerInjureEffect);
 		player.addOnGainXP(gameUI.doPlayerGainXP);
 		player.addOnMove(gameUI.checkTileItems);
+		
+		switch(chosenClass) {
+			case FIGHTER:
+				player.give(null, CqItemType.SHORT_SWORD);
+				player.give(null, CqItemType.RED_POTION);
+				player.give(null, CqItemType.RED_POTION);
+				player.give(null, CqItemType.PURPLE_POTION);
+				player.give(null, CqSpellType.BERSERK);
+				
+			case WIZARD:
+				player.give(null, CqItemType.STAFF);
+				player.give(null, CqItemType.RED_POTION);
+				player.give(null, CqItemType.RED_POTION);
+				player.give(null, CqItemType.BLUE_POTION);
+				player.give(null, CqSpellType.FIREBALL);
+			case THIEF:
+				player.give(null, CqItemType.DAGGER);
+				player.give(null, CqItemType.RED_POTION);
+				player.give(null, CqItemType.RED_POTION);
+				player.give(null, CqItemType.YELLOW_POTION);
+				player.give(null, CqItemType.GREEN_POTION);
+				player.give(null, CqSpellType.SHADOW_WALK);
+		}
 
 		var self = this;
 		world.addOnNewLevel(function() {
