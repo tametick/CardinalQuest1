@@ -531,7 +531,6 @@ class CqPlayer extends CqActor, implements Player {
 		maxHp = vitality * 2;
 		hp = maxHp;
 	
-		maxHp = hp = 5000;
 
 		addAnimation("idle", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase())], 0 );
 		addAnimation("idle_dagger", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase() + "_dagger")], 0 );

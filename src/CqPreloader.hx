@@ -107,8 +107,8 @@ class CqPreloader extends MovieClip {
 		if ( !initialized ) {
 			initialized = true;
 			if (!Configuration.debug && (root.loaderInfo.url.indexOf(url) < 0))  {
-				//invalidUrl();
-				//return;
+				invalidUrl();
+				return;
 			}
 		}
 
