@@ -74,8 +74,8 @@ class CqLevel extends Level {
 
 		startingLocation = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
 		
+		var tmpDown = tiles.getSpriteIndex("red_down");
 		if (index < CqConfiguration.lastLevel) {
-			var tmpDown = tiles.getSpriteIndex("red_down");
 			var stairsDown:HxlPoint;
 			do {
 				stairsDown = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
