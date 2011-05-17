@@ -92,31 +92,31 @@ class CqLootFactory {
 				item.name = "Elixir of the hawk";
 				item.consumable = true;
 				item.buffs.set("attack", 3);
-				item.stackSizeMax = 20;
+				item.stackSizeMax = 5;
 				item.duration = 120;
 			case PURPLE_POTION:
 				item.name = "Elixir of the lion";
 				item.consumable = true;
 				item.specialEffects.add(new CqSpecialEffectValue("damage multipler","2"));
 				item.duration = 120;
-				item.stackSizeMax = 20;			
+				item.stackSizeMax = 5;			
 			case BLUE_POTION:
 				item.name = "Elixir of the elephant";
 				item.consumable = true;
 				item.buffs.set("defense", 3);
 				item.duration = 120;
-				item.stackSizeMax = 20;
+				item.stackSizeMax = 5;
 			case YELLOW_POTION:
 				item.name = "Coca-leaf cocktail";
 				item.consumable = true;
 				item.buffs.set("speed", 3);
 				item.duration = 120;
-				item.stackSizeMax = 20;
+				item.stackSizeMax = 5;
 			case RED_POTION:
 				item.name ="Healing potion";
 				item.consumable = true;
 				item.specialEffects.add(new CqSpecialEffectValue("heal","full"));
-				item.stackSizeMax = 20;
+				item.stackSizeMax = 5;
 			
 			case BOOTS:
 				item.name ="Boots of escape";

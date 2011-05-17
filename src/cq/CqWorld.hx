@@ -73,13 +73,15 @@ class CqLevel extends Level {
 		
 		var newMapData = BSP.getBSPMap(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), tmpWall, tmpFloor, tmpDoor);
 
-		startingLocation = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
-		var stairsDown:HxlPoint;
-		do {
-			stairsDown = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
-		} while (HxlUtil.distance(stairsDown, startingLocation) < 10);
-		
-		newMapData[Std.int(stairsDown.y)][Std.int(stairsDown.x)] = tmpDown;
+		if(index<CqConfiguration.lastLevel) {
+			startingLocation = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
+			var stairsDown:HxlPoint;
+			do {
+				stairsDown = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
+			} while (HxlUtil.distance(stairsDown, startingLocation) < 10);
+			
+			newMapData[Std.int(stairsDown.y)][Std.int(stairsDown.x)] = tmpDown;
+		}
 		
 
 		for (y in 0...newMapData.length) {

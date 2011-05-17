@@ -6,6 +6,7 @@ class CqConfiguration extends Configuration {
 	public static var chestsPerLevel = 12;
 	public static var spellsPerLevel = 1;
 	public static var mobsPerLevel = 24;
+	public static var lastLevel = 11;
 	
 	public static function getLevelWidth(?level:Int=0) { 
 		return 32; 
