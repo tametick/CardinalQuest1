@@ -39,6 +39,8 @@ class SpriteMonsters extends HxlSpriteSheet {
 	public static var minotauers = ["minotauer", "minotauer_axe", "minotauer_sword"];
 	public static var succubi = ["succubus", "succubus_staff", "succubus_whip", "succubus_scepter", ];
 	public static var spiders = ["spider_yellow", "spider_red", "spider_gray", "spider_green"];
+	public static var apes = ["ape_blue", "ape_black", "ape_red","ape_white"];
+	public static var elementeals= ["elemental_green", "elemental_white", "elemental_red", "elemental_blue"];
 	public function new() {
 		spriteNames = [
 			kobolds.concat(["kobold_blank"]),
@@ -47,19 +49,8 @@ class SpriteMonsters extends HxlSpriteSheet {
 			minotauers.concat(["minotauer_blank"]),
 			succubi,
 			spiders,
-		];
-		super(0);
-	} 
-}
-
-class SpriteExtraMonsters extends HxlSpriteSheet { 	
-	public static var instance = new SpriteExtraMonsters();
-	public static var apes = ["ape_blue", "ape_black", "ape_red","ape_white"];
-	public static var elementeals= ["elemental_green", "elemental_white", "elemental_red", "elemental_blue"];
-	public function new() {
-		spriteNames = [
 			apes,
-			elementeals
+			elementeals,
 		];
 		super(0);
 	} 

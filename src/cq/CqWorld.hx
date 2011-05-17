@@ -69,12 +69,13 @@ class CqLevel extends Level {
 		var tmpWall = tiles.getSpriteIndex("red_wall4");
 		var tmpFloor = tiles.getSpriteIndex("red_floor0");
 		var tmpDoor = tiles.getSpriteIndex("red_door_close");
-		var tmpDown = tiles.getSpriteIndex("red_down");
 		
 		var newMapData = BSP.getBSPMap(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), tmpWall, tmpFloor, tmpDoor);
 
-		if(index<CqConfiguration.lastLevel) {
-			startingLocation = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
+		startingLocation = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
+		
+		if (index < CqConfiguration.lastLevel) {
+			var tmpDown = tiles.getSpriteIndex("red_down");
 			var stairsDown:HxlPoint;
 			do {
 				stairsDown = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);

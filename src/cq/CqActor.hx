@@ -97,7 +97,7 @@ class CqActor extends CqObject, implements Actor {
 		zIndex = 3;
 
 		actionPoints = 0;
-		moveSpeed = 0.15;
+		moveSpeed = 0.3;
 		visionRadius = 8.2;
 		
 		maxHp = vitality;
@@ -802,43 +802,43 @@ class CqMobFactory {
 		
 		var typeName = null;
 		switch(level+1) {
-			case 1,2:
+			case 1:
 				typeName = HxlUtil.getRandomElement(SpriteMonsters.bandits);
-			case 3:
+			case 2:
 				if(Math.random()<0.7)
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.bandits);
 				else
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.kobolds);
-			case 4:
-				typeName = HxlUtil.getRandomElement(SpriteMonsters.kobolds);
-			case 5:
+			case 3:
 				if(Math.random()<0.7)
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.kobolds);
 				else
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.succubi);
-			case 6:
-				typeName = HxlUtil.getRandomElement(SpriteMonsters.succubi);
-			case 7:
+			case 4:
 				if(Math.random()<0.7)
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.succubi);
 				else
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.spiders);
-			case 8:
-				typeName = HxlUtil.getRandomElement(SpriteMonsters.spiders);
-			case 9:
+			case 5:
 				if(Math.random()<0.7)
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.spiders);
 				else
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.apes);
+			case 6:
+				if (Math.random() < 0.7)
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.apes);
+				else
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.elementeals);
+			case 7:
+				if(Math.random()<0.7)
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.elementeals);
+				else
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.werewolves);
-			case 10:
-				typeName = HxlUtil.getRandomElement(SpriteMonsters.werewolves);
-			case 11:
+			case 8:
 				if(Math.random()<0.7)
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.werewolves);
 				else
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.minotauers);
-			case 12:
-				typeName = HxlUtil.getRandomElement(SpriteMonsters.minotauers);
 		}
 		
 		var mob = new CqMob(X, Y, typeName.toLowerCase());
@@ -872,20 +872,34 @@ class CqMobFactory {
 				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(3,12);
 				mob.damage = new Range(2, 8);
 				mob.xpValue = 50;
-			case WEREWOLF_GRAY, WEREWOLF_BLUE, WEREWOLF_PURPLE:
+			case APE_BLUE, APE_BLACK, APE_RED, APE_WHITE:
 				mob.attack = 4;
 				mob.defense = 4;
 				mob.speed = 5;
 				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(4,16);
 				mob.damage = new Range(2, 4);
 				mob.xpValue = 125;
+			case ELEMENTAL_GREEN, ELEMENTAL_WHITE, ELEMENTAL_RED, ELEMENTAL_BLUE:
+				mob.attack = 5;
+				mob.defense = 5;
+				mob.speed = 2;
+				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(6,24);
+				mob.damage = new Range(4, 8);
+				mob.xpValue = 275;
+			case WEREWOLF_GRAY, WEREWOLF_BLUE, WEREWOLF_PURPLE:
+				mob.attack = 5;
+				mob.defense = 5;
+				mob.speed = 7;
+				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(8,32);
+				mob.damage = new Range(4,8);
+				mob.xpValue = 500;
 			case MINOTAUER, MINOTAUER_AXE, MINOTAUER_SWORD:
 				mob.attack = 5;
 				mob.defense = 3;
-				mob.speed = 4;
-				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(6,24);
-				mob.damage = new Range(2, 16);
-				mob.xpValue = 275;
+				mob.speed = 5;
+				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(12,48);
+				mob.damage = new Range(4, 32);
+				mob.xpValue = 750;
 		}
 		
 		return mob;
@@ -903,6 +917,8 @@ enum CqMobType {
 	KOBOLD_SPEAR; KOBOLD_KNIVES; KOBOLD_MAGE;
 	SUCCUBUS; SUCCUBUS_STAFF; SUCCUBUS_WHIP; SUCCUBUS_SCEPTER;
 	SPIDER_YELLOW; SPIDER_RED; SPIDER_GRAY; SPIDER_GREEN;
+	APE_BLUE; APE_BLACK; APE_RED; APE_WHITE;
+	ELEMENTAL_GREEN; ELEMENTAL_WHITE; ELEMENTAL_RED; ELEMENTAL_BLUE;
 	WEREWOLF_GRAY; WEREWOLF_BLUE; WEREWOLF_PURPLE;
 	MINOTAUER; MINOTAUER_AXE; MINOTAUER_SWORD;
 }
