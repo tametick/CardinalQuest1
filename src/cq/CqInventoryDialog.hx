@@ -355,6 +355,13 @@ class CqSpellGrid extends CqInventoryGrid {
 
 	public var buttons:Array<CqSpellButton>;
 
+	public function forceClearCharge(Cell:Int) {
+		if(buttons[Cell].getSpell()!=null)
+			buttons[Cell].getSpell().spiritPoints = 0;
+		
+		GameUI.instance.updateCharge(buttons[Cell],0);
+	}
+	
 	public function clearCharge(Cell:Int) {
 		buttons[Cell].getSpell().spiritPoints = 0;
 		GameUI.instance.updateCharge(buttons[Cell]);
@@ -667,10 +674,12 @@ class CqInventoryItem extends HxlSprite {
 	 * Sets this object as the CellObj of the target inventory cell, and places this object within that cell.
 	 **/
 	public function setInventoryCell(Cell:Int):Void {		
-		if (cellSpell)
+		if (cellSpell) {
 			cast(Registery.player, CqPlayer).equippedSpells[cellIndex] = null;
+			_dlg.dlgSpellGrid.forceClearCharge(cellIndex);
+		}
 		
-		var spell = _dlg.dlgSpellGrid.remove(this);
+		_dlg.dlgSpellGrid.remove(this);
 		_dlg.remove(this);
 		zIndex = idleZIndex;
 		_dlg.add(this);
@@ -719,7 +728,12 @@ class CqInventoryItem extends HxlSprite {
 	 * Sets this object as the CellObj of the target spell cell, and places this object within that cell.
 	 **/
 	public function setSpellCell(Cell:Int):Bool {
-		cast(Registery.player, CqPlayer).equippedSpells[cellIndex] = null;
+		if (cellSpell) {
+			// if it was already in a different spell cell before moving to the new spell cell
+			cast(Registery.player, CqPlayer).equippedSpells[cellIndex] = null;
+			_dlg.dlgSpellGrid.forceClearCharge(cellIndex);
+		}
+		
 		_dlg.dlgSpellGrid.remove(this);
 		_dlg.remove(this);
 		zIndex = idleZIndex;

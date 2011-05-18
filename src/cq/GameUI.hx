@@ -214,8 +214,10 @@ class GameUI extends HxlDialog {
 		}
 	}
 	
-	public function updateCharge(btn:CqSpellButton) {
-		var spiritPoints = btn.getSpell().spiritPoints;
+	public function updateCharge(btn:CqSpellButton, ?forcedValue:Int=-1) {
+		var spiritPoints = forcedValue;
+		if (btn.getSpell() != null)
+			spiritPoints = btn.getSpell().spiritPoints;
 
 		var end:Float = (((Math.PI / 2) * 3) - (-(Math.PI/2))) * (spiritPoints / 360);
 		end = ((Math.PI / 2) * 3) - end;
