@@ -49,7 +49,6 @@ class CqActor extends CqObject, implements Actor {
 	public var faction:Int;
 	
 	public var actionPoints:Int;
-	public var spiritPoints:Int;
 	
 	public var attack:Int;
 	public var defense:Int;
@@ -61,6 +60,7 @@ class CqActor extends CqObject, implements Actor {
 	public var damage:Range;
 	
 	var equippedWeapon:CqItem;
+	public var equippedSpells:Array<CqSpell>;
 	
 	// changes to basic abilities (attack, defense, speed, spirit) caused by equipped items or spells
 	public var buffs:Hash<Int>;
@@ -102,6 +102,8 @@ class CqActor extends CqObject, implements Actor {
 		
 		maxHp = vitality;
 		hp = maxHp;
+		
+		equippedSpells = new Array<CqSpell>();
 		
 		initBuffs();
 		visibleEffects = new Array<String>();
@@ -528,9 +530,11 @@ class CqPlayer extends CqActor, implements Player {
 		
 		super(X, Y);
 
+		for (s in 0...5)
+			equippedSpells[s] = null;
+		
 		maxHp = vitality * 2;
 		hp = maxHp;
-	
 
 		addAnimation("idle", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase())], 0 );
 		addAnimation("idle_dagger", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase() + "_dagger")], 0 );

@@ -86,10 +86,13 @@ class CqSpellFactory {
 
 class CqSpell extends CqItem {
 	public var targetsOther:Bool;
+	public var spiritPoints:Int;
+	
 	public function new(X:Float, Y:Float, type:CqSpellType) {
 		super(X, Y, type);
 		equipSlot = SPELL;
 		visible = false;
+		spiritPoints = 0;
 	}
 }
 

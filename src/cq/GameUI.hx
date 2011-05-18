@@ -207,11 +207,15 @@ class GameUI extends HxlDialog {
 
 	public function updateCharges() {
 		var player = cast(Registery.player, CqPlayer);
-		for ( btn in dlgSpellGrid.buttons )
-			updateCharge(btn, player.spiritPoints);
+		for ( btn in dlgSpellGrid.buttons ){
+			if (btn.getSpell() != null) {				
+				updateCharge(btn);
+			}
+		}
 	}
 	
-	public function updateCharge(btn:CqSpellButton, spiritPoints:Int) {
+	public function updateCharge(btn:CqSpellButton) {
+		var spiritPoints = btn.getSpell().spiritPoints;
 
 		var end:Float = (((Math.PI / 2) * 3) - (-(Math.PI/2))) * (spiritPoints / 360);
 		end = ((Math.PI / 2) * 3) - end;
@@ -519,8 +523,8 @@ class GameUI extends HxlDialog {
 			if ( cast(tile.actors[0], CqActor).faction != 0 ) {
 				var player = cast(Registery.player, CqPlayer);
 				player.use(targetSpell.getSpell(), cast(tile.actors[0], CqActor));
-				player.spiritPoints = 0;
-				GameUI.instance.updateCharge(targetSpell, player.spiritPoints);
+				targetSpell.getSpell().spiritPoints = 0;
+				GameUI.instance.updateCharge(targetSpell);
 				GameUI.setTargeting(false);
 			} else {
 				GameUI.setTargeting(false);

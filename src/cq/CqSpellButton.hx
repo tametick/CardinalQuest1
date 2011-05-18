@@ -79,20 +79,21 @@ class CqSpellButton extends HxlDialog {
 		if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
 			var spellObj = cell.getCellObj();
 			if ( spellObj != null ) {
+				var spell = cast(spellObj.item, CqSpell);
 				var player = cast(Registery.player, CqPlayer);
-				if ( player.spiritPoints < 360 ) {
+				if ( spell.spiritPoints < 360 ) {
 					event.stopPropagation();
 					return;
 				}
-				var spell = cast(spellObj.item, CqSpell);
+				
 		
 				if ( spell.targetsOther ) {
 					GameUI.setTargeting(true, spell.name);
 					GameUI.setTargetingSpell(this);
 				} else {
 					cast(Registery.player,CqPlayer).use(spellObj.item, null);
-					player.spiritPoints = 0;
-					GameUI.instance.updateCharge(this,player.spiritPoints);
+					spell.spiritPoints = 0;
+					GameUI.instance.updateCharge(this);
 				}
 
 				event.stopPropagation();

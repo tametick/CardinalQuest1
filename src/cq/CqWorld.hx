@@ -273,8 +273,12 @@ class CqLevel extends Level {
 			
 			// Charge action & spirit points				
 			creature.actionPoints += speed;
-			if (!specialActive)
-				creature.spiritPoints = Std.int(Math.min(360, creature.spiritPoints + spirit));
+			if (!specialActive) {
+				for (s in creature.equippedSpells) {
+					if(s!=null)
+						s.spiritPoints = Std.int(Math.min(360, s.spiritPoints + spirit));
+				}
+			}
 			
 			// Move mob if charged
 			if ( !Std.is(creature,CqPlayer)  &&  creature.actionPoints>=60 ) {

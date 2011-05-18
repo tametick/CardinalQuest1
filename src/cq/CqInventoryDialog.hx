@@ -137,7 +137,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 					if ( cell.getCellObj() == null ) {
 						uiItem.setSpellCell(cell.cellIndex);
 						
-						GameUI.instance.updateCharge(cast(cell, CqSpellCell).btn,cast(Registery.player,CqPlayer).spiritPoints);
+						GameUI.instance.updateCharge(cast(cell, CqSpellCell).btn);
 						return;
 					}
 				}
@@ -356,8 +356,8 @@ class CqSpellGrid extends CqInventoryGrid {
 	public var buttons:Array<CqSpellButton>;
 
 	public function clearCharge(Cell:Int) {
-		GameUI.instance.updateCharge(buttons[Cell], 0);
-		// todo - clear charge from spell object
+		buttons[Cell].getSpell().spiritPoints = 0;
+		GameUI.instance.updateCharge(buttons[Cell]);
 	}
 	
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100) {
@@ -666,8 +666,11 @@ class CqInventoryItem extends HxlSprite {
 	/**
 	 * Sets this object as the CellObj of the target inventory cell, and places this object within that cell.
 	 **/
-	public function setInventoryCell(Cell:Int):Void {
-		_dlg.dlgSpellGrid.remove(this);
+	public function setInventoryCell(Cell:Int):Void {		
+		if (cellSpell)
+			cast(Registery.player, CqPlayer).equippedSpells[cellIndex] = null;
+		
+		var spell = _dlg.dlgSpellGrid.remove(this);
 		_dlg.remove(this);
 		zIndex = idleZIndex;
 		_dlg.add(this);
@@ -716,6 +719,7 @@ class CqInventoryItem extends HxlSprite {
 	 * Sets this object as the CellObj of the target spell cell, and places this object within that cell.
 	 **/
 	public function setSpellCell(Cell:Int):Bool {
+		cast(Registery.player, CqPlayer).equippedSpells[cellIndex] = null;
 		_dlg.dlgSpellGrid.remove(this);
 		_dlg.remove(this);
 		zIndex = idleZIndex;
@@ -733,6 +737,9 @@ class CqInventoryItem extends HxlSprite {
 		cellSpell = true;
 		cellEquip = false;
 		cellPotion = false;
+		
+		cast(Registery.player, CqPlayer).equippedSpells[cellIndex] = cast(this.item,CqSpell);
+		
 		return true;
 	}
 
@@ -827,7 +834,7 @@ class CqInventoryItem extends HxlSprite {
 					var spellBtn = cast(getSpellCell(cellIndex), CqSpellCell).btn;
 					
 					if (other != this)
-						GameUI.instance.updateCharge(spellBtn, cast(Registery.player,CqPlayer).spiritPoints);
+						GameUI.instance.updateCharge(spellBtn);
 					// todo: equip spell
 				} else if ( cellPotion ) {
 					// Moving the other item into a potion cell
@@ -878,7 +885,7 @@ class CqInventoryItem extends HxlSprite {
 					setSpellCell(CqInventoryCell.highlightedCell.cellIndex);
 					var spellCell = getSpellCell(CqInventoryCell.highlightedCell.cellIndex); 
 					var spellBtn = spellCell.btn;
-					GameUI.instance.updateCharge(spellBtn, cast(Registery.player,CqPlayer).spiritPoints);
+					GameUI.instance.updateCharge(spellBtn);
 					// todo: equip spell
 				} else if ( Std.is(CqInventoryCell.highlightedCell, CqPotionCell) ) {
 					// Moving this item into a potion cell
