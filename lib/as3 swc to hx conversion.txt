@@ -1,0 +1,23 @@
+The steps to convert from ActionScript 3 (and 2?) to haXe are numerous and involve some elbow-grease. However, they work wonderfully and in theory allow us to convert any AcitonScript project to haXe useable classes in a matter of minutes.
+
+Tools needed:
+* FlashDevelop
+* haXe
+* basic command-line understanding
+
+Steps:
+
+!!Note!! If packages use capitals, it may be wise to convert to lowercase now! Use Ctrl+I inside FlashDevelop to speed this up. This also may apply to classes.
+
+1) Install flashDevelop plugin from http://sourceforge.net/projects/exportswc/files/exportswc/. As of this writing, 4.1 is for FD4 and 2.3 is for FD3.
+2) Create new FlashDevelop AS3 project. Make sure to remove /src/main.as. Put the source code inside /src/ and make sure the files are in the right package folders.
+3) Use the plugin to generate a .swc file. Find it inside /bin/
+4) Rename .swc file to zip and extract library.swf
+5) Compile .hx classes from library.swf with "haxe -swf dummy.swf -swf-lib library.swf --gen-hx-classes"
+6) Include the generated .hx classes as you normally would in your project.
+7) Move the library.swf to your project directory, rename it to something easier, right click on it inside FlashDevelop and press "Add to Library".
+
+!!Note!! You can safely delete dummy.swf. It's only generated as the compiler complains if there is no output specified, even if it doesn't use it.
+
+
+You can now use the ActionScript code as part of haxe. There may be some small compatibility problems due to the differences between ActionScript and haXe, but they should be able to be worked around.
