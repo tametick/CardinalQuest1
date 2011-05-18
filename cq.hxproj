@@ -42,6 +42,7 @@
   <!-- Assets to embed into the output SWF -->
   <library>
     <asset path="rsrc\cq\resources.swf" />
+    <asset path="lib\playtomic.swf" />
   </library>
   <!-- Paths to exclude from the Project Explorer tree -->
   <hiddenPaths>
