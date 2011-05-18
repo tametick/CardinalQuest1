@@ -57,7 +57,7 @@ class GameState extends HxlState {
 		while (player.actionPoints < 60) {
 			level.tick(this);
 		}
-		gameUI.updateCharge();
+		gameUI.updateCharges();
 	}
 
 	override function init() {

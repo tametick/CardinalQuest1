@@ -136,7 +136,8 @@ class CqInventoryDialog extends HxlSlidingDialog {
 				for ( cell in dlgSpellGrid.cells ) {
 					if ( cell.getCellObj() == null ) {
 						uiItem.setSpellCell(cell.cellIndex);
-						GameUI.instance.updateCharge();
+						
+						GameUI.instance.updateCharge(cast(cell, CqSpellCell).btn,cast(Registery.player,CqPlayer).spiritPoints);
 						return;
 					}
 				}
@@ -354,6 +355,11 @@ class CqSpellGrid extends CqInventoryGrid {
 
 	public var buttons:Array<CqSpellButton>;
 
+	public function clearCharge(Cell:Int) {
+		GameUI.instance.updateCharge(buttons[Cell], 0);
+		// todo - clear charge from spell object
+	}
+	
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100) {
 		super(X, Y, Width, Height, false);
 
@@ -674,6 +680,14 @@ class CqInventoryItem extends HxlSprite {
 		cellPotion = false;
 	}
 
+	function getEquipmentCell(Index:Int):CqEquipmentCell {
+		return cast(_dlg.dlgEqGrid.cells[Index], CqEquipmentCell);
+	}
+	
+	function getSpellCell(Index:Int):CqSpellCell {
+		return cast(_dlg.dlgSpellGrid.cells[Index], CqSpellCell);
+	}
+	
 	/**
 	 * Sets this object as the CellObj of the target equipment cell, and places this object within that cell.
 	 **/
@@ -810,7 +824,10 @@ class CqInventoryItem extends HxlSprite {
 				} else if ( cellSpell ) {
 					// Moving the other item into a spell cell
 					other.setSpellCell(cellIndex);
-					GameUI.instance.updateCharge();
+					var spellBtn = cast(getSpellCell(cellIndex), CqSpellCell).btn;
+					
+					if (other != this)
+						GameUI.instance.updateCharge(spellBtn, cast(Registery.player,CqPlayer).spiritPoints);
 					// todo: equip spell
 				} else if ( cellPotion ) {
 					// Moving the other item into a potion cell
@@ -845,8 +862,10 @@ class CqInventoryItem extends HxlSprite {
 					cast(Registery.player, CqActor).unequipItem(this.item);
 				} else if ( cellSpell ) {
 					// Clearing out a spell cell
+					_dlg.dlgSpellGrid.clearCharge(cellIndex);
 					_dlg.dlgSpellGrid.setCellObj(cellIndex, null);
-					GameUI.instance.updateCharge();
+
+					//GameUI.instance.updateCharge(spellBtn, cast(Registery.player,CqPlayer).spiritPoints);
 				} else if ( cellPotion ) {
 					// Clearing out a potion cell
 					_dlg.dlgPotionGrid.setCellObj(cellIndex, null);
@@ -857,7 +876,9 @@ class CqInventoryItem extends HxlSprite {
 				if ( Std.is(CqInventoryCell.highlightedCell, CqSpellCell) ) {
 					// Moving this item into a spell cell
 					setSpellCell(CqInventoryCell.highlightedCell.cellIndex);
-					GameUI.instance.updateCharge();
+					var spellCell = getSpellCell(CqInventoryCell.highlightedCell.cellIndex); 
+					var spellBtn = spellCell.btn;
+					GameUI.instance.updateCharge(spellBtn, cast(Registery.player,CqPlayer).spiritPoints);
 					// todo: equip spell
 				} else if ( Std.is(CqInventoryCell.highlightedCell, CqPotionCell) ) {
 					// Moving this item into a potion cell

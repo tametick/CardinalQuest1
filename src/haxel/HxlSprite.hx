@@ -829,15 +829,18 @@ class HxlSprite extends HxlObject {
 	}
 
 	function dragStart():Void {
-		if ( dragStartCallback != null ) dragStartCallback();
+		if ( dragStartCallback != null ) 
+			dragStartCallback();
 	}
 
 	function dragStop():Void {
-		if ( dragStopCallback != null ) dragStopCallback();
+		if ( dragStopCallback != null ) 
+			dragStopCallback();
 	}
 
 	function dragMove():Void {
-		if ( dragMoveCallback != null ) dragMoveCallback();
+		if ( dragMoveCallback != null ) 
+			dragMoveCallback();
 	}
 
 	private function onDragMouseDown(event:MouseEvent):Void {

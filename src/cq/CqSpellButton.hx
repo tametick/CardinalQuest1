@@ -33,7 +33,7 @@ class CqSpellButton extends HxlDialog {
 
 		initialized = false;
 
-		cell = new CqSpellCell(5, 5, 54, 54, Idx);
+		cell = new CqSpellCell(this,5, 5, 54, 54, Idx);
 		cell.setGraphicKeys("EquipmentCellBG", "EqCellBGHighlight", "CellGlow");
 		cell.zIndex = 1;
 		add(cell);
@@ -67,12 +67,18 @@ class CqSpellButton extends HxlDialog {
 		chargeSprite.y = y + 5;	
 	}
 
+	public function getSpell():CqSpell {
+		if ( cell != null && cell.getCellObj()!= null )
+			return cast(cell.getCellObj().item, CqSpell);
+		
+		return null;
+	}
+	
 	function clickMouseDown(event:MouseEvent):Void {
 		if (!exists || !visible || !active || GameUI.currentPanel != null ) return;
 		if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
 			var spellObj = cell.getCellObj();
 			if ( spellObj != null ) {
-				//HxlLog.append("Activating spell!!");
 				var player = cast(Registery.player, CqPlayer);
 				if ( player.spiritPoints < 360 ) {
 					event.stopPropagation();
@@ -82,11 +88,11 @@ class CqSpellButton extends HxlDialog {
 		
 				if ( spell.targetsOther ) {
 					GameUI.setTargeting(true, spell.name);
-					GameUI.setTargetingSpell(spell);
+					GameUI.setTargetingSpell(this);
 				} else {
 					cast(Registery.player,CqPlayer).use(spellObj.item, null);
 					player.spiritPoints = 0;
-					GameUI.instance.updateCharge();
+					GameUI.instance.updateCharge(this,player.spiritPoints);
 				}
 
 				event.stopPropagation();
@@ -107,11 +113,12 @@ class CqSpellButton extends HxlDialog {
 }
 
 class CqSpellCell extends CqEquipmentCell {
-
 	public static var highlightedCell:CqInventoryCell = null;
-
-	public function new(X:Int,Y:Int,?Width:Int=100,?Height:Int=20, ?Idx:Int=0) {
+	public var btn:CqSpellButton;
+	
+	public function new(Btn:CqSpellButton, X:Int,Y:Int,?Width:Int=100,?Height:Int=20, ?Idx:Int=0) {
 		super(SPELL, X, Y, Width, Height, Idx);
+		btn = Btn;
 	}
 
 }

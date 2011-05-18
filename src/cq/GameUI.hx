@@ -72,7 +72,7 @@ class GameUI extends HxlDialog {
 	public static var currentPanel:HxlSlidingDialog = null;
 	public static var isTargeting:Bool = false;
 	public static var targetString:String = "";
-	public static var targetSpell:CqSpell = null;
+	public static var targetSpell:CqSpellButton = null;
 	var targetLastPos:HxlPoint;
 	public static var instance:GameUI = null;
 	
@@ -200,14 +200,20 @@ class GameUI extends HxlDialog {
 
 	}
 
-	public override function update():Void {
+	public override function update() {
 		super.update();
-		updateCharge();
+		updateCharges();
 	}
 
-	public function updateCharge():Void {
+	public function updateCharges() {
 		var player = cast(Registery.player, CqPlayer);
-		var end:Float = (((Math.PI / 2) * 3) - (-(Math.PI/2))) * (player.spiritPoints / 360);
+		for ( btn in dlgSpellGrid.buttons )
+			updateCharge(btn, player.spiritPoints);
+	}
+	
+	public function updateCharge(btn:CqSpellButton, spiritPoints:Int) {
+
+		var end:Float = (((Math.PI / 2) * 3) - (-(Math.PI/2))) * (spiritPoints / 360);
 		end = ((Math.PI / 2) * 3) - end;
 		var shape:Shape = new Shape();
 		var G = shape.graphics;
@@ -222,9 +228,7 @@ class GameUI extends HxlDialog {
 		bmpdata.draw(shape, null, ctrans);
 		HxlGraphics.addBitmapData(bmpdata, "chargeRadial", true);
 
-		for ( btn in dlgSpellGrid.buttons ) {
-			btn.updateChargeSprite("chargeRadial");
-		}
+		btn.updateChargeSprite("chargeRadial");
 	}
 
 	public static function drawChargeArc(G:Graphics, centerX:Float, centerY:Float, startAngle:Float, endAngle:Float, radius:Float, direction:Int):Void {
@@ -457,7 +461,7 @@ class GameUI extends HxlDialog {
 		}
 	}
 
-	public static function setTargetingSpell(Spell:CqSpell):Void {
+	public static function setTargetingSpell(Spell:CqSpellButton):Void {
 		targetSpell = Spell;
 	}
 
@@ -514,9 +518,9 @@ class GameUI extends HxlDialog {
 		} else {
 			if ( cast(tile.actors[0], CqActor).faction != 0 ) {
 				var player = cast(Registery.player, CqPlayer);
-				player.use(targetSpell, cast(tile.actors[0], CqActor));
+				player.use(targetSpell.getSpell(), cast(tile.actors[0], CqActor));
 				player.spiritPoints = 0;
-				GameUI.instance.updateCharge();
+				GameUI.instance.updateCharge(targetSpell, player.spiritPoints);
 				GameUI.setTargeting(false);
 			} else {
 				GameUI.setTargeting(false);
