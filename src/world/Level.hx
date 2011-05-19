@@ -22,6 +22,8 @@ class Level extends HxlTilemap
 	var _pathMap:PathMap;
 	var index:Int;
 	
+	var startTime:Date;
+	
 	public function new(index:Int) {
 		super();
 		
@@ -49,12 +51,15 @@ class Level extends HxlTilemap
 	public override function onAdd(state:HxlState) {
 		addAllActors(state);
 		addAllLoots(state);
-		Log.LevelCounterMetric("Enter Level", index + 1, true);
+		Log.LevelCounterMetric("Enter Level", index, true);
+		startTime = Date.now();
 		//follow();
 		HxlGraphics.follow(Registery.player, 10);
 	}
 	
 	public override function onRemove(state:HxlState) {
+		Log.LevelAverageMetric("Time Spent (sec)", index, Std.int((Date.now().getTime() - startTime.getTime()) / 1000));
+		Log.LevelAverageMetric("Time Spent (mins)", index, Std.int((Date.now().getTime() - startTime.getTime()) / 1000 / 60));
 		removeAllActors(state);
 		removeAllLoots(state);
 	}

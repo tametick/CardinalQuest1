@@ -7,6 +7,7 @@ import haxel.HxlUtil;
 import haxel.HxlSprite;
 
 import playtomic.Playtomic;
+import playtomic.Log;
 
 import data.Configuration;
 import data.Registery;
@@ -92,13 +93,14 @@ class GameState extends HxlState {
 				player.give(null, CqItemType.RED_POTION);
 				player.give(null, CqItemType.PURPLE_POTION);
 				player.give(null, CqSpellType.BERSERK);
-				
+				Log.CustomMetric("Fighter", "Character Selected");
 			case WIZARD:
 				player.give(null, CqItemType.STAFF);
 				player.give(null, CqItemType.RED_POTION);
 				player.give(null, CqItemType.RED_POTION);
 				player.give(null, CqItemType.BLUE_POTION);
 				player.give(null, CqSpellType.FIREBALL);
+				Log.CustomMetric("Wizard", "Character Selected");
 			case THIEF:
 				player.give(null, CqItemType.DAGGER);
 				player.give(null, CqItemType.RED_POTION);
@@ -106,6 +108,7 @@ class GameState extends HxlState {
 				player.give(null, CqItemType.YELLOW_POTION);
 				player.give(null, CqItemType.GREEN_POTION);
 				player.give(null, CqSpellType.SHADOW_WALK);
+				Log.CustomMetric("Thief", "Character Selected");
 		}
 
 		var self = this;
