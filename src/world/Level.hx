@@ -12,6 +12,8 @@ import haxel.HxlSprite;
 
 import data.Registery;
 
+import playtomic.Log;
+
 class Level extends HxlTilemap
 {
 	public var mobs:Array<Mob>;
@@ -47,7 +49,7 @@ class Level extends HxlTilemap
 	public override function onAdd(state:HxlState) {
 		addAllActors(state);
 		addAllLoots(state);
-		
+		Log.LevelCounterMetric("Enter Level", index + 1, true);
 		//follow();
 		HxlGraphics.follow(Registery.player, 10);
 	}

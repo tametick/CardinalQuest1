@@ -15,7 +15,7 @@ Steps:
 4) Rename .swc file to zip and extract library.swf
 5) Compile .hx classes from library.swf with "haxe -swf dummy.swf -swf-lib library.swf --gen-hx-classes"
 6) Include the generated .hx classes as you normally would in your project.
-7) Move the library.swf to your project directory, rename it to something easier, right click on it inside FlashDevelop and press "Add to Library".
+7) Move the library.swf to your project directory, rename it to something easier. Go to project properties, Compiler Options, Additional Compiler Options and append -swf-lib RELATIVE_PATH_TO_SWF
 
 !!Note!! You can safely delete dummy.swf. It's only generated as the compiler complains if there is no output specified, even if it doesn't use it.
 

@@ -8,6 +8,8 @@ import data.Configuration;
 
 import flash.Lib;
 
+import playtomic.Playtomic;
+
 class Main {
 	public static function main() {
 		#if flash9
@@ -30,6 +32,7 @@ class Game extends HxlGame {
 		Configuration.tileSize = 16;
 		Configuration.zoom = 2.0;
 		HxlState.bgColor = 0xFF000000;
+		Playtomic.begin();
 		
 		if(Configuration.debug)
 			super(640, 480, GameState, 1, "Geo");

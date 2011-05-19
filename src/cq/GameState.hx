@@ -6,6 +6,8 @@ import haxel.HxlGraphics;
 import haxel.HxlUtil;
 import haxel.HxlSprite;
 
+import playtomic.Playtomic;
+
 import data.Configuration;
 import data.Registery;
 
@@ -62,6 +64,7 @@ class GameState extends HxlState {
 
 	override function init() {
 		initRegistry();
+		Playtomic.play();
 		var world = cast(Registery.world,CqWorld);
 		var player = cast(Registery.player,CqPlayer);
 		
