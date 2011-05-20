@@ -1,4 +1,4 @@
-package playtomic;
+package playtomic.base;
 
 @:final extern class PlayerScore {
 	var CustomData : Dynamic;

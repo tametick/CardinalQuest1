@@ -1,4 +1,4 @@
-package playtomic;
+package playtomic.base;
 
 @:final extern class LogRequest {
 	var Ready : Bool;

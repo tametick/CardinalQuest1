@@ -12,7 +12,7 @@ import haxel.HxlSprite;
 
 import data.Registery;
 
-import playtomic.Log;
+import playtomic.PtLevel;
 
 class Level extends HxlTilemap
 {
@@ -20,9 +20,10 @@ class Level extends HxlTilemap
 	public var loots:Array<Loot>;
 	public var startingLocation:HxlPoint;
 	var _pathMap:PathMap;
-	var index:Int;
+	public var index(default, null):Int;
 	
-	var startTime:Date;
+	
+	var ptLevel:PtLevel;
 	
 	public function new(index:Int) {
 		super();
@@ -32,6 +33,7 @@ class Level extends HxlTilemap
 		loots = new Array();
 		_pathMap = null;
 		startingIndex = 1;
+		ptLevel = new PtLevel(this);
 	}
 	
 	public function isBlockingMovement(X:Int, Y:Int, ?CheckActor:Bool=false):Bool { 
@@ -51,17 +53,15 @@ class Level extends HxlTilemap
 	public override function onAdd(state:HxlState) {
 		addAllActors(state);
 		addAllLoots(state);
-		Log.LevelCounterMetric("Enter Level", index, true);
-		startTime = Date.now();
+		ptLevel.Start();
 		//follow();
 		HxlGraphics.follow(Registery.player, 10);
 	}
 	
 	public override function onRemove(state:HxlState) {
-		Log.LevelAverageMetric("Time Spent (sec)", index, Std.int((Date.now().getTime() - startTime.getTime()) / 1000));
-		Log.LevelAverageMetric("Time Spent (mins)", index, Std.int((Date.now().getTime() - startTime.getTime()) / 1000 / 60));
 		removeAllActors(state);
 		removeAllLoots(state);
+		ptLevel.Finish();
 	}
 	
 	public function addMobToLevel(state:HxlState, mob:Mob) {
@@ -155,7 +155,6 @@ class Level extends HxlTilemap
 
 		return map;
 	}
-	
 	
 	/**
 	 * Slightly less confusing name in this context

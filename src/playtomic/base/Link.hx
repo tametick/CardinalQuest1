@@ -1,4 +1,4 @@
-package playtomic;
+package playtomic.base;
 
 extern class Link {
 	function new() : Void;

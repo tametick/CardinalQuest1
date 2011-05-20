@@ -26,6 +26,8 @@ import cq.CqWorld;
 import cq.GameUI;
 import cq.CqVitalBar;
 
+import playtomic.PtPlayer;
+
 import com.eclecticdesignstudio.motion.Actuate;
 
 class CqTimer {
@@ -188,8 +190,10 @@ class CqActor extends CqObject, implements Actor {
 	function injureActor(other:CqActor, dmgTotal:Int) {
 		if (this == cast(Registery.player,CqPlayer)) {
 			HxlLog.append("You hit");
+			PtPlayer.hits();
 		} else {
 			HxlLog.append("Hit you");
+			PtPlayer.isHit();
 		}
 		other.doInjure(dmgTotal);
 	}
@@ -212,6 +216,7 @@ class CqActor extends CqObject, implements Actor {
 			mob.doDeathEffect();
 		} else {
 			HxlLog.append("kills you");
+			PtPlayer.dies();
 			// todo = game over screen
 			HxlGraphics.pushState(new GameOverState());
 		}
@@ -263,8 +268,10 @@ class CqActor extends CqObject, implements Actor {
 			// Miss
 			if (this == cast(Registery.player,CqPlayer)) {
 				HxlLog.append("You miss");//<b style='color: rgb("+other.vars.color.join()+");'>"+other.vars.description[0]+"</b>.");
+				PtPlayer.misses();
 			} else {
 				HxlLog.append("Misses you");//"<b style='color: rgb("+vars.color.join()+");'>"+vars.description[0]+"</b> misses you.");
+				PtPlayer.dodges();
 			}
 			for ( Callback in onAttackMiss ) Callback(this, other);
 		}
