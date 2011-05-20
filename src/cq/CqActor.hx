@@ -230,14 +230,8 @@ class CqActor extends CqObject, implements Actor {
 		var def = Math.max(other.defense + other.buffs.get("defense"), 1);
 
 		if (Math.random() < atk / (atk + def)) {
-			// Hit
-
-			if ( Std.is(this,CqMob) && cast(this,CqMob).spell !=null && Math.random() <= 0.25 ) {
-				// Use my spell rather than apply attack damage
-				use(cast(this, CqMob).spell, other);
-				return;
-			}
-
+			// hit
+			
 			var dmgMultipler:Int = 1;
 			if(specialEffects.get("damage multipler")!=null)
 				dmgMultipler =  Std.parseInt(specialEffects.get("damage multipler").value);
@@ -703,7 +697,6 @@ class CqMob extends CqActor, implements Mob {
 	static var sprites = SpriteMonsters.instance;
 	public var type:CqMobType;
 	public var xpValue:Int;
-	public var spell:CqSpell;
 	var aware:Int;
 		
 	public function new(X:Float, Y:Float, typeName:String) {
@@ -753,6 +746,30 @@ class CqMob extends CqActor, implements Mob {
 		if (dest == null)
 			return true;
 		
+		if ( Std.is(this, CqMob) && equippedSpells.length > 0) {
+			// Try casting spell first
+			
+			var spell:CqSpell = null;
+			for (s in equippedSpells){
+				if (s.spiritPoints >= 360) {
+					spell = s;
+					break;
+				}
+			}
+			
+			if (spell != null && Math.random() < 0.25) {
+				// Use my spell rather than attack
+				if(spell.targetsOther)
+					use(spell, cast(Registery.player,CqActor));
+				else
+					use(spell, this);
+				
+				spell.spiritPoints = 0;
+				// end turn
+				return true;
+			}
+		}
+			
 		var dx = dest.x - tilePos.x;
 		var dy = dest.y - tilePos.y;
 		
@@ -870,13 +887,16 @@ class CqMobFactory {
 				mob.attack = 2;
 				mob.defense = 2;
 				mob.speed = 3;
+				mob.spirit = 3;
 				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(1, 2);
 				mob.damage = new Range(1, 1);
 				mob.xpValue = 5;
+				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.HASTE));
 			case KOBOLD_SPEAR, KOBOLD_KNIVES, KOBOLD_MAGE:
 				mob.attack = 3;
 				mob.defense = 3;
 				mob.speed = 3;
+				mob.spirit = 3;
 				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(1,4);
 				mob.damage = new Range(1, 3);
 				mob.xpValue = 10;
@@ -884,6 +904,7 @@ class CqMobFactory {
 				mob.attack = 3;
 				mob.defense = 4;
 				mob.speed = 4;
+				mob.spirit = 3;
 				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(2,8);
 				mob.damage = new Range(1, 3);
 				mob.xpValue = 25;
@@ -891,6 +912,7 @@ class CqMobFactory {
 				mob.attack = 4;
 				mob.defense = 3;
 				mob.speed = 2;
+				mob.spirit = 3;
 				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(3,12);
 				mob.damage = new Range(2, 8);
 				mob.xpValue = 50;
@@ -898,6 +920,7 @@ class CqMobFactory {
 				mob.attack = 4;
 				mob.defense = 4;
 				mob.speed = 5;
+				mob.spirit = 3;
 				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(4,16);
 				mob.damage = new Range(2, 4);
 				mob.xpValue = 125;
@@ -905,6 +928,7 @@ class CqMobFactory {
 				mob.attack = 5;
 				mob.defense = 5;
 				mob.speed = 2;
+				mob.spirit = 3;
 				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(6,24);
 				mob.damage = new Range(4, 8);
 				mob.xpValue = 275;
@@ -912,6 +936,7 @@ class CqMobFactory {
 				mob.attack = 5;
 				mob.defense = 5;
 				mob.speed = 7;
+				mob.spirit = 3;
 				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(8,32);
 				mob.damage = new Range(4,8);
 				mob.xpValue = 500;
@@ -919,6 +944,7 @@ class CqMobFactory {
 				mob.attack = 5;
 				mob.defense = 3;
 				mob.speed = 5;
+				mob.spirit = 3;
 				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(12,48);
 				mob.damage = new Range(4, 32);
 				mob.xpValue = 750;

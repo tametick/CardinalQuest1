@@ -2,12 +2,6 @@ package playtomic;
 
 import flash.Lib;
 import playtomic.base.Log;
-//import CqPreloader;
-
-/**
- * ...
- * @author Live-Dimension
- */
 
 class Playtomic {
 	static inline var SWFID:Int = 2781;
