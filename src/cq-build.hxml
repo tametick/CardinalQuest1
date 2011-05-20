@@ -9,6 +9,7 @@
 --flash-use-stage
 -swf-version 10
 -swf-header 640:480:60:ffffff
+-swf-lib ../lib/playtomic.swf
 -swf ../bin/cq-movie.swf
 -cp ../
 
