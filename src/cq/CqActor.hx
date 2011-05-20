@@ -751,7 +751,7 @@ class CqMob extends CqActor, implements Mob {
 			
 			var spell:CqSpell = null;
 			for (s in equippedSpells){
-				if (s.spiritPoints >= 360) {
+				if (s.spiritPoints >=  s.spiritPointsRequired) {
 					spell = s;
 					break;
 				}

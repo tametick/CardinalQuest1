@@ -276,7 +276,7 @@ class CqLevel extends Level {
 			if (!specialActive) {
 				for (s in creature.equippedSpells) {
 					if(s!=null)
-						s.spiritPoints = Std.int(Math.min(360, s.spiritPoints + spirit));
+						s.spiritPoints = Std.int(Math.min( s.spiritPointsRequired, s.spiritPoints + spirit));
 				}
 			}
 			

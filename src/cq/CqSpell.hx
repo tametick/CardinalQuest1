@@ -58,26 +58,33 @@ class CqSpellFactory {
 				spell.targetsOther = true;
 				spell.duration = 120;
 				spell.buffs.set("speed", -3);
+				spell.spiritPointsRequired = 720;
 			case FIREBALL:
 				spell.targetsOther = true;
 				spell.damage = new Range(1, 6);
+				spell.spiritPointsRequired = 720;
 			case BERSERK:
 				spell.duration = 60;
 				spell.buffs.set("attack", 3);
 				spell.buffs.set("speed", 3);
+				spell.spiritPointsRequired = 720;
 			case ENFEEBLE_MONSTER:
 				spell.targetsOther = true;
 				spell.duration = 120;
 				spell.buffs.set("attack", -3);
+				spell.spiritPointsRequired = 720;
 			case BLESS_WEAPON:
 				spell.duration = 120;
 				spell.buffs.set("attack", 3);
+				spell.spiritPointsRequired = 720;
 			case HASTE:
 				spell.duration = 120;
 				spell.buffs.set("speed", 3);
+				spell.spiritPointsRequired = 720;
 			case SHADOW_WALK:
 				spell.duration = 120;
-				spell.specialEffects.add(new CqSpecialEffectValue("invisible","true"));
+				spell.specialEffects.add(new CqSpecialEffectValue("invisible", "true"));
+				spell.spiritPointsRequired = 720;
 		}
 		
 		return spell;
@@ -87,6 +94,7 @@ class CqSpellFactory {
 class CqSpell extends CqItem {
 	public var targetsOther:Bool;
 	public var spiritPoints:Int;
+	public var spiritPointsRequired:Int;
 	
 	public function new(X:Float, Y:Float, type:CqSpellType) {
 		super(X, Y, type);
