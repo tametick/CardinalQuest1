@@ -53,7 +53,7 @@ class Level extends HxlTilemap
 	public override function onAdd(state:HxlState) {
 		addAllActors(state);
 		addAllLoots(state);
-		ptLevel.Start();
+		ptLevel.start();
 		//follow();
 		HxlGraphics.follow(Registery.player, 10);
 	}
@@ -61,7 +61,7 @@ class Level extends HxlTilemap
 	public override function onRemove(state:HxlState) {
 		removeAllActors(state);
 		removeAllLoots(state);
-		ptLevel.Finish();
+		ptLevel.finish();
 	}
 	
 	public function addMobToLevel(state:HxlState, mob:Mob) {

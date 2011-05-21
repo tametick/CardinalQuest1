@@ -2,6 +2,7 @@ package playtomic;
 
 import world.Level;
 
+import playtomic.Playtomic;
 import playtomic.base.Log;
 
 class PtLevel 
@@ -10,17 +11,23 @@ class PtLevel
 	var level:Level;
 	
 	public function new(level:Level) {
+		if (!Playtomic.isEnabled())
+			return;
 		this.level = level;
 	}
 	
 	//Use this when level starts
-	public function Start():Void {
+	public function start():Void {
+		if (!Playtomic.isEnabled())
+			return;
 		PtPlayer.startLevel();
 		startTime = Date.now();
 	}
 	
 	//when level finnishes
-	public function Finish():Void {
+	public function finish():Void {
+		if (!Playtomic.isEnabled())
+			return;
 		var timeDifferenceSeconds:Float = (Date.now().getTime() - startTime.getTime()) / 1000;
 		Log.LevelAverageMetric("Time Spent (sec)", level.index, Std.int(timeDifferenceSeconds));
 		Log.LevelAverageMetric("Time Spent (mins)", level.index, Std.int(timeDifferenceSeconds / 60));

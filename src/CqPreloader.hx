@@ -26,7 +26,7 @@ class MovieBytes extends ByteArray {
 }
 
 class CqPreloader extends MovieClip {
-	static var url = "ereptoric.com";
+	public static inline var url = "ereptoric.com";
 	var tf:TextField;
 	var loader:Loader;
 	var ctx : LoaderContext;
