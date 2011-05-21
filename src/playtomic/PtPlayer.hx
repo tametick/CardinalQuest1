@@ -7,9 +7,7 @@ import data.Registery;
 import playtomic.Playtomic;
 import playtomic.base.Log;
 
-class PtPlayer 
-{
-		
+class PtPlayer {
 	static var attacksDodged:Int;
 	static var attacksMissed:Int;
 	static var attacksSuccessful:Int;
@@ -38,21 +36,25 @@ class PtPlayer
 			return;
 		beenHit++;
 	}
+	
 	public static function hits():Void {
 		if (!Playtomic.isEnabled())
 			return;
 		attacksSuccessful++;
 	}
+	
 	public static function dodges():Void {
 		if (!Playtomic.isEnabled())
 			return;
 		attacksDodged++;
 	}
+	
 	public static function kills():Void {
 		if (!Playtomic.isEnabled())
 			return;
 		enemiesKilled++;
 	}
+	
 	public static function misses():Void {
 		if (!Playtomic.isEnabled())
 			return;
@@ -65,6 +67,7 @@ class PtPlayer
 		Log.LevelCounterMetric("Player Died", Registery.level.index);
 		Log.LevelCounterMetric("Player Died U", Registery.level.index, true);	
 	}
+
 	public static function ClassSelected(Class:CqClass):Void {
 		if (!Playtomic.isEnabled())
 			return;

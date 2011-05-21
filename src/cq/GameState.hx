@@ -146,8 +146,9 @@ class GameState extends HxlState {
 		isPlayerActing = false;
 	}
 	
-	private function act():Void 
-	{
+	private function act():Void {
+		if (GameUI.currentPanel != null)
+			return;
 		if ( GameUI.isTargeting ) {
 			//gameUI.targetingMouseDown();
 			return;

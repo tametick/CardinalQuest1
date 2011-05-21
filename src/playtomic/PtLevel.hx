@@ -5,8 +5,7 @@ import world.Level;
 import playtomic.Playtomic;
 import playtomic.base.Log;
 
-class PtLevel 
-{
+class PtLevel {
 	var startTime:Date;
 	var level:Level;
 	
