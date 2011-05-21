@@ -23,7 +23,7 @@ class CqSpellFactory {
 		Resources.descriptions.set("Berserk", "Induces berserk rage that greatly increases strength and speed.");
 		Resources.descriptions.set("Enfeeble monster", "Weakens monsters and renders them less dangerous.");
 		Resources.descriptions.set("Bless weapon", "Blesses the currently wielded weapon, providing a temporary boost to its effectivness.");
-		Resources.descriptions.set("Haste", "Turns the caster fast and nimble.");
+		Resources.descriptions.set("Haste", "Makes you fast and nimble.");
 		Resources.descriptions.set("Shadow walk", "Renders the caster invisible for a few seconds.");
 		
 		inited = true;
