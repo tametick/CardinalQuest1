@@ -27,6 +27,7 @@ import flash.events.MouseEvent;
 class GameState extends HxlState {
 	var gameUI:GameUI;
 	public var chosenClass:CqClass;
+	var isPlayerActing:Bool;
 
 	public override function create():Void {
 		super.create();		
@@ -131,7 +132,6 @@ class GameState extends HxlState {
 		}
 	}
 
-	var isPlayerActing:Bool;
 	override function onMouseDown(event:MouseEvent) {
 		if ( GameUI.isTargeting ) {
 			gameUI.targetingMouseDown();
@@ -172,7 +172,8 @@ class GameState extends HxlState {
 				// descend
 				Registery.world.goToNextLevel(this);
 			}
-			
+			//clicking on ones-self should only do one turn
+			isPlayerActing = false;
 			// wait
 		} else if ( !isBlockingMovement(target) ) {
 			// move or attack in chosen tile

@@ -684,13 +684,15 @@ class CqPlayer extends CqActor, implements Player {
 			}
 		}
 		super.moveToPixel(state, X, Y);
-		isMoving = true;
+	//TODO: this code is repeated in the super, not sure why its here....
+	//so commented out. IF no bugs happen, probalby fine to remove.
+	/*	isMoving = true;
 		if ( Y < y ) bobDir = 0;
 		else if ( X > x ) bobDir = 1;
 		else if ( Y > y ) bobDir = 2;
 		else if ( X < x ) bobDir = 3;
 		bobCounter = 0.0;
-		Actuate.tween(this, moveSpeed, { x: X, y: Y } ).onComplete(moveStop,[state]);
+		Actuate.tween(this, moveSpeed, { x: X, y: Y } ).onComplete(moveStop,[state]);*/
 	}
 }
 
