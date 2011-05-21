@@ -210,6 +210,7 @@ class CqActor extends CqObject, implements Actor {
 			var mob = cast(other, CqMob);
 			
 			HxlLog.append("You kill");
+			PtPlayer.kills();
 			cast(this, CqPlayer).gainExperience(mob);
 			// remove other
 			Registery.level.removeMobFromLevel(state, mob);
