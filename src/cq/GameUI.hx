@@ -64,7 +64,6 @@ class GameUI extends HxlDialog {
 
 	// Misc UI elements
 	var xpBar:HxlUIBar;
-	var btnPickup:HxlButton;
 	var targetSprite:HxlSprite;
 	var targetText:HxlText;
 
@@ -180,16 +179,6 @@ class GameUI extends HxlDialog {
 		});
 		btnLogView.configEvent(5, true, true);
 		leftButtons.addButton(btnLogView);
-
-		btnPickup = new HxlButton(HxlGraphics.width - 130, HxlGraphics.height - 68, 120, 52);
-		btnPickup.setBackgroundColor(0xff999999, 0xffcccccc);
-		btnPickup.loadText(new HxlText(0, 13, 120, "Pick Up Items", true, "Geo").setFormat("Geo", 18, 0xffffff, "center", 0x010101));
-		btnPickup.setCallback(function() {
-			self.btnPickupPressed();
-		});
-		btnPickup.configEvent(5, true, true);
-		btnPickup.visible = false;
-		add(btnPickup);
 
 		panelInventory.dlgSpellGrid = dlgSpellGrid;
 		panelInventory.dlgPotionGrid = dlgPotionGrid;
@@ -350,44 +339,26 @@ class GameUI extends HxlDialog {
 		var glow:GlowFilter = new GlowFilter(0x00ff00, 0.9, 15.0, 15.0, 1.6, 1, false, true);
 		tmp.applyFilter(tmp, new Rectangle(0, 0, 79, 79), new Point(0, 0), glow);
 		HxlGraphics.addBitmapData(tmp, "CellGlow");
-		/*
-		var tmp2:HxlSprite = new HxlSprite(100, 100);
-		tmp2.loadCachedGraphic("tester!");
-		tmp2.zIndex = 20;
-		add(tmp2);
-		*/
-
 	}
 
-	public function btnPickupPressed():Void {
-		var player:CqPlayer = cast(Registery.player, CqPlayer);
-		var curPos:HxlPoint = player.getTilePos();
-		var tile = cast(Registery.level.getTile(Std.int(curPos.x), Std.int(curPos.y)), Tile);
-		if ( tile.loots.length > 0 ) {
-			var item = cast(tile.loots[tile.loots.length - 1], CqItem);
-			player.pickup(HxlGraphics.state, item);
-		}
-	}
-
-	public function checkTileItems(Player:CqActor):Void {
+	public function checkTileItems(Player:CqPlayer):Void {
 		var curPos:HxlPoint = Player.getTilePos();
 		var curTile = cast(Registery.level.getTile(Std.int(curPos.x), Std.int(curPos.y)), Tile);
 		if ( curTile.loots.length > 0 ) {
-			btnPickup.visible = true;
-		} else {
-			btnPickup.visible = false;
+			if (panelInventory.getEmptyCell() == null) {
+				// todo - show visual/audio feedback that inv is full
+				// todo - move this check to player.pickup
+				return;
+			}
+			
+			var item = cast(curTile.loots[curTile.loots.length - 1], CqItem);
+			Player.pickup(HxlGraphics.state, item);
 		}
 	}
-
+	
 	public function itemPickup(Item:CqItem):Void {
-		if (panelInventory.getEmptyCell() == null) {
-			// todo - show visual/audio feedback that inv is full
-			return;
-		}
-		
 		panelInventory.itemPickup(Item);
-		btnInventoryView.doFlash();		
-		checkTileItems(cast(Registery.player, CqActor));
+		btnInventoryView.doFlash();
 	}
 
 	public function initChests():Void {
