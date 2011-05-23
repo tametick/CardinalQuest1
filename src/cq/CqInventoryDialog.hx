@@ -143,7 +143,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 				}
 			} else {
 				for ( cell in dlgEqGrid.cells ) {
-					if ( cell.getCellObj() == null && cast(cell, CqEquipmentCell).equipSlot == Item.equipSlot ) {
+					if (  Math.abs(1.0 - shouldEquipItemInCell(cast(cell,CqEquipmentCell),Item)) < 0.1  ) {
 						uiItem.setEquipmentCell(cell.cellIndex);
 						if ( !cast(cell, CqEquipmentCell).eqCellInit ) {
 							// Mysterious things happen with positioning before the ui
@@ -165,7 +165,19 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		} else {
 			throw "no room in inventory, should not happen because pick up should have not been allowed!";
 		}
+	}
+	
+	/**
+	 * 1.0 == yes, 0.0 == no, in-between == maybe
+	 * */
+	function shouldEquipItemInCell(Cell:CqEquipmentCell, Item:CqItem):Float {
+		if (Cell.equipSlot != Item.equipSlot)
+			return 0.0;
 		
+		if (Cell.getCellObj() == null)
+			return 1.0;
+		
+		return Item.amBetterThan( Cell.getCellObj().item );
 	}
 	
 	public function getEmptyCell():CqInventoryCell {

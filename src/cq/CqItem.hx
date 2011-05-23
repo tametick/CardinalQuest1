@@ -271,6 +271,42 @@ class CqItem extends GameObjectImpl, implements Loot {
 			self.destroy();
 		}).ease(Cubic.easeOut); 
 	}
+	
+	/**
+	 * 1.0 == yes, 0.0 == no, in-between == maybe
+	 * */
+	public function amBetterThan(other:CqItem) {
+		if (other.equipSlot != equipSlot)
+			return 0.0;
+		
+		var preference:Float = 0.0;
+		
+
+		switch(equipSlot) {
+			case CqEquipSlot.SHOES:
+
+			case CqEquipSlot.ARMOR:
+
+			case CqEquipSlot.JEWELRY:
+
+			case CqEquipSlot.HAT:
+
+			case CqEquipSlot.GLOVES:
+
+			case CqEquipSlot.WEAPON:
+				if (damage.start+damage.end > other.damage.start+other.damage.end)
+					preference = 1.0;
+
+			case CqEquipSlot.SPELL:
+
+			case CqEquipSlot.POTION:
+				// can always use more potions!
+				preference = 1.0;
+		}
+		
+		
+		return preference;
+	}
 }
 
 /**
@@ -301,7 +337,7 @@ class CqChest extends CqItem {
 			typeName = HxlUtil.getRandomElement(Type.getEnumConstructs(CqItemType).concat(["PURPLE_POTION","GREEN_POTION","BLUE_POTION","YELLOW_POTION","RED_POTION"])); 
 		} while (typeName == "CHEST");
 		
-		var item = CqLootFactory.newItem(x, y, Type.createEnum(CqItemType,  typeName));		
+		var item = CqLootFactory.newItem(x, y, Type.createEnum(CqItemType,  typeName));
 		
 		// add item to level
 		Registery.level.addLootToLevel(state, item);
