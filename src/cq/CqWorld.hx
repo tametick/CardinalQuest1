@@ -234,7 +234,8 @@ class CqLevel extends Level {
 						if(t.buffName!= null) {
 							// remove buff effect
 							var newVal = buffs.get(t.buffName) - t.buffValue;
-							GameUI.showEffectText(creature, (t.buffValue*-1>0?"+":"-") + t.buffValue * -1 + " " + t.buffName , 0xff0000);
+							var text:String = Std.string(t.buffValue);
+							GameUI.showEffectText(creature, (text.charAt(0) == "-"?"":"+") + t.buffValue + " " + t.buffName , 0xff0000);
 							buffs.set(t.buffName, newVal);
 						} 
 						
