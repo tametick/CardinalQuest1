@@ -345,6 +345,7 @@ class CqChest extends CqItem {
 		} while (typeName == "CHEST");
 		
 		var item = CqLootFactory.newItem(x, y, Type.createEnum(CqItemType,  typeName));
+		//var item = CqLootFactory.newItem(x, y, Type.createEnum(CqItemType,  "LONG_SWORD"));
 		
 		// add item to level
 		Registery.level.addLootToLevel(state, item);
