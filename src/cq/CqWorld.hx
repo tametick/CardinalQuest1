@@ -232,10 +232,10 @@ class CqLevel extends Level {
 					if (t.ticks == 0) {
 						
 						if(t.buffName!= null) {
-							// reduce buff
+							// remove buff effect
 							var newVal = buffs.get(t.buffName) - t.buffValue;
+							GameUI.showEffectText(creature, (t.buffValue*-1>0?"+":"-") + t.buffValue * -1 + " " + t.buffName , 0xff0000);
 							buffs.set(t.buffName, newVal);
-							GameUI.showEffectText(creature, "-" + t.buffValue+ " " + t.buffName , 0xff0000);
 						} 
 						
 						if(HxlUtil.contains(visibleEffects.iterator(), t.buffName)) {

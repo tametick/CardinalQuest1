@@ -89,24 +89,24 @@ class GameState extends HxlState {
 		
 		switch(chosenClass) {
 			case FIGHTER:
-				player.give(null, CqItemType.SHORT_SWORD);
-				player.give(null, CqItemType.RED_POTION);
-				player.give(null, CqItemType.RED_POTION);
-				player.give(null, CqItemType.PURPLE_POTION);
-				player.give(null, CqSpellType.BERSERK);
+				player.give(CqItemType.SHORT_SWORD);
+				player.give(CqItemType.RED_POTION);
+				player.give(CqItemType.RED_POTION);
+				player.give(CqItemType.PURPLE_POTION);
+				player.give(CqSpellType.BERSERK);
 			case WIZARD:
-				player.give(null, CqItemType.STAFF);
-				player.give(null, CqItemType.RED_POTION);
-				player.give(null, CqItemType.RED_POTION);
-				player.give(null, CqItemType.BLUE_POTION);
-				player.give(null, CqSpellType.FIREBALL);
+				player.give(CqItemType.STAFF);
+				player.give(CqItemType.RED_POTION);
+				player.give(CqItemType.RED_POTION);
+				player.give(CqItemType.BLUE_POTION);
+				player.give(CqSpellType.FIREBALL);
 			case THIEF:
-				player.give(null, CqItemType.DAGGER);
-				player.give(null, CqItemType.RED_POTION);
-				player.give(null, CqItemType.RED_POTION);
-				player.give(null, CqItemType.YELLOW_POTION);
-				player.give(null, CqItemType.GREEN_POTION);
-				player.give(null, CqSpellType.SHADOW_WALK);
+				player.give(CqItemType.DAGGER);
+				player.give(CqItemType.RED_POTION);
+				player.give(CqItemType.RED_POTION);
+				player.give(CqItemType.YELLOW_POTION);
+				player.give(CqItemType.GREEN_POTION);
+				player.give(CqSpellType.SHADOW_WALK);
 		}
 
 		PtPlayer.ClassSelected(chosenClass);
