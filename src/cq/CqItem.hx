@@ -122,7 +122,6 @@ class CqLootFactory {
 			case BOOTS:
 				item.name ="Boots of escape";
 				item.buffs.set("speed", 1);
-
 			case WINGED_SANDLES:
 				item.name =	"Hermes' sandals";
 				item.buffs.set("speed", 2);
@@ -273,9 +272,9 @@ class CqItem extends GameObjectImpl, implements Loot {
 	}
 	
 	/**
-	 * 1.0 == yes, 0.0 == no, in-between == maybe
+	 * 1.0 == this is better, 0.0 == other is better
 	 * */
-	public function amBetterThan(other:CqItem) {
+	public function compareTo(other:CqItem) {
 		if (other.equipSlot != equipSlot)
 			return 0.0;
 		
@@ -284,24 +283,32 @@ class CqItem extends GameObjectImpl, implements Loot {
 
 		switch(equipSlot) {
 			case CqEquipSlot.SHOES:
+				if (buffs.get("speed") > other.buffs.get("speed"))
+					preference = 1.0;
 
 			case CqEquipSlot.ARMOR:
+				if (buffs.get("defense") > other.buffs.get("defense"))
+					preference = 1.0;
 
 			case CqEquipSlot.JEWELRY:
+				if (buffs.get("spirit") > other.buffs.get("spirit"))
+					preference = 1.0;
 
 			case CqEquipSlot.HAT:
+				if (buffs.get("life") > other.buffs.get("life"))
+					preference = 1.0;
 
 			case CqEquipSlot.GLOVES:
+				if (buffs.get("attack") > other.buffs.get("attack"))
+					preference = 1.0;
 
 			case CqEquipSlot.WEAPON:
 				if (damage.start+damage.end > other.damage.start+other.damage.end)
 					preference = 1.0;
 
-			case CqEquipSlot.SPELL:
-
-			case CqEquipSlot.POTION:
-				// can always use more potions!
-				preference = 1.0;
+			case CqEquipSlot.SPELL, CqEquipSlot.POTION:
+				// all potions & spells are the same quality
+				preference = 0.5;
 		}
 		
 		

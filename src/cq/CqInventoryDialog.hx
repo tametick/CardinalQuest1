@@ -177,7 +177,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		if (Cell.getCellObj() == null)
 			return 1.0;
 		
-		return Item.amBetterThan( Cell.getCellObj().item );
+		return Item.compareTo( Cell.getCellObj().item );
 	}
 	
 	public function getEmptyCell():CqInventoryCell {
