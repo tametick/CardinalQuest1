@@ -838,8 +838,9 @@ class CqInventoryItem extends HxlSprite {
 				var other:CqInventoryItem = CqInventoryCell.highlightedCell.getCellObj();
 				
 				if ( cellEquip ) {
-					// Moving the other item into an equipment cell
-					cast(Registery.player, CqActor).unequipItem(this.item);
+					// Unequipping current item (?)
+					cast(Registery.player, CqActor).unequipItem(item);
+					// Moving the other item into an equipment cell (?)
 					if ( other.setEquipmentCell(cellIndex) && other!=this) 
 						cast(Registery.player, CqActor).equipItem(other.item);
 				} else if ( cellSpell ) {
