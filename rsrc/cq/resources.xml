@@ -10,5 +10,6 @@
 		<bitmap id="cq.SpriteTiles" import="tiles.png"/>
 		<bitmap id="cq.SpriteSpells" import="spells.png"/>
 		<bitmap id="cq.SpriteDecorations" import="decorations.png"/>
+		<sound id="cq.MainTheme" name="MainTheme" import="MainTheme.mp3"/>
 	</library>
 </movie>

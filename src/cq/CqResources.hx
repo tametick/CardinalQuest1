@@ -8,6 +8,8 @@ import haxel.HxlSpriteSheet;
 
 class FontGeo extends Font { public function new() { super(); } }
 
+class MainTheme extends Sound { public function new() { super(); } }
+
 class SpriteEffects extends HxlSpriteSheet { 
 	public static var instance = new SpriteEffects();
 	public function new() {

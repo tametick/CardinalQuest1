@@ -38,7 +38,7 @@ class CqSpellFactory {
 		var newSpellName = HxlUtil.getRandomElement(remainingSpells);
 		
 		// every spell is only given once
-		remainingSpells.remove(newSpellName);
+		//remainingSpells.remove(newSpellName);
 		
 		initDescriptions();
 		return newSpell(X, Y, Type.createEnum(CqSpellType,  newSpellName.toUpperCase()));

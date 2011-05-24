@@ -27,6 +27,9 @@
 	<DefineFont id="8" file="../rsrc/cq/Geo-Regular.ttf" />
 	<SymbolClass id="8" class="cq.FontGeo" />
 	
+	<DefineSound id="9" file="../rsrc/cq/MainTheme.mp3" />
+	<SymbolClass id="9" class="cq.MainTheme" />
+	
 	<DefineABC file="../bin/cq-movie.swf" isBoot="true" />
 	<SymbolClass id="0" class="flash.Boot"/>
 

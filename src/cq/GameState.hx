@@ -1,6 +1,7 @@
 package cq;
 
 import haxel.HxlPoint;
+import haxel.HxlSound;
 import haxel.HxlState;
 import haxel.HxlGraphics;
 import haxel.HxlUtil;
@@ -25,12 +26,20 @@ import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 
 class GameState extends HxlState {
+	public static var music:HxlSound;
+	
 	var gameUI:GameUI;
 	public var chosenClass:CqClass;
 	var isPlayerActing:Bool;
 
 	public override function create():Void {
 		super.create();		
+		
+		if ( music == null) {
+			music= new HxlSound();
+			music.loadEmbedded(MainTheme, true);
+			music.play();
+		}
 		
 		chosenClass = FIGHTER;
 

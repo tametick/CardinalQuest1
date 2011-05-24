@@ -143,17 +143,23 @@ class CqInventoryDialog extends HxlSlidingDialog {
 				}
 			} else {
 				for ( cell in dlgEqGrid.cells ) {
-					if ( cell.getCellObj() == null && cast(cell, CqEquipmentCell).equipSlot == Item.equipSlot ) {
-						uiItem.setEquipmentCell(cell.cellIndex);
-						if ( !cast(cell, CqEquipmentCell).eqCellInit ) {
-							// Mysterious things happen with positioning before the ui
-							// stuff gets updated for the first time.. just accommodate for it
-							// now.
-							uiItem.x = uiItem.x + 10;
-							uiItem.y = uiItem.y + 10;
+					if (cast(cell, CqEquipmentCell).equipSlot == Item.equipSlot){
+						if (cell.getCellObj() == null) {
+							equipItem(cell, Item, uiItem);
+							return;
+						} else if (  Math.abs(1.0 - shouldEquipItemInCell(cast(cell, CqEquipmentCell), Item)) < 0.1  ) {
+							equipItem(cell, Item, uiItem);
+							return;
+						} else {							
+							if (  Math.abs(shouldEquipItemInCell(cast(cell, CqEquipmentCell), Item)) < 0.1  ) {
+								// "destroy" crappy items
+								// todo - add some effect/text
+								remove(uiItem);
+								return;
+							} else {
+								// let "uncertain"  items bubble down to the inventory
+							}
 						}
-						cast(Registery.player, CqActor).equipItem(Item);
-						return;
 					}
 				}
 			}
@@ -165,7 +171,34 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		} else {
 			throw "no room in inventory, should not happen because pick up should have not been allowed!";
 		}
+	}
+	
+	private function equipItem(Cell:CqInventoryCell, Item:CqItem, UiItem:CqInventoryItem) {
+		// todo - if exist old item remove it first
 		
+		UiItem.setEquipmentCell(Cell.cellIndex);
+		if ( !cast(Cell, CqEquipmentCell).eqCellInit ) {
+			// Mysterious things happen with positioning before the ui
+			// stuff gets updated for the first time.. just accommodate for it
+			// now.
+			UiItem.x = UiItem.x + 10;
+			UiItem.y = UiItem.y + 10;
+		}
+		cast(Registery.player, CqActor).equipItem(Item);
+	}
+	
+	
+	/**
+	 * 1.0 == yes, 0.0 == no, in-between == maybe
+	 * */
+	function shouldEquipItemInCell(Cell:CqEquipmentCell, Item:CqItem):Float {
+		if (Cell.equipSlot != Item.equipSlot)
+			return 0.0;
+		
+		if (Cell.getCellObj() == null)
+			return 1.0;
+		
+		return Item.compareTo( Cell.getCellObj().item );
 	}
 	
 	public function getEmptyCell():CqInventoryCell {
@@ -838,8 +871,9 @@ class CqInventoryItem extends HxlSprite {
 				var other:CqInventoryItem = CqInventoryCell.highlightedCell.getCellObj();
 				
 				if ( cellEquip ) {
-					// Moving the other item into an equipment cell
-					cast(Registery.player, CqActor).unequipItem(this.item);
+					// Unequipping current item (?)
+					cast(Registery.player, CqActor).unequipItem(item);
+					// Moving the other item into an equipment cell (?)
 					if ( other.setEquipmentCell(cellIndex) && other!=this) 
 						cast(Registery.player, CqActor).equipItem(other.item);
 				} else if ( cellSpell ) {
