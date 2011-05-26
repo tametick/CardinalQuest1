@@ -11,12 +11,12 @@ class CqVitalBar extends HxlUIBar {
 	public function new(Actor:CqActor, ?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0) {
 		actor = Actor;
 		super(X, Y, Width, Height);
+		
+		mount(Actor);
+		
 		scrollFactor.x = scrollFactor.y = 1;
 		zIndex = 5;
-		mount(Actor);
-		Actor.addOnInjure(updateValue);
-		Actor.addOnKill(destroy);
-		Actor.addOnDestroy(destroy);
+
 		updateValue();
 	}
 
@@ -29,10 +29,41 @@ class CqVitalBar extends HxlUIBar {
 	}
 }
 
+class CqXpBar extends CqVitalBar {
+
+	public function new(Player:CqPlayer, ?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0) {
+		super(Player, X, Y, Width, Height);
+		Player.xpBar = this;
+		
+		setFrameColor(0xff444444);
+		setInteriorColor(0xff000000);
+		
+		setBarColor(0xff59C65E);
+		
+		setPercentToXp();
+		Player.xpBar.visible = true;
+	}
+
+	public override function updateValue(?xpTotal:Int=0) {
+		setPercentToXp();
+	}
+	function setPercentToXp() {
+		var player:CqPlayer = cast(actor, CqPlayer);
+		var percent:Float = (player.xp - player.currentLevel()) / (player.nextLevel() - player.currentLevel());
+		setPercent( percent );
+	}
+}
+
+
 class CqHealthBar extends CqVitalBar {
 
-	public function new(Actor:CqActor, ?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0) {
+	public function new(Actor:CqActor, ?X:Float = 0, ?Y:Float = 0, ?Width:Float = 0, ?Height:Float = 0) {
 		super(Actor, X, Y, Width, Height);
+		
+		Actor.addOnInjure(updateValue);
+		Actor.addOnKill(destroy);
+		Actor.addOnDestroy(destroy);
+		
 		actor.healthBar = this;
 		setFrameColor(0xff444444);
 		setInteriorColor(0xff000000);
@@ -43,7 +74,7 @@ class CqHealthBar extends CqVitalBar {
 	public override function updateValue(?dmgTotal:Int=0) {
 		setPercentToHp();
 		if ( !Std.is(actor, CqPlayer) ) {
-			// todo: huh??? what does this check suppose to mean?
+			// only show hp bar if mob is hurt
 			if ( actor.hp >= actor.maxHp ) {
 				visible = false;
 			} else {
@@ -52,7 +83,7 @@ class CqHealthBar extends CqVitalBar {
 		}
 	}
 	
-	private function setPercentToHp() {
+	function setPercentToHp() {
 		setPercent((actor.hp + actor.buffs.get("life")) / 
 				   (actor.maxHp + actor.buffs.get("life")));
 	}

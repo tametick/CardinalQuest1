@@ -63,7 +63,7 @@ class GameUI extends HxlDialog {
 	var btnLogView:HxlButton;
 
 	// Misc UI elements
-	var xpBar:HxlUIBar;
+	var xpBar:CqXpBar;
 	var targetSprite:HxlSprite;
 	var targetText:HxlText;
 
@@ -182,11 +182,6 @@ class GameUI extends HxlDialog {
 
 		panelInventory.dlgSpellGrid = dlgSpellGrid;
 		panelInventory.dlgPotionGrid = dlgPotionGrid;
-
-		xpBar = new HxlUIBar(84, 10, 472, 10);
-		xpBar.setBarColor(0xff59C65E);
-		add(xpBar);
-
 	}
 
 	public override function update() {
@@ -373,7 +368,7 @@ class GameUI extends HxlDialog {
 			}
 		}
 	}
-
+	
 	public function initHealthBars():Void {
 		for ( actor in Registery.level.mobs ) {
 			addHealthBar(cast(actor, CqActor));
@@ -391,6 +386,17 @@ class GameUI extends HxlDialog {
 		Actor.addOnAttackMiss(doAttackMiss);
 	}
 
+	public function addXpBar(Actor:CqPlayer):Void {
+		xpBar = new CqXpBar(Actor, Actor.x, Actor.y + Actor.height + 5, 32, 4);
+		HxlGraphics.state.add(xpBar);
+		var self = this;
+
+		/*Actor.addOnInjure(function(?dmgTotal:Int=0) { 
+			self.showDamageText(Actor, dmgTotal);
+			self.doInjureEffect(Actor);
+		});*/
+	}
+	
 	public function doAttackMiss(?Attacker:CqActor, ?Defender:CqActor):Void {
 		var attPos:HxlPoint = Attacker.tilePos;
 		var defPos:HxlPoint = Defender.tilePos;
@@ -424,9 +430,8 @@ class GameUI extends HxlDialog {
 		HxlGraphics.state.add(txt);
 	}
 	
-	public function doPlayerGainXP(?xpGained:Int=0):Void {
-		var _player:CqPlayer = cast(Registery.player, CqPlayer);
-		xpBar.setPercent( (_player.xp-_player.currentLevel()) / (_player.nextLevel()-_player.currentLevel()) );
+	public function doPlayerGainXP(?xpTotal:Int=0):Void {
+		xpBar.updateValue(xpTotal);
 	}
 
 	public static function setTargeting(Toggle:Bool, ?TargetText:String=null):Void {

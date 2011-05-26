@@ -93,6 +93,7 @@ class CqActor extends CqObject, implements Actor {
 	public var justAttacked:Bool;
 	
 	public var healthBar:CqHealthBar;
+
 	public function new(X:Float, Y:Float) {
 		super(X, Y);
 
@@ -496,6 +497,8 @@ class CqPlayer extends CqActor, implements Player {
 	static var sprites = SpritePlayer.instance;
 	
 	public var inventory:Array<CqItem>;
+	
+	public var xpBar:CqXpBar;
 	
 	public var xp:Int;
 	public var level:Int;
