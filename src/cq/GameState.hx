@@ -26,7 +26,8 @@ import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 
 class GameState extends HxlState {
-	public static var music:HxlSound;
+	public static var music1:HxlSound;
+	public static var music2:HxlSound;
 	
 	var gameUI:GameUI;
 	public var chosenClass:CqClass;
@@ -35,10 +36,15 @@ class GameState extends HxlState {
 	public override function create():Void {
 		super.create();		
 		
-		if ( music == null) {
-			music= new HxlSound();
-			music.loadEmbedded(MainTheme, true);
-			music.play();
+		if ( music1 == null) {
+			music1= new HxlSound();
+			music1.loadEmbedded(MainThemeOne, true);
+			music1.play();
+		}
+		
+		if ( music2 == null) {
+			music2= new HxlSound();
+			music2.loadEmbedded(MainThemeTwo, true);
 		}
 		
 		chosenClass = FIGHTER;

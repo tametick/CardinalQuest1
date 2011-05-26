@@ -27,8 +27,15 @@
 	<DefineFont id="8" file="../rsrc/cq/Geo-Regular.ttf" />
 	<SymbolClass id="8" class="cq.FontGeo" />
 	
-	<DefineSound id="9" file="../rsrc/cq/MainTheme.mp3" />
-	<SymbolClass id="9" class="cq.MainTheme" />
+	<DefineSound id="9" file="../rsrc/cq/main1.mp3" />
+	<SymbolClass id="9" class="cq.MainThemeOne" />
+	<DefineSound id="10" file="../rsrc/cq/main2.mp3" />
+	<SymbolClass id="10" class="cq.MainThemeTwo" />
+	<DefineSound id="11" file="../rsrc/cq/menu.mp3" />
+	<SymbolClass id="11" class="cq.MenuTheme" />
+	<DefineSound id="12" file="../rsrc/cq/boss.mp3" />
+	<SymbolClass id="12" class="cq.BossTheme" />
+
 	
 	<DefineABC file="../bin/cq-movie.swf" isBoot="true" />
 	<SymbolClass id="0" class="flash.Boot"/>
