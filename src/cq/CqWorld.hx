@@ -150,9 +150,11 @@ class CqLevel extends Level {
 	function addChests(numberOfChests:Int) {
 		for (c in 0...numberOfChests){
 			var pos; 
+			var distFromPlayer;
 			do {
 				pos = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
-			} while (chestsNearby(pos)>0);
+				distFromPlayer = HxlUtil.distance(pos, startingLocation);
+			} while (chestsNearby(pos)>0 && distFromPlayer>2);
 			
 			createAndaddChest(pos);
 		}
