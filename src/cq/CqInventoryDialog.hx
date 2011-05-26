@@ -83,12 +83,17 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		CqInventoryItem.backgroundSelectedKey = "ItemSelectedBG";
 	}
 
-	public function itemPickup(Item:CqItem):Void {
+	/**
+	 * True - added to inventory or equipped
+	 * False - destroyed or added to potion/spell belts
+	 * */
+	
+	public function itemPickup(Item:CqItem):Bool {
 		// if item already in inventory (?)
 		for ( cell in dlgInvGrid.cells ) {
 			if ( cell.getCellObj() != null && cell.getCellObj().item == Item ) {
 				cell.getCellObj().updateIcon();
-				return;
+				return false;
 			}
 		}
 
@@ -97,7 +102,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 			for ( cell in dlgPotionGrid.cells ) {
 				if ( cell.getCellObj() != null && cell.getCellObj().item == Item ) {
 					cell.getCellObj().updateIcon();
-					return;
+					return false;
 				}
 			}
 		}
@@ -129,7 +134,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 							uiItem.x = uiItem.x + cast(cell, CqPotionCell).potBtn.x;
 							uiItem.y = uiItem.y + cast(cell, CqPotionCell).potBtn.y;
 						}
-						return;
+						return false;
 					}
 				}
 			} else if ( Item.equipSlot == SPELL ) {
@@ -138,7 +143,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 						uiItem.setSpellCell(cell.cellIndex);
 						
 						GameUI.instance.updateCharge(cast(cell, CqSpellCell).btn);
-						return;
+						return false;
 					}
 				}
 			} else {
@@ -146,16 +151,16 @@ class CqInventoryDialog extends HxlSlidingDialog {
 					if (cast(cell, CqEquipmentCell).equipSlot == Item.equipSlot){
 						if (cell.getCellObj() == null) {
 							equipItem(cell, Item, uiItem);
-							return;
+							return true;
 						} else if (  Math.abs(1.0 - shouldEquipItemInCell(cast(cell, CqEquipmentCell), Item)) < 0.1  ) {
 							equipItem(cell, Item, uiItem);
-							return;
+							return true;
 						} else {							
 							if (  Math.abs(shouldEquipItemInCell(cast(cell, CqEquipmentCell), Item)) < 0.1  ) {
 								// "destroy" crappy items
 								// todo - add some effect/text
 								remove(uiItem);
-								return;
+								return false;
 							} else {
 								// let "uncertain"  items bubble down to the inventory
 							}
@@ -168,6 +173,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		var emptyCell:CqInventoryCell = getEmptyCell();
 		if(emptyCell != null ){
 			uiItem.setInventoryCell(emptyCell.cellIndex);
+			return true;
 		} else {
 			throw "no room in inventory, should not happen because pick up should have not been allowed!";
 		}
