@@ -11,8 +11,12 @@ class MusicManager {
 	public static function play(track:Class<Sound>) {
 		var name = Type.getClassName(track);
 		
-		if (currentlyPlaying != null)
+		if (currentlyPlaying != null) {
+			if (currentlyPlaying == tracks.get(name))
+				// already playing chosen tune
+				return;
 			currentlyPlaying.stop();
+		}
 		
 		if (tracks.get(name) == null){
 			var newTrack = new HxlSound();

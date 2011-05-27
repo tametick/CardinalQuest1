@@ -7,6 +7,7 @@ import haxel.HxlMenuItem;
 import haxel.HxlState;
 import haxel.HxlText;
 import haxel.HxlTimer;
+import data.MusicManager;
 import flash.ui.Mouse;
 import flash.ui.MouseCursor;
 
@@ -23,6 +24,7 @@ class MainMenuState extends HxlState{
 
 	public override function create():Void {
 		super.create();
+		MusicManager.play(MenuTheme);
 
 		fadeTimer = new HxlTimer();
 		fadeTime = 0.5;

@@ -5,7 +5,6 @@ import cq.CqItem;
 import cq.CqSpell;
 import cq.CqActor;
 
-
 import generators.BSP;
 import world.World;
 import world.Level;
@@ -22,6 +21,7 @@ import haxel.HxlLog;
 
 import data.Registery;
 import data.Configuration;
+import data.MusicManager;
 
 import flash.geom.Rectangle;
 
@@ -54,9 +54,12 @@ class CqLevel extends Level {
 	static var itemSprites = SpriteItems.instance;
 
 	public function getColor():String {
-		if (index < 4)
+		if (index <=2 )
 			return "blue";
-		else if (index < 8)
+		else if (index <= 4)
+			//return "green";
+			return "blue";
+		else if (index <= 6)
 			return "brown";
 		else
 			return "red";
@@ -64,6 +67,14 @@ class CqLevel extends Level {
 	
 	public function new(index:Int) {
 		super(index);
+		
+		if(index==0)
+			MusicManager.play(MainThemeOne);
+		else if (index == 4)
+			MusicManager.play(MainThemeTwo);
+		else if (index == 7)
+			MusicManager.play(BossTheme);
+		
 		tileClass = CqTile;
 		
 		var tmpWall = tiles.getSpriteIndex("red_wall4");

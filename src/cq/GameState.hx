@@ -12,7 +12,7 @@ import playtomic.PtPlayer;
 
 import data.Configuration;
 import data.Registery;
-import data.MusicManager;
+
 
 import world.World;
 import world.Player;
@@ -33,8 +33,7 @@ class GameState extends HxlState {
 	var isPlayerActing:Bool;
 
 	public override function create():Void {
-		super.create();		
-		MusicManager.play(MainThemeOne);
+		super.create();
 		
 		chosenClass = FIGHTER;
 
