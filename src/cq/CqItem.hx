@@ -178,7 +178,6 @@ class CqLootFactory {
 			// sorry, not enchanting potions & spells!
 			return;
 		
-		
 		var isSuperb = false;
 		var isMagical = false;
 		var isWondrous = false;
@@ -191,7 +190,7 @@ class CqLootFactory {
 			case 4, 5:
 				isSuperb = true;
 				isMagical = true;
-			case 6, 7:
+			case 6, 7, 8: // 8 is for out of depth items on level 7
 				isSuperb = true;
 				isWondrous = true;
 		}
@@ -213,7 +212,33 @@ class CqLootFactory {
 					Item.damage.start += 1;
 					Item.damage.end += 1;
 				default:
-					throw "not enchanting "+Item.equipSlot;
+			}
+		}
+		
+		if (isMagical || isWondrous) {
+			var buffs = ["defense", "attack", "life", "spirit", "speed"];
+			
+			switch(Item.equipSlot) {
+				case CqEquipSlot.ARMOR:
+					buffs.remove("defense");
+				case CqEquipSlot.GLOVES:
+					buffs.remove("attack");
+				case CqEquipSlot.HAT:
+					buffs.remove("life");
+				case CqEquipSlot.JEWELRY:
+					buffs.remove("spirit");
+				case CqEquipSlot.SHOES:
+					buffs.remove("speed");
+				default:
+			}
+			
+			var extraBuff = HxlUtil.getRandomElement(buffs);
+			if (isMagical) {
+				Item.name = "Magical " + Item.name;
+				Item.buffs.set(extraBuff, Item.buffs.get("extraBuff") + 1);
+			} else {// isWondrous
+				Item.name = "Wondrous " + Item.name;
+				Item.buffs.set(extraBuff, Item.buffs.get("extraBuff") + 2);
 			}
 		}
 	}
@@ -327,6 +352,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 		
 
 		switch(equipSlot) {
+			// todo - magical items
 			case CqEquipSlot.SHOES:
 				if (buffs.get("speed") > other.buffs.get("speed"))
 					preference = 1.0;
