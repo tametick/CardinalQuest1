@@ -172,6 +172,51 @@ class CqLootFactory {
 	
 		return item;
 	}
+	
+	public static function enchantItem(Item:CqItem, DungeonLevel:Int) {
+		if (Item.equipSlot == CqEquipSlot.SPELL || Item.equipSlot == CqEquipSlot.POTION)
+			// sorry, not enchanting potions & spells!
+			return;
+		
+		
+		var isSuperb = false;
+		var isMagical = false;
+		var isWondrous = false;
+		
+		switch(DungeonLevel) {
+			case 0, 1:
+				isSuperb = true;
+			case 2, 3:
+				isMagical = true;
+			case 4, 5:
+				isSuperb = true;
+				isMagical = true;
+			case 6, 7:
+				isSuperb = true;
+				isWondrous = true;
+		}
+
+		if (isSuperb) {
+			Item.name = "Superb " + Item.name;
+			switch(Item.equipSlot) {
+				case CqEquipSlot.ARMOR:
+					Item.buffs.set("defense", Item.buffs.get("defense") + 1);
+				case CqEquipSlot.GLOVES:
+					Item.buffs.set("attack", Item.buffs.get("attack") + 1);
+				case CqEquipSlot.HAT:
+					Item.buffs.set("life", Item.buffs.get("life") + 1);
+				case CqEquipSlot.JEWELRY:
+					Item.buffs.set("spirit", Item.buffs.get("spirit") + 1);
+				case CqEquipSlot.SHOES:
+					Item.buffs.set("speed", Item.buffs.get("speed") + 1);
+				case CqEquipSlot.WEAPON:
+					Item.damage.start += 1;
+					Item.damage.end += 1;
+				default:
+					throw "not enchanting "+Item.equipSlot;
+			}
+		}
+	}
 }
 
 class CqItem extends GameObjectImpl, implements Loot {
@@ -345,7 +390,13 @@ class CqChest extends CqItem {
 		} while (typeName == "CHEST");
 		
 		var item = CqLootFactory.newItem(x, y, Type.createEnum(CqItemType,  typeName));
-		//var item = CqLootFactory.newItem(x, y, Type.createEnum(CqItemType,  "LONG_SWORD"));
+		
+		if (Math.random() < 0.1)
+			// 10% chance of magical item
+			CqLootFactory.enchantItem(item, Registery.level.index);
+		else if (Math.random() < 0.01)
+			// another 1% chance of out-of-depth magical item
+			CqLootFactory.enchantItem(item, Registery.level.index);
 		
 		// add item to level
 		Registery.level.addLootToLevel(state, item);
