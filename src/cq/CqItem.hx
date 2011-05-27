@@ -178,24 +178,20 @@ class CqLootFactory {
 			// sorry, not enchanting potions & spells!
 			return;
 		
-		var isSuperb = false;
-		var isMagical = false;
-		var isWondrous = false;
-		
 		switch(DungeonLevel) {
 			case 0, 1:
-				isSuperb = true;
+				Item.isSuperb = true;
 			case 2, 3:
-				isMagical = true;
+				Item.isMagical = true;
 			case 4, 5:
-				isSuperb = true;
-				isMagical = true;
+				Item.isSuperb = true;
+				Item.isMagical = true;
 			case 6, 7, 8: // 8 is for out of depth items on level 7
-				isSuperb = true;
-				isWondrous = true;
+				Item.isSuperb = true;
+				Item.isWondrous = true;
 		}
 
-		if (isSuperb) {
+		if (Item.isSuperb) {
 			Item.name = "Superb " + Item.name;
 			switch(Item.equipSlot) {
 				case CqEquipSlot.ARMOR:
@@ -215,7 +211,7 @@ class CqLootFactory {
 			}
 		}
 		
-		if (isMagical || isWondrous) {
+		if (Item.isMagical || Item.isWondrous) {
 			var buffs = ["defense", "attack", "life", "spirit", "speed"];
 			
 			switch(Item.equipSlot) {
@@ -233,7 +229,7 @@ class CqLootFactory {
 			}
 			
 			var extraBuff = HxlUtil.getRandomElement(buffs);
-			if (isMagical) {
+			if (Item.isMagical) {
 				Item.name = "Magical " + Item.name;
 				Item.buffs.set(extraBuff, Item.buffs.get("extraBuff") + 1);
 			} else {// isWondrous
@@ -264,11 +260,18 @@ class CqItem extends GameObjectImpl, implements Loot {
 	var glowSpriteKey:String;
 	var glowSprite:BitmapData;
 	var glowRect:Rectangle;
+	
+	public var isSuperb:Bool;
+	public var isMagical:Bool;
+	public var isWondrous:Bool;
 
 	public function new(X:Float, Y:Float, type:Dynamic) {
 		super(X, Y);
 		var typeName:String = Type.enumConstructor(type).toLowerCase();
 		zIndex = 1;
+		isSuperb = false;
+		isMagical = false;
+		isWondrous = false;
 		
 		//this is a terrible, terrible work-around, but it'll do for now
 		if (Std.is(this, CqSpell)) {
@@ -350,7 +353,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 		
 		var preference:Float = 0.0;
 		
-
+/*
 		switch(equipSlot) {
 			// todo - magical items
 			case CqEquipSlot.SHOES:
@@ -381,7 +384,8 @@ class CqItem extends GameObjectImpl, implements Loot {
 				// all potions & spells are the same quality
 				preference = 0.5;
 		}
-		
+	*/	
+		preference = 0.5; // until we can compare magical items...
 		
 		return preference;
 	}
@@ -422,7 +426,7 @@ class CqChest extends CqItem {
 			CqLootFactory.enchantItem(item, Registery.level.index);
 		else if (Math.random() < 0.01)
 			// another 1% chance of out-of-depth magical item
-			CqLootFactory.enchantItem(item, Registery.level.index);
+			CqLootFactory.enchantItem(item, Registery.level.index+1);
 		
 		// add item to level
 		Registery.level.addLootToLevel(state, item);
