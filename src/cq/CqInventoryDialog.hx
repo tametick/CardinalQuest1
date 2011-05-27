@@ -180,7 +180,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	}
 	
 	private function equipItem(Cell:CqInventoryCell, Item:CqItem, UiItem:CqInventoryItem) {
-		// todo - if exist old item remove it first
+		cast(Cell, CqEquipmentCell).clearCellObj();
 		
 		UiItem.setEquipmentCell(Cell.cellIndex);
 		if ( !cast(Cell, CqEquipmentCell).eqCellInit ) {
@@ -610,6 +610,14 @@ class CqInventoryCell extends HxlDialog {
 	public function getCellObj():CqInventoryItem {
 		return cellObj;
 	}
+	
+	public function clearCellObj() {
+		if (cellObj != null) {
+			cast(Registery.player, CqActor).unequipItem(cellObj.item);
+			cellObj.removeFromDialog();
+			cellObj = null;
+		}
+	}
 
 }
 
@@ -674,6 +682,10 @@ class CqInventoryItem extends HxlSprite {
 		//stackSize = 1;
 	}
 
+	public function removeFromDialog() {
+		_dlg.remove(this);
+	}
+	
 	public function setSelected(Toggle:Bool):Void {
 		selected = Toggle;
 		if ( selected ) {
