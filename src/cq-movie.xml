@@ -35,7 +35,8 @@
 	<SymbolClass id="11" class="cq.MenuTheme" />
 	<DefineSound id="12" file="../rsrc/cq/boss.mp3" />
 	<SymbolClass id="12" class="cq.BossTheme" />
-
+	<DefineSound id="13" file="../rsrc/cq/win.mp3" />
+	<SymbolClass id="13" class="cq.WinTheme" />
 	
 	<DefineABC file="../bin/cq-movie.swf" isBoot="true" />
 	<SymbolClass id="0" class="flash.Boot"/>

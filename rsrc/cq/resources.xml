@@ -14,6 +14,7 @@
 		<sound id="cq.MainThemeTwo" name="MainThemeTwo" import="main2.mp3"/>
 		<sound id="cq.MenuTheme" name="MenuTheme" import="menu.mp3"/>
 		<sound id="cq.BossTheme" name="BossTheme" import="boss.mp3"/>
+		<sound id="cq.WinTheme" name="WinTheme" import="win.mp3"/>
 		
 	</library>
 </movie>
