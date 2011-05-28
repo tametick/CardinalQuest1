@@ -23,14 +23,14 @@ class StateTitle extends BaseMenuState {
 		}
 		
 		var titleText:HxlText = new HxlText(0, 20, 360, "Detribus", true);
-		titleText.setFormat("Geo", 80, 0xffffff, "center", 0x010101);
+		titleText.setFormat("FontDungeon", 80, 0xffffff, "center", 0x010101);
 		add(titleText);
 		
 		titleMenu = new Menu(80, 120, 200, 100 );
 		add(titleMenu);
 		
 		var item1:MenuItem = new MenuItem(10, 10, 180, "New Game");
-		item1.setFormat("Geo", 24, 0x000000, "center");
+		item1.setFormat("FontDungeon", 24, 0x000000, "center");
 		titleMenu.addItem(item1);
 		item1.itemCallback = function() { 
 			BaseMenuState.playSelectSound();
@@ -41,7 +41,7 @@ class StateTitle extends BaseMenuState {
 		};
 		
 		var item2:MenuItem = new MenuItem(10, 36, 180, "Help");
-		item2.setFormat("Geo", 24, 0x000000, "center");
+		item2.setFormat("FontDungeon", 24, 0x000000, "center");
 		titleMenu.addItem(item2);
 		item2.itemCallback = function() { 
 			BaseMenuState.playSelectSound();

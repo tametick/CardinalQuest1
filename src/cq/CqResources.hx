@@ -6,7 +6,7 @@ import flash.media.Sound;
 import data.Resources;
 import haxel.HxlSpriteSheet;
 
-class FontGeo extends Font { public function new() { super(); } }
+class FontDungeon extends Font { public function new() { super(); } }
 
 class MainThemeOne extends Sound { public function new() { super(); } }
 class MainThemeTwo extends Sound { public function new() { super(); } }

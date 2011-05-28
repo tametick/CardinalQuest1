@@ -24,8 +24,8 @@
 	<DefineBitsJPEG id="7" file="../rsrc/cq/spells.png" />
 	<SymbolClass id="7" class="cq.SpriteSpells" />
 
-	<DefineFont id="8" file="../rsrc/cq/Geo-Regular.ttf" />
-	<SymbolClass id="8" class="cq.FontGeo" />
+	<DefineFont id="8" file="../rsrc/cq/Dungeon.ttf" />
+	<SymbolClass id="8" class="cq.FontDungeon" />
 	
 	<DefineSound id="9" file="../rsrc/cq/main1.mp3" />
 	<SymbolClass id="9" class="cq.MainThemeOne" />

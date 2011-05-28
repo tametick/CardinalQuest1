@@ -189,7 +189,7 @@ class StateCreateChar extends BaseMenuState {
 		}
 		if ( whoText == null ) {
 			whoText = new HxlText(0, 5, 360, "Who are you?", true);
-			whoText.setFormat("Geo", 30, 0xffffff, "center", 0x010101);
+			whoText.setFormat("FontDungeon", 30, 0xffffff, "center", 0x010101);
 			add(whoText);
 
 			
@@ -208,7 +208,7 @@ class StateCreateChar extends BaseMenuState {
 
 		if ( nameInput == null ) {
 			nameInput = new HxlTextInput( 90, 100, 240, "Abraxis", true);
-			nameInput.setFormat("Geo", 20, 0x000000, "left");
+			nameInput.setFormat("FontDungeon", 20, 0x000000, "left");
 			nameInput.backgroundVisible = false;
 			nameInput.borderVisible = true;
 			nameInput.borderColor = 0x000000;
@@ -221,7 +221,7 @@ class StateCreateChar extends BaseMenuState {
 
 		if ( nameText == null ) {
 			nameText = new HxlText(30, 100, 75, "Name:", true);
-			nameText.setFormat("Geo", 20, 0x000000, "left");
+			nameText.setFormat("FontDungeon", 20, 0x000000, "left");
 			add(nameText);
 		} else {
 			nameText.visible = true;
@@ -229,7 +229,7 @@ class StateCreateChar extends BaseMenuState {
 
 		if ( nextText == null ) {
 			nextText = new HxlText(295, 190, 60, "Enter >", true);
-			nextText.setFormat("Geo", 18, 0x000000, "left");
+			nextText.setFormat("FontDungeon", 18, 0x000000, "left");
 			add(nextText);
 		} else {
 			nextText.visible = true;
@@ -237,7 +237,7 @@ class StateCreateChar extends BaseMenuState {
 
 		if ( backText == null ) {
 			backText = new HxlText(10, 190, 45, "< Esc", true);
-			backText.setFormat("Geo", 18, 0x000000, "left");
+			backText.setFormat("FontDungeon", 18, 0x000000, "left");
 			add(backText);
 		}
 
@@ -278,14 +278,14 @@ class StateCreateChar extends BaseMenuState {
 
 		if ( whatText == null ) {
 			whatText = new HxlText(0, 5, 360, "What are you?", true);
-			whatText.setFormat("Geo", 30, 0xffffff, "center", 0x010101);
+			whatText.setFormat("FontDungeon", 30, 0xffffff, "center", 0x010101);
 			add(whatText);
 		} else {
 			whatText.visible = true;
 		}
 		if ( perkPointsText == null ) {
 			perkPointsText = new HxlText(140, 40, 200, "Points Left: 1", true);
-			perkPointsText.setFormat("Geo", 16, 0x000000, "left");
+			perkPointsText.setFormat("FontDungeon", 16, 0x000000, "left");
 			add(perkPointsText);
 		} else {
 			perkPointsText.visible = true;
@@ -294,10 +294,10 @@ class StateCreateChar extends BaseMenuState {
 			var names:Array<String> = perks.getPerkNames();
 			for ( i in 0...names.length ) {
 				perkName[i] = new PerkSprite(60, 80+(i*22), 100, names[i], true);
-				perkName[i].setFormat("Geo", 22, 0x000000, "left");
+				perkName[i].setFormat("FontDungeon", 22, 0x000000, "left");
 				add(perkName[i]);
 				perkValue[i] = new PerkSprite(265, 80+(i*22), 100, "_ _ _", true);
-				perkValue[i].setFormat("Geo", 22, 0x000000, "left");
+				perkValue[i].setFormat("FontDungeon", 22, 0x000000, "left");
 				add(perkValue[i]);
 			}
 		} else {
@@ -308,7 +308,7 @@ class StateCreateChar extends BaseMenuState {
 		}
 		if ( perkIcon == null ) {
 			perkIcon = new HxlText(20, 80, 40, "->", true);
-			perkIcon.setFormat("Geo", 22, 0x000000, "center");
+			perkIcon.setFormat("FontDungeon", 22, 0x000000, "center");
 			add(perkIcon);
 		} else {
 			perkIcon.visible = true;

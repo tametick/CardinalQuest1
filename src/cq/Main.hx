@@ -35,9 +35,9 @@ class Game extends HxlGame {
 		Playtomic.create();
 		
 		if(Configuration.debug)
-			super(640, 480, GameState, 1, "Geo");
+			super(640, 480, GameState, 1, "FontDungeon");
 		else
-			super(640, 480, SplashState, 1, "Geo");
+			super(640, 480, SplashState, 1, "FontDungeon");
 
 	}
 }

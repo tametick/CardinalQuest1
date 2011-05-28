@@ -4,7 +4,7 @@ import flash.text.Font;
 import flash.display.Bitmap;
 import flash.media.Sound;
 
-class FontGeo extends Font { public function new(){super();} }
+class FontDungeon extends Font { public function new(){super();} }
 class SpritesSmall extends Bitmap { public function new(){super();} }
 class Tileset extends Bitmap { public function new() { super(); } }
 class Rain extends Sound { public function new() { super(); } }
