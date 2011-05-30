@@ -58,7 +58,7 @@ class CqLootFactory {
 		Resources.descriptions.set("Achilles' Bracer","This magical bronze bracer contains within it the great warrior's spirit.");
 		Resources.descriptions.set("Short Sword", "A one handed hilt attached to a thrusting blade approximately 60cm in length.");
 		Resources.descriptions.set("Long Sword","Long swords have long cruciform hilts with grips and double-edged blades over one meter long.");
-		Resources.descriptions.set("Staff","A stury shaft of hardwood with metal tips.");
+		Resources.descriptions.set("Staff","A sturdy shaft of hardwood with metal tips.");
 		Resources.descriptions.set("Dagger", "A double-edged blade used for stabbing or thrusting.");
 		
 		inited = true;
