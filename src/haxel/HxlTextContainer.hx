@@ -79,7 +79,7 @@ class HxlTextContainer extends HxlDialog {
 		}
 	}
 
-	public function setFormat(?Font:String=null,?Size:Int=8,?Color:Int=0xffffff,?Alignment:String=null,?ShadowColor:Int=0):Void {
+	public function setFormat(?Font:String=null,?Size:Int=12,?Color:Int=0xffffff,?Alignment:String=null,?ShadowColor:Int=0):Void {
 		if ( Font != null ) fontName = Font;
 		fontSize = Size;
 		fontColor = Color;

@@ -29,8 +29,8 @@ class MainMenuState extends HxlState{
 		fadeTimer = new HxlTimer();
 		fadeTime = 0.5;
 
-		titleText = new HxlText(0, 60, 640, "Main Menu Screen");
-		titleText.setFormat(null, 40, 0xff6666, "center");
+		titleText = new HxlText(0, 60, 640, "Cardinal Quest");
+		titleText.setFormat(null, 72, 0xff6666, "center");
 		add(titleText);
 
 		menu = new HxlMenu(200, 220, 240, 200);

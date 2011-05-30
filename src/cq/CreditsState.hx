@@ -25,8 +25,8 @@ class CreditsState extends HxlState
 		waitTime = 2.0;
 		stateNum = 0;
 
-		creditsText = new HxlText(0, 220, 640, "Credits Screen");
-		creditsText.setFormat(null, 40, 0xffffff, "center");
+		creditsText = new HxlText(0, (480-72)/2, 640, "Credits");
+		creditsText.setFormat(null, 72, 0xffffff, "center");
 		add(creditsText);
 
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);

@@ -25,8 +25,8 @@ class SplashState extends HxlState
 		waitTime = 2.0;
 		stateNum = 0;
 
-		splashText = new HxlText(0, 220, 640, "Splash Screen");
-		splashText.setFormat(null, 40, 0xffffff, "center");
+		splashText = new HxlText(0, (480-72)/2, 640, "Cardinal Quest");
+		splashText.setFormat(null, 72, 0xffffff, "center");
 		add(splashText);
 
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);

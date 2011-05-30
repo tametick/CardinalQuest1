@@ -45,12 +45,12 @@ class CreateCharState extends HxlState
 		state = 0;
 
 		var titleText:HxlText = new HxlText(0, 0, 640, "Create Character");
-		titleText.setFormat(null, 40, 0xffffff, "center");
+		titleText.setFormat(null, 72, 0xffffff, "center");
 		add(titleText);
 
 		var btnStart:HxlButton = new HxlButton(520, 430, 100, 30);
 		btnStart.setBackgroundColor(0xff999999, 0xffcccccc);
-		btnStart.loadText(new HxlText(0, 3, 100, "START", true, "FontDungeon").setFormat("FontDungeon", 18, 0xffffff, "center", 0x010101));
+		btnStart.loadText(new HxlText(0, 3, 100, "START", true, "FontDungeon").setFormat("FontDungeon", 24, 0xffffff, "center", 0x010101));
 
 		add(btnStart);
 		var self = this;
@@ -69,7 +69,7 @@ class CreateCharState extends HxlState
 		add(btnFighter);
 		btnFighter.setCallback(function() { self.changeSelection(FIGHTER); });
 		txtFighter = new HxlText(95, 250, 150, "Fighter");
-		txtFighter.setFormat(null, 26, 0xffffff, "center", 0x010101);
+		txtFighter.setFormat(null, 32, 0xffffff, "center", 0x010101);
 		add(txtFighter);
 
 		var sprThief = new HxlSprite(0, 0);
@@ -80,7 +80,7 @@ class CreateCharState extends HxlState
 		add(btnThief);
 		btnThief.setCallback(function() { self.changeSelection(THIEF); });
 		txtThief = new HxlText(245, 250, 150, "Thief");
-		txtThief.setFormat(null, 26, 0xffffff, "center", 0x010101);
+		txtThief.setFormat(null, 32, 0xffffff, "center", 0x010101);
 		add(txtThief);
 
 		var sprWizard = new HxlSprite(0, 0);
@@ -91,7 +91,7 @@ class CreateCharState extends HxlState
 		add(btnWizard);
 		btnWizard.setCallback(function() { self.changeSelection(WIZARD); });
 		txtWizard = new HxlText(395, 250, 150, "Wizard");
-		txtWizard.setFormat(null, 26, 0xffffff, "center", 0x010101);
+		txtWizard.setFormat(null, 32, 0xffffff, "center", 0x010101);
 		add(txtWizard);
 
 		selectBox = new HxlSprite(105, 160);
@@ -111,7 +111,7 @@ class CreateCharState extends HxlState
 		add(selectBox);
 
 		txtDesc = new HxlText(30, 325, HxlGraphics.width - 60);
-		txtDesc.setFormat(null, 22, 0xffffff, "center", 0x010101);
+		txtDesc.setFormat(null, 24, 0xffffff, "center", 0x010101);
 		add(txtDesc);
 		txtDesc.text = Resources.descriptions.get("Fighter");
 

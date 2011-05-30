@@ -26,8 +26,8 @@ class GameOverState extends HxlState{
 		
 		stackRender = true;
 
-		gameOverText = new HxlText(0, 220, 640, "Game over");
-		gameOverText.setFormat(null, 40, 0xffffff, "center");
+		gameOverText = new HxlText(0, (480-72)/2, 640, "Game over");
+		gameOverText.setFormat(null, 72, 0xffffff, "center");
 		add(gameOverText);
 
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
