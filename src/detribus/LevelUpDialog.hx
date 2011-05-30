@@ -44,22 +44,22 @@ class LevelUpDialog extends StatsDialog {
 		chosenPerk = 0;
 
 		levelUpText = new HxlText(0, 5, 300, "You gained a level!", true);
-		levelUpText.setFormat("FontDungeon", 24, 0xffffff, "center", 0x010101);
+		levelUpText.setFormat(null, 24, 0xffffff, "center", 0x010101);
 		add(levelUpText);
 
 		var names:Array<String> = perks.getPerkNames();
 		for ( i in 0...names.length ) {
 			perkName[i] = new PerkSprite(40, 70+(i*22), 100, names[i], true);
-			perkName[i].setFormat("FontDungeon", 22, 0x000000, "left");
+			perkName[i].setFormat(null, 22, 0x000000, "left");
 			add(perkName[i]);
 			perkValue[i] = new PerkSprite(205, 70+(i*22), 100, "_ _ _", true);
-			perkValue[i].setFormat("FontDungeon", 22, 0x000000, "left");
+			perkValue[i].setFormat(null, 22, 0x000000, "left");
 			add(perkValue[i]);
 			perkValue[i].updateValue(perks.getPerkValue(i));
 		}
 
 		perkIcon = new HxlText(20, 70, 40, "->", true);
-		perkIcon.setFormat("FontDungeon", 22, 0x000000, "left");
+		perkIcon.setFormat(null, 22, 0x000000, "left");
 		add(perkIcon);
 
 		var o:HxlObject;

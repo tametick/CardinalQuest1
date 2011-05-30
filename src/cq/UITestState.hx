@@ -33,7 +33,7 @@ class UITestState extends HxlState
 
 		textcon = new HxlTextContainer( 170, 0, 300, 80 );
 		textcon.setBackgroundColor(0xff333333);
-		textcon.setFormat("FontDungeon", 18, 0xffffff, "left", 0x000000);
+		textcon.setFormat(null, 18, 0xffffff, "left", 0x000000);
 		add(textcon);
 		textcon.setColorStep(true);
 		textcon.addText("Uh oh, whats that sound?");

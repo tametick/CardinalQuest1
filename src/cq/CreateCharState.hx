@@ -50,7 +50,7 @@ class CreateCharState extends HxlState
 
 		var btnStart:HxlButton = new HxlButton(520, 430, 100, 30);
 		btnStart.setBackgroundColor(0xff999999, 0xffcccccc);
-		btnStart.loadText(new HxlText(0, 3, 100, "START", true, "FontDungeon").setFormat("FontDungeon", 24, 0xffffff, "center", 0x010101));
+		btnStart.loadText(new HxlText(0, 3, 100, "START", true, null).setFormat(null, 24, 0xffffff, "center", 0x010101));
 
 		add(btnStart);
 		var self = this;

@@ -136,7 +136,7 @@ class GameUI extends HxlDialog {
 		 **/
 		btnMainView = new HxlButton(0, 0, 64, 64);
 		btnMainView.setBackgroundColor(0xff999999, 0xffcccccc);
-		btnMainView.loadText(new HxlText(0, 23, 64, "Main", true, "FontDungeon").setFormat("FontDungeon", 18, 0xffffff, "center", 0x010101));
+		btnMainView.loadText(new HxlText(0, 23, 64, "Main", true, null).setFormat(null, 18, 0xffffff, "center", 0x010101));
 		btnMainView.setCallback(function() {
 			self.showPanel(null, self.btnMainView);
 		});
@@ -146,7 +146,7 @@ class GameUI extends HxlDialog {
 
 		btnMapView = new HxlButton(0, 0, 64, 64);
 		btnMapView.setBackgroundColor(0xff999999, 0xffcccccc);
-		btnMapView.loadText(new HxlText(0, 23, 64, "Map", true, "FontDungeon").setFormat("FontDungeon", 18, 0xffffff, "center", 0x010101));
+		btnMapView.loadText(new HxlText(0, 23, 64, "Map", true, null).setFormat(null, 18, 0xffffff, "center", 0x010101));
 		btnMapView.setCallback(function() {
 			self.showPanel(self.panelMap, self.btnMapView);
 		});
@@ -155,7 +155,7 @@ class GameUI extends HxlDialog {
 
 		btnInventoryView = new HxlButton(0, 0, 64, 64);
 		btnInventoryView.setBackgroundColor(0xff999999, 0xffcccccc);
-		btnInventoryView.loadText(new HxlText(0, 23, 64, "Inv", true, "FontDungeon").setFormat("FontDungeon", 18, 0xffffff, "center", 0x010101));
+		btnInventoryView.loadText(new HxlText(0, 23, 64, "Inv", true, null).setFormat(null, 18, 0xffffff, "center", 0x010101));
 		btnInventoryView.setCallback(function() {
 			self.showPanel(self.panelInventory, self.btnInventoryView);
 		});
@@ -164,7 +164,7 @@ class GameUI extends HxlDialog {
 
 		btnCharacterView = new HxlButton(0, 0, 64, 64);
 		btnCharacterView.setBackgroundColor(0xff999999, 0xffcccccc);
-		btnCharacterView.loadText(new HxlText(0, 23, 64, "Char", true, "FontDungeon").setFormat("FontDungeon", 18, 0xffffff, "center", 0x010101));
+		btnCharacterView.loadText(new HxlText(0, 23, 64, "Char", true, null).setFormat(null, 18, 0xffffff, "center", 0x010101));
 		btnCharacterView.setCallback(function() {
 			self.showPanel(self.panelCharacter, self.btnCharacterView);
 		});
@@ -173,7 +173,7 @@ class GameUI extends HxlDialog {
 
 		btnLogView = new HxlButton(0, 0, 64, 64);
 		btnLogView.setBackgroundColor(0xff999999, 0xffcccccc);
-		btnLogView.loadText(new HxlText(0, 23, 64, "Log", true, "FontDungeon").setFormat("FontDungeon", 18, 0xffffff, "center", 0x010101));
+		btnLogView.loadText(new HxlText(0, 23, 64, "Log", true, null).setFormat(null, 18, 0xffffff, "center", 0x010101));
 		btnLogView.setCallback(function() {
 			self.showPanel(self.panelLog, self.btnLogView);
 		});

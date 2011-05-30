@@ -35,10 +35,10 @@ class SdrlGame extends HxlGame {
 
 	public function new() {
 		//super(720, 480, StateGame, 1);
-		super(360, 240, StateTitle, 2, "FontDungeon");
+		super(360, 240, StateTitle, 2, null);
 		_autoPause = false;
 		//super(360, 240, StateCreateChar, 2);
-		//super(360, 240, StateGame, 2, "FontDungeon");
+		//super(360, 240, StateGame, 2, null);
 
 		HxlState.bgColor = 0xffffffff;
 	}

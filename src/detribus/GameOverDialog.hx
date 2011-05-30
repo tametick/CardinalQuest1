@@ -16,12 +16,12 @@ class GameOverDialog extends StatsDialog {
 		super(Width, Height);
 
 		defeatText = new HxlText(0, 65, 300, "Game Over!", true);
-		defeatText.setFormat("FontDungeon", 50, 0xffffff, "center", 0x010101);
+		defeatText.setFormat(null, 50, 0xffffff, "center", 0x010101);
 		add(defeatText);
 		defeatText.visible = false;
 
 		victoryText = new HxlText(0, 65, 300, "You Win!", true);
-		victoryText.setFormat("FontDungeon", 50, 0xffffff, "center", 0x010101);
+		victoryText.setFormat(null, 50, 0xffffff, "center", 0x010101);
 		add(victoryText);
 		victoryText.visible = false;
 

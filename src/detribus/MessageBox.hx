@@ -49,7 +49,7 @@ class MessageBox extends HxlGroup {
 		messageText.gridFitType = GridFitType.PIXEL;
 		#else
 		#end
-		messageText.defaultTextFormat = new TextFormat("FontDungeon",16,0x000000);
+		messageText.defaultTextFormat = new TextFormat(null,16,0x000000);
 
 		HxlGraphics.state.addChild(messageText);
 	}
