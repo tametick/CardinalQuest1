@@ -162,10 +162,21 @@ class CqLevel extends Level {
 		for (c in 0...numberOfChests){
 			var pos; 
 			var distFromPlayer;
-			do {
+			var iterations:Int = 0;
+			var minChestDistance = 5;
+			var minPlayerDistance = 3;
+			do {//find chest locations that are far apart, but we may run out of space!
+				iterations++;
 				pos = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
 				distFromPlayer = HxlUtil.distance(pos, startingLocation);
-			} while (chestsNearby(pos)>0 && distFromPlayer>2);
+				//having trouble finding a good place, so find a position thats closer to other chests, but not on a chest or a player
+				//less iterations should equal to more groups of chests together
+				//they do tend to group around the player, so we need them far away!
+				if (iterations > 10) {
+					minChestDistance = 2;
+					minPlayerDistance = 15;
+				}
+			} while (chestsNearby(pos, minChestDistance) > 0 && distFromPlayer > minPlayerDistance);
 			
 			createAndaddChest(pos);
 		}
