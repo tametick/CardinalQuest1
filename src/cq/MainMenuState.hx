@@ -21,8 +21,10 @@ class MainMenuState extends HxlState{
 	var btnResumeGame:HxlMenuItem;
 	var btnNewGame:HxlMenuItem;
 	var btnCredits:HxlMenuItem;
+	var btnClicked:Bool;
 
 	public override function create():Void {
+		btnClicked = false;
 		super.create();
 		MusicManager.play(MenuTheme);
 
@@ -73,6 +75,9 @@ class MainMenuState extends HxlState{
 	}
 
 	function changeState(TargetState:Class<HxlState>) {
+		if (btnClicked)
+			return;
+		btnClicked = true;
 		var self = this;
 		if ( TargetState == null ) {
 			HxlGraphics.popState();
