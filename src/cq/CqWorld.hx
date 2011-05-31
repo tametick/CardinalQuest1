@@ -147,11 +147,11 @@ class CqLevel extends Level {
 		}
 	}
 	
-	function chestsNearby(pos:HxlPoint):Int {
+	function chestsNearby(pos:HxlPoint, ?distance:Int = 5):Int {
 		var chests = 0;
 		
 		for (chest in loots) {
-			if (HxlUtil.distance(chest.tilePos, pos) < 5)
+			if (HxlUtil.distance(chest.tilePos, pos) < distance)
 				chests ++;
 		}
 		
@@ -182,12 +182,12 @@ class CqLevel extends Level {
 		}
 	}
 	
-	function isValidMobPosition(pos:HxlPoint):Bool {
+	function isValidMobPosition(pos:HxlPoint, ?minDistance:Int = 5):Bool {
 		var numberOfActors = cast(getTile(pos.x, pos.y), CqTile).actors.length;
 		var numberOfLoot = cast(getTile(pos.x, pos.y), CqTile).loots.length;
 		var distFromPlayer = HxlUtil.distance(pos, startingLocation);
 		
-		return (numberOfActors == 0 && numberOfLoot == 0 && distFromPlayer >= 5);
+		return (numberOfActors == 0 && numberOfLoot == 0 && distFromPlayer >= minDistance);
 	}
 
 	function createAndaddSpell(pos:HxlPoint) {
