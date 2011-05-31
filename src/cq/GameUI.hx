@@ -464,7 +464,10 @@ class GameUI extends HxlDialog {
 			targetText.setFormat(null, 24, 0xffffff, "center", 0x010101);
 			targetText.zIndex = -1;
 			add(targetText);
-		} else if ( targetText.visible == false ) targetText.visible = true;
+		} else if ( targetText.visible == false ) {
+			targetText.visible = true;
+			targetText.setText(GameUI.targetString);
+		}
 		var targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
 		var targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
 
