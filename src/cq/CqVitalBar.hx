@@ -61,7 +61,6 @@ class CqHealthBar extends CqVitalBar {
 		super(Actor, X, Y, Width, Height);
 		
 		Actor.addOnInjure(updateValue);
-		Actor.addOnKill(destroy);
 		Actor.addOnDestroy(destroy);
 		
 		actor.healthBar = this;

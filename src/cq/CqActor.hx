@@ -45,6 +45,7 @@ class CqTimer {
 }
 
 class CqActor extends CqObject, implements Actor {
+	public var lives:Int;
 	public var isMoving:Bool;
 	public var moveSpeed:Float;	
 	public var visionRadius:Float;
@@ -217,10 +218,26 @@ class CqActor extends CqObject, implements Actor {
 			Registery.level.removeMobFromLevel(state, mob);
 			mob.doDeathEffect();
 		} else {
-			HxlLog.append("kills you");
-			PtPlayer.dies();
-			// todo = game over screen
-			HxlGraphics.pushState(new GameOverState());
+			if (Std.is(other, CqPlayer)) {
+				var player = cast(other, CqPlayer);
+				HxlLog.append("kills you");
+				PtPlayer.dies();
+				if (player.lives > 1) {
+					player.lives--;
+					
+					var startingPostion = Registery.level.getPixelPositionOfTile(
+												Registery.level.startingLocation.x,
+												Registery.level.startingLocation.y);
+					player.setTilePos(Registery.level.startingLocation);
+					player.moveToPixel(state, startingPostion.x, startingPostion.y);
+					player.hp = player.maxHp;
+					player.healthBar.updateValue();
+					player.healthBar.visible = true;					
+				} else {
+					///todo: Playtomic recording
+					HxlGraphics.pushState(new GameOverState());
+				}
+			}
 		}
 	}
 
@@ -535,6 +552,8 @@ class CqPlayer extends CqActor, implements Player {
 		
 		super(X, Y);
 
+		lives = 3;
+		
 		for (s in 0...5)
 			equippedSpells[s] = null;
 		
