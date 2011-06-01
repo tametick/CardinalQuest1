@@ -198,6 +198,7 @@ class GameUI extends HxlDialog {
 		}
 	}
 	
+	var chrageBmp:Bitmap;
 	public function updateCharge(btn:CqSpellButton, ?forcedValue:Int=-1) {
 		var spiritPoints = forcedValue;
 		var spiritPointsRequired = 360;
@@ -213,8 +214,9 @@ class GameUI extends HxlDialog {
 		G.beginFill(0x88ff0000);
 		GameUI.drawChargeArc(G, 27, 27, -(Math.PI/2), end, 47, -1);
 		G.endFill();
-		var bmp:Bitmap = new Bitmap(HxlGraphics.getBitmap("EquipmentCellBG"));
-		shape.mask = bmp;
+		if(chrageBmp == null)
+			chrageBmp = new Bitmap(HxlGraphics.getBitmap("EquipmentCellBG"));
+		shape.mask = chrageBmp;
 		var bmpdata:BitmapData = new BitmapData(94, 94, true, 0x0);
 		var ctrans:ColorTransform = new ColorTransform();
 		ctrans.alphaMultiplier = 0.5;
