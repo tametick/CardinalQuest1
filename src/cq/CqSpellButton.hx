@@ -22,10 +22,12 @@ import haxel.HxlLog;
 import haxel.HxlSprite;
 
 class CqSpellButton extends HxlDialog {
-
+	public static var clearChargeRect = new Rectangle(0, 0, 94, 94);
+	
 	var _initialized:Bool;
 	public var cell:CqSpellCell;
 	var chargeSprite:HxlSprite;
+	public var chrageBmpData:BitmapData;
 
 	public function new(X:Int,Y:Int,?Width:Int=100,?Height:Int=20,?Idx:Int=0) {
 		super(X, Y, Width, Height);
@@ -41,6 +43,8 @@ class CqSpellButton extends HxlDialog {
 		chargeSprite.createGraphic(54, 54, 0x00010101);
 		chargeSprite.zIndex = 1;
 		GameUI.instance.add(chargeSprite);
+		
+		chrageBmpData = new BitmapData(94, 94, true, 0x0);
 	}
 
 	public override function update():Void {

@@ -224,11 +224,15 @@ class GameUI extends HxlDialog {
 		if(chrageBmp == null)
 			chrageBmp = new Bitmap(HxlGraphics.getBitmap("EquipmentCellBG"));
 		chrageShape.mask = chrageBmp;
-		var bmpdata:BitmapData = new BitmapData(94, 94, true, 0x0);
+		
+		//var bmpdata:BitmapData = new BitmapData(94, 94, true, 0x0);
+		btn.chrageBmpData.fillRect(CqSpellButton.clearChargeRect, 0x0);
+		
+		
 		var ctrans:ColorTransform = new ColorTransform();
 		ctrans.alphaMultiplier = 0.5;
-		bmpdata.draw(chrageShape, null, ctrans);
-		HxlGraphics.addBitmapData(bmpdata, "chargeRadial", true);
+		btn.chrageBmpData.draw(chrageShape, null, ctrans);
+		HxlGraphics.addBitmapData(btn.chrageBmpData, "chargeRadial", true);
 
 		btn.updateChargeSprite("chargeRadial");
 	}
