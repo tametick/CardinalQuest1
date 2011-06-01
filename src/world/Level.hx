@@ -308,20 +308,29 @@ class Level extends HxlTilemap
 	}
 	
 	public function getTargetAccordingToMousePosition(dx:Float, dy:Float):HxlPoint {
-		var targetTile:HxlPoint = null;
+		if (targetTile == null)
+			targetTile = new HxlPoint(0, 0);
+		else{
+			targetTile.x = 0;
+			targetTile.y = 0;
+		}
+		
 		if (Math.abs(dx) > Math.abs(dy)){
 			if (dx < 0) {
-				targetTile = new HxlPoint( -1, 0);
+				targetTile.x = -1;
 			} else {
-				targetTile = new HxlPoint( 1, 0);
+				targetTile.x = 1;
 			}
 		} else {
 			if (dy < 0) {
-				targetTile = new HxlPoint( 0, -1);
+				targetTile.y = -1;
 			} else {
-				targetTile = new HxlPoint( 0, 1);
+				targetTile.y = 1;
 			}
 		}
+		
+		if (targetTile.x == 0 && targetTile.y == 0)
+			return null;
 		return targetTile;
 	}
 	
