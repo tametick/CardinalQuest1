@@ -11,7 +11,7 @@ class Playtomic {
 	
 	public static function create() {
 		enabled = true;
-		Log.View(swfid, guid, CqPreloader.url);
+		Log.View(swfid, guid, Lib.current.root.loaderInfo.loaderURL);
 	}
 	
 	// pausing still collects the data, it only pauses sending

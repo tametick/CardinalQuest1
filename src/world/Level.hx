@@ -14,6 +14,9 @@ import data.Registery;
 
 import playtomic.PtLevel;
 
+import cq.CqConfiguration;
+import cq.WinState;
+
 class Level extends HxlTilemap
 {
 	public var mobs:Array<Mob>;
@@ -79,6 +82,8 @@ class Level extends HxlTilemap
 		mobTile.actors.remove(mob);
 		
 		state.remove(mob);
+		if (mobs.length == 0)
+		levelComplete();
 	}
 	
 	function addObject(state:HxlState, obj:GameObject) {
@@ -137,6 +142,11 @@ class Level extends HxlTilemap
 		lootTile.loots.remove(loot);
 		
 		state.remove(loot);
+	}
+	
+	function levelComplete():Void {
+		if (index == CqConfiguration.lastLevel)
+			HxlGraphics.pushState(new WinState());
 	}
 	
 	override public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {
