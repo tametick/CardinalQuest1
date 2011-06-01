@@ -228,7 +228,9 @@ class CqActor extends CqObject, implements Actor {
 					var startingPostion = Registery.level.getPixelPositionOfTile(
 												Registery.level.startingLocation.x,
 												Registery.level.startingLocation.y);
-					player.setTilePos(Registery.level.startingLocation);
+					player.setTilePos(
+						Std.int(Registery.level.startingLocation.x), Std.int(Registery.level.startingLocation.y)
+					);
 					player.moveToPixel(state, startingPostion.x, startingPostion.y);
 					player.hp = player.maxHp;
 					player.healthBar.updateValue();
@@ -327,7 +329,7 @@ class CqActor extends CqObject, implements Actor {
 		}
 		
 		isMoving = true;
-		setTilePos(new HxlPoint(targetX, targetY));
+		setTilePos(Std.int(targetX), Std.int(targetY));
 		var positionOfTile:HxlPoint = level.getPixelPositionOfTile(Math.round(tilePos.x), Math.round(tilePos.y));
 		moveToPixel(state, positionOfTile.x, positionOfTile.y);
 		

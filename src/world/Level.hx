@@ -92,7 +92,7 @@ class Level extends HxlTilemap
 	
 	function addAllActors(state:HxlState) {
 		var player = Registery.player;
-		player.tilePos = startingLocation;
+		player.setTilePos(Std.int(startingLocation.x),Std.int(startingLocation.y));
 		player.x = getPixelPositionOfTile(player.tilePos.x, player.tilePos.y).x;
 		player.y = getPixelPositionOfTile(player.tilePos.x, player.tilePos.y).y;
 		state.add(player);

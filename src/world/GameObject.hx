@@ -12,9 +12,9 @@ interface GameObject implements HxlObjectI {
 	var hp:Int;
 	var maxHp:Int;
 
-	var tilePos(getTilePos, setTilePos):HxlPoint;
+	var tilePos(getTilePos, null):HxlPoint;
 	function getTilePos():HxlPoint;
-	function setTilePos(TilePos:HxlPoint):HxlPoint;
+	function setTilePos(X:Int, Y:Int):HxlPoint;
 	function addOnDestroy(Callback:Dynamic):Void;
 	function destroy():Void;
 }
@@ -22,8 +22,8 @@ interface GameObject implements HxlObjectI {
 class GameObjectImpl extends HxlSprite, implements GameObject
 {
 	public var hp:Int;
-	public var maxHp:Int;	
-	public var tilePos(getTilePos, setTilePos):HxlPoint;
+	public var maxHp:Int;
+	public var tilePos(getTilePos, null):HxlPoint;
 	
 	var _tilePos:HxlPoint;
 
@@ -47,7 +47,7 @@ class GameObjectImpl extends HxlSprite, implements GameObject
 		return _tilePos;
 	}
 	
-	public function setTilePos(TilePos:HxlPoint):HxlPoint {
+	public function setTilePos(X:Int, Y:Int):HxlPoint {
 		// remove from old tile
 		if (_tilePos != null) {
 			var tile = Registery.level.getTile(_tilePos.x, _tilePos.y);
@@ -59,14 +59,19 @@ class GameObjectImpl extends HxlSprite, implements GameObject
 		}
 		
 		// add to new tile
-		_tilePos = TilePos;
+		if(_tilePos == null)
+			_tilePos = new HxlPoint(X, Y);
+		else {
+			_tilePos.x = X;
+			_tilePos.y = Y;
+		}
 
 		if(Std.is(this,Actor))
 			Registery.level.getTile(_tilePos.x, _tilePos.y).actors.push(this);
 		else if (Std.is(this, Loot))
 			Registery.level.getTile(_tilePos.x, _tilePos.y).loots.push(this);
 		
-		return TilePos;
+		return _tilePos;
 	}
 
 	public function addOnDestroy(Callback:Dynamic):Void {
