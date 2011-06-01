@@ -699,10 +699,10 @@ class HxlSprite extends HxlObject {
 	 * 
 	 * @param	AnimationCallback		A function that has 3 parameters: a string name, a Int frame number, and a Int frame index.
 	 */
-	public function addAnimationCallback(AnimationCallback:Dynamic):Void {
+/*	public function addAnimationCallback(AnimationCallback:Dynamic):Void {
 		_callback = AnimationCallback;
 	}
-
+*/
 	/**
 	 * Plays an existing animation (e.g. "run").
 	 * If you call an animation that is already playing it will be ignored.
