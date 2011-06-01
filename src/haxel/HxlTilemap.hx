@@ -310,9 +310,9 @@ class HxlTilemap extends HxlObject {
 	/**
 	 * Internal function that actually renders the tilemap.  Called by render().
 	 */
-	function renderTilemap():Void
-	{
-
+	static var tmpBitmap:BitmapData;
+	static var tmpRect:Rectangle;
+	function renderTilemap():Void {
 		//Bounding box display options
 		var tileBitmap:BitmapData;
 		if (HxlGraphics.showBounds) {
@@ -321,8 +321,15 @@ class HxlTilemap extends HxlObject {
 			tileBitmap = _pixels;
 		}
 
-		var tmpBitmap:BitmapData = new BitmapData(_tileWidth, _tileHeight, true, 0x00ffffff);
-		var tmpRect:Rectangle = new Rectangle(0, 0, _tileWidth, _tileHeight);
+		
+		if (tmpRect == null)
+			tmpRect = new Rectangle(0, 0, _tileWidth, _tileHeight);
+		
+		if (tmpBitmap == null)
+			tmpBitmap = new BitmapData(_tileWidth, _tileHeight, true, 0x00ffffff);
+		else
+			tmpBitmap.fillRect(tmpRect, 0x00ffffff);
+		
 
 		getScreenXY(_point);
 		_flashPoint.x = _point.x;
