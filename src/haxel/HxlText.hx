@@ -311,4 +311,11 @@ class HxlText extends HxlSprite {
 		return new TextFormat(dtf.font,dtf.size,dtf.color,dtf.bold,dtf.italic,dtf.underline,dtf.url,dtf.target,dtf.align);
 	}
 
+	override public function kill():Void {
+		_framePixels.dispose();
+		_pixels.dispose();
+		_bbb.dispose();
+		
+		super.kill();
+	}
 }

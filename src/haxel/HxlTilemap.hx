@@ -386,19 +386,26 @@ class HxlTilemap extends HxlObject {
 	public function getTileBitmap(X:Int, Y:Int):BitmapData {
 		var tileBitmap:BitmapData = _pixels;
 		var tile:HxlTile = _tiles[Y][X];
-		var bmp:BitmapData = new BitmapData(_tileWidth, _tileHeight, true, 0x00ffffff);
-		var bmpRect:Rectangle = new Rectangle(0, 0, _tileWidth, _tileHeight);
+		
+		if (tmpRect == null)
+			tmpRect = new Rectangle(0, 0, _tileWidth, _tileHeight);
+		
+		if (tmpBitmap == null)
+			tmpBitmap = new BitmapData(_tileWidth, _tileHeight, true, 0x00ffffff);
+		else
+			tmpBitmap.fillRect(tmpRect, 0x00ffffff);		
+		
 		if ( tile._ct != null ) {
 			#if flash9
-			bmp.copyPixels(tileBitmap, tile.bitmapRect, new Point(0, 0), null, null, true);
-			bmp.colorTransform(bmpRect, tile._ct);
+			tmpBitmap.copyPixels(tileBitmap, tile.bitmapRect, new Point(0, 0), null, null, true);
+			tmpBitmap.colorTransform(tmpRect, tile._ct);
 			#else
 			bmp.copyPixels(tileBitmap, tile.bitmapRect, new Point(0, 0), null, null, true);
 			#end
 		} else {
-			bmp.copyPixels(tileBitmap, tile.bitmapRect, new Point(0, 0), null, null, true);
+			tmpBitmap.copyPixels(tileBitmap, tile.bitmapRect, new Point(0, 0), null, null, true);
 		}
-		return bmp;
+		return tmpBitmap;
 	}
 
 	/**
