@@ -740,16 +740,24 @@ class CqMob extends CqActor, implements Mob {
 		play("idle");
 	}
 	
+	static var up:HxlPoint = new HxlPoint(0,-1);
+	static var down:HxlPoint = new HxlPoint(0,1);
+	static var left:HxlPoint = new HxlPoint(-1,0);
+	static var right:HxlPoint = new HxlPoint(1, 0);
+	static var directions = [];
+	
 	function actUnaware(state:HxlState):Bool {
-		var directions = [];
+		while(directions.length>0)
+			directions.pop();
+			
 		if (!Registery.level.isBlockingMovement(Std.int(tilePos.x + 1), Std.int(tilePos.y)))
-			directions.push(new HxlPoint(1, 0));
+			directions.push(CqMob.right);
 		if (!Registery.level.isBlockingMovement(Std.int(tilePos.x - 1), Std.int(tilePos.y)))
-			directions.push(new HxlPoint(-1, 0));
+			directions.push(CqMob.left);
 		if (!Registery.level.isBlockingMovement(Std.int(tilePos.x), Std.int(tilePos.y+1)))
-			directions.push(new HxlPoint(0, 1));
+			directions.push(CqMob.down);
 		if (!Registery.level.isBlockingMovement(Std.int(tilePos.x), Std.int(tilePos.y-1)))
-			directions.push(new HxlPoint(0, -1));
+			directions.push(CqMob.up);
 			
 		var direction = HxlUtil.getRandomElement(directions);
 
