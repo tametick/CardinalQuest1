@@ -339,8 +339,9 @@ class CqWorld extends World {
 	}
 
 	function goToLevel(level:Int) {
-		levels.push(new CqLevel(level));
-		currentLevel = levels[level];
+		//levels.push(new CqLevel(level));
+		//currentLevel = levels[level];
+		currentLevel = new CqLevel(level);
 		doOnNewLevel();
 	}
 	

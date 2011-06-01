@@ -6,11 +6,11 @@ class World
 {
 	public var currentLevel:Level;
 	public var currentLevelIndex:Int;
-	var levels:Array<Level>;
+	//var levels:Array<Level>;
 	
 	public function new() {
 		currentLevelIndex = 0;
-		levels = new Array<Level>();
+		//levels = new Array<Level>();
 	}
 	
 	public function goToNextLevel(state:HxlState){}
