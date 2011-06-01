@@ -867,7 +867,14 @@ class HxlSprite extends HxlObject {
 		if ( !exists || !visible || !active || !dragEnabled || HxlGraphics.mouse.dragSprite != this ) return;
 		HxlGraphics.mouse.dragSprite = null;
 		isDragging = false;
-		dragStopPoint = new HxlPoint(x, y);
+		
+		if(dragStopPoint ==null) {
+			dragStopPoint = new HxlPoint(x, y);
+		}else{
+			dragStopPoint.x = x;
+			dragStopPoint.y = y;
+		}
+		
 		dragStop();
 	}
 
