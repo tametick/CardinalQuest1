@@ -274,28 +274,36 @@ class Level extends HxlTilemap
 		return Math.round(color);
 	}
 	
+	var targetTile:HxlPoint;
 	public function getTargetAccordingToKeyPress():HxlPoint {
 		var player = Registery.player;
 		
-		var targetTile:HxlPoint = null;
+		if (targetTile == null)
+			targetTile = new HxlPoint(0, 0);
+		else{
+			targetTile.x = 0;
+			targetTile.y = 0;
+		}
 		if ( HxlGraphics.keys.LEFT ) {
 			if ( player.tilePos.x > 0) {
-				targetTile = new HxlPoint( -1, 0);
+				targetTile.x = -1;
 			}
 		} else if ( HxlGraphics.keys.RIGHT ) {
 			if ( player.tilePos.x < widthInTiles) {
-				targetTile = new HxlPoint(1, 0);
+				targetTile.x = 1;
 			}
 		} else if ( HxlGraphics.keys.UP ) {
 			if ( player.tilePos.y > 0 ) {
-					targetTile = new HxlPoint(0, -1);
+					targetTile.y = -1;
 			}
 		} else if ( HxlGraphics.keys.DOWN ) {
 			if ( player.tilePos.y < heightInTiles ) {
-					targetTile = new HxlPoint(0, 1);
+					targetTile.y = 1;
 			}
 		} 
 		
+		if (targetTile.x == 0 && targetTile.y == 0)
+			return null;
 		return targetTile;
 	}
 	
