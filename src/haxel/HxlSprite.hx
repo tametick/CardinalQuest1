@@ -811,7 +811,7 @@ class HxlSprite extends HxlObject {
 		dragStartPoint = null;
 		dragOffset = null;
 	}
-
+/*
 	public function onDragStart(?Callback:Dynamic=null):Void {
 		dragStartCallback = Callback;
 	}
@@ -823,7 +823,7 @@ class HxlSprite extends HxlObject {
 	public function onDragMove(?Callback:Dynamic=null):Void {
 		dragMoveCallback = Callback;
 	}
-
+*/
 	function dragStart():Void {
 		if ( dragStartCallback != null ) 
 			dragStartCallback();
