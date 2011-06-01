@@ -379,9 +379,6 @@ class HxlSprite extends HxlObject {
 		
 		//Simple render
 		if (((angle == 0) || (_bakedRotation > 0)) && (scale.x == 1) && (scale.y == 1) && (blend == null)) {
-
-			//DEBUG!
-			//flash.Lib.current.addChild(new Bitmap(_framePixels));
 			HxlGraphics.buffer.copyPixels(_framePixels,_flashRect,_flashPoint,null,null,true);
 			return;
 		}
@@ -538,14 +535,11 @@ class HxlSprite extends HxlObject {
 		}
 		origin.x = frameWidth/2;
 		origin.y = frameHeight/2;
-		//DEBUG!!!
-		//flash.Lib.current.addChild(new Bitmap(_pixels));
 		_framePixels.copyPixels(_pixels,_flashRect,_flashPointZero);
 		if (HxlGraphics.showBounds) {
 			drawBounds();
 		}
 		_caf = 0;
-		//refreshHulls();
 	}
 
 	function drawBounds():Void {

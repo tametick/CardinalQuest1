@@ -1,13 +1,10 @@
 package haxel;
 
-import flash.display.Bitmap;
 import flash.media.Sound;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 
-class HxlMenu extends HxlDialog
-{
-
+class HxlMenu extends HxlDialog {
 	var items:Array<HxlMenuItem>;
 	var _scrollSound:HxlSound;
 	var _selectSound:HxlSound;
