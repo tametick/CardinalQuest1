@@ -83,7 +83,7 @@ class HxlTilemap extends HxlObject {
 	var _tileWidth:Int;
 	var _tileHeight:Int;
 	var _block:HxlObject;
-	var _callbacks:Array<Dynamic>;
+	//var _callbacks:Array<Dynamic>;
 	var _screenRows:Int;
 	var _screenCols:Int;
 	public var tileGraphicName:String;
@@ -124,7 +124,7 @@ class HxlTilemap extends HxlObject {
 		_block = new HxlObject();
 		_block.width = _block.height = 0;
 		//_block.fixed = true;
-		_callbacks = new Array();
+		//_callbacks = new Array();
 		//fixed = true;
 
 		_alpha = 1;
