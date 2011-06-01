@@ -199,6 +199,7 @@ class GameUI extends HxlDialog {
 	}
 	
 	var chrageBmp:Bitmap;
+	var chrageShape:Shape;
 	public function updateCharge(btn:CqSpellButton, ?forcedValue:Int=-1) {
 		var spiritPoints = forcedValue;
 		var spiritPointsRequired = 360;
@@ -209,18 +210,24 @@ class GameUI extends HxlDialog {
 
 		var end:Float = (((Math.PI / 2) * 3) - (-(Math.PI/2))) * (spiritPoints / spiritPointsRequired);
 		end = ((Math.PI / 2) * 3) - end;
-		var shape:Shape = new Shape();
-		var G = shape.graphics;
+		
+		if(chrageShape==null)
+			chrageShape = new Shape();
+			
+		var G = chrageShape.graphics;
+		
+		G.clear();
+		
 		G.beginFill(0x88ff0000);
 		GameUI.drawChargeArc(G, 27, 27, -(Math.PI/2), end, 47, -1);
 		G.endFill();
 		if(chrageBmp == null)
 			chrageBmp = new Bitmap(HxlGraphics.getBitmap("EquipmentCellBG"));
-		shape.mask = chrageBmp;
+		chrageShape.mask = chrageBmp;
 		var bmpdata:BitmapData = new BitmapData(94, 94, true, 0x0);
 		var ctrans:ColorTransform = new ColorTransform();
 		ctrans.alphaMultiplier = 0.5;
-		bmpdata.draw(shape, null, ctrans);
+		bmpdata.draw(chrageShape, null, ctrans);
 		HxlGraphics.addBitmapData(bmpdata, "chargeRadial", true);
 
 		btn.updateChargeSprite("chargeRadial");

@@ -1,7 +1,6 @@
 package cq;
 
 import flash.display.BitmapData;
-import flash.display.Shape;
 
 import haxel.HxlEmitter;
 import haxel.HxlGradient;
