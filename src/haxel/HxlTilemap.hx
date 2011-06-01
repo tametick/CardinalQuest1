@@ -417,8 +417,11 @@ class HxlTilemap extends HxlObject {
 	 * @param	Center	If true, returns point centered on tile.
 	 * @return HxlPoint object
 	 */
+	var pos:HxlPoint;
 	public function getTilePos(X:Dynamic, Y:Dynamic, ?Center:Bool=false):HxlPoint {
-		var pos:HxlPoint = new HxlPoint();
+		if (pos == null)
+			pos = new HxlPoint();
+			
 		pos.x = x + (X * _tileWidth);
 		pos.y = y + (Y * _tileHeight);
 		if ( Center ) {

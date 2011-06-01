@@ -179,6 +179,7 @@ class Level extends HxlTilemap
 		return Std.parseInt("0x"+hex+hex+hex);
 	}
 	
+	var dest:HxlPoint;
 	public function updateFieldOfView(?skipTween:Bool = false, ?gradientColoring:Bool = true, ?seenTween:Int = 64, ?inSightTween:Int=255) {
 		var player = Registery.player;
 		
@@ -215,7 +216,14 @@ class Level extends HxlTilemap
 		for ( x in left...right+1 ) {
 			for ( y in top...bottom+1 ) {
 				tile = getTile(x, y);
-				var dist = HxlUtil.distance(player.tilePos, new HxlPoint(x, y));
+				if (dest == null){
+					dest = new HxlPoint(x, y);
+				} else {
+					dest.x = x;
+					dest.y = y;
+				}
+					
+				var dist = HxlUtil.distance(player.tilePos, dest);
 				
 				switch (tile.visibility) {
 					case Visibility.IN_SIGHT:
