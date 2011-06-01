@@ -774,6 +774,7 @@ class CqMob extends CqActor, implements Mob {
 		return Registery.level.getTile(Math.round(p.x), Math.round(p.y)).isBlockingView();
 	}
 	
+	static var direction:HxlPoint;
 	function actAware(state:HxlState):Bool {
 		var line = HxlUtil.getLine(tilePos, Registery.player.tilePos, isBlocking);
 		var dest = line[1];
@@ -816,7 +817,12 @@ class CqMob extends CqActor, implements Mob {
 				dx = 0;
 		}
 		
-		var direction = new HxlPoint(dx, dy);
+		if(direction==null)
+			direction = new HxlPoint(dx, dy);
+		else {
+			direction.x = dx;
+			direction.y = dy;
+		}
 		
 		return actInDirection(state,direction);
 	}
