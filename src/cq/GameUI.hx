@@ -497,7 +497,9 @@ class GameUI extends HxlDialog {
 				}
 			}
 
-			if ( targetLastPos == null ) targetLastPos = new HxlPoint();
+			if ( targetLastPos == null ) 
+				targetLastPos = new HxlPoint();
+			
 			targetLastPos.x = targetX;
 			targetLastPos.y = targetY;
 		}

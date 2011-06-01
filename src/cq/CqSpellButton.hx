@@ -8,7 +8,6 @@ import cq.CqSpell;
 import cq.CqActor;
 
 import flash.display.BitmapData;
-import flash.display.Shape;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;

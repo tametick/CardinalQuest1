@@ -422,7 +422,9 @@ class HxlSprite extends HxlObject {
 		}
 		//updateFlickering();
 		if ( dragEnabled && isDragging && HxlGraphics.mouse.dragSprite == this ) {
-			if ( dragOffset == null ) dragOffset = new HxlPoint(0,0);
+			if ( dragOffset == null ) 
+				dragOffset = new HxlPoint(0, 0);
+			
 			x = HxlGraphics.mouse.x - dragOffset.x;
 			y = HxlGraphics.mouse.y - dragOffset.y;
 			dragMove();
@@ -840,10 +842,22 @@ class HxlSprite extends HxlObject {
 	private function onDragMouseDown(event:MouseEvent):Void {
 		if ( !exists || !visible || !active || !dragEnabled ) return;
 		if ( overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y) ) {
-			dragStartPoint = new HxlPoint(x, y);
+			
+			if(dragStartPoint ==null) {
+				dragStartPoint = new HxlPoint(x, y);
+			}else{
+				dragStartPoint.x = x;
+				dragStartPoint.y = y;
+			}
+			
 			dragStopPoint = null;
 			isDragging = true;
-			dragOffset = new HxlPoint(HxlGraphics.mouse.x - x, HxlGraphics.mouse.y - y);
+			if(dragOffset == null){
+				dragOffset = new HxlPoint(HxlGraphics.mouse.x - x, HxlGraphics.mouse.y - y);
+			} else {
+				dragOffset.x = HxlGraphics.mouse.x - x; 
+				dragOffset.y = HxlGraphics.mouse.y - y;
+			}
 			HxlGraphics.mouse.dragSprite = this;
 			dragStart();
 		}
