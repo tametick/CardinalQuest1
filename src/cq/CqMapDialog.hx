@@ -7,6 +7,7 @@ import data.Registery;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Shape;
+import flash.geom.Rectangle;
 import haxel.HxlDialog;
 import haxel.HxlPoint;
 import haxel.HxlSlidingDialog;
@@ -23,6 +24,8 @@ class CqMapDialog extends HxlSlidingDialog {
 	var mapSize:HxlPoint;
 	var cellSize:HxlPoint;
 
+	var clearRect:Rectangle;
+	
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0)
 	{
 		// Size: 472 x 480
@@ -33,11 +36,12 @@ class CqMapDialog extends HxlSlidingDialog {
 		mapDialog = new HxlDialog(36, 40, 400, 400);
 		mapDialog.setBackgroundColor(0x222222, 15.0);
 		add(mapDialog);
-
+		
 		// map draw area size: 380x380
 		// map draw area offset: 20x20
 		// map draw area pos: 20x20
 		mapSize = new HxlPoint(380, 380);
+		clearRect = new Rectangle(0, 0, 380, 380);
 
 		mapSprite = new HxlSprite(20, 20);
 		mapDialog.add(mapSprite);
@@ -148,7 +152,8 @@ class CqMapDialog extends HxlSlidingDialog {
 				}
 			}
 		}
-		mapBitmap = new Bitmap(new BitmapData(Std.int(mapSize.x), Std.int(mapSize.y), true, 0x0));
+
+		mapBitmap.bitmapData.fillRect(clearRect, 0x0);
 		mapBitmap.bitmapData.draw(mapShape);
 		mapSprite.pixels = mapBitmap.bitmapData;
 	}

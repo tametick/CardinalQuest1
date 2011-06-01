@@ -1,6 +1,5 @@
 import flash.display.Loader;
 import flash.display.MovieClip;
-import flash.display.Bitmap;
 import flash.events.Event;
 import flash.system.LoaderContext;
 import flash.system.ApplicationDomain;
