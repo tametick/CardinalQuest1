@@ -34,10 +34,7 @@ class Game extends HxlGame {
 		HxlState.bgColor = 0xFF000000;
 		Playtomic.create();
 		
-		if(Configuration.debug)
-			super(640, 480, GameState, 1, "FontDungeon");
-		else
-			super(640, 480, SplashState, 1, "FontDungeon");
+		super(640, 480, SplashState, 1, new FontDungeon().fontName);
 
 	}
 }
