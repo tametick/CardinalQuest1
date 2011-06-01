@@ -152,6 +152,7 @@ class GameState extends HxlState {
 		isPlayerActing = false;
 	}
 	
+	var tmpPoint:HxlPoint;
 	private function act():Void {
 		if (GameUI.currentPanel != null)
 			return;
@@ -170,7 +171,14 @@ class GameState extends HxlState {
 		var tile = getPlayerTile(target);
 		
 		if (Math.abs(dx) < Configuration.zoomedTileSize() / 2 && Math.abs(dy) < Configuration.zoomedTileSize() / 2) {
-			tile = getPlayerTile(new HxlPoint(0, 0));
+			if (tmpPoint == null)
+				tmpPoint = new HxlPoint(0, 0);
+			else {
+				tmpPoint.x = 0;
+				tmpPoint.y = 0;
+			}
+				
+			tile = getPlayerTile(tmpPoint);
 			 if (tile.loots.length > 0) {
 				 // pickup item
 				var item = cast(tile.loots[tile.loots.length - 1], CqItem);
