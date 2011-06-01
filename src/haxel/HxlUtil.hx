@@ -219,6 +219,7 @@ class HxlUtil {
 		return Math.sqrt(Math.pow(src.x - dest.x, 2) + Math.pow(src.y - dest.y, 2));
 	}
 	
+	static var tmpDest = new HxlPoint();
 	public static function markFieldOfView(position:HxlPoint, radius:Float, map:HxlTilemap, ?radial:Bool=true) {
 		var bottom = Std.int(Math.min(map.heightInTiles - 1, position.y + radius));
 		var top = Std.int(Math.max(0, position.y - radius));
@@ -233,13 +234,22 @@ class HxlUtil {
 			map.getTile(Math.round(p.x), Math.round(p.y)).visibility = Visibility.IN_SIGHT ; 
 		}
 
-		for (dx in left...right+1) {
-			travrseLine(position, new HxlPoint(dx, top), isBlocking, apply, radial?radius:-1);
-			travrseLine(position, new HxlPoint(dx, bottom), isBlocking, apply, radial?radius:-1);
+		
+		for (dx in left...right + 1) {
+			tmpDest.x = dx;
+			tmpDest.y = top;
+			travrseLine(position, tmpDest, isBlocking, apply, radial?radius: -1);
+			tmpDest.x = dx;
+			tmpDest.y = bottom;
+			travrseLine(position, tmpDest, isBlocking, apply, radial?radius:-1);
 		}
-		for (dy in top...bottom+1) {
-			travrseLine(position, new HxlPoint(left, dy), isBlocking, apply, radial?radius:-1);
-			travrseLine(position, new HxlPoint(right, dy), isBlocking, apply, radial?radius:-1);
+		for (dy in top...bottom + 1) {
+			tmpDest.x = left;
+			tmpDest.y = dy;
+			travrseLine(position, tmpDest, isBlocking, apply, radial?radius: -1);
+			tmpDest.x = right;
+			tmpDest.y = dy;			
+			travrseLine(position, tmpDest, isBlocking, apply, radial?radius:-1);
 		}
 	}
 	
@@ -251,7 +261,7 @@ class HxlUtil {
 		
 		return line[line.length-1].intEquals(dest);
 	}
-	
+		
 	public static function travrseLine(src:HxlPoint, dest:HxlPoint, ?isBlocking:HxlPoint->Bool=null, apply:HxlPoint->Void, ?maxDist:Float=-1) {
 		for (pos in getLine(src, dest, isBlocking)) {
 			if(maxDist<0 || distance(src,pos) <= maxDist)
