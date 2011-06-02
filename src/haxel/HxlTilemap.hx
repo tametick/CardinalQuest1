@@ -351,8 +351,8 @@ class HxlTilemap extends HxlObject {
 				if ( tile.bitmapRect != null && tile.visible ) {
 					if ( tile._ct == null ) {
 						HxlGraphics.buffer.copyPixels(tileBitmap, tile.bitmapRect, _flashPoint, null, null, true);
-					} else if ( tile.altBitmap != null ) {
-						HxlGraphics.buffer.copyPixels(tile.altBitmap, tmpRect, _flashPoint, null, null, true);
+/*					} else if ( tile.altBitmap != null ) {
+						HxlGraphics.buffer.copyPixels(tile.altBitmap, tmpRect, _flashPoint, null, null, true);*/
 					} else {
 						#if flash9
 						_mtx.identity();
@@ -686,7 +686,7 @@ class HxlTilemap extends HxlObject {
 			return;
 			
 		tile.dataNum = Data;
-		tile.altBitmap = null;
+//		tile.altBitmap = null;
 		
 		if ( Data == 0 ) {
 			tile.bitmapRect = null;
@@ -762,7 +762,7 @@ class HxlTile {
 	var _color:Int;
 	public var _ct:ColorTransform;
 	var _mtx:Matrix;
-	public var altBitmap:BitmapData;
+//	public var altBitmap:BitmapData;
 
 	public var alpha(getAlpha, setAlpha) : Float;
 	public var color(getColor, setColor) : Int;
@@ -776,7 +776,7 @@ class HxlTile {
 		_color = 0x00ffffff;
 		blend = null;
 		visible = true;
-		altBitmap = null;
+//		altBitmap = null;
 	}
 
 	/**
@@ -787,7 +787,7 @@ class HxlTile {
 	}
 	
 	public function setAlpha(Alpha:Float):Float {
-		altBitmap = null;
+//		altBitmap = null;
 		if (Alpha > 1) Alpha = 1;
 		if (Alpha < 0) Alpha = 0;
 		if (Alpha == _alpha) return Alpha;
@@ -807,7 +807,7 @@ class HxlTile {
 	}
 
 	public function setColor(Color:Int):Int {
-		altBitmap = null;
+//		altBitmap = null;
 		Color &= 0x00ffffff;
 		if (_color == Color) return Color;
 		_color = Color;

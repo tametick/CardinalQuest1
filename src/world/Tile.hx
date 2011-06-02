@@ -6,7 +6,6 @@ import haxel.HxlUtil;
 
 import data.Resources;
 
-import flash.display.BitmapData;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
@@ -38,7 +37,7 @@ class Tile extends HxlTile
 	
 	public function colorTo(ToColor:Int, Speed:Float):Void {
 		var self = this;
-		altBitmap = null;
+//		altBitmap = null;
 		Actuate.update(self.colorTween, Speed, {Color: HxlUtil.colorRGB(_color)[0]}, {Color: ToColor})
 			.onComplete(self.captureAltBitmap);
 	}
@@ -48,13 +47,12 @@ class Tile extends HxlTile
 	}
 
 	function captureAltBitmap():Void {
-		if ( level == null ) return;
-		var key:String = level.tileGraphicName+"-"+dataNum+"-"+_color+"-"+_alpha;
+/*		var key:String = level.tileGraphicName+"-"+dataNum+"-"+_color+"-"+_alpha;
 		if ( HxlGraphics.checkBitmapCache(key) ) {
 			altBitmap = HxlGraphics.getBitmap(key);
 		} else {
 			HxlGraphics.addBitmapData(level.getTileBitmap(mapX, mapY), key);
 			altBitmap = HxlGraphics.getBitmap(key);
-		}
+		}*/
 	}
 }

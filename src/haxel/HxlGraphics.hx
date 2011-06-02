@@ -24,7 +24,7 @@ class HxlGraphics {
 	 * If you build and maintain your own version of flixel,
 	 * you can give it your own name here.  Appears in the console.
 	 */
-	public static var LIBRARY_NAME:String = "haxegame";
+	public static var LIBRARY_NAME:String = "haxel";
 	/**
 	 * Assign a major version to your library.
 	 * Appears before the decimal in the console.
@@ -461,6 +461,14 @@ class HxlGraphics {
 
 	}
 
+	public static function clearBitmapData() {
+		var fieldNames:Array<String> = Reflect.fields(_cache).copy();
+		for (fieldName in fieldNames) {
+			cast(Reflect.field(_cache, fieldName), BitmapData).dispose();
+			Reflect.deleteField(_cache, fieldName);
+		}
+	}
+	
 	public static function addBitmapData(Graphic:BitmapData, ?Key:String=null, ?Force:Bool=false):BitmapData {
 		var key:String = Key;
 		if(key == null) {
@@ -475,10 +483,16 @@ class HxlGraphics {
 			}
 		}
 		if ( !checkBitmapCache(key) || Force ) {
+			if (checkBitmapCache(key)) {
+				// dispose old in case of forcing
+				cast(Reflect.field(_cache, key), BitmapData).dispose();
+			}
+			
 			var bd:BitmapData = new BitmapData( Graphic.width, Graphic.height, true, 0x00000000 );
 			bd.draw(Graphic);
 			Reflect.setField(_cache, key, bd);
 		}
+		
 		return Reflect.field(_cache, key);
 	}
 
