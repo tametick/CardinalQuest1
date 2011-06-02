@@ -242,7 +242,6 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	 */
 	public function onAdd(state:HxlState) {}
 	public function onRemove(state:HxlState) {
-		trace("on remove");
 	}
 	
 	/**
@@ -251,7 +250,6 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	public function kill():Void {
 		exists = false;
 		dead = true;
-		trace(this);
 		HxlGraphics.state.remove(this);
 	}
 
