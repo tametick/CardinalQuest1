@@ -208,7 +208,8 @@ class HxlGraphics {
 		_scrollTarget = null;
 		unfollow();
 		timeScale = 1.0;
-		framerate = 60;
+		//framerate = 60;
+		framerate = 30;
 		frameratePaused = 10;
 		maxElapsed = 0.0333333;
 		HxlGraphics.elapsed = 0;
@@ -486,7 +487,8 @@ class HxlGraphics {
 	 * If a matching bitmap is now found, returns a 20x20 pixel red square.
 	 **/
 	public static function getBitmap(Key:String):BitmapData {
-		if ( Key == null || !checkBitmapCache(Key) ) return createBitmap(20, 20, 0xff0000); 
+		if ( Key == null || !checkBitmapCache(Key) ) 
+			return createBitmap(20, 20, 0xff0000); 
 		return Reflect.field(_cache, Key);
 	}
 
@@ -496,11 +498,10 @@ class HxlGraphics {
 	 * @return	A Flash <code>MovieClip</code> object.
 	 */
 	public static function getStage():Stage {
-		//trace("Getting stage..");
 		if ((_game.state != null)  && (_game.state.parent != null)) {
 			return _game.state.parent.stage;
 		}
-		//trace("no stage!");
+
 		return null;
 	}
 
