@@ -1,6 +1,5 @@
 import flash.display.Loader;
 import flash.display.MovieClip;
-import flash.events.Event;
 import flash.system.LoaderContext;
 import flash.system.ApplicationDomain;
 import flash.utils.ByteArray;
