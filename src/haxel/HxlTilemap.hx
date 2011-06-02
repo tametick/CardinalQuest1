@@ -312,6 +312,7 @@ class HxlTilemap extends HxlObject {
 	 */
 	static var tmpBitmap:BitmapData;
 	static var tmpRect:Rectangle;
+	static var originPoint:Point = new Point(0, 0);
 	function renderTilemap():Void {
 		//Bounding box display options
 		var tileBitmap:BitmapData;
@@ -358,7 +359,7 @@ class HxlTilemap extends HxlObject {
 						_mtx.identity();
 						_mtx.translate(_flashPoint.x, _flashPoint.y);
 						tmpBitmap.fillRect( tmpRect, 0xffFF0000);
-						tmpBitmap.copyPixels(tileBitmap, tile.bitmapRect, new Point(0, 0), null, null, true);
+						tmpBitmap.copyPixels(tileBitmap, tile.bitmapRect, originPoint, null, null, true);
 						tmpBitmap.colorTransform( tmpRect,  tile._ct);
 						HxlGraphics.buffer.copyPixels(tmpBitmap, tmpRect, _flashPoint, null, null, true);
 						#else

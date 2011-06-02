@@ -241,7 +241,9 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	 * override these function if you want to do something after the object is added or removed
 	 */
 	public function onAdd(state:HxlState) {}
-	public function onRemove(state:HxlState) {}
+	public function onRemove(state:HxlState) {
+		trace("on remove");
+	}
 	
 	/**
 	 * Call this function to "kill" a sprite so that it no longer 'exists'.
@@ -249,6 +251,8 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	public function kill():Void {
 		exists = false;
 		dead = true;
+		trace(this);
+		HxlGraphics.state.remove(this);
 	}
 
 	/**
@@ -404,7 +408,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		return true;
 	}
 	
-	function addEventListener(Type:String, Listener:Dynamic, UseCapture:Bool=false, Priority:Int=0, UseWeakReference:Bool=false):Void { 
+	function addEventListener(Type:String, Listener:Dynamic, UseCapture:Bool=false, Priority:Int=0, UseWeakReference:Bool=true):Void { 
 		HxlGraphics.stage.addEventListener(Type, Listener, UseCapture, Priority, UseWeakReference);
 		eventListeners.push( {Type: Type, Listener: Listener, UseCapture: UseCapture, Priority: Priority} );
 	}
@@ -436,7 +440,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	public function resumeEventListeners():Void {
 		if ( HxlGraphics.stage == null ) return;
 		for ( i in eventListeners ) {
-			HxlGraphics.stage.addEventListener(i.Type, i.Listener, i.UseCapture, i.Priority);
+			HxlGraphics.stage.addEventListener(i.Type, i.Listener, i.UseCapture, i.Priority, true);
 		}
 	}
 

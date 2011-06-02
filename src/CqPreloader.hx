@@ -57,8 +57,8 @@ class CqPreloader extends MovieClip {
 		txt.defaultTextFormat = fmt;
 		txt.setTextFormat(fmt);
 		addChild(txt);
-		txt.addEventListener(MouseEvent.CLICK,goToMyURL);
-		tmp.addEventListener(MouseEvent.CLICK,goToMyURL);
+		txt.addEventListener(MouseEvent.CLICK,goToMyURL,false,0,true);
+		tmp.addEventListener(MouseEvent.CLICK,goToMyURL,false,0,true);
 
 		// Stop listening for onEnterFrame events (halts further loading)
 		removeEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -99,7 +99,7 @@ class CqPreloader extends MovieClip {
 		progressBar.y = 230;
 		
 
-		addEventListener(Event.ENTER_FRAME, onEnterFrame);
+		addEventListener(Event.ENTER_FRAME, onEnterFrame,false,0,true);
 	}
 	private function onEnterFrame(event:Event):Void
 	{

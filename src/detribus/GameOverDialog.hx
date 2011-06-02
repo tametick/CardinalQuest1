@@ -54,7 +54,7 @@ class GameOverDialog extends StatsDialog {
 		victoryText.visible = true;
 		visible = true;
 		fadeIn();
-		HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown,false,0,true);
 	}
 
 	public function showDefeat():Void {
@@ -62,7 +62,7 @@ class GameOverDialog extends StatsDialog {
 		defeatText.visible = true;
 		visible = true;
 		fadeIn();
-		HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown,false,0,true);
 	}
 
 	function onKeyDown(event:KeyboardEvent):Void {

@@ -55,7 +55,7 @@ class DetribusPreloader extends MovieClip
 		progressBar.x = 260;
 		progressBar.y = 230;
 
-		addEventListener(Event.ENTER_FRAME, onEnterFrame);
+		addEventListener(Event.ENTER_FRAME, onEnterFrame,false,0,true);
 	}
 	private function onEnterFrame(event:Event):Void
 	{

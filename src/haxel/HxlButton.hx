@@ -225,8 +225,8 @@ class HxlButton extends HxlGroup {
 	public override function update():Void {
 		if (!_initialized) {
 			if (HxlGraphics.stage != null) {
-				addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, eventUseCapture, eventPriority);
-				addEventListener(MouseEvent.MOUSE_UP, onMouseUp, eventUseCapture, eventPriority);
+				addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, eventUseCapture, eventPriority,true);
+				addEventListener(MouseEvent.MOUSE_UP, onMouseUp, eventUseCapture, eventPriority,true);
 				_initialized = true;
 			}
 		}

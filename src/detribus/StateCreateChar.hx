@@ -63,8 +63,8 @@ class StateCreateChar extends BaseMenuState {
 		renderNameStep();
 
 		HxlGraphics.fade.start(false, 0xffffffff, 0.25);
-		HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-		HxlGraphics.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+		HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown,false,0,true);
+		HxlGraphics.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp,false,0,true);
 	}
 
 	function startGame():Void {

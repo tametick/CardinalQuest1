@@ -55,7 +55,7 @@ class HxlPreloader extends MovieClip {
 		progress.y = 100;
 
 		fully_loaded = false;
-		flash.Lib.current.addEventListener(flash.events.Event.ENTER_FRAME,onEnterFrame);
+		flash.Lib.current.addEventListener(flash.events.Event.ENTER_FRAME,onEnterFrame,false,0,true);
 	}
 
 	function isInvalidUrl():Bool {
@@ -82,8 +82,8 @@ class HxlPreloader extends MovieClip {
 			txt.text = "Hi there!  It looks like somebody copied this game without my permission.  Just click anywhere, or copy-paste this URL into your browser.\n\n"+myUrl+"\n\nto play the game at my site.  Thanks, and have fun!";
 			addChild(txt);
 			
-			txt.addEventListener(MouseEvent.CLICK,goToMyURL);
-			tmp.addEventListener(MouseEvent.CLICK,goToMyURL);
+			txt.addEventListener(MouseEvent.CLICK,goToMyURL,false,0,true);
+			tmp.addEventListener(MouseEvent.CLICK,goToMyURL,false,0,true);
 			return true;
 		}
 		return false;

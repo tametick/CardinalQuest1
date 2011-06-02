@@ -50,8 +50,8 @@ class CqSpellButton extends HxlDialog {
 	public override function update():Void {
 		if (!_initialized) {
 			if (HxlGraphics.stage != null) {
-				addEventListener(MouseEvent.MOUSE_DOWN, clickMouseDown, true, 6);
-				addEventListener(MouseEvent.MOUSE_UP, clickMouseUp, true, 6);
+				addEventListener(MouseEvent.MOUSE_DOWN, clickMouseDown, true, 6,true);
+				addEventListener(MouseEvent.MOUSE_UP, clickMouseUp, true, 6,true);
 				_initialized = true;
 			}
 		}

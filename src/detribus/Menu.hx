@@ -31,8 +31,8 @@ class Menu extends HxlGroup
 	public override function update():Void {
 		if (!initialized) {
 			if (HxlGraphics.stage != null) {
-				HxlGraphics.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-				HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+				HxlGraphics.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp,false,0,true);
+				HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp,false,0,true);
 				initialized = true;
 			}
 		}

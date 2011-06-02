@@ -36,10 +36,10 @@ class HxlTextInput extends HxlText {
 		nextFrameHide = false;
 		forceUpperCase = false;
 		customFilterPattern = ~/[]*/g;
-		_tf.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-		_tf.addEventListener(Event.REMOVED_FROM_STAGE, onInputFieldRemoved);
-		_tf.addEventListener(Event.CHANGE, onTextChange);
-		_tf.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		_tf.addEventListener(Event.ENTER_FRAME, onEnterFrame,false,0,true);
+		_tf.addEventListener(Event.REMOVED_FROM_STAGE, onInputFieldRemoved,false,0,true);
+		_tf.addEventListener(Event.CHANGE, onTextChange,false,0,true);
+		_tf.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown,false,0,true);
 		alwaysVisible = true;
 		HxlGraphics.state.addChild(_tf);
 	}

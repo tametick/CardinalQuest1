@@ -113,7 +113,7 @@ class HxlSound extends HxlObject {
 		stop();
 		init();
 		_sound = new Sound();
-		_sound.addEventListener(Event.ID3, gotID3);
+		_sound.addEventListener(Event.ID3, gotID3,false,0,true);
 		_sound.load(new URLRequest(SoundURL));
 		_looped = Looped;
 		updateTransform();
@@ -163,7 +163,7 @@ class HxlSound extends HxlObject {
 				if (_channel == null) {
 					active = false;
 				} else {
-					_channel.addEventListener(Event.SOUND_COMPLETE, looped);
+					_channel.addEventListener(Event.SOUND_COMPLETE, looped,false,0,true);
 				}
 			}
 		} else {
@@ -173,7 +173,7 @@ class HxlSound extends HxlObject {
 					if (_channel == null) {
 						active = false;
 					} else {
-						_channel.addEventListener(Event.SOUND_COMPLETE, stopped);
+						_channel.addEventListener(Event.SOUND_COMPLETE, stopped,false,0,true);
 					}
 				}
 			} else {
@@ -181,7 +181,7 @@ class HxlSound extends HxlObject {
 				if (_channel == null) {
 					active = false;
 				} else {
-					_channel.addEventListener(Event.SOUND_COMPLETE, stopped);
+					_channel.addEventListener(Event.SOUND_COMPLETE, stopped,false,0,true);
 				}
 			}
 		}

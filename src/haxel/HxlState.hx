@@ -67,7 +67,7 @@ class HxlState extends Sprite {
 		obj.onRemove(this);
 		return defaultGroup.remove(obj);
 	}
-
+	
 	public function preProcess():Void {
 		screen.fill(bgColor);
 		HxlGraphics.numRenders = 0;
@@ -98,11 +98,11 @@ class HxlState extends Sprite {
 			if ( eventListeners.length > 0 ) {
 				resumeEventListeners();
 			} else {
-				_addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
-				_addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-				_addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-				_addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-				_addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+				_addEventListener(KeyboardEvent.KEY_UP, onKeyUp,false,0,true);
+				_addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown,false,0,true);
+				_addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown,false,0,true);
+				_addEventListener(MouseEvent.MOUSE_UP, onMouseUp,false,0,true);
+				_addEventListener(MouseEvent.MOUSE_OVER, onMouseOver,false,0,true);
 			}
 			init();
 			initialized = 1;
@@ -159,7 +159,7 @@ class HxlState extends Sprite {
 		return _isStacked;
 	}
 
-	function _addEventListener(Type:String, Listener:Dynamic, UseCapture:Bool=false, Priority:Int=0, UseWeakReference:Bool=false):Void { 
+	function _addEventListener(Type:String, Listener:Dynamic, UseCapture:Bool=false, Priority:Int=0, UseWeakReference:Bool=true):Void { 
 		HxlGraphics.stage.addEventListener(Type, Listener, UseCapture, Priority, UseWeakReference);
 		eventListeners.push( {Type: Type, Listener: Listener, UseCapture: UseCapture} );
 	}
@@ -191,7 +191,7 @@ class HxlState extends Sprite {
 	function resumeEventListeners():Void {
 		if ( HxlGraphics.stage == null ) return;
 		for ( i in eventListeners ) {
-			HxlGraphics.stage.addEventListener(i.Type, i.Listener, i.UseCapture);
+			HxlGraphics.stage.addEventListener(i.Type, i.Listener, i.UseCapture,0,true);
 		}
 	}
 

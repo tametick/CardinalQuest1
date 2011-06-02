@@ -430,7 +430,6 @@ class HxlGraphics {
 
 		//If there is no data for this key, generate the requested graphic
 		if (!checkBitmapCache(key)) {
-			//flash.Lib.current.addChild(Type.createInstance(Graphic, []));
 			var bd:BitmapData = Type.createInstance(Graphic, []).bitmapData;
 			if ( ScaleX != 1.0 || ScaleY != 1.0 ) {
 				var newPixels:BitmapData = new BitmapData(Std.int(bd.width * ScaleX), Std.int(bd.height * ScaleY), true, 0x00000000);

@@ -75,8 +75,8 @@ class LevelUpDialog extends StatsDialog {
 	public function toggleDisplay(Show:Bool):Void {
 		if ( Show ) {
 			visible = true;
-			HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-			HxlGraphics.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown,false,0,true);
+			HxlGraphics.stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp,false,0,true);
 		} else {
 			visible = false;
 			HxlGraphics.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);

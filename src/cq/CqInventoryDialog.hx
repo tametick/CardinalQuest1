@@ -841,8 +841,8 @@ class CqInventoryItem extends HxlSprite {
 		if ( dragEnabled ) {
 			removeEventListener(MouseEvent.MOUSE_DOWN, onDragMouseDown);
 			removeEventListener(MouseEvent.MOUSE_UP, onDragMouseUp);
-			addEventListener(MouseEvent.MOUSE_DOWN, onDragMouseDown, true, 5);
-			addEventListener(MouseEvent.MOUSE_UP, onDragMouseUp, true, 4);
+			addEventListener(MouseEvent.MOUSE_DOWN, onDragMouseDown, true, 5,true);
+			addEventListener(MouseEvent.MOUSE_UP, onDragMouseUp, true, 4,true);
 		}
 	}
 

@@ -100,7 +100,7 @@ class HxlGame extends Sprite {
 		paused = false;
 		_autoPause = true;
 		_created = false;
-		addEventListener(Event.ENTER_FRAME, create);
+		addEventListener(Event.ENTER_FRAME, create,false,0,true);
 	}
 
 	/**
@@ -318,12 +318,12 @@ class HxlGame extends Sprite {
 		addChild(console);
 
 		// Initialize input event listeners
-		stage.addEventListener(KeyboardEvent.KEY_DOWN, HxlGraphics.keys.handleKeyDown);
-		stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
-		stage.addEventListener(MouseEvent.MOUSE_DOWN, HxlGraphics.mouse.handleMouseDown);
-		stage.addEventListener(MouseEvent.MOUSE_UP, HxlGraphics.mouse.handleMouseUp);
-		stage.addEventListener(MouseEvent.MOUSE_OUT, HxlGraphics.mouse.handleMouseOut);
-		stage.addEventListener(MouseEvent.MOUSE_OVER, HxlGraphics.mouse.handleMouseOver);
+		stage.addEventListener(KeyboardEvent.KEY_DOWN, HxlGraphics.keys.handleKeyDown,false,0,true);
+		stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp,false,0,true);
+		stage.addEventListener(MouseEvent.MOUSE_DOWN, HxlGraphics.mouse.handleMouseDown,false,0,true);
+		stage.addEventListener(MouseEvent.MOUSE_UP, HxlGraphics.mouse.handleMouseUp,false,0,true);
+		stage.addEventListener(MouseEvent.MOUSE_OUT, HxlGraphics.mouse.handleMouseOut,false,0,true);
+		stage.addEventListener(MouseEvent.MOUSE_OVER, HxlGraphics.mouse.handleMouseOver,false,0,true);
 
 		//Sound Tray popup
 		_soundTray = new Sprite();
@@ -367,8 +367,8 @@ class HxlGame extends Sprite {
 		addChild(_soundTray);
 
 		//Initialize the pause screen
-		stage.addEventListener(Event.DEACTIVATE, onFocusLost);
-		stage.addEventListener(Event.ACTIVATE, onFocus);
+		stage.addEventListener(Event.DEACTIVATE, onFocusLost,false,0,true);
+		stage.addEventListener(Event.ACTIVATE, onFocus,false,0,true);
 
 		//Check for saved sound preference data
 		soundPrefs = new HxlSave();
@@ -387,7 +387,7 @@ class HxlGame extends Sprite {
 		switchState(Type.createInstance(_iState, []));
 		HxlState.screen.unsafeBind(HxlGraphics.buffer);
 		removeEventListener(Event.ENTER_FRAME, create);
-		addEventListener(Event.ENTER_FRAME, update);
+		addEventListener(Event.ENTER_FRAME, update,false,0,true);
 	}
 
 	public function update(event:Event) : Void {

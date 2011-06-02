@@ -52,7 +52,7 @@ class SimpleActuator extends GenericActuator {
 		if (shape == null) {
 			
 			shape = new Shape ();
-			Lib.current.stage.addEventListener (Event.ENTER_FRAME, shape_onEnterFrame);
+			Lib.current.stage.addEventListener (Event.ENTER_FRAME, shape_onEnterFrame,false,0,true);
 			
 		}
 		
@@ -327,61 +327,34 @@ class SimpleActuator extends GenericActuator {
 						
 						_repeat --;
 						
-					}
-					
+					}	
 				}
-				
 			}
 			
 			if (sendChange) {
-				
-				change ();
-				
-			}
-			
-		}
-		
+				change ();	
+			}	
+		}		
 	}
-	
-	
-	
-	
+
 	// Event Handlers
-	
-	
-	
-	
 	private static function shape_onEnterFrame (event:Event):Void {
-		
 		var currentTime:Float = Lib.getTimer () / 1000;
-		
 		var actuator:SimpleActuator;
-		
 		var j:Int = 0;
 		
 		for (i in 0...actuatorsLength) {
-			
 			actuator = actuators[j];
-			
 			if (actuator.active) {
-				
 				if (currentTime > actuator.timeOffset) {
-					
 					actuator.update (currentTime);
-					
 				}
-				
 				j++;
-				
 			} else {
-				
 				actuators.splice (j, 1);
 				--actuatorsLength;
-				
 			}
-			
 		}
-		
 	}
 	
 	

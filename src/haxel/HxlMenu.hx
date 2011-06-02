@@ -35,8 +35,8 @@ class HxlMenu extends HxlDialog {
 	public function toggleInput(Toggle:Bool):Void {
 		inputEnabled = Toggle;
 		if ( inputEnabled ) {
-			addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-			addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+			addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown,false,0,true);
+			addEventListener(MouseEvent.MOUSE_UP, onMouseUp,false,0,true);
 		} else {
 			removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);				
