@@ -797,7 +797,7 @@ class HxlSprite extends HxlObject {
 		if ( !dragEnabled && Toggle ) {
 			addEventListener(MouseEvent.MOUSE_DOWN, onDragMouseDown,false,0,true);
 			addEventListener(MouseEvent.MOUSE_UP, onDragMouseUp,false,0,true);
-		} else if ( dragEnabled && !Toggle ) {
+		} else { //if ( dragEnabled && !Toggle ) {
 			removeEventListener(MouseEvent.MOUSE_DOWN, onDragMouseDown);
 			removeEventListener(MouseEvent.MOUSE_UP, onDragMouseUp);
 			if ( isDragging && HxlGraphics.mouse.dragSprite == this ) {
