@@ -602,14 +602,14 @@ class CqPlayer extends CqActor, implements Player {
 	public function give(?item:CqItem, ?itemType:CqItemType, ?spellType:CqSpellType) {
 		if (item != null) {
 			// add to actor inventory
-			// if this item has a max stack size greater than 1, lets see if we already have the same item in inventory
+			// if this item has a max stack size greater than or less than 1, lets see if we already have the same item in inventory
 			var added:Bool = false;
-			if ( item.stackSizeMax > 1 ) {
+			if ( item.stackSizeMax != 1 ) {
 				for ( i in 0 ... inventory.length ) {
-					if ( inventory[i].spriteIndex == item.spriteIndex && inventory[i].stackSize < inventory[i].stackSizeMax ) {
+					if (inventory[i].spriteIndex == item.spriteIndex) {
 						added = true;
 						inventory[i].stackSize += item.stackSize;
-						if ( inventory[i].stackSize > inventory[i].stackSizeMax ) {
+						if ( inventory[i].stackSize > inventory[i].stackSizeMax && inventory[i].stackSizeMax > 1) {
 							added = false;
 							var diff = inventory[i].stackSize - inventory[i].stackSizeMax;
 							inventory[i].stackSize = inventory[i].stackSizeMax;
