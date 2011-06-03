@@ -143,6 +143,9 @@ class GameUI extends HxlDialog {
 		btnMainView.configEvent(5, true, true);
 		btnMainView.setActive(true);
 		leftButtons.addButton(btnMainView);
+		//
+		btnMainView.visible = false;
+		//
 
 		btnMapView = new HxlButton(0, 0, 64, 64);
 		btnMapView.setBackgroundColor(0xff999999, 0xffcccccc);
@@ -179,6 +182,9 @@ class GameUI extends HxlDialog {
 		});
 		btnLogView.configEvent(5, true, true);
 		leftButtons.addButton(btnLogView);
+		//
+		btnLogView.visible = false;
+		//
 
 		panelInventory.dlgSpellGrid = dlgSpellGrid;
 		panelInventory.dlgPotionGrid = dlgPotionGrid;
