@@ -340,12 +340,12 @@ class GameUI extends HxlDialog {
 
 		var cellBgKey:String = "EquipmentCellBG";
 		if ( !HxlGraphics.checkBitmapCache(cellBgKey) ) {
-			HxlGraphics.addBitmapData(HxlGradient.RectData(54, 54, [0x333333, 0x555555], null, Math.PI/2, 5.0), cellBgKey);
+			HxlGraphics.addBitmapData(HxlGradient.RectData(54, 54, [0x333333, 0x555555], null, [0.0,0.0], Math.PI/2, 5.0), cellBgKey);
 		}
 
 		var cellBgHighlightKey:String = "EqCellBGHighlight";
 		if ( !HxlGraphics.checkBitmapCache(cellBgHighlightKey) ) {
-			HxlGraphics.addBitmapData(HxlGradient.RectData(54, 54, [0x686835, 0xADAB6B], null, Math.PI/2, 5.0), cellBgHighlightKey);
+			HxlGraphics.addBitmapData(HxlGradient.RectData(54, 54, [0xFFCC00, 0xFFFF99], null, [0.5,0.5],Math.PI/2, 5.0), cellBgHighlightKey);
 		}
 
 		var tmp:BitmapData = new BitmapData(79, 79, true, 0x0);

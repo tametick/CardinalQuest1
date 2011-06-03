@@ -2,6 +2,7 @@
 <movie width="360" height="240" framerate="12" as3="1">
 	<library>
 		<font id="cq.FontDungeon" import="Dungeon.ttf" name="FontDungeon" /> 
+		<bitmap id="cq.SpriteItemSlot1" import="Item_slot_01.png"/>
 		<bitmap id="cq.SpriteCorpses" import="corpses.png"/>
 		<bitmap id="cq.SpriteEffects" import="effects.png"/>
 		<bitmap id="cq.SpriteItems" import="items.png"/>

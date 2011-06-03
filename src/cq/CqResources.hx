@@ -1,5 +1,6 @@
 package cq;
 
+import flash.display.Bitmap;
 import flash.text.Font;
 import flash.media.Sound;
 
@@ -14,6 +15,7 @@ class MenuTheme extends Sound { public function new() { super(); } }
 class BossTheme extends Sound { public function new() { super(); } }
 class WinTheme extends Sound { public function new() { super(); } }
 
+class SpriteItemSlot1 extends Bitmap { public function new() { super(); } }
 class SpriteEffects extends HxlSpriteSheet { 
 	public static var instance = new SpriteEffects();
 	public function new() {
