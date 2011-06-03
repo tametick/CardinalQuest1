@@ -71,7 +71,7 @@ class HxlGradient {
 	}
 
 	static public function CircleData(Radius:Float, Colors:Array<Int>, ?Ratios:Array<Int>=null, ?Alphas:Array<Float>=null, ?Rotation:Float=0.0):BitmapData {
-		var type = GradientType.LINEAR; 
+		var type = GradientType.RADIAL; 
 		var colors:Array<Int> = Colors; 
 		var alphas:Array<Float>;
 		if ( Alphas != null ) {

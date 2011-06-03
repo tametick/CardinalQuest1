@@ -475,10 +475,14 @@ class CqPotionGrid extends CqInventoryGrid {
 		var padding:Int = 8;
 		var idx:Int = 0;
 	
+		var btnSprite = new HxlSprite();
+		btnSprite.loadGraphic(SpriteItemSlot1, true, false, btnSize, btnSize, false, 1, 1);
+		
 		for ( i in 0...5 ) {
 			var btnCell:CqPotionButton = new CqPotionButton(this, 10 + ((i * btnSize) + (i * 10)), 10, btnSize, btnSize,i);
 
-			btnCell.setBackgroundColor(0xff999999, 0xffcccccc);
+			//btnCell.setBackgroundColor(0xff999999, 0xffcccccc);
+			btnCell.setBackgroundSprite(btnSprite);
 			add(btnCell);
 			cells.push(btnCell.cell);
 		}

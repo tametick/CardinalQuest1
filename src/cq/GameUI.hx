@@ -330,12 +330,14 @@ class GameUI extends HxlDialog {
 
 		var itemBgKey:String = "ItemBG";
 		if ( !HxlGraphics.checkBitmapCache(itemBgKey) ) {
-			HxlGraphics.addBitmapData(HxlGradient.RectData(50, 50, [0xc1c1c1, 0x9e9e9e], null, Math.PI/2, 8.0), itemBgKey);
+			//HxlGraphics.addBitmapData(HxlGradient.RectData(50, 50, [0xc1c1c1, 0x9e9e9e], null, [0.0, 0.0], Math.PI / 2, 8.0), itemBgKey);
+			HxlGraphics.addBitmapData(HxlGradient.CircleData(25, [0xc1c1c1, 0x9e9e9e],null,[0.5,0.0]),itemBgKey);
 		}
 
 		var itemSelectedBgKey:String = "ItemSelectedBG";
 		if ( !HxlGraphics.checkBitmapCache(itemSelectedBgKey) ) {
-			HxlGraphics.addBitmapData(HxlGradient.RectData(50, 50, [0xEFEDBC, 0xB9B99A], null, Math.PI/2, 8.0), itemSelectedBgKey);
+			//HxlGraphics.addBitmapData(HxlGradient.RectData(50, 50, [0xEFEDBC, 0xB9B99A], null, [0.0, 0.0], Math.PI / 2, 8.0), itemSelectedBgKey);
+			HxlGraphics.addBitmapData(HxlGradient.CircleData(25, [0xc1c1c1, 0x9e9e9e],null,[0.5,0.0]),itemSelectedBgKey);
 		}
 
 		var cellBgKey:String = "EquipmentCellBG";
