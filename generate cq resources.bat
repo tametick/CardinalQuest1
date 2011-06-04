@@ -1,3 +1,3 @@
 @cd ".\rsrc\cq\"
-swfmill simple resources.xml resource.swf
+swfmill simple resources.xml resources.swf
 pause
