@@ -407,8 +407,11 @@ class CqActor extends CqObject, implements Actor {
 		if(item.buffs != null) {
 			for (buff in item.buffs.keys()) {
 				buffs.set(buff, buffs.get(buff) - item.buffs.get(buff));
-				if (buff == "life")
+				if (buff == "life") {
+					if (this.hp < 1)
+						this.hp = 1;
 					healthBar.updateValue();
+				}
 			}
 		}
 	}
