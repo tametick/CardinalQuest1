@@ -5,12 +5,27 @@ import playtomic.base.Log;
 import CqPreloader;
 
 class Playtomic {
-	static inline var swfid:Int = 2781;
-	static inline var guid:String = "abad7983339e41ac";
+	static var swfid:Int = 2781;
+	static var guid:String = "abad7983339e41ac";
 	static var enabled:Bool;
+	public static var localhost(default, null):Bool;
 	
 	public static function create() {
 		enabled = true;
+		localhost = false;
+		var loadUrl = Lib.current.root.loaderInfo.loaderURL;
+		
+		if (StringTools.startsWith(loadUrl, "file://"))
+			localhost = true;
+			
+		if (localhost) { //test build
+			swfid = 2781;
+			guid = "abad7983339e41ac";
+		} else {
+			swfid = 3045;
+			guid = "759bd3b960a94124";
+		}
+
 		Log.View(swfid, guid, Lib.current.root.loaderInfo.loaderURL);
 	}
 	
