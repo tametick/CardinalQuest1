@@ -2,6 +2,8 @@ package playtomic;
 
 import world.Level;
 
+import data.Registery;
+
 import playtomic.Playtomic;
 import playtomic.base.Log;
 
@@ -21,6 +23,9 @@ class PtLevel {
 			return;
 		PtPlayer.startLevel();
 		startTime = Date.now();
+		
+		Log.LevelCounterMetric("Level Reached", Registery.level.index);
+		Log.LevelCounterMetric("Level Reached U", Registery.level.index, true);	
 	}
 	
 	//when level finnishes

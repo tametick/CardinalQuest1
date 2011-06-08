@@ -221,7 +221,6 @@ class CqActor extends CqObject, implements Actor {
 			if (Std.is(other, CqPlayer)) {
 				var player = cast(other, CqPlayer);
 				HxlLog.append("kills you");
-				PtPlayer.dies();
 				if (player.lives > 1) {
 					player.lives--;
 					

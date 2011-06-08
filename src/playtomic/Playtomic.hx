@@ -18,7 +18,7 @@ class Playtomic {
 		if (StringTools.startsWith(loadUrl, "file://"))
 			localhost = true;
 			
-		if (localhost) { //test build
+		if (localhost) { //probably a dev build
 			swfid = 2781;
 			guid = "abad7983339e41ac";
 		} else {

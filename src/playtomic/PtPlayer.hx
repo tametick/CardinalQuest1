@@ -14,6 +14,9 @@ class PtPlayer {
 	static var beenHit:Int;
 	static var enemiesKilled:Int;
 	
+	static var classSelected:CqClass;
+	static var classSelectedStr:String;
+	
 	public static function startLevel():Void {
 		if (!Playtomic.isEnabled())
 			return;
@@ -24,11 +27,13 @@ class PtPlayer {
 	public static function finishLevel():Void {
 		if (!Playtomic.isEnabled())
 			return;
-		Log.LevelRangedMetric("Attacks Dodged", Registery.level.index, attacksDodged);
-		Log.LevelRangedMetric("Attacks Missed", Registery.level.index, attacksMissed);
-		Log.LevelRangedMetric("Attacks Successful", Registery.level.index, attacksSuccessful);
-		Log.LevelRangedMetric("Player Hit", Registery.level.index, beenHit);
-		Log.LevelRangedMetric("Kills", Registery.level.index, enemiesKilled);
+			
+		Log.LevelRangedMetric(classSelectedStr.charAt(0) + " Attacks Dodged", Registery.level.index, attacksDodged);
+		Log.LevelRangedMetric(classSelectedStr.charAt(0) + " Attacks Missed", Registery.level.index, attacksMissed);
+		Log.LevelRangedMetric(classSelectedStr.charAt(0) + " Attacks Successful", Registery.level.index, attacksSuccessful);
+		Log.LevelRangedMetric(classSelectedStr.charAt(0) + " Player Hit", Registery.level.index, beenHit);
+		Log.LevelRangedMetric(classSelectedStr.charAt(0) + " Kills", Registery.level.index, enemiesKilled);
+
 	}
 	
 	public static function isHit():Void {
@@ -60,18 +65,21 @@ class PtPlayer {
 			return;
 		attacksMissed++;
 	}
-	
+	/*
 	public static function dies():Void {
 		if (!Playtomic.isEnabled())
 			return;
 		Log.LevelCounterMetric("Player Died", Registery.level.index);
-		Log.LevelCounterMetric("Player Died U", Registery.level.index, true);	
+		Log.LevelCounterMetric("Player Died U", Registery.level.index, true);
 	}
-
-	public static function ClassSelected(Class:CqClass):Void {
+*/
+	public static function ClassSelected(SelectedClass:CqClass):Void {
 		if (!Playtomic.isEnabled())
 			return;
-		Log.CustomMetric(Type.enumConstructor(Class).toLowerCase(), "Class Selected");
+		classSelectedStr = Type.enumConstructor(SelectedClass).toLowerCase();
+		classSelectedStr = classSelectedStr.charAt(0).toUpperCase() + classSelectedStr.substr(1);
+		Log.CustomMetric(classSelectedStr, "Class Selected");
+		classSelected = SelectedClass;
 	}
 }
 
