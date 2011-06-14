@@ -157,5 +157,13 @@ class SpriteDecorations extends HxlSpriteSheet {
 		super(0);
 	} 
 }
-
+class UiBeltVertical extends HxlSpriteSheet {
+	public static var instance = new UiBeltVertical();
+	public function new() {
+		spriteNames = [
+			["belt_vert_metal"]
+		];
+		super(0);
+	}
+}
 class CqResources extends Resources {}

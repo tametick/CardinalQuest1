@@ -11,6 +11,7 @@ import cq.CqSpell;
 import cq.CqSpellButton;
 import cq.CqWorld;
 import cq.CqVitalBar;
+import cq.CqResources;
 
 import data.Configuration;
 import data.Registery;
@@ -61,6 +62,7 @@ class GameUI extends HxlDialog {
 	var btnInventoryView:HxlButton;
 	var btnCharacterView:HxlButton;
 	var btnLogView:HxlButton;
+	var menuBelt:HxlSprite;
 
 	// Misc UI elements
 	var xpBar:CqXpBar;
@@ -134,6 +136,12 @@ class GameUI extends HxlDialog {
 		/**
 		 * Left side panel buttons
 		 **/
+
+		
+		menuBelt = new HxlSprite(6, -13);
+		menuBelt.loadGraphic(UiBeltVertical, false, false, 71, 406, false);
+		leftButtons.add(menuBelt);
+		
 		btnMainView = new HxlButton(0, 0, 64, 64);
 		btnMainView.setBackgroundColor(0xff999999, 0xffcccccc);
 		btnMainView.loadText(new HxlText(0, 23, 64, "Main", true, null).setFormat(null, 18, 0xffffff, "center", 0x010101));

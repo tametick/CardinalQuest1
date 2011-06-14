@@ -11,6 +11,7 @@
 		<bitmap id="cq.SpriteTiles" import="tiles.png"/>
 		<bitmap id="cq.SpriteSpells" import="spells.png"/>
 		<bitmap id="cq.SpriteDecorations" import="decorations.png"/>
+		<bitmap id="cq.UiBeltVertical" import="Belt_vert_metal.png"/>
 		<sound id="cq.MainThemeOne" name="MainThemeOne" import="main1.mp3"/>
 		<sound id="cq.MainThemeTwo" name="MainThemeTwo" import="main2.mp3"/>
 		<sound id="cq.MenuTheme" name="MenuTheme" import="menu.mp3"/>

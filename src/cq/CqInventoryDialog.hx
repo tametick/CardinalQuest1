@@ -392,7 +392,8 @@ class CqEquipmentGrid extends CqInventoryGrid {
 
 class CqSpellGrid extends CqInventoryGrid {
 
-	public var buttons:Array<CqSpellButton>;
+	public var buttons:Array<CqSpellButton>;	
+	var belt:HxlSprite;
 
 	public function forceClearCharge(Cell:Int) {
 		if(buttons[Cell].getSpell()!=null)
@@ -408,7 +409,6 @@ class CqSpellGrid extends CqInventoryGrid {
 	
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100) {
 		super(X, Y, Width, Height, false);
-
 		cells = new Array();
 
 		var cellBgKey:String = "EquipmentCellBG";
@@ -419,6 +419,10 @@ class CqSpellGrid extends CqInventoryGrid {
 		var padding:Int = 8;
 		var idx:Int = 0;
 		buttons = new Array();
+		
+		belt = new HxlSprite(6, -13);
+		belt.loadGraphic(UiBeltVertical, false, false, 71, 406, false);
+		add(belt);
 		
 		var btnSprite = new HxlSprite();
 		btnSprite.loadGraphic(SpriteItemSlot1, true, false, btnSize, btnSize, false, 1, 1);
