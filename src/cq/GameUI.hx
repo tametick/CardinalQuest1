@@ -139,6 +139,7 @@ class GameUI extends HxlDialog {
 
 		
 		menuBelt = new HxlSprite(6, -13);
+		menuBelt.zIndex = 0;
 		menuBelt.loadGraphic(UiBeltVertical, false, false, 71, 406, false);
 		leftButtons.add(menuBelt);
 		

@@ -421,6 +421,7 @@ class CqSpellGrid extends CqInventoryGrid {
 		buttons = new Array();
 		
 		belt = new HxlSprite(6, -13);
+		belt.zIndex = 0;
 		belt.loadGraphic(UiBeltVertical, false, false, 71, 406, false);
 		add(belt);
 		
@@ -432,6 +433,7 @@ class CqSpellGrid extends CqInventoryGrid {
 			//btnCell.setBackgroundColor(0xffffffff, 0xffcccccc);
 			
 			btnCell.setBackgroundSprite(btnSprite);
+			btnCell.zIndex = 1;
 			add(btnCell);
 			cells.push(btnCell.cell);
 			buttons.push(btnCell);
