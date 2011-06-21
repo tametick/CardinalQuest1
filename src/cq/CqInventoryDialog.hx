@@ -425,8 +425,7 @@ class CqSpellGrid extends CqInventoryGrid {
 		belt.loadGraphic(UiBeltVertical, false, false, 71, 406, false);
 		add(belt);
 		
-		var btnSprite = new HxlSprite();
-		btnSprite.loadGraphic(SpriteItemSlot1, true, false, btnSize, btnSize, false, 1, 1);
+		var btnSprite = new ButtonSprite();
 		
 		for ( i in 0...5 ) {
 			var btnCell:CqSpellButton = new CqSpellButton(10, 10 + ((i * btnSize) + (i * 10)), btnSize, btnSize,i);
@@ -481,8 +480,7 @@ class CqPotionGrid extends CqInventoryGrid {
 		var padding:Int = 8;
 		var idx:Int = 0;
 	
-		var btnSprite = new HxlSprite();
-		btnSprite.loadGraphic(SpriteItemSlot1, true, false, btnSize, btnSize, false, 1, 1);
+		var btnSprite = new ButtonSprite();
 		
 		for ( i in 0...5 ) {
 			var btnCell:CqPotionButton = new CqPotionButton(this, 10 + ((i * btnSize) + (i * 10)), 10, btnSize, btnSize,i);

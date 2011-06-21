@@ -3,6 +3,7 @@ package cq;
 import flash.display.Bitmap;
 import flash.text.Font;
 import flash.media.Sound;
+import haxel.HxlSprite;
 
 import data.Resources;
 import haxel.HxlSpriteSheet;
@@ -15,7 +16,17 @@ class MenuTheme extends Sound { public function new() { super(); } }
 class BossTheme extends Sound { public function new() { super(); } }
 class WinTheme extends Sound { public function new() { super(); } }
 
-class SpriteItemSlot1 extends Bitmap { public function new() { super(); } }
+class SpriteItemSlot1 extends Bitmap { 	public function new() { super(); } }
+class ButtonSprite extends HxlSprite {
+	public function new(?Alpha:Float=1.0) {
+		super();
+		var btnSize:Int = 64;
+		loadGraphic(SpriteItemSlot1, true, false, btnSize, btnSize, false, 1, 1);
+		setAlpha(Alpha);
+	}
+}
+
+
 class SpriteEffects extends HxlSpriteSheet { 
 	public static var instance = new SpriteEffects();
 	public function new() {
