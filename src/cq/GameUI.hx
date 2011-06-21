@@ -155,7 +155,20 @@ class GameUI extends HxlDialog {
 		//
 		btnMainView.visible = false;
 		//
+		
+		btnLogView = new HxlButton(0, 0, 64, 64);
+		btnLogView.setBackgroundColor(0xff999999, 0xffcccccc);
+		btnLogView.loadText(new HxlText(0, 23, 64, "Log", true, null).setFormat(null, 18, 0xffffff, "center", 0x010101));
+		btnLogView.setCallback(function() {
+			self.showPanel(self.panelLog, self.btnLogView);
+		});
+		btnLogView.configEvent(5, true, true);
+		leftButtons.addButton(btnLogView);
+		//
+		btnLogView.visible = false;
+		//
 
+		
 		btnMapView = new HxlButton(0, 0, 64, 64);
 		btnMapView.setBackgroundColor(0xff999999, 0xffcccccc);
 		btnMapView.loadText(new HxlText(0, 23, 64, "Map", true, null).setFormat(null, 18, 0xffffff, "center", 0x010101));
@@ -182,18 +195,6 @@ class GameUI extends HxlDialog {
 		});
 		btnCharacterView.configEvent(5, true, true);
 		leftButtons.addButton(btnCharacterView);
-
-		btnLogView = new HxlButton(0, 0, 64, 64);
-		btnLogView.setBackgroundColor(0xff999999, 0xffcccccc);
-		btnLogView.loadText(new HxlText(0, 23, 64, "Log", true, null).setFormat(null, 18, 0xffffff, "center", 0x010101));
-		btnLogView.setCallback(function() {
-			self.showPanel(self.panelLog, self.btnLogView);
-		});
-		btnLogView.configEvent(5, true, true);
-		leftButtons.addButton(btnLogView);
-		//
-		btnLogView.visible = false;
-		//
 
 		panelInventory.dlgSpellGrid = dlgSpellGrid;
 		panelInventory.dlgPotionGrid = dlgPotionGrid;
