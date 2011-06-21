@@ -26,6 +26,15 @@ class ButtonSprite extends HxlSprite {
 	}
 }
 
+class SpriteIcons extends HxlSpriteSheet { 
+	public static var instance = new SpriteIcons();
+	public function new() {
+		spriteNames = [
+			["inventory","map","character","blank_icon"]
+		];
+		super(0);
+	} 
+}
 
 class SpriteEffects extends HxlSpriteSheet { 
 	public static var instance = new SpriteEffects();
