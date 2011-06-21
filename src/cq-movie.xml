@@ -42,6 +42,10 @@
 	<DefineBitsJPEG id="14" file="../rsrc/cq/Item_slot_01.png" />
 	<SymbolClass id="14" class="cq.SpriteItemSlot1" />
 	
+	<DefineBitsJPEG id="15" file="../rsrc/cq/buttons.png" />
+	<SymbolClass id="15" class="cq.SpriteIcons" />
+
+	
 	<DefineABC file="../bin/cq-movie.swf" isBoot="true" />
 
 	<ShowFrame/>
