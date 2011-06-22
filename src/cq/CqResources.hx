@@ -18,11 +18,10 @@ class WinTheme extends Sound { public function new() { super(); } }
 
 class SpriteItemSlot1 extends Bitmap { 	public function new() { super(); } }
 class ButtonSprite extends HxlSprite {
-	public function new(?Alpha:Float=1.0) {
+	public function new() {
 		super();
 		var btnSize:Int = 64;
 		loadGraphic(SpriteItemSlot1, true, false, btnSize, btnSize, true, 1, 1);
-		setAlpha(Alpha);
 	}
 }
 
