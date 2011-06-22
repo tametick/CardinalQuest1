@@ -168,9 +168,30 @@ class GameUI extends HxlDialog {
 		btnLogView.visible = false;
 		//
 
+
+		var mapBtn = new ButtonSprite();		
+		var mapBtnHigh = new ButtonSprite(0.6);
+
+		
+		var invBtn = new ButtonSprite();		
+		var invBtnHigh = new ButtonSprite(0.6);
+		
+		
+		var charBtn = new ButtonSprite();		
+		var charBtnHigh = new ButtonSprite(0.6);
+		
+		var mapIcon = getIcon(1);		
+		mapBtn.draw(mapIcon, 16, 16);
+		
+		var invIcon = getIcon(0);
+		invBtn.draw(invIcon, 16, 16);
+		
+		var charIcon = getIcon(2);
+		charBtn.draw(charIcon, 16, 16);
+		
 		
 		btnMapView = new HxlButton(0, 0, btnSize, btnSize);
-		btnMapView.loadGraphic(new ButtonSprite(),new ButtonSprite(0.6));
+		btnMapView.loadGraphic(mapBtn,mapBtnHigh);
 		btnMapView.loadText(new HxlText(0, 23, btnSize, "Map", true, null).setFormat(null, 18, 0xffffff, "center", 0x010101));
 		btnMapView.setCallback(function() {
 			self.showPanel(self.panelMap, self.btnMapView);
@@ -179,7 +200,7 @@ class GameUI extends HxlDialog {
 		leftButtons.addButton(btnMapView);
 
 		btnInventoryView = new HxlButton(0, 0, btnSize, btnSize);
-		btnInventoryView.loadGraphic(new ButtonSprite(),new ButtonSprite(0.6));
+		btnInventoryView.loadGraphic(invBtn,invBtnHigh);
 		btnInventoryView.loadText(new HxlText(0, 23, btnSize, "Inv", true, null).setFormat(null, 18, 0xffffff, "center", 0x010101));
 		btnInventoryView.setCallback(function() {
 			self.showPanel(self.panelInventory, self.btnInventoryView);
@@ -188,7 +209,7 @@ class GameUI extends HxlDialog {
 		leftButtons.addButton(btnInventoryView);
 
 		btnCharacterView = new HxlButton(0, 0, btnSize, btnSize);
-		btnCharacterView.loadGraphic(new ButtonSprite(),new ButtonSprite(0.6));
+		btnCharacterView.loadGraphic(charBtn,charBtnHigh);
 		btnCharacterView.loadText(new HxlText(0, 23, btnSize, "Char", true, null).setFormat(null, 18, 0xffffff, "center", 0x010101));
 		btnCharacterView.setCallback(function() {
 			self.showPanel(self.panelCharacter, self.btnCharacterView);
@@ -199,6 +220,14 @@ class GameUI extends HxlDialog {
 		panelInventory.dlgSpellGrid = dlgSpellGrid;
 		panelInventory.dlgPotionGrid = dlgPotionGrid;
 	}
+	
+	private function getIcon(?Frame:Int=0):HxlSprite {
+		var icon = new HxlSprite();
+		icon.loadGraphic(SpriteIcons, true, false, 32, 32);
+		icon.setFrame(Frame);
+		return icon;
+	}
+	
 
 	public override function update() {
 		super.update();
