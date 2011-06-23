@@ -45,6 +45,10 @@
 	<DefineBitsJPEG id="16" file="../rsrc/cq/equipment_icons.png" />
 	<SymbolClass id="16" class="cq.SpriteEquipmentIcons" />
 	
+	<DefineFont id="17" file="../rsrc/cq/AnonymousPro-Regular.ttf" />
+	<SymbolClass id="17" class="cq.FontAnonymousPro" />	
+	
+	
 	<DefineABC file="../bin/cq-movie.swf" isBoot="true" />
 
 	<ShowFrame/>

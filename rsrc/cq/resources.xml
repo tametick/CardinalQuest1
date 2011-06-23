@@ -2,6 +2,7 @@
 <movie width="360" height="240" framerate="12" as3="1">
 	<library>
 		<font id="cq.FontDungeon" import="Dungeon.ttf" name="FontDungeon" /> 
+		<font id="cq.FontAnonymousPro" import="AnonymousPro-Regular.ttf" name="FontAnonymousPro" /> 
 		<bitmap id="cq.SpriteItemSlot1" import="Item_slot_01.png"/>
 		<bitmap id="cq.SpriteIcons" import="buttons.png"/>
 		<bitmap id="cq.SpriteEquipmentIcons" import="equipment_icons.png"/>
