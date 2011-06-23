@@ -25,6 +25,17 @@ class ButtonSprite extends HxlSprite {
 	}
 }
 
+class SpriteEquipmentIcons extends HxlSpriteSheet { 
+	public static var instance = new SpriteEquipmentIcons();
+	public function new() {
+		spriteNames = [
+			["grey_destory", "jewelry", "hat", "destory"],
+			["shoes", "armor", "gloves", "weapon"],
+		];
+		super(0);
+	} 
+}
+
 class SpriteIcons extends HxlSpriteSheet { 
 	public static var instance = new SpriteIcons();
 	public function new() {

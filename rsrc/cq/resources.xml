@@ -4,6 +4,7 @@
 		<font id="cq.FontDungeon" import="Dungeon.ttf" name="FontDungeon" /> 
 		<bitmap id="cq.SpriteItemSlot1" import="Item_slot_01.png"/>
 		<bitmap id="cq.SpriteIcons" import="buttons.png"/>
+		<bitmap id="cq.SpriteEquipmentIcons" import="equipment_icons.png"/>
 		<bitmap id="cq.SpriteCorpses" import="corpses.png"/>
 		<bitmap id="cq.SpriteEffects" import="effects.png"/>
 		<bitmap id="cq.SpriteItems" import="items.png"/>

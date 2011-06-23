@@ -181,23 +181,23 @@ class GameUI extends HxlDialog {
 		var charBtnHigh = new ButtonSprite();
 		
 		var mapIcon = getIcon(1);		
-		mapBtn.draw(mapIcon, 16, 9);
-		mapBtnHigh.draw(mapIcon, 16, 9);
+		mapBtn.draw(mapIcon, 16, 10);
+		mapBtnHigh.draw(mapIcon, 16, 10);
 		mapBtnHigh.setAlpha(0.6);
 		
 		var invIcon = getIcon(0);
-		invBtn.draw(invIcon, 16, 9);
-		invBtnHigh.draw(invIcon, 16, 9);
+		invBtn.draw(invIcon, 16, 10);
+		invBtnHigh.draw(invIcon, 16, 10);
 		invBtnHigh.setAlpha(0.6);
 		
 		var charIcon = getIcon(2);
-		charBtn.draw(charIcon, 16, 9);
-		charBtnHigh.draw(charIcon, 16, 9);
+		charBtn.draw(charIcon, 16, 10);
+		charBtnHigh.draw(charIcon, 16, 10);
 		charBtnHigh.setAlpha(0.6);
 		
 		btnMapView = new HxlButton(0, 0, btnSize, btnSize);
 		btnMapView.loadGraphic(mapBtn,mapBtnHigh);
-		btnMapView.loadText(new HxlText(0, 36, btnSize, "Map", true, null).setFormat(null, 16, 0xffffff, "center", 0x010101));
+		btnMapView.loadText(new HxlText(0, 37, btnSize, "Map", true, null).setFormat(null, 16, 0xffffff, "center", 0x010101));
 		btnMapView.setCallback(function() {
 			self.showPanel(self.panelMap, self.btnMapView);
 		});
@@ -206,7 +206,7 @@ class GameUI extends HxlDialog {
 
 		btnInventoryView = new HxlButton(0, 0, btnSize, btnSize);
 		btnInventoryView.loadGraphic(invBtn,invBtnHigh);
-		btnInventoryView.loadText(new HxlText(0, 36, btnSize, "Inventory", true, null).setFormat(null, 16, 0xffffff, "center", 0x010101));
+		btnInventoryView.loadText(new HxlText(0, 37, btnSize, "Inventory", true, null).setFormat(null, 16, 0xffffff, "center", 0x010101));
 		btnInventoryView.setCallback(function() {
 			self.showPanel(self.panelInventory, self.btnInventoryView);
 		});
@@ -215,7 +215,7 @@ class GameUI extends HxlDialog {
 
 		btnCharacterView = new HxlButton(0, 0, btnSize, btnSize);
 		btnCharacterView.loadGraphic(charBtn,charBtnHigh);
-		btnCharacterView.loadText(new HxlText(0, 36, btnSize, "Stats", true, null).setFormat(null, 16, 0xffffff, "center", 0x010101));
+		btnCharacterView.loadText(new HxlText(0, 37, btnSize, "Stats", true, null).setFormat(null, 16, 0xffffff, "center", 0x010101));
 		btnCharacterView.setCallback(function() {
 			self.showPanel(self.panelCharacter, self.btnCharacterView);
 		});
