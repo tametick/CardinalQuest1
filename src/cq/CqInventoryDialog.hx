@@ -421,7 +421,6 @@ class CqSpellGrid extends CqInventoryGrid {
 		var cellBgHighlightKey:String = "EqCellBGHighlight";
 
 		var btnSize:Int = 64;
-		var cellSize:Int = 54;
 		var padding:Int = 8;
 		var idx:Int = 0;
 		buttons = new Array();
@@ -482,7 +481,6 @@ class CqPotionGrid extends CqInventoryGrid {
 		var cellBgHighlightKey:String = "EqCellBGHighlight";
 
 		var btnSize:Int = 64;
-		var cellSize:Int = 54;
 		var padding:Int = 8;
 		var idx:Int = 0;
 	
