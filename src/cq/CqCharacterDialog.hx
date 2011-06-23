@@ -1,6 +1,7 @@
 package cq;
 
 import cq.CqActor;
+import cq.CqResources;
 
 import data.Registery;
 
@@ -30,55 +31,55 @@ class CqCharacterDialog extends HxlSlidingDialog {
 		super(X, Y, Width, Height, Direction);
 
 		txtCharName = new HxlText(20, 20, 430, "Unknown Hero");
-		txtCharName.setFormat(null, 30, 0xffffff, "left", 0x010101);
+		txtCharName.setFormat(null, 32, 0xffffff, "left", 0x010101);
 		add(txtCharName);
 
 		txtHealthLabel = new HxlText(20, 100, 430, "Health:");
-		txtHealthLabel.setFormat(null, 25, 0xffffff, "left", 0x010101);
+		txtHealthLabel.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
 		add(txtHealthLabel);
 
 		valHealth = new HxlText(150, 100, 200, "0");
-		valHealth.setFormat(null, 25, 0xffffff, "left", 0x010101);
+		valHealth.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
 		add(valHealth);
 
 		txtAttackLabel = new HxlText(20, 130, 430, "Attack:");
-		txtAttackLabel.setFormat(null, 25, 0xffffff, "left", 0x010101);
+		txtAttackLabel.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
 		add(txtAttackLabel);
 
 		valAttack = new HxlText(150, 130, 200, "0");
-		valAttack.setFormat(null, 25, 0xffffff, "left", 0x010101);
+		valAttack.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
 		add(valAttack);
 
 		txtDefenseLabel = new HxlText(20, 160, 430, "Defense:");
-		txtDefenseLabel.setFormat(null, 25, 0xffffff, "left", 0x010101);
+		txtDefenseLabel.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
 		add(txtDefenseLabel);
 
 		valDefense = new HxlText(150, 160, 200, "0");
-		valDefense.setFormat(null, 25, 0xffffff, "left", 0x010101);
+		valDefense.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
 		add(valDefense);
 
 		txtSpeedLabel = new HxlText(20, 190, 430, "Speed:");
-		txtSpeedLabel.setFormat(null, 25, 0xffffff, "left", 0x010101);
+		txtSpeedLabel.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
 		add(txtSpeedLabel);
 
 		valSpeed = new HxlText(150, 190, 200, "0");
-		valSpeed.setFormat(null, 25, 0xffffff, "left", 0x010101);
+		valSpeed.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
 		add(valSpeed);
 
 		txtSpiritLabel = new HxlText(20, 220, 430, "Spirit:");
-		txtSpiritLabel.setFormat(null, 25, 0xffffff, "left", 0x010101);
+		txtSpiritLabel.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
 		add(txtSpiritLabel);
 
 		valSpirit = new HxlText(150, 220, 200, "0");
-		valSpirit.setFormat(null, 25, 0xffffff, "left", 0x010101);
+		valSpirit.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
 		add(valSpirit);
 
 		txtVitalityLabel = new HxlText(20, 250, 430, "Vitality:");
-		txtVitalityLabel.setFormat(null, 25, 0xffffff, "left", 0x010101);
+		txtVitalityLabel.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
 		add(txtVitalityLabel);
 
 		valVitality = new HxlText(150, 250, 200, "0");
-		valVitality.setFormat(null, 25, 0xffffff, "left", 0x010101);
+		valVitality.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
 		add(valVitality);
 
 	}

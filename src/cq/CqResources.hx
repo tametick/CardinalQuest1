@@ -8,8 +8,14 @@ import haxel.HxlSprite;
 import data.Resources;
 import haxel.HxlSpriteSheet;
 
-class FontDungeon extends Font { public function new() { super(); } }
-class FontAnonymousPro extends Font { public function new() { super(); } }
+class FontDungeon extends Font { 
+	public static var instance = new FontDungeon();
+	public function new() { super(); } 
+}
+class FontAnonymousPro extends Font { 
+	public static var instance = new FontAnonymousPro();
+	public function new() { super(); } 
+}
 
 class MainThemeOne extends Sound { public function new() { super(); } }
 class MainThemeTwo extends Sound { public function new() { super(); } }

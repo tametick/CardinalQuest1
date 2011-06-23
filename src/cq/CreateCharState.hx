@@ -50,7 +50,7 @@ class CreateCharState extends HxlState
 
 		var btnStart:HxlButton = new HxlButton(520, 430, 100, 30);
 		btnStart.setBackgroundColor(0xff999999, 0xffcccccc);
-		btnStart.loadText(new HxlText(0, 3, 100, "START", true, null).setFormat(null, 24, 0xffffff, "center", 0x010101));
+		btnStart.loadText(new HxlText(0, 3, 100, "Start", true, null).setFormat(null, 24, 0xffffff, "center", 0x010101));
 
 		add(btnStart);
 		var self = this;
@@ -111,7 +111,7 @@ class CreateCharState extends HxlState
 		add(selectBox);
 
 		txtDesc = new HxlText(30, 325, HxlGraphics.width - 60);
-		txtDesc.setFormat(null, 24, 0xffffff, "center", 0x010101);
+		txtDesc.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "center", 0x010101);
 		add(txtDesc);
 		txtDesc.text = Resources.descriptions.get("Fighter");
 
