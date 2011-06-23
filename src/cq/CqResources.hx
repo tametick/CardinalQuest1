@@ -24,11 +24,14 @@ class BossTheme extends Sound { public function new() { super(); } }
 class WinTheme extends Sound { public function new() { super(); } }
 
 class SpriteItemSlot1 extends Bitmap { 	public function new() { super(); } }
+class SpriteItemSlot2 extends Bitmap { 	public function new() { super(); } }
 class ButtonSprite extends HxlSprite {
-	public function new() {
+	public function new(?WithGlow:Bool=true) {
 		super();
-		var btnSize:Int = 64;
-		loadGraphic(SpriteItemSlot1, true, false, btnSize, btnSize, true, 1, 1);
+		if(WithGlow) 
+			loadGraphic(SpriteItemSlot1, true, false, 64, 64, true, 1, 1);
+		else
+			loadGraphic(SpriteItemSlot2, true, false, 54, 54, true, 1, 1);
 	}
 }
 

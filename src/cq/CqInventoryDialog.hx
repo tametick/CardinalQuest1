@@ -325,36 +325,42 @@ class CqEquipmentGrid extends CqInventoryGrid {
 	
 		cell = new CqEquipmentCell(SHOES, 8, 193, cellSize, cellSize, idx);
 		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
+		cell.setBackgroundSprite(new ButtonSprite(false));
 		add(cell);
 		cells.push(cell);
 		idx++;
 
 		cell = new CqEquipmentCell(GLOVES, 8, 100, cellSize, cellSize, idx);
 		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
+		cell.setBackgroundSprite(new ButtonSprite(false));
 		add(cell);
 		cells.push(cell);
 		idx++;
 
 		cell = new CqEquipmentCell(ARMOR, 8, 8, cellSize, cellSize, idx);
 		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
+		cell.setBackgroundSprite(new ButtonSprite(false));
 		add(cell);
 		cells.push(cell);
 		idx++;
 
 		cell = new CqEquipmentCell(JEWELRY, 159, 193, cellSize, cellSize, idx);
 		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
+		cell.setBackgroundSprite(new ButtonSprite(false));
 		add(cell);
 		cells.push(cell);
 		idx++;
 
 		cell = new CqEquipmentCell(WEAPON, 159, 100, cellSize, cellSize, idx);
 		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
+		cell.setBackgroundSprite(new ButtonSprite(false));
 		add(cell);
 		cells.push(cell);
 		idx++;
 
 		cell = new CqEquipmentCell(HAT, 159, 8, cellSize, cellSize, idx);
 		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
+		cell.setBackgroundSprite(new ButtonSprite(false));
 		add(cell);
 		cells.push(cell);
 		idx++;

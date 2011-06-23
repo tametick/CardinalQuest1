@@ -44,9 +44,11 @@
 	<SymbolClass id="15" class="cq.SpriteIcons" />
 	<DefineBitsJPEG id="16" file="../rsrc/cq/equipment_icons.png" />
 	<SymbolClass id="16" class="cq.SpriteEquipmentIcons" />
+	<DefineBitsJPEG id="17" file="../rsrc/cq/Item_slot_02.png" />
+	<SymbolClass id="17" class="cq.SpriteItemSlot2" />
 	
-	<DefineFont id="17" file="../rsrc/cq/AnonymousPro-Regular.ttf" />
-	<SymbolClass id="17" class="cq.FontAnonymousPro" />	
+	<DefineFont id="18" file="../rsrc/cq/AnonymousPro-Regular.ttf" />
+	<SymbolClass id="18" class="cq.FontAnonymousPro" />	
 	
 	
 	<DefineABC file="../bin/cq-movie.swf" isBoot="true" />
