@@ -565,7 +565,13 @@ class CqInventoryCell extends HxlDialog {
 		origin.y = Std.int(background.height / 2);
 		
 		if ( dropCell ) {
-			var droptext:HxlText = new HxlText(0, 18, Std.int(width), "X");
+			
+			var icon = SpriteEquipmentIcons.getIcon("destory");
+			add(icon);
+			icon.x += 12;
+			icon.y += 6;
+			
+			var droptext:HxlText = new HxlText(0, 32, Std.int(width), "Destory");
 			droptext.setFormat(null, 18, 0xffffff, "center", 0x010101);
 			droptext.zIndex = -1;
 			add(droptext);

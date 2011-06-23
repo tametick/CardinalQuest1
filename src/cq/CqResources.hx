@@ -35,6 +35,13 @@ class SpriteEquipmentIcons extends HxlSpriteSheet {
 		];
 		super(0);
 	} 
+	
+	public static function getIcon(?IconName:String="weapon"):HxlSprite {
+		var icon = new HxlSprite();
+		icon.loadGraphic(SpriteEquipmentIcons, true, false, 16, 16, false, 2.0, 2.0);
+		icon.setFrame(instance.getSpriteIndex(IconName));
+		return icon;
+	}
 }
 
 class SpriteIcons extends HxlSpriteSheet { 
