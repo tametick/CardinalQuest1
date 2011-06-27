@@ -451,7 +451,8 @@ class CqSpellGrid extends CqInventoryGrid {
 		
 		belt = new HxlSprite(6, -13);
 		belt.zIndex = 0;
-		belt.loadGraphic(UiBeltVertical, false, false, 71, 406, false);
+		belt.loadGraphic(UiBeltVertical, true, false, 71, 406, false);
+		belt.setFrame(0);
 		add(belt);
 		
 		var btnSprite = new ButtonSprite();
