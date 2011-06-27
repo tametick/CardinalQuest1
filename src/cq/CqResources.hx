@@ -35,6 +35,23 @@ class ButtonSprite extends HxlSprite {
 	}
 }
 
+class SpritePortrait extends HxlSpriteSheet { 
+	public static var instance = new SpritePortrait();
+	public function new() {
+		spriteNames = [
+			["thief", "warrior", "wizard"]
+		];
+		super(0);
+	} 
+	
+	public static function getIcon(IconName:String):HxlSprite {
+		var icon = new HxlSprite();
+		icon.loadGraphic(SpritePortrait, true, false, 64, 64);
+		icon.setFrame(instance.getSpriteIndex(IconName));
+		return icon;
+	}
+}
+
 class SpriteEquipmentIcons extends HxlSpriteSheet { 
 	public static var instance = new SpriteEquipmentIcons();
 	public function new() {

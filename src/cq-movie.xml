@@ -50,6 +50,9 @@
 	<DefineFont id="18" file="../rsrc/cq/AnonymousPro-Regular.ttf" />
 	<SymbolClass id="18" class="cq.FontAnonymousPro" />	
 	
+	<DefineBitsJPEG id="19" file="../rsrc/cq/portrait_slots.png" />
+	<SymbolClass id="19" class="cq.SpritePortrait" />
+
 	
 	<DefineABC file="../bin/cq-movie.swf" isBoot="true" />
 
