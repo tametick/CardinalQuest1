@@ -39,7 +39,7 @@ class SpritePortrait extends HxlSpriteSheet {
 	public static var instance = new SpritePortrait();
 	public function new() {
 		spriteNames = [
-			["thief", "warrior", "wizard"]
+			["thief", "fighter", "wizard"]
 		];
 		super(0);
 	} 

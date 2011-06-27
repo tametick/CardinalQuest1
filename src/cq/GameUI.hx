@@ -133,50 +133,12 @@ class GameUI extends HxlDialog {
 		panelLog.zIndex = 2;
 		add(panelLog);		
 		
-		/**
-		 * Left side panel buttons
-		 **/
-
-		var btnSize:Int = 64;
-		menuBelt = new HxlSprite(6, -13);
-		menuBelt.zIndex = 0;
-		menuBelt.loadGraphic(UiBeltVertical, false, false, 71, 406, false);
-		leftButtons.add(menuBelt);
-		
-		btnMainView = new HxlButton(0, 0, btnSize, btnSize);
-		btnMainView.setBackgroundColor(0xff999999, 0xffcccccc);
-		btnMainView.loadText(new HxlText(0, 23, btnSize, "Main", true, null).setFormat(null, 18, 0xffffff, "center", 0x010101));
-		btnMainView.setCallback(function() {
-			self.showPanel(null, self.btnMainView);
-		});
-		btnMainView.configEvent(5, true, true);
-		btnMainView.setActive(true);
-		leftButtons.addButton(btnMainView);
-		//
-		btnMainView.visible = false;
-		//
-		
-		btnLogView = new HxlButton(0, 0, btnSize, btnSize);
-		btnLogView.setBackgroundColor(0xff999999, 0xffcccccc);
-		btnLogView.loadText(new HxlText(0, 23, btnSize, "Log", true, null).setFormat(null, 18, 0xffffff, "center", 0x010101));
-		btnLogView.setCallback(function() {
-			self.showPanel(self.panelLog, self.btnLogView);
-		});
-		btnLogView.configEvent(5, true, true);
-		leftButtons.addButton(btnLogView);
-		//
-		btnLogView.visible = false;
-		//
-
-
+		var className = Type.enumConstructor(cast(Registery.player, CqPlayer).playerClass).toLowerCase();
+		var mainBtn = SpritePortrait.getIcon(className );
 		var mapBtn = new ButtonSprite();		
 		var mapBtnHigh = new ButtonSprite();
-
-		
 		var invBtn = new ButtonSprite();		
 		var invBtnHigh = new ButtonSprite();
-		
-		
 		var charBtn = new ButtonSprite();		
 		var charBtnHigh = new ButtonSprite();
 		
@@ -195,6 +157,36 @@ class GameUI extends HxlDialog {
 		charBtnHigh.draw(charIcon, 16, 10);
 		charBtnHigh.setAlpha(0.6);
 		
+		/**
+		 * Left side panel buttons
+		 **/
+
+		var btnSize:Int = 64;
+		menuBelt = new HxlSprite(6, -13);
+		menuBelt.zIndex = 0;
+		menuBelt.loadGraphic(UiBeltVertical, false, false, 71, 406, false);
+		leftButtons.add(menuBelt);
+		
+		// main
+		btnMainView = new HxlButton(0, 0, btnSize, btnSize);
+		btnMainView .loadGraphic(mainBtn);
+		btnMainView.configEvent(5, true, true);
+		btnMainView.setActive(true);
+		leftButtons.addButton(btnMainView);
+		btnMainView.visible = true;
+		
+		// log
+		btnLogView = new HxlButton(0, 0, btnSize, btnSize);
+		btnLogView.setBackgroundColor(0xff999999, 0xffcccccc);
+		btnLogView.loadText(new HxlText(0, 23, btnSize, "Log", true, null).setFormat(null, 18, 0xffffff, "center", 0x010101));
+		btnLogView.setCallback(function() {
+			self.showPanel(self.panelLog, self.btnLogView);
+		});
+		btnLogView.configEvent(5, true, true);
+		leftButtons.addButton(btnLogView);
+		btnLogView.visible = false;
+		
+		// map
 		btnMapView = new HxlButton(0, 0, btnSize, btnSize);
 		btnMapView.loadGraphic(mapBtn,mapBtnHigh);
 		btnMapView.loadText(new HxlText(0, 37, btnSize, "Map", true, null).setFormat(null, 16, 0xffffff, "center", 0x010101));
@@ -204,6 +196,7 @@ class GameUI extends HxlDialog {
 		btnMapView.configEvent(5, true, true);
 		leftButtons.addButton(btnMapView);
 
+		// inv
 		btnInventoryView = new HxlButton(0, 0, btnSize, btnSize);
 		btnInventoryView.loadGraphic(invBtn,invBtnHigh);
 		btnInventoryView.loadText(new HxlText(0, 37, btnSize, "Inventory", true, null).setFormat(null, 16, 0xffffff, "center", 0x010101));
@@ -213,6 +206,7 @@ class GameUI extends HxlDialog {
 		btnInventoryView.configEvent(5, true, true);
 		leftButtons.addButton(btnInventoryView);
 
+		// stats
 		btnCharacterView = new HxlButton(0, 0, btnSize, btnSize);
 		btnCharacterView.loadGraphic(charBtn,charBtnHigh);
 		btnCharacterView.loadText(new HxlText(0, 37, btnSize, "Stats", true, null).setFormat(null, 16, 0xffffff, "center", 0x010101));

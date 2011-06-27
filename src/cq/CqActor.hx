@@ -518,6 +518,7 @@ class CqActor extends CqObject, implements Actor {
 class CqPlayer extends CqActor, implements Player {
 	static var sprites = SpritePlayer.instance;
 	
+	public var playerClass:CqClass;
 	public var inventory:Array<CqItem>;
 	
 	public var xpBar:CqXpBar;
@@ -530,7 +531,8 @@ class CqPlayer extends CqActor, implements Player {
 
 	var lastTile:HxlPoint;
 
-	public function new(playerClass:CqClass, ?X:Float = -1, ?Y:Float = -1) {
+	public function new(PlayerClass:CqClass, ?X:Float = -1, ?Y:Float = -1) {
+		playerClass = PlayerClass;
 		switch(playerClass) {
 			case FIGHTER:
 				attack = 5;
