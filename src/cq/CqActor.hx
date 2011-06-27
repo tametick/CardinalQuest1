@@ -1,6 +1,7 @@
 package cq;
 
 import com.eclecticdesignstudio.motion.Actuate;
+import cq.states.GameOverState;
 
 import haxel.HxlLog;
 import haxel.HxlState;
