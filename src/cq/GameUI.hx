@@ -61,7 +61,7 @@ class GameUI extends HxlDialog {
 	var btnMapView:HxlButton;
 	var btnInventoryView:HxlButton;
 	var btnCharacterView:HxlButton;
-	var btnLogView:HxlButton;
+	var btnInfoView:HxlButton;
 	var menuBelt:HxlSprite;
 
 	// Misc UI elements
@@ -135,7 +135,11 @@ class GameUI extends HxlDialog {
 		
 		var className = Type.enumConstructor(cast(Registery.player, CqPlayer).playerClass).toLowerCase();
 		var mainBtn = SpritePortrait.getIcon(className );
-		var mapBtn = new ButtonSprite();		
+		var infoBtn = new HxlSprite();
+		infoBtn.loadGraphic(SpriteInfo, false, false, 64, 64, true, 1, 1);
+		
+		
+		var mapBtn = new ButtonSprite();
 		var mapBtnHigh = new ButtonSprite();
 		var invBtn = new ButtonSprite();		
 		var invBtnHigh = new ButtonSprite();
@@ -170,22 +174,15 @@ class GameUI extends HxlDialog {
 		
 		// main
 		btnMainView = new HxlButton(0, 0, btnSize, btnSize);
-		btnMainView .loadGraphic(mainBtn);
+		btnMainView.loadGraphic(mainBtn);
 		btnMainView.configEvent(5, true, true);
-		btnMainView.setActive(true);
 		leftButtons.addButton(btnMainView);
-		btnMainView.visible = true;
 		
-		// log
-		btnLogView = new HxlButton(0, 0, btnSize, btnSize);
-		btnLogView.setBackgroundColor(0xff999999, 0xffcccccc);
-		btnLogView.loadText(new HxlText(0, 23, btnSize, "Log", true, null).setFormat(null, 18, 0xffffff, "center", 0x010101));
-		btnLogView.setCallback(function() {
-			self.showPanel(self.panelLog, self.btnLogView);
-		});
-		btnLogView.configEvent(5, true, true);
-		leftButtons.addButton(btnLogView);
-		btnLogView.visible = false;
+		// info
+		btnInfoView = new HxlButton(0, 0, btnSize, btnSize);
+		btnInfoView.loadGraphic(infoBtn);
+		btnInfoView.configEvent(5, true, true);
+		leftButtons.addButton(btnInfoView);
 		
 		// map
 		btnMapView = new HxlButton(0, 0, btnSize, btnSize);
@@ -313,7 +310,7 @@ class GameUI extends HxlDialog {
 			btnMapView.setActive(false);
 			btnInventoryView.setActive(false);
 			btnCharacterView.setActive(false);
-			btnLogView.setActive(false);
+			btnInfoView.setActive(false);
 			Button.setActive(true);
 		}
 		if ( Panel == null ) {
@@ -339,7 +336,7 @@ class GameUI extends HxlDialog {
 						btnMapView.setActive(false);
 						btnInventoryView.setActive(false);
 						btnCharacterView.setActive(false);
-						btnLogView.setActive(false);
+						btnInfoView.setActive(false);
 					}
 				}
 			}

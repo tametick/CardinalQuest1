@@ -52,6 +52,9 @@
 	
 	<DefineBitsJPEG id="19" file="../rsrc/cq/portrait_slots.png" />
 	<SymbolClass id="19" class="cq.SpritePortrait" />
+	
+	<DefineBitsJPEG id="20" file="../rsrc/cq/info_slot.png" />
+	<SymbolClass id="20" class="cq.SpriteInfo" />
 
 	
 	<DefineABC file="../bin/cq-movie.swf" isBoot="true" />

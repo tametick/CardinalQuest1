@@ -23,8 +23,11 @@ class MenuTheme extends Sound { public function new() { super(); } }
 class BossTheme extends Sound { public function new() { super(); } }
 class WinTheme extends Sound { public function new() { super(); } }
 
-class SpriteItemSlot1 extends Bitmap { 	public function new() { super(); } }
-class SpriteItemSlot2 extends Bitmap { 	public function new() { super(); } }
+class SpriteItemSlot1 extends Bitmap { public function new() { super(); } }
+class SpriteItemSlot2 extends Bitmap { public function new() { super(); } }
+class SpriteInfo extends Bitmap { public function new() { super(); } }
+
+
 class ButtonSprite extends HxlSprite {
 	public function new(?WithGlow:Bool=true) {
 		super();
