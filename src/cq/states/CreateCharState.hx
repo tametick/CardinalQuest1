@@ -1,4 +1,4 @@
-package cq;
+package cq.states;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;

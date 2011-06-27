@@ -29,7 +29,6 @@
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="src\cq\GameState.hx" />
     <compile path="src\world\Actor.hx" />
     <compile path="src\world\GameObject.hx" />
     <compile path="src\world\Level.hx" />
@@ -38,6 +37,7 @@
     <compile path="src\world\Tile.hx" />
     <compile path="src\world\World.hx" />
     <compile path="src\data\Registery.hx" />
+    <compile path="src\cq\states\GameState.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

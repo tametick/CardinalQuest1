@@ -1,4 +1,4 @@
-package cq;
+package cq.states;
 
 import haxel.HxlPoint;
 import haxel.HxlSound;

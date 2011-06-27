@@ -15,7 +15,7 @@ import data.Registery;
 import playtomic.PtLevel;
 
 import cq.CqConfiguration;
-import cq.WinState;
+import cq.states.WinState;
 
 class Level extends HxlTilemap
 {

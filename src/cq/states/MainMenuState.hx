@@ -1,4 +1,4 @@
-package cq;
+package cq.states;
 
 import cq.CqResources;
 import haxel.HxlGraphics;

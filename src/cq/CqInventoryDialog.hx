@@ -325,7 +325,7 @@ class CqEquipmentGrid extends CqInventoryGrid {
 	
 		cell = new CqEquipmentCell(SHOES, 8, 193, cellSize, cellSize, idx);
 		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
-		var shoeBtn = new ButtonSprite(false);
+		var shoeBtn = new ButtonSprite();
 		var shoeIcon = SpriteEquipmentIcons.getIcon("shoes");
 		shoeIcon.setAlpha(0.3);
 		shoeBtn.draw(shoeIcon, 10, 10);
@@ -336,7 +336,7 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		
 		cell = new CqEquipmentCell(GLOVES, 8, 100, cellSize, cellSize, idx);
 		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
-		var glovesBtn = new ButtonSprite(false);
+		var glovesBtn = new ButtonSprite();
 		var glovesIcon = SpriteEquipmentIcons.getIcon("gloves");
 		glovesIcon.setAlpha(0.3);
 		glovesBtn.draw(glovesIcon, 10, 10);
@@ -347,7 +347,7 @@ class CqEquipmentGrid extends CqInventoryGrid {
 
 		cell = new CqEquipmentCell(ARMOR, 8, 8, cellSize, cellSize, idx);
 		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
-		var armorBtn = new ButtonSprite(false);
+		var armorBtn = new ButtonSprite();
 		var armorIcon = SpriteEquipmentIcons.getIcon("armor");
 		armorIcon.setAlpha(0.3);
 		armorBtn.draw(armorIcon, 10, 10);
@@ -358,7 +358,7 @@ class CqEquipmentGrid extends CqInventoryGrid {
 
 		cell = new CqEquipmentCell(JEWELRY, 159, 193, cellSize, cellSize, idx);
 		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
-		var jewelryBtn = new ButtonSprite(false);
+		var jewelryBtn = new ButtonSprite();
 		var jewelryIcon = SpriteEquipmentIcons.getIcon("jewelry");
 		jewelryIcon.setAlpha(0.3);
 		jewelryBtn.draw(jewelryIcon, 10, 10);
@@ -369,7 +369,7 @@ class CqEquipmentGrid extends CqInventoryGrid {
 
 		cell = new CqEquipmentCell(WEAPON, 159, 100, cellSize, cellSize, idx);
 		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
-		var weaponBtn = new ButtonSprite(false);
+		var weaponBtn = new ButtonSprite();
 		var weaponIcon = SpriteEquipmentIcons.getIcon("weapon");
 		weaponIcon.setAlpha(0.3);
 		weaponBtn.draw(weaponIcon, 10, 10);
@@ -380,7 +380,7 @@ class CqEquipmentGrid extends CqInventoryGrid {
 
 		cell = new CqEquipmentCell(HAT, 159, 8, cellSize, cellSize, idx);
 		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
-		var hatBtn = new ButtonSprite(false);
+		var hatBtn = new ButtonSprite();
 		var hatIcon = SpriteEquipmentIcons.getIcon("hat");
 		hatIcon.setAlpha(0.3);
 		hatBtn.draw(hatIcon, 10, 6);

@@ -1,4 +1,4 @@
-package cq;
+package cq.states;
 
 import cq.CqResources;
 import flash.events.MouseEvent;
@@ -8,14 +8,14 @@ import haxel.HxlState;
 import haxel.HxlText;
 import haxel.HxlTimer;
 
-class SplashState extends HxlState
+class CreditsState extends HxlState
 {
 
 	var fadeTimer:HxlTimer;
 	var fadeTime:Float;
 	var waitTime:Float;
 	var stateNum:Int;
-	var splashText:HxlText;
+	var creditsText:HxlText;
 
 	public override function create():Void {
 		super.create();
@@ -25,9 +25,9 @@ class SplashState extends HxlState
 		waitTime = 2.0;
 		stateNum = 0;
 
-		splashText = new HxlText(0, (480-72)/2, 640, "Cardinal Quest");
-		splashText.setFormat(null, 72, 0xffffff, "center");
-		add(splashText);
+		creditsText = new HxlText(0, (480-72)/2, 640, "Credits");
+		creditsText.setFormat(null, 72, 0xffffff, "center");
+		add(creditsText);
 
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
 		//HxlGraphics.stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
@@ -39,9 +39,10 @@ class SplashState extends HxlState
 		if ( stateNum == 0 && fadeTimer.delta() >= fadeTime ) {
 			fadeTimer.reset();
 			stateNum = 1;
-		} else if ( stateNum == 1 && fadeTimer.delta() >= waitTime ) {
+		} 
+		/*else if ( stateNum == 1 && fadeTimer.delta() >= waitTime ) {
 			nextScreen();
-		}
+		}*/
 	}
 
 	override function onMouseDown(event:MouseEvent):Void {
