@@ -466,7 +466,7 @@ class CqSpellGrid extends CqInventoryGrid {
 		var cellBgKey:CqGraphicKey = CqGraphicKey.EquipmentCellBG;
 		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.EqCellBGHighlight;
 
-		var btnSize:Int = 54;
+		var btnSize:Int = 64;
 		var padding:Int = 8;
 		var idx:Int = 0;
 		buttons = new Array();
