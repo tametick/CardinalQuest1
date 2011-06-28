@@ -258,8 +258,10 @@ class CqInventoryGrid extends HxlDialog {
 
 		if ( !CreateCells ) return;
 		
+		var glowKey:CqGraphicKey = CqGraphicKey.CellGlow;
 		var cellBgKey:CqGraphicKey = CqGraphicKey.InventoryCellBG;
-		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.CellBGHighlight;
+		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.DropCellBGHighlight;
+		
 		var dropCellBgKey:CqGraphicKey = CqGraphicKey.DropCellBG;
 		var dropCellBgHighlightKey:CqGraphicKey = CqGraphicKey.DropCellBGHighlight;
 
@@ -274,14 +276,14 @@ class CqInventoryGrid extends HxlDialog {
 			for ( col in 0...cols ) {
 				var idx:Int = cells.length;
 				var cell:CqInventoryCell = new CqInventoryCell( offsetX + ((col) * paddingX) + (col * cellSize), ((row) * paddingY) + (row * cellSize), cellSize, cellSize, idx);
-				cell.setGraphicKeys(cellBgKey, cellBgHighlightKey);
+				cell.setGraphicKeys(cellBgKey, cellBgHighlightKey,glowKey);
 				add(cell);
 				cells.push(cell);
 			}
 		}
 		var dropCell = cells[cells.length - 1];
 		dropCell.dropCell = true;
-		dropCell.setGraphicKeys(dropCellBgKey, dropCellBgHighlightKey);
+		dropCell.setGraphicKeys(dropCellBgKey, dropCellBgHighlightKey,glowKey);
 		
 	}
 
@@ -331,7 +333,7 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		eqGridInit = false;
 
 		var cellBgKey:CqGraphicKey = CqGraphicKey.EquipmentCellBG;
-		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.EqCellBGHighlight;
+		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.EquipmentCellBG;
 		var cellGlowKey:CqGraphicKey = CqGraphicKey.CellGlow;
 
 		var cellSize:Int = 54;
@@ -339,12 +341,16 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		var idx:Int = 0;
 		var cell:CqEquipmentCell;
 	
+		var icons_size:Int = 16;
+		var icons_x:Int = Std.int( (cellSize / 2)- (icons_size / 2) ) - 3; // -3 offset, to make it look better
+		var icons_y:Int = icons_x;
+		
 		cell = new CqEquipmentCell(SHOES, 8, 193, cellSize, cellSize, idx);
 		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
 		var shoeBtn = new ButtonSprite();
 		var shoeIcon = SpriteEquipmentIcons.getIcon("shoes",16,2.0);
 		shoeIcon.setAlpha(0.3);
-		shoeBtn.draw(shoeIcon, 10, 10);
+		shoeBtn.draw(shoeIcon, icons_x, icons_y);
 		cell.setBackgroundSprite(shoeBtn);
 		add(cell);
 		cells.push(cell);
@@ -355,7 +361,7 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		var glovesBtn = new ButtonSprite();
 		var glovesIcon = SpriteEquipmentIcons.getIcon("gloves",16,2.0);
 		glovesIcon.setAlpha(0.3);
-		glovesBtn.draw(glovesIcon, 10, 10);
+		glovesBtn.draw(glovesIcon, icons_x, icons_y);
 		cell.setBackgroundSprite(glovesBtn);
 		add(cell);
 		cells.push(cell);
@@ -366,7 +372,7 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		var armorBtn = new ButtonSprite();
 		var armorIcon = SpriteEquipmentIcons.getIcon("armor",16,2.0);
 		armorIcon.setAlpha(0.3);
-		armorBtn.draw(armorIcon, 10, 10);
+		armorBtn.draw(armorIcon, icons_x, icons_y);
 		cell.setBackgroundSprite(armorBtn);
 		add(cell);
 		cells.push(cell);
@@ -377,7 +383,7 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		var jewelryBtn = new ButtonSprite();
 		var jewelryIcon = SpriteEquipmentIcons.getIcon("jewelry",16,2.0);
 		jewelryIcon.setAlpha(0.3);
-		jewelryBtn.draw(jewelryIcon, 10, 10);
+		jewelryBtn.draw(jewelryIcon, icons_x, icons_y);
 		cell.setBackgroundSprite(jewelryBtn);
 		add(cell);
 		cells.push(cell);
@@ -388,7 +394,7 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		var weaponBtn = new ButtonSprite();
 		var weaponIcon = SpriteEquipmentIcons.getIcon("weapon",16,2.0);
 		weaponIcon.setAlpha(0.3);
-		weaponBtn.draw(weaponIcon, 10, 10);
+		weaponBtn.draw(weaponIcon, icons_x, icons_y);
 		cell.setBackgroundSprite(weaponBtn);
 		add(cell);
 		cells.push(cell);
@@ -399,7 +405,7 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		var hatBtn = new ButtonSprite();
 		var hatIcon = SpriteEquipmentIcons.getIcon("hat",16,2.0);
 		hatIcon.setAlpha(0.3);
-		hatBtn.draw(hatIcon, 10, 6);
+		hatBtn.draw(hatIcon, icons_x, icons_y);
 		cell.setBackgroundSprite(hatBtn);
 		add(cell);
 		cells.push(cell);
@@ -460,7 +466,7 @@ class CqSpellGrid extends CqInventoryGrid {
 		var cellBgKey:CqGraphicKey = CqGraphicKey.EquipmentCellBG;
 		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.EqCellBGHighlight;
 
-		var btnSize:Int = 64;
+		var btnSize:Int = 54;
 		var padding:Int = 8;
 		var idx:Int = 0;
 		buttons = new Array();
