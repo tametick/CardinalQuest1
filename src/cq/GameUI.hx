@@ -134,7 +134,7 @@ class GameUI extends HxlDialog {
 		add(panelLog);		
 		
 		var className = Type.enumConstructor(cast(Registery.player, CqPlayer).playerClass).toLowerCase();
-		var mainBtn = SpritePortrait.getIcon(className );
+		var mainBtn = SpritePortrait.getIcon(className,64 ,1.0);
 		var infoBtn = new HxlSprite();
 		infoBtn.loadGraphic(SpriteInfo, false, false, 64, 64, true, 1, 1);
 		

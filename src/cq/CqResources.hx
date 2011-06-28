@@ -27,7 +27,6 @@ class SpriteItemSlot1 extends Bitmap { public function new() { super(); } }
 class SpriteItemSlot2 extends Bitmap { public function new() { super(); } }
 class SpriteInfo extends Bitmap { public function new() { super(); } }
 
-
 class ButtonSprite extends HxlSprite {
 	public function new(?WithGlow:Bool=true) {
 		super();
@@ -47,14 +46,10 @@ class SpritePortrait extends HxlSpriteSheet {
 		super(0);
 	} 
 	
-	public static function getIcon(IconName:String):HxlSprite {
-		var icon = new HxlSprite();
-		icon.loadGraphic(SpritePortrait, true, false, 64, 64);
-		icon.setFrame(instance.getSpriteIndex(IconName));
-		return icon;
+	public static function getIcon(IconName:String, Size:Int, Zoom:Float):HxlSprite {
+		return HxlSpriteSheet.getSprite(SpritePortrait, instance.getSpriteIndex(IconName), Size, Zoom);
 	}
 }
-
 class SpriteEquipmentIcons extends HxlSpriteSheet { 
 	public static var instance = new SpriteEquipmentIcons();
 	public function new() {
@@ -65,14 +60,10 @@ class SpriteEquipmentIcons extends HxlSpriteSheet {
 		super(0);
 	} 
 	
-	public static function getIcon(?IconName:String="weapon"):HxlSprite {
-		var icon = new HxlSprite();
-		icon.loadGraphic(SpriteEquipmentIcons, true, false, 16, 16, false, 2.0, 2.0);
-		icon.setFrame(instance.getSpriteIndex(IconName));
-		return icon;
+	public static function getIcon(IconName:String, Size:Int, Zoom:Float):HxlSprite {
+		return HxlSpriteSheet.getSprite(SpriteEquipmentIcons, instance.getSpriteIndex(IconName), Size, Zoom);
 	}
 }
-
 class SpriteIcons extends HxlSpriteSheet { 
 	public static var instance = new SpriteIcons();
 	public function new() {
@@ -82,7 +73,6 @@ class SpriteIcons extends HxlSpriteSheet {
 		super(0);
 	} 
 }
-
 class SpriteEffects extends HxlSpriteSheet { 
 	public static var instance = new SpriteEffects();
 	public function new() {
@@ -130,7 +120,6 @@ class SpriteMonsters extends HxlSpriteSheet {
 		super(0);
 	} 
 }
-
 class SpritePlayer extends HxlSpriteSheet { 
 	public static var instance = new SpritePlayer();
 	public function new() { 
@@ -145,7 +134,6 @@ class SpritePlayer extends HxlSpriteSheet {
 		super(0); 
 	} 
 }
-
 class SpriteTiles extends HxlSpriteSheet { 
 	public static var instance = new SpriteTiles();
 	static var inited = false;
@@ -197,7 +185,6 @@ class SpriteCorpses extends HxlSpriteSheet {
 		super(0);
 	} 
 }
-
 class SpriteSpells extends HxlSpriteSheet { 
 	public static var instance = new SpriteSpells();
 	public function new() {
@@ -233,4 +220,5 @@ class UiBeltVertical extends HxlSpriteSheet {
 		super(0);
 	}
 }
+
 class CqResources extends Resources {}

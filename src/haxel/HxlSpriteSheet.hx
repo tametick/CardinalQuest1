@@ -24,4 +24,12 @@ class HxlSpriteSheet extends Bitmap {
 	public function getSpriteIndex(name:String):Int {
 		return spriteIndex.get(name);
 	}
+	
+	public static function getSprite(Graphic:Class<Bitmap>, Frame:Int, Size:Int, Zoom:Float):HxlSprite {
+		var icon = new HxlSprite();
+		icon.loadGraphic(Graphic, true, false, Size, Size, false, Zoom, Zoom);
+		icon.setFrame(Frame);
+		return icon;
+	}
+	
 }
