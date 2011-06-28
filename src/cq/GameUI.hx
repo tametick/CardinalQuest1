@@ -279,14 +279,13 @@ class GameUI extends HxlDialog {
 		
 		G.clear();
 		
-		G.beginFill(0x88ff0000);
+		G.beginFill(0x55000000);
 		GameUI.drawChargeArc(G, 27, 27, -(Math.PI/2), end, 47, -1);
 		G.endFill();
 		if(chrageBmp == null)
 			chrageBmp = new Bitmap(GraphicCache.getBitmap(CqGraphicKey.EquipmentCellBG));
 		chrageShape.mask = chrageBmp;
 		
-		//var bmpdata:BitmapData = new BitmapData(94, 94, true, 0x0);
 		btn.chrageBmpData.fillRect(CqSpellButton.clearChargeRect, 0x0);
 		
 		

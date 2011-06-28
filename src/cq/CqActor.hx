@@ -580,7 +580,7 @@ class CqPlayer extends CqActor, implements Player {
 		
 		super(X, Y);
 
-		lives = 3;
+		lives = 0;
 		
 		for (s in 0...5)
 			equippedSpells[s] = null;
