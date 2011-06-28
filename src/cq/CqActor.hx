@@ -234,6 +234,7 @@ class CqActor extends CqObject, implements Actor {
 					player.moveToPixel(state, startingPostion.x, startingPostion.y);
 					player.hp = player.maxHp;
 					player.healthBar.updateValue();
+					player.infoViewHealthBar.updateValue();
 					player.healthBar.visible = true;					
 				} else {
 					///todo: Playtomic recording
@@ -391,8 +392,13 @@ class CqActor extends CqObject, implements Actor {
 		if(item.buffs != null) {
 			for (buff in item.buffs.keys()) {
 				buffs.set(buff, buffs.get(buff) + item.buffs.get(buff));
-				if (buff == "life")
+				if (buff == "life") {
 					healthBar.updateValue();
+					if (Std.is(this, CqPlayer)) {
+						var player = cast(this, CqPlayer);
+						player.infoViewHealthBar.updateValue();
+					}
+				}
 			}
 		}
 	}
@@ -411,6 +417,10 @@ class CqActor extends CqObject, implements Actor {
 					if (this.hp < 1)
 						this.hp = 1;
 					healthBar.updateValue();
+					if (Std.is(this, CqPlayer)) {
+						var player = cast(this, CqPlayer);
+						player.infoViewHealthBar.updateValue();
+					}
 				}
 			}
 		}
@@ -494,11 +504,19 @@ class CqActor extends CqObject, implements Actor {
 					healthBar.visible = true;
 					hp = maxHp;
 					healthBar.updateValue();
+					if (Std.is(this, CqPlayer)) {
+						var player = cast(this, CqPlayer);
+						player.infoViewHealthBar.updateValue();
+					}
 					GameUI.showEffectText(this, "Healed", 0x0000ff);
 				} else {
 					healthBar.visible = true;
 					other.hp = other.maxHp;
 					other.healthBar.updateValue();
+					if (Std.is(other, CqPlayer)) {
+						var player = cast(other, CqPlayer);
+						player.infoViewHealthBar.updateValue();
+					}
 					GameUI.showEffectText(other, "Healed", 0x0000ff);
 				}
 			}
@@ -522,6 +540,9 @@ class CqPlayer extends CqActor, implements Player {
 	public var inventory:Array<CqItem>;
 	
 	public var xpBar:CqXpBar;
+	
+	public var infoViewHealthBar:CqHealthBar;
+	public var infoViewXpBar:CqXpBar;
 	
 	public var xp:Int;
 	public var level:Int;
@@ -686,6 +707,7 @@ class CqPlayer extends CqActor, implements Player {
 		maxHp += vitality;
 		hp = maxHp;
 		healthBar.updateValue();
+		infoViewHealthBar.updateValue();
 	}
 	
 	public override function actInDirection(state:HxlState, targetTile:HxlPoint):Bool {

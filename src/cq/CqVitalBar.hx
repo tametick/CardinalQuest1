@@ -37,6 +37,9 @@ class CqXpBar extends CqVitalBar {
 		super(Player, X, Y, Width, Height,isDefaultBar);
 		if(isDefaultBar){
 			Player.xpBar = this;
+		} else if (Std.is( actor, CqPlayer)) {
+			var player = cast(actor, CqPlayer);
+			player.infoViewXpBar = this;
 		}
 		
 		setFrameColor(0xff444444);
@@ -67,8 +70,12 @@ class CqHealthBar extends CqVitalBar {
 		
 		actor.addOnInjure(updateValue);
 		actor.addOnDestroy(destroy);
-		if(isDefaultBar)
+		if(isDefaultBar){
 			actor.healthBar = this;
+		} else if (Std.is( actor, CqPlayer)) {
+			var player = cast(actor, CqPlayer);
+			player.infoViewHealthBar = this;
+		}
 
 		
 		setFrameColor(0xff444444);

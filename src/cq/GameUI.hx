@@ -509,6 +509,7 @@ class GameUI extends HxlDialog {
 	
 	public function doPlayerGainXP(?xpTotal:Int=0):Void {
 		xpBar.updateValue(xpTotal);
+		infoViewXpBar.updateValue(xpTotal);
 	}
 
 	public static function setTargeting(Toggle:Bool, ?TargetText:String=null):Void {
