@@ -65,7 +65,9 @@ class GameUI extends HxlDialog {
 	var btnCharacterView:HxlButton;
 	var btnInfoView:HxlButton;
 	var menuBelt:HxlSprite;
-
+	var infoViewHpBar:CqHealthBar;
+	var infoViewXpBar:CqXpBar;
+	
 	// Misc UI elements
 	var xpBar:CqXpBar;
 	var targetSprite:HxlSprite;
@@ -185,6 +187,7 @@ class GameUI extends HxlDialog {
 		btnInfoView.loadGraphic(infoBtn);
 		btnInfoView.configEvent(5, true, true);
 		leftButtons.addButton(btnInfoView);
+		addInfoButtonBars();
 		
 		// map
 		btnMapView = new HxlButton(0, 0, btnSize, btnSize);
@@ -220,7 +223,21 @@ class GameUI extends HxlDialog {
 		panelInventory.dlgPotionGrid = dlgPotionGrid;
 	}
 	
-	private function getIcon(?Frame:Int=0):HxlSprite {
+	function addInfoButtonBars() {
+		var width = 50;
+		var height = 6;
+		var xShift = (leftButtons.width - width) / 4;
+		var yShift = btnMainView.height;
+
+		infoViewHpBar = new CqHealthBar(cast(Registery.player,CqPlayer), leftButtons.x+btnInfoView.x+xShift, leftButtons.y+btnMainView.y+yShift,width, height,false);
+		infoViewXpBar = new CqXpBar(cast(Registery.player, CqPlayer), infoViewHpBar.x, infoViewHpBar.y+infoViewHpBar.height, width, height, false);
+		infoViewHpBar.scrollFactor.x = infoViewHpBar.scrollFactor.y = 0;
+		infoViewXpBar.scrollFactor.x = infoViewXpBar.scrollFactor.y = 0;
+		add(infoViewHpBar);
+		add(infoViewXpBar);
+	}
+	
+	function getIcon(?Frame:Int=0):HxlSprite {
 		var icon = new HxlSprite();
 		icon.loadGraphic(SpriteIcons, true, false, 32, 32);
 		icon.setFrame(Frame);
@@ -434,7 +451,7 @@ class GameUI extends HxlDialog {
 			addHealthBar(cast(actor, CqActor));
 		}
 	}
-
+	
 	public function addHealthBar(Actor:CqActor):Void {
 		var bar:CqHealthBar = new CqHealthBar(Actor, Actor.x, Actor.y + Actor.height + 2, 32, 4);
 		HxlGraphics.state.add(bar);

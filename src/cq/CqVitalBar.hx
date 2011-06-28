@@ -8,11 +8,13 @@ class CqVitalBar extends HxlUIBar {
 
 	var actor:CqActor;
 
-	public function new(Actor:CqActor, ?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0) {
+	public function new(Actor:CqActor, ?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0,?isFollowingActor:Bool=true) {
 		actor = Actor;
 		super(X, Y, Width, Height);
 		
-		mount(Actor);
+		if(isFollowingActor){
+			mount(actor);
+		}
 		
 		scrollFactor.x = scrollFactor.y = 1;
 		zIndex = 5;
@@ -31,9 +33,11 @@ class CqVitalBar extends HxlUIBar {
 
 class CqXpBar extends CqVitalBar {
 
-	public function new(Player:CqPlayer, ?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0) {
-		super(Player, X, Y, Width, Height);
-		Player.xpBar = this;
+	public function new(Player:CqPlayer, ?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0, ?isDefaultBar:Bool=true) {
+		super(Player, X, Y, Width, Height,isDefaultBar);
+		if(isDefaultBar){
+			Player.xpBar = this;
+		}
 		
 		setFrameColor(0xff444444);
 		setInteriorColor(0xff000000);
@@ -41,7 +45,8 @@ class CqXpBar extends CqVitalBar {
 		setBarColor(0xff59C65E);
 		
 		setPercentToXp();
-		Player.xpBar.visible = true;
+		visible = true;
+
 	}
 
 	public override function updateValue(?xpTotal:Int=0) {
@@ -57,13 +62,15 @@ class CqXpBar extends CqVitalBar {
 
 class CqHealthBar extends CqVitalBar {
 
-	public function new(Actor:CqActor, ?X:Float = 0, ?Y:Float = 0, ?Width:Float = 0, ?Height:Float = 0) {
-		super(Actor, X, Y, Width, Height);
+	public function new(Actor:CqActor, ?X:Float = 0, ?Y:Float = 0, ?Width:Float = 0, ?Height:Float = 0, ?isDefaultBar:Bool=true) {
+		super(Actor, X, Y, Width, Height,isDefaultBar);
 		
-		Actor.addOnInjure(updateValue);
-		Actor.addOnDestroy(destroy);
+		actor.addOnInjure(updateValue);
+		actor.addOnDestroy(destroy);
+		if(isDefaultBar)
+			actor.healthBar = this;
+
 		
-		actor.healthBar = this;
 		setFrameColor(0xff444444);
 		setInteriorColor(0xff000000);
 		setBarColor(0xffff0000);
