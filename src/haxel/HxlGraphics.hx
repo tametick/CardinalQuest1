@@ -1,5 +1,6 @@
 package haxel;
 
+import cq.CqGraphicKeys;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Stage;
@@ -72,10 +73,6 @@ class HxlGraphics {
 	 * References the active graphics buffer.
 	 **/
 	public static var buffer:BitmapData;
-	/**
-	 * Internal storage system to prevent graphics from being used repeatedly in memory.
-	 */
-	static var _cache:Dynamic;
 	/**
 	 * Tells the camera to follow this <code>FlxCore</code> object around.
 	 */
@@ -201,7 +198,6 @@ class HxlGraphics {
 	 **/
 	public static function setGameData(Game:HxlGame, Width:Int, Height:Int, Zoom:Int):Void {
 		_game = Game;
-		_cache = {};
 		width = Width;
 		height = Height;
 		scroll = null;
@@ -361,148 +357,6 @@ class HxlGraphics {
 	public static function resetInput():Void {
 		keys.reset();
 		mouse.reset();
-	}
-
-	/**
-	 * Check the local bitmap cache to see if a bitmap with this key has been loaded already.
-	 *
-	 * @param	Key		The string key identifying the bitmap.
-	 * 
-	 * @return	Whether or not this file can be found in the cache.
-	 */
-	public static function checkBitmapCache(Key:String):Bool {
-		return (Reflect.hasField(_cache, Key)) && (Reflect.field(_cache, Key) != null);
-	}
-
-	/**
-	 * Generates a new <code>BitmapData</code> object (a colored square) and caches it.
-	 * 
-	 * @param	Width	How wide the square should be.
-	 * @param	Height	How high the square should be.
-	 * @param	Color	What color the square should be (0xAARRGGBB)
-	 * 
-	 * @return	The <code>BitmapData</code> we just created.
-	 */
-	public static function createBitmap(Width:Int, Height:Int, Color:Int, ?Unique:Bool=false, ?Key:String=null):BitmapData {
-		var key:String = Key;
-		if(key == null) {
-			key = Width+"x"+Height+":"+Color;
-			if (Unique && (Reflect.hasField(_cache, key)) && (Reflect.field(_cache, key) != null)) {
-				//Generate a unique key
-				var inc:Int = 0;
-				var ukey:String;
-				do { ukey = key + inc++;
-				} while((Reflect.hasField(_cache, ukey)) && (Reflect.field(_cache, ukey) != null));
-				key = ukey;
-			}
-		}
-		if (!checkBitmapCache(key)) {
-			Reflect.setField(_cache, key, new BitmapData(Width,Height,true,Color));
-		}
-		return Reflect.field(_cache, key);
-	}
-
-
-	/**
-	 * Loads a bitmap from a file, caches it, and generates a horizontally flipped version if necessary.
-	 * 
-	 * @param	Graphic		The image file that you want to load.
-	 * @param	Reverse		Whether to generate a flipped version.
-	 * 
-	 * @return	The <code>BitmapData</code> we just created.
-	 */
-	public static function addBitmap(Graphic:Class<Bitmap>,?Reverse:Bool=false, ?Unique:Bool=false, ?Key:String=null, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):BitmapData {
-		var key:String = Key;
-		var needReverse:Bool = false;
-		if ( key == null ) {
-			key = Type.getClassName(Graphic);
-			if ( ScaleX != 1.0 || ScaleY != 1.0 ) key = key+"-"+ScaleX+"x"+ScaleY;
-			if(Unique && (Reflect.hasField(_cache, key)) && (Reflect.field(_cache, key) != null)) {
-				//Generate a unique key
-				var inc:Int = 0;
-				var ukey:String;
-				do {
-					ukey = key + inc++;
-				} while((Reflect.hasField(_cache, ukey)) && (Reflect.field(_cache, ukey) != null));
-				key = ukey;
-			}
-		}
-
-		//If there is no data for this key, generate the requested graphic
-		if (!checkBitmapCache(key)) {
-			var bd:BitmapData = Type.createInstance(Graphic, []).bitmapData;
-			if ( ScaleX != 1.0 || ScaleY != 1.0 ) {
-				var newPixels:BitmapData = new BitmapData(Std.int(bd.width * ScaleX), Std.int(bd.height * ScaleY), true, 0x00000000);
-				var mtx:Matrix = new Matrix();
-				mtx.scale(ScaleX, ScaleY);
-				newPixels.draw(bd, mtx);
-				bd = newPixels;
-			}
-			Reflect.setField(_cache, key, bd);
-			if (Reverse) needReverse = true;
-		}
-
-		var pixels:BitmapData = Reflect.field(_cache, key);
-
-		if (!needReverse && Reverse && (pixels.width == Type.createInstance(Graphic, []).bitmapData.width)) {
-			needReverse = true;
-		}
-		if (needReverse) {
-			var newPixels:BitmapData = new BitmapData(pixels.width<<1,pixels.height,true,0x00000000);
-			newPixels.draw(pixels);
-			var mtx:Matrix = new Matrix();
-			mtx.scale(-1,1);
-			mtx.translate(newPixels.width,0);
-			newPixels.draw(pixels,mtx);
-			pixels = newPixels;
-		}
-		return pixels;
-
-	}
-
-	public static function clearBitmapData() {
-		var fieldNames:Array<String> = Reflect.fields(_cache).copy();
-		for (fieldName in fieldNames) {
-			cast(Reflect.field(_cache, fieldName), BitmapData).dispose();
-			Reflect.deleteField(_cache, fieldName);
-		}
-	}
-	
-	public static function addBitmapData(Graphic:BitmapData, ?Key:String=null, ?Force:Bool=false):BitmapData {
-		var key:String = Key;
-		if(key == null) {
-			key = "data-"+Graphic.width+"x"+Graphic.height;
-			if ( Reflect.hasField(_cache, key) && (Reflect.field(_cache, key) != null)) {
-				//Generate a unique key
-				var inc:Int = 0;
-				var ukey:String;
-				do { ukey = key + inc++;
-				} while((Reflect.hasField(_cache, ukey)) && (Reflect.field(_cache, ukey) != null));
-				key = ukey;
-			}
-		}
-		if ( !checkBitmapCache(key) || Force ) {
-			if (checkBitmapCache(key)) {
-				// dispose old in case of forcing
-				cast(Reflect.field(_cache, key), BitmapData).dispose();
-			}
-			
-			var bd:BitmapData = new BitmapData( Graphic.width, Graphic.height, true, 0x00000000 );
-			bd.draw(Graphic);
-			Reflect.setField(_cache, key, bd);
-		}
-		
-		return Reflect.field(_cache, key);
-	}
-
-	/**
-	 * Returns a BitmapData object for the cached graphic matching the supplied key.
-	 * If a matching bitmap is now found, returns a 20x20 pixel red square.
-	 **/
-	public static function getBitmap(Key:String):BitmapData {
-		if ( Key == null || !checkBitmapCache(Key) ) 
-			return createBitmap(20, 20, 0xff0000); 
-		return Reflect.field(_cache, Key);
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package haxel;
 
+import cq.CqGraphicKeys;
 import flash.display.BitmapData;
 import flash.display.Bitmap;
 import flash.geom.Matrix;
@@ -169,9 +170,9 @@ class HxlSprite extends HxlObject {
 	 * 
 	 * @return	This HxlSprite instance (nice for chaining stuff together, if you're into that).
 	 */
-	public function createGraphic(Width:Int,Height:Int,?Color:Int=0xffffffff,?Unique:Bool=false,?Key:String=null):HxlSprite {
+	public function createGraphic(Width:Int,Height:Int,?Color:Int=0xffffffff,?Unique:Bool=false,?Key:CqGraphicKey=null):HxlSprite {
 		_bakedRotation = 0;
-		_pixels = HxlGraphics.createBitmap(Width, Height, Color, Unique, Key);
+		_pixels = GraphicCache.createBitmap(Width, Height, Color, Unique, Key);
 		width = frameWidth = _pixels.width;
 		height = frameHeight = _pixels.height;
 		resetHelpers();
@@ -194,7 +195,7 @@ class HxlSprite extends HxlObject {
 		_bakedRotation = 0;
 		Width = Std.int(Width * ScaleX);
 		Height = Std.int(Height * ScaleY);
-		_pixels = HxlGraphics.addBitmap(Graphic,Reverse,Unique, null, ScaleX, ScaleY);
+		_pixels = GraphicCache.addBitmap(Graphic,Reverse,Unique, null, ScaleX, ScaleY);
 		if (Reverse) {
 			_flipped = _pixels.width>>1;
 		} else {
@@ -225,8 +226,8 @@ class HxlSprite extends HxlObject {
 	/**
 	 * Fetches a bitmapData object from the cache matching the supplied key.
 	 **/
-	public function loadCachedGraphic(Key:String, ?Animated:Bool=false, ?Width:Int=0, ?Height:Int=0):HxlSprite {
-		_pixels = HxlGraphics.getBitmap(Key);
+	public function loadCachedGraphic(Key:CqGraphicKey, ?Animated:Bool = false, ?Width:Int = 0, ?Height:Int = 0):HxlSprite {
+		_pixels = GraphicCache.getBitmap(Key);
 
 		if (Animated) {
 			Width = _pixels.height;
@@ -260,7 +261,7 @@ class HxlSprite extends HxlObject {
 	public function loadRotatedGraphic(Graphic:Class<Bitmap>, ?Rotations:Int=16, ?Frame:Int=-1, ?AntiAliasing:Bool=false, ?AutoBuffer:Bool=false):HxlSprite {
 		//Create the brush and canvas
 		var rows:Int = Math.floor(Math.sqrt(Rotations));
-		var brush:BitmapData = HxlGraphics.addBitmap(Graphic);
+		var brush:BitmapData = GraphicCache.addBitmap(Graphic);
 		if (Frame >= 0) {
 			//Using just a segment of the graphic - find the right bit here
 			var full:BitmapData = brush;
@@ -289,9 +290,9 @@ class HxlSprite extends HxlObject {
 		var cols:Int = Math.floor(HxlUtil.ceil(Rotations/rows));
 		width = max*cols;
 		height = max*rows;
-		var key:String = Type.getClassName(Graphic) + ":" + Frame + ":" + width + "x" + height;
-		var skipGen:Bool = HxlGraphics.checkBitmapCache(key);
-		_pixels = HxlGraphics.createBitmap(Math.floor(width), Math.floor(height), 0, true, key);
+		var key:CqGraphicKey = CqGraphicKey.FromClass(Type.getClassName(Graphic), Frame, width, height);
+		var skipGen:Bool = GraphicCache.checkBitmapCache(key);
+		_pixels = GraphicCache.createBitmap(Math.floor(width), Math.floor(height), 0, true, key);
 		width = frameWidth = _pixels.width;
 		height = frameHeight = _pixels.height;
 		_bakedRotation = 360/Rotations;

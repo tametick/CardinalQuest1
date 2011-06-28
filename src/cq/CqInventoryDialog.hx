@@ -7,6 +7,7 @@ import cq.CqPotionButton;
 import cq.CqResources;
 import cq.CqSpell;
 import cq.CqSpellButton;
+import haxel.GraphicCache;
 
 import data.Configuration;
 import data.Registery;
@@ -28,6 +29,7 @@ import haxel.HxlSprite;
 import haxel.HxlSpriteSheet;
 import haxel.HxlText;
 import haxel.HxlUtil;
+import cq.CqGraphicKeys;
 
 class CqInventoryDialog extends HxlSlidingDialog {
 
@@ -66,21 +68,21 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		add(dlgInvGrid);
 
 		itemSheet = SpriteItems.instance;
-		var itemSheetKey:String = "ItemIconSheet";
+		var itemSheetKey:CqGraphicKey = CqGraphicKey.ItemIconSheet;
 		itemSprite = new HxlSprite(0, 0);
 		itemSprite.loadGraphic(SpriteItems, true, false, Configuration.tileSize, Configuration.tileSize, false, 3.0, 3.0);
 		dlgInfo.itemSheet = itemSheet;
 		dlgInfo.itemSprite = itemSprite;
 
 		spellSheet = SpriteSpells.instance;
-		var spellSheetKey:String = "SpellIconSheet";
+		var spellSheetKey:CqGraphicKey = CqGraphicKey.SpellIconSheet;
 		spellSprite = new HxlSprite(0, 0);
 		spellSprite.loadGraphic(SpriteSpells, true, false, Configuration.tileSize, Configuration.tileSize, false, 3.0, 3.0);
 		dlgInfo.spellSheet = spellSheet;
 		dlgInfo.spellSprite = spellSprite;
 
-		CqInventoryItem.backgroundKey = "ItemBG";	
-		CqInventoryItem.backgroundSelectedKey = "ItemSelectedBG";
+		CqInventoryItem.backgroundKey = CqGraphicKey.ItemBG;
+		CqInventoryItem.backgroundSelectedKey = CqGraphicKey.ItemSelectedBG;
 	}
 
 	/**
@@ -242,10 +244,10 @@ class CqInventoryGrid extends HxlDialog {
 
 		if ( !CreateCells ) return;
 		
-		var cellBgKey:String = "InventoryCellBG";
-		var cellBgHighlightKey:String = "CellBGHighlight";
-		var dropCellBgKey:String = "DropCellBG";
-		var dropCellBgHighlightKey:String = "DropCellBGHighlight";
+		var cellBgKey:CqGraphicKey = CqGraphicKey.InventoryCellBG;
+		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.CellBGHighlight;
+		var dropCellBgKey:CqGraphicKey = CqGraphicKey.DropCellBG;
+		var dropCellBgHighlightKey:CqGraphicKey = CqGraphicKey.DropCellBGHighlight;
 
 		var paddingX:Float = 12.3;
 		var paddingY:Float = 8;
@@ -314,9 +316,9 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		cells = new Array();
 		eqGridInit = false;
 
-		var cellBgKey:String = "EquipmentCellBG";
-		var cellBgHighlightKey:String = "EqCellBGHighlight";
-		var cellGlowKey:String = "CellGlow";
+		var cellBgKey:CqGraphicKey = CqGraphicKey.EquipmentCellBG;
+		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.EqCellBGHighlight;
+		var cellGlowKey:CqGraphicKey = CqGraphicKey.CellGlow;
 
 		var cellSize:Int = 54;
 		var padding:Int = 8;
@@ -441,8 +443,8 @@ class CqSpellGrid extends CqInventoryGrid {
 		super(X, Y, Width, Height, false);
 		cells = new Array();
 
-		var cellBgKey:String = "EquipmentCellBG";
-		var cellBgHighlightKey:String = "EqCellBGHighlight";
+		var cellBgKey:CqGraphicKey = CqGraphicKey.EquipmentCellBG;
+		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.EqCellBGHighlight;
 
 		var btnSize:Int = 64;
 		var padding:Int = 8;
@@ -502,8 +504,8 @@ class CqPotionGrid extends CqInventoryGrid {
 
 		cells = new Array();
 
-		var cellBgKey:String = "EquipmentCellBG";
-		var cellBgHighlightKey:String = "EqCellBGHighlight";
+		var cellBgKey:CqGraphicKey = CqGraphicKey.EquipmentCellBG;
+		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.EqCellBGHighlight;
 
 		var btnSize:Int = 64;
 		var padding:Int = 8;
@@ -564,7 +566,7 @@ class CqInventoryCell extends HxlDialog {
 		dropCell = false;
 	}
 
-	public function setGraphicKeys(Normal:String, ?Highlight:String=null, ?Glow:String=null):Void {
+	public function setGraphicKeys(Normal:CqGraphicKey, ?Highlight:CqGraphicKey = null, ?Glow:CqGraphicKey = null):Void {
 		if ( bgHighlight == null ) {
 			bgHighlight = new HxlSprite(0, 0);
 			bgHighlight.zIndex = -2;
@@ -698,8 +700,8 @@ class CqEquipmentCell extends CqInventoryCell {
 
 class CqInventoryItem extends HxlSprite {
 
-	public static var backgroundKey:String;
-	public static var backgroundSelectedKey:String;
+	public static var backgroundKey:CqGraphicKey;
+	public static var backgroundSelectedKey:CqGraphicKey;
 	public static var selectedItem:CqInventoryItem = null;
 	var background:BitmapData;
 	var icon:BitmapData;
@@ -739,12 +741,12 @@ class CqInventoryItem extends HxlSprite {
 		selected = Toggle;
 		if ( selected ) {
 			loadCachedGraphic(backgroundSelectedKey);
-			background = HxlGraphics.getBitmap(backgroundSelectedKey);
+			background = GraphicCache.getBitmap(backgroundSelectedKey);
 			if ( icon != null ) setIcon(icon);
 			_dlg.dlgInfo.setItem(item);
 		} else {
 			loadCachedGraphic(backgroundKey);
-			background = HxlGraphics.getBitmap(backgroundKey);
+			background = GraphicCache.getBitmap(backgroundKey);
 			if ( icon != null ) setIcon(icon);
 		}
 	}

@@ -5,7 +5,7 @@ import cq.GameUI;
 import cq.CqInventoryDialog;
 import cq.CqItem;
 import cq.CqResources;
-
+import cq.CqGraphicKeys;
 import data.Registery;
 
 import flash.display.BitmapData;
@@ -32,7 +32,7 @@ class CqPotionButton extends HxlDialog {
 		initialized = false;
 
 		cell = new CqPotionCell(this, 5, 5, 54, 54, Idx);
-		cell.setGraphicKeys("EquipmentCellBG", "EqCellBGHighlight", "CellGlow");
+		cell.setGraphicKeys(CqGraphicKey.EquipmentCellBG,CqGraphicKey.EqCellBGHighlight,CqGraphicKey.CellGlow);
 		cell.zIndex = 1;
 		add(cell);
 	}

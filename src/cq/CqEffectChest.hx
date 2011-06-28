@@ -4,18 +4,19 @@ import flash.display.BitmapData;
 
 import haxel.HxlEmitter;
 import haxel.HxlGradient;
-import haxel.HxlGraphics;
+import haxel.GraphicCache;
 import haxel.HxlSprite;
 import haxel.HxlUtil;
+
+import cq.CqGraphicKeys;
 
 class CqEffectChest extends HxlEmitter {
 
 	public function new(?X:Float=0, ?Y:Float=0) {
 		super(X, Y);
-	
-		if ( !HxlGraphics.checkBitmapCache("ChestEffectParticle")) {
+		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.ChestEffectParticle)) {
 			var bmp:BitmapData = HxlGradient.RectData(12, 12, [0xe1e1e1, 0x5e5e5e], [0.7, 0.55], Math.PI/2, 12.0);
-			HxlGraphics.addBitmapData(bmp, "ChestEffectParticle");
+			GraphicCache.addBitmapData(bmp, CqGraphicKey.ChestEffectParticle);
 		}
 		setAlphaVelocity(-5, -2);
 		gravity = 0.0;
@@ -35,7 +36,7 @@ class CqEffectChest extends HxlEmitter {
 		var sh:Float;
 		if (Multiple) {
 			s = new HxlSprite(0,0);
-			s.loadCachedGraphic("ChestEffectParticle");
+			s.loadCachedGraphic(CqGraphicKey.ChestEffectParticle);
 			tf = Math.floor(s.width/s.height);
 		}
 		for (i in 0...Quantity) {
@@ -44,19 +45,19 @@ class CqEffectChest extends HxlEmitter {
 				r = Math.floor(HxlUtil.random()*tf);
 				if (BakedRotations > 0) {
 					//s.loadRotatedGraphic(Graphics,BakedRotations,r);
-					s.loadCachedGraphic("ChestEffectParticle");		
+					s.loadCachedGraphic(CqGraphicKey.ChestEffectParticle);		
 				} else {
 					//s.loadGraphic(Graphics,true);
-					s.loadCachedGraphic("ChestEffectParticle");
+					s.loadCachedGraphic(CqGraphicKey.ChestEffectParticle);
 					s.frame = r;
 				}
 			} else {
 				if (BakedRotations > 0) {
 					//s.loadRotatedGraphic(Graphics,BakedRotations);
-					s.loadCachedGraphic("ChestEffectParticle");
+					s.loadCachedGraphic(CqGraphicKey.ChestEffectParticle);
 				} else {
 					//s.loadGraphic(Graphics);
-					s.loadCachedGraphic("ChestEffectParticle");
+					s.loadCachedGraphic(CqGraphicKey.ChestEffectParticle);
 				}
 			}
 			if (Collide > 0) {

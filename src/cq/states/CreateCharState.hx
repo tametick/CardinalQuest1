@@ -2,6 +2,8 @@ package cq.states;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;
+import cq.CqGraphicKeys;
+import haxel.GraphicCache;
 
 import cq.CqActor;
 import cq.CqResources;
@@ -95,7 +97,7 @@ class CreateCharState extends HxlState
 		add(txtWizard);
 
 		selectBox = new HxlSprite(105, 160);
-		if ( !HxlGraphics.checkBitmapCache("CharCreateSelector") ) {
+		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.CharCreateSelector) ) {
 			var target:Shape = new Shape();
 			target.graphics.lineStyle(5, 0xffffff00);
 			target.graphics.beginFill(0x00000000, 0.0);
@@ -106,7 +108,7 @@ class CreateCharState extends HxlState
 			selectBox.width = selectBox.height = 130;
 			selectBox.pixels = bmp;
 		} else {
-			selectBox.loadCachedGraphic("CharCreateSelector");
+			selectBox.loadCachedGraphic(CqGraphicKey.CharCreateSelector);
 		}
 		add(selectBox);
 

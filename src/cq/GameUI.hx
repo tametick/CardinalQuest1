@@ -12,6 +12,7 @@ import cq.CqSpellButton;
 import cq.CqWorld;
 import cq.CqVitalBar;
 import cq.CqResources;
+import cq.CqGraphicKeys;
 
 import data.Configuration;
 import data.Registery;
@@ -42,6 +43,7 @@ import haxel.HxlSprite;
 import haxel.HxlText;
 import haxel.HxlTextContainer;
 import haxel.HxlUIBar;
+import haxel.GraphicCache;
 
 class GameUI extends HxlDialog {
 
@@ -264,7 +266,7 @@ class GameUI extends HxlDialog {
 		GameUI.drawChargeArc(G, 27, 27, -(Math.PI/2), end, 47, -1);
 		G.endFill();
 		if(chrageBmp == null)
-			chrageBmp = new Bitmap(HxlGraphics.getBitmap("EquipmentCellBG"));
+			chrageBmp = new Bitmap(GraphicCache.getBitmap(CqGraphicKey.EquipmentCellBG));
 		chrageShape.mask = chrageBmp;
 		
 		//var bmpdata:BitmapData = new BitmapData(94, 94, true, 0x0);
@@ -274,9 +276,9 @@ class GameUI extends HxlDialog {
 		var ctrans:ColorTransform = new ColorTransform();
 		ctrans.alphaMultiplier = 0.5;
 		btn.chrageBmpData.draw(chrageShape, null, ctrans);
-		HxlGraphics.addBitmapData(btn.chrageBmpData, "chargeRadial", true);
+		GraphicCache.addBitmapData(btn.chrageBmpData, CqGraphicKey.chargeRadial, true);
 
-		btn.updateChargeSprite("chargeRadial");
+		btn.updateChargeSprite(CqGraphicKey.chargeRadial);
 	}
 
 	public static function drawChargeArc(G:Graphics, centerX:Float, centerY:Float, startAngle:Float, endAngle:Float, radius:Float, direction:Int):Void {
@@ -345,53 +347,53 @@ class GameUI extends HxlDialog {
 
 	public function initUIGraphics():Void {
 		var size = 54;
-		var cellBgKey:String = "InventoryCellBG";
-		if ( !HxlGraphics.checkBitmapCache(cellBgKey) ) {
-			HxlGraphics.addBitmapData(HxlGradient.RectData(size, size, [0x333333, 0x555555], null, Math.PI/2, 5.0), cellBgKey);
+		var cellBgKey:CqGraphicKey = CqGraphicKey.InventoryCellBG;
+		if ( !GraphicCache.checkBitmapCache(cellBgKey) ) {
+			GraphicCache.addBitmapData(HxlGradient.RectData(size, size, [0x333333, 0x555555], null, Math.PI/2, 5.0), cellBgKey);
 		}
 		
-		var cellBgKey:String = "DropCellBG";
-		if ( !HxlGraphics.checkBitmapCache(cellBgKey) ) {
-			HxlGraphics.addBitmapData(HxlGradient.RectData(size, size, [0x883333, 0xcc5555], null, Math.PI/2, 5.0), cellBgKey);
+		var cellBgKey:CqGraphicKey = CqGraphicKey.DropCellBG;
+		if ( !GraphicCache.checkBitmapCache(cellBgKey) ) {
+			GraphicCache.addBitmapData(HxlGradient.RectData(size, size, [0x883333, 0xcc5555], null, Math.PI/2, 5.0), cellBgKey);
 		}
 
-		var cellBgHighlightKey:String = "CellBGHighlight";
-		if ( !HxlGraphics.checkBitmapCache(cellBgHighlightKey) ) {
-			HxlGraphics.addBitmapData(HxlGradient.RectData(size, size, [0x686835, 0xADAB6B], null, Math.PI/2, 5.0), cellBgHighlightKey);
+		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.EqCellBGHighlight;
+		if ( !GraphicCache.checkBitmapCache(cellBgHighlightKey) ) {
+			GraphicCache.addBitmapData(HxlGradient.RectData(size, size, [0x686835, 0xADAB6B], null, Math.PI/2, 5.0), cellBgHighlightKey);
 		}
 		
-		var cellBgHighlightKey:String = "DropCellBGHighlight";
-		if ( !HxlGraphics.checkBitmapCache(cellBgHighlightKey) ) {
-			HxlGraphics.addBitmapData(HxlGradient.RectData(size, size, [0x996835, 0xFDAB6B], null, Math.PI/2, 5.0), cellBgHighlightKey);
+		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.DropCellBGHighlight;
+		if ( !GraphicCache.checkBitmapCache(cellBgHighlightKey) ) {
+			GraphicCache.addBitmapData(HxlGradient.RectData(size, size, [0x996835, 0xFDAB6B], null, Math.PI/2, 5.0), cellBgHighlightKey);
 		}
 
-		var itemBgKey:String = "ItemBG";
-		if ( !HxlGraphics.checkBitmapCache(itemBgKey) ) {
+		var itemBgKey:CqGraphicKey = CqGraphicKey.ItemBG;
+		if ( !GraphicCache.checkBitmapCache(itemBgKey) ) {
 			//HxlGraphics.addBitmapData(HxlGradient.RectData(50, 50, [0xc1c1c1, 0x9e9e9e], null, [0.0, 0.0], Math.PI / 2, 8.0), itemBgKey);
-			HxlGraphics.addBitmapData(HxlGradient.CircleData(25, [0xc1c1c1, 0x9e9e9e],null,[0.5,0.0]),itemBgKey);
+			GraphicCache.addBitmapData(HxlGradient.CircleData(25, [0xc1c1c1, 0x9e9e9e],null,[0.5,0.0]),itemBgKey);
 		}
 
-		var itemSelectedBgKey:String = "ItemSelectedBG";
-		if ( !HxlGraphics.checkBitmapCache(itemSelectedBgKey) ) {
+		var itemSelectedBgKey:CqGraphicKey = CqGraphicKey.ItemSelectedBG;
+		if ( !GraphicCache.checkBitmapCache(itemSelectedBgKey) ) {
 			//HxlGraphics.addBitmapData(HxlGradient.RectData(50, 50, [0xEFEDBC, 0xB9B99A], null, [0.0, 0.0], Math.PI / 2, 8.0), itemSelectedBgKey);
-			HxlGraphics.addBitmapData(HxlGradient.CircleData(25, [0xc1c1c1, 0x9e9e9e],null,[0.5,0.0]),itemSelectedBgKey);
+			GraphicCache.addBitmapData(HxlGradient.CircleData(25, [0xc1c1c1, 0x9e9e9e],null,[0.5,0.0]),itemSelectedBgKey);
 		}
 
-		var cellBgKey:String = "EquipmentCellBG";
-		if ( !HxlGraphics.checkBitmapCache(cellBgKey) ) {
-			HxlGraphics.addBitmapData(HxlGradient.RectData(size, size, [0x333333, 0x555555], null, [0.0,0.0], Math.PI/2, 5.0), cellBgKey);
+		var cellBgKey:CqGraphicKey = CqGraphicKey.EquipmentCellBG;
+		if ( !GraphicCache.checkBitmapCache(cellBgKey) ) {
+			GraphicCache.addBitmapData(HxlGradient.RectData(size, size, [0x333333, 0x555555], null, [0.0,0.0], Math.PI/2, 5.0), cellBgKey);
 		}
 
-		var cellBgHighlightKey:String = "EqCellBGHighlight";
-		if ( !HxlGraphics.checkBitmapCache(cellBgHighlightKey) ) {
-			HxlGraphics.addBitmapData(HxlGradient.RectData(size, size, [0xFFCC00, 0xFFFF99], null, [0.5,0.5],Math.PI/2, 5.0), cellBgHighlightKey);
+		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.EqCellBGHighlight;
+		if ( !GraphicCache.checkBitmapCache(cellBgHighlightKey) ) {
+			GraphicCache.addBitmapData(HxlGradient.RectData(size, size, [0xFFCC00, 0xFFFF99], null, [0.5,0.5],Math.PI/2, 5.0), cellBgHighlightKey);
 		}
 
 		var tmp:BitmapData = new BitmapData(79, 79, true, 0x0);
-		tmp.copyPixels(HxlGraphics.getBitmap("InventoryCellBG"), new Rectangle(0, 0, size, size), new Point(19, 19), null, null, true);
+		tmp.copyPixels(GraphicCache.getBitmap(CqGraphicKey.InventoryCellBG), new Rectangle(0, 0, size, size), new Point(19, 19), null, null, true);
 		var glow:GlowFilter = new GlowFilter(0x00ff00, 0.9, 15.0, 15.0, 1.6, 1, false, true);
 		tmp.applyFilter(tmp, new Rectangle(0, 0, 79, 79), new Point(0, 0), glow);
-		HxlGraphics.addBitmapData(tmp, "CellGlow");
+		GraphicCache.addBitmapData(tmp, CqGraphicKey.CellGlow);
 	}
 
 	public function checkTileItems(Player:CqPlayer):Void {
@@ -511,7 +513,7 @@ class GameUI extends HxlDialog {
 	public function updateTargeting():Void {
 		if ( targetSprite == null ) {
 			targetSprite = new HxlSprite(0, 0);
-			targetSprite.createGraphic(Configuration.zoomedTileSize(), Configuration.zoomedTileSize(), 0x88ffffff, false, "targetSprite");
+			targetSprite.createGraphic(Configuration.zoomedTileSize(), Configuration.zoomedTileSize(), 0x88ffffff, false, CqGraphicKey.targetSprite);
 			targetSprite.zIndex = 1;
 			targetSprite.color = 0x00ff00;
 			HxlGraphics.state.add(targetSprite);

@@ -4,18 +4,20 @@ import flash.display.BitmapData;
 
 import haxel.HxlEmitter;
 import haxel.HxlGradient;
-import haxel.HxlGraphics;
+import haxel.GraphicCache;
 import haxel.HxlSprite;
 import haxel.HxlUtil;
+
+import cq.CqGraphicKeys;
 
 class CqEffectInjure extends HxlEmitter {
 
 	public function new(?X:Float=0, ?Y:Float=0) {
 		super(X, Y);
 		
-		if ( !HxlGraphics.checkBitmapCache("InjureEffectParticle") ) {
+		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.InjureEffectParticle) ) {
 			var bmp:BitmapData = HxlGradient.CircleData(4, [0xdd1111, 0x3e0101], [1.0, 0.65], Math.PI/2);
-			HxlGraphics.addBitmapData(bmp, "InjureEffectParticle");
+			GraphicCache.addBitmapData(bmp, CqGraphicKey.InjureEffectParticle);
 		}
 		setAlphaVelocity(-5, -2);
 		gravity = 0.0;
@@ -35,7 +37,7 @@ class CqEffectInjure extends HxlEmitter {
 		var sh:Float;
 		if (Multiple) {
 			s = new HxlSprite(0,0);
-			s.loadCachedGraphic("InjureEffectParticle");
+			s.loadCachedGraphic(CqGraphicKey.InjureEffectParticle);
 			tf = Math.floor(s.width/s.height);
 		}
 		for (i in 0...Quantity) {
@@ -44,19 +46,19 @@ class CqEffectInjure extends HxlEmitter {
 				r = Math.floor(HxlUtil.random()*tf);
 				if (BakedRotations > 0) {
 					//s.loadRotatedGraphic(Graphics,BakedRotations,r);
-					s.loadCachedGraphic("InjureEffectParticle");		
+					s.loadCachedGraphic(CqGraphicKey.InjureEffectParticle);		
 				} else {
 					//s.loadGraphic(Graphics,true);
-					s.loadCachedGraphic("InjureEffectParticle");
+					s.loadCachedGraphic(CqGraphicKey.InjureEffectParticle);
 					s.frame = r;
 				}
 			} else {
 				if (BakedRotations > 0) {
 					//s.loadRotatedGraphic(Graphics,BakedRotations);
-					s.loadCachedGraphic("InjureEffectParticle");
+					s.loadCachedGraphic(CqGraphicKey.InjureEffectParticle);
 				} else {
 					//s.loadGraphic(Graphics);
-					s.loadCachedGraphic("InjureEffectParticle");
+					s.loadCachedGraphic(CqGraphicKey.InjureEffectParticle);
 				}
 			}
 			if (Collide > 0) {

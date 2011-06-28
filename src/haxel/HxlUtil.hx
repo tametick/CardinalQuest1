@@ -382,4 +382,23 @@ class HxlUtil {
 				if (map[y][x] == tileToReplace)
 					map[y][x] = replacement;
 	}
+	
+	public static function enumToString( enm : Dynamic ) : String {
+		if (enm == null)
+		{
+			throw "cant parse null enum";
+			return "";
+		}
+		var rslt:String = Type.getEnumName(Type.getEnum(enm)) + Type.enumConstructor(enm);
+		/*var one1:String = Type.enumConstructor(Type.getEnum(enm));
+		var one4:String = 
+		var one2:Dynamic = Type.getEnum(enm);
+		var one3:Dynamic = Type.enumIndex(enm);*/
+		var params:Array<Dynamic> = Type.enumParameters( enm );
+		for ( p in  params) {
+			rslt += Std.string( p );
+		}
+		
+		return rslt;
+	}
 }
