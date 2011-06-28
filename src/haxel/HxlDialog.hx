@@ -1,5 +1,6 @@
 package haxel;
 
+import cq.CqGraphicKeys;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Shape;
@@ -106,7 +107,7 @@ class HxlDialog extends HxlGroup
 		}
 	}
 
-	public function setBackgroundKey(Key:String):Void {
+	public function setBackgroundKey(Key:CqGraphicKey):Void {
 		if ( background == null ) {
 			background = new HxlSprite(0, 0);
 			background.zIndex = -1;

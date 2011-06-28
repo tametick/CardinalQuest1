@@ -2,6 +2,7 @@ package cq;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;
+import haxel.GraphicCache;
 
 import data.Configuration;
 import data.Resources;
@@ -18,6 +19,7 @@ import world.GameObject;
 import cq.CqConfiguration;
 import cq.CqResources;
 import cq.CqWorld;
+import cq.CqGraphicKeys;
 
 import flash.display.BitmapData;
 import flash.filters.GlowFilter;
@@ -257,7 +259,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 	public var stackSizeMax:Int;
 
 	var isGlowing:Bool;
-	var glowSpriteKey:String;
+	var glowSpriteKey:CqGraphicKey;
 	var glowSprite:BitmapData;
 	var glowRect:Rectangle;
 	
@@ -296,16 +298,17 @@ class CqItem extends GameObjectImpl, implements Loot {
 		stackSizeMax = 1;
 
 		isGlowing = false;
-		glowSpriteKey = "ItemGlow-"+typeName;
+		
+		glowSpriteKey = CqGraphicKey.ItemGlow(typeName);
 		glowRect = new Rectangle(0, 0, 48, 48);
-		if ( HxlGraphics.checkBitmapCache(glowSpriteKey) ) {
-			glowSprite = HxlGraphics.getBitmap(glowSpriteKey);
+		if ( GraphicCache.checkBitmapCache(glowSpriteKey) ) {
+			glowSprite = GraphicCache.getBitmap(glowSpriteKey);
 		} else {
 			var tmp:BitmapData = new BitmapData(48, 48, true, 0x0);
 			tmp.copyPixels(getFramePixels(), new Rectangle(0, 0, 32, 32), new Point(8, 8), null, null, true);
 			var glow:GlowFilter = new GlowFilter(0xffea00, 0.9, 16.0, 16.0, 1.6, 1, false, false);
 			tmp.applyFilter(tmp, glowRect, new Point(0, 0), glow);
-			HxlGraphics.addBitmapData(tmp, glowSpriteKey);
+			GraphicCache.addBitmapData(tmp, glowSpriteKey);
 			glowSprite = tmp;
 			glow = null;
 		}

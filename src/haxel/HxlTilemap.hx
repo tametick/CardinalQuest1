@@ -26,7 +26,6 @@ class HxlTilemap extends HxlObject {
 	public static var ImgAutoAlt:Class<Bitmap>;
 
 	public var alpha(getAlpha, setAlpha) : Float;
-
 	/**
 	 * No auto-tiling.
 	 */
@@ -170,7 +169,7 @@ class HxlTilemap extends HxlObject {
 		*/
 
 		//Figure out the size of the tiles
-		_pixels = HxlGraphics.addBitmap(TileGraphic, false, false, null, ScaleX, ScaleY);
+		_pixels = GraphicCache.addBitmap(TileGraphic, false, false, null, ScaleX, ScaleY);
 		if ( ScaleX != 1.0 && ScaleX > 0.0 ) TileWidth = Std.int(TileWidth * ScaleX);
 		if ( ScaleY != 1.0 && ScaleY > 0.0 ) TileHeight = Std.int(TileHeight * ScaleY);
 		_tileWidth = TileWidth;

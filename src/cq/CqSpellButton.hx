@@ -6,6 +6,7 @@ import cq.CqItem;
 import cq.CqResources;
 import cq.CqSpell;
 import cq.CqActor;
+import cq.CqGraphicKeys;
 
 import flash.display.BitmapData;
 import flash.events.MouseEvent;
@@ -35,7 +36,7 @@ class CqSpellButton extends HxlDialog {
 		initialized = false;
 
 		cell = new CqSpellCell(this,5, 5, 54, 54, Idx);
-		cell.setGraphicKeys("EquipmentCellBG", "EqCellBGHighlight", "CellGlow");
+		cell.setGraphicKeys(CqGraphicKey.EquipmentCellBG,CqGraphicKey.EqCellBGHighlight,CqGraphicKey.CellGlow);
 		cell.zIndex = 1;
 		add(cell);
 
@@ -59,7 +60,7 @@ class CqSpellButton extends HxlDialog {
 		super.update();
 	}
 
-	public function updateChargeSprite(Key:String):Void {
+	public function updateChargeSprite(Key:CqGraphicKey):Void {
 		if ( cell.getCellObj() == null ) {
 			chargeSprite.visible = false;
 			return;
