@@ -314,20 +314,24 @@ class CqItem extends GameObjectImpl, implements Loot {
 		}
 	}
 
-	public function setGlow(Toggle:Bool):Void {
+	public function setGlow(Toggle:Bool) {
 		isGlowing = Toggle;
 	}
 
-	override function renderSprite():Void {
-		if ( !isGlowing ) {
+	override function renderSprite() {
+		if ( isGlowing )
+			renderGlow();
+		else
 			super.renderSprite();
-			return;
-		}
+	}
+	
+	function renderGlow() {
 		getScreenXY(_point);
 		_flashPoint.x = _point.x - 8;
 		_flashPoint.y = _point.y - 8;
 		HxlGraphics.buffer.copyPixels(glowSprite, glowRect, _flashPoint, null, null, true);
 	}
+	
 
 	public function doPickupEffect():Void {
 		HxlGraphics.state.add(this);
