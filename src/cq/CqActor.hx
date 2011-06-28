@@ -557,21 +557,21 @@ class CqPlayer extends CqActor, implements Player {
 		switch(playerClass) {
 			case FIGHTER:
 				attack = 5;
-				defense = 3;
+				defense = 2;
 				speed = 3;
 				spirit = 1;
 				vitality = 5;
 				damage = new Range(1, 1);
 			case WIZARD:
 				attack = 2;
-				defense = 3;
+				defense = 2;
 				speed = 4;
 				spirit = 5;
 				vitality = 3;
 				damage = new Range(1, 1);
 			case THIEF:
 				attack = 3;
-				defense = 4;
+				defense = 3;
 				speed = 5;
 				spirit = 3;
 				vitality = 2;
