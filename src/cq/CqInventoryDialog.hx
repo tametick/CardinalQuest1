@@ -45,26 +45,40 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	var spellSheet:HxlSpriteSheet;
 	var spellSprite:HxlSprite;
 
+	static inline var DLG_OUTER_BORDER:Int 		= 10; 
+	static inline var DLG_GAP:Int 				= 15; 
+	static inline var DLG_DIVISOR_H_PERCENT:Int = 75;
+	static inline var DLG_DIVISOR_V_PERCENT:Int = 55;
+	
 	public function new(_GameUI:GameUI, ?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0)
 	{
 		// Size: 472 x 480
 		super(X, Y, Width, Height, Direction);
-
+		
 		gameui = _GameUI;
-
-		dlgCharacter = new HxlDialog(10, 10, 221, 255);
-		dlgCharacter.setBackgroundColor(0xff555555);
+		
+		var div_l:Float = (Width * (DLG_DIVISOR_V_PERCENT / 100)) - DLG_OUTER_BORDER*2;
+		var div_r:Float = (Width * ((100-DLG_DIVISOR_V_PERCENT) / 100))-DLG_OUTER_BORDER*2;
+		var div_u:Float  = (Height * (DLG_DIVISOR_H_PERCENT / 100))-DLG_OUTER_BORDER*2;
+		var div_b:Float  = (Height * ((100 - DLG_DIVISOR_H_PERCENT) / 100))-DLG_OUTER_BORDER*2;
+		
+		//on the left
+		dlgCharacter = new HxlDialog(DLG_OUTER_BORDER, DLG_OUTER_BORDER, div_l-DLG_OUTER_BORDER, div_u-DLG_OUTER_BORDER);
+		//dlgCharacter.setBackgroundColor(0xff885555);
 		add(dlgCharacter);
 
-		dlgEqGrid = new CqEquipmentGrid(0, 0, 221, 255);
+		//in dlgCharacter
+		dlgEqGrid = new CqEquipmentGrid(0, 0, dlgCharacter.width, dlgCharacter.height);
+		dlgEqGrid.setBackgroundColor(0xff555555);
 		dlgCharacter.add(dlgEqGrid);
 
-		dlgInfo = new CqItemInfoDialog(241, 10, 221, 255);
-		dlgInfo.setBackgroundColor(0xff555555);
+		//on the right
+		dlgInfo = new CqItemInfoDialog(div_l+DLG_GAP, DLG_OUTER_BORDER, div_r, div_u-DLG_OUTER_BORDER);
+		dlgInfo.setBackgroundColor(0xff885555);
 		add(dlgInfo);
 
-		// 452x195
-		dlgInvGrid = new CqInventoryGrid(10, 275, 452, 117);
+		//on the bottom
+		dlgInvGrid = new CqInventoryGrid(DLG_OUTER_BORDER, div_u+DLG_GAP, div_l+div_r, div_b);
 		add(dlgInvGrid);
 
 		itemSheet = SpriteItems.instance;
