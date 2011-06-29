@@ -18,7 +18,7 @@ class IntPoint
 	}
 	
 	
-	public function add(p:IntPoint):Void
+	public function add(p:IntPoint)
 	{
 		x += p.x;
 		y += p.y;

@@ -38,7 +38,7 @@ class HxlFlash extends HxlSprite {
 	 * @param	FlashComplete	A function you want to run when the flash finishes
 	 * @param	Force			Force the effect to reset
 	 */
-	public function start(?Color:Int=0xffffffff, ?Duration:Float=1, ?FlashComplete:Dynamic=null, ?Force:Bool=false):Void {
+	public function start(?Color:Int=0xffffffff, ?Duration:Float=1, ?FlashComplete:Dynamic=null, ?Force:Bool=false) {
 		if (!Force && exists) return;
 		fill(Color);
 		_delay = Duration;
@@ -51,14 +51,14 @@ class HxlFlash extends HxlSprite {
 	/**
 	 * Stops and hides this screen effect.
 	 */
-	public function stop():Void {
+	public function stop() {
 		exists = false;
 	}
 
 	/**
 	 * Updates and/or animates this special effect
 	 */
-	public override function update():Void {
+	public override function update() {
 		alpha -= HxlGraphics.elapsed/_delay;
 		if(alpha <= 0)
 		{

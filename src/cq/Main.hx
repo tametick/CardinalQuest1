@@ -36,8 +36,7 @@ class Game extends HxlGame {
 		HxlState.bgColor = 0xFF000000;
 		Playtomic.create();
 		
-		//super(640, 480, SplashState, 1, FontDungeon.instance.fontName);
-		super(640, 480, GameState, 1, FontDungeon.instance.fontName);
-
+		super(640, 480, SplashState, 1, FontDungeon.instance.fontName);
+		//super(640, 480, GameState, 1, FontDungeon.instance.fontName);
 	}
 }

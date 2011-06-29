@@ -196,7 +196,7 @@ class HxlGraphics {
 	/**
 	 * Called by HxlGame to set up HxlGraphics during game constructor.
 	 **/
-	public static function setGameData(Game:HxlGame, Width:Int, Height:Int, Zoom:Int):Void {
+	public static function setGameData(Game:HxlGame, Width:Int, Height:Int, Zoom:Int) {
 		_game = Game;
 		width = Width;
 		height = Height;
@@ -226,7 +226,7 @@ class HxlGraphics {
 	 * 
 	 * @param	Data		Anything you want to log to the console.
 	 */
-	public static function log(Data:Dynamic):Void {
+	public static function log(Data:Dynamic) {
 		if ((_game != null) && (_game.console != null)) {
 			_game.console.log((Data == null)?"ERROR: null object":Data.toString());
 		}
@@ -235,7 +235,7 @@ class HxlGraphics {
 	/**
 	 * Stops and resets the camera.
 	 */
-	public static function unfollow():Void
+	public static function unfollow()
 	{
 		followTarget = null;
 		followLead = null;
@@ -260,7 +260,7 @@ class HxlGraphics {
 	 * @param	Target		The object to follow.
 	 * @param	Lerp		How much lag the camera should have (can help smooth out the camera movement).
 	 */
-	public static function follow(Target:HxlObjectI, ?Lerp:Float=1):Void {
+	public static function follow(Target:HxlObjectI, ?Lerp:Float=1) {
 		followTarget = Target;
 		followLerp = Lerp;
 		_scrollTarget.x = (Math.floor(width)>>1)-followTarget.x-(Math.floor(followTarget.width)>>1);
@@ -277,7 +277,7 @@ class HxlGraphics {
 	 * @param	LeadX		Percentage of X velocity to add to the camera's motion.
 	 * @param	LeadY		Percentage of Y velocity to add to the camera's motion.
 	 */
-	public static function followAdjust(?LeadX:Float = 0, ?LeadY:Float = 0):Void {
+	public static function followAdjust(?LeadX:Float = 0, ?LeadY:Float = 0) {
 		followLead = new Point(LeadX,LeadY);
 	}
 
@@ -290,7 +290,7 @@ class HxlGraphics {
 	 * @param	MaxY				The largest Y value of your level (usually the level height).
 	 * @param	UpdateWorldBounds	Whether the quad tree's dimensions should be updated to match.
 	 */
-	public static function followBounds(?MinX:Int=0, ?MinY:Int=0, ?MaxX:Int=0, ?MaxY:Int=0, ?UpdateWorldBounds:Bool=true):Void {
+	public static function followBounds(?MinX:Int=0, ?MinY:Int=0, ?MaxX:Int=0, ?MaxY:Int=0, ?UpdateWorldBounds:Bool=true) {
 		followMin = new Point(-MinX,-MinY);
 		followMax = new Point(-MaxX+width,-MaxY+height);
 		if (followMax.x > followMin.x) {
@@ -319,7 +319,7 @@ class HxlGraphics {
 	/**
 	 * Internal function that updates the camera and parallax scrolling.
 	 */
-	public static function doFollow():Void {
+	public static function doFollow() {
 		// TODO: Port me!
 		if (followTarget != null) {
 			_scrollTarget.x = (Math.floor(width)>>1)-followTarget.x-(Math.floor(followTarget.width)>>1);
@@ -354,7 +354,7 @@ class HxlGraphics {
 	/**
 	 * Reset the input helper objects (useful when changing screens or states)
 	 */
-	public static function resetInput():Void {
+	public static function resetInput() {
 		keys.reset();
 		mouse.reset();
 	}
@@ -434,7 +434,7 @@ class HxlGraphics {
 	 * @param	Music		The sound file you want to loop in the background.
 	 * @param	Volume		How loud the sound should be, from 0 to 1.
 	 */
-	public static function playMusic(Music:Class<Sound>,?Volume:Float=1.0):Void	{
+	public static function playMusic(Music:Class<Sound>,?Volume:Float=1.0)	{
 		if (music == null) {
 			music = new HxlSound();
 		} else if (music.active) {
@@ -559,7 +559,7 @@ class HxlGraphics {
 	 * 
 	 * @param	ForceDestroy		Kill sounds even if they're flagged <code>survive</code>.
 	 */
-	public static function destroySounds(?ForceDestroy:Bool=false):Void {
+	public static function destroySounds(?ForceDestroy:Bool=false) {
 		if (sounds == null) {
 			return;
 		}
@@ -579,7 +579,7 @@ class HxlGraphics {
 	/**
 	 * An internal function that adjust the volume levels and the music channel after a change.
 	 */
-	static function changeSounds():Void	{
+	static function changeSounds()	{
 		if ((music != null) && music.active) {
 			music.updateTransform();
 		}
@@ -596,7 +596,7 @@ class HxlGraphics {
 	/**
 	 * Called by the game loop to make sure the sounds get updated each frame.
 	 */
-	public static function updateSounds():Void {
+	public static function updateSounds() {
 		if ((music != null) && music.active) {
 			music.update();
 		}
@@ -614,7 +614,7 @@ class HxlGraphics {
 	/**
 	 * Internal helper, pauses all game sounds.
 	 */
-	static function pauseSounds():Void {
+	static function pauseSounds() {
 		if ((music != null) && music.active) {
 			music.pause();
 		}
@@ -631,7 +631,7 @@ class HxlGraphics {
 	/**
 	 * Internal helper, pauses all game sounds.
 	 */
-	static function playSounds():Void {
+	static function playSounds() {
 		if ((music != null) && music.active) {
 			music.play();
 		}
@@ -648,7 +648,7 @@ class HxlGraphics {
 	/**
 	 * Calls update on the keyboard and mouse input tracking objects.
 	 */
-	public static function updateInput():Void {
+	public static function updateInput() {
 		keys.update();
 		mouse.update(Math.floor(state.mouseX),Math.floor(state.mouseY),scroll.x,scroll.y);
 	}
@@ -670,7 +670,7 @@ class HxlGraphics {
 		return State;
 	}
 
-	public static function popState():Void {
+	public static function popState() {
 		_game.popState();
 	}
 

@@ -38,7 +38,7 @@ class CreateCharState extends HxlState
 	var selectBox:HxlSprite;
 	var curClass:CqClass;
 
-	public override function create():Void {
+	public override function create() {
 		super.create();
 		
 		CqMobFactory.initDescriptions();
@@ -141,13 +141,33 @@ class CreateCharState extends HxlState
 		Actuate.tween(selectBox, 0.25, { x: targetX }).ease(Cubic.easeOut);
 	}
 
-	public override function update():Void {
+	public override function update() {
 		super.update();	
 	}
 
-	override function onKeyDown(event:KeyboardEvent) { 
-		if ( HxlGraphics.keys.ESCAPE ) {
+	override function onKeyUp(event:KeyboardEvent) { 
+		if ( HxlGraphics.keys.justReleased("ESCAPE") ) {
 			gotoState(MainMenuState);
+		} else if (HxlGraphics.keys.justReleased("LEFT")) {
+			switch(curClass) {
+				case FIGHTER:
+					changeSelection(WIZARD);
+				case THIEF:
+					changeSelection(FIGHTER);
+				case WIZARD:
+					changeSelection(THIEF);
+			}
+		} else if (HxlGraphics.keys.justReleased("RIGHT")) {
+			switch(curClass) {
+				case FIGHTER:
+					changeSelection(THIEF);
+				case THIEF:
+					changeSelection(WIZARD);
+				case WIZARD:
+					changeSelection(FIGHTER);
+			}			
+		} else if (HxlGraphics.keys.justReleased("ENTER")) {
+			gotoState(GameState);
 		}
 	}
 

@@ -43,7 +43,7 @@ class HxlDialog extends HxlGroup
 		return NewObject;
 	}
 
-	public function setBackgroundColor(Color:Int, ?CornerRadius:Float=0.0):Void {
+	public function setBackgroundColor(Color:Int, ?CornerRadius:Float=0.0) {
 		if ( background == null ) {
 			background = new HxlSprite(0, 0);
 			background.zIndex = -1;
@@ -66,7 +66,7 @@ class HxlDialog extends HxlGroup
 		}
 	}
 
-	public function setBackgroundSprite(Sprite:HxlSprite):Void {
+	public function setBackgroundSprite(Sprite:HxlSprite) {
 		if ( background == null ) {
 			background = new HxlSprite(0, 0);
 			background.zIndex = -1;
@@ -75,7 +75,7 @@ class HxlDialog extends HxlGroup
 		background.pixels = Sprite.pixels;
 	}
 
-	public function setBackgroundGraphic(Graphic:Class<Bitmap>, ?Tiled:Bool=false, ?CornerRadius:Float=0.0):Void {
+	public function setBackgroundGraphic(Graphic:Class<Bitmap>, ?Tiled:Bool=false, ?CornerRadius:Float=0.0) {
 		if ( background == null ) {
 			background = new HxlSprite(0, 0);
 			background.zIndex = -1;
@@ -107,7 +107,7 @@ class HxlDialog extends HxlGroup
 		}
 	}
 
-	public function setBackgroundKey(Key:CqGraphicKey):Void {
+	public function setBackgroundKey(Key:CqGraphicKey) {
 		if ( background == null ) {
 			background = new HxlSprite(0, 0);
 			background.zIndex = -1;
@@ -116,7 +116,7 @@ class HxlDialog extends HxlGroup
 		background.loadCachedGraphic(Key);
 	}
 
-	override function updateMembers():Void {
+	override function updateMembers() {
 		var mx:Float = Math.NaN;
 		var my:Float = Math.NaN;
 		var moved:Bool = false;
@@ -166,7 +166,7 @@ class HxlDialog extends HxlGroup
 		}
 	}
 
-	public override function update():Void
+	public override function update()
 	{
 		saveOldPosition();
 		if ( targetX != x || targetY != y ) {

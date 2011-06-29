@@ -107,7 +107,7 @@ class HxlGame extends Sprite {
 	 * 
 	 * @param	Silent	Whether or not it should beep.
 	 */
-	public function showSoundTray(?Silent:Bool=false):Void {
+	public function showSoundTray(?Silent:Bool=false) {
 		if (!Silent) {
 			//HxlGraphics.play(SndBeep);
 		}
@@ -130,7 +130,7 @@ class HxlGame extends Sprite {
 	 * 
 	 * @param	State		The class name of the state you want (e.g. PlayState)
 	 */
-	public function switchState(State:HxlState, ?Push:Bool=false):Void { 
+	public function switchState(State:HxlState, ?Push:Bool=false) { 
 		// Swap the new state for the old one and dispose of it
 		_screen.addChild(State);
 		state = State;
@@ -186,7 +186,7 @@ class HxlGame extends Sprite {
 		state.isStacked = false;
 	}
 
-	public function popState():Void {
+	public function popState() {
 		if ( stateStack.length <= 1 ) 
 			return;
 			
@@ -206,7 +206,7 @@ class HxlGame extends Sprite {
 		state.isStacked = false;
 	}
 
-	function onKeyUp(event:KeyboardEvent):Void {
+	function onKeyUp(event:KeyboardEvent) {
 		// todo: use HxlKeyboard constants instead of keycodes
 		if ((event.keyCode == 192) || (event.keyCode == 220)) {
 			console.toggle();
@@ -246,7 +246,7 @@ class HxlGame extends Sprite {
 	/**
 	 * Internal function to help with basic pause game functionality.
 	 */
-	public function unpauseGame():Void {
+	public function unpauseGame() {
 		#if flash9
 		//if(!HxlGraphics.panel.visible) flash.ui.Mouse.hide();
 		#end
@@ -259,7 +259,7 @@ class HxlGame extends Sprite {
 	/**
 	 * Internal function to help with basic pause game functionality.
 	 */
-	public function pauseGame():Void {
+	public function pauseGame() {
 		if ((x != 0) || (y != 0)) {
 			x = 0;
 			y = 0;
@@ -275,7 +275,7 @@ class HxlGame extends Sprite {
 	/**
 	 * Internal event handler for input and focus.
 	 */
-	function onFocus(?event:Event=null):Void {
+	function onFocus(?event:Event=null) {
 		if ( _autoPause && HxlGraphics.pause) {
 			HxlGraphics.pause = false;
 		}
@@ -284,7 +284,7 @@ class HxlGame extends Sprite {
 	/**
 	 * Internal event handler for input and focus.
 	 */
-	function onFocusLost(?event:Event=null):Void {
+	function onFocusLost(?event:Event=null) {
 		if ( _autoPause ) {
 			HxlGraphics.pause = true;
 		}

@@ -11,7 +11,7 @@ class HxlTimer {
 	var base:Float;
 	var last:Float;
 
-	public static function setGameData(Game:HxlGame):Void {
+	public static function setGameData(Game:HxlGame) {
 		_game = Game;
 	}
 

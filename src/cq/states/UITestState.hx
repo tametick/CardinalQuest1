@@ -16,7 +16,7 @@ class UITestState extends HxlState
 	var sliding:HxlSlidingDialog;
 	var bar:HxlUIBar;
 
-	public override function create():Void {
+	public override function create() {
 		super.create();
 
 		var but1:HxlButton = new HxlButton(0, 0, 64, 64);

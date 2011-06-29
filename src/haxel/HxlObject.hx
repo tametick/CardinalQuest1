@@ -247,7 +247,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	/**
 	 * Call this function to "kill" a sprite so that it no longer 'exists'.
 	 */
-	public function kill():Void {
+	public function kill() {
 		exists = false;
 		dead = true;
 		HxlGraphics.state.remove(this);
@@ -260,7 +260,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	 * @param	X	The new X position of this object.
 	 * @param	Y	The new Y position of this object.
 	 */
-	public function reset(X:Float,Y:Float):Void {
+	public function reset(X:Float,Y:Float) {
 		x = X;
 		y = Y;
 		exists = true;
@@ -270,7 +270,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	/**
 	 * Called by <code>FlxGroup</code>, commonly when game states are changed.
 	 */
-	public function destroy():Void {
+	public function destroy() {
 		//Nothing to destroy yet
 		clearEventListeners();
 	}
@@ -294,7 +294,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	 * Internal function for updating the position and speed of this object.
 	 * Useful for cases when you need to update this but are buried down in too many supers.
 	 */
-	function updateMotion():Void {
+	function updateMotion() {
 		if (!moves) {
 			return;
 		}
@@ -358,7 +358,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	/**
 	 * Called by the main game loop, handles motion/physics and game logic
 	 */
-	public function update():Void {
+	public function update() {
 		updateMotion();
 		//updateFlickering();
 		if ( mountObject != null ) {
@@ -370,7 +370,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	/**
 	 * Override this function to draw graphics (see <code>HxlSprite</code>).
 	 */
-	public function render():Void {
+	public function render() {
 		//Objects don't have any visual logic/display of their own.
 	}
 
@@ -406,12 +406,12 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		return true;
 	}
 	
-	function addEventListener(Type:String, Listener:Dynamic, UseCapture:Bool=false, Priority:Int=0, UseWeakReference:Bool=true):Void { 
+	function addEventListener(Type:String, Listener:Dynamic, UseCapture:Bool=false, Priority:Int=0, UseWeakReference:Bool=true) { 
 		HxlGraphics.stage.addEventListener(Type, Listener, UseCapture, Priority, UseWeakReference);
 		eventListeners.push( {Type: Type, Listener: Listener, UseCapture: UseCapture, Priority: Priority} );
 	}
 
-	function removeEventListener(Type:String, Listener:Dynamic):Void {
+	function removeEventListener(Type:String, Listener:Dynamic) {
 		HxlGraphics.stage.removeEventListener(Type, Listener);
 		for ( i in 0...eventListeners.length ) {
 			var ev:Dynamic = eventListeners[i];
@@ -422,20 +422,20 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		}
 	}
 
-	function clearEventListeners():Void {
+	function clearEventListeners() {
 		while ( eventListeners.length > 0 ) {
 			var i:Dynamic = eventListeners.pop();
 			HxlGraphics.stage.removeEventListener(i.Type, i.Listener);
 		}
 	}
 
-	public function pauseEventListeners():Void {
+	public function pauseEventListeners() {
 		for ( i in eventListeners ) {
 			HxlGraphics.stage.removeEventListener(i.Type, i.Listener);
 		}
 	}
 
-	public function resumeEventListeners():Void {
+	public function resumeEventListeners() {
 		if ( HxlGraphics.stage == null ) return;
 		for ( i in eventListeners ) {
 			HxlGraphics.stage.addEventListener(i.Type, i.Listener, i.UseCapture, i.Priority, true);
@@ -446,7 +446,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	 * Mounts this HxlObject to another HxlObject, causing it to follow the target object's movement.
 	 * Uses the current position relative to the target object as the offset.
 	 **/
-	public function mount(Other:HxlObject):Void {
+	public function mount(Other:HxlObject) {
 		mountObject = Other;
 		mountOffsetX = x - Other.x;
 		mountOffsetY = y - Other.y;
@@ -455,7 +455,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	/**
 	 * Unmounts from the currently mounted HxlObject.
 	 **/
-	public function unmount():Void {
+	public function unmount() {
 		mountObject = null;
 	}
 }

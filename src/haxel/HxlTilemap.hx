@@ -222,7 +222,7 @@ class HxlTilemap extends HxlObject {
 	/**
 	 * Generates a bounding box version of the tiles, flixel should call this automatically when necessary.
 	 */
-	function generateBoundingTiles():Void {
+	function generateBoundingTiles() {
 		return;
 		/*
 		if ((_bbKey == null) || (_bbKey.length <= 0)) {
@@ -312,7 +312,7 @@ class HxlTilemap extends HxlObject {
 	static var tmpBitmap:BitmapData;
 	static var tmpRect:Rectangle;
 	static var originPoint:Point = new Point(0, 0);
-	function renderTilemap():Void {
+	function renderTilemap() {
 		//Bounding box display options
 		var tileBitmap:BitmapData;
 		if (HxlGraphics.showBounds) {
@@ -379,7 +379,7 @@ class HxlTilemap extends HxlObject {
 	/**
 	 * Draws the tilemap.
 	 */
-	public override function render():Void {
+	public override function render() {
 		renderTilemap();
 	}
 
@@ -517,7 +517,7 @@ class HxlTilemap extends HxlObject {
 	 * 
 	 * @param	Border		Adjusts the camera follow boundary by whatever number of tiles you specify here.  Handy for blocking off deadends that are offscreen, etc.  Use a negative number to add padding instead of hiding the edges.
 	 */
-	public function follow(?Border:Int=0):Void {
+	public function follow(?Border:Int=0) {
 		HxlGraphics.followBounds(Std.int(x+Border*_tileWidth),Std.int(y+Border*_tileHeight),Std.int(width-Border*_tileWidth),Std.int(height-Border*_tileHeight));
 	}
 
@@ -645,7 +645,7 @@ class HxlTilemap extends HxlObject {
 	 * 
 	 * @param	Index		The index of the tile you want to analyze.
 	 */
-	function autoTile(Index:Int):Void {
+	function autoTile(Index:Int) {
 		return;
 		/*
 		if (_data[Index] == 0) return;

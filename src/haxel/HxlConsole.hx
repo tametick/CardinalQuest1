@@ -201,7 +201,7 @@ class HxlConsole extends Sprite {
 		_text.scrollV = Math.floor(_text.height);
 	}
 
-	public function update():Void {
+	public function update() {
 		var total:Int = Math.floor(mtrTotal.average());
 		_fpsDisplay.text = Math.floor(1000/total) + " fps";
 		

@@ -54,7 +54,7 @@ class CqItemInfoDialog extends HxlDialog {
 		add(_itemStats);
 	}
 
-	public function setItem(Item:CqItem):Void {
+	public function setItem(Item:CqItem) {
 		_item = Item;
 		_itemName.text = Item.name;
 		_itemDesc.text = Resources.descriptions.get(Item.name);
@@ -101,7 +101,7 @@ class CqItemInfoDialog extends HxlDialog {
 		_icon.visible = true;
 	}
 
-	public function clearInfo():Void {
+	public function clearInfo() {
 		_item = null;
 		_itemName.visible = false;
 		_itemDesc.visible = false;

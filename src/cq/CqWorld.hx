@@ -40,7 +40,7 @@ class CqTile extends Tile {
 	
 /*	
  *  todo = render decorations
-	override function render():Void {
+	override function render() {
 		super.render();
 		if ( decorations.length>0 ) {
 			...
@@ -226,7 +226,13 @@ class CqLevel extends Level {
 	
 	function createAndaddMob(pos:HxlPoint, levelIndex:Int) {
 		var pixelPos = getPixelPositionOfTile(pos.x, pos.y);
-		var mob = CqMobFactory.newMobFromLevel(pixelPos.x, pixelPos.y, levelIndex);
+		var mob:CqMob; 
+		if ( Math.random() < 0.1) {
+			// out of depth enemy
+			mob = CqMobFactory.newMobFromLevel(pixelPos.x, pixelPos.y, levelIndex + 1);
+		} else {
+			mob = CqMobFactory.newMobFromLevel(pixelPos.x, pixelPos.y, levelIndex);
+		}
 		
 		// add to level mobs list
 		mobs.push(mob);
@@ -330,11 +336,11 @@ class CqWorld extends World {
 		goToLevel(currentLevelIndex);
 	}
 
-	public function addOnNewLevel(Callback:Dynamic):Void {
+	public function addOnNewLevel(Callback:Dynamic) {
 		onNewLevel.add(Callback);
 	}
 	
-	function doOnNewLevel():Void {
+	function doOnNewLevel() {
 		for ( Callback in onNewLevel ) Callback();
 	}
 
@@ -358,7 +364,7 @@ class CqWorld extends World {
 		doOnNewLevel();
 	}
 
-	static public function onActorAdded(Actor:CqActor):Void {
+	static public function onActorAdded(Actor:CqActor) {
 		if ( actorAdded != null ) actorAdded();
 	}
 }

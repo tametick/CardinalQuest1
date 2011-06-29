@@ -34,7 +34,7 @@ class PathMap implements IAStarSearchable
 	 * 	Size the map and fill with empty tiles
 	 * 
 	 */
-	public function initialize():Void
+	public function initialize()
 	{
 		map = new Array<Array<PathTile>>();
 		var x:Int = 0;
@@ -59,7 +59,7 @@ class PathMap implements IAStarSearchable
 	/**
 	 * 
 	 */
-	public function setWalkable(x:Int, y:Int, walkable:Bool):Void
+	public function setWalkable(x:Int, y:Int, walkable:Bool)
 	{
 		outOfBoundsCheck(x,y);
 		map[x][y].walkable = walkable;
@@ -73,7 +73,7 @@ class PathMap implements IAStarSearchable
 
 	
 	
-	function outOfBoundsCheck(x:Int, y:Int):Void
+	function outOfBoundsCheck(x:Int, y:Int)
 	{
 		if (x<0||x>width-1||y<0||y>height-1) throw new Error("Position out of bounds ("+x+", "+y+")");
 	}

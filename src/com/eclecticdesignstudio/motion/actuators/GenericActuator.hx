@@ -59,7 +59,7 @@ class GenericActuator {
 		return properties;
 	}
 
-	private function apply ():Void {
+	private function apply () {
 		
 		for (i in Reflect.fields (properties)) {
 			
@@ -84,7 +84,7 @@ class GenericActuator {
 	}
 	
 	
-	private function change ():Void {
+	private function change () {
 		
 		if (_onUpdate != null) {
 			
@@ -95,7 +95,7 @@ class GenericActuator {
 	}
 	
 	
-	private function complete (? sendEvent:Bool = true):Void {
+	private function complete (? sendEvent:Bool = true) {
 		
 		if (sendEvent) {
 			
@@ -144,7 +144,7 @@ class GenericActuator {
 	}
 	
 	
-	private function move ():Void {
+	private function move () {
 		
 		
 		
@@ -189,7 +189,7 @@ class GenericActuator {
 	}
 	
 	
-	private function pause ():Void {
+	private function pause () {
 		
 		
 		
@@ -225,7 +225,7 @@ class GenericActuator {
 	}
 	
 	
-	private function resume ():Void {
+	private function resume () {
 		
 		
 		
@@ -277,7 +277,7 @@ class GenericActuator {
 	}
 	
 	
-	private function stop (properties:Dynamic, complete:Bool, sendEvent:Bool):Void {
+	private function stop (properties:Dynamic, complete:Bool, sendEvent:Bool) {
 		
 		
 		

@@ -89,7 +89,7 @@ class HxlPreloader extends MovieClip {
 		return false;
 	}
 	
-	function goToMyURL(?event:MouseEvent=null):Void {
+	function goToMyURL(?event:MouseEvent=null) {
 		Lib.getURL(new URLRequest("http://"+myUrl));
 	}
 	
@@ -116,7 +116,7 @@ class HxlPreloader extends MovieClip {
 		}
 	}
 	
-	function update(percent:Float):Void 
+	function update(percent:Float) 
 	{
 		// animate progress bar
 		progress.scaleX = 1.0 * percent;

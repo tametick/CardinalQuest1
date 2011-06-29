@@ -162,7 +162,7 @@ class HxlKeyboard {
 	/**
 	 * Updates the key states (for tracking just pressed, just released, etc).
 	 */
-	public function update():Void {
+	public function update() {
 		for (i in 0..._t) {
 			if (_map[i] == null) continue;
 			var o:Dynamic = _map[i];
@@ -178,7 +178,7 @@ class HxlKeyboard {
 	/**
 	 * Resets all the keys.
 	 */
-	public function reset():Void {
+	public function reset() {
 		for (i in 0..._t) {
 			if (_map[i] == null) continue;
 			var o:Dynamic = _map[i];
@@ -220,7 +220,7 @@ class HxlKeyboard {
 	 * 
 	 * @param	event	A <code>KeyboardEvent</code> object.
 	 */
-	public function handleKeyDown(event:KeyboardEvent):Void {
+	public function handleKeyDown(event:KeyboardEvent) {
 		//trace("event.keyCode: " + event.keyCode);
 		var o:Dynamic = _map[event.keyCode];
 		if (o == null) return;
@@ -237,7 +237,7 @@ class HxlKeyboard {
 	 * 
 	 * @param	event	A <code>KeyboardEvent</code> object.
 	 */
-	public function handleKeyUp(event:KeyboardEvent):Void {
+	public function handleKeyUp(event:KeyboardEvent) {
 		var o:Dynamic = _map[event.keyCode];
 		if (o == null) return;
 		if (o.current > 0) {
@@ -254,7 +254,7 @@ class HxlKeyboard {
 	 * @param	KeyName		String name of the key (e.g. "LEFT" or "A")
 	 * @param	KeyCode		The numeric Flash code for this key.
 	 */
-	function addKey(KeyName:String,KeyCode:Int):Void {
+	function addKey(KeyName:String,KeyCode:Int) {
 		Reflect.setField(_lookup, KeyName, KeyCode);
 		_map[KeyCode] = { name: KeyName, current: 0, last: 0 };
 	}

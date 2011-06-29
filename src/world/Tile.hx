@@ -35,18 +35,18 @@ class Tile extends HxlTile
 		decorations = new Array<Decoration>();
 	}
 	
-	public function colorTo(ToColor:Int, Speed:Float):Void {
+	public function colorTo(ToColor:Int, Speed:Float) {
 		var self = this;
 //		altBitmap = null;
 		Actuate.update(self.colorTween, Speed, {Color: HxlUtil.colorRGB(_color)[0]}, {Color: ToColor})
 			.onComplete(self.captureAltBitmap);
 	}
 
-	function colorTween(params:Dynamic):Void {
+	function colorTween(params:Dynamic) {
 		setColor( HxlUtil.colorInt(params.Color, params.Color, params.Color) );
 	}
 
-	function captureAltBitmap():Void {
+	function captureAltBitmap() {
 /*		var key:String = level.tileGraphicName+"-"+dataNum+"-"+_color+"-"+_alpha;
 		if ( HxlGraphics.checkBitmapCache(key) ) {
 			altBitmap = HxlGraphics.getBitmap(key);

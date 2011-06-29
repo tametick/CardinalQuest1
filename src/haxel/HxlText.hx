@@ -226,7 +226,7 @@ class HxlText extends HxlSprite {
 	/**
 	 * Internal function to update the current animation frame.
 	 */
-	override function calcFrame():Void {
+	override function calcFrame() {
 		if (_regen) {
 			//Need to generate a new buffer to store the text graphic
 			height = 0;
@@ -311,7 +311,7 @@ class HxlText extends HxlSprite {
 		return new TextFormat(dtf.font,dtf.size,dtf.color,dtf.bold,dtf.italic,dtf.underline,dtf.url,dtf.target,dtf.align);
 	}
 
-	override public function kill():Void {
+	override public function kill() {
 		_framePixels.dispose();
 		_pixels.dispose();
 		_bbb.dispose();

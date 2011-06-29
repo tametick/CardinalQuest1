@@ -338,7 +338,7 @@ class GameUI extends HxlDialog {
 		btn.updateChargeSprite(CqGraphicKey.chargeRadial);
 	}
 
-	public static function drawChargeArc(G:Graphics, centerX:Float, centerY:Float, startAngle:Float, endAngle:Float, radius:Float, direction:Int):Void {
+	public static function drawChargeArc(G:Graphics, centerX:Float, centerY:Float, startAngle:Float, endAngle:Float, radius:Float, direction:Int) {
 		var difference:Float = Math.abs(endAngle - startAngle);
 		var divisions:Int = Math.floor(difference / (Math.PI / 4))+1;
 		var span:Float = direction * difference / (2 * divisions);
@@ -359,7 +359,7 @@ class GameUI extends HxlDialog {
 	}
 
 
-	function showPanel(Panel:HxlSlidingDialog, ?Button:HxlButton=null):Void {
+	function showPanel(Panel:HxlSlidingDialog, ?Button:HxlButton=null) {
 		if ( HxlGraphics.mouse.dragSprite != null ) return;
 		// If user was in targeting mode, cancel it
 		if ( GameUI.isTargeting ) GameUI.setTargeting(false);
@@ -402,7 +402,7 @@ class GameUI extends HxlDialog {
 		}
 	}
 
-	public function initUIGraphics():Void {
+	public function initUIGraphics() {
 		var size = 54;
 		var cellBgKey:CqGraphicKey = CqGraphicKey.InventoryCellBG;
 		if ( !GraphicCache.checkBitmapCache(cellBgKey) ) {
@@ -456,7 +456,7 @@ class GameUI extends HxlDialog {
 		}
 	}
 
-	public function checkTileItems(Player:CqPlayer):Void {
+	public function checkTileItems(Player:CqPlayer) {
 		var curPos:HxlPoint = Player.getTilePos();
 		var curTile = cast(Registery.level.getTile(Std.int(curPos.x), Std.int(curPos.y)), Tile);
 		if ( curTile.loots.length > 0 ) {
@@ -471,12 +471,12 @@ class GameUI extends HxlDialog {
 		}
 	}
 	
-	public function itemPickup(Item:CqItem):Void {
+	public function itemPickup(Item:CqItem) {
 		if(panelInventory.itemPickup(Item))
 			btnInventoryView.doFlash();
 	}
 
-	public function initChests():Void {
+	public function initChests() {
 		for ( Item in Registery.level.loots ) {
 			if ( Std.is(Item, CqChest) ) {
 				cast(Item, CqChest).addOnBust(function(Target:CqChest) {
@@ -489,13 +489,13 @@ class GameUI extends HxlDialog {
 		}
 	}
 	
-	public function initHealthBars():Void {
+	public function initHealthBars() {
 		for ( actor in Registery.level.mobs ) {
 			addHealthBar(cast(actor, CqActor));
 		}
 	}
 	
-	public function addHealthBar(Actor:CqActor):Void {
+	public function addHealthBar(Actor:CqActor) {
 		var bar:CqHealthBar = new CqHealthBar(Actor, Actor.x, Actor.y + Actor.height + 2, 32, 4);
 		HxlGraphics.state.add(bar);
 		var self = this;
@@ -506,12 +506,12 @@ class GameUI extends HxlDialog {
 		Actor.addOnAttackMiss(doAttackMiss);
 	}
 
-	public function addXpBar(Actor:CqPlayer):Void {
+	public function addXpBar(Actor:CqPlayer) {
 		xpBar = new CqXpBar(Actor, Actor.x, Actor.y + Actor.height + 5, 32, 4);
 		HxlGraphics.state.add(xpBar);
 	}
 	
-	public function doAttackMiss(?Attacker:CqActor, ?Defender:CqActor):Void {
+	public function doAttackMiss(?Attacker:CqActor, ?Defender:CqActor) {
 		var attPos:HxlPoint = Attacker.tilePos;
 		var defPos:HxlPoint = Defender.tilePos;
 		if ( attPos.x > defPos.x ) Defender.runDodge(1); 
@@ -520,21 +520,21 @@ class GameUI extends HxlDialog {
 		else if ( attPos.y > defPos.y ) Defender.runDodge(2);
 	}
 
-	public function doPlayerInjureEffect(?dmgTotal:Int):Void {
+	public function doPlayerInjureEffect(?dmgTotal:Int) {
 		var player = cast(Registery.player, CqActor);
 		if ( (player.hp / player.maxHp) <= 0.2 ) {
 			HxlGraphics.flash.start(0xffff0000, 0.2, null, true);
 		}
 	}
 
-	public function doInjureEffect(Target:CqActor):Void {
+	public function doInjureEffect(Target:CqActor) {
 		var eff:CqEffectInjure = new CqEffectInjure(Target.x + Target.origin.x, Target.y + Target.origin.y);
 		eff.zIndex = 6;
 		HxlGraphics.state.add(eff);
 		eff.start(true, 1.0, 10);
 	}
 
-	public function showDamageText(Actor:CqActor, Damage:Int):Void {
+	public function showDamageText(Actor:CqActor, Damage:Int) {
 		showEffectText(Actor, ""+Damage, 0xff2222);
 	}
 	
@@ -544,12 +544,12 @@ class GameUI extends HxlDialog {
 		HxlGraphics.state.add(txt);
 	}
 	
-	public function doPlayerGainXP(?xpTotal:Int=0):Void {
+	public function doPlayerGainXP(?xpTotal:Int=0) {
 		xpBar.updateValue(xpTotal);
 		infoViewXpBar.updateValue(xpTotal);
 	}
 
-	public static function setTargeting(Toggle:Bool, ?TargetText:String=null):Void {
+	public static function setTargeting(Toggle:Bool, ?TargetText:String=null) {
 		isTargeting = Toggle;
 		if ( TargetText != null ) {
 			targetString = TargetText + ": Select A Target";
@@ -561,11 +561,11 @@ class GameUI extends HxlDialog {
 		}
 	}
 
-	public static function setTargetingSpell(Spell:CqSpellButton):Void {
+	public static function setTargetingSpell(Spell:CqSpellButton) {
 		targetSpell = Spell;
 	}
 
-	public function updateTargeting():Void {
+	public function updateTargeting() {
 		if ( targetSprite == null ) {
 			targetSprite = new HxlSprite(0, 0);
 			targetSprite.createGraphic(Configuration.zoomedTileSize(), Configuration.zoomedTileSize(), 0x88ffffff, false, CqGraphicKey.targetSprite);
@@ -611,7 +611,7 @@ class GameUI extends HxlDialog {
 		}
 	}
 
-	public function targetingMouseDown():Void {
+	public function targetingMouseDown() {
 		if ( targetSpell == null ) {
 			GameUI.setTargeting(false);
 		}

@@ -53,7 +53,7 @@ class HxlState extends Sprite {
 		}
 	}
 
-	public function create():Void {
+	public function create() {
 		initialized = -1;
 	}
 	
@@ -68,12 +68,12 @@ class HxlState extends Sprite {
 		return defaultGroup.remove(obj);
 	}
 	
-	public function preProcess():Void {
+	public function preProcess() {
 		screen.fill(bgColor);
 		HxlGraphics.numRenders = 0;
 	}
 
-	public function render():Void {
+	public function render() {
 		if ( _isStacked ) {
 			var oldScroll:Point = HxlGraphics.scroll;
 			HxlGraphics.scroll = _scroll;
@@ -84,10 +84,10 @@ class HxlState extends Sprite {
 		}
 	}
 
-	public function postProcess():Void {
+	public function postProcess() {
 	}
 
-	public function update():Void {
+	public function update() {
 		defaultGroup.update();
 		if ( initialized == -1 ) {
 //			loadingBox.visible = true;
@@ -112,7 +112,7 @@ class HxlState extends Sprite {
 		}
 	}
 
-	public function destroy():Void {
+	public function destroy() {
 		//HxlGraphics.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 		//HxlGraphics.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		clearEventListeners();
@@ -159,12 +159,12 @@ class HxlState extends Sprite {
 		return _isStacked;
 	}
 
-	function _addEventListener(Type:String, Listener:Dynamic, UseCapture:Bool=false, Priority:Int=0, UseWeakReference:Bool=true):Void { 
+	function _addEventListener(Type:String, Listener:Dynamic, UseCapture:Bool=false, Priority:Int=0, UseWeakReference:Bool=true) { 
 		HxlGraphics.stage.addEventListener(Type, Listener, UseCapture, Priority, UseWeakReference);
 		eventListeners.push( {Type: Type, Listener: Listener, UseCapture: UseCapture} );
 	}
 
-	function _removeEventListener(Type:String, Listener:Dynamic):Void {
+	function _removeEventListener(Type:String, Listener:Dynamic) {
 		HxlGraphics.stage.removeEventListener(Type, Listener);
 		for ( i in 0...eventListeners.length ) {
 			var ev:Dynamic = eventListeners[i];
@@ -175,20 +175,20 @@ class HxlState extends Sprite {
 		}
 	}
 
-	function clearEventListeners():Void {
+	function clearEventListeners() {
 		while ( eventListeners.length > 0 ) {
 			var i:Dynamic = eventListeners.pop();
 			HxlGraphics.stage.removeEventListener(i.Type, i.Listener);
 		}
 	}
 
-	function pauseEventListeners():Void {
+	function pauseEventListeners() {
 		for ( i in eventListeners ) {
 			HxlGraphics.stage.removeEventListener(i.Type, i.Listener);
 		}
 	}
 
-	function resumeEventListeners():Void {
+	function resumeEventListeners() {
 		if ( HxlGraphics.stage == null ) return;
 		for ( i in eventListeners ) {
 			HxlGraphics.stage.addEventListener(i.Type, i.Listener, i.UseCapture,0,true);

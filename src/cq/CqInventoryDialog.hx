@@ -236,7 +236,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	}
 	
 
-	public override function hide(?HideCallback:Dynamic=null):Void {
+	public override function hide(?HideCallback:Dynamic=null) {
 		super.hide(HideCallback);
 		if ( CqInventoryItem.selectedItem != null ) {
 			CqInventoryItem.selectedItem.setSelected(false);
@@ -297,7 +297,7 @@ class CqInventoryGrid extends HxlDialog {
 
 	}
 
-	public function setCellObj(Cell:Int, CellObj:CqInventoryItem):Void {
+	public function setCellObj(Cell:Int, CellObj:CqInventoryItem) {
 		cells[Cell].setCellObj(CellObj);
 	}
 
@@ -361,7 +361,7 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		return new HxlPoint(cells[Cell].x + 2, cells[Cell].y + 2);
 	}
 
-	public function onItemDrag(Item:CqItem):Void {
+	public function onItemDrag(Item:CqItem) {
 		for( i in 0...cells.length ) {
 			var Cell:CqEquipmentCell = cast(cells[i], CqEquipmentCell);
 			if ( Item.equipSlot == Cell.equipSlot ) {
@@ -370,13 +370,13 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		}
 	}
 
-	public function onItemDragStop():Void {
+	public function onItemDragStop() {
 		for ( i in 0...cells.length ) {
 			cells[i].setGlow(false);
 		}
 	}
 
-	public override function update():Void {
+	public override function update() {
 		super.update();
 		if ( !eqGridInit ) {
 			eqGridInit = true;
@@ -442,7 +442,7 @@ class CqSpellGrid extends CqInventoryGrid {
 		return new HxlPoint(cells[Cell].x + 2, cells[Cell].y + 2);
 	}
 
-	public function onItemDrag(Item:CqItem):Void {
+	public function onItemDrag(Item:CqItem) {
 		for( i in 0...cells.length ) {
 			var Cell:CqSpellCell = cast(cells[i], CqSpellCell);
 			if ( Item.equipSlot == Cell.equipSlot ) {
@@ -451,7 +451,7 @@ class CqSpellGrid extends CqInventoryGrid {
 		}
 	}
 
-	public function onItemDragStop():Void {
+	public function onItemDragStop() {
 		for ( i in 0...cells.length ) {
 			cells[i].setGlow(false);
 		}
@@ -485,7 +485,7 @@ class CqPotionGrid extends CqInventoryGrid {
 		}
 	}
 
-	public function onItemDrag(Item:CqItem):Void {
+	public function onItemDrag(Item:CqItem) {
 		for( i in 0...cells.length ) {
 			var Cell:CqPotionCell = cast(cells[i], CqPotionCell);
 			if ( Item.equipSlot == Cell.equipSlot ) {
@@ -494,7 +494,7 @@ class CqPotionGrid extends CqInventoryGrid {
 		}
 	}
 
-	public function onItemDragStop():Void {
+	public function onItemDragStop() {
 		for ( i in 0...cells.length ) {
 			cells[i].setGlow(false);
 		}
@@ -528,7 +528,7 @@ class CqInventoryCell extends HxlDialog {
 		dropCell = false;
 	}
 
-	public function setGraphicKeys(Normal:CqGraphicKey, ?Highlight:CqGraphicKey = null, ?Glow:CqGraphicKey = null):Void {
+	public function setGraphicKeys(Normal:CqGraphicKey, ?Highlight:CqGraphicKey = null, ?Glow:CqGraphicKey = null) {
 		if ( bgHighlight == null ) {
 			bgHighlight = new HxlSprite(0, 0);
 			bgHighlight.zIndex = 1;
@@ -572,7 +572,7 @@ class CqInventoryCell extends HxlDialog {
 		droptext.zIndex = 10;
 		add(droptext);
 	}
-	public override function update():Void {
+	public override function update() {
 		super.update();
 		if ( isHighlighted ) {
 			if ( !visible || HxlGraphics.mouse.dragSprite == null || !itemOverlap() ) {	
@@ -596,7 +596,7 @@ class CqInventoryCell extends HxlDialog {
 		return true;
 	}
 
-	function setHighlighted(Toggle:Bool):Void {
+	function setHighlighted(Toggle:Bool) {
 		isHighlighted = Toggle;
 		setGlow(Toggle);
 		if ( isHighlighted ) {
@@ -610,7 +610,7 @@ class CqInventoryCell extends HxlDialog {
 		}
 	}
 
-	public function setGlow(Toggle:Bool):Void {
+	public function setGlow(Toggle:Bool) {
 		if ( Toggle ) {
 			bgGlow.visible = true;
 		} else {
@@ -618,7 +618,7 @@ class CqInventoryCell extends HxlDialog {
 		}
 	}
 
-	public function setCellObj(CellObj:CqInventoryItem):Void {
+	public function setCellObj(CellObj:CqInventoryItem) {
 		cellObj = CellObj;
 	}
 
@@ -648,12 +648,12 @@ class CqEquipmentCell extends CqInventoryCell {
 		eqCellInit = false;
 	}
 
-	override function setHighlighted(Toggle:Bool):Void {
+	override function setHighlighted(Toggle:Bool) {
 		if ( Toggle && cast(HxlGraphics.mouse.dragSprite, CqInventoryItem).item.equipSlot != equipSlot ) return; 
 		super.setHighlighted(Toggle);
 	}
 
-	public override function update():Void {
+	public override function update() {
 		super.update();
 		if ( !eqCellInit ) {
 			eqCellInit = true;
@@ -701,7 +701,7 @@ class CqInventoryItem extends HxlSprite {
 		_dlg.remove(this);
 	}
 	
-	public function setSelected(Toggle:Bool):Void {
+	public function setSelected(Toggle:Bool) {
 		selected = Toggle;
 		if ( selected ) {
 			loadCachedGraphic(backgroundSelectedKey);
@@ -715,11 +715,11 @@ class CqInventoryItem extends HxlSprite {
 		}
 	}
 
-	public function updateIcon():Void {
+	public function updateIcon() {
 		setIcon(icon);
 	}
 
-	public function setIcon(Icon:BitmapData):Void {
+	public function setIcon(Icon:BitmapData) {
 		icon = new BitmapData(Icon.width, Icon.height, true, 0x0);
 		icon.copyPixels(Icon, new Rectangle(0, 0, Icon.width, Icon.height), new Point(0,0), null, null, true);
 		var X:Int = Std.int((width / 2) - (icon.width / 2));
@@ -739,7 +739,7 @@ class CqInventoryItem extends HxlSprite {
 	/**
 	 * Sets this object as the CellObj of the target inventory cell, and places this object within that cell.
 	 **/
-	public function setInventoryCell(Cell:Int):Void {		
+	public function setInventoryCell(Cell:Int) {		
 		if (cellSpell) {
 			cast(Registery.player, CqPlayer).equippedSpells[cellIndex] = null;
 			_dlg.dlgSpellGrid.forceClearCharge(cellIndex);
@@ -846,12 +846,12 @@ class CqInventoryItem extends HxlSprite {
 		cellPotion = true;
 		return true;
 	}
-	public function setPos(Pos:HxlPoint):Void {
+	public function setPos(Pos:HxlPoint) {
 		x = Pos.x;
 		y = Pos.y;
 	}
 
-	public override function toggleDrag(Toggle:Bool):Void {
+	public override function toggleDrag(Toggle:Bool) {
 		super.toggleDrag(Toggle);
 		if ( dragEnabled ) {
 			removeEventListener(MouseEvent.MOUSE_DOWN, onDragMouseDown);
@@ -861,7 +861,7 @@ class CqInventoryItem extends HxlSprite {
 		}
 	}
 
-	private override function onDragMouseDown(event:MouseEvent):Void {
+	private override function onDragMouseDown(event:MouseEvent) {
 		if ( GameUI.currentPanel == null ) return;
 		super.onDragMouseDown(event);
 		if ( isDragging ) {
@@ -877,7 +877,7 @@ class CqInventoryItem extends HxlSprite {
 		}
 	}
 
-	private override function onDragMouseUp(event:MouseEvent):Void {
+	private override function onDragMouseUp(event:MouseEvent) {
 		if ( !exists || !visible || !active || !dragEnabled || GameUI.currentPanel == null || HxlGraphics.mouse.dragSprite != this ) return;
 		super.onDragMouseUp(event);
 		if ( !isDragging ) {
@@ -885,7 +885,7 @@ class CqInventoryItem extends HxlSprite {
 		}
 	}
 
-	override function dragStart():Void {
+	override function dragStart() {
 		_dlg.remove(this);
 		_dlg.dlgSpellGrid.remove(this);
 		zIndex = dragZIndex;
@@ -896,7 +896,7 @@ class CqInventoryItem extends HxlSprite {
 		super.dragStart();
 	}
 
-	override function dragStop():Void {
+	override function dragStop() {
 		// If the user was hovering an eligable drop target, act on it
 		if ( CqInventoryCell.highlightedCell != null ) {
 			if ( CqInventoryCell.highlightedCell.getCellObj() != null ) {

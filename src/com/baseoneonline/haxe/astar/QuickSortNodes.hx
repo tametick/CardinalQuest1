@@ -10,7 +10,7 @@ class QuickSortNodes {
 		quicksort( a, 0, a.length-1 );
 		return a;
 	}
-	static function quicksort( a:Array<AStarNode>, lo:Int, hi:Int ):Void{
+	static function quicksort( a:Array<AStarNode>, lo:Int, hi:Int ){
 		var i:Int = lo;
 		var j:Int = hi;
 		var p = a[Math.floor((lo+hi)/2)].f;

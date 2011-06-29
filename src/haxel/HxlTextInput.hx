@@ -44,14 +44,14 @@ class HxlTextInput extends HxlText {
 		HxlGraphics.state.addChild(_tf);
 	}
 
-	public override function render():Void	{
+	public override function render()	{
 		_tf.x = x;
 		_tf.y = y;
 		_tf.visible = true;
 		nextFrameHide = false;
 	}
 
-	function onInputFieldRemoved(event:Event):Void {
+	function onInputFieldRemoved(event:Event) {
 		//Clean up after ourselves
 		_tf.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 		_tf.removeEventListener(Event.REMOVED, onInputFieldRemoved);
@@ -59,20 +59,20 @@ class HxlTextInput extends HxlText {
 		_tf.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 	}
 
-	function onEnterFrame(event:Event):Void {
+	function onEnterFrame(event:Event) {
 		if (nextFrameHide) {
 			_tf.visible = false;
 		}
 		nextFrameHide = true;
 	}
 
-	function onKeyDown(event:KeyboardEvent):Void {
+	function onKeyDown(event:KeyboardEvent) {
 		if ( event.charCode == 13 ) {
 			event.preventDefault();
 		}
 	}
 
-	function onTextChange(event:Event):Void {
+	function onTextChange(event:Event) {
 		if (forceUpperCase) {
 			_tf.text = _tf.text.toUpperCase();
 		}
@@ -97,7 +97,7 @@ class HxlTextInput extends HxlText {
 		
 	}
 
-	public function setMaxLength(Length:Int):Void {
+	public function setMaxLength(Length:Int) {
 		_tf.maxChars = Length;
 	}
 

@@ -136,7 +136,7 @@ class HxlGroup extends HxlObject {
 	 * @param	X	The new X position of this object.
 	 * @param	Y	The new Y position of this object.
 	 */
-	public override function reset(X:Float,Y:Float):Void
+	public override function reset(X:Float,Y:Float)
 	{
 		saveOldPosition();
 		super.reset(X,Y);
@@ -364,7 +364,7 @@ class HxlGroup extends HxlObject {
 	/**
 	 * Internal function, helps with the moving/updating of group members.
 	 */
-	function saveOldPosition():Void {
+	function saveOldPosition() {
 		if (_first) {
 			_first = false;
 			_last.x = 0;
@@ -379,7 +379,7 @@ class HxlGroup extends HxlObject {
 	 * Internal function that actually goes through and updates all the group members.
 	 * Depends on <code>saveOldPosition()</code> to set up the correct values in <code>_last</code> in order to work properly.
 	 */
-	function updateMembers():Void {
+	function updateMembers() {
 		var mx:Float = Math.NaN;
 		var my:Float = Math.NaN;
 		var moved:Bool = false;
@@ -427,7 +427,7 @@ class HxlGroup extends HxlObject {
 	 * Automatically goes through and calls update on everything you added,
 	 * override this function to handle custom input and perform collisions.
 	 */
-	public override function update():Void {
+	public override function update() {
 		saveOldPosition();
 		updateMotion();
 		if ( mountObject != null ) {
@@ -442,7 +442,7 @@ class HxlGroup extends HxlObject {
 	/**
 	 * Internal function that actually loops through and renders all the group members.
 	 */
-	function renderMembers():Void {
+	function renderMembers() {
 		var o:HxlObject;
 		var l:Int = members.length;
 		for (i in 0...l) {
@@ -459,7 +459,7 @@ class HxlGroup extends HxlObject {
 	/**
 	 * Internal function that actually loops through and destroys each member.
 	 */
-	function destroyMembers():Void {
+	function destroyMembers() {
 		//trace("destroyMembers called!");
 		var o:HxlObject;
 		var l:Int = members.length;
@@ -476,7 +476,7 @@ class HxlGroup extends HxlObject {
 	 * Override this function to handle any deleting or "shutdown" type operations you might need,
 	 * such as removing traditional Flash children like Sprite objects.
 	 */
-	public override function destroy():Void {
+	public override function destroy() {
 		destroyMembers();
 		super.destroy();
 	}
@@ -485,14 +485,14 @@ class HxlGroup extends HxlObject {
 	 * Automatically goes through and calls render on everything you added,
 	 * override this loop to control render order manually.
 	 */
-	public override function render():Void {
+	public override function render() {
 		renderMembers();
 	}
 
 	/**
 	 * Internal function that calls kill on all members.
 	 */
-	function killMembers():Void {
+	function killMembers() {
 		var o:HxlObject;
 		var l:Int = members.length;
 		for (i in 0...l) {
@@ -506,7 +506,7 @@ class HxlGroup extends HxlObject {
 	/**
 	 * Calls kill on the group and all its members.
 	 */
-	public override function kill():Void {
+	public override function kill() {
 		killMembers();
 		super.kill();
 	}
@@ -522,12 +522,12 @@ class HxlGroup extends HxlObject {
 		return 0;
 	}
 
-	public function sortMembersByZIndex():Void {
+	public function sortMembersByZIndex() {
 		if ( members.length == 0 ) return;
 		members.sort(zIndexSort);
 	}
 
-	override function clearEventListeners():Void {
+	override function clearEventListeners() {
 		super.clearEventListeners();
 		var o:HxlObject;
 		var l:Int = members.length;
@@ -539,7 +539,7 @@ class HxlGroup extends HxlObject {
 		}
 	}
 
-	override public function pauseEventListeners():Void {
+	override public function pauseEventListeners() {
 		super.pauseEventListeners();
 		var o:HxlObject;
 		var l:Int = members.length;
@@ -551,7 +551,7 @@ class HxlGroup extends HxlObject {
 		}
 	}
 
-	override public function resumeEventListeners():Void {
+	override public function resumeEventListeners() {
 		super.resumeEventListeners();
 		var o:HxlObject;
 		var l:Int = members.length;

@@ -59,7 +59,7 @@ class HxlTextContainer extends HxlDialog {
 		stepAlpha = 0.3;
 	}
 
-	public override function update():Void {
+	public override function update() {
 	    super.update();
 		if ( fadeEffect &&  scrollTimer.delta() > 0 ) {
 			if ( lines.length > 0 ) scrollText();
@@ -67,7 +67,7 @@ class HxlTextContainer extends HxlDialog {
 		}
 	}
 
-	public function setColorStep(Toggle:Bool, ?Colors:Array<Int>=null):Void {
+	public function setColorStep(Toggle:Bool, ?Colors:Array<Int>=null) {
 		stepColorEffect = Toggle;
 		if ( Colors != null ) {
 			stepColors = Colors;
@@ -79,7 +79,7 @@ class HxlTextContainer extends HxlDialog {
 		}
 	}
 
-	public function setFormat(?Font:String=null,?Size:Int=12,?Color:Int=0xffffff,?Alignment:String=null,?ShadowColor:Int=0):Void {
+	public function setFormat(?Font:String=null,?Size:Int=12,?Color:Int=0xffffff,?Alignment:String=null,?ShadowColor:Int=0) {
 		if ( Font != null ) fontName = Font;
 		fontSize = Size;
 		fontColor = Color;
@@ -90,7 +90,7 @@ class HxlTextContainer extends HxlDialog {
 		}
 	}
 
-	public function addText(Text:String):Void {
+	public function addText(Text:String) {
 		var line:HxlText = new HxlText(0, 0, Std.int(width - (_padding * 2)), Text, true, fontName);
 		line.setFormat(fontName, fontSize, fontColor, fontAlignment, shadowColor);
 		if ( lines.length == maxLines ) {
@@ -107,7 +107,7 @@ class HxlTextContainer extends HxlDialog {
 		if ( lines.length == 1 ) scrollTimer.reset(scrollRate);
 	}
 
-	public function enforceMaxHeight():Void {
+	public function enforceMaxHeight() {
 		var totalHeight:Float = 0;
 		var count:Int = 0;
 		for ( line in lines ) {
@@ -125,7 +125,7 @@ class HxlTextContainer extends HxlDialog {
 		}
 	}
 
-	public function scrollText():Void {
+	public function scrollText() {
 		if ( lines.length > 0 ) {
 			if ( fadeEffect && !isFading ) {
 				var line:HxlText = lines.first();
@@ -142,7 +142,7 @@ class HxlTextContainer extends HxlDialog {
 		}
 	}
 
-	function updateLayout():Void {
+	function updateLayout() {
 		if ( !reverseOrder  ) {
 			var Y:Float = y + _padding;
 			var X:Float = x + _padding;

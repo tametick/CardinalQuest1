@@ -144,7 +144,7 @@ class Level extends HxlTilemap
 		state.remove(loot);
 	}
 	
-	function levelComplete():Void {
+	function levelComplete() {
 		if (index == CqConfiguration.lastLevel)
 			HxlGraphics.pushState(new WinState());
 	}

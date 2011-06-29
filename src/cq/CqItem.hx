@@ -333,7 +333,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 	}
 	
 
-	public function doPickupEffect():Void {
+	public function doPickupEffect() {
 		HxlGraphics.state.add(this);
 		setGlow(false);
 		var self = this;
@@ -411,7 +411,7 @@ class CqChest extends CqItem {
 		visible = false;
 	}
 	
-	public function addOnBust(Callback:Dynamic):Void {
+	public function addOnBust(Callback:Dynamic) {
 		onBust.add(Callback);
 	}
 
