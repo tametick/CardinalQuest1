@@ -30,7 +30,6 @@ class SplashState extends HxlState
 		add(splashText);
 
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
-		//HxlGraphics.stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 	}
 
 	public override function update():Void {
@@ -44,18 +43,23 @@ class SplashState extends HxlState
 		}
 	}
 
-	override function onMouseDown(event:MouseEvent):Void {
-		if ( stateNum != 1 ) return;
+	override function onMouseDown(event:MouseEvent) {
+		nextScreen();
+	}
+	
+	override function onKeyUp(event:KeyboardEvent) { 
 		nextScreen();
 	}
 
 	function nextScreen() {
+		if ( stateNum != 1 ) 
+			return;
+		
 		stateNum = 2;
 		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
 			var newState = new MainMenuState();
 			HxlGraphics.state = newState;
 		}, true);
-		//HxlGraphics.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);	
 	}
 
 }

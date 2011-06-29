@@ -30,7 +30,6 @@ class CreditsState extends HxlState
 		add(creditsText);
 
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
-		//HxlGraphics.stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 	}
 
 	public override function update():Void {
@@ -39,24 +38,26 @@ class CreditsState extends HxlState
 		if ( stateNum == 0 && fadeTimer.delta() >= fadeTime ) {
 			fadeTimer.reset();
 			stateNum = 1;
-		} 
-		/*else if ( stateNum == 1 && fadeTimer.delta() >= waitTime ) {
-			nextScreen();
-		}*/
+		}
 	}
 
 	override function onMouseDown(event:MouseEvent):Void {
-		if ( stateNum != 1 ) return;
+		nextScreen();
+	}
+	
+	override function onKeyUp(event:KeyboardEvent) { 
 		nextScreen();
 	}
 
 	function nextScreen() {
+		if ( stateNum != 1 ) 
+			return;
+		
 		stateNum = 2;
 		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
 			var newState = new MainMenuState();
 			HxlGraphics.state = newState;
 		}, true);
-		//HxlGraphics.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);	
 	}
 
 }
