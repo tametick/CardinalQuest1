@@ -192,7 +192,7 @@ class GameUI extends HxlDialog {
 		// map
 		btnMapView = new HxlButton(0, 0, btnSize, btnSize);
 		btnMapView.loadGraphic(mapBtn,mapBtnHigh);
-		btnMapView.loadText(new HxlText(0, 37, btnSize, "Map", true, null).setFormat(null, 16, 0xffffff, "center", 0x010101));
+		btnMapView.loadText(new HxlText(0, 40, btnSize, "Map", true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
 		btnMapView.setCallback(function() {
 			self.showPanel(self.panelMap, self.btnMapView);
 		});
@@ -202,7 +202,7 @@ class GameUI extends HxlDialog {
 		// inv
 		btnInventoryView = new HxlButton(0, 0, btnSize, btnSize);
 		btnInventoryView.loadGraphic(invBtn,invBtnHigh);
-		btnInventoryView.loadText(new HxlText(0, 37, btnSize, "Inventory", true, null).setFormat(null, 16, 0xffffff, "center", 0x010101));
+		btnInventoryView.loadText(new HxlText(0, 40, btnSize, "Inv", true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
 		btnInventoryView.setCallback(function() {
 			self.showPanel(self.panelInventory, self.btnInventoryView);
 		});
@@ -212,7 +212,7 @@ class GameUI extends HxlDialog {
 		// stats
 		btnCharacterView = new HxlButton(0, 0, btnSize, btnSize);
 		btnCharacterView.loadGraphic(charBtn,charBtnHigh);
-		btnCharacterView.loadText(new HxlText(0, 37, btnSize, "Stats", true, null).setFormat(null, 16, 0xffffff, "center", 0x010101));
+		btnCharacterView.loadText(new HxlText(0, 40, btnSize, "Char", true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
 		btnCharacterView.setCallback(function() {
 			self.showPanel(self.panelCharacter, self.btnCharacterView);
 		});

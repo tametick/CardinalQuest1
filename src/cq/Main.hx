@@ -37,7 +37,7 @@ class Game extends HxlGame {
 		Playtomic.create();
 		
 		//super(640, 480, SplashState, 1, FontDungeon.instance.fontName);
-		super(640, 480, GameState, 1, new FontDungeon().fontName);
+		super(640, 480, GameState, 1, FontDungeon.instance.fontName);
 
 	}
 }
