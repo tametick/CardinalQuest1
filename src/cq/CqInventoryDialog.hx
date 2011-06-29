@@ -29,7 +29,7 @@ import haxel.HxlSprite;
 import haxel.HxlSpriteSheet;
 import haxel.HxlText;
 import haxel.HxlUtil;
-import cq.CqGraphicKeys;
+import cq.CqGraphicKey;
 
 class CqInventoryDialog extends HxlSlidingDialog {
 

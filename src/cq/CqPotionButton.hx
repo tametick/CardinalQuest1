@@ -5,7 +5,7 @@ import cq.GameUI;
 import cq.CqInventoryDialog;
 import cq.CqItem;
 import cq.CqResources;
-import cq.CqGraphicKeys;
+import cq.CqGraphicKey;
 import data.Registery;
 
 import flash.display.BitmapData;

@@ -8,7 +8,7 @@ import haxel.GraphicCache;
 import haxel.HxlSprite;
 import haxel.HxlUtil;
 
-import cq.CqGraphicKeys;
+import cq.CqGraphicKey;
 
 class CqEffectChest extends HxlEmitter {
 

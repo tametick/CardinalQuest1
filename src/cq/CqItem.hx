@@ -19,7 +19,7 @@ import world.GameObject;
 import cq.CqConfiguration;
 import cq.CqResources;
 import cq.CqWorld;
-import cq.CqGraphicKeys;
+import cq.CqGraphicKey;
 
 import flash.display.BitmapData;
 import flash.filters.GlowFilter;

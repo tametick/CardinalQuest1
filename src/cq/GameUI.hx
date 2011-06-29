@@ -12,7 +12,7 @@ import cq.CqSpellButton;
 import cq.CqWorld;
 import cq.CqVitalBar;
 import cq.CqResources;
-import cq.CqGraphicKeys;
+import cq.CqGraphicKey;
 import haxel.HxlGroup;
 
 import data.Configuration;

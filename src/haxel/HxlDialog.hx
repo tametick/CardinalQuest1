@@ -1,6 +1,6 @@
 package haxel;
 
-import cq.CqGraphicKeys;
+import cq.CqGraphicKey;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Shape;

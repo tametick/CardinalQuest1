@@ -2,7 +2,7 @@ package cq.states;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;
-import cq.CqGraphicKeys;
+import cq.CqGraphicKey;
 import haxel.GraphicCache;
 
 import cq.CqActor;

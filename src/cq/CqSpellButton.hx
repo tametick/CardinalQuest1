@@ -6,7 +6,7 @@ import cq.CqItem;
 import cq.CqResources;
 import cq.CqSpell;
 import cq.CqActor;
-import cq.CqGraphicKeys;
+import cq.CqGraphicKey;
 
 import flash.display.BitmapData;
 import flash.events.MouseEvent;
