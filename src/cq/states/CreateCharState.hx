@@ -145,9 +145,29 @@ class CreateCharState extends HxlState
 		super.update();	
 	}
 
-	override function onKeyDown(event:KeyboardEvent) { 
-		if ( HxlGraphics.keys.ESCAPE ) {
+	override function onKeyUp(event:KeyboardEvent) { 
+		if ( HxlGraphics.keys.justReleased("ESCAPE") ) {
 			gotoState(MainMenuState);
+		} else if (HxlGraphics.keys.justReleased("LEFT")) {
+			switch(curClass) {
+				case FIGHTER:
+					changeSelection(WIZARD);
+				case THIEF:
+					changeSelection(FIGHTER);
+				case WIZARD:
+					changeSelection(THIEF);
+			}
+		} else if (HxlGraphics.keys.justReleased("RIGHT")) {
+			switch(curClass) {
+				case FIGHTER:
+					changeSelection(THIEF);
+				case THIEF:
+					changeSelection(WIZARD);
+				case WIZARD:
+					changeSelection(FIGHTER);
+			}			
+		} else if (HxlGraphics.keys.justReleased("ENTER")) {
+			gotoState(GameState);
 		}
 	}
 
