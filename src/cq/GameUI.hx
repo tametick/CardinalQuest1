@@ -13,6 +13,7 @@ import cq.CqWorld;
 import cq.CqVitalBar;
 import cq.CqResources;
 import cq.CqGraphicKeys;
+import haxel.HxlGroup;
 
 import data.Configuration;
 import data.Registery;
@@ -67,6 +68,9 @@ class GameUI extends HxlDialog {
 	var menuBelt:HxlSprite;
 	var infoViewHpBar:CqHealthBar;
 	var infoViewXpBar:CqXpBar;
+	var infoViewHearts:HxlGroup;
+	var infoViewLevel:HxlText;
+	var infoViewFloor:HxlText;
 	
 	// Misc UI elements
 	var xpBar:CqXpBar;
@@ -188,6 +192,7 @@ class GameUI extends HxlDialog {
 		btnInfoView.configEvent(5, true, true);
 		leftButtons.addButton(btnInfoView);
 		addInfoButtonBars();
+		addInfoButtonTexts();
 		
 		// map
 		btnMapView = new HxlButton(0, 0, btnSize, btnSize);
@@ -235,6 +240,27 @@ class GameUI extends HxlDialog {
 		infoViewXpBar.scrollFactor.x = infoViewXpBar.scrollFactor.y = 0;
 		add(infoViewHpBar);
 		add(infoViewXpBar);
+	}
+	
+	function addInfoButtonTexts() {
+		infoViewHearts = new HxlGroup();
+		infoViewHearts.x = infoViewXpBar.x;
+		infoViewHearts.y = infoViewXpBar.y+infoViewXpBar.height+4;
+		infoViewHearts.zIndex = 100;
+		
+		infoViewHearts.width = 50;
+		infoViewHearts.height = 20;
+
+		var heart = new HeartSprite();
+		heart.scrollFactor.x = heart.scrollFactor.y = 0;
+		infoViewHearts.add(heart);
+		
+		var lives = new HxlText(heart.x + heart.width+2, 0, Std.int(infoViewHearts.width - heart.width), "x "+cast(Registery.player,CqPlayer).lives, true, FontAnonymousPro.instance.fontName);
+		lives.setSize(15);
+		lives.scrollFactor.x = lives.scrollFactor.y = 0;
+		infoViewHearts.add(lives);
+		
+		add(infoViewHearts);
 	}
 	
 	function getIcon(?Frame:Int=0):HxlSprite {

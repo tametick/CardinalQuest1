@@ -78,6 +78,7 @@ class GameState extends HxlState {
 		world.currentLevel.updateFieldOfView(true);
 
 		// create and init the game gui
+		// todo: do not recreate if already exists from previous games?
 		gameUI = new GameUI();
 		gameUI.zIndex = 50;
 		add(gameUI);

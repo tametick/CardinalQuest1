@@ -29,12 +29,15 @@ class SpriteItemSlot2 extends Bitmap { public function new() { super(); } }
 class SpriteInfo extends Bitmap { public function new() { super(); } }
 
 class ButtonSprite extends HxlSprite {
-	public function new(?WithGlow:Bool=true) {
-		super();
-		if(WithGlow) 
-			loadGraphic(SpriteItemSlot1, true, false, 64, 64, true, 1, 1);
-		else
-			loadGraphic(SpriteItemSlot2, true, false, 54, 54, true, 1, 1);
+	public function new(?X:Float=0, ?Y:Float=0) {
+		super(X,Y);
+		loadGraphic(SpriteItemSlot1, false, false, 64, 64, true, 1, 1);
+	}
+}
+class HeartSprite extends HxlSprite {
+	public function new(?X:Float=0, ?Y:Float=0) {
+		super(X,Y);
+		loadGraphic(SpriteHeart, false, false, 18, 18, false, 1, 1);
 	}
 }
 
