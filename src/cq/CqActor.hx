@@ -2,6 +2,7 @@ package cq;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import cq.states.GameOverState;
+import haxel.HxlText;
 
 import haxel.HxlLog;
 import haxel.HxlState;
@@ -543,6 +544,10 @@ class CqPlayer extends CqActor, implements Player {
 	
 	public var infoViewHealthBar:CqHealthBar;
 	public var infoViewXpBar:CqXpBar;
+	public var infoViewLives:HxlText;
+	public var infoViewLevel:HxlText;
+	public var infoViewFloor:HxlText;
+
 	
 	public var xp:Int;
 	public var level:Int;

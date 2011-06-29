@@ -232,7 +232,7 @@ class GameUI extends HxlDialog {
 		var width = 50;
 		var height = 6;
 		var xShift = (leftButtons.width - width) / 4;
-		var yShift = btnMainView.height;
+		var yShift = btnMainView.height-3;
 
 		infoViewHpBar = new CqHealthBar(cast(Registery.player,CqPlayer), leftButtons.x+btnInfoView.x+xShift, leftButtons.y+btnMainView.y+yShift,width, height,false);
 		infoViewXpBar = new CqXpBar(cast(Registery.player, CqPlayer), infoViewHpBar.x, infoViewHpBar.y+infoViewHpBar.height, width, height, false);
@@ -243,24 +243,39 @@ class GameUI extends HxlDialog {
 	}
 	
 	function addInfoButtonTexts() {
-		infoViewHearts = new HxlGroup();
-		infoViewHearts.x = infoViewXpBar.x;
-		infoViewHearts.y = infoViewXpBar.y+infoViewXpBar.height+4;
-		infoViewHearts.zIndex = 100;
+		var fontSize = 12;
+		var player = cast(Registery.player, CqPlayer);
+		var level  = cast(Registery.level, CqLevel);
 		
+		infoViewHearts = new HxlGroup();
+		infoViewHearts.zIndex = zIndex+1;
 		infoViewHearts.width = 50;
 		infoViewHearts.height = 20;
-
+		infoViewHearts.x = infoViewXpBar.x+4;
+		infoViewHearts.y = infoViewXpBar.y+infoViewXpBar.height+3;
 		var heart = new HeartSprite();
 		heart.scrollFactor.x = heart.scrollFactor.y = 0;
-		infoViewHearts.add(heart);
-		
-		var lives = new HxlText(heart.x + heart.width+2, 0, Std.int(infoViewHearts.width - heart.width), "x "+cast(Registery.player,CqPlayer).lives, true, FontAnonymousPro.instance.fontName);
-		lives.setSize(15);
+		infoViewHearts.add(heart);		
+		var lives = new HxlText(heart.x + heart.width + 2, 0, Std.int(infoViewHearts.width - heart.width), "x " + player.lives, true, FontAnonymousPro.instance.fontName);
+		player.infoViewLives = lives;
+		lives.setSize(fontSize);
 		lives.scrollFactor.x = lives.scrollFactor.y = 0;
 		infoViewHearts.add(lives);
-		
 		add(infoViewHearts);
+
+		infoViewLevel = new HxlText(infoViewXpBar.x, infoViewHearts.y + infoViewHearts.height - 2, Std.int(btnInfoView.width), "Level " + player.level, true, FontAnonymousPro.instance.fontName);
+		infoViewLevel.zIndex = zIndex+1;
+		player.infoViewLevel = infoViewLevel;
+		infoViewLevel.setSize(fontSize);
+		infoViewLevel.scrollFactor.x = infoViewLevel.scrollFactor.y = 0;
+		add(infoViewLevel);
+		
+		infoViewFloor = new HxlText(infoViewXpBar.x, infoViewLevel.y + infoViewLevel.height-4, Std.int(btnInfoView.width), "Floor " + (level.index+1), true, FontAnonymousPro.instance.fontName);
+		infoViewFloor.zIndex = zIndex+1;
+		player.infoViewFloor = infoViewFloor;
+		infoViewFloor.setSize(fontSize);
+		infoViewFloor.scrollFactor.x = infoViewFloor.scrollFactor.y = 0;
+		add(infoViewFloor);
 	}
 	
 	function getIcon(?Frame:Int=0):HxlSprite {
@@ -411,13 +426,11 @@ class GameUI extends HxlDialog {
 
 		var itemBgKey:CqGraphicKey = CqGraphicKey.ItemBG;
 		if ( !GraphicCache.checkBitmapCache(itemBgKey) ) {
-			//HxlGraphics.addBitmapData(HxlGradient.RectData(50, 50, [0xc1c1c1, 0x9e9e9e], null, [0.0, 0.0], Math.PI / 2, 8.0), itemBgKey);
 			GraphicCache.addBitmapData(HxlGradient.CircleData(25, [0xc1c1c1, 0x9e9e9e],null,[0.5,0.0]),itemBgKey);
 		}
 
 		var itemSelectedBgKey:CqGraphicKey = CqGraphicKey.ItemSelectedBG;
 		if ( !GraphicCache.checkBitmapCache(itemSelectedBgKey) ) {
-			//HxlGraphics.addBitmapData(HxlGradient.RectData(50, 50, [0xEFEDBC, 0xB9B99A], null, [0.0, 0.0], Math.PI / 2, 8.0), itemSelectedBgKey);
 			GraphicCache.addBitmapData(HxlGradient.CircleData(25, [0xc1c1c1, 0x9e9e9e],null,[0.5,0.0]),itemSelectedBgKey);
 		}
 
@@ -491,12 +504,6 @@ class GameUI extends HxlDialog {
 	public function addXpBar(Actor:CqPlayer):Void {
 		xpBar = new CqXpBar(Actor, Actor.x, Actor.y + Actor.height + 5, 32, 4);
 		HxlGraphics.state.add(xpBar);
-		var self = this;
-
-		/*Actor.addOnInjure(function(?dmgTotal:Int=0) { 
-			self.showDamageText(Actor, dmgTotal);
-			self.doInjureEffect(Actor);
-		});*/
 	}
 	
 	public function doAttackMiss(?Attacker:CqActor, ?Defender:CqActor):Void {
