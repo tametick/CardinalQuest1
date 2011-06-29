@@ -345,71 +345,21 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		var icons_x:Int = Std.int( (cellSize / 2)- (icons_size / 2) ) - 3; // -3 offset, to make it look better
 		var icons_y:Int = icons_x;
 		
-		cell = new CqEquipmentCell(SHOES, 8, 193, cellSize, cellSize, idx);
-		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
-		var shoeBtn = new ButtonSprite();
-		var shoeIcon = SpriteEquipmentIcons.getIcon("shoes",16,2.0);
-		shoeIcon.setAlpha(0.3);
-		shoeBtn.draw(shoeIcon, icons_x, icons_y);
-		cell.setBackgroundSprite(shoeBtn);
-		add(cell);
-		cells.push(cell);
-		idx++;
-		
-		cell = new CqEquipmentCell(GLOVES, 8, 100, cellSize, cellSize, idx);
-		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
-		var glovesBtn = new ButtonSprite();
-		var glovesIcon = SpriteEquipmentIcons.getIcon("gloves",16,2.0);
-		glovesIcon.setAlpha(0.3);
-		glovesBtn.draw(glovesIcon, icons_x, icons_y);
-		cell.setBackgroundSprite(glovesBtn);
-		add(cell);
-		cells.push(cell);
-		idx++;
-
-		cell = new CqEquipmentCell(ARMOR, 8, 8, cellSize, cellSize, idx);
-		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
-		var armorBtn = new ButtonSprite();
-		var armorIcon = SpriteEquipmentIcons.getIcon("armor",16,2.0);
-		armorIcon.setAlpha(0.3);
-		armorBtn.draw(armorIcon, icons_x, icons_y);
-		cell.setBackgroundSprite(armorBtn);
-		add(cell);
-		cells.push(cell);
-		idx++;
-
-		cell = new CqEquipmentCell(JEWELRY, 159, 193, cellSize, cellSize, idx);
-		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
-		var jewelryBtn = new ButtonSprite();
-		var jewelryIcon = SpriteEquipmentIcons.getIcon("jewelry",16,2.0);
-		jewelryIcon.setAlpha(0.3);
-		jewelryBtn.draw(jewelryIcon, icons_x, icons_y);
-		cell.setBackgroundSprite(jewelryBtn);
-		add(cell);
-		cells.push(cell);
-		idx++;
-
-		cell = new CqEquipmentCell(WEAPON, 159, 100, cellSize, cellSize, idx);
-		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
-		var weaponBtn = new ButtonSprite();
-		var weaponIcon = SpriteEquipmentIcons.getIcon("weapon",16,2.0);
-		weaponIcon.setAlpha(0.3);
-		weaponBtn.draw(weaponIcon, icons_x, icons_y);
-		cell.setBackgroundSprite(weaponBtn);
-		add(cell);
-		cells.push(cell);
-		idx++;
-
-		cell = new CqEquipmentCell(HAT, 159, 8, cellSize, cellSize, idx);
-		cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
-		var hatBtn = new ButtonSprite();
-		var hatIcon = SpriteEquipmentIcons.getIcon("hat",16,2.0);
-		hatIcon.setAlpha(0.3);
-		hatBtn.draw(hatIcon, icons_x, icons_y);
-		cell.setBackgroundSprite(hatBtn);
-		add(cell);
-		cells.push(cell);
-		idx++;
+		var icons_names:Array<String> = [ "shoes", "gloves", "armor", "jewelry", "weapon", "hat" ];
+		var icons_positions:Array<Array<Int>> = [ [8, 193], [8, 100], [8, 8], [159, 193], [159, 100], [159, 8] ];
+		var icons_slots:Array<CqEquipSlot> = [SHOES, GLOVES, ARMOR, JEWELRY, WEAPON, HAT];
+		for (idx in 0...icons_names.length)
+		{
+			cell = new CqEquipmentCell(icons_slots[idx], icons_positions[idx][0],icons_positions[idx][1], cellSize, cellSize, idx);
+			cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
+			var btn = new ButtonSprite();
+			var icon = SpriteEquipmentIcons.getIcon(icons_names[idx],16,2.0);
+			icon.setAlpha(0.3);
+			btn.draw(icon, icons_x, icons_y);
+			cell.setBackgroundSprite(btn);
+			add(cell);
+			cells.push(cell);
+		}
 	}
 
 	public override function getCellItemPos(Cell:Int):HxlPoint {
