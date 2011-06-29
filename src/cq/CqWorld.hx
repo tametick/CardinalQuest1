@@ -350,6 +350,7 @@ class CqWorld extends World {
 		
 		currentLevelIndex++;
 		goToLevel(currentLevelIndex);
+		cast(Registery.player, CqPlayer).infoViewFloor.setText("Floor " +(currentLevelIndex + 1));
 
 		currentLevel.zIndex = -1;	
 		state.add(currentLevel);

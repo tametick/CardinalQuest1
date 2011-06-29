@@ -707,6 +707,7 @@ class CqPlayer extends CqActor, implements Player {
 	
 	function gainLevel() {
 		level++;
+		infoViewLevel.setText("Level " + level);
 		HxlLog.append("Level " + level);
 		GameUI.showEffectText(this, "Level " + level, 0xFFFF66);
 		healthBar.visible = true;
