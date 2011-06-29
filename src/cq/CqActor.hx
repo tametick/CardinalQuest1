@@ -223,8 +223,9 @@ class CqActor extends CqObject, implements Actor {
 			if (Std.is(other, CqPlayer)) {
 				var player = cast(other, CqPlayer);
 				HxlLog.append("kills you");
-				if (player.lives > 1) {
+				if (player.lives >= 1) {
 					player.lives--;
+					player.infoViewLives.setText("x " + player.lives);
 					
 					var startingPostion = Registery.level.getPixelPositionOfTile(
 												Registery.level.startingLocation.x,
