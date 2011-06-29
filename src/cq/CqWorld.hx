@@ -226,7 +226,13 @@ class CqLevel extends Level {
 	
 	function createAndaddMob(pos:HxlPoint, levelIndex:Int) {
 		var pixelPos = getPixelPositionOfTile(pos.x, pos.y);
-		var mob = CqMobFactory.newMobFromLevel(pixelPos.x, pixelPos.y, levelIndex);
+		var mob:CqMob; 
+		if ( Math.random() < 0.1) {
+			// out of depth enemy
+			mob = CqMobFactory.newMobFromLevel(pixelPos.x, pixelPos.y, levelIndex + 1);
+		} else {
+			mob = CqMobFactory.newMobFromLevel(pixelPos.x, pixelPos.y, levelIndex);
+		}
 		
 		// add to level mobs list
 		mobs.push(mob);

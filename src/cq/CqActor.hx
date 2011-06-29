@@ -948,7 +948,7 @@ class CqMobFactory {
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.elementeals);
 				else
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.werewolves);
-			case 8:
+			case 8,9:// for "out of depth" enemies in the 8th level 
 				if(Math.random()<0.7)
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.werewolves);
 				else
