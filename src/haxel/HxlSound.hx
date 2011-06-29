@@ -58,7 +58,7 @@ class HxlSound extends HxlObject {
 	/**
 	 * An internal function for clearing all the variables used by sounds.
 	 */
-	function init():Void
+	function init()
 	{
 		_transform.pan = 0;
 		_sound = null;
@@ -144,7 +144,7 @@ class HxlSound extends HxlObject {
 	/**
 	 * Call this function to play the sound.
 	 */
-	public function play():Void {
+	public function play() {
 		
 		if (_position < 0) {
 			return;
@@ -192,7 +192,7 @@ class HxlSound extends HxlObject {
 	/**
 	 * Call this function to pause this sound.
 	 */
-	public function pause():Void {
+	public function pause() {
 		if (_channel == null) {
 			_position = -1;
 			return;
@@ -211,7 +211,7 @@ class HxlSound extends HxlObject {
 	/**
 	 * Call this function to stop this sound.
 	 */
-	public function stop():Void {
+	public function stop() {
 		_position = 0;
 		if (_channel != null) {
 			_channel.stop();
@@ -225,7 +225,7 @@ class HxlSound extends HxlObject {
 	 * @param	Seconds			The amount of time the fade out operation should take.
 	 * @param	PauseInstead	Tells the sound to pause on fadeout, instead of stopping.
 	 */
-	public function fadeOut(Seconds:Float,?PauseInstead:Bool=false):Void {
+	public function fadeOut(Seconds:Float,?PauseInstead:Bool=false) {
 		_pauseOnFadeOut = PauseInstead;
 		_fadeInTimer = 0;
 		_fadeOutTimer = Seconds;
@@ -238,7 +238,7 @@ class HxlSound extends HxlObject {
 	 * 
 	 * @param	Seconds		The amount of time the fade-in operation should take.
 	 */
-	public function fadeIn(Seconds:Float):Void {
+	public function fadeIn(Seconds:Float) {
 		_fadeOutTimer = 0;
 		_fadeInTimer = Seconds;
 		_fadeInTotal = _fadeInTimer;
@@ -270,7 +270,7 @@ class HxlSound extends HxlObject {
 	 * Internal function that performs the actual logical updates to the sound object.
 	 * Doesn't do much except optional proximity and fade calculations.
 	 */
-	function updateSound():Void	{
+	function updateSound()	{
 		if (_position != 0) {
 			return;
 		}
@@ -327,7 +327,7 @@ class HxlSound extends HxlObject {
 	/**
 	 * The basic game loop update function.  Just calls <code>updateSound()</code>.
 	 */
-	public override function update():Void {
+	public override function update() {
 		super.update();
 		updateSound();			
 	}
@@ -335,14 +335,14 @@ class HxlSound extends HxlObject {
 	/**
 	 * The basic class destructor, stops the music and removes any leftover events.
 	 */
-	public override function destroy():Void {
+	public override function destroy() {
 		if (active) stop();
 	}
 
 	/**
 	 * An internal function used to help organize and change the volume of the sound.
 	 */
-	public function updateTransform():Void {
+	public function updateTransform() {
 		_transform.volume = HxlGraphics.getMuteValue() * HxlGraphics.volume * _volume * _volumeAdjust;
 		if (_channel != null) {
 			_channel.soundTransform = _transform;
@@ -354,7 +354,7 @@ class HxlSound extends HxlObject {
 	 * 
 	 * @param	event		An <code>Event</code> object.
 	 */
-	function looped(?event:Event=null):Void	{
+	function looped(?event:Event=null)	{
 		if (_channel == null) {
 			return;
 		}
@@ -368,7 +368,7 @@ class HxlSound extends HxlObject {
 	 * 
 	 * @param	event		An <code>Event</code> object.
 	 */
-	function stopped(?event:Event=null):Void {
+	function stopped(?event:Event=null) {
 		if (!_looped) {
 			_channel.removeEventListener(Event.SOUND_COMPLETE,stopped);
 		} else {
@@ -384,7 +384,7 @@ class HxlSound extends HxlObject {
 	 * 
 	 * @param	event	An <code>Event</code> object.
 	 */
-	function gotID3(?event:Event=null):Void	{
+	function gotID3(?event:Event=null)	{
 		HxlGraphics.log("got ID3 info!");
 		if (_sound.id3.songName.length > 0) {
 			name = _sound.id3.songName;

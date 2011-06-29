@@ -32,7 +32,7 @@ class GameState extends HxlState {
 	public var chosenClass:CqClass;
 	var isPlayerActing:Bool;
 
-	public override function create():Void {
+	public override function create() {
 		super.create();
 		
 		chosenClass = FIGHTER;
@@ -154,7 +154,7 @@ class GameState extends HxlState {
 	}
 	
 	var tmpPoint:HxlPoint;
-	private function act():Void {
+	private function act() {
 		if (GameUI.currentPanel != null)
 			return;
 		if ( GameUI.isTargeting ) {

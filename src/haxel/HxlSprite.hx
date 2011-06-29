@@ -331,7 +331,7 @@ class HxlSprite extends HxlObject {
 	 * @param	X			The X coordinate of the brush's top left corner on this sprite.
 	 * @param	Y			They Y coordinate of the brush's top left corner on this sprite.
 	 */
-	public function draw(Brush:HxlSprite,?X:Int=0,?Y:Int=0):Void {
+	public function draw(Brush:HxlSprite,?X:Int=0,?Y:Int=0) {
 		var b:BitmapData = Brush._framePixels;
 		
 		//Simple draw
@@ -366,7 +366,7 @@ class HxlSprite extends HxlObject {
 	/**
 	 * Internal function that performs the actual sprite rendering, called by render().
 	 */
-	function renderSprite():Void {
+	function renderSprite() {
 		if (HxlObject._refreshBounds) {
 			calcFrame();
 		}
@@ -406,7 +406,7 @@ class HxlSprite extends HxlObject {
 	/**
 	 * Called by game loop, updates then blits or renders current frame of animation to the screen
 	 */
-	public override function render():Void {
+	public override function render() {
 		renderSprite();
 	}
 
@@ -414,7 +414,7 @@ class HxlSprite extends HxlObject {
 	 * Main game loop update function.  Override this to create your own sprite logic!
 	 * Just don't forget to call super.update() or any of the helper functions.
 	 */
-	public override function update():Void {
+	public override function update() {
 		updateMotion();
 		updateAnimation();
 		if ( mountObject != null ) {
@@ -437,7 +437,7 @@ class HxlSprite extends HxlObject {
 	 * Useful for cases when you need to update this but are buried down in too many supers.
 	 * This function is called automatically by <code>HxlSprite.update()</code>.
 	 */
-	function updateAnimation():Void	{
+	function updateAnimation()	{
 		if ( alphaVelocity != 0 ) {
 			var Alpha:Float = _alpha;
 			Alpha += alphaVelocity * HxlGraphics.elapsed;
@@ -498,7 +498,7 @@ class HxlSprite extends HxlObject {
 		}
 	}
 
-	public override function destroy():Void {
+	public override function destroy() {
 		toggleDrag(false);
 		dragStopCallback = null;
 		dragStartCallback = null;
@@ -508,7 +508,7 @@ class HxlSprite extends HxlObject {
 		super.destroy();
 	}
 
-	public override function kill():Void {
+	public override function kill() {
 		toggleDrag(false);
 		dragStopCallback = null;
 		dragStartCallback = null;
@@ -521,7 +521,7 @@ class HxlSprite extends HxlObject {
 	/**
 	 * Resets some important variables for sprite optimization and rendering.
 	 */
-	function resetHelpers():Void {
+	function resetHelpers() {
 		_flashRect.x = 0;
 		_flashRect.y = 0;
 		_flashRect.width = frameWidth;
@@ -545,7 +545,7 @@ class HxlSprite extends HxlObject {
 		_caf = 0;
 	}
 
-	function drawBounds():Void {
+	function drawBounds() {
 		var bbbc:Int = getBoundingColor();
 		_bbb.fillRect(_flashRect,0);
 		var ofrw:Int = Math.floor(_flashRect.width);
@@ -571,14 +571,14 @@ class HxlSprite extends HxlObject {
 	 * 
 	 * @param	Color		The color with which to fill the graphic, format 0xAARRGGBB.
 	 */
-	public function fill(Color:Int):Void {
+	public function fill(Color:Int) {
 		_pixels.fillRect(_flashRect2,Color);
 		if (_pixels != _framePixels) {
 			calcFrame();
 		}
 	}
 
-	function calcFrame():Void {
+	function calcFrame() {
 		var rx:Int = _caf*frameWidth;
 		var ry:Int = 0;
 
@@ -619,7 +619,7 @@ class HxlSprite extends HxlObject {
 	/**
 	 * Triggered whenever this sprite is launched by a <code>HxlEmitter</code>.
 	 */
-	public function onEmit():Void { }
+	public function onEmit() { }
 
 	/**
 	 * Set <code>alpha</code> to a number between 0 and 1 to change the opacity of the sprite.
@@ -691,7 +691,7 @@ class HxlSprite extends HxlObject {
 	 * @param	FrameRate	The speed in frames per second that the animation should play at (e.g. 40 fps).
 	 * @param	Looped		Whether or not the animation is looped or just plays once.
 	 */
-	public function addAnimation(Name:String, Frames:Array<Int>, ?FrameRate:Float=0, ?Looped:Bool=true):Void {
+	public function addAnimation(Name:String, Frames:Array<Int>, ?FrameRate:Float=0, ?Looped:Bool=true) {
 		_animations.push(new HxlAnim(Name,Frames,FrameRate,Looped));
 	}
 		
@@ -700,7 +700,7 @@ class HxlSprite extends HxlObject {
 	 * 
 	 * @param	AnimationCallback		A function that has 3 parameters: a string name, a Int frame number, and a Int frame index.
 	 */
-/*	public function addAnimationCallback(AnimationCallback:Dynamic):Void {
+/*	public function addAnimationCallback(AnimationCallback:Dynamic) {
 		_callback = AnimationCallback;
 	}
 */
@@ -711,7 +711,7 @@ class HxlSprite extends HxlObject {
 	 * @param	AnimName	The string name of the animation you want to play.
 	 * @param	Force		Whether to force the animation to restart.
 	 */
-	public function play(AnimName:String,?Force:Bool=false):Void {
+	public function play(AnimName:String,?Force:Bool=false) {
 		if (!Force && (_curAnim != null) && (AnimName == _curAnim.name)) return;
 		_curFrame = 0;
 		_caf = 0;
@@ -736,7 +736,7 @@ class HxlSprite extends HxlObject {
 	 * Tell the sprite to change to a random frame of animation
 	 * Useful for instantiating particles or other weird things.
 	 */
-	public function randomFrame():Void {
+	public function randomFrame() {
 		_curAnim = null;
 		_caf = Math.floor(HxlUtil.random()*(_pixels.width/frameWidth));
 		calcFrame();
@@ -790,11 +790,11 @@ class HxlSprite extends HxlObject {
 	 * 
 	 * @param	Pixels		The <code>BitmapData</code> object you want to point at.
 	 */
-	public function unsafeBind(Pixels:BitmapData):Void {
+	public function unsafeBind(Pixels:BitmapData) {
 		_pixels = _framePixels = Pixels;
 	}
 
-	public function toggleDrag(Toggle:Bool):Void {
+	public function toggleDrag(Toggle:Bool) {
 		if ( !dragEnabled && Toggle ) {
 			addEventListener(MouseEvent.MOUSE_DOWN, onDragMouseDown,false,0,true);
 			addEventListener(MouseEvent.MOUSE_UP, onDragMouseUp,false,0,true);
@@ -813,34 +813,34 @@ class HxlSprite extends HxlObject {
 		dragOffset = null;
 	}
 /*
-	public function onDragStart(?Callback:Dynamic=null):Void {
+	public function onDragStart(?Callback:Dynamic=null) {
 		dragStartCallback = Callback;
 	}
 
-	public function onDragStop(?Callback:Dynamic=null):Void {
+	public function onDragStop(?Callback:Dynamic=null) {
 		dragStopCallback = Callback;
 	}
 
-	public function onDragMove(?Callback:Dynamic=null):Void {
+	public function onDragMove(?Callback:Dynamic=null) {
 		dragMoveCallback = Callback;
 	}
 */
-	function dragStart():Void {
+	function dragStart() {
 		if ( dragStartCallback != null ) 
 			dragStartCallback();
 	}
 
-	function dragStop():Void {
+	function dragStop() {
 		if ( dragStopCallback != null ) 
 			dragStopCallback();
 	}
 
-	function dragMove():Void {
+	function dragMove() {
 		if ( dragMoveCallback != null ) 
 			dragMoveCallback();
 	}
 
-	private function onDragMouseDown(event:MouseEvent):Void {
+	private function onDragMouseDown(event:MouseEvent) {
 		if ( !exists || !visible || !active || !dragEnabled ) return;
 		if ( overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y) ) {
 			
@@ -864,7 +864,7 @@ class HxlSprite extends HxlObject {
 		}
 	}
 
-	private function onDragMouseUp(event:MouseEvent):Void {
+	private function onDragMouseUp(event:MouseEvent) {
 		if ( !exists || !visible || !active || !dragEnabled || HxlGraphics.mouse.dragSprite != this ) return;
 		HxlGraphics.mouse.dragSprite = null;
 		isDragging = false;

@@ -17,14 +17,14 @@ class PtPlayer {
 	static var classSelected:CqClass;
 	static var classSelectedStr:String;
 	
-	public static function startLevel():Void {
+	public static function startLevel() {
 		if (!Playtomic.isEnabled())
 			return;
 		beenHit = enemiesKilled = 0;
 		attacksDodged = attacksMissed = attacksSuccessful = 0;
 	}
 	
-	public static function finishLevel():Void {
+	public static function finishLevel() {
 		if (!Playtomic.isEnabled())
 			return;
 			
@@ -36,44 +36,44 @@ class PtPlayer {
 
 	}
 	
-	public static function isHit():Void {
+	public static function isHit() {
 		if (!Playtomic.isEnabled())
 			return;
 		beenHit++;
 	}
 	
-	public static function hits():Void {
+	public static function hits() {
 		if (!Playtomic.isEnabled())
 			return;
 		attacksSuccessful++;
 	}
 	
-	public static function dodges():Void {
+	public static function dodges() {
 		if (!Playtomic.isEnabled())
 			return;
 		attacksDodged++;
 	}
 	
-	public static function kills():Void {
+	public static function kills() {
 		if (!Playtomic.isEnabled())
 			return;
 		enemiesKilled++;
 	}
 	
-	public static function misses():Void {
+	public static function misses() {
 		if (!Playtomic.isEnabled())
 			return;
 		attacksMissed++;
 	}
 	/*
-	public static function dies():Void {
+	public static function dies() {
 		if (!Playtomic.isEnabled())
 			return;
 		Log.LevelCounterMetric("Player Died", Registery.level.index);
 		Log.LevelCounterMetric("Player Died U", Registery.level.index, true);
 	}
 */
-	public static function ClassSelected(SelectedClass:CqClass):Void {
+	public static function ClassSelected(SelectedClass:CqClass) {
 		if (!Playtomic.isEnabled())
 			return;
 		classSelectedStr = Type.enumConstructor(SelectedClass).toLowerCase();

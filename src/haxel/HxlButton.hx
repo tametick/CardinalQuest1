@@ -106,19 +106,19 @@ class HxlButton extends HxlGroup {
 		_flash = false;
 	}
 
-	public function setEventPriority(Priority:Int):Void {
+	public function setEventPriority(Priority:Int) {
 		eventPriority = Priority;
 	}
 
-	public function setEventUseCapture(Toggle:Bool):Void {
+	public function setEventUseCapture(Toggle:Bool) {
 		eventUseCapture = Toggle;
 	}
 
-	public function setEventStopPropagate(Toggle:Bool):Void {
+	public function setEventStopPropagate(Toggle:Bool) {
 		eventStopPropagate = Toggle;
 	}
 
-	public function configEvent(Priority:Int, Capture:Bool, StopPropagate:Bool):Void {
+	public function configEvent(Priority:Int, Capture:Bool, StopPropagate:Bool) {
 		eventPriority = Priority;
 		eventUseCapture = Capture;
 		eventStopPropagate = StopPropagate;
@@ -134,7 +134,7 @@ class HxlButton extends HxlGroup {
 		_callback = Callback;
 	}
 
-	public function setBackgroundColor(ColorNormal:Int, ColorHover:Int, ?Width:Int=0, ?Height:Int=0):Void {
+	public function setBackgroundColor(ColorNormal:Int, ColorHover:Int, ?Width:Int=0, ?Height:Int=0) {
 		if ( Width > 0 ) width = Width;
 		if ( Height > 0 ) height = Height;
 		remove(_on, true);
@@ -177,12 +177,12 @@ class HxlButton extends HxlGroup {
 		return this;
 	}
 
-	public function setActive(Toggle:Bool):Void {
+	public function setActive(Toggle:Bool) {
 		_isActive = Toggle;
 		visibility(false);
 	}
 
-	public function setDisabled(Toggle:Bool):Void {
+	public function setDisabled(Toggle:Bool) {
 		_isDisabled = Toggle;
 		visibility(false);
 	}
@@ -222,7 +222,7 @@ class HxlButton extends HxlGroup {
 	/**
 	 * Called by the game loop automatically, handles mouseover and click detection.
 	 */
-	public override function update():Void {
+	public override function update() {
 		if (!_initialized) {
 			if (HxlGraphics.stage != null) {
 				addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, eventUseCapture, eventPriority,true);
@@ -260,7 +260,7 @@ class HxlButton extends HxlGroup {
 		return On;
 	}
 
-	public function doFlash():Void {
+	public function doFlash() {
 		effectTimer.reset();
 		flashCount = 11;
 	}
@@ -268,7 +268,7 @@ class HxlButton extends HxlGroup {
 	/**
 	 * Called by the game state when state is changed (if this object belongs to the state)
 	 */
-	public override function destroy():Void {
+	public override function destroy() {
 		if (HxlGraphics.stage != null) {
 			removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 			removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);
@@ -280,7 +280,7 @@ class HxlButton extends HxlGroup {
 	 * 
 	 * @param	On		Whether the button should be on or off.
 	 */
-	function visibility(On:Bool):Void {
+	function visibility(On:Bool) {
 		if (On) {
 			_off.visible = false;
 			if (_offT != null) _offT.visible = false;
@@ -318,7 +318,7 @@ class HxlButton extends HxlGroup {
 	/**
 	 * Internal function for handling the actual callback call (for UI thread dependent calls like <code>FlxU.openURL()</code>).
 	 */
-	function onMouseUp(event:MouseEvent):Void {
+	function onMouseUp(event:MouseEvent) {
 		if ( !eventUseCapture ) {
 			if (!exists || !visible || !active || !HxlGraphics.mouse.justReleased() ) return;
 		} else {
@@ -332,7 +332,7 @@ class HxlButton extends HxlGroup {
 		}
 	}
 
-	function onMouseDown(event:MouseEvent):Void {
+	function onMouseDown(event:MouseEvent) {
 		if ( !eventUseCapture ) {
 			if (!exists || !visible || !active || !HxlGraphics.mouse.justPressed() ) return;
 		} else {

@@ -38,7 +38,7 @@ class HxlSlidingDialog extends HxlDialog
 		hideSound = null;
 	}
 	
-	private function setHiddenPosition():Void {
+	private function setHiddenPosition() {
 		switch (direction) {
 			case TOP:
 				y = 0 - height;
@@ -53,7 +53,7 @@ class HxlSlidingDialog extends HxlDialog
 		targetY = y;
 	}
 	
-	public function show(?ShowCallback:Dynamic=null):Void {
+	public function show(?ShowCallback:Dynamic=null) {
 		if ( isDropped ) return;
 		visible = true;
 		active = true;
@@ -91,7 +91,7 @@ class HxlSlidingDialog extends HxlDialog
 		if ( showSound != null ) showSound.play();
 	}
 	
-	public function hide(?HideCallback:Dynamic=null):Void {
+	public function hide(?HideCallback:Dynamic=null) {
 		if ( !visible ) return;
 		active = true;
 		var duration:Float = dropSpeed;
@@ -128,7 +128,7 @@ class HxlSlidingDialog extends HxlDialog
 		if ( hideSound != null ) hideSound.play();
 	}
 
-	private function posTween(params:Dynamic):Void {
+	private function posTween(params:Dynamic) {
 		targetX = params.X;
 		targetY = params.Y;
 	}
@@ -173,14 +173,14 @@ class HxlSlidingDialog extends HxlDialog
 		}
 	}
 
-	public override function update():Void {
+	public override function update() {
 		super.update();
 	}
 
-	public function setShowCallback(ShowCallback:Dynamic):Void {
+	public function setShowCallback(ShowCallback:Dynamic) {
 		showCallback = ShowCallback;
 	}
-	public function setHideCallback(HideCallback:Dynamic):Void {
+	public function setHideCallback(HideCallback:Dynamic) {
 		hideCallback = HideCallback;
 	}
 

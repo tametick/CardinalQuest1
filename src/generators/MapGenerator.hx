@@ -138,7 +138,7 @@ class MapGenerator
 		copyMap(width,height,newMap,map);
 	}
 	
-	function copyMap(width:Int, height:Int,srcMap:Array<Array<Int>>, newMap:Array<Array<Int>>):Void 
+	function copyMap(width:Int, height:Int,srcMap:Array<Array<Int>>, newMap:Array<Array<Int>>) 
 	{
 		for (y in 0...height) {
 			newMap[y] = new Array<Int>();

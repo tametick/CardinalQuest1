@@ -84,12 +84,12 @@ class CqCharacterDialog extends HxlSlidingDialog {
 
 	}
 
-	public override function show(?ShowCallback:Dynamic=null):Void {
+	public override function show(?ShowCallback:Dynamic=null) {
 		super.show(ShowCallback);
 		updateText();
 	}
 
-	public function updateText():Void {
+	public function updateText() {
 		var _player:CqPlayer = cast(Registery.player, CqPlayer);
 		valHealth.text = "" + (_player.hp + _player.buffs.get("life")) +"/" + (_player.maxHp + _player.buffs.get("life"));
 		

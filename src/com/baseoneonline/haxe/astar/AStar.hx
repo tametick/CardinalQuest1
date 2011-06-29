@@ -27,7 +27,7 @@ class AStar
 	public var visited:Array<AStarNode>;
 	
 	// Euclidian is better, but slower 
-	//dynamic function dist():Void{} //= distEuclidian;
+	//dynamic function dist(){} //= distEuclidian;
 	//var dist:Function = distManhattan;	
 
 	// Diagonal moves span a larger distance
@@ -149,7 +149,7 @@ class AStar
 	/**
 	 * 	For debug only, remove to gain performance	
 	 */
-	function visit(n:AStarNode):Void
+	function visit(n:AStarNode)
 	{
 		var node:AStarNode;
 		for (node in visited) {

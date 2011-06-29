@@ -16,7 +16,7 @@ class WinState extends HxlState{
 	var stateNum:Int;
 	var gameOverText:HxlText;
 
-	public override function create():Void {
+	public override function create() {
 		super.create();
 
 		fadeTimer = new HxlTimer();
@@ -33,7 +33,7 @@ class WinState extends HxlState{
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
 	}
 
-	public override function update():Void {
+	public override function update() {
 		super.update();	
 		
 		if ( stateNum == 0 && fadeTimer.delta() >= fadeTime ) {
@@ -42,7 +42,7 @@ class WinState extends HxlState{
 		}
 	}
 
-	override function onMouseDown(event:MouseEvent):Void {
+	override function onMouseDown(event:MouseEvent) {
 		if ( stateNum != 1 ) 
 			return;
 		nextScreen();

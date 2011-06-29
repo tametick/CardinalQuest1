@@ -34,20 +34,20 @@ class HxlButtonContainer extends HxlDialog {
 		buttons = new List();
 	}
 
-	public function addButton(Button:HxlButton):Void {
+	public function addButton(Button:HxlButton) {
 		buttons.add(Button);
 		Button.zIndex = 1;
 		add(Button);
 		updateLayout();
 	}
 
-	public function removeButton(Button:HxlButton):Void {
+	public function removeButton(Button:HxlButton) {
 		buttons.remove(Button);
 		add(Button);
 		updateLayout();
 	}
 
-	private function updateLayout():Void {
+	private function updateLayout() {
 		var X:Float = 0;
 		var Y:Float = 0;
 		if ( alignment == VERTICAL && order == BOTTOM_TO_TOP ) {

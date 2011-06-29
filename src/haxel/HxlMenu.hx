@@ -22,7 +22,7 @@ class HxlMenu extends HxlDialog {
 		currentItem = -1;
 	}
 
-	public function addItem(Item:HxlMenuItem):Void {
+	public function addItem(Item:HxlMenuItem) {
 		Item.zIndex = 2;
 		add(Item);
 		items.push(Item);
@@ -32,7 +32,7 @@ class HxlMenu extends HxlDialog {
 		}
 	}
 
-	public function toggleInput(Toggle:Bool):Void {
+	public function toggleInput(Toggle:Bool) {
 		inputEnabled = Toggle;
 		if ( inputEnabled ) {
 			addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown,false,0,true);
@@ -43,7 +43,7 @@ class HxlMenu extends HxlDialog {
 		}
 	}
 	
-	function onKeyDown(event:KeyboardEvent):Void {
+	function onKeyDown(event:KeyboardEvent) {
 		var c:Int = event.keyCode;
 		if ( c == 13 ) { // Enter
 			if ( currentItem >= 0 ) {
@@ -65,7 +65,7 @@ class HxlMenu extends HxlDialog {
 		}
 	}
 
-	function onMouseUp(event:MouseEvent):Void {
+	function onMouseUp(event:MouseEvent) {
 		if ( !inputEnabled || !exists || !visible || !active || !HxlGraphics.mouse.justReleased() || (currentItem == -1)) return;
 		if ( items[currentItem].overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y) ) {
 			items[currentItem].doCallback();
@@ -85,7 +85,7 @@ class HxlMenu extends HxlDialog {
 		return _selectSound;
 	}
 	
-	public override function update():Void {
+	public override function update() {
 		if ( inputEnabled == true && !visible ) toggleInput(false);
 		if ( inputEnabled ) {
 			for ( i in 0...items.length ) {
@@ -102,7 +102,7 @@ class HxlMenu extends HxlDialog {
 		super.update();
 	}
 	
-	public override function destroy():Void {
+	public override function destroy() {
 		toggleInput(false);
 		super.destroy();
 	}

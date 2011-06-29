@@ -18,7 +18,7 @@ class PtLevel {
 	}
 	
 	//Use this when level starts
-	public function start():Void {
+	public function start() {
 		if (!Playtomic.isEnabled())
 			return;
 		PtPlayer.startLevel();
@@ -29,7 +29,7 @@ class PtLevel {
 	}
 	
 	//when level finnishes
-	public function finish():Void {
+	public function finish() {
 		if (!Playtomic.isEnabled())
 			return;
 		var timeDifferenceSeconds:Float = (Date.now().getTime() - startTime.getTime()) / 1000;

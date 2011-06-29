@@ -22,7 +22,7 @@ class CqVitalBar extends HxlUIBar {
 		updateValue();
 	}
 
-	public override function update():Void {
+	public override function update() {
 		super.update();		
 	}
 

@@ -38,7 +38,7 @@ class CreateCharState extends HxlState
 	var selectBox:HxlSprite;
 	var curClass:CqClass;
 
-	public override function create():Void {
+	public override function create() {
 		super.create();
 		
 		CqMobFactory.initDescriptions();
@@ -141,7 +141,7 @@ class CreateCharState extends HxlState
 		Actuate.tween(selectBox, 0.25, { x: targetX }).ease(Cubic.easeOut);
 	}
 
-	public override function update():Void {
+	public override function update() {
 		super.update();	
 	}
 

@@ -40,7 +40,7 @@ class CqTile extends Tile {
 	
 /*	
  *  todo = render decorations
-	override function render():Void {
+	override function render() {
 		super.render();
 		if ( decorations.length>0 ) {
 			...
@@ -330,11 +330,11 @@ class CqWorld extends World {
 		goToLevel(currentLevelIndex);
 	}
 
-	public function addOnNewLevel(Callback:Dynamic):Void {
+	public function addOnNewLevel(Callback:Dynamic) {
 		onNewLevel.add(Callback);
 	}
 	
-	function doOnNewLevel():Void {
+	function doOnNewLevel() {
 		for ( Callback in onNewLevel ) Callback();
 	}
 
@@ -358,7 +358,7 @@ class CqWorld extends World {
 		doOnNewLevel();
 	}
 
-	static public function onActorAdded(Actor:CqActor):Void {
+	static public function onActorAdded(Actor:CqActor) {
 		if ( actorAdded != null ) actorAdded();
 	}
 }

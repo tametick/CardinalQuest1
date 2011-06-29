@@ -31,7 +31,7 @@ class HxlMenuItem extends HxlText
 		_mouseHover = false;
 	}
 
-	public function setHover(Hover:Bool=false):Void {
+	public function setHover(Hover:Bool=false) {
 		showHover = Hover;
 		if ( !showHover ) {
 			_tf.setTextFormat(normalFormat);
@@ -42,7 +42,7 @@ class HxlMenuItem extends HxlText
 		calcFrame();
 	}
 
-	public function setNormalFormat(?Font:String=null,?Size:Int=8,?Color:Int=0xffffff,?Alignment:String=null,?ShadowColor:Int=0):Void {
+	public function setNormalFormat(?Font:String=null,?Size:Int=8,?Color:Int=0xffffff,?Alignment:String=null,?ShadowColor:Int=0) {
 		if ( Font == null ) Font = "";
 		normalFormat.font = Font;
 		normalFormat.size = Size;
@@ -52,7 +52,7 @@ class HxlMenuItem extends HxlText
 		setHover(showHover);
 	}
 
-	public function setHoverFormat(?Font:String=null,?Size:Int=8,?Color:Int=0xffffff,?Alignment:String=null,?ShadowColor:Int=0):Void {
+	public function setHoverFormat(?Font:String=null,?Size:Int=8,?Color:Int=0xffffff,?Alignment:String=null,?ShadowColor:Int=0) {
 		if ( Font == null ) Font = "";
 		hoverFormat.font = Font;
 		hoverFormat.size = Size;
@@ -62,7 +62,7 @@ class HxlMenuItem extends HxlText
 		setHover(showHover);
 	}
 
-	public function doCallback():Void {
+	public function doCallback() {
 		_itemCallback();
 	}
 
@@ -75,7 +75,7 @@ class HxlMenuItem extends HxlText
 		return _itemCallback;
 	}
 
-	public override function update():Void {
+	public override function update() {
 		super.update();
 		if ( visible && !_mouseHover && overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y) ) {
 			HxlGraphics.mouse.set("button");

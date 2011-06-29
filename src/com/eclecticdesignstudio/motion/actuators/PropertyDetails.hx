@@ -15,7 +15,7 @@ class PropertyDetails {
 	public var change:Float;
 	//public var current:Float;	
 	
-	public function new (target:Dynamic, propertyName:String, start:Float, change:Float):Void {
+	public function new (target:Dynamic, propertyName:String, start:Float, change:Float) {
 		
 		this.target = target;
 		this.propertyName = propertyName;

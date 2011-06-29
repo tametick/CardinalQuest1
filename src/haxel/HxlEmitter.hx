@@ -206,7 +206,7 @@ class HxlEmitter extends HxlGroup {
 	 * @param	Width	The desired width of the emitter (particles are spawned randomly within these dimensions).
 	 * @param	Height	The desired height of the emitter.
 	 */
-	public function setSize(Width:Int,Height:Int):Void {
+	public function setSize(Width:Int,Height:Int) {
 		width = Width;
 		height = Height;
 	}
@@ -217,7 +217,7 @@ class HxlEmitter extends HxlGroup {
 	 * @param	Min		The minimum value for this range.
 	 * @param	Max		The maximum value for this range.
 	 */
-	public function setXSpeed(?Min:Float=0,?Max:Float=0):Void {
+	public function setXSpeed(?Min:Float=0,?Max:Float=0) {
 		minParticleSpeed.x = Min;
 		maxParticleSpeed.x = Max;
 	}
@@ -228,7 +228,7 @@ class HxlEmitter extends HxlGroup {
 	 * @param	Min		The minimum value for this range.
 	 * @param	Max		The maximum value for this range.
 	 */
-	public function setYSpeed(?Min:Float=0,?Max:Float=0):Void {
+	public function setYSpeed(?Min:Float=0,?Max:Float=0) {
 		minParticleSpeed.y = Min;
 		maxParticleSpeed.y = Max;
 	}
@@ -239,7 +239,7 @@ class HxlEmitter extends HxlGroup {
 	 * @param	?X
 	 * @param	?Y
 	 */
-	public function setMinScale(?X:Float = 0, ?Y:Float = 0):Void {
+	public function setMinScale(?X:Float = 0, ?Y:Float = 0) {
 		minParticleScale.x = X;
 		minParticleScale.y = Y;
 	}
@@ -250,7 +250,7 @@ class HxlEmitter extends HxlGroup {
 	 * @param	?X
 	 * @param	?Y
 	 */
-	public function setMaxScale(?X:Float = 0, ?Y:Float = 0):Void {
+	public function setMaxScale(?X:Float = 0, ?Y:Float = 0) {
 		maxParticleScale.x = X;
 		maxParticleScale.y = Y;
 	}
@@ -261,7 +261,7 @@ class HxlEmitter extends HxlGroup {
 	 * @param	Min		The minimum value for this range.
 	 * @param	Max		The maximum value for this range.
 	 */
-	public function setRotation(?Min:Float=0,?Max:Float=0):Void {
+	public function setRotation(?Min:Float=0,?Max:Float=0) {
 		minRotation = Min;
 		maxRotation = Max;
 	}
@@ -272,7 +272,7 @@ class HxlEmitter extends HxlGroup {
 	 * @param	?Min	The minimum value for this range.
 	 * @param	?Max	The maximum value for this range.
 	 */
-	public function setAlphaVelocity(?Min:Float = 0, ?Max:Float = 0):Void {
+	public function setAlphaVelocity(?Min:Float = 0, ?Max:Float = 0) {
 		minParticleAlphaVelocity = Min;
 		maxParticleAlphaVelocity = Max;
 	}
@@ -280,7 +280,7 @@ class HxlEmitter extends HxlGroup {
 	/**
 	 * Internal function that actually performs the emitter update (called by update()).
 	 */
-	function updateEmitter():Void {
+	function updateEmitter() {
 		if (_explode) {
 			var i:Int;
 			var l:Int;
@@ -318,7 +318,7 @@ class HxlEmitter extends HxlGroup {
 	 * Internal function that actually goes through and updates all the group members.
 	 * Overridden here to remove the position update code normally used by a HxlGroup.
 	 */
-	override function updateMembers():Void {
+	override function updateMembers() {
 		var o:HxlObject;
 		var l:Int = members.length;
 		for (i in 0...l) {
@@ -332,7 +332,7 @@ class HxlEmitter extends HxlGroup {
 	/**
 	 * Called automatically by the game loop, decides when to launch particles and when to "die".
 	 */
-	public override function update():Void {
+	public override function update() {
 		super.update();
 		updateEmitter();
 	}
@@ -344,7 +344,7 @@ class HxlEmitter extends HxlGroup {
 	 * @param	Delay		You can set the delay (or lifespan) here if you want.
 	 * @param	Quantity	How many particles to launch.  Default value is 0, or "all the particles".
 	 */
-	public function start(?Explode:Bool=true,?Delay:Float=0,?Quantity:Int=0):Void {
+	public function start(?Explode:Bool=true,?Delay:Float=0,?Quantity:Int=0) {
 		if (members.length <= 0) {
 			//HxlG.log("WARNING: there are no sprites loaded in your emitter.\nAdd some to HxlEmitter.members or use HxlEmitter.createSprites().");
 			return;
@@ -383,7 +383,7 @@ class HxlEmitter extends HxlGroup {
 	/**
 	 * This function can be used both internally and externally to emit the next particle.
 	 */
-	public function emitParticle():Void
+	public function emitParticle()
 	{
 		_counter++;
 		var s:HxlSprite = cast( members[_particle], HxlSprite);
@@ -428,7 +428,7 @@ class HxlEmitter extends HxlGroup {
 	 * 
 	 * @param	Delay	How long to wait before killing all the particles.  Set to 'zero' to never kill them.
 	 */
-	public function stop(?Delay:Float=3):Void {
+	public function stop(?Delay:Float=3) {
 		_explode = true;
 		delay = Delay;
 		if (delay < 0) {
@@ -442,7 +442,7 @@ class HxlEmitter extends HxlGroup {
 	 * 
 	 * @param	Object		The <code>HxlObject</code> that needs to spew particles.
 	 */
-	public function at(Object:HxlObject):Void {
+	public function at(Object:HxlObject) {
 		x = Object.x + Object.origin.x;
 		y = Object.y + Object.origin.y;
 	}
@@ -450,7 +450,7 @@ class HxlEmitter extends HxlGroup {
 	/**
 	 * Call this function to turn off all the particles and the emitter.
 	 */
-	public override function kill():Void {
+	public override function kill() {
 		super.kill();
 		on = false;
 	}

@@ -101,7 +101,7 @@ class CqPreloader extends MovieClip {
 
 		addEventListener(Event.ENTER_FRAME, onEnterFrame,false,0,true);
 	}
-	private function onEnterFrame(event:Event):Void
+	private function onEnterFrame(event:Event)
 	{
 		//haxe.Log.setColor(0xffffff);
 		if ( !initialized ) {

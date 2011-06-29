@@ -37,7 +37,7 @@ class CqPotionButton extends HxlDialog {
 		add(cell);
 	}
 
-	public override function update():Void {
+	public override function update() {
 		if (!_initialized) {
 			if (HxlGraphics.stage != null) {
 				addEventListener(MouseEvent.MOUSE_DOWN, clickMouseDown, true, 6,true);
@@ -49,7 +49,7 @@ class CqPotionButton extends HxlDialog {
 		super.update();
 	}
 
-	function clickMouseDown(event:MouseEvent):Void {
+	function clickMouseDown(event:MouseEvent) {
 		if (!exists || !visible || !active || GameUI.currentPanel != null ) return;
 		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
 			if ( cell.getCellObj() != null ) {
@@ -71,7 +71,7 @@ class CqPotionButton extends HxlDialog {
 		}
 	}
 
-	function clickMouseUp(event:MouseEvent):Void {
+	function clickMouseUp(event:MouseEvent) {
 		if (!exists || !visible || !active || GameUI.currentPanel != null ) return;
 		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
 			//if ( _callback != null ) _callback();

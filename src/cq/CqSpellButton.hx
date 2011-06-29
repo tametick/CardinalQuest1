@@ -48,7 +48,7 @@ class CqSpellButton extends HxlDialog {
 		chrageBmpData = new BitmapData(94, 94, true, 0x0);
 	}
 
-	public override function update():Void {
+	public override function update() {
 		if (!_initialized) {
 			if (HxlGraphics.stage != null) {
 				addEventListener(MouseEvent.MOUSE_DOWN, clickMouseDown, true, 6,true);
@@ -60,7 +60,7 @@ class CqSpellButton extends HxlDialog {
 		super.update();
 	}
 
-	public function updateChargeSprite(Key:CqGraphicKey):Void {
+	public function updateChargeSprite(Key:CqGraphicKey) {
 		if ( cell.getCellObj() == null ) {
 			chargeSprite.visible = false;
 			return;
@@ -78,7 +78,7 @@ class CqSpellButton extends HxlDialog {
 		return null;
 	}
 	
-	function clickMouseDown(event:MouseEvent):Void {
+	function clickMouseDown(event:MouseEvent) {
 		if (!exists || !visible || !active || GameUI.currentPanel != null ) return;
 		if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
 			var spellObj = cell.getCellObj();
@@ -106,7 +106,7 @@ class CqSpellButton extends HxlDialog {
 		}
 	}
 
-	function clickMouseUp(event:MouseEvent):Void {
+	function clickMouseUp(event:MouseEvent) {
 		if (!exists || !visible || !active || GameUI.currentPanel != null ) return;
 		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
 			//if ( _callback != null ) _callback();

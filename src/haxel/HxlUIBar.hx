@@ -38,12 +38,12 @@ class HxlUIBar extends HxlDialog {
 		tweenSpeed = 0.4;
 	}
 
-	public function setTween(Enabled:Bool=true, ?TweenSpeed:Float=0.0):Void {
+	public function setTween(Enabled:Bool=true, ?TweenSpeed:Float=0.0) {
 		if ( TweenSpeed > 0.0 ) tweenSpeed = TweenSpeed;
 		tweenEnabled = Enabled;
 	}
 
-	public function setPercent(Value:Float):Void {
+	public function setPercent(Value:Float) {
 		var newVal:Float = (width-2) * Value;
 		if ( newVal < 0 ) newVal = 0;
 		if ( newVal > width-2 ) newVal = width-2;
@@ -58,7 +58,7 @@ class HxlUIBar extends HxlDialog {
 		}
 	}
 
-	public function setFrameColor(Color:Int, ?CornerRadius:Float=0.0):Void {
+	public function setFrameColor(Color:Int, ?CornerRadius:Float=0.0) {
 		if ( CornerRadius <= 0.0 ) {
 			frame.createGraphic(Std.int(width), Std.int(height), Color);
 		} else {
@@ -66,7 +66,7 @@ class HxlUIBar extends HxlDialog {
 		}
 	}
 
-	public function setInteriorColor(Color:Int, ?CornerRadius:Float=0.0):Void {
+	public function setInteriorColor(Color:Int, ?CornerRadius:Float=0.0) {
 		if ( CornerRadius <= 0 ) {
 			interior.createGraphic(Std.int(width-2), Std.int(height-2), Color);
 		} else {
@@ -74,7 +74,7 @@ class HxlUIBar extends HxlDialog {
 		}
 	}
 
-	public function setBarColor(Color:Int, ?CornerRadius:Float=0.0):Void {
+	public function setBarColor(Color:Int, ?CornerRadius:Float=0.0) {
 		if ( CornerRadius <= 0 ) {
 			bar.createGraphic(1, Std.int(height-2), Color);
 		} else {
@@ -83,7 +83,7 @@ class HxlUIBar extends HxlDialog {
 		bar.origin.x = bar.origin.y = 0;
 	}
 
-	function createRounded(TargetSprite:HxlSprite, Width:Float, Height:Float, Color:Int, ?CornerRadius:Float=0.0):Void {
+	function createRounded(TargetSprite:HxlSprite, Width:Float, Height:Float, Color:Int, ?CornerRadius:Float=0.0) {
 		var iWidth:Int = Std.int(Width);
 		var iHeight:Int = Std.int(Height);
 		if ( CornerRadius <= 0.0 ) {

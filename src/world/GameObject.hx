@@ -74,11 +74,11 @@ class GameObjectImpl extends HxlSprite, implements GameObject
 		return _tilePos;
 	}
 
-	public function addOnDestroy(Callback:Dynamic):Void {
+	public function addOnDestroy(Callback:Dynamic) {
 		onDestroy.add(Callback);
 	}
 
-	public override function destroy():Void {
+	public override function destroy() {
 		for ( Callback in onDestroy ) Callback();
 		super.destroy();
 	}

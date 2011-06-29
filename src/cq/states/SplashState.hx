@@ -8,16 +8,14 @@ import haxel.HxlState;
 import haxel.HxlText;
 import haxel.HxlTimer;
 
-class SplashState extends HxlState
-{
-
+class SplashState extends HxlState {
 	var fadeTimer:HxlTimer;
 	var fadeTime:Float;
 	var waitTime:Float;
 	var stateNum:Int;
 	var splashText:HxlText;
 
-	public override function create():Void {
+	public override function create() {
 		super.create();
 
 		fadeTimer = new HxlTimer();
@@ -32,7 +30,7 @@ class SplashState extends HxlState
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
 	}
 
-	public override function update():Void {
+	public override function update() {
 		super.update();	
 		
 		if ( stateNum == 0 && fadeTimer.delta() >= fadeTime ) {

@@ -38,20 +38,20 @@ class HxlObjectContainer extends HxlDialog {
 		return objects;
 	}
 
-	public function addObject(Obj:HxlObject):Void {
+	public function addObject(Obj:HxlObject) {
 		objects.add(Obj);
 		Obj.zIndex = 1;
 		add(Obj);
 		updateLayout();
 	}
 
-	public function removeObj(Obj:HxlObject):Void {
+	public function removeObj(Obj:HxlObject) {
 		objects.remove(Obj);
 		remove(Obj);
 		updateLayout();
 	}
 
-	private function updateLayout():Void {
+	private function updateLayout() {
 		var X:Float = 0;
 		var Y:Float = 0;
 		if ( alignment == VERTICAL && order == BOTTOM_TO_TOP ) {

@@ -17,7 +17,7 @@ class CreditsState extends HxlState
 	var stateNum:Int;
 	var creditsText:HxlText;
 
-	public override function create():Void {
+	public override function create() {
 		super.create();
 
 		fadeTimer = new HxlTimer();
@@ -32,7 +32,7 @@ class CreditsState extends HxlState
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
 	}
 
-	public override function update():Void {
+	public override function update() {
 		super.update();	
 		
 		if ( stateNum == 0 && fadeTimer.delta() >= fadeTime ) {
@@ -41,7 +41,7 @@ class CreditsState extends HxlState
 		}
 	}
 
-	override function onMouseDown(event:MouseEvent):Void {
+	override function onMouseDown(event:MouseEvent) {
 		nextScreen();
 	}
 	

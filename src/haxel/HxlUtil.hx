@@ -117,7 +117,7 @@ class HxlUtil {
 	 * @param	Height		Desired height of the game world.
 	 * @param	Divisions	Pass a non-zero value to set <code>quadTreeDivisions</code>.  Default value is 3.
 	 */
-	public static function setWorldBounds(?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0, ?Divisions:Int=3):Void {
+	public static function setWorldBounds(?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0, ?Divisions:Int=3) {
 		if (quadTreeBounds == null) {
 			quadTreeBounds = new HxlRect();
 		}
@@ -230,7 +230,7 @@ class HxlUtil {
 			if ( p.x < 0 || p.y < 0 || p.x >= map.widthInTiles || p.y >= map.heightInTiles ) return true;
 			return map.getTile(Math.round(p.x), Math.round(p.y)).isBlockingView();
 		}
-		var apply = function(p:HxlPoint):Void { 
+		var apply = function(p:HxlPoint) { 
 			map.getTile(Math.round(p.x), Math.round(p.y)).visibility = Visibility.IN_SIGHT ; 
 		}
 

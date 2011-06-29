@@ -136,7 +136,7 @@ class HxlQuadTree extends HxlRect {
 	 * @param	Object		The <code>HxlObject</code> you want to add.  <code>HxlGroup</code> objects will be recursed and their applicable members added automatically.
 	 * @param	List		A <code>Int</code> flag indicating the list to which you want to add the objects.  Options are <code>A_LIST</code> and <code>B_LIST</code>.
 	 */
-	public function add(Object:HxlObject, List:Int):Void {
+	public function add(Object:HxlObject, List:Int) {
 		_oa = List;
 		if (Object._group) {
 			var m:HxlObject;
@@ -172,7 +172,7 @@ class HxlQuadTree extends HxlRect {
 	 * Internal function for recursively navigating and creating the tree
 	 * while adding objects to the appropriate nodes.
 	 */
-	function addObject():Void {
+	function addObject() {
 		//If this quad (not its children) lies entirely inside this object, add it here
 		if (!_canSubdivide || ((_l >= _ol) && (_r <= _or) && (_t >= _ot) && (_b <= _ob))) {
 			addToList();
@@ -243,7 +243,7 @@ class HxlQuadTree extends HxlRect {
 	/**
 	 * Internal function for recursively adding objects to leaf lists.
 	 */
-	function addToList():Void {
+	function addToList() {
 		var ot:HxlList;
 		if (_oa == A_LIST) {
 			if (_tailA.object != null) {

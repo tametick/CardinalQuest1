@@ -21,11 +21,11 @@ class MethodActuator extends SimpleActuator {
 
 	}
 
-	private override function apply():Void {
+	private override function apply() {
 
 	}
 
-	private override function initialize():Void {
+	private override function initialize() {
 		var details:PropertyDetails;
 		var propertyName:String;
 		var start:Dynamic;
@@ -40,7 +40,7 @@ class MethodActuator extends SimpleActuator {
 		initialized = true;
 	}
 
-	private override function update(currentTime:Float):Void {
+	private override function update(currentTime:Float) {
 		//super.update(currentTime);
 		if (!paused) {	
 			var details:PropertyDetails;

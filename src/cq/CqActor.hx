@@ -143,31 +143,31 @@ class CqActor extends CqObject, implements Actor {
 		specialEffects.set("damage multipler", new CqSpecialEffectValue("damage multipler","1"));
 	}
 
-	public function addOnInjure(Callback:Dynamic):Void {
+	public function addOnInjure(Callback:Dynamic) {
 		onInjure.add(Callback);
 	}
 
-	public function addOnKill(Callback:Dynamic):Void {
+	public function addOnKill(Callback:Dynamic) {
 		onKill.add(Callback);
 	}
 
-	public function addOnEquip(Callback:Dynamic):Void {
+	public function addOnEquip(Callback:Dynamic) {
 		onEquip.add(Callback);
 	}
 
-	public function addOnUnequip(Callback:Dynamic):Void {
+	public function addOnUnequip(Callback:Dynamic) {
 		onUnequip.add(Callback);
 	}
 
-	public function addOnAttackMiss(Callback:Dynamic):Void {
+	public function addOnAttackMiss(Callback:Dynamic) {
 		onAttackMiss.add(Callback);
 	}
 
-	public function addOnMove(Callback:Dynamic):Void {
+	public function addOnMove(Callback:Dynamic) {
 		onMove.add(Callback);
 	}
 
-	public function moveToPixel(state:HxlState, X:Float, Y:Float):Void {
+	public function moveToPixel(state:HxlState, X:Float, Y:Float) {
 		isMoving = true;
 		if ( Y < y ) bobDir = 0;
 		else if ( X > x ) bobDir = 1;
@@ -178,7 +178,7 @@ class CqActor extends CqObject, implements Actor {
 		for (Callback in onMove ) Callback(this);
 	}
 	
-	public function moveStop(state:HxlState):Void {
+	public function moveStop(state:HxlState) {
 		isMoving = false;
 	}
 	
@@ -187,7 +187,7 @@ class CqActor extends CqObject, implements Actor {
 		chest.bust(state);
 	}
 	
-	public function doInjure(?dmgTotal:Int=0):Void {
+	public function doInjure(?dmgTotal:Int=0) {
 		for ( Callback in onInjure ) Callback(dmgTotal);
 	}
 
@@ -202,7 +202,7 @@ class CqActor extends CqObject, implements Actor {
 		other.doInjure(dmgTotal);
 	}
 	
-	public function doKill(?dmgTotal:Int=0):Void {
+	public function doKill(?dmgTotal:Int=0) {
 		doInjure(dmgTotal);
 		for ( Callback in onKill ) Callback();
 	}
@@ -345,7 +345,7 @@ class CqActor extends CqObject, implements Actor {
 		dodgeDir = Dir;
 	}
 
-	public override function render():Void {
+	public override function render() {
 		var oldX:Float = x;
 		var oldY:Float = y;
 		if ( isMoving ) {
@@ -374,7 +374,7 @@ class CqActor extends CqObject, implements Actor {
 		}
 	}
 
-	public override function update():Void {
+	public override function update() {
 		if ( isDodging ) {
 			dodgeCounter += 2;
 			if ( dodgeCounter >= 20 ) isDodging = false;
@@ -384,7 +384,7 @@ class CqActor extends CqObject, implements Actor {
 
 	function updateSprite(){ }
 	
-	public function equipItem(item:CqItem):Void {
+	public function equipItem(item:CqItem) {
 		if (CqEquipSlot.WEAPON == item.equipSlot) {
 			equippedWeapon = item;
 			updateSprite();
@@ -405,7 +405,7 @@ class CqActor extends CqObject, implements Actor {
 		}
 	}
 
-	public function unequipItem(item:CqItem):Void {
+	public function unequipItem(item:CqItem) {
 		if (item == equippedWeapon) {
 			equippedWeapon = null;
 			updateSprite();
@@ -615,11 +615,11 @@ class CqPlayer extends CqActor, implements Player {
 		lastTile = null;
 	}
 
-	public function addOnGainXP(Callback:Dynamic):Void {
+	public function addOnGainXP(Callback:Dynamic) {
 		onGainXP.add(Callback);
 	}
 
-	public function addOnPickup(Callback:Dynamic):Void {
+	public function addOnPickup(Callback:Dynamic) {
 		onPickup.add(Callback);
 	}
 
@@ -676,7 +676,7 @@ class CqPlayer extends CqActor, implements Player {
 		give(item);
 	}
 
-	public function removeInventory(item:CqItem):Void {
+	public function removeInventory(item:CqItem) {
 		for ( i in 0 ... inventory.length ) {
 			if ( inventory[i] == item ) {
 				inventory.splice(i, 1);
@@ -722,7 +722,7 @@ class CqPlayer extends CqActor, implements Player {
 		return super.actInDirection(state, targetTile);
 	}
 
-	public override function moveStop(state:HxlState):Void {
+	public override function moveStop(state:HxlState) {
 		super.moveStop(state);
 		var currentTile = cast(Registery.level.getTile(Std.int(tilePos.x), Std.int(tilePos.y)), Tile);
 		var currentTileIndex = currentTile.dataNum;
@@ -732,7 +732,7 @@ class CqPlayer extends CqActor, implements Player {
 		}
 	}
 
-	public override function moveToPixel(state:HxlState, X:Float, Y:Float):Void {
+	public override function moveToPixel(state:HxlState, X:Float, Y:Float) {
 		if ( lastTile != null ) {
 			if ( Registery.level.getTile(Std.int(lastTile.x), Std.int(lastTile.y)) != null ) {
 				var tile = cast(Registery.level.getTile(Std.int(lastTile.x), Std.int(lastTile.y)), Tile);
@@ -881,7 +881,7 @@ class CqMob extends CqActor, implements Mob {
 			return actUnaware(state);
 	}
 
-	public function doDeathEffect():Void {
+	public function doDeathEffect() {
 		HxlGraphics.state.add(this);
 		var self = this;
 		angularVelocity = -200;

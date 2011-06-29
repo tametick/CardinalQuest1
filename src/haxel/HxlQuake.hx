@@ -43,7 +43,7 @@ class HxlQuake {
 	 * @param	Intensity	Percentage of screen size representing the maximum distance that the screen can move during the 'quake'.
 	 * @param	Duration	The length in seconds that the "quake" should last.
 	 */
-	public function start(Intensity:Float=0.05,Duration:Float=0.5):Void {
+	public function start(Intensity:Float=0.05,Duration:Float=0.5) {
 		stop();
 		_intensity = Intensity;
 		_timer = Duration;
@@ -52,7 +52,7 @@ class HxlQuake {
 	/**
 	 * Stops this screen effect.
 	 */
-	public function stop():Void {
+	public function stop() {
 		x = 0;
 		y = 0;
 		_intensity = 0;
@@ -62,7 +62,7 @@ class HxlQuake {
 	/**
 	 * Updates and/or animates this special effect.
 	 */
-	public function update():Void {
+	public function update() {
 		if (_timer > 0) {
 			_timer -= HxlGraphics.elapsed;
 			if (_timer <= 0) {

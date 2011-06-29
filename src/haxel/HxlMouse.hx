@@ -72,7 +72,7 @@ class HxlMouse {
 	 * @param	XOffset		The number of pixels between the mouse's screen position and the graphic's top left corner.
 	 * * @param	YOffset		The number of pixels between the mouse's screen position and the graphic's top left corner. 
 	 */
-	public function show(?Graphic:Class<Bitmap>=null,?XOffset:Int=0,?YOffset:Int=0):Void {
+	public function show(?Graphic:Class<Bitmap>=null,?XOffset:Int=0,?YOffset:Int=0) {
 		_out = true;
 		if (Graphic != null) {
 			load(Graphic,XOffset,YOffset);
@@ -86,14 +86,14 @@ class HxlMouse {
 	/**
 	 * Sets the system mouse cursor. Valid arguments are: 'auto', 'ibeam', 'hand', 'button' and 'arrow'.
 	 **/
-	public function set(Cursor:String="auto"):Void {
+	public function set(Cursor:String="auto") {
 		Reflect.setField(flash.ui.Mouse, "cursor", Cursor);	
 	}
 
 	/**
 	 * Hides the mouse cursor
 	 */
-	public function hide():Void {
+	public function hide() {
 		if (cursor != null) {
 			cursor.visible = false;
 			_out = false;
@@ -107,7 +107,7 @@ class HxlMouse {
 	 * @param	XOffset		The number of pixels between the mouse's screen position and the graphic's top left corner.
 	 * * @param	YOffset		The number of pixels between the mouse's screen position and the graphic's top left corner. 
 	 */
-	public function load(Graphic:Class<Bitmap>,?XOffset:Int=0,?YOffset:Int=0):Void {
+	public function load(Graphic:Class<Bitmap>,?XOffset:Int=0,?YOffset:Int=0) {
 		if (Graphic == null) {
 			Graphic = ImgDefaultCursor;
 		}
@@ -120,7 +120,7 @@ class HxlMouse {
 	 * Unload the current cursor graphic.  If the current cursor is visible,
 	 * then the default system cursor is loaded up to replace the old one.
 	 */
-	public function unload():Void {
+	public function unload() {
 		if (cursor != null) 	{
 			if (cursor.visible) {
 				load(null);
@@ -139,7 +139,7 @@ class HxlMouse {
 	 * @param	XScroll		The amount the game world has scrolled horizontally.
 	 * @param	YScroll		The amount the game world has scrolled vertically.
 	 */
-	public function update(X:Int,Y:Int,XScroll:Float,YScroll:Float):Void {
+	public function update(X:Int,Y:Int,XScroll:Float,YScroll:Float) {
 		screenX = X;
 		screenY = Y;
 		x = Math.floor(screenX-HxlUtil.floor(XScroll));
@@ -159,7 +159,7 @@ class HxlMouse {
 	/**
 	 * Resets the just pressed/just released flags and sets mouse to not pressed.
 	 */
-	public function reset():Void {
+	public function reset() {
 		_current = 0;
 		_last = 0;
 	}
@@ -190,7 +190,7 @@ class HxlMouse {
 	 * 
 	 * @param	event	A <code>MouseEvent</code> object.
 	 */
-	public function handleMouseDown(event:MouseEvent):Void {
+	public function handleMouseDown(event:MouseEvent) {
 		if (_current > 0) {
 			_current = 1;
 		} else {
@@ -203,7 +203,7 @@ class HxlMouse {
 	 * 
 	 * @param	event	A <code>MouseEvent</code> object.
 	 */
-	public function handleMouseUp(event:MouseEvent):Void {
+	public function handleMouseUp(event:MouseEvent) {
 		if (_current > 0) {
 			_current = -1;
 		} else {
@@ -216,7 +216,7 @@ class HxlMouse {
 	 * 
 	 * @param	event	A <code>MouseEvent</code> object.
 	 */
-	public function handleMouseOut(event:MouseEvent):Void  {
+	public function handleMouseOut(event:MouseEvent)  {
 		if (cursor != null) {
 			_out = cursor.visible;
 			cursor.visible = false;
@@ -228,7 +228,7 @@ class HxlMouse {
 	 * 
 	 * @param	event	A <code>MouseEvent</code> object.
 	 */
-	public function handleMouseOver(event:MouseEvent):Void {
+	public function handleMouseOver(event:MouseEvent) {
 		if (cursor != null) {
 			cursor.visible = _out;
 		}

@@ -47,7 +47,7 @@ class HxlFade extends HxlSprite {
 	 * @param	FadeComplete	A function you want to run when the fade finishes
 	 * @param	Force			Force the effect to reset
 	 */
-	public function start(?FadeOut:Bool=true, ?Color:Int=0xff000000, ?Duration:Float=1, ?FadeComplete:Dynamic=null, ?Force:Bool=false):Void {
+	public function start(?FadeOut:Bool=true, ?Color:Int=0xff000000, ?Duration:Float=1, ?FadeComplete:Dynamic=null, ?Force:Bool=false) {
 		_fadeOut = FadeOut;
 		if (!Force && exists) return;
 		fill(Color);
@@ -75,7 +75,7 @@ class HxlFade extends HxlSprite {
 	
 	}
 	
-	public function fadeText(params:Dynamic):Void {
+	public function fadeText(params:Dynamic) {
 		params.obj.textColor = HxlUtil.colorInt(params.R, params.G, params.B);
 		params.obj.alpha = 1.0;
 	}
@@ -83,14 +83,14 @@ class HxlFade extends HxlSprite {
 	/**
 	 * Stops and hides this screen effect.
 	 */
-	public function stop():Void {
+	public function stop() {
 		exists = false;
 	}
 		
 	/**
 	 * Updates and/or animates this special effect
 	 */
-	public override function update():Void {
+	public override function update() {
 		if ( _fadeOut ) {
 			alpha += HxlGraphics.elapsed/_delay;
 			if (alpha >= 1) {

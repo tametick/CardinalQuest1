@@ -43,7 +43,7 @@ class HxlMonitor {
 	 * 
 	 * @param	Data	The value you want to track and average.
 	 */
-	public function add(Data:Float):Void
+	public function add(Data:Float)
 	{
 		_data[_itr++] = Data;
 		if(_itr >= _size)

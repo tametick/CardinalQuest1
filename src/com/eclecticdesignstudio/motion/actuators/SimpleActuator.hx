@@ -96,7 +96,7 @@ class SimpleActuator extends GenericActuator {
 	}
 	
 	
-	private function initialize ():Void {
+	private function initialize () {
 		
 		var details:PropertyDetails;
 		var start:Float;
@@ -114,7 +114,7 @@ class SimpleActuator extends GenericActuator {
 	}
 	
 	
-	private override function move ():Void {
+	private override function move () {
 		
 		toggleVisible = (Reflect.hasField (properties, "alpha") && Std.is (target, DisplayObject));
 		
@@ -147,7 +147,7 @@ class SimpleActuator extends GenericActuator {
 	}
 	
 	
-	private override function pause ():Void {
+	private override function pause () {
 		
 		paused = true;
 		pauseTime = Lib.getTimer ();
@@ -155,7 +155,7 @@ class SimpleActuator extends GenericActuator {
 	}
 	
 	
-	private override function resume ():Void {
+	private override function resume () {
 		
 		if (paused) {
 			
@@ -167,7 +167,7 @@ class SimpleActuator extends GenericActuator {
 	}
 	
 	
-	private override function stop (properties:Dynamic, complete:Bool, sendEvent:Bool):Void {
+	private override function stop (properties:Dynamic, complete:Bool, sendEvent:Bool) {
 		
 		if (active) {
 			
@@ -210,7 +210,7 @@ class SimpleActuator extends GenericActuator {
 	}
 	
 	
-	private function update (currentTime:Float):Void {
+	private function update (currentTime:Float) {
 		
 		if (!paused) {
 			
@@ -338,7 +338,7 @@ class SimpleActuator extends GenericActuator {
 	}
 
 	// Event Handlers
-	private static function shape_onEnterFrame (event:Event):Void {
+	private static function shape_onEnterFrame (event:Event) {
 		var currentTime:Float = Lib.getTimer () / 1000;
 		var actuator:SimpleActuator;
 		var j:Int = 0;

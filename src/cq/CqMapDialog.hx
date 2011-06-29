@@ -54,18 +54,18 @@ class CqMapDialog extends HxlSlidingDialog {
 		updateMap();
 	}
 
-	function init():Void {
+	function init() {
 		cellSize = new HxlPoint();
 		cellSize.x = Math.floor(mapSize.x / Registery.level.widthInTiles);
 		cellSize.y = Math.floor(mapSize.y / Registery.level.heightInTiles);
 	}
 
-	public override function show(?ShowCallback:Dynamic=null):Void {
+	public override function show(?ShowCallback:Dynamic=null) {
 		super.show(ShowCallback);
 		updateMap();
 	}
 
-	public function updateMap():Void {
+	public function updateMap() {
 		var tiles:Array<Array<HxlTile>> = Registery.level.getTiles();
 		var mapW:Int = Registery.level.widthInTiles;
 		var mapH:Int = Registery.level.heightInTiles;

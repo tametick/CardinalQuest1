@@ -23,7 +23,7 @@ class MainMenuState extends HxlState{
 	var btnCredits:HxlMenuItem;
 	var btnClicked:Bool;
 
-	public override function create():Void {
+	public override function create() {
 		btnClicked = false;
 		super.create();
 		MusicManager.play(MenuTheme);
@@ -70,7 +70,7 @@ class MainMenuState extends HxlState{
 		}
 	}
 
-	public override function update():Void {
+	public override function update() {
 		super.update();			
 	}
 
