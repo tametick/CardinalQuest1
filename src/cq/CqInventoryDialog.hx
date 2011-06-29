@@ -7,6 +7,7 @@ import cq.CqPotionButton;
 import cq.CqResources;
 import cq.CqSpell;
 import cq.CqSpellButton;
+import cq.ui.ItemCellGroups;
 import haxel.GraphicCache;
 
 import data.Configuration;
@@ -49,6 +50,8 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	static inline var DLG_GAP:Int 				= 15; 
 	static inline var DLG_DIVISOR_H_PERCENT:Int = 75;
 	static inline var DLG_DIVISOR_V_PERCENT:Int = 55;
+	//
+	static var itemCell_groups:ItemCellGroups;
 	
 	public function new(_GameUI:GameUI, ?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0)
 	{
@@ -62,6 +65,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		var div_u:Float  = (Height * (DLG_DIVISOR_H_PERCENT / 100))-DLG_OUTER_BORDER*2;
 		var div_b:Float  = (Height * ((100 - DLG_DIVISOR_H_PERCENT) / 100))-DLG_OUTER_BORDER*2;
 		
+		itemCell_groups = new ItemCellGroups();
 		//on the left
 		dlgCharacter = new HxlDialog(DLG_OUTER_BORDER, DLG_OUTER_BORDER, div_l-DLG_OUTER_BORDER, div_u-DLG_OUTER_BORDER);
 		//dlgCharacter.setBackgroundColor(0xff885555);
