@@ -449,6 +449,11 @@ class GameUI extends HxlDialog {
 		var glow:GlowFilter = new GlowFilter(0x00ff00, 0.9, 15.0, 15.0, 1.6, 1, false, true);
 		tmp.applyFilter(tmp, new Rectangle(0, 0, 79, 79), new Point(0, 0), glow);
 		GraphicCache.addBitmapData(tmp, CqGraphicKey.CellGlow);
+		
+		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.buttonSprite) ) {
+			var btn:ButtonSprite = new ButtonSprite();
+			GraphicCache.addBitmapData(btn.pixels, CqGraphicKey.buttonSprite);
+		}
 	}
 
 	public function checkTileItems(Player:CqPlayer):Void {
