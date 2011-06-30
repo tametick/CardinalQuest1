@@ -109,13 +109,17 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	
 	public function itemPickup(Item:CqItem):Bool {
 		// if item already in inventory (?)
+		//var groupc:Bool = CqInventoryDialog.itemCell_groups.containsItem("equipment", Item);
+		var anyc:Bool = CqInventoryDialog.itemCell_groups.anyGroupContainsItem(Item);
+		var itrc:Bool = false;
 		for ( cell in dlgInvGrid.cells ) {
 			if ( cell.getCellObj() != null && cell.getCellObj().item == Item ) {
+				itrc = true;
 				cell.getCellObj().updateIcon();
 				return false;
 			}
 		}
-
+		//trace(anyc);
 		// because of stacking (?)
 		if ( Item.equipSlot == POTION ) {
 			for ( cell in dlgPotionGrid.cells ) {
@@ -166,22 +170,38 @@ class CqInventoryDialog extends HxlSlidingDialog {
 					}
 				}
 			} else {
+				//item in equipment
 				for ( cell in dlgEqGrid.cells ) {
-					if (cast(cell, CqEquipmentCell).equipSlot == Item.equipSlot){
+					if (cast(cell, CqEquipmentCell).equipSlot == Item.equipSlot) {
+						//found same quipment cell slot as item
 						if (cell.getCellObj() == null) {
+							//if slot was empty - equip
+							trace("equip to empty");
 							equipItem(cell, Item, uiItem);
 							return true;
-						} else if (  Math.abs(1.0 - shouldEquipItemInCell(cast(cell, CqEquipmentCell), Item)) < 0.1  ) {
-							equipItem(cell, Item, uiItem);
-							return true;
-						} else {							
-							if (  Math.abs(shouldEquipItemInCell(cast(cell, CqEquipmentCell), Item)) < 0.1  ) {
-								// "destroy" crappy items
-								// todo - add some effect/text
+						} else {
+							var preference:Float = shouldEquipItemInCell(cast(cell, CqEquipmentCell), Item);
+							
+							if (preference > 1)
+							{	//equip if item is better
+								trace("new is better, pref:"+preference);
+								var old:CqInventoryItem = equipItem(cell, Item, uiItem);
+								//if old is non plain add to inv
+								if (!old.item.isMagical && !old.item.isSuperb && !old.item.isWondrous)
+									return false;
+							}else if (!Item.isMagical && !Item.isSuperb && !Item.isWondrous && preference <1)
+							{	//if item is worse than current, and is plain - destroy it
+								trace("new is worse and plain, deleting, pref:"+preference);
 								remove(uiItem);
 								return false;
-							} else {
-								// let "uncertain"  items bubble down to the inventory
+							}else
+							{	//if item is not better, and not plain - add to inventory
+								trace("item is not better, adding to inv,pref:" + preference);
+								if ( Item.equalTo( cell.getCellObj().item))
+								{
+									remove(uiItem);
+									//remove old
+								}
 							}
 						}
 					}
@@ -198,8 +218,8 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		}
 	}
 	
-	private function equipItem(Cell:CqInventoryCell, Item:CqItem, UiItem:CqInventoryItem) {
-		cast(Cell, CqEquipmentCell).clearCellObj();
+	private function equipItem(Cell:CqInventoryCell, Item:CqItem, UiItem:CqInventoryItem):CqInventoryItem {
+		var old:CqInventoryItem = cast(Cell, CqEquipmentCell).clearCellObj();
 		
 		UiItem.setEquipmentCell(Cell.cellIndex);
 		if ( !cast(Cell, CqEquipmentCell).eqCellInit ) {
@@ -210,18 +230,19 @@ class CqInventoryDialog extends HxlSlidingDialog {
 			UiItem.y = UiItem.y + 10;
 		}
 		CqRegistery.player.equipItem(Item);
+		return old;
 	}
 	
 	
 	/**
-	 * 1.0 == yes, 0.0 == no, in-between == maybe
+	 * <1 yes 1 == equal, >1 no
 	 * */
 	function shouldEquipItemInCell(Cell:CqEquipmentCell, Item:CqItem):Float {
 		if (Cell.equipSlot != Item.equipSlot)
 			return 0.0;
 		
 		if (Cell.getCellObj() == null)
-			return 1.0;
+			return 2.0;
 		
 		return Item.compareTo( Cell.getCellObj().item );
 	}
@@ -637,14 +658,16 @@ class CqInventoryCell extends HxlDialog {
 		return cellObj;
 	}
 	
-	public function clearCellObj() {
+	public function clearCellObj():CqInventoryItem {
+		var oldItem:CqInventoryItem = null;
 		if (cellObj != null) {
+			oldItem = cellObj;
 			CqRegistery.player.unequipItem(cellObj.item);
 			cellObj.removeFromDialog();
 			cellObj = null;
 		}
+		return oldItem;
 	}
-
 }
 
 class CqEquipmentCell extends CqInventoryCell {

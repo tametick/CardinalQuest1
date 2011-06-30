@@ -53,12 +53,28 @@ class ItemCellGroups
 			for ( i in 0...items.length)
 			{
 				var cellOB:CqInventoryItem = items[i].getCellObj();
-				if (cellOB != null)
-					if (cellOB.item == item) return true;
+				if (cellOB != null && cellOB.item == item)
+					return true;
 			}
 			return false;
 		}else {
 			return false;
 		}
 	}
+	public function anyGroupContainsItem(item:CqItem):Bool 
+	{
+		for ( j in 0...db.length)
+		{
+			var items:Array<CqInventoryCell> = db[j];
+			for ( i in 0...items.length)
+			{
+				var cellOB:CqInventoryItem = items[i].getCellObj();
+				if (cellOB != null && cellOB.item == item)
+					return true;
+			}
+			return false;
+		}
+		return false;
+	}
+	
 }

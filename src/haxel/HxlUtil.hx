@@ -396,4 +396,14 @@ class HxlUtil {
 		}
 		return rslt;
 	}
+	public static function sumHashInt(hash:Hash<Int>):Int
+	{
+		var itr:Iterator<Int> = hash.iterator();
+		var sum:Int = 0;
+		while (itr.hasNext())
+		{
+			sum += itr.next();
+		}
+		return sum;
+	}
 }
