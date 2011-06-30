@@ -174,7 +174,6 @@ class CqInventoryDialog extends HxlSlidingDialog {
 						//found same quipment cell slot as item
 						if (cell.getCellObj() == null) {
 							//if slot was empty - equip
-							trace("equip to empty");
 							equipItem(cell, Item, uiItem);
 							return true;
 						} else {
@@ -182,19 +181,16 @@ class CqInventoryDialog extends HxlSlidingDialog {
 							
 							if (preference > 1)
 							{	//equip if item is better
-								trace("new is better, pref:"+preference);
 								var old:CqInventoryItem = equipItem(cell, Item, uiItem);
 								//if old is non plain add to inv
 								if (!old.item.isMagical && !old.item.isSuperb && !old.item.isWondrous)
 									return false;
 							}else if (!Item.isMagical && !Item.isSuperb && !Item.isWondrous && preference <1)
 							{	//if item is worse than current, and is plain - destroy it
-								trace("new is worse and plain, deleting, pref:"+preference);
 								remove(uiItem);
 								return false;
 							}else
 							{	//if item is not better, and not plain - add to inventory
-								trace("item is not better, adding to inv,pref:" + preference);
 								if ( Item.equalTo( cell.getCellObj().item))
 								{
 									remove(uiItem);

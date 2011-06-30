@@ -359,9 +359,9 @@ class CqItem extends GameObjectImpl, implements Loot {
 		{
 			var key:String = itr.next();
 			if (other.buffs.get(key) != buffs.get(key))
-				return false
+				return false;
 		}
-		return true
+		return true;
 	}
 	/**
 	 * <1 other is worse 1 == equal, >1 other is better
