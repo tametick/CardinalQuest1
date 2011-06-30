@@ -50,10 +50,16 @@ class CreateCharState extends HxlState
 		titleText.setFormat(null, 72, 0xffffff, "center");
 		add(titleText);
 
-		var btnStart:HxlButton = new HxlButton(520, 430, 100, 30);
-		btnStart.setBackgroundColor(0xff999999, 0xffcccccc);
-		btnStart.loadText(new HxlText(0, 3, 100, "Start", true, null).setFormat(null, 24, 0xffffff, "center", 0x010101));
+		
+		var btnStart:HxlButton = new HxlButton(Std.int((640 - 90) / 2), 430, 90, 28);
+		var btnStartBg:HxlSprite = new HxlSprite(btnStart.x, btnStart.y);
+		btnStartBg.loadGraphic(SpriteButtonBg, false, false, 90, 26);
+		var btnStartHigh = new StartButtonSprite();
+		btnStartHigh.setAlpha(0.6);
+		btnStart.loadGraphic(new StartButtonSprite(),btnStartHigh);
+		btnStart.loadText(new HxlText(0, -7, 90, "Start", true, null).setFormat(null, 32, 0xffffff, "center", 0x010101));
 
+		add(btnStartBg);
 		add(btnStart);
 		var self = this;
 		btnStart.setCallback(function() {

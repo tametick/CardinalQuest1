@@ -58,6 +58,10 @@
 	<SymbolClass id="21" class="cq.SpriteHeart" />
 	<DefineBitsJPEG id="22" file="../rsrc/cq/Belt_vert_metal.png" />
 	<SymbolClass id="22" class="cq.UiBeltVertical" />
+	<DefineBitsJPEG id="23" file="../rsrc/cq/Start_button.png" />
+	<SymbolClass id="23" class="cq.SpriteStartButton" />
+	<DefineBitsJPEG id="24" file="../rsrc/cq/button_bg.png" />
+	<SymbolClass id="24" class="cq.SpriteButtonBg" />
 	
 	<DefineABC file="../bin/cq-movie.swf" isBoot="true" />
 

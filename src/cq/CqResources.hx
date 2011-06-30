@@ -24,20 +24,28 @@ class BossTheme extends Sound { public function new() { super(); } }
 class WinTheme extends Sound { public function new() { super(); } }
 
 class SpriteHeart extends Bitmap { public function new() { super(); } }
+class SpriteStartButton extends Bitmap { public function new() { super(); } }
+class SpriteButtonBg extends Bitmap { public function new() { super(); } }
 class SpriteItemSlot1 extends Bitmap { public function new() { super(); } }
 class SpriteItemSlot2 extends Bitmap { public function new() { super(); } }
 class SpriteInfo extends Bitmap { public function new() { super(); } }
 
+class StartButtonSprite extends HxlSprite {
+	public function new(?X:Float=0, ?Y:Float=0) {
+		super(X,Y);
+		loadGraphic(SpriteStartButton, false, false, 90, 26);
+	}
+}
 class ButtonSprite extends HxlSprite {
 	public function new(?X:Float=0, ?Y:Float=0) {
 		super(X,Y);
-		loadGraphic(SpriteItemSlot1, false, false, 64, 64, true, 1, 1);
+		loadGraphic(SpriteItemSlot1, false, false, 64, 64, true);
 	}
 }
 class HeartSprite extends HxlSprite {
 	public function new(?X:Float=0, ?Y:Float=0) {
 		super(X,Y);
-		loadGraphic(SpriteHeart, false, false, 18, 18, false, 1, 1);
+		loadGraphic(SpriteHeart, false, false, 18, 18);
 	}
 }
 

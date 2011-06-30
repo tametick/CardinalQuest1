@@ -6,6 +6,8 @@
 		<bitmap id="cq.SpriteHeart" import="heart.png"/>
 		<bitmap id="cq.SpritePortrait" import="portrait_slots.png"/>
 		<bitmap id="cq.SpriteInfo" import="info_slot.png"/>
+		<bitmap id="cq.SpriteStartButton" import="Start_button.png"/>
+		<bitmap id="cq.SpriteButtonBg" import="button_bg.png"/>
 		<bitmap id="cq.SpriteItemSlot1" import="Item_slot_01.png"/>
 		<bitmap id="cq.SpriteItemSlot2" import="Item_slot_02.png"/>
 		<bitmap id="cq.SpriteIcons" import="buttons.png"/>
