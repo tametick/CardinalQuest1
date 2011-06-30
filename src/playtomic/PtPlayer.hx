@@ -1,8 +1,7 @@
 package playtomic;
 
 import cq.CqActor;
-
-import data.Registery;
+import cq.CqRegistery;
 
 import playtomic.Playtomic;
 import playtomic.base.Log;
@@ -28,11 +27,11 @@ class PtPlayer {
 		if (!Playtomic.isEnabled())
 			return;
 			
-		Log.LevelRangedMetric(classSelectedStr.charAt(0) + " Attacks Dodged", Registery.level.index, attacksDodged);
-		Log.LevelRangedMetric(classSelectedStr.charAt(0) + " Attacks Missed", Registery.level.index, attacksMissed);
-		Log.LevelRangedMetric(classSelectedStr.charAt(0) + " Attacks Successful", Registery.level.index, attacksSuccessful);
-		Log.LevelRangedMetric(classSelectedStr.charAt(0) + " Player Hit", Registery.level.index, beenHit);
-		Log.LevelRangedMetric(classSelectedStr.charAt(0) + " Kills", Registery.level.index, enemiesKilled);
+		Log.LevelRangedMetric(classSelectedStr.charAt(0) + " Attacks Dodged", CqRegistery.level.index, attacksDodged);
+		Log.LevelRangedMetric(classSelectedStr.charAt(0) + " Attacks Missed", CqRegistery.level.index, attacksMissed);
+		Log.LevelRangedMetric(classSelectedStr.charAt(0) + " Attacks Successful", CqRegistery.level.index, attacksSuccessful);
+		Log.LevelRangedMetric(classSelectedStr.charAt(0) + " Player Hit", CqRegistery.level.index, beenHit);
+		Log.LevelRangedMetric(classSelectedStr.charAt(0) + " Kills", CqRegistery.level.index, enemiesKilled);
 
 	}
 	

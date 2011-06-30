@@ -2,8 +2,7 @@ package cq;
 
 import cq.CqActor;
 import cq.CqResources;
-
-import data.Registery;
+import cq.CqRegistery;
 
 import haxel.HxlSlidingDialog;
 import haxel.HxlText;
@@ -90,7 +89,7 @@ class CqCharacterDialog extends HxlSlidingDialog {
 	}
 
 	public function updateText() {
-		var _player:CqPlayer = cast(Registery.player, CqPlayer);
+		var _player:CqPlayer = cast(CqRegistery.player, CqPlayer);
 		valHealth.text = "" + (_player.hp + _player.buffs.get("life")) +"/" + (_player.maxHp + _player.buffs.get("life"));
 		
 		if (_player.buffs.get("life") != 0) {

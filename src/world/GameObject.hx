@@ -6,7 +6,7 @@ import haxel.HxlPoint;
 import haxel.HxlGraphics;
 
 import data.Configuration;
-import data.Registery;
+import cq.CqRegistery;
 
 interface GameObject implements HxlObjectI {
 	var hp:Int;
@@ -50,7 +50,7 @@ class GameObjectImpl extends HxlSprite, implements GameObject
 	public function setTilePos(X:Int, Y:Int):HxlPoint {
 		// remove from old tile
 		if (_tilePos != null) {
-			var tile = Registery.level.getTile(_tilePos.x, _tilePos.y);
+			var tile = CqRegistery.level.getTile(_tilePos.x, _tilePos.y);
 			if (tile != null)
 				if(Std.is(this,Actor))
 					tile.actors.remove(this);
@@ -67,9 +67,9 @@ class GameObjectImpl extends HxlSprite, implements GameObject
 		}
 
 		if(Std.is(this,Actor))
-			Registery.level.getTile(_tilePos.x, _tilePos.y).actors.push(this);
+			CqRegistery.level.getTile(_tilePos.x, _tilePos.y).actors.push(this);
 		else if (Std.is(this, Loot))
-			Registery.level.getTile(_tilePos.x, _tilePos.y).loots.push(this);
+			CqRegistery.level.getTile(_tilePos.x, _tilePos.y).loots.push(this);
 		
 		return _tilePos;
 	}

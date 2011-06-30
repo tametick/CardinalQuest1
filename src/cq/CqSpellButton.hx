@@ -7,13 +7,14 @@ import cq.CqResources;
 import cq.CqSpell;
 import cq.CqActor;
 import cq.CqGraphicKey;
+import cq.CqRegistery;
 
 import flash.display.BitmapData;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
-import data.Registery;
+
 
 import haxel.HxlButton;
 import haxel.HxlDialog;
@@ -85,7 +86,7 @@ class CqSpellButton extends HxlDialog {
 			var spellObj = cell.getCellObj();
 			if ( spellObj != null ) {
 				var spell = cast(spellObj.item, CqSpell);
-				var player = cast(Registery.player, CqPlayer);
+				var player = cast(CqRegistery.player, CqPlayer);
 				if ( spell.spiritPoints < spell.spiritPointsRequired ) {
 					event.stopPropagation();
 					return;
@@ -97,7 +98,7 @@ class CqSpellButton extends HxlDialog {
 					GameUI.setTargetingSpell(this);
 				} else {
 					GameUI.setTargeting(false);
-					cast(Registery.player,CqPlayer).use(spellObj.item, null);
+					cast(CqRegistery.player,CqPlayer).use(spellObj.item, null);
 					spell.spiritPoints = 0;
 					GameUI.instance.updateCharge(this);
 				}

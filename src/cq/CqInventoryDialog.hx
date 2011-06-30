@@ -8,10 +8,10 @@ import cq.CqResources;
 import cq.CqSpell;
 import cq.CqSpellButton;
 import cq.ui.ItemCellGroups;
-import haxel.GraphicCache;
+import cq.CqRegistery;
+import cq.CqGraphicKey;
 
 import data.Configuration;
-import data.Registery;
 import world.Tile;
 
 import flash.display.BitmapData;
@@ -30,7 +30,8 @@ import haxel.HxlSprite;
 import haxel.HxlSpriteSheet;
 import haxel.HxlText;
 import haxel.HxlUtil;
-import cq.CqGraphicKey;
+import haxel.GraphicCache;
+
 
 class CqInventoryDialog extends HxlSlidingDialog {
 
@@ -109,6 +110,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	
 	public function itemPickup(Item:CqItem):Bool {
 		// if item already in inventory (?)
+		//var ContainingCell:CqInventoryCell = CqInventoryDialog.itemCell_groups.AnyGroupCellThatContainsItem(Item);
 		for ( cell in dlgInvGrid.cells ) {
 			if ( cell.getCellObj() != null && cell.getCellObj().item == Item ) {
 				cell.getCellObj().updateIcon();
@@ -209,7 +211,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 			UiItem.x = UiItem.x + 10;
 			UiItem.y = UiItem.y + 10;
 		}
-		cast(Registery.player, CqActor).equipItem(Item);
+		cast(CqRegistery.player, CqActor).equipItem(Item);
 	}
 	
 	
@@ -639,7 +641,7 @@ class CqInventoryCell extends HxlDialog {
 	
 	public function clearCellObj() {
 		if (cellObj != null) {
-			cast(Registery.player, CqActor).unequipItem(cellObj.item);
+			cast(CqRegistery.player, CqActor).unequipItem(cellObj.item);
 			cellObj.removeFromDialog();
 			cellObj = null;
 		}
@@ -752,7 +754,7 @@ class CqInventoryItem extends HxlSprite {
 	 **/
 	public function setInventoryCell(Cell:Int) {		
 		if (cellSpell) {
-			cast(Registery.player, CqPlayer).equippedSpells[cellIndex] = null;
+			cast(CqRegistery.player, CqPlayer).equippedSpells[cellIndex] = null;
 			_dlg.dlgSpellGrid.forceClearCharge(cellIndex);
 		}
 		
@@ -807,7 +809,7 @@ class CqInventoryItem extends HxlSprite {
 	public function setSpellCell(Cell:Int):Bool {
 		if (cellSpell) {
 			// if it was already in a different spell cell before moving to the new spell cell
-			cast(Registery.player, CqPlayer).equippedSpells[cellIndex] = null;
+			cast(CqRegistery.player, CqPlayer).equippedSpells[cellIndex] = null;
 			_dlg.dlgSpellGrid.forceClearCharge(cellIndex);
 		}
 		
@@ -829,7 +831,7 @@ class CqInventoryItem extends HxlSprite {
 		cellEquip = false;
 		cellPotion = false;
 		
-		cast(Registery.player, CqPlayer).equippedSpells[cellIndex] = cast(this.item,CqSpell);
+		cast(CqRegistery.player, CqPlayer).equippedSpells[cellIndex] = cast(this.item,CqSpell);
 		
 		return true;
 	}
@@ -909,19 +911,20 @@ class CqInventoryItem extends HxlSprite {
 
 	override function dragStop() {
 		// If the user was hovering an eligable drop target, act on it
-		if ( CqInventoryCell.highlightedCell != null ) {
-			if ( CqInventoryCell.highlightedCell.getCellObj() != null ) {
+		var dropCell:CqInventoryCell = CqInventoryCell.highlightedCell;
+		var other:CqInventoryItem = dropCell.getCellObj();
+		if ( dropCell != null ) {
+			if ( other != null ) {
 				// There was already an item in the target cell, switch places with it
-				var other:CqInventoryItem = CqInventoryCell.highlightedCell.getCellObj();
-				
 				if ( cellEquip ) {
 					// Unequipping current item (?)
-					cast(Registery.player, CqActor).unequipItem(item);
+					cast(CqRegistery.player, CqActor).unequipItem(item);
 					// Moving the other item into an equipment cell (?)
 					if ( other.setEquipmentCell(cellIndex) && other!=this) 
-						cast(Registery.player, CqActor).equipItem(other.item);
+						cast(CqRegistery.player, CqActor).equipItem(other.item);
 				} else if ( cellSpell ) {
 					// Moving the other item into a spell cell
+					//spell scrolling out with the inventory bug somewhere here.
 					other.setSpellCell(cellIndex);
 					var spellBtn = cast(getSpellCell(cellIndex), CqSpellCell).btn;
 					
@@ -946,7 +949,7 @@ class CqInventoryItem extends HxlSprite {
 				} else if ( Std.is(CqInventoryCell.highlightedCell, CqEquipmentCell) ) {
 					// Moving this item into an equipment cell
 					setEquipmentCell(CqInventoryCell.highlightedCell.cellIndex);
-					cast(Registery.player, CqActor).equipItem(this.item);
+					cast(CqRegistery.player, CqActor).equipItem(this.item);
 				} else {
 					// Moving this item into an inventory cell
 					setInventoryCell(CqInventoryCell.highlightedCell.cellIndex);
@@ -958,7 +961,7 @@ class CqInventoryItem extends HxlSprite {
 				if ( cellEquip ) {
 					// Clearing out an equipment cell
 					_dlg.dlgEqGrid.setCellObj(cellIndex, null);
-					cast(Registery.player, CqActor).unequipItem(this.item);
+					cast(CqRegistery.player, CqActor).unequipItem(this.item);
 				} else if ( cellSpell ) {
 					// Clearing out a spell cell
 					_dlg.dlgSpellGrid.clearCharge(cellIndex);
@@ -985,7 +988,7 @@ class CqInventoryItem extends HxlSprite {
 				} else if ( Std.is(CqInventoryCell.highlightedCell, CqEquipmentCell) ) {
 					// Moving this item into an equipment cell
 					setEquipmentCell(CqInventoryCell.highlightedCell.cellIndex);
-					cast(Registery.player, CqActor).equipItem(this.item);
+					cast(CqRegistery.player, CqActor).equipItem(this.item);
 				} else {
 					if ( CqInventoryCell.highlightedCell.dropCell ) {
 						// This item is being dropped
@@ -1004,7 +1007,7 @@ class CqInventoryItem extends HxlSprite {
 						
 						destroy();
 						
-						cast(Registery.player, CqPlayer).removeInventory(this.item);
+						cast(CqRegistery.player, CqPlayer).removeInventory(this.item);
 						_dlg.dlgEqGrid.onItemDragStop();
 						_dlg.dlgSpellGrid.onItemDragStop();
 						_dlg.dlgPotionGrid.onItemDragStop();
@@ -1029,14 +1032,14 @@ class CqInventoryItem extends HxlSprite {
 				var objW = _dlg.dlgCharacter.width;
 				var objH = _dlg.dlgCharacter.height;
 				if ( (myX >= objX) || (myX <= objX+objW) || (myY >= objY) || (myY <= objY+objH) ) {
-					cast(Registery.player, CqActor).use(item);
+					cast(CqRegistery.player, CqActor).use(item);
 					item.stackSize--;
 					if ( item.stackSize <= 0 ) {
 						_dlg.remove(this);
 						// Clear out the inventory cell this item previously occupied
 						_dlg.dlgInvGrid.setCellObj(cellIndex, null);
 						destroy();
-						cast(Registery.player, CqPlayer).removeInventory(this.item);
+						cast(CqRegistery.player, CqPlayer).removeInventory(this.item);
 						_dlg.dlgEqGrid.onItemDragStop();
 						_dlg.dlgSpellGrid.onItemDragStop();
 						_dlg.dlgPotionGrid.onItemDragStop();

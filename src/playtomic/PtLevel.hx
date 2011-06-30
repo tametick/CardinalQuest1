@@ -2,7 +2,7 @@ package playtomic;
 
 import world.Level;
 
-import data.Registery;
+import cq.CqRegistery;
 
 import playtomic.Playtomic;
 import playtomic.base.Log;
@@ -24,8 +24,8 @@ class PtLevel {
 		PtPlayer.startLevel();
 		startTime = Date.now();
 		
-		Log.LevelCounterMetric("Level Reached", Registery.level.index);
-		Log.LevelCounterMetric("Level Reached U", Registery.level.index, true);	
+		Log.LevelCounterMetric("Level Reached", CqRegistery.level.index);
+		Log.LevelCounterMetric("Level Reached U", CqRegistery.level.index, true);	
 	}
 	
 	//when level finnishes

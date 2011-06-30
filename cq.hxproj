@@ -33,11 +33,10 @@
     <compile path="src\world\GameObject.hx" />
     <compile path="src\world\Level.hx" />
     <compile path="src\world\Mob.hx" />
-    <compile path="src\world\Player.hx" />
     <compile path="src\world\Tile.hx" />
     <compile path="src\world\World.hx" />
-    <compile path="src\data\Registery.hx" />
     <compile path="src\cq\states\GameState.hx" />
+    <compile path="src\cq\CqRegistery.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

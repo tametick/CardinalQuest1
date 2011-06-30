@@ -3,8 +3,8 @@ package cq;
 import cq.CqActor;
 import cq.CqResources;
 import cq.CqWorld;
+import cq.CqRegistery;
 import world.Tile;
-import data.Registery;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Shape;
@@ -57,8 +57,8 @@ class CqMapDialog extends HxlSlidingDialog {
 
 	function init() {
 		cellSize = new HxlPoint();
-		cellSize.x = Math.floor(mapSize.x / Registery.level.widthInTiles);
-		cellSize.y = Math.floor(mapSize.y / Registery.level.heightInTiles);
+		cellSize.x = Math.floor(mapSize.x / CqRegistery.level.widthInTiles);
+		cellSize.y = Math.floor(mapSize.y / CqRegistery.level.heightInTiles);
 	}
 
 	public override function show(?ShowCallback:Dynamic=null) {
@@ -67,9 +67,9 @@ class CqMapDialog extends HxlSlidingDialog {
 	}
 
 	public function updateMap() {
-		var tiles = Registery.level.getTiles();
-		var mapW:Int = Registery.level.widthInTiles;
-		var mapH:Int = Registery.level.heightInTiles;
+		var tiles = CqRegistery.level.getTiles();
+		var mapW:Int = CqRegistery.level.widthInTiles;
+		var mapH:Int = CqRegistery.level.heightInTiles;
 		var graph = mapShape.graphics;
 		var Color:Int = 0x339933;
 		var SightColor:Int = 0x339933;
@@ -83,7 +83,7 @@ class CqMapDialog extends HxlSlidingDialog {
 		var mobColor:Int = 0xFF3333;
 		var lootColor:Int = 0xFFCC00;
 
-		var player = cast(Registery.player, CqActor);
+		var player = cast(CqRegistery.player, CqActor);
 		var playerPos = player.getTilePos();
 
 		graph.clear();
@@ -93,12 +93,12 @@ class CqMapDialog extends HxlSlidingDialog {
 				
 				if ( tiles[Y][X].visibility == Visibility.SEEN ) {
 								Color = SeenColor;
-					if ( Registery.level.isBlockingMovement(X, Y) ) {
+					if ( CqRegistery.level.isBlockingMovement(X, Y) ) {
 						Color = WallSeenColor;
 					}
 				} else if ( tiles[Y][X].visibility == Visibility.IN_SIGHT ) {
 					Color = SightColor;
-					if ( Registery.level.isBlockingMovement(X, Y) ) {
+					if ( CqRegistery.level.isBlockingMovement(X, Y) ) {
 						Color = WallSightColor;
 					}
 				}
@@ -137,7 +137,7 @@ class CqMapDialog extends HxlSlidingDialog {
 					
 					
 					// Render player position
-					var playerPos = cast(Registery.player, CqActor).getTilePos();
+					var playerPos = cast(CqRegistery.player, CqActor).getTilePos();
 					if ( playerPos.x == X && playerPos.y == Y ) {
 						var dx:Float = (X * cellSize.x) + (cellSize.x / 2);
 						var dy:Float = (Y * cellSize.y) + (cellSize.y / 2);
