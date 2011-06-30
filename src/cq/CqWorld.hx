@@ -54,7 +54,7 @@ class CqLevel extends Level {
 	static var itemSprites = SpriteItems.instance;
 
 	public function getColor():String {
-		if (index <2 )
+		if (index < 2)
 			return "blue";
 		else if (index < 4)
 			return "green";

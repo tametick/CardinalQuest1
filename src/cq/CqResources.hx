@@ -198,7 +198,9 @@ class SpriteSpells extends HxlSpriteSheet {
 	public static var instance = new SpriteSpells();
 	public function new() {
 		spriteNames = [
-			["freeze", "fireball", "berserk", "enfeeble_monster", "bless_weapon", "haste", "shadow_walk"]
+			["freeze", "fireball", "berserk", "enfeeble_monster", "bless_weapon", "haste", "shadow_walk"],
+			["charm_monster", "polymorph", "sleep", "fear", "magic_mirror", "stone_skin", "blink"],
+			["magic_armor", "pass_wall", "teleport", "reveal_map", "heal"]			
 		];
 		super(0);
 	} 
