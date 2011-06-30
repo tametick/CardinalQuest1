@@ -353,48 +353,37 @@ class CqItem extends GameObjectImpl, implements Loot {
 		}).ease(Cubic.easeOut); 
 	}
 	
+	public function equalTo(other:CqItem):Bool {
+		var itr:Iterator<String> = buffs.keys();
+		while (itr.hasNext())
+		{
+			var key:String = itr.next();
+			if (other.buffs.get(key) != buffs.get(key))
+				return false
+		}
+		return true
+	}
 	/**
-	 * 1.0 == this is better, 0.0 == other is better
+	 * <1 other is worse 1 == equal, >1 other is better
 	 * */
 	public function compareTo(other:CqItem) {
 		if (other.equipSlot != equipSlot)
 			return 0.0;
+			
 		
 		var preference:Float = 0.0;
+		var sumBuffsThis:Float  = HxlUtil.sumHashInt(buffs);
+		var sumBuffsOther:Float = HxlUtil.sumHashInt(other.buffs);
 		
-/*
-		switch(equipSlot) {
-			// todo - magical items
-			case CqEquipSlot.SHOES:
-				if (buffs.get("speed") > other.buffs.get("speed"))
-					preference = 1.0;
-
-			case CqEquipSlot.ARMOR:
-				if (buffs.get("defense") > other.buffs.get("defense"))
-					preference = 1.0;
-
-			case CqEquipSlot.JEWELRY:
-				if (buffs.get("spirit") > other.buffs.get("spirit"))
-					preference = 1.0;
-
-			case CqEquipSlot.HAT:
-				if (buffs.get("life") > other.buffs.get("life"))
-					preference = 1.0;
-
-			case CqEquipSlot.GLOVES:
-				if (buffs.get("attack") > other.buffs.get("attack"))
-					preference = 1.0;
-
-			case CqEquipSlot.WEAPON:
-				if (damage.start+damage.end > other.damage.start+other.damage.end)
-					preference = 1.0;
-
-			case CqEquipSlot.SPELL, CqEquipSlot.POTION:
-				// all potions & spells are the same quality
-				preference = 0.5;
-		}
-	*/	
-		preference = 0.5; // until we can compare magical items...
+		var dmgThis:Float  = damage.start + damage.end;
+		var dmgOther:Float = other.damage.start + other.damage.end;
+		if (dmgThis > dmgOther)
+			sumBuffsThis++;
+		else if(dmgThis < dmgOther)
+			sumBuffsOther++;
+		//do nothing if damage is equal
+		if ( sumBuffsOther == 0) sumBuffsOther = 0.1;
+		preference = sumBuffsThis / sumBuffsOther;
 		
 		return preference;
 	}

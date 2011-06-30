@@ -56,7 +56,7 @@ class CqXpBar extends CqVitalBar {
 		setPercentToXp();
 	}
 	function setPercentToXp() {
-		var player:CqPlayer = cast(actor, CqPlayer);
+		var player:CqPlayer = CqRegistery.player;
 		var percent:Float = (player.xp - player.currentLevel()) / (player.nextLevel() - player.currentLevel());
 		setPercent( percent );
 	}

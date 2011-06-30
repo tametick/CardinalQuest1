@@ -57,7 +57,7 @@ class GameState extends HxlState {
 	
 	function passTurn() {
 		var player = CqRegistery.player;
-		var level = cast(Registery.level, CqLevel);
+		var level = CqRegistery.level;
 		
 		level.updateFieldOfView();
 		player.actionPoints = 0;
@@ -235,7 +235,7 @@ class GameState extends HxlState {
 	
 	
 	function openDoor(tile:CqTile) {
-		var col = cast(Registery.level, CqLevel).getColor();
+		var col = CqRegistery.level.getColor();
 		Registery.level.updateTileGraphic(tile.mapX, tile.mapY, SpriteTiles.instance.getSpriteIndex(col+"_door_open"));
 	}
 }
