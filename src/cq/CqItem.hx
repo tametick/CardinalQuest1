@@ -464,6 +464,7 @@ enum CqItemType {
 	YELLOW_POTION;
 	RED_POTION;
 	HELM;
+	// todo: add new items from spritesheet
 }
 
 enum CqEquipSlot {
