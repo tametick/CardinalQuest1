@@ -3,6 +3,7 @@ package cq;
 import cq.CqActor;
 import cq.CqResources;
 import cq.CqWorld;
+import world.Tile;
 import data.Registery;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
@@ -66,7 +67,7 @@ class CqMapDialog extends HxlSlidingDialog {
 	}
 
 	public function updateMap() {
-		var tiles:Array<Array<HxlTile>> = Registery.level.getTiles();
+		var tiles = Registery.level.getTiles();
 		var mapW:Int = Registery.level.widthInTiles;
 		var mapH:Int = Registery.level.heightInTiles;
 		var graph = mapShape.graphics;
@@ -80,6 +81,7 @@ class CqMapDialog extends HxlSlidingDialog {
 		var DoorSeenColor:Int = 0x563A2F;
 		var playerColor:Int = 0xFFFED2;
 		var mobColor:Int = 0xFF3333;
+		var lootColor:Int = 0xFFCC00;
 
 		var player = cast(Registery.player, CqActor);
 		var playerPos = player.getTilePos();
@@ -88,9 +90,7 @@ class CqMapDialog extends HxlSlidingDialog {
 		for ( Y in 0...mapH ) {
 			for ( X in 0...mapW ) {
 				Color = -1;
-
-				// Uncomment the following line to display the entire map for debugging purposes
-				//if ( tiles[Y][X].visibility == Visibility.SEEN || tiles[Y][X].visibility != Visibility.IN_SIGHT) {
+				
 				if ( tiles[Y][X].visibility == Visibility.SEEN ) {
 								Color = SeenColor;
 					if ( Registery.level.isBlockingMovement(X, Y) ) {
@@ -120,13 +120,22 @@ class CqMapDialog extends HxlSlidingDialog {
 						// Draw doors
 						if ( !HxlUtil.contains(SpriteTiles.instance.openDoors.iterator(), tiles[Y][X].dataNum) ) {
 							// Dont draw open doors
-							if ( tiles[Y][X].visibility == Visibility.SEEN ) Color = DoorSeenColor;
-							else Color = DoorSightColor;
+							if ( tiles[Y][X].visibility == Visibility.SEEN ) 
+								Color = DoorSeenColor;
+							else 
+								Color = DoorSightColor;
 							graph.beginFill(Color);
 							graph.drawRect( (X * cellSize.x), (Y * cellSize.y), cellSize.x, cellSize.y );
 							graph.endFill();			
 						}
+					} else if ( cast(tiles[Y][X],Tile).loots.length >0)  { 
+						// Draw loot
+						graph.beginFill(lootColor);
+						graph.drawRect( (X * cellSize.x+1), (Y * cellSize.y+1), cellSize.x-2, cellSize.y-2 );
+						graph.endFill();			
 					}
+					
+					
 					// Render player position
 					var playerPos = cast(Registery.player, CqActor).getTilePos();
 					if ( playerPos.x == X && playerPos.y == Y ) {
