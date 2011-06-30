@@ -38,6 +38,7 @@ class CqSpellButton extends HxlDialog {
 		cell = new CqSpellCell(this,5, 5, 54, 54, Idx);
 		cell.setGraphicKeys(CqGraphicKey.EquipmentCellBG,CqGraphicKey.EqCellBGHighlight,CqGraphicKey.CellGlow);
 		cell.zIndex = 1;
+		cell.cell_type = CqInvCellType.Spell;
 		add(cell);
 
 		chargeSprite = new HxlSprite(x + 5, y + 5);

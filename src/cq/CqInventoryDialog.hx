@@ -350,6 +350,7 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		{
 			cell = new CqEquipmentCell(icons_slots[idx], icons_positions[idx][0],icons_positions[idx][1], cellSize, cellSize, idx);
 			cell.setGraphicKeys(CqGraphicKey.buttonSprite, cellBgHighlightKey, cellGlowKey);
+			cell.cell_type = CqInvCellType.Equipment;
 			var icon = SpriteEquipmentIcons.getIcon(icons_names[idx],icons_size,2.0);
 			icon.setAlpha(0.3);
 			add(cell);
@@ -513,7 +514,11 @@ class CqPotionGrid extends CqInventoryGrid {
 		return new HxlPoint(cells[Cell].x + 2, cells[Cell].y + 2);
 	}
 }
-
+enum CqInvCellType {
+	Equipment;
+	Spell;
+	Potion;
+}
 class CqInventoryCell extends HxlDialog {
 
 	public static var highlightedCell:CqInventoryCell = null;
@@ -523,7 +528,7 @@ class CqInventoryCell extends HxlDialog {
 	var isHighlighted:Bool;
 	public var cellIndex:Int;
 	public var dropCell:Bool;
-
+	public var cell_type:CqInvCellType;
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?CellIndex:Int=0) {
 		super(X, Y, Width, Height);
 		bgHighlight = null;
