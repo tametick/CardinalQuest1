@@ -51,7 +51,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	static inline var DLG_DIVISOR_H_PERCENT:Int = 75;
 	static inline var DLG_DIVISOR_V_PERCENT:Int = 55;
 	//
-	static var itemCell_groups:ItemCellGroups;
+	static public var itemCell_groups:ItemCellGroups;
 	
 	public function new(_GameUI:GameUI, ?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0)
 	{
@@ -356,6 +356,8 @@ class CqEquipmentGrid extends CqInventoryGrid {
 			add(cell);
 			cells.push(cell);
 		}
+		
+		CqInventoryDialog.itemCell_groups.add("equipment", cells);
 	}
 
 	public override function getCellItemPos(Cell:Int):HxlPoint {

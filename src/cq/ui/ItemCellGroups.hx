@@ -6,30 +6,38 @@ package cq.ui;
  * 
  * @author joris
  */
-import cq.CqInventoryDialog
+import cq.CqInventoryDialog;
 
 class ItemCellGroups 
 {
-	var db:Dynamic;
+	var db:Array<Array<CqInventoryCell>>;
+	var db_names:Array<String>;
 	public function new() 
 	{
-		db = { };
+		db = [];
+		db_names = [];
 	}
 	public function add(name:String, cells:Array<CqInventoryCell>)
 	{
-		Reflect.setField(db, name, cells);
+		db.push(cells);
+		db_names.push(name);
 	}
+	
 	public function get(name:String):Array<CqInventoryCell>
 	{
-		return cast( Reflect.field(db, name),Array<CqInventoryCell>);
+		var i:Int = Lambda.indexOf(db_names, name);
+		if (i < 0 || i > db.length) throw "there is no group by the name: "+name;
+		return db[i];
 	}
 	public function has(name:String):Bool
 	{
-		return Reflect.hasField(db, name);
+		var b:Bool = Lambda.exists(db_names, function(ii) { return ii==name; });
+		return b;
 	}
 	public function remove(name:String)
 	{
-		Reflect.deleteField(db, name);
+		var i:Int = Lambda.indexOf(db_names, name);
+		db_names.splice(i, 1);
+		db.splice(i, 1);
 	}
-	
 }
