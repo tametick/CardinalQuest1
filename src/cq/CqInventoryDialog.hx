@@ -67,7 +67,6 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		
 		//on the left
 		dlgCharacter = new HxlDialog(DLG_OUTER_BORDER, DLG_OUTER_BORDER, div_l-DLG_OUTER_BORDER, div_u-DLG_OUTER_BORDER);
-		//dlgCharacter.setBackgroundColor(0xff885555);
 		add(dlgCharacter);
 
 		//in dlgCharacter
@@ -141,7 +140,6 @@ class CqInventoryDialog extends HxlSlidingDialog {
 
 		// If this uiItem is equippable, and affiliated slot is open, auto equip it
 		if ( Item.equipSlot != null ) {
-			//HxlGraphics.log("Checking for free slots..");
 			if ( Item.equipSlot == POTION ) {
 				for ( cell in dlgPotionGrid.cells ) {
 					if ( cell.getCellObj() == null ) {
@@ -428,7 +426,6 @@ class CqSpellGrid extends CqInventoryGrid {
 		
 		for ( i in 0...5 ) {
 			var btnCell:CqSpellButton = new CqSpellButton(10, 10 + ((i * btnSize) + (i * 10)), btnSize, btnSize,i);
-			//btnCell.setBackgroundColor(0xffffffff, 0xffcccccc);
 			
 			btnCell.setBackgroundSprite(btnSprite);
 			btnCell.zIndex = 1;
@@ -441,7 +438,6 @@ class CqSpellGrid extends CqInventoryGrid {
 
 	public override function getCellItemPos(Cell:Int):HxlPoint {
 		if ( !initialized ) {
-			//return new HxlPoint(x + cells[Cell].x + 2, y + cells[Cell].y + 2);
 			return new HxlPoint(cells[Cell].x + 12, cells[Cell].y + 12);
 
 		}
@@ -466,10 +462,16 @@ class CqSpellGrid extends CqInventoryGrid {
 }
 
 class CqPotionGrid extends CqInventoryGrid {
-
+	var belt:HxlSprite;
+	
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100) {
 		super(X, Y, Width, Height, false);
-
+		
+		belt = new HxlSprite(-13, 8);
+		belt.zIndex = -1;
+		belt.loadGraphic(UiBeltHorizontal, false, false, 406, 71);
+		add(belt);
+		
 		cells = new Array();
 
 		var cellBgKey:CqGraphicKey = CqGraphicKey.EquipmentCellBG;
@@ -478,18 +480,17 @@ class CqPotionGrid extends CqInventoryGrid {
 		var btnSize:Int = 64;
 		var padding:Int = 8;
 		var idx:Int = 0;
-	
+			
 		var btnSprite = new ButtonSprite();
 		
 		for ( i in 0...5 ) {
 			var btnCell:CqPotionButton = new CqPotionButton(this, 10 + ((i * btnSize) + (i * 10)), 10, btnSize, btnSize,i);
-
-			//btnCell.setBackgroundColor(0xff999999, 0xffcccccc);
 			btnCell.setBackgroundSprite(btnSprite);
 			add(btnCell);
 			cells.push(btnCell.cell);
 		}
 		CqInventoryDialog.itemCell_groups.add("potions", cells);
+
 	}
 
 	public function onItemDrag(Item:CqItem) {

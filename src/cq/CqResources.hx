@@ -29,6 +29,7 @@ class SpriteButtonBg extends Bitmap { public function new() { super(); } }
 class SpriteItemSlot1 extends Bitmap { public function new() { super(); } }
 class SpriteItemSlot2 extends Bitmap { public function new() { super(); } }
 class SpriteInfo extends Bitmap { public function new() { super(); } }
+class UiBeltHorizontal extends Bitmap { public function new() { super(); } }
 
 class StartButtonSprite extends HxlSprite {
 	public function new(?X:Float=0, ?Y:Float=0) {

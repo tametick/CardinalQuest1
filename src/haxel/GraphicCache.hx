@@ -82,7 +82,7 @@ class GraphicCache
 		}
 		if ( pixels == null )
 		{
-			throw "ASD";
+			throw "Cannot find specified graphics: "+Graphic;
 		}
 		return pixels;
 
@@ -124,7 +124,7 @@ class GraphicCache
 		}
 		if ( Reflect.field(cache, keystr) == null )
 		{
-			throw "ASD";
+			throw "Cannot find in graphics cache: "+keystr;
 		}
 		return Reflect.field(cache, keystr);
 	}
