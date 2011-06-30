@@ -6,7 +6,6 @@ import cq.CqInventoryDialog;
 import cq.CqItem;
 import cq.CqResources;
 import cq.CqGraphicKey;
-import cq.CqRegistery;
 
 import flash.display.BitmapData;
 import flash.events.MouseEvent;
@@ -58,13 +57,13 @@ class CqPotionButton extends HxlDialog {
 				var item:CqItem = cellObj.item;
 				HxlLog.append("Using potion");
 				event.stopPropagation();
-				cast(CqRegistery.player, CqActor).use(item);
+				CqRegistery.player.use(item);
 				item.stackSize--;
 				if ( item.stackSize <= 0 ) {
 					_dlg.remove(cellObj);
 					cell.setCellObj(null);
 					cellObj.destroy();
-					cast(CqRegistery.player, CqPlayer).removeInventory(item);
+					CqRegistery.player.removeInventory(item);
 				} else {
 					cell.getCellObj().updateIcon();
 				}

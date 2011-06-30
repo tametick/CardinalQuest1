@@ -4,7 +4,6 @@ import cq.CqResources;
 import cq.CqItem;
 import cq.CqSpell;
 import cq.CqActor;
-import cq.CqRegistery;
 
 import generators.BSP;
 import world.World;
@@ -20,7 +19,7 @@ import haxel.HxlUtil;
 import haxel.HxlGraphics;
 import haxel.HxlLog;
 
-
+import data.Registery;
 import data.Configuration;
 import data.MusicManager;
 
@@ -244,7 +243,7 @@ class CqLevel extends Level {
 	
 	public override function tick(state:HxlState) {
 		var creatures:Array<CqActor> = new Array<CqActor>();
-		creatures.push(cast(CqRegistery.player, CqActor));
+		creatures.push(CqRegistery.player);
 		for (mob in mobs)
 			creatures.push(cast(mob, CqActor));
 			
@@ -356,7 +355,7 @@ class CqWorld extends World {
 		
 		currentLevelIndex++;
 		goToLevel(currentLevelIndex);
-		cast(CqRegistery.player, CqPlayer).infoViewFloor.setText("Floor " +(currentLevelIndex + 1));
+		CqRegistery.player.infoViewFloor.setText("Floor " +(currentLevelIndex + 1));
 
 		currentLevel.zIndex = -1;	
 		state.add(currentLevel);

@@ -13,12 +13,12 @@ import cq.CqWorld;
 import cq.CqVitalBar;
 import cq.CqResources;
 import cq.CqGraphicKey;
-import cq.CqRegistery;
-
+import haxel.HxlGroup;
 
 import data.Configuration;
+import data.Registery;
 
-
+import world.Player;
 import world.Tile;
 import world.World;
 
@@ -45,7 +45,6 @@ import haxel.HxlText;
 import haxel.HxlTextContainer;
 import haxel.HxlUIBar;
 import haxel.GraphicCache;
-import haxel.HxlGroup;
 
 class GameUI extends HxlDialog {
 
@@ -142,7 +141,7 @@ class GameUI extends HxlDialog {
 		panelLog.zIndex = 2;
 		add(panelLog);		
 		
-		var className = Type.enumConstructor(cast(CqRegistery.player, CqPlayer).playerClass).toLowerCase();
+		var className = Type.enumConstructor(CqRegistery.player.playerClass).toLowerCase();
 		var mainBtn = SpritePortrait.getIcon(className,64 ,1.0);
 		var infoBtn = new HxlSprite();
 		infoBtn.loadGraphic(SpriteInfo, false, false, 64, 64, true, 1, 1);
@@ -235,8 +234,8 @@ class GameUI extends HxlDialog {
 		var xShift = (leftButtons.width - width) / 4;
 		var yShift = btnMainView.height-3;
 
-		infoViewHpBar = new CqHealthBar(cast(CqRegistery.player,CqPlayer), leftButtons.x+btnInfoView.x+xShift, leftButtons.y+btnMainView.y+yShift,width, height,false);
-		infoViewXpBar = new CqXpBar(cast(CqRegistery.player, CqPlayer), infoViewHpBar.x, infoViewHpBar.y+infoViewHpBar.height, width, height, false);
+		infoViewHpBar = new CqHealthBar(CqRegistery.player, leftButtons.x+btnInfoView.x+xShift, leftButtons.y+btnMainView.y+yShift,width, height,false);
+		infoViewXpBar = new CqXpBar(CqRegistery.player, infoViewHpBar.x, infoViewHpBar.y+infoViewHpBar.height, width, height, false);
 		infoViewHpBar.scrollFactor.x = infoViewHpBar.scrollFactor.y = 0;
 		infoViewXpBar.scrollFactor.x = infoViewXpBar.scrollFactor.y = 0;
 		add(infoViewHpBar);
@@ -245,8 +244,8 @@ class GameUI extends HxlDialog {
 	
 	function addInfoButtonTexts() {
 		var fontSize = 12;
-		var player = cast(CqRegistery.player, CqPlayer);
-		var level  = cast(CqRegistery.level, CqLevel);
+		var player = CqRegistery.player;
+		var level  = CqRegistery.level;
 		
 		infoViewHearts = new HxlGroup();
 		infoViewHearts.zIndex = zIndex+1;
@@ -293,7 +292,7 @@ class GameUI extends HxlDialog {
 	}
 
 	public function updateCharges() {
-		var player = cast(CqRegistery.player, CqPlayer);
+		var player = CqRegistery.player;
 		for ( btn in dlgSpellGrid.buttons ){
 			if (btn.getSpell() != null) {				
 				updateCharge(btn);
@@ -459,7 +458,7 @@ class GameUI extends HxlDialog {
 
 	public function checkTileItems(Player:CqPlayer) {
 		var curPos:HxlPoint = Player.getTilePos();
-		var curTile = cast(CqRegistery.level.getTile(Std.int(curPos.x), Std.int(curPos.y)), Tile);
+		var curTile = cast(Registery.level.getTile(Std.int(curPos.x), Std.int(curPos.y)), Tile);
 		if ( curTile.loots.length > 0 ) {
 			if (panelInventory.getEmptyCell() == null) {
 				// todo - show visual/audio feedback that inv is full
@@ -478,7 +477,7 @@ class GameUI extends HxlDialog {
 	}
 
 	public function initChests() {
-		for ( Item in CqRegistery.level.loots ) {
+		for ( Item in Registery.level.loots ) {
 			if ( Std.is(Item, CqChest) ) {
 				cast(Item, CqChest).addOnBust(function(Target:CqChest) {
 					var eff:CqEffectChest = new CqEffectChest(Target.x + Target.origin.x, Target.y + Target.origin.y);
@@ -491,7 +490,7 @@ class GameUI extends HxlDialog {
 	}
 	
 	public function initHealthBars() {
-		for ( actor in CqRegistery.level.mobs ) {
+		for ( actor in Registery.level.mobs ) {
 			addHealthBar(cast(actor, CqActor));
 		}
 	}
@@ -522,7 +521,7 @@ class GameUI extends HxlDialog {
 	}
 
 	public function doPlayerInjureEffect(?dmgTotal:Int) {
-		var player = cast(CqRegistery.player, CqActor);
+		var player = CqRegistery.player;
 		if ( (player.hp / player.maxHp) <= 0.2 ) {
 			HxlGraphics.flash.start(0xffff0000, 0.2, null, true);
 		}
@@ -588,11 +587,11 @@ class GameUI extends HxlDialog {
 		var targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
 
 		if ( targetLastPos == null || targetLastPos.x != targetX || targetLastPos.y != targetY ) {
-			var worldPos:HxlPoint = CqRegistery.level.getTilePos(Std.int(targetX), Std.int(targetY));
+			var worldPos:HxlPoint = Registery.level.getTilePos(Std.int(targetX), Std.int(targetY));
 			targetSprite.x = worldPos.x;
 			targetSprite.y = worldPos.y;
 
-			var tile:CqTile = cast(CqRegistery.level.getTile(Std.int(targetX), Std.int(targetY)), CqTile);
+			var tile:CqTile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)), CqTile);
 			//tile.color = 0xbbffbb;
 			if ( tile == null || tile.actors.length <= 0 ) {
 				targetSprite.color = 0xff0000;
@@ -618,12 +617,12 @@ class GameUI extends HxlDialog {
 		}
 		var targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
 		var targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
-		var tile:CqTile = cast(CqRegistery.level.getTile(Std.int(targetX), Std.int(targetY)), CqTile);
+		var tile:CqTile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)), CqTile);
 		if ( tile == null || tile.actors.length <= 0 ) {
 			GameUI.setTargeting(false);
 		} else {
 			if ( cast(tile.actors[0], CqActor).faction != 0 ) {
-				var player = cast(CqRegistery.player, CqPlayer);
+				var player = CqRegistery.player;
 				player.use(targetSpell.getSpell(), cast(tile.actors[0], CqActor));
 				targetSpell.getSpell().spiritPoints = 0;
 				GameUI.instance.updateCharge(targetSpell);
