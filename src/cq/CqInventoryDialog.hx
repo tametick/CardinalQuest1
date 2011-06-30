@@ -193,8 +193,9 @@ class CqInventoryDialog extends HxlSlidingDialog {
 							{	//if item is not better, and not plain - add to inventory
 								if ( Item.equalTo( cell.getCellObj().item))
 								{
-									remove(uiItem);
 									//remove old
+									remove(uiItem);
+									return false;
 								}
 							}
 						}
