@@ -13,14 +13,14 @@ import haxel.HxlGraphics;
 
 import world.Mob;
 import world.Actor;
+import world.Player;
 import world.GameObject;
 import world.Tile;
 
-
+import data.Registery;
 import data.Resources;
 import data.Configuration;
 
-import cq.CqRegistery;
 import cq.CqResources;
 import cq.CqItem;
 import cq.CqSpell;
@@ -192,7 +192,7 @@ class CqActor extends CqObject, implements Actor {
 	}
 
 	function injureActor(other:CqActor, dmgTotal:Int) {
-		if (this == cast(CqRegistery.player,CqPlayer)) {
+		if (this == cast(Registery.player,CqPlayer)) {
 			HxlLog.append("You hit");
 			PtPlayer.hits();
 		} else {
@@ -217,7 +217,7 @@ class CqActor extends CqObject, implements Actor {
 			PtPlayer.kills();
 			cast(this, CqPlayer).gainExperience(mob);
 			// remove other
-			CqRegistery.level.removeMobFromLevel(state, mob);
+			Registery.level.removeMobFromLevel(state, mob);
 			mob.doDeathEffect();
 		} else {
 			if (Std.is(other, CqPlayer)) {
@@ -227,11 +227,11 @@ class CqActor extends CqObject, implements Actor {
 					player.lives--;
 					player.infoViewLives.setText("x " + player.lives);
 					
-					var startingPostion = CqRegistery.level.getPixelPositionOfTile(
-												CqRegistery.level.startingLocation.x,
-												CqRegistery.level.startingLocation.y);
+					var startingPostion = Registery.level.getPixelPositionOfTile(
+												Registery.level.startingLocation.x,
+												Registery.level.startingLocation.y);
 					player.setTilePos(
-						Std.int(CqRegistery.level.startingLocation.x), Std.int(CqRegistery.level.startingLocation.y)
+						Std.int(Registery.level.startingLocation.x), Std.int(Registery.level.startingLocation.y)
 					);
 					player.moveToPixel(state, startingPostion.x, startingPostion.y);
 					player.hp = player.maxHp;
@@ -284,7 +284,7 @@ class CqActor extends CqObject, implements Actor {
 
 		} else {
 			// Miss
-			if (this == cast(CqRegistery.player,CqPlayer)) {
+			if (this == cast(Registery.player,CqPlayer)) {
 				HxlLog.append("You miss");//<b style='color: rgb("+other.vars.color.join()+");'>"+other.vars.description[0]+"</b>.");
 				PtPlayer.misses();
 			} else {
@@ -300,7 +300,7 @@ class CqActor extends CqObject, implements Actor {
 		
 		var targetX = tilePos.x + targetTile.x;
 		var targetY = tilePos.y + targetTile.y;
-		var level = CqRegistery.level;
+		var level = Registery.level;
 		
 		var tile = cast(level.getTile(targetX,  targetY),CqTile);
 		
@@ -535,7 +535,7 @@ class CqActor extends CqObject, implements Actor {
 }
 
 
-class CqPlayer extends CqActor  {
+class CqPlayer extends CqActor, implements Player {
 	static var sprites = SpritePlayer.instance;
 	
 	public var playerClass:CqClass;
@@ -671,7 +671,7 @@ class CqPlayer extends CqActor  {
 	//pickup item from map
 	public function pickup(state:HxlState, item:CqItem) {
 		// remove item from map
-		CqRegistery.level.removeLootFromLevel(state, item);
+		Registery.level.removeLootFromLevel(state, item);
 		item.doPickupEffect(); //todo: Find out if this should be apart of give()
 		give(item);
 	}
@@ -724,7 +724,7 @@ class CqPlayer extends CqActor  {
 
 	public override function moveStop(state:HxlState) {
 		super.moveStop(state);
-		var currentTile = cast(CqRegistery.level.getTile(Std.int(tilePos.x), Std.int(tilePos.y)), Tile);
+		var currentTile = cast(Registery.level.getTile(Std.int(tilePos.x), Std.int(tilePos.y)), Tile);
 		var currentTileIndex = currentTile.dataNum;
 		if ( currentTile.loots.length > 0 ) {
 			var item = cast(currentTile.loots[currentTile.loots.length-1], CqItem);
@@ -734,8 +734,8 @@ class CqPlayer extends CqActor  {
 
 	public override function moveToPixel(state:HxlState, X:Float, Y:Float) {
 		if ( lastTile != null ) {
-			if ( CqRegistery.level.getTile(Std.int(lastTile.x), Std.int(lastTile.y)) != null ) {
-				var tile = cast(CqRegistery.level.getTile(Std.int(lastTile.x), Std.int(lastTile.y)), Tile);
+			if ( Registery.level.getTile(Std.int(lastTile.x), Std.int(lastTile.y)) != null ) {
+				var tile = cast(Registery.level.getTile(Std.int(lastTile.x), Std.int(lastTile.y)), Tile);
 				if ( tile.loots.length > 0 ) {
 					for ( item in tile.loots ) cast(item, CqItem).setGlow(false);
 				}
@@ -784,13 +784,13 @@ class CqMob extends CqActor, implements Mob {
 		while(directions.length>0)
 			directions.pop();
 			
-		if (!CqRegistery.level.isBlockingMovement(Std.int(tilePos.x + 1), Std.int(tilePos.y)))
+		if (!Registery.level.isBlockingMovement(Std.int(tilePos.x + 1), Std.int(tilePos.y)))
 			directions.push(CqMob.right);
-		if (!CqRegistery.level.isBlockingMovement(Std.int(tilePos.x - 1), Std.int(tilePos.y)))
+		if (!Registery.level.isBlockingMovement(Std.int(tilePos.x - 1), Std.int(tilePos.y)))
 			directions.push(CqMob.left);
-		if (!CqRegistery.level.isBlockingMovement(Std.int(tilePos.x), Std.int(tilePos.y+1)))
+		if (!Registery.level.isBlockingMovement(Std.int(tilePos.x), Std.int(tilePos.y+1)))
 			directions.push(CqMob.down);
-		if (!CqRegistery.level.isBlockingMovement(Std.int(tilePos.x), Std.int(tilePos.y-1)))
+		if (!Registery.level.isBlockingMovement(Std.int(tilePos.x), Std.int(tilePos.y-1)))
 			directions.push(CqMob.up);
 			
 		var direction = HxlUtil.getRandomElement(directions);
@@ -804,13 +804,13 @@ class CqMob extends CqActor, implements Mob {
 	}
 	
 	static function isBlocking(p:HxlPoint):Bool {
-		if ( p.x < 0 || p.y < 0 || p.x >= CqRegistery.level.widthInTiles || p.y >= CqRegistery.level.heightInTiles ) return true;
-		return CqRegistery.level.getTile(Math.round(p.x), Math.round(p.y)).isBlockingView();
+		if ( p.x < 0 || p.y < 0 || p.x >= Registery.level.widthInTiles || p.y >= Registery.level.heightInTiles ) return true;
+		return Registery.level.getTile(Math.round(p.x), Math.round(p.y)).isBlockingView();
 	}
 	
 	static var direction:HxlPoint;
 	function actAware(state:HxlState):Bool {
-		var line = HxlUtil.getLine(tilePos, CqRegistery.player.tilePos, isBlocking);
+		var line = HxlUtil.getLine(tilePos, Registery.player.tilePos, isBlocking);
 		var dest = line[1];
 		
 		if (dest == null)
@@ -830,7 +830,7 @@ class CqMob extends CqActor, implements Mob {
 			if (spell != null && Math.random() < 0.25) {
 				// Use my spell rather than attack
 				if(spell.targetsOther)
-					use(spell, cast(CqRegistery.player,CqActor));
+					use(spell, cast(Registery.player,CqActor));
 				else
 					use(spell, this);
 				
@@ -863,7 +863,7 @@ class CqMob extends CqActor, implements Mob {
 	
 	function updateAwarness() {
 		
-		if ( HxlUtil.isInLineOfSight(tilePos, CqRegistery.player.tilePos,isBlocking,CqRegistery.player.visionRadius) )
+		if ( HxlUtil.isInLineOfSight(tilePos, Registery.player.tilePos,isBlocking,Registery.player.visionRadius) )
 			aware = 5;
 		else
 			if (aware > 0)
@@ -873,7 +873,7 @@ class CqMob extends CqActor, implements Mob {
 	public function act(state:HxlState):Bool {
 		updateAwarness();
 		
-		var invisible = cast(CqRegistery.player, CqPlayer).specialEffects.get("invisible");
+		var invisible = cast(Registery.player, CqPlayer).specialEffects.get("invisible");
 		
 		if (aware>0 && invisible==null)
 			return actAware(state);

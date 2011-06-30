@@ -7,7 +7,7 @@ import flash.geom.Rectangle;
 import flash.events.KeyboardEvent;
 
 import haxel.HxlObject;
-import cq.CqRegistery;
+import data.Registery;
 
 class HxlState extends Sprite {
 

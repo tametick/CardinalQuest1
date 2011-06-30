@@ -1,5 +1,6 @@
 package cq.states;
 
+import cq.CqRegistery;
 import haxel.HxlPoint;
 import haxel.HxlSound;
 import haxel.HxlState;
@@ -11,16 +12,17 @@ import playtomic.Playtomic;
 import playtomic.PtPlayer;
 
 import data.Configuration;
+import data.Registery;
 
 
 import world.World;
+import world.Player;
 
 import cq.CqActor;
 import cq.CqWorld;
 import cq.CqItem;
 import cq.CqSpell;
 import cq.CqResources;
-import cq.CqRegistery;
 
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
@@ -54,8 +56,8 @@ class GameState extends HxlState {
 	}
 	
 	function passTurn() {
-		var player = cast(CqRegistery.player, CqPlayer);
-		var level = cast(CqRegistery.level, CqLevel);
+		var player = CqRegistery.player;
+		var level = cast(Registery.level, CqLevel);
 		
 		level.updateFieldOfView();
 		player.actionPoints = 0;
@@ -69,8 +71,8 @@ class GameState extends HxlState {
 	override function init() {
 		initRegistry();
 		Playtomic.play();
-		var world = cast(CqRegistery.world,CqWorld);
-		var player = cast(CqRegistery.player,CqPlayer);
+		var world = CqRegistery.world;
+		var player = CqRegistery.player;
 		
 		add(world.currentLevel);
 		
@@ -126,8 +128,8 @@ class GameState extends HxlState {
 	
 	public function initRegistry(){
 		// populating the registry
-		CqRegistery.world = new CqWorld();
-		CqRegistery.player = new CqPlayer(chosenClass);
+		Registery.world = new CqWorld();
+		Registery.player = new CqPlayer(chosenClass);
 	}
 	
 	override function onKeyDown(event:KeyboardEvent) {		
@@ -161,12 +163,12 @@ class GameState extends HxlState {
 			return;
 		}
 		
-		var level = CqRegistery.level;
-		if (CqRegistery.player.isMoving)
+		var level = Registery.level;
+		if (Registery.player.isMoving)
 			return;
 		
-		var dx = HxlGraphics.mouse.x - (CqRegistery.player.x+Configuration.zoomedTileSize()/2);
-		var dy = HxlGraphics.mouse.y - (CqRegistery.player.y+Configuration.zoomedTileSize()/2);
+		var dx = HxlGraphics.mouse.x - (Registery.player.x+Configuration.zoomedTileSize()/2);
+		var dy = HxlGraphics.mouse.y - (Registery.player.y+Configuration.zoomedTileSize()/2);
 		var target:HxlPoint = level.getTargetAccordingToMousePosition(dx, dy);
 		var tile = getPlayerTile(target);
 		
@@ -182,20 +184,20 @@ class GameState extends HxlState {
 			 if (tile.loots.length > 0) {
 				 // pickup item
 				var item = cast(tile.loots[tile.loots.length - 1], CqItem);
-				cast(CqRegistery.player, CqPlayer).pickup(this, item);
+				CqRegistery.player.pickup(this, item);
 			} else if (HxlUtil.contains(SpriteTiles.instance.stairsDown.iterator(), tile.dataNum)) {
 				// descend
-				CqRegistery.world.goToNextLevel(this);
+				Registery.world.goToNextLevel(this);
 			}
 			//clicking on ones-self should only do one turn
 			isPlayerActing = false;
 			// wait
 		} else if ( !isBlockingMovement(target) ) {
 			// move or attack in chosen tile
-			CqRegistery.player.actInDirection(this, target);
+			Registery.player.actInDirection(this, target);
 			
 			// if player just attacked don't continue moving
-			if (cast(CqRegistery.player, CqPlayer).justAttacked)
+			if (CqRegistery.player.justAttacked)
 				isPlayerActing = false;
 				
 		} else if(HxlUtil.contains(SpriteTiles.instance.doors.iterator(),tile.dataNum)){
@@ -223,17 +225,17 @@ class GameState extends HxlState {
 	
 	
 	private function isBlockingMovement(target:HxlPoint):Bool{
-		return CqRegistery.level.isBlockingMovement(Std.int(CqRegistery.player.tilePos.x + target.x), Std.int(CqRegistery.player.tilePos.y + target.y));
+		return Registery.level.isBlockingMovement(Std.int(Registery.player.tilePos.x + target.x), Std.int(Registery.player.tilePos.y + target.y));
 	}
 	
 	
 	function getPlayerTile(target:HxlPoint):CqTile {
-		return cast(CqRegistery.level.getTile(Std.int(CqRegistery.player.tilePos.x + target.x), Std.int(CqRegistery.player.tilePos.y + target.y)), CqTile);
+		return cast(Registery.level.getTile(Std.int(Registery.player.tilePos.x + target.x), Std.int(Registery.player.tilePos.y + target.y)), CqTile);
 	}
 	
 	
 	function openDoor(tile:CqTile) {
-		var col = cast(CqRegistery.level, CqLevel).getColor();
-		CqRegistery.level.updateTileGraphic(tile.mapX, tile.mapY, SpriteTiles.instance.getSpriteIndex(col+"_door_open"));
+		var col = cast(Registery.level, CqLevel).getColor();
+		Registery.level.updateTileGraphic(tile.mapX, tile.mapY, SpriteTiles.instance.getSpriteIndex(col+"_door_open"));
 	}
 }

@@ -1,12 +1,12 @@
-package cq;
+package data;
 
 import world.World;
 import world.Level;
-import world.Actor;
+import world.Player;
 
-class CqRegistery {
+class Registery {
 	public static var world:World;
-	public static var player:Actor;
+	public static var player:Player;
 	public static var level(getLevel, null):Level;
 	
 	static function getLevel():Level {

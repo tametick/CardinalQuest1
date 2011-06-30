@@ -3,11 +3,10 @@ package cq;
 import cq.CqItem;
 import cq.CqResources;
 import cq.CqSpell;
-import cq.CqRegistery;
 
 import data.Configuration;
 import data.Resources;
-
+import data.Registery;
 
 import haxel.HxlDialog;
 import haxel.HxlGraphics;

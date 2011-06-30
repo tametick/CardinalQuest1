@@ -6,6 +6,7 @@ import haxel.GraphicCache;
 
 import data.Configuration;
 import data.Resources;
+import data.Registery;
 
 import haxel.HxlSprite;
 import haxel.HxlState;
@@ -15,7 +16,6 @@ import haxel.HxlUtil;
 import world.Loot;
 import world.GameObject;
 
-import cq.CqRegistery;
 import cq.CqConfiguration;
 import cq.CqResources;
 import cq.CqWorld;
@@ -432,16 +432,16 @@ class CqChest extends CqItem {
 		
 		if (Math.random() < 0.1)
 			// 10% chance of magical item
-			CqLootFactory.enchantItem(item, CqRegistery.level.index);
+			CqLootFactory.enchantItem(item, Registery.level.index);
 		else if (Math.random() < 0.01)
 			// another 1% chance of out-of-depth magical item
-			CqLootFactory.enchantItem(item, CqRegistery.level.index+1);
+			CqLootFactory.enchantItem(item, Registery.level.index+1);
 		
 		// add item to level
-		CqRegistery.level.addLootToLevel(state, item);
+		Registery.level.addLootToLevel(state, item);
 		
 		// remove chest
-		CqRegistery.level.removeLootFromLevel(state, this);
+		Registery.level.removeLootFromLevel(state, this);
 	}
 }
 

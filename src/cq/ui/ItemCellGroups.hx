@@ -45,7 +45,7 @@ class ItemCellGroups
 		db_names.splice(i, 1);
 		db.splice(i, 1);
 	}
-	public function cellThatContainsItem(group:String,item:CqItem):CqInventoryCell 
+	public function containsItem(group:String,item:CqItem):Bool 
 	{
 		if (has(group))
 		{
@@ -54,25 +54,11 @@ class ItemCellGroups
 			{
 				var cellOB:CqInventoryItem = items[i].getCellObj();
 				if (cellOB != null)
-					if (cellOB.item == item) return items[i];
+					if (cellOB.item == item) return true;
 			}
-			return null;
+			return false;
 		}else {
-			return null;
+			return false;
 		}
-	}
-	public function AnyGroupCellThatContainsItem(item:CqItem):CqInventoryCell 
-	{
-		for (j in 0...db.length)
-		{
-			var items:Array<CqInventoryCell> = db[j];
-			for ( i in 0...items.length)
-			{
-				var cellOB:CqInventoryItem = items[i].getCellObj();
-				if (cellOB != null && cellOB.item == item)
-					return items[i];
-			}
-		}
-		return null;
 	}
 }

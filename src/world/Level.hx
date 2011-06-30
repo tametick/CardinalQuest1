@@ -10,7 +10,7 @@ import haxel.HxlGraphics;
 import haxel.HxlUtil;
 import haxel.HxlSprite;
 
-import cq.CqRegistery;
+import data.Registery;
 
 import playtomic.PtLevel;
 
@@ -58,7 +58,7 @@ class Level extends HxlTilemap
 		addAllLoots(state);
 		ptLevel.start();
 		//follow();
-		HxlGraphics.follow(CqRegistery.player, 10);
+		HxlGraphics.follow(Registery.player, 10);
 	}
 	
 	public override function onRemove(state:HxlState) {
@@ -91,7 +91,7 @@ class Level extends HxlTilemap
 	}
 	
 	function addAllActors(state:HxlState) {
-		var player = CqRegistery.player;
+		var player = Registery.player;
 		player.setTilePos(Std.int(startingLocation.x),Std.int(startingLocation.y));
 		player.x = getPixelPositionOfTile(player.tilePos.x, player.tilePos.y).x;
 		player.y = getPixelPositionOfTile(player.tilePos.x, player.tilePos.y).y;
@@ -121,7 +121,7 @@ class Level extends HxlTilemap
 	}
 	
 	public function removeAllActors(state:HxlState) {
-		state.remove(CqRegistery.player);
+		state.remove(Registery.player);
 			
 		for (mob in mobs) {
 			state.remove(mob);
@@ -181,7 +181,7 @@ class Level extends HxlTilemap
 	
 	var dest:HxlPoint;
 	public function updateFieldOfView(?skipTween:Bool = false, ?gradientColoring:Bool = true, ?seenTween:Int = 64, ?inSightTween:Int=255) {
-		var player = CqRegistery.player;
+		var player = Registery.player;
 		
 		var bottom = Std.int(Math.min(heightInTiles - 1, player.tilePos.y + (player.visionRadius+1)));
 		var top = Std.int(Math.max(0, player.tilePos.y - (player.visionRadius+1)));
@@ -276,7 +276,7 @@ class Level extends HxlTilemap
 	
 	var targetTile:HxlPoint;
 	public function getTargetAccordingToKeyPress():HxlPoint {
-		var player = CqRegistery.player;
+		var player = Registery.player;
 		
 		if (targetTile == null)
 			targetTile = new HxlPoint(0, 0);
