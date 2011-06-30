@@ -70,7 +70,8 @@ class CqLootFactory {
 		initDescriptions();
 
 		var item = new CqItem(X, Y, type);
-
+		
+		
 		switch(type) {
 			case WINGED_SANDLES, BOOTS:
 				item.equipSlot = CqEquipSlot.SHOES;
@@ -80,7 +81,7 @@ class CqLootFactory {
 				item.equipSlot = CqEquipSlot.JEWELRY;
 			case CAP, HELM:
 				item.equipSlot = CqEquipSlot.HAT;
-			case GLOVE, BRACLET:
+			case GLOVE, BRACELET:
 				item.equipSlot = CqEquipSlot.GLOVES;
 			case STAFF, DAGGER, SHORT_SWORD, LONG_SWORD:
 				item.equipSlot = CqEquipSlot.WEAPON;
@@ -152,7 +153,7 @@ class CqLootFactory {
 			case GLOVE:
 				item.name ="Gloves of Dexterity";
 				item.buffs.set("attack", 1);
-			case BRACLET:
+			case BRACELET:
 				item.name ="Achilles' Bracer";
 				item.buffs.set("attack", 2);
 			
@@ -300,6 +301,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 		isGlowing = false;
 		
 		glowSpriteKey = CqGraphicKey.ItemGlow(typeName);
+		//TODO: move to game ui, to be with the rest of graphic cache creation
 		glowRect = new Rectangle(0, 0, 48, 48);
 		if ( GraphicCache.checkBitmapCache(glowSpriteKey) ) {
 			glowSprite = GraphicCache.getBitmap(glowSpriteKey);
@@ -452,7 +454,7 @@ enum CqItemType {
 	GLOVE;
 	CAP;
 	RING;
-	BRACLET;
+	BRACELET;
 	WINGED_SANDLES;
 	STAFF;
 	DAGGER;
