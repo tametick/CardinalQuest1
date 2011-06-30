@@ -258,16 +258,9 @@ class CqInventoryGrid extends HxlDialog {
 
 		if ( !CreateCells ) return;
 		
-		var glowKey:CqGraphicKey = CqGraphicKey.CellGlow;
-		var cellBgKey:CqGraphicKey = CqGraphicKey.InventoryCellBG;
-		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.DropCellBGHighlight;
-		
-		var dropCellBgKey:CqGraphicKey = CqGraphicKey.DropCellBG;
-		var dropCellBgHighlightKey:CqGraphicKey = CqGraphicKey.DropCellBGHighlight;
-
-		var paddingX:Float = 12.3;
-		var paddingY:Float = 8;
-		var cellSize:Int = 54;
+		var paddingX:Float = -2;
+		var paddingY:Float = -2;
+		var cellSize:Int = 64;
 		var offsetX:Int = 0;
 
 		var rows:Int = 2;
@@ -275,16 +268,18 @@ class CqInventoryGrid extends HxlDialog {
 		for ( row in 0...rows ) {
 			for ( col in 0...cols ) {
 				var idx:Int = cells.length;
-				var cell:CqInventoryCell = new CqInventoryCell( offsetX + ((col) * paddingX) + (col * cellSize), ((row) * paddingY) + (row * cellSize), cellSize, cellSize, idx);
-				cell.setGraphicKeys(cellBgKey, cellBgHighlightKey,glowKey);
+				var _x:Float = offsetX + ((col) * paddingX) + (col * cellSize);
+				var _y:Float = ((row) * paddingY) + (row * cellSize);
+				var cell:CqInventoryCell = new CqInventoryCell( _x+5, _y+5, cellSize, cellSize, idx);
+				
+				cell.setGraphicKeys(CqGraphicKey.buttonSprite, CqGraphicKey.EqCellBGHighlight, CqGraphicKey.CellGlow);
 				add(cell);
 				cells.push(cell);
 			}
 		}
 		var dropCell = cells[cells.length - 1];
 		dropCell.dropCell = true;
-		dropCell.setGraphicKeys(dropCellBgKey, dropCellBgHighlightKey,glowKey);
-		
+		dropCell.setGraphicKeys(CqGraphicKey.buttonSprite,CqGraphicKey.DropCellBGHighlight,CqGraphicKey.CellGlow);
 	}
 
 	public function getOpenCellIndex():Int {
@@ -351,12 +346,9 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		for (idx in 0...icons_names.length)
 		{
 			cell = new CqEquipmentCell(icons_slots[idx], icons_positions[idx][0],icons_positions[idx][1], cellSize, cellSize, idx);
-			cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
-			var btn = new ButtonSprite();
-			var icon = SpriteEquipmentIcons.getIcon(icons_names[idx],16,2.0);
+			cell.setGraphicKeys(CqGraphicKey.buttonSprite, cellBgHighlightKey, cellGlowKey);
+			var icon = SpriteEquipmentIcons.getIcon(icons_names[idx],icons_size,2.0);
 			icon.setAlpha(0.3);
-			btn.draw(icon, icons_x, icons_y);
-			cell.setBackgroundSprite(btn);
 			add(cell);
 			cells.push(cell);
 		}
@@ -539,7 +531,7 @@ class CqInventoryCell extends HxlDialog {
 	public function setGraphicKeys(Normal:CqGraphicKey, ?Highlight:CqGraphicKey = null, ?Glow:CqGraphicKey = null) {
 		if ( bgHighlight == null ) {
 			bgHighlight = new HxlSprite(0, 0);
-			bgHighlight.zIndex = -2;
+			bgHighlight.zIndex = 1;
 			add(bgHighlight);
 			bgHighlight.visible = false;
 		}
@@ -565,20 +557,21 @@ class CqInventoryCell extends HxlDialog {
 		origin.x = Std.int(background.width / 2);
 		origin.y = Std.int(background.height / 2);
 		
-		if ( dropCell ) {
-			
-			var icon = SpriteEquipmentIcons.getIcon("destory",16,2.0);
-			add(icon);
-			icon.x += 12;
-			icon.y += 6;
-			
-			var droptext:HxlText = new HxlText(0, 32, Std.int(width), "Destory");
-			droptext.setFormat(null, 18, 0xffffff, "center", 0x010101);
-			droptext.zIndex = -1;
-			add(droptext);
-		}
+		if ( dropCell )
+			initDropCell();
 	}
-
+	function initDropCell()
+	{
+		var icon = SpriteEquipmentIcons.getIcon("destory",16,2.0);
+		add(icon);
+		icon.x += 12;
+		icon.y += 6;
+			
+		var droptext:HxlText = new HxlText(0, 32, Std.int(width), "Destory");
+		droptext.setFormat(null, 18, 0xffffff, "center", 0x010101);
+		droptext.zIndex = 10;
+		add(droptext);
+	}
 	public override function update() {
 		super.update();
 		if ( isHighlighted ) {
@@ -605,6 +598,7 @@ class CqInventoryCell extends HxlDialog {
 
 	function setHighlighted(Toggle:Bool) {
 		isHighlighted = Toggle;
+		setGlow(Toggle);
 		if ( isHighlighted ) {
 			background.visible = false;
 			bgHighlight.visible = true;
