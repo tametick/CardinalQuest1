@@ -192,7 +192,7 @@ class CqActor extends CqObject, implements Actor {
 	}
 
 	function injureActor(other:CqActor, dmgTotal:Int) {
-		if (this == cast(Registery.player,CqPlayer)) {
+		if (this == CqRegistery.player) {
 			HxlLog.append("You hit");
 			PtPlayer.hits();
 		} else {
@@ -397,7 +397,7 @@ class CqActor extends CqObject, implements Actor {
 				if (buff == "life") {
 					healthBar.updateValue();
 					if (Std.is(this, CqPlayer)) {
-						var player = cast(this, CqPlayer);
+						var player = CqRegistery.player;
 						player.infoViewHealthBar.updateValue();
 					}
 				}
@@ -420,7 +420,7 @@ class CqActor extends CqObject, implements Actor {
 						this.hp = 1;
 					healthBar.updateValue();
 					if (Std.is(this, CqPlayer)) {
-						var player = cast(this, CqPlayer);
+						var player = CqRegistery.player;
 						player.infoViewHealthBar.updateValue();
 					}
 				}
@@ -507,7 +507,7 @@ class CqActor extends CqObject, implements Actor {
 					hp = maxHp;
 					healthBar.updateValue();
 					if (Std.is(this, CqPlayer)) {
-						var player = cast(this, CqPlayer);
+						var player = CqRegistery.player;
 						player.infoViewHealthBar.updateValue();
 					}
 					GameUI.showEffectText(this, "Healed", 0x0000ff);
@@ -516,7 +516,7 @@ class CqActor extends CqObject, implements Actor {
 					other.hp = other.maxHp;
 					other.healthBar.updateValue();
 					if (Std.is(other, CqPlayer)) {
-						var player = cast(other, CqPlayer);
+						var player = CqRegistery.player;
 						player.infoViewHealthBar.updateValue();
 					}
 					GameUI.showEffectText(other, "Healed", 0x0000ff);
@@ -686,6 +686,7 @@ class CqPlayer extends CqActor, implements Player {
 
 	public function gainExperience(other:CqMob) {
 		HxlLog.append("gained " + other.xpValue + " xp");
+		//move this??
 		cast(this, CqPlayer).xp += other.xpValue;
 		
 		if (xp >= nextLevel())
@@ -873,7 +874,7 @@ class CqMob extends CqActor, implements Mob {
 	public function act(state:HxlState):Bool {
 		updateAwarness();
 		
-		var invisible = cast(Registery.player, CqPlayer).specialEffects.get("invisible");
+		var invisible = CqRegistery.player.specialEffects.get("invisible");
 		
 		if (aware>0 && invisible==null)
 			return actAware(state);

@@ -964,7 +964,7 @@ class CqInventoryItem extends HxlSprite {
 					_dlg.dlgSpellGrid.clearCharge(cellIndex);
 					_dlg.dlgSpellGrid.setCellObj(cellIndex, null);
 
-					//GameUI.instance.updateCharge(spellBtn, cast(Registery.player,CqPlayer).spiritPoints);
+					//GameUI.instance.updateCharge(spellBtn, CqRegistery.player.spiritPoints);
 				} else if ( cellPotion ) {
 					// Clearing out a potion cell
 					_dlg.dlgPotionGrid.setCellObj(cellIndex, null);
@@ -1010,7 +1010,7 @@ class CqInventoryItem extends HxlSprite {
 						_dlg.dlgPotionGrid.onItemDragStop();
 						_dlg.dlgInfo.clearInfo();
 						
-						//_dlg.gameui.checkTileItems(cast(Registery.player, CqActor));
+						//_dlg.gameui.checkTileItems(CqRegistery.player);
 						
 						return;
 					} else {
