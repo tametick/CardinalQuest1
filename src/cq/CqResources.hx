@@ -4,7 +4,8 @@ import flash.display.Bitmap;
 import flash.text.Font;
 import flash.media.Sound;
 import haxel.HxlSprite;
-
+import haxel.HxlUtil;
+import cq.CqActor;
 import data.Resources;
 import haxel.HxlSpriteSheet;
 
@@ -53,14 +54,15 @@ class HeartSprite extends HxlSprite {
 class SpritePortrait extends HxlSpriteSheet { 
 	public static var instance = new SpritePortrait();
 	public function new() {
-		spriteNames = [
-			["thief", "fighter", "wizard"]
-		];
+		spriteNames = [HxlUtil.enumToStringArray(
+		
+			[CqClass.THIEF, CqClass.FIGHTER, CqClass.WIZARD]
+		)];
 		super(0);
 	} 
 	
-	public static function getIcon(IconName:String, Size:Int, Zoom:Float):HxlSprite {
-		return HxlSpriteSheet.getSprite(SpritePortrait, instance.getSpriteIndex(IconName), Size, Zoom);
+	public static function getIcon(IconName:CqClass, Size:Int, Zoom:Float):HxlSprite {
+		return HxlSpriteSheet.getSprite(SpritePortrait, instance.getSpriteIndex(HxlUtil.enumToString(IconName)), Size, Zoom);
 	}
 }
 class SpriteEquipmentIcons extends HxlSpriteSheet { 
@@ -101,9 +103,9 @@ class SpriteItems extends HxlSpriteSheet {
 	public var potions:Array<String>;
 	public function new() {
 		potions = ["purple_potion", "green_potion", "blue_potion", "yellow_potion", "red_potion"];
-		
+		//potions = HxlUtil.enumToStringArray([CqItemType.PURPLE_POTION, CqItemType.GREEN_POTION, CqItemType.BLUE_POTION, CqItemType.YELLOW_POTION, CqItemType.RED_POTION]);
 		spriteNames = [
-			["amulet","boots","leather_armor","brestplate","chest","glove","cap","ring","braclet","winged_sandles"],
+			["amulet","boots","leather_armor","brestplate","chest","glove","cap","ring","bracelet","winged_sandles"],
 			["staff", "dagger", "short_sword", "long_sword"].concat(potions).concat(["helm"]),
 			["axe", "battle_axe", "claymore", "golden_helm", "mace", "broad_sword", "full_helm", "full_plate_mail", "cloak", "gauntlet"],
 			["gemmed_amulet","gemmed_ring","tundra_boots"]
