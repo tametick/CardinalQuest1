@@ -396,6 +396,24 @@ class HxlUtil {
 		}
 		return rslt;
 	}
+	public static function enumToStringArray( arr : Array<Dynamic> ) : Array<String> {
+		if (arr == null)
+		{
+			throw "cant parse null enum";
+			return null;
+		}
+		var rslt:Array<String> = [];
+		for (i in 0...arr.length) {
+			var enm:Dynamic = arr[i];
+			var name:String = Type.getEnumName(Type.getEnum(enm)) + Type.enumConstructor(enm);
+			var params:Array<Dynamic> = Type.enumParameters( enm );
+			for ( p in  params) {
+				name += Std.string( p );
+			}
+			name = name.toLowerCase();
+		}
+		return rslt;
+	}
 	public static function sumHashInt(hash:Hash<Int>):Int
 	{
 		var itr:Iterator<Int> = hash.iterator();

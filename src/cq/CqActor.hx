@@ -964,11 +964,11 @@ class CqMobFactory {
 				mob.defense = 2;
 				mob.speed = 3;
 				mob.spirit = 3;
-				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(1, 2);
+				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(2, 3);
 				mob.damage = new Range(1, 1);
 				mob.xpValue = 5;
 			case KOBOLD_SPEAR, KOBOLD_KNIVES, KOBOLD_MAGE:
-				mob.attack = 3;
+				mob.attack = 4;
 				mob.defense = 3;
 				mob.speed = 3;
 				mob.spirit = 3;
