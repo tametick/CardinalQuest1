@@ -147,7 +147,8 @@ class CreateCharState extends CqState {
 	}
 
 	public override function update() {
-		super.update();	
+		super.update();
+		setDiagonalCursor();
 	}
 
 	override function onKeyUp(event:KeyboardEvent) { 

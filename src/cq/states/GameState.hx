@@ -45,38 +45,49 @@ class GameState extends CqState {
 	
 	public override function update() {
 		super.update();
+		var diagonal = SpriteCursor.instance.getSpriteIndex("diagonal");
+		var up = SpriteCursor.instance.getSpriteIndex("up");
 		
 		if ( initialized < 1 ) 
 			return;
 			
 		if ( GameUI.isTargeting ) {
 			gameUI.updateTargeting();
-			cursor.setFrame(SpriteCursor.instance.getSpriteIndex("diagonal"));
-			// todo - set back to "up"
-		} else if (isPlayerActing) {
-			if (GameUI.currentPanel == null || !GameUI.currentPanel.isBlockingInput ) {
-				act();
+			cursor.angle = 0;
+			if(cursor.getFrame()!=diagonal)
+				cursor.setFrame(diagonal);
+		} else {
+			if (isPlayerActing) {
+				if (GameUI.currentPanel == null || !GameUI.currentPanel.isBlockingInput ) {
+					act();
+				}
 			}
 		}
 		
 		var dx = HxlGraphics.mouse.x - (Registery.player.x+Configuration.zoomedTileSize()/2);
 		var dy = HxlGraphics.mouse.y - (Registery.player.y+Configuration.zoomedTileSize()/2);
 		var target:HxlPoint = Registery.level.getTargetAccordingToMousePosition(dx, dy);
-		if(target.x==0 && target.y==1){
-			if (cursor.angle != 180)
-				cursor.angle = 180;
+		if (Math.abs(dx) < Configuration.zoomedTileSize() && Math.abs(dy) < Configuration.zoomedTileSize() ) {
+			cursor.angle = 0;
+			if(cursor.getFrame()!=diagonal)
+				cursor.setFrame(diagonal);
+		} else {
+			if(cursor.getFrame()!=up)
+				cursor.setFrame(up);
 			
-		} else if(target.x==0 && target.y==-1){
-			if (cursor.angle != 0)
-				cursor.angle = 0;
-			
-		} else if(target.x==1 && target.y==0){
-			if (cursor.angle != 90)
-				cursor.angle = 90;
-			
-		} else if(target.x==-1 && target.y==0){
-			if (cursor.angle != 270)
-				cursor.angle = 270;
+			if(target.x==0 && target.y==1){
+				if (cursor.angle != 180)
+					cursor.angle = 180;
+			} else if(target.x==0 && target.y==-1){
+				if (cursor.angle != 0)
+					cursor.angle = 0;
+			} else if(target.x==1 && target.y==0){
+				if (cursor.angle != 90)
+					cursor.angle = 90;
+			} else if(target.x==-1 && target.y==0){
+				if (cursor.angle != 270)
+					cursor.angle = 270;
+			}
 		}
 	}
 	
@@ -160,8 +171,8 @@ class GameState extends CqState {
 		Registery.player = new CqPlayer(chosenClass);
 	}
 	
-	override function onKeyDown(event:KeyboardEvent) {		
-		if ( HxlGraphics.keys.ESCAPE ) {
+	override function onKeyUp(event:KeyboardEvent) {		
+		if ( HxlGraphics.keys.justReleased("ESCAPE") ) {
 			// If user was in targeting mode, cancel it
 			if ( GameUI.isTargeting ) 
 				GameUI.setTargeting(false);
@@ -198,7 +209,7 @@ class GameState extends CqState {
 		var target:HxlPoint = level.getTargetAccordingToMousePosition(dx, dy);
 		var tile = getPlayerTile(target);
 		
-		if (Math.abs(dx) < Configuration.zoomedTileSize() / 2 && Math.abs(dy) < Configuration.zoomedTileSize() / 2) {
+		if (Math.abs(dx) < Configuration.zoomedTileSize() && Math.abs(dy) < Configuration.zoomedTileSize() ) {
 			if (tmpPoint == null)
 				tmpPoint = new HxlPoint(0, 0);
 			else {

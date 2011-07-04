@@ -71,7 +71,8 @@ class MainMenuState extends CqState {
 	}
 
 	public override function update() {
-		super.update();			
+		super.update();
+		setDiagonalCursor();
 	}
 
 	function changeState(TargetState:Class<HxlState>) {

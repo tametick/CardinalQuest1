@@ -35,6 +35,7 @@ class GameOverState extends CqState {
 
 	public override function update() {
 		super.update();	
+		setDiagonalCursor();
 		
 		if ( stateNum == 0 && fadeTimer.delta() >= fadeTime ) {
 			fadeTimer.reset();

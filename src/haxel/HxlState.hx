@@ -123,7 +123,7 @@ class HxlState extends Sprite {
 			initialized = 1;
 //			loadingBox.visible = false;
 		} else {
-			
+
 		}
 	}
 

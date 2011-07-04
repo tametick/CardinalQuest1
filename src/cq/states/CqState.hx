@@ -11,4 +11,12 @@ class CqState extends HxlState {
 		
 		super.create();
 	}
+	
+	function setDiagonalCursor() {
+		cursor.angle = 0;
+		var diagonal = SpriteCursor.instance.getSpriteIndex("diagonal");
+		if(cursor.getFrame()!=diagonal) {
+			cursor.setFrame(diagonal);
+		}
+	}
 }
