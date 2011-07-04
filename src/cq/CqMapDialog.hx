@@ -73,8 +73,9 @@ class CqMapDialog extends HxlSlidingDialog {
 		var mapH:Int = Registery.level.heightInTiles;
 		var graph = mapShape.graphics;
 		var Color:Int;
-		var SightColor:Int = 0x339933;
-		var SeenColor:Int = 0x116611;
+		var Alpha = 0.5;
+		var SightColor:Int = 0x222222;
+		var SeenColor:Int = 0x111111;
 		var WallSightColor:Int = 0x333399;
 		var WallSeenColor:Int = 0x111166;
 		var StairsColor:Int = 0xffffff;
@@ -104,7 +105,7 @@ class CqMapDialog extends HxlSlidingDialog {
 					}
 				}
 				if ( Color != -1 ) {
-					graph.beginFill(Color);
+					graph.beginFill(Color,Alpha);
 					graph.drawRect( (X * cellSize.x), (Y * cellSize.y), cellSize.x, cellSize.y );
 					graph.endFill();
 					if ( HxlUtil.contains(SpriteTiles.instance.stairsDown.iterator(), tiles[Y][X].dataNum) ) {
@@ -112,7 +113,7 @@ class CqMapDialog extends HxlSlidingDialog {
 						var dx:Float = X * cellSize.x + 2;
 						var dy:Float = Y * cellSize.y + 2;
 						graph.moveTo(dx, dy);
-						graph.beginFill(StairsColor);
+						graph.beginFill(StairsColor,Alpha);
 						graph.lineTo(dx + (cellSize.x - 4), dy);
 						graph.lineTo(dx + ((cellSize.x - 4) / 2), dy + (cellSize.y - 4));
 						graph.lineTo(dx, dy);
@@ -125,13 +126,13 @@ class CqMapDialog extends HxlSlidingDialog {
 								Color = DoorSeenColor;
 							else 
 								Color = DoorSightColor;
-							graph.beginFill(Color);
+							graph.beginFill(Color,Alpha);
 							graph.drawRect( (X * cellSize.x), (Y * cellSize.y), cellSize.x, cellSize.y );
 							graph.endFill();			
 						}
 					} else if ( cast(tiles[Y][X],Tile).loots.length >0)  { 
 						// Draw loot
-						graph.beginFill(lootColor);
+						graph.beginFill(lootColor,Alpha);
 						graph.drawRect( (X * cellSize.x+1), (Y * cellSize.y+1), cellSize.x-2, cellSize.y-2 );
 						graph.endFill();			
 					}
@@ -142,7 +143,7 @@ class CqMapDialog extends HxlSlidingDialog {
 					if ( playerPos.x == X && playerPos.y == Y ) {
 						var dx:Float = (X * cellSize.x) + (cellSize.x / 2);
 						var dy:Float = (Y * cellSize.y) + (cellSize.y / 2);
-						graph.beginFill(playerColor);
+						graph.beginFill(playerColor,Alpha);
 						graph.drawCircle(dx, dy, (cellSize.x / 2) - 1);
 						graph.endFill();
 					} else if ( tiles[Y][X].visibility == Visibility.IN_SIGHT ) {
@@ -153,7 +154,7 @@ class CqMapDialog extends HxlSlidingDialog {
 							if ( other.faction != player.faction ) {
 								var dx:Float = (X * cellSize.x) + (cellSize.x / 2);
 								var dy:Float = (Y * cellSize.y) + (cellSize.y / 2);
-								graph.beginFill(mobColor);
+								graph.beginFill(mobColor,Alpha);
 								graph.drawCircle(dx, dy, (cellSize.x / 2) - 1);
 								graph.endFill();
 							}
