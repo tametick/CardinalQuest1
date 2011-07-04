@@ -5,6 +5,7 @@ import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.events.KeyboardEvent;
+import flash.ui.Mouse;
 
 import haxel.HxlObject;
 import data.Registery;
@@ -32,6 +33,8 @@ class HxlState extends Sprite {
 	var initialized:Int;
 	//var loadingBox:LoadingBox;
 	
+	var cursor:HxlSprite;
+	
 	public function new() {
 
 		super();
@@ -55,6 +58,12 @@ class HxlState extends Sprite {
 
 	public function create() {
 		initialized = -1;
+		
+		if(cursor!=null){
+			Mouse.hide();
+			cursor.zIndex = 100;
+			add(cursor);
+		}
 	}
 	
 	public function add(obj:HxlObjectI):HxlObjectI {
@@ -89,6 +98,12 @@ class HxlState extends Sprite {
 
 	public function update() {
 		defaultGroup.update();
+		
+		if(cursor!=null) {
+			cursor.x = HxlGraphics.mouse.x;
+			cursor.y = HxlGraphics.mouse.y;
+		}
+		
 		if ( initialized == -1 ) {
 //			loadingBox.visible = true;
 			initialized = 0;

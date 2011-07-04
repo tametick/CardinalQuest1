@@ -117,7 +117,7 @@ class HxlSprite extends HxlObject {
 	var dragStopCallback:Dynamic;
 	var dragMoveCallback:Dynamic;
 
-	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:Class<Bitmap>=null) {
+	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:Class<Bitmap>=null,?ScaleX:Float=1.0, ?ScaleY:Float=1.0) {
 		super();
 		x = X;
 		y = Y;
@@ -149,7 +149,7 @@ class HxlSprite extends HxlObject {
 		if (SimpleGraphic == null) {
 			createGraphic(8,8);
 		} else {
-			loadGraphic(SimpleGraphic);
+			loadGraphic(SimpleGraphic, false,false,0,0,false,ScaleX, ScaleY);
 		}
 
 		dragEnabled = false;

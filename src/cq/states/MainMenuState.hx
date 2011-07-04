@@ -12,7 +12,7 @@ import flash.ui.Mouse;
 import flash.ui.MouseCursor;
 
 
-class MainMenuState extends HxlState{
+class MainMenuState extends CqState {
 	var fadeTimer:HxlTimer;
 	var fadeTime:Float;
 	var titleText:HxlText;

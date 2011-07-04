@@ -27,8 +27,7 @@ import cq.CqResources;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 
-
-class GameState extends HxlState {	
+class GameState extends CqState {	
 	var gameUI:GameUI;
 	public var chosenClass:CqClass;
 	var isPlayerActing:Bool;
@@ -37,8 +36,9 @@ class GameState extends HxlState {
 		super.create();
 		
 		chosenClass = FIGHTER;
-
 		HxlGraphics.fade.start(false, 0x00000000, 0.25);
+		
+		cursor.setFrame(SpriteCursor.instance.getSpriteIndex("up"));
 		//loadingBox = new HxlLoadingBox();
 		//add(loadingBox);
 	}
@@ -51,12 +51,33 @@ class GameState extends HxlState {
 			
 		if ( GameUI.isTargeting ) {
 			gameUI.updateTargeting();
+			cursor.setFrame(SpriteCursor.instance.getSpriteIndex("diagonal"));
+			// todo - set back to "up"
 		} else if (isPlayerActing) {
 			if (GameUI.currentPanel == null || !GameUI.currentPanel.isBlockingInput ) {
 				act();
 			}
 		}
 		
+		var dx = HxlGraphics.mouse.x - (Registery.player.x+Configuration.zoomedTileSize()/2);
+		var dy = HxlGraphics.mouse.y - (Registery.player.y+Configuration.zoomedTileSize()/2);
+		var target:HxlPoint = Registery.level.getTargetAccordingToMousePosition(dx, dy);
+		if(target.x==0 && target.y==1){
+			if (cursor.angle != 180)
+				cursor.angle = 180;
+			
+		} else if(target.x==0 && target.y==-1){
+			if (cursor.angle != 0)
+				cursor.angle = 0;
+			
+		} else if(target.x==1 && target.y==0){
+			if (cursor.angle != 90)
+				cursor.angle = 90;
+			
+		} else if(target.x==-1 && target.y==0){
+			if (cursor.angle != 270)
+				cursor.angle = 270;
+		}
 	}
 	
 	function passTurn() {
@@ -95,7 +116,7 @@ class GameState extends HxlState {
 		
 		gameUI.addHealthBar(player);
 		gameUI.addXpBar(player);
-		
+				
 		player.addOnPickup(gameUI.itemPickup);
 		player.addOnInjure(gameUI.doPlayerInjureEffect);
 		player.addOnKill(gameUI.doPlayerInjureEffect);
