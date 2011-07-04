@@ -67,7 +67,7 @@ class GameState extends CqState {
 		var dx = HxlGraphics.mouse.x - (Registery.player.x+Configuration.zoomedTileSize()/2);
 		var dy = HxlGraphics.mouse.y - (Registery.player.y+Configuration.zoomedTileSize()/2);
 		var target:HxlPoint = Registery.level.getTargetAccordingToMousePosition(dx, dy);
-		if (Math.abs(dx) < Configuration.zoomedTileSize() / 2 && Math.abs(dy) < Configuration.zoomedTileSize() / 2) {
+		if (Math.abs(dx) < Configuration.zoomedTileSize() && Math.abs(dy) < Configuration.zoomedTileSize() ) {
 			cursor.angle = 0;
 			if(cursor.getFrame()!=diagonal)
 				cursor.setFrame(diagonal);
@@ -209,7 +209,7 @@ class GameState extends CqState {
 		var target:HxlPoint = level.getTargetAccordingToMousePosition(dx, dy);
 		var tile = getPlayerTile(target);
 		
-		if (Math.abs(dx) < Configuration.zoomedTileSize() / 2 && Math.abs(dy) < Configuration.zoomedTileSize() / 2) {
+		if (Math.abs(dx) < Configuration.zoomedTileSize() && Math.abs(dy) < Configuration.zoomedTileSize() ) {
 			if (tmpPoint == null)
 				tmpPoint = new HxlPoint(0, 0);
 			else {
