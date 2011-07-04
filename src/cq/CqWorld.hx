@@ -146,23 +146,6 @@ class CqLevel extends Level {
 			createAndaddSpell(pos);
 		}
 	}
-	function addTileDecorations(state:HxlState) {
-		var decs:Int = 0;
-		var dec:CqDecoration;
-		var t:Tile;
-		for ( Y in 0...heightInTiles ) {
-			for ( X in 0...widthInTiles ) {
-				if (chance_decoration > Math.random())
-				{
-					t= cast(_tiles[Y][X], CqTile);
-					var pos:HxlPoint = getPixelPositionOfTile(X, Y);
-					dec = new CqDecoration(pos.x, pos.y);
-					t.decorations.push( dec );
-					addObject(state, dec );
-				}
-			}
-		}
-	}
 	function chestsNearby(pos:HxlPoint, ?distance:Int = 5):Int {
 		var chests = 0;
 		
