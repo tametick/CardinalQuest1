@@ -32,10 +32,11 @@ class CqMapDialog extends HxlSlidingDialog {
 		// Size: 472 x 480
 		// map size: 400x400
 		// map pos: 36, 40
-		super(X, Y, Width, Height, Direction);
+		super(X, Y, Width, Height, Direction,false);
 
 		mapDialog = new HxlDialog(36, 40, 400, 400);
-		mapDialog.setBackgroundColor(0x222222, 15.0);
+		mapDialog.setBackgroundColor(0, 15.0);
+		mapDialog.setBackgroundAlpha(0);
 		add(mapDialog);
 		
 		// map draw area size: 380x380
@@ -52,7 +53,7 @@ class CqMapDialog extends HxlSlidingDialog {
 		mapSprite.pixels = mapBitmap.bitmapData;
 
 		init();
-		updateMap();
+		updateDialog();
 	}
 
 	function init() {
@@ -63,15 +64,15 @@ class CqMapDialog extends HxlSlidingDialog {
 
 	public override function show(?ShowCallback:Dynamic=null) {
 		super.show(ShowCallback);
-		updateMap();
+		updateDialog();
 	}
 
-	public function updateMap() {
+	public override function updateDialog() {
 		var tiles = Registery.level.getTiles();
 		var mapW:Int = Registery.level.widthInTiles;
 		var mapH:Int = Registery.level.heightInTiles;
 		var graph = mapShape.graphics;
-		var Color:Int = 0x339933;
+		var Color:Int;
 		var SightColor:Int = 0x339933;
 		var SeenColor:Int = 0x116611;
 		var WallSightColor:Int = 0x333399;

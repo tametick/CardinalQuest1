@@ -43,6 +43,9 @@ class HxlDialog extends HxlGroup
 		return NewObject;
 	}
 
+	public function setBackgroundAlpha(Alpha:Int) {
+		background.setAlpha(Alpha);
+	}
 	public function setBackgroundColor(Color:Int, ?CornerRadius:Float=0.0) {
 		if ( background == null ) {
 			background = new HxlSprite(0, 0);

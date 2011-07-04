@@ -20,8 +20,9 @@ class HxlSlidingDialog extends HxlDialog
 	var hideCallback:Dynamic;
 	var showSound:HxlSound;
 	var hideSound:HxlSound;
-
-	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0)
+	public var isBlockingInput:Bool;
+	
+	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0, ?IsBlockingInput=true)
 	{
 		super(X, Y, Width, Height);
 		
@@ -36,6 +37,7 @@ class HxlSlidingDialog extends HxlDialog
 		hideCallback = null;
 		showSound = null;
 		hideSound = null;
+		isBlockingInput = IsBlockingInput;
 	}
 	
 	private function setHiddenPosition() {
@@ -89,6 +91,11 @@ class HxlSlidingDialog extends HxlDialog
 			.onComplete(shown)
 			.ease(Quad.easeOut);
 		if ( showSound != null ) showSound.play();
+	}
+	
+	/** override this to do special updating before showing the dialog */
+	public function updateDialog() {
+		
 	}
 	
 	public function hide(?HideCallback:Dynamic=null) {

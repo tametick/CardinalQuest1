@@ -121,11 +121,11 @@ class GameUI extends HxlDialog {
 		 * View state panels
 		 **/
 		panelMap = new CqMapDialog(84, 0, 472, 480);
-		panelMap.setBackgroundColor(0xff9A9DBC);
+		// no map bg color (alpha=0)
+		panelMap.setBackgroundColor(0x00000000);
 		panelMap.zIndex = 2;
 		add(panelMap);
 
-		// -62 472x480
 		panelInventory = new CqInventoryDialog(this, 84, 0, 472, 400);
 		panelInventory.setBackgroundColor(0xffBC9A9A);
 		panelInventory.zIndex = 2;

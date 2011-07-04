@@ -45,12 +45,16 @@ class GameState extends HxlState {
 	
 	public override function update() {
 		super.update();
+		
 		if ( initialized < 1 ) 
 			return;
+			
 		if ( GameUI.isTargeting ) {
 			gameUI.updateTargeting();
-		} else if(isPlayerActing){
-			act();
+		} else if (isPlayerActing) {
+			if (GameUI.currentPanel == null || !GameUI.currentPanel.isBlockingInput ) {
+				act();
+			}
 		}
 		
 	}
@@ -60,6 +64,9 @@ class GameState extends HxlState {
 		var level = CqRegistery.level;
 		
 		level.updateFieldOfView();
+		if (Std.is(GameUI.currentPanel,CqMapDialog))
+			GameUI.currentPanel.updateDialog();
+		
 		player.actionPoints = 0;
 
 		while (player.actionPoints < 60) {
@@ -135,7 +142,8 @@ class GameState extends HxlState {
 	override function onKeyDown(event:KeyboardEvent) {		
 		if ( HxlGraphics.keys.ESCAPE ) {
 			// If user was in targeting mode, cancel it
-			if ( GameUI.isTargeting ) GameUI.setTargeting(false);
+			if ( GameUI.isTargeting ) 
+				GameUI.setTargeting(false);
 			HxlGraphics.pushState(new MainMenuState());
 		}
 	}
@@ -156,10 +164,7 @@ class GameState extends HxlState {
 	
 	var tmpPoint:HxlPoint;
 	private function act() {
-		if (GameUI.currentPanel != null)
-			return;
 		if ( GameUI.isTargeting ) {
-			//gameUI.targetingMouseDown();
 			return;
 		}
 		
@@ -212,13 +217,12 @@ class GameState extends HxlState {
 			
 			target = level.getTargetAccordingToMousePosition(dx, dy);
 			tile = getPlayerTile(target);
-			if ( !isBlockingMovement(target) )
+			if ( !isBlockingMovement(target) ) {
 				CqRegistery.player.actInDirection(this,target);
-			else if (HxlUtil.contains(SpriteTiles.instance.doors.iterator(), tile.dataNum))
+			} else if (HxlUtil.contains(SpriteTiles.instance.doors.iterator(), tile.dataNum)){
 				openDoor(tile);
-				
+			}
 		}
-		
 		
 		passTurn();
 	}
@@ -236,6 +240,6 @@ class GameState extends HxlState {
 	
 	function openDoor(tile:CqTile) {
 		var col = CqRegistery.level.getColor();
-		Registery.level.updateTileGraphic(tile.mapX, tile.mapY, SpriteTiles.instance.getSpriteIndex(col+"_door_open"));
+		Registery.level.updateTileGraphic(tile.mapX, tile.mapY, SpriteTiles.instance.getSpriteIndex(col + "_door_open"));
 	}
 }
