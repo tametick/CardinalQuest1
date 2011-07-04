@@ -359,9 +359,12 @@ class GameUI extends HxlDialog {
 
 
 	function showPanel(Panel:HxlSlidingDialog, ?Button:HxlButton=null) {
-		if ( HxlGraphics.mouse.dragSprite != null ) return;
+		if ( HxlGraphics.mouse.dragSprite != null ) 
+			return;
+		
 		// If user was in targeting mode, cancel it
-		if ( GameUI.isTargeting ) GameUI.setTargeting(false);
+		if ( GameUI.isTargeting ) 
+			GameUI.setTargeting(false);
 
 		if ( Button != null ) {
 			btnMainView.setActive(false);
@@ -380,8 +383,9 @@ class GameUI extends HxlDialog {
 				currentPanel = Panel;
 				Panel.show();
 			} else {
-				if ( currentPanel != Panel ) {
-					// A view state other than main is already active.. Hide that one first before showing the selected one
+				if ( currentPanel!=Panel ) {
+					// A view state other than main is already active: 
+					// Hide that one first before showing the selected one
 					currentPanel.hide(function() {
 						GameUI.currentPanel = Panel;
 						GameUI.currentPanel.show();
