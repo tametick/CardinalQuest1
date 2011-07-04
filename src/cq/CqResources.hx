@@ -24,6 +24,7 @@ class MenuTheme extends Sound { public function new() { super(); } }
 class BossTheme extends Sound { public function new() { super(); } }
 class WinTheme extends Sound { public function new() { super(); } }
 
+class SpriteCursor extends Bitmap { public function new() { super(); } }
 class SpriteHeart extends Bitmap { public function new() { super(); } }
 class SpriteStartButton extends Bitmap { public function new() { super(); } }
 class SpriteButtonBg extends Bitmap { public function new() { super(); } }
@@ -32,6 +33,12 @@ class SpriteItemSlot2 extends Bitmap { public function new() { super(); } }
 class SpriteInfo extends Bitmap { public function new() { super(); } }
 class UiBeltHorizontal extends Bitmap { public function new() { super(); } }
 
+class CursorSprite extends HxlSprite {
+	public function new(?X:Float=0, ?Y:Float=0) {
+		super(X,Y);
+		loadGraphic(SpriteCursor, false, false, 16, 16,false,2.0,2.0);
+	}
+}
 class StartButtonSprite extends HxlSprite {
 	public function new(?X:Float=0, ?Y:Float=0) {
 		super(X,Y);

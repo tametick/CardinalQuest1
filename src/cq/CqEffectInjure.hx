@@ -45,19 +45,15 @@ class CqEffectInjure extends HxlEmitter {
 			if (Multiple) {
 				r = Math.floor(HxlUtil.random()*tf);
 				if (BakedRotations > 0) {
-					//s.loadRotatedGraphic(Graphics,BakedRotations,r);
 					s.loadCachedGraphic(CqGraphicKey.InjureEffectParticle);		
 				} else {
-					//s.loadGraphic(Graphics,true);
 					s.loadCachedGraphic(CqGraphicKey.InjureEffectParticle);
 					s.frame = r;
 				}
 			} else {
 				if (BakedRotations > 0) {
-					//s.loadRotatedGraphic(Graphics,BakedRotations);
 					s.loadCachedGraphic(CqGraphicKey.InjureEffectParticle);
 				} else {
-					//s.loadGraphic(Graphics);
 					s.loadCachedGraphic(CqGraphicKey.InjureEffectParticle);
 				}
 			}

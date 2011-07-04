@@ -64,7 +64,8 @@
 	<SymbolClass id="24" class="cq.SpriteButtonBg" />
 	<DefineBitsJPEG id="25" file="../rsrc/cq/Belt_horiz_leather.png" />
 	<SymbolClass id="25" class="cq.UiBeltHorizontal" />
-	
+	<DefineBitsJPEG id="26" file="../rsrc/cq/cursor.png" />
+	<SymbolClass id="26" class="cq.SpriteCursor" />	
 	
 	<DefineABC file="../bin/cq-movie.swf" isBoot="true" />
 
