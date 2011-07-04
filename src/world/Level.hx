@@ -195,7 +195,7 @@ class Level extends HxlTilemap
 		if (Lambda.has( Resources.doors, t.dataNum))
 			return;
 		//return if stair or ladder
-		if (t.dataNum == 1 || t.dataNum == 2)
+		if (Lambda.has( Resources.stairsDown, t.dataNum))
 			return;
 		var floor:Bool = Lambda.has( Resources.walkableAndSeeThroughTiles, t.dataNum);
 		var frame:String = floor?CqDecoration.randomFloor():CqDecoration.randomWall();
