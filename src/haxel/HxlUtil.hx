@@ -383,20 +383,20 @@ class HxlUtil {
 					map[y][x] = replacement;
 	}
 	
-	public static function enumToString( enm : Dynamic ) : String {
+	public static function enumToString( enm : Dynamic, ?addEnumName:Bool = true ) : String {
 		if (enm == null)
 		{
 			throw "cant parse null enum";
 			return "";
 		}
-		var rslt:String = Type.getEnumName(Type.getEnum(enm)) + Type.enumConstructor(enm);
+		var rslt:String = (addEnumName? Type.getEnumName(Type.getEnum(enm)):"") + Type.enumConstructor(enm);
 		var params:Array<Dynamic> = Type.enumParameters( enm );
 		for ( p in  params) {
 			rslt += Std.string( p );
 		}
 		return rslt;
 	}
-	public static function enumToStringArray( arr : Array<Dynamic> ) : Array<String> {
+	public static function enumToStringArray( arr : Array<Dynamic>, ?addEnumName:Bool = true ) : Array<String> {
 		if (arr == null)
 		{
 			throw "cant parse null enum";
@@ -405,7 +405,7 @@ class HxlUtil {
 		var rslt:Array<String> = [];
 		for (i in 0...arr.length) {
 			var enm:Dynamic = arr[i];
-			var name:String = Type.getEnumName(Type.getEnum(enm)) + Type.enumConstructor(enm);
+			var name:String = (addEnumName? Type.getEnumName(Type.getEnum(enm)):"") + Type.enumConstructor(enm);
 			var params:Array<Dynamic> = Type.enumParameters( enm );
 			for ( p in  params) {
 				name += Std.string( p );
