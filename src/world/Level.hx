@@ -28,6 +28,7 @@ class Level extends HxlTilemap
 	var _pathMap:PathMap;
 	public var index(default, null):Int;
 	
+	public static inline var CHANCE_DECORATION:Float = 0.2;
 	
 	var ptLevel:PtLevel;
 	
@@ -67,6 +68,7 @@ class Level extends HxlTilemap
 	public override function onRemove(state:HxlState) {
 		removeAllActors(state);
 		removeAllLoots(state);
+		removeAllDecorations(state);
 		ptLevel.finish();
 	}
 	
@@ -98,8 +100,12 @@ class Level extends HxlTilemap
 		player.setTilePos(Std.int(startingLocation.x),Std.int(startingLocation.y));
 		player.x = getPixelPositionOfTile(player.tilePos.x, player.tilePos.y).x;
 		player.y = getPixelPositionOfTile(player.tilePos.x, player.tilePos.y).y;
-		trace(player.tilePos.x + " " + startingLocation.x);
-		trace(player.tilePos.y + " " + startingLocation.y);
+		if (player.tilePos.x != startingLocation.x || player.tilePos.y  != startingLocation.y)
+		{
+			trace(player.tilePos.x + " " + startingLocation.x);
+			trace(player.tilePos.y + " " + startingLocation.y);
+			trace("positions not equal! Is there a chest on player starting pos??");
+		}
 		state.add(player);
 		
 		for (mob in mobs)
@@ -148,7 +154,7 @@ class Level extends HxlTilemap
 		
 		state.remove(loot);
 	}
-	
+	//public function 
 	function levelComplete() {
 		if (index == CqConfiguration.lastLevel)
 			HxlGraphics.pushState(new WinState());
@@ -188,15 +194,37 @@ class Level extends HxlTilemap
 		//return if is door.
 		if (Lambda.has( Resources.doors, t.dataNum))
 			return;
-			
+		//return if stair or ladder
+		if (t.dataNum == 1 || t.dataNum == 2)
+			return;
 		var floor:Bool = Lambda.has( Resources.walkableAndSeeThroughTiles, t.dataNum);
 		var frame:String = floor?CqDecoration.randomFloor():CqDecoration.randomWall();
 		var pos:HxlPoint = getPixelPositionOfTile(t.mapX, t.mapY);
 		var dec:CqDecoration = new CqDecoration(pos.x, pos.y,frame);
 		t.decorations.push( dec );
 		addObject(state, dec );
+		var minimumZ:Int = 0;
+		for (loot in t.loots) {
+			var field:Dynamic = Reflect.field(loot, "zIndex");
+			Reflect.setField(loot, "zIndex", field+1);
+			if (field < minimumZ) 
+				dec.zIndex = minimumZ = field;
+		}
+		
 	}
-	
+	public function removeAllDecorations(state:HxlState)
+	{
+		for (y in 0...heightInTiles) {
+			for (x in 0...widthInTiles) {
+				var t:Tile = cast(_tiles[y][x], Tile);
+				for(dec in t.decorations)
+				{
+					state.remove(dec);
+				}
+				t.decorations = null;
+			}
+		}
+	}
 	var dest:HxlPoint;
 	public function updateFieldOfView(state:HxlState,?skipTween:Bool = false, ?gradientColoring:Bool = true, ?seenTween:Int = 64, ?inSightTween:Int=255) {
 		var player = Registery.player;
@@ -233,7 +261,7 @@ class Level extends HxlTilemap
 			//the function that gets called for each tile first time seen.
 			var firstSeen = function(p:HxlPoint) { 
 				var t:Tile = map.getTile(Math.round(p.x), Math.round(p.y));
-				if (t.visibility == Visibility.UNSEEN && Math.random() < 0.2)					
+				if (t.visibility == Visibility.UNSEEN && Math.random() < CHANCE_DECORATION)					
 					map.addDecoration(t, state);
 				t.visibility = Visibility.IN_SIGHT ; 
 			}
