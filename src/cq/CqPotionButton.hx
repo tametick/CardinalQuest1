@@ -50,7 +50,8 @@ class CqPotionButton extends HxlDialog {
 	}
 
 	function clickMouseDown(event:MouseEvent) {
-		if (!exists || !visible || !active || GameUI.currentPanel != null ) return;
+		if (!exists || !visible || !active || Std.is(GameUI.currentPanel,CqInventoryDialog) ) 
+			return;
 		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
 			if ( cell.getCellObj() != null ) {
 				var cellObj = cell.getCellObj();
@@ -72,7 +73,8 @@ class CqPotionButton extends HxlDialog {
 	}
 
 	function clickMouseUp(event:MouseEvent) {
-		if (!exists || !visible || !active || GameUI.currentPanel != null ) return;
+		if (!exists || !visible || !active || Std.is(GameUI.currentPanel,CqInventoryDialog) ) 
+			return;
 		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
 			//if ( _callback != null ) _callback();
 			//if ( clickSound != null ) clickSound.play();

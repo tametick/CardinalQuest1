@@ -897,7 +897,8 @@ class CqInventoryItem extends HxlSprite {
 	}
 
 	private override function onDragMouseDown(event:MouseEvent) {
-		if ( GameUI.currentPanel == null ) return;
+		if ( !Std.is(GameUI.currentPanel,CqInventoryDialog) ) 
+			return;
 		super.onDragMouseDown(event);
 		if ( isDragging ) {
 			event.stopPropagation();
@@ -913,7 +914,8 @@ class CqInventoryItem extends HxlSprite {
 	}
 
 	private override function onDragMouseUp(event:MouseEvent) {
-		if ( !exists || !visible || !active || !dragEnabled || GameUI.currentPanel == null || HxlGraphics.mouse.dragSprite != this ) return;
+		if ( !exists || !visible || !active || !dragEnabled || !Std.is(GameUI.currentPanel,CqInventoryDialog) || HxlGraphics.mouse.dragSprite != this ) 
+			return;
 		super.onDragMouseUp(event);
 		if ( !isDragging ) {
 			event.stopPropagation();
