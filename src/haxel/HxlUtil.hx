@@ -410,7 +410,7 @@ class HxlUtil {
 			for ( p in  params) {
 				name += Std.string( p );
 			}
-			name = name.toLowerCase();
+			rslt[i] = name;
 		}
 		return rslt;
 	}
