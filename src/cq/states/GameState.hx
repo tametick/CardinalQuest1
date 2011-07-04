@@ -67,7 +67,10 @@ class GameState extends CqState {
 		var dx = HxlGraphics.mouse.x - (Registery.player.x+Configuration.zoomedTileSize()/2);
 		var dy = HxlGraphics.mouse.y - (Registery.player.y+Configuration.zoomedTileSize()/2);
 		var target:HxlPoint = Registery.level.getTargetAccordingToMousePosition(dx, dy);
-		if (Math.abs(dx) < Configuration.zoomedTileSize() && Math.abs(dy) < Configuration.zoomedTileSize() ) {
+		
+		if ( gameUI.overlapsPoint( HxlGraphics.mouse.x, HxlGraphics.mouse.y)||
+		     Math.abs(dx) < Configuration.zoomedTileSize() && Math.abs(dy) < Configuration.zoomedTileSize() 
+		   ) {
 			cursor.angle = 0;
 			if(cursor.getFrame()!=diagonal)
 				cursor.setFrame(diagonal);
