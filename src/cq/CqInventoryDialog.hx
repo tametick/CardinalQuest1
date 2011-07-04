@@ -367,7 +367,10 @@ class CqEquipmentGrid extends CqInventoryGrid {
 			cell = new CqEquipmentCell(icons_slots[idx], icons_positions[idx][0],icons_positions[idx][1], cellSize, cellSize, idx);
 			cell.setGraphicKeys(CqGraphicKey.buttonSprite, cellBgHighlightKey, cellGlowKey);
 			cell.cell_type = CqInvCellType.Equipment;
-			var icon = SpriteEquipmentIcons.getIcon(icons_names[idx],icons_size,2.0);
+			var icon = SpriteEquipmentIcons.getIcon(icons_names[idx], icons_size, 2.0);
+			cell.add(icon);
+			icon.x = icons_x;
+			icon.y = icons_y;
 			icon.setAlpha(0.3);
 			add(cell);
 			cells.push(cell);

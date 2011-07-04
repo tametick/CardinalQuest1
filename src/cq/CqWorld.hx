@@ -121,7 +121,7 @@ class CqLevel extends Level {
 		// mark as visible in fov
 		markInvisible();
 
-		addChests(CqConfiguration.chestsPerLevel);
+		addChests(CqConfiguration.chestsPerLevel,startingLocation);
 		addSpells(CqConfiguration.spellsPerLevel);
 		addMobs(CqConfiguration.mobsPerLevel);
 	}
@@ -151,32 +151,35 @@ class CqLevel extends Level {
 		
 		for (chest in loots) {
 			if (HxlUtil.distance(chest.tilePos, pos) < distance)
-				chests ++;
+			{
+				chests++;
+			}
 		}
-		
 		return chests;
 	}
 	
-	function addChests(numberOfChests:Int) {
+	function addChests(numberOfChests:Int,playerPos:HxlPoint) {
 		for (c in 0...numberOfChests){
 			var pos; 
 			var distFromPlayer;
 			var iterations:Int = 0;
 			var minChestDistance = 5;
-			var minPlayerDistance = 3;
+			var minPlayerDistance = 10;
 			do {//find chest locations that are far apart, but we may run out of space!
 				iterations++;
 				pos = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
-				distFromPlayer = HxlUtil.distance(pos, startingLocation);
 				//having trouble finding a good place, so find a position thats closer to other chests, but not on a chest or a player
 				//less iterations should equal to more groups of chests together
 				//they do tend to group around the player, so we need them far away!
-				if (iterations > 10) {
-					minChestDistance = 2;
+				if (iterations > 4) {
+					minChestDistance = 4;
 					minPlayerDistance = 15;
 				}
-			} while (chestsNearby(pos, minChestDistance) > 0 && distFromPlayer > minPlayerDistance);
-			
+				if (iterations > 10) {
+					minChestDistance = 1;
+					minPlayerDistance = 25;
+				}
+			} while (chestsNearby(pos, minChestDistance) > 0 || playerPos.intEquals(pos));
 			createAndaddChest(pos);
 		}
 	}
