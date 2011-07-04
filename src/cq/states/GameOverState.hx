@@ -8,7 +8,7 @@ import haxel.HxlState;
 import haxel.HxlText;
 import haxel.HxlTimer;
 
-class GameOverState extends HxlState{
+class GameOverState extends CqState {
 
 	var fadeTimer:HxlTimer;
 	var fadeTime:Float;

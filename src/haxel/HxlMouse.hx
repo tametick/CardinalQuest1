@@ -107,13 +107,14 @@ class HxlMouse {
 	 * @param	XOffset		The number of pixels between the mouse's screen position and the graphic's top left corner.
 	 * * @param	YOffset		The number of pixels between the mouse's screen position and the graphic's top left corner. 
 	 */
-	public function load(Graphic:Class<Bitmap>,?XOffset:Int=0,?YOffset:Int=0) {
+	public function load(Graphic:Class<Bitmap>,?XOffset:Int=0,?YOffset:Int=0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0) {
 		if (Graphic == null) {
 			Graphic = ImgDefaultCursor;
 		}
-		cursor = new HxlSprite(screenX,screenY,Graphic);
+		cursor = new HxlSprite(screenX,screenY,Graphic,ScaleX,ScaleY);
 		cursor.offset.x = XOffset;
 		cursor.offset.y = YOffset;
+		cursor.visible = true;
 	}
 
 	/**

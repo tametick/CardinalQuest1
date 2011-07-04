@@ -24,8 +24,7 @@ import haxel.HxlSprite;
 import haxel.HxlState;
 import haxel.HxlText;
 
-class CreateCharState extends HxlState
-{
+class CreateCharState extends CqState {
 	var fadeTime:Float;
 	var state:Int;
 	var btnFighter:HxlButton;
