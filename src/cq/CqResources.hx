@@ -201,6 +201,7 @@ class SpriteTiles extends HxlSpriteSheet {
 			Resources.walkableAndSeeThroughTiles = Resources.walkableAndSeeThroughTiles.concat(walkableAndSeeThroughTiles);
 			Resources.solidAndBlockingTiles = Resources.solidAndBlockingTiles.concat(solidAndBlockingTiles);
 			Resources.doors = Resources.doors.concat(doors).concat(openDoors);
+			Resources.stairsDown = Resources.stairsDown.concat(stairsDown);
 			inited = true;
 		}
 	}
