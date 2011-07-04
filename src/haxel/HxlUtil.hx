@@ -1,5 +1,6 @@
 package haxel;
 
+import com.eclecticdesignstudio.motion.Actuate;
 import flash.net.URLRequest;
 import flash.Lib;
 
@@ -220,7 +221,7 @@ class HxlUtil {
 	}
 	
 	static var tmpDest = new HxlPoint();
-	public static function markFieldOfView(position:HxlPoint, radius:Float, map:HxlTilemap, ?radial:Bool=true) {
+	public static function markFieldOfView(position:HxlPoint, radius:Float, map:HxlTilemap, ?radial:Bool=true, ?firstSeen:HxlPoint->Void) {
 		var bottom = Std.int(Math.min(map.heightInTiles - 1, position.y + radius));
 		var top = Std.int(Math.max(0, position.y - radius));
 		var right = Std.int(Math.min(map.widthInTiles - 1, position.x + radius));
@@ -230,11 +231,13 @@ class HxlUtil {
 			if ( p.x < 0 || p.y < 0 || p.x >= map.widthInTiles || p.y >= map.heightInTiles ) return true;
 			return map.getTile(Math.round(p.x), Math.round(p.y)).isBlockingView();
 		}
-		var apply = function(p:HxlPoint) { 
-			map.getTile(Math.round(p.x), Math.round(p.y)).visibility = Visibility.IN_SIGHT ; 
+		var apply = firstSeen;
+		if (apply == null) {
+			apply = function(p:HxlPoint) { 
+				map.getTile(Math.round(p.x), Math.round(p.y)).visibility = Visibility.IN_SIGHT ; 
+			}
 		}
-
-		
+			
 		for (dx in left...right + 1) {
 			tmpDest.x = dx;
 			tmpDest.y = top;

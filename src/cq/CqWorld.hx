@@ -4,6 +4,8 @@ import cq.CqResources;
 import cq.CqItem;
 import cq.CqSpell;
 import cq.CqActor;
+import haxel.HxlSprite;
+import world.Decoration;
 
 import generators.BSP;
 import world.World;
@@ -38,7 +40,7 @@ class CqTile extends Tile {
 		visible = false;
 	}
 	
-/*	
+/*	[edit] no need anymore, decorations added in a different place. is CqTile class needed anymore?
  *  todo = render decorations
 	override function render() {
 		super.render();
@@ -52,7 +54,7 @@ class CqTile extends Tile {
 class CqLevel extends Level {
 	static var tiles = SpriteTiles.instance;
 	static var itemSprites = SpriteItems.instance;
-
+	
 	public function getColor():String {
 		if (index < 2)
 			return "blue";
@@ -125,7 +127,6 @@ class CqLevel extends Level {
 		addSpells(CqConfiguration.spellsPerLevel);
 		addMobs(CqConfiguration.mobsPerLevel);
 	}
-	
 	function markInvisible() {
 		for ( Y in 0...heightInTiles ) {
 			for ( X in 0...widthInTiles ) {
@@ -145,7 +146,23 @@ class CqLevel extends Level {
 			createAndaddSpell(pos);
 		}
 	}
-	
+	function addTileDecorations(state:HxlState) {
+		var decs:Int = 0;
+		var dec:CqDecoration;
+		var t:Tile;
+		for ( Y in 0...heightInTiles ) {
+			for ( X in 0...widthInTiles ) {
+				if (chance_decoration > Math.random())
+				{
+					t= cast(_tiles[Y][X], CqTile);
+					var pos:HxlPoint = getPixelPositionOfTile(X, Y);
+					dec = new CqDecoration(pos.x, pos.y);
+					t.decorations.push( dec );
+					addObject(state, dec );
+				}
+			}
+		}
+	}
 	function chestsNearby(pos:HxlPoint, ?distance:Int = 5):Int {
 		var chests = 0;
 		
@@ -362,7 +379,7 @@ class CqWorld extends World {
 
 		currentLevel.zIndex = -1;	
 		state.add(currentLevel);
-		currentLevel.updateFieldOfView(true);
+		currentLevel.updateFieldOfView(state,true);
 		doOnNewLevel();
 	}
 

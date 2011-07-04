@@ -63,7 +63,7 @@ class GameState extends HxlState {
 		var player = CqRegistery.player;
 		var level = CqRegistery.level;
 		
-		level.updateFieldOfView();
+		level.updateFieldOfView(this);
 		if (Std.is(GameUI.currentPanel,CqMapDialog))
 			GameUI.currentPanel.updateDialog();
 		
@@ -83,7 +83,7 @@ class GameState extends HxlState {
 		
 		add(world.currentLevel);
 		
-		world.currentLevel.updateFieldOfView(true);
+		world.currentLevel.updateFieldOfView(this,true);
 
 		// create and init the game gui
 		// todo: do not recreate if already exists from previous games?

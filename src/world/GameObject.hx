@@ -26,7 +26,7 @@ class GameObjectImpl extends HxlSprite, implements GameObject
 	public var tilePos(getTilePos, null):HxlPoint;
 	
 	var _tilePos:HxlPoint;
-
+	
 	var onDestroy:List<Dynamic>;
 
 	public function new(x:Float, y:Float, ?hp:Int=1) 

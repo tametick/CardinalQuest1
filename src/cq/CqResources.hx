@@ -199,6 +199,7 @@ class SpriteTiles extends HxlSpriteSheet {
 			Resources.seeThroughTiles = Resources.seeThroughTiles.concat(walkableAndSeeThroughTiles);
 			Resources.walkableAndSeeThroughTiles = Resources.walkableAndSeeThroughTiles.concat(walkableAndSeeThroughTiles);
 			Resources.solidAndBlockingTiles = Resources.solidAndBlockingTiles.concat(solidAndBlockingTiles);
+			Resources.doors = Resources.doors.concat(doors).concat(openDoors);
 			inited = true;
 		}
 	}
@@ -239,6 +240,9 @@ class SpriteDecorations extends HxlSpriteSheet {
 		];
 		super(0);
 	} 
+	public static function getIcon(IconName:String, Size:Int, Zoom:Float):HxlSprite {
+		return HxlSpriteSheet.getSprite(SpriteDecorations, instance.getSpriteIndex(IconName), Size, Zoom);
+	}
 }
 class UiBeltVertical extends HxlSpriteSheet {
 	public static var instance = new UiBeltVertical();

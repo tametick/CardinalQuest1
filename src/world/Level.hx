@@ -1,5 +1,8 @@
 package world;
 
+import com.eclecticdesignstudio.motion.Actuate;
+import cq.CqDecoration;
+import data.Resources;
 import flash.display.Bitmap;
 import com.baseoneonline.haxe.astar.PathMap;
 
@@ -95,6 +98,8 @@ class Level extends HxlTilemap
 		player.setTilePos(Std.int(startingLocation.x),Std.int(startingLocation.y));
 		player.x = getPixelPositionOfTile(player.tilePos.x, player.tilePos.y).x;
 		player.y = getPixelPositionOfTile(player.tilePos.x, player.tilePos.y).y;
+		trace(player.tilePos.x + " " + startingLocation.x);
+		trace(player.tilePos.y + " " + startingLocation.y);
 		state.add(player);
 		
 		for (mob in mobs)
@@ -178,9 +183,22 @@ class Level extends HxlTilemap
 		var hex = StringTools.hex(tween);
 		return Std.parseInt("0x"+hex+hex+hex);
 	}
+	public function addDecoration(t:Tile,state:HxlState)
+	{
+		//return if is door.
+		if (Lambda.has( Resources.doors, t.dataNum))
+			return;
+			
+		var floor:Bool = Lambda.has( Resources.walkableAndSeeThroughTiles, t.dataNum);
+		var frame:String = floor?CqDecoration.randomFloor():CqDecoration.randomWall();
+		var pos:HxlPoint = getPixelPositionOfTile(t.mapX, t.mapY);
+		var dec:CqDecoration = new CqDecoration(pos.x, pos.y,frame);
+		t.decorations.push( dec );
+		addObject(state, dec );
+	}
 	
 	var dest:HxlPoint;
-	public function updateFieldOfView(?skipTween:Bool = false, ?gradientColoring:Bool = true, ?seenTween:Int = 64, ?inSightTween:Int=255) {
+	public function updateFieldOfView(state:HxlState,?skipTween:Bool = false, ?gradientColoring:Bool = true, ?seenTween:Int = 64, ?inSightTween:Int=255) {
 		var player = Registery.player;
 		
 		var bottom = Std.int(Math.min(heightInTiles - 1, player.tilePos.y + (player.visionRadius+1)));
@@ -206,11 +224,20 @@ class Level extends HxlTilemap
 			for ( i in adjacent ) {
 				var xx = Std.int(player.tilePos.x + i[0]);
 				var yy = Std.int(player.tilePos.y + i[1]);
-				if(yy<heightInTiles && xx<widthInTiles && yy>=0 && xx>=0)
+				if (yy < heightInTiles && xx < widthInTiles && yy >= 0 && xx >= 0) {
 					cast(getTile(xx, yy), Tile).visibility = Visibility.IN_SIGHT;
+				}
 			}
 		} else {
-			HxlUtil.markFieldOfView(player.tilePos, player.visionRadius, this);
+			var map:Level = this;
+			//the function that gets called for each tile first time seen.
+			var firstSeen = function(p:HxlPoint) { 
+				var t:Tile = map.getTile(Math.round(p.x), Math.round(p.y));
+				if (t.visibility == Visibility.UNSEEN && Math.random() < 0.2)					
+					map.addDecoration(t, state);
+				t.visibility = Visibility.IN_SIGHT ; 
+			}
+			HxlUtil.markFieldOfView(player.tilePos, player.visionRadius, this,true,firstSeen);
 		}
 		
 		for ( x in left...right+1 ) {
@@ -224,50 +251,41 @@ class Level extends HxlTilemap
 				}
 					
 				var dist = HxlUtil.distance(player.tilePos, dest);
-				
+
+				var Ttile:Tile = cast(tile, Tile);
+				var normColor:Int = normalizeColor(dist, player.visionRadius, seenTween, inSightTween);
 				switch (tile.visibility) {
 					case Visibility.IN_SIGHT:
 						tile.visible = true;
 						
-						for (loot in cast(tile, Tile).loots)
+						for (loot in Ttile.loots)
 							cast(loot,HxlSprite).visible = true;
-						for (actor in cast(tile, Tile).actors)
+						for (actor in Ttile.actors)
 							cast(actor,HxlSprite).visible = true;
 						
-						if ( skipTween ) {
-							if (gradientColoring) {
-								var normTween = normalizeColor(dist, player.visionRadius, seenTween, inSightTween);
-								tile.color = tweenToColor(normTween);
-							} else {
-								var inSightColor = tweenToColor(inSightTween);
-								tile.color = inSightColor;
-							}
-						} else {
-							if (gradientColoring)
-								cast(tile,Tile).colorTo(normalizeColor(dist, player.visionRadius, seenTween, inSightTween), player.moveSpeed);
-							else
-								cast(tile,Tile).colorTo(inSightTween, player.moveSpeed);
-						}
+						Ttile.colorTo(normColor, player.moveSpeed);
+						for (decoration in Ttile.decorations)
+							decoration.colorTo(normColor, player.moveSpeed);
 					case Visibility.SEEN:
 						tile.visible = true;
 						
-						for (loot in cast(tile, Tile).loots)
+						for (loot in Ttile.loots)
 							cast(loot,HxlSprite).visible = false;
-						for (actor in cast(tile, Tile).actors)
+						for (actor in Ttile.actors)
 							cast(actor,HxlSprite).visible = false;
 						
-						if ( skipTween ) {
-							var seenColor = tweenToColor(seenTween);
-							tile.color = seenColor;
-						} else {
-							cast(tile,Tile).colorTo(seenTween, player.moveSpeed);
-						}
+						Ttile.colorTo(seenTween, player.moveSpeed);
+						for (decoration in Ttile.decorations)
+							decoration.colorTo(seenTween, player.moveSpeed);
 					case Visibility.UNSEEN:
 				}
 			}
 		}
 	}
-	
+	function colorTo(target:Dynamic,Speed:Float,ToColor:Float,onComplete:Dynamic) {
+		Actuate.update(target, Speed, {Color: HxlUtil.colorRGB(_color)[0]}, {Color: ToColor})
+				.onComplete(onComplete);
+	}
 	function normalizeColor(dist:Float, maxDist:Float, minColor:Int, maxColor:Int):Int {
 		var dimness = (maxDist-dist) / maxDist;
 		var color = minColor + (maxColor - minColor)*dimness;

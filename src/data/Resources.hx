@@ -6,4 +6,5 @@ class Resources {
 	public static var walkableAndSeeThroughTiles:Array<Int> = [];
 	public static var solidAndBlockingTiles:Array<Int> = [];
 	public static var descriptions:Hash<String>;
+	public static var doors:Array<Int> = [];
 }
