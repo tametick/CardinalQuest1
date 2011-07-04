@@ -226,6 +226,14 @@ class GameUI extends HxlDialog {
 		panelInventory.dlgSpellGrid = dlgSpellGrid;
 		panelInventory.dlgPotionGrid = dlgPotionGrid;
 	}
+		
+	override public function overlapsPoint(X:Float, Y:Float, ?PerPixel:Bool = false):Bool {
+		return leftButtons.overlapsPoint(X, Y) ||
+		     dlgSpellGrid.overlapsPoint(X, Y) ||
+		     dlgPotionGrid.overlapsPoint(X, Y) ||
+			 panelInventory.overlapsPoint(X, Y) ||
+			 panelCharacter.overlapsPoint(X, Y);
+	}
 	
 	function addInfoButtonBars() {
 		var width = 50;
