@@ -31,6 +31,7 @@ class SpriteItemSlot1 extends Bitmap { public function new() { super(); } }
 class SpriteItemSlot2 extends Bitmap { public function new() { super(); } }
 class SpriteInfo extends Bitmap { public function new() { super(); } }
 class UiBeltHorizontal extends Bitmap { public function new() { super(); } }
+class UiInventoryBox extends Bitmap { public function new() { super(); } }
 
 class CursorSprite extends HxlSprite {
 	public static var instance:CursorSprite;	
@@ -255,7 +256,6 @@ class UiBeltVertical extends HxlSpriteSheet {
 		super(0);
 	}
 }
-
 class SpriteCursor extends HxlSpriteSheet { 
 	public static var instance = new SpriteCursor();
 	public function new() {

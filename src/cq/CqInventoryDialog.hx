@@ -68,15 +68,13 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		//on the left
 		dlgCharacter = new HxlDialog(DLG_OUTER_BORDER, DLG_OUTER_BORDER, div_l-DLG_OUTER_BORDER, div_u-DLG_OUTER_BORDER);
 		add(dlgCharacter);
-
+		dlgCharacter.setBackgroundGraphic(UiInventoryBox);
 		//in dlgCharacter
-		dlgEqGrid = new CqEquipmentGrid(0, 0, dlgCharacter.width, dlgCharacter.height);
-		dlgEqGrid.setBackgroundColor(0xff555555);
+		dlgEqGrid = new CqEquipmentGrid(4, 0, dlgCharacter.width, dlgCharacter.height);
 		dlgCharacter.add(dlgEqGrid);
 
 		//on the right
 		dlgInfo = new CqItemInfoDialog(div_l+DLG_GAP, DLG_OUTER_BORDER, div_r, div_u-DLG_OUTER_BORDER);
-		dlgInfo.setBackgroundColor(0xff885555);
 		add(dlgInfo);
 
 		//on the bottom

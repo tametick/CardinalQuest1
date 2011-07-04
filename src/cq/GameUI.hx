@@ -126,8 +126,7 @@ class GameUI extends HxlDialog {
 		panelMap.zIndex = 2;
 		add(panelMap);
 
-		panelInventory = new CqInventoryDialog(this, 84, 0, 472, 400);
-		panelInventory.setBackgroundColor(0xffBC9A9A);
+		panelInventory = new CqInventoryDialog(this, 69, 0, 472, 400);
 		panelInventory.zIndex = 2;
 		add(panelInventory);
 
