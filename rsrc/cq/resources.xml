@@ -57,5 +57,6 @@
 		<sound id="cq.ChestBusted" name="ChestBusted" import="sounds/chestBusted.mp3"/>
 		<sound id="cq.Pickup" name="Pickup" import="sounds/pickup.mp3"/>
 		<sound id="cq.DoorOpen" name="DoorOpen" import="sounds/doorOpen.mp3"/>
+		<sound id="cq.Death" name="Death" import="sounds/death.mp3"/>
 	</library>
 </movie>
