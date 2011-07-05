@@ -257,6 +257,11 @@ class CqActor extends CqObject, implements Actor {
 		if (Math.random() < atk / (atk + def)) {
 			// hit
 			
+			if (Std.is(this, CqPlayer))
+				SoundEffectsManager.play(EnemyHit);	
+			else
+				SoundEffectsManager.play(PlayerHit);
+			
 			var dmgMultipler:Int = 1;
 			if(specialEffects.get("damage multipler")!=null)
 				dmgMultipler =  Std.parseInt(specialEffects.get("damage multipler").value);
@@ -285,6 +290,11 @@ class CqActor extends CqObject, implements Actor {
 
 		} else {
 			// Miss
+			if (Std.is(this, CqPlayer))
+				SoundEffectsManager.play(EnemyMiss);	
+			else
+				SoundEffectsManager.play(PlayerMiss);
+				
 			if (this == cast(Registery.player,CqPlayer)) {
 				HxlLog.append("You miss");//<b style='color: rgb("+other.vars.color.join()+");'>"+other.vars.description[0]+"</b>.");
 				PtPlayer.misses();
@@ -326,6 +336,7 @@ class CqActor extends CqObject, implements Actor {
 				// bust chest & don't move
 				attackObject(state, loot);
 				justAttacked = true;
+				SoundEffectsManager.play(ChestBusted);
 				// end turn
 				return true;
 			}

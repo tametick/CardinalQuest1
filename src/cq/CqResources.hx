@@ -42,6 +42,10 @@ class Footstep3 extends Sound { public function new() { super(); } }
 class Footstep4 extends Sound { public function new() { super(); } }
 class Footstep5 extends Sound { public function new() { super(); } }
 class Footstep6 extends Sound { public function new() { super(); } }
+class EnemyMiss extends Sound { public function new() { super(); } }
+class PlayerMiss extends Sound { public function new() { super(); } }
+class ChestBusted extends Sound { public function new() { super(); } }
+class Pickup extends Sound { public function new() { super(); } }
 
 class SpriteLogo extends Bitmap { public function new() { super(); } }
 class SpriteHeart extends Bitmap { public function new() { super(); } }
