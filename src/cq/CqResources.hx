@@ -24,6 +24,19 @@ class MenuTheme extends Sound { public function new() { super(); } }
 class BossTheme extends Sound { public function new() { super(); } }
 class WinTheme extends Sound { public function new() { super(); } }
 
+class EnemyHit extends Sound { public function new() { super(); } }
+class FortressGate extends Sound { public function new() { super(); } }
+class ItemEquipped extends Sound { public function new() { super(); } }
+class LevelUp extends Sound { public function new() { super(); } }
+class MenuItemClick extends Sound { public function new() { super(); } }
+class MenuItemMouseOver extends Sound { public function new() { super(); } }
+class PlayerHit extends Sound { public function new() { super(); } }
+class PotionEquipped extends Sound { public function new() { super(); } }
+class PotionQuaffed extends Sound { public function new() { super(); } }
+class SpellCast extends Sound { public function new() { super(); } }
+class SpellCastNegative extends Sound { public function new() { super(); } }
+class SpellEquipped extends Sound { public function new() { super(); } }
+
 class SpriteLogo extends Bitmap { public function new() { super(); } }
 class SpriteHeart extends Bitmap { public function new() { super(); } }
 class SpriteStartButton extends Bitmap { public function new() { super(); } }

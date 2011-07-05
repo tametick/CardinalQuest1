@@ -67,7 +67,7 @@ class MainMenuState extends CqState {
 		menu.addItem(btnCredits);
 		btnCredits.setCallback(function() { self.changeState(CreditsState); });
 
-		Actuate.tween(menu, fadeTime, { targetY: 220 }).ease(Cubic.easeOut);
+		Actuate.tween(menu, 1, { targetY: 220 }).ease(Cubic.easeOut);
 	}
 
 	public override function update() {
