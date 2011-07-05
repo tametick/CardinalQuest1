@@ -72,15 +72,17 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		add(dlgCharacter);
 		dlgCharacter.setBackgroundGraphic(UiInventoryBox);
 		//in dlgCharacter
-		dlgEqGrid = new CqEquipmentGrid(4, 0, dlgCharacter.width, dlgCharacter.height);
+		dlgEqGrid = new CqEquipmentGrid(14, 10, dlgCharacter.width, dlgCharacter.height);
 		dlgCharacter.add(dlgEqGrid);
 
 		//on the right
-		dlgInfo = new CqItemInfoDialog(div_l+DLG_GAP, DLG_OUTER_BORDER, div_r, div_u-DLG_OUTER_BORDER);
+		dlgInfo = new CqItemInfoDialog(div_l + DLG_GAP, DLG_OUTER_BORDER, div_r, div_u - DLG_OUTER_BORDER);
+		dlgInfo.zIndex = 3;
 		add(dlgInfo);
 
 		//on the bottom
-		dlgInvGrid = new CqInventoryGrid(DLG_OUTER_BORDER, div_u-23, div_l+div_r, div_b);
+		dlgInvGrid = new CqInventoryGrid(DLG_OUTER_BORDER + 5, div_u - 18, div_l + div_r, div_b);
+		dlgInvGrid.zIndex = 2;
 		add(dlgInvGrid);
 
 		itemSheet = SpriteItems.instance;
@@ -141,7 +143,6 @@ class CqInventoryDialog extends HxlSlidingDialog {
 			uiItem.setIcon(itemSprite.getFramePixels());
 		}
 		add(uiItem);
-		//uiItem.setPopup(new CqPopup(150,Resources.descriptions.get(Item.name));
 		uiItem.setPopup(new CqPopup(100,Item.name ));
 		add(uiItem.popup);
 		uiItem.popup.zIndex = 500;
@@ -273,14 +274,13 @@ class CqInventoryDialog extends HxlSlidingDialog {
 class CqInventoryGrid extends HxlDialog {
 
 	public var cells:Array<CqInventoryCell>;
-
+	
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?CreateCells:Bool=true) {
 		super(X, Y, Width, Height);
 		
 		cells = new Array();
 
 		if ( !CreateCells ) return;
-		
 		var paddingX:Float = -2;
 		var paddingY:Float = 10;
 		var cellSize:Int = 64;
@@ -288,20 +288,24 @@ class CqInventoryGrid extends HxlDialog {
 
 		var rows:Int = 2;
 		var cols:Int = 7;
+		var btn:ButtonSprite;
 		for ( row in 0...rows ) {
 			for ( col in 0...cols ) {
 				var idx:Int = cells.length;
 				var _x:Float = offsetX + ((col) * paddingX) + (col * cellSize);
 				var _y:Float = ((row) * paddingY) + (row * cellSize);
-				var cell:CqInventoryCell = new CqInventoryCell( _x+5, _y+5, cellSize, cellSize, idx);
-				cell.setGraphicKeys(CqGraphicKey.buttonSprite, CqGraphicKey.EqCellBGHighlight, CqGraphicKey.CellGlow);
+				var cell:CqInventoryCell = new CqInventoryCell( _x + 5, _y + 5, cellSize, cellSize, idx);
+				btn = new ButtonSprite();
+				btn.x = btn.y = -5;//fix glow
+				cell.add(btn);
+				cell.setGraphicKeys(CqGraphicKey.EquipmentCellBG, CqGraphicKey.EqCellBGHighlight, CqGraphicKey.CellGlow);
 				add(cell);
 				cells.push(cell);
 			}
 		}
 		var dropCell = cells[cells.length - 1];
 		dropCell.dropCell = true;
-		dropCell.setGraphicKeys(CqGraphicKey.buttonSprite,CqGraphicKey.DropCellBGHighlight,CqGraphicKey.CellGlow);
+		dropCell.setGraphicKeys(CqGraphicKey.EquipmentCellBG,CqGraphicKey.DropCellBGHighlight,CqGraphicKey.CellGlow);
 	}
 
 	public function getOpenCellIndex():Int {
@@ -350,7 +354,7 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		eqGridInit = false;
 
 		var cellBgKey:CqGraphicKey = CqGraphicKey.EquipmentCellBG;
-		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.EquipmentCellBG;
+		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.EqCellBGHighlight;
 		var cellGlowKey:CqGraphicKey = CqGraphicKey.CellGlow;
 
 		var cellSize:Int = 54;
@@ -365,15 +369,20 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		var icons_names:Array<String> = [ "shoes", "gloves", "armor", "jewelry", "weapon", "hat" ];
 		var icons_positions:Array<Array<Int>> = [ [8, 193], [8, 100], [8, 8], [159, 193], [159, 100], [159, 8] ];
 		var icons_slots:Array<CqEquipSlot> = [SHOES, GLOVES, ARMOR, JEWELRY, WEAPON, HAT];
+		
+		var btn:ButtonSprite;
 		for (idx in 0...icons_names.length)
 		{
-			cell = new CqEquipmentCell(icons_slots[idx], icons_positions[idx][0],icons_positions[idx][1], cellSize, cellSize, idx);
-			cell.setGraphicKeys(CqGraphicKey.buttonSprite, cellBgHighlightKey, cellGlowKey);
+			cell = new CqEquipmentCell(icons_slots[idx], icons_positions[idx][0]-5, icons_positions[idx][1]-5, cellSize, cellSize, idx);
+			btn = new ButtonSprite();
+			cell.add(btn);
+			btn.x = btn.y = -5;
+			cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
 			cell.cell_type = CqInvCellType.Equipment;
 			var icon = SpriteEquipmentIcons.getIcon(icons_names[idx], icons_size, 2.0);
 			cell.add(icon);
-			icon.x = icons_x;
-			icon.y = icons_y;
+			icon.x = icons_x-5;
+			icon.y = icons_y-5;
 			icon.setAlpha(0.3);
 			add(cell);
 			cells.push(cell);
@@ -600,10 +609,10 @@ class CqInventoryCell extends HxlDialog {
 		var icon = SpriteEquipmentIcons.getIcon("destory", 16, 2.0);
 		icon.setAlpha(0.3);
 		add(icon);
-		icon.x += 18;
-		icon.y += 8;
+		icon.x += 13;
+		icon.y += 3;
 			
-		var droptext:HxlText = new HxlText(0, 40, Std.int(width), "Destory");
+		var droptext:HxlText = new HxlText(-5, 35, Std.int(width), "Destory");
 		droptext.setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101);
 		droptext.zIndex = 10;
 		droptext.setAlpha(0.3);
@@ -635,7 +644,7 @@ class CqInventoryCell extends HxlDialog {
 
 	function setHighlighted(Toggle:Bool) {
 		isHighlighted = Toggle;
-		setGlow(Toggle);
+		//setGlow(Toggle);
 		if ( isHighlighted ) {
 			background.visible = false;
 			bgHighlight.visible = true;
@@ -648,11 +657,7 @@ class CqInventoryCell extends HxlDialog {
 	}
 
 	public function setGlow(Toggle:Bool) {
-		if ( Toggle ) {
-			bgGlow.visible = true;
-		} else {
-			bgGlow.visible = false;
-		}
+		bgGlow.visible = Toggle;
 	}
 
 	public function setCellObj(CellObj:CqInventoryItem) {
@@ -723,8 +728,8 @@ class CqInventoryItem extends HxlSprite {
 	public function new(Dialog:CqInventoryDialog, ?X:Float=0, ?Y:Float=0) {
 		super(X, Y);
 		icon = null;
-		idleZIndex = 5;
-		dragZIndex = 6;
+		idleZIndex = 11;
+		dragZIndex = 11;
 		_dlg = Dialog;
 		cellIndex = 0;
 		cellEquip = false;
@@ -929,7 +934,7 @@ class CqInventoryItem extends HxlSprite {
 	override function dragStart() {
 		_dlg.remove(this);
 		_dlg.dlgSpellGrid.remove(this);
-		zIndex = dragZIndex;
+		zIndex = 500;
 		_dlg.add(this);
 		_dlg.dlgEqGrid.onItemDrag(this.item);
 		_dlg.dlgSpellGrid.onItemDrag(this.item);
@@ -1052,6 +1057,7 @@ class CqInventoryItem extends HxlSprite {
 		} else {
 			if ( item.consumable ) {
 				// If this item is a consumable, and was dropped on the doll, use it
+				//TODO: make this more accurate.
 				var myX = x + origin.x;
 				var myY = y + origin.y;
 				var objX = _dlg.dlgCharacter.x;
