@@ -131,7 +131,6 @@ class GameUI extends HxlDialog {
 		add(panelInventory);
 
 		panelCharacter = new CqCharacterDialog(84, 0, 472, 480);
-		panelCharacter.setBackgroundColor(0xffa5a5a5);
 		panelCharacter.zIndex = 2;
 		add(panelCharacter);
 
@@ -426,12 +425,12 @@ class GameUI extends HxlDialog {
 
 		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.EqCellBGHighlight;
 		if ( !GraphicCache.checkBitmapCache(cellBgHighlightKey) ) {
-			GraphicCache.addBitmapData(HxlGradient.RectData(size, size, [0x686835, 0xADAB6B], null, Math.PI/2, 5.0), cellBgHighlightKey);
+			GraphicCache.addBitmapData(HxlGradient.RectData(size, size, [0x686835, 0xADAB6B], null,[0.8,0.1], Math.PI/2, 5.0), cellBgHighlightKey);
 		}
 		
 		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.DropCellBGHighlight;
 		if ( !GraphicCache.checkBitmapCache(cellBgHighlightKey) ) {
-			GraphicCache.addBitmapData(HxlGradient.RectData(size, size, [0x996835, 0xFDAB6B], null, Math.PI/2, 5.0), cellBgHighlightKey);
+			GraphicCache.addBitmapData(HxlGradient.RectData(size, size, [0x996835, 0xFDAB6B], null,[0.8,0.1], Math.PI/2, 5.0), cellBgHighlightKey);
 		}
 
 		var itemBgKey:CqGraphicKey = CqGraphicKey.ItemBG;

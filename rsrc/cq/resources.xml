@@ -21,6 +21,7 @@
 		<bitmap id="cq.SpritePlayer" import="player.png"/>
 		<bitmap id="cq.SpriteTiles" import="tiles.png"/>
 		<bitmap id="cq.SpriteSpells" import="spells.png"/>
+		<bitmap id="cq.SpriteMapPaper" import="map_paper.png"/>
 		<bitmap id="cq.SpriteDecorations" import="decorations.png"/>
 		<bitmap id="cq.UiBeltVertical" import="Belt_vert_metal.png"/>
 		<bitmap id="cq.UiBeltHorizontal" import="Belt_horiz_leather.png"/>

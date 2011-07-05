@@ -56,7 +56,7 @@ class SpriteItemSlot2 extends Bitmap { public function new() { super(); } }
 class SpriteInfo extends Bitmap { public function new() { super(); } }
 class UiBeltHorizontal extends Bitmap { public function new() { super(); } }
 class UiInventoryBox extends Bitmap { public function new() { super(); } }
-
+class SpriteMapPaper extends Bitmap { public function new() { super(); } }
 class LogoSprite extends HxlSprite {
 	public function new(?X:Float = 0, ?Y:Float = 0) {
 		super(X,Y);
@@ -89,7 +89,6 @@ class HeartSprite extends HxlSprite {
 		loadGraphic(SpriteHeart, false, false, 18, 18);
 	}
 }
-
 class SpritePortrait extends HxlSpriteSheet { 
 	public static var instance = new SpritePortrait();
 	public function new() {
