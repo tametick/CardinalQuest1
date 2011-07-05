@@ -50,7 +50,7 @@ class MainMenuState extends CqState {
 			btnResumeGame.setNormalFormat(null, 40, 0xffffff, "center");
 			btnResumeGame.setHoverFormat(null, 40, 0xffff00, "center");
 			menu.addItem(btnResumeGame);
-			btnResumeGame.setCallback(function() { self.changeState(null); });
+			btnResumeGame.setCallback(function() { self.changeState(null); SoundEffectsManager.play(MenuItemClick);});
 			buttonY += 50;
 		}
 
@@ -62,7 +62,7 @@ class MainMenuState extends CqState {
 		btnNewGame.setNormalFormat(null, 40, 0xffffff, "center");
 		btnNewGame.setHoverFormat(null, 40, 0xffff00, "center");
 		menu.addItem(btnNewGame);
-		btnNewGame.setCallback(function() { self.changeState(CreateCharState); });
+		btnNewGame.setCallback(function() { self.changeState(CreateCharState); SoundEffectsManager.play(MenuItemClick);});
 
 		buttonY += 50;
 
@@ -70,7 +70,7 @@ class MainMenuState extends CqState {
 		btnCredits.setNormalFormat(null, 40, 0xffffff, "center");
 		btnCredits.setHoverFormat(null, 40, 0xffff00, "center");
 		menu.addItem(btnCredits);
-		btnCredits.setCallback(function() { self.changeState(CreditsState); });
+		btnCredits.setCallback(function() { self.changeState(CreditsState); SoundEffectsManager.play(MenuItemClick);});
 
 		Actuate.tween(menu, 1, { targetY: 220 }).ease(Cubic.easeOut);
 	}
