@@ -24,6 +24,7 @@ class MenuTheme extends Sound { public function new() { super(); } }
 class BossTheme extends Sound { public function new() { super(); } }
 class WinTheme extends Sound { public function new() { super(); } }
 
+class SpriteLogo extends Bitmap { public function new() { super(); } }
 class SpriteHeart extends Bitmap { public function new() { super(); } }
 class SpriteStartButton extends Bitmap { public function new() { super(); } }
 class SpriteButtonBg extends Bitmap { public function new() { super(); } }
@@ -33,6 +34,12 @@ class SpriteInfo extends Bitmap { public function new() { super(); } }
 class UiBeltHorizontal extends Bitmap { public function new() { super(); } }
 class UiInventoryBox extends Bitmap { public function new() { super(); } }
 
+class LogoSprite extends HxlSprite {
+	public function new(?X:Float = 0, ?Y:Float = 0) {
+		super(X,Y);
+		loadGraphic(SpriteLogo);
+	}
+}
 class CursorSprite extends HxlSprite {
 	public static var instance:CursorSprite;	
 	public function new(?CursorName:String = "diagonal", ?X:Float = 0, ?Y:Float = 0) {

@@ -4,6 +4,7 @@ import cq.CqResources;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import haxel.HxlGraphics;
+import haxel.HxlSprite;
 import haxel.HxlState;
 import haxel.HxlText;
 import haxel.HxlTimer;
@@ -13,7 +14,7 @@ class SplashState extends CqState {
 	var fadeTime:Float;
 	var waitTime:Float;
 	var stateNum:Int;
-	var splashText:HxlText;
+	var splashText:HxlSprite;
 
 	public override function create() {
 		super.create();
@@ -23,8 +24,7 @@ class SplashState extends CqState {
 		waitTime = 2.0;
 		stateNum = 0;
 
-		splashText = new HxlText(0, (480-72)/2, 640, "Cardinal Quest");
-		splashText.setFormat(null, 72, 0xffffff, "center");
+		splashText = new LogoSprite((640-345)/2, (480-50)/2);
 		add(splashText);
 
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);

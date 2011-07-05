@@ -66,6 +66,8 @@
 	<SymbolClass id="25" class="cq.UiBeltHorizontal" />
 	<DefineBitsJPEG id="26" file="../rsrc/cq/cursor.png" />
 	<SymbolClass id="26" class="cq.SpriteCursor" />	
+	<DefineBitsJPEG id="26" file="../rsrc/cq/logo.png" />
+	<SymbolClass id="26" class="cq.SpriteLogo" />	
 	
 	<DefineABC file="../bin/cq-movie.swf" isBoot="true" />
 

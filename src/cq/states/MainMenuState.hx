@@ -4,6 +4,7 @@ import cq.CqResources;
 import haxel.HxlGraphics;
 import haxel.HxlMenu;
 import haxel.HxlMenuItem;
+import haxel.HxlSprite;
 import haxel.HxlState;
 import haxel.HxlText;
 import haxel.HxlTimer;
@@ -15,7 +16,7 @@ import flash.ui.MouseCursor;
 class MainMenuState extends CqState {
 	var fadeTimer:HxlTimer;
 	var fadeTime:Float;
-	var titleText:HxlText;
+	var titleText:HxlSprite;
 
 	var menu:HxlMenu;
 	var btnResumeGame:HxlMenuItem;
@@ -31,8 +32,7 @@ class MainMenuState extends CqState {
 		fadeTimer = new HxlTimer();
 		fadeTime = 0.5;
 
-		titleText = new HxlText(0, 60, 640, "Cardinal Quest");
-		titleText.setFormat(null, 72, 0xff6666, "center");
+		titleText = new LogoSprite((640-345)/2, (480-50)/2 - 60);
 		add(titleText);
 
 		menu = new HxlMenu(200, 220, 240, 200);
