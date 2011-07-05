@@ -591,16 +591,17 @@ class CqInventoryCell extends HxlDialog {
 		if ( dropCell )
 			initDropCell();
 	}
-	function initDropCell()
-	{
-		var icon = SpriteEquipmentIcons.getIcon("destory",16,2.0);
+	function initDropCell()	{
+		var icon = SpriteEquipmentIcons.getIcon("destory", 16, 2.0);
+		icon.setAlpha(0.3);
 		add(icon);
-		icon.x += 12;
-		icon.y += 6;
+		icon.x += 18;
+		icon.y += 8;
 			
-		var droptext:HxlText = new HxlText(0, 32, Std.int(width), "Destory");
-		droptext.setFormat(null, 18, 0xffffff, "center", 0x010101);
+		var droptext:HxlText = new HxlText(0, 40, Std.int(width), "Destory");
+		droptext.setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101);
 		droptext.zIndex = 10;
+		droptext.setAlpha(0.3);
 		add(droptext);
 	}
 	public override function update() {

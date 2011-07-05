@@ -85,7 +85,7 @@ class MainMenuState extends CqState {
 			return;
 		}
 		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
-			flash.ui.Mouse.cursor = MouseCursor.AUTO;
+			//flash.ui.Mouse.cursor = MouseCursor.AUTO;
 			var newState = Type.createInstance(TargetState, []);
 			if ( self.stackId == 0 ) {
 				HxlGraphics.state = newState;

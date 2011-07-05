@@ -78,10 +78,10 @@ class HxlMenuItem extends HxlText
 	public override function update() {
 		super.update();
 		if ( visible && !_mouseHover && overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y) ) {
-			HxlGraphics.mouse.set("button");
+			//HxlGraphics.mouse.set("button");
 			_mouseHover = true;
 		} else if ( !visible || (_mouseHover && !overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) ) {
-			HxlGraphics.mouse.set("auto");
+			//HxlGraphics.mouse.set("auto");
 			_mouseHover = false;
 		}
 	}

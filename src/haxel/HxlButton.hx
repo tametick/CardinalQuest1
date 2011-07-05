@@ -320,27 +320,34 @@ class HxlButton extends HxlGroup {
 	 */
 	function onMouseUp(event:MouseEvent) {
 		if ( !eventUseCapture ) {
-			if (!exists || !visible || !active || !HxlGraphics.mouse.justReleased() ) return;
+			if (!exists || !visible || !active || !HxlGraphics.mouse.justReleased() ) 
+				return;
 		} else {
 			if (!exists || !visible || !active) return;
 		}
 
 		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
-			if ( _callback != null ) _callback();
-			if ( clickSound != null ) clickSound.play();
-			if ( eventStopPropagate ) event.stopPropagation();
+			if ( _callback != null ) 
+				_callback();
+			if ( clickSound != null ) 
+				clickSound.play();
+			if ( eventStopPropagate ) 
+				event.stopPropagation();
 		}
 	}
 
 	function onMouseDown(event:MouseEvent) {
 		if ( !eventUseCapture ) {
-			if (!exists || !visible || !active || !HxlGraphics.mouse.justPressed() ) return;
+			if (!exists || !visible || !active || !HxlGraphics.mouse.justPressed() ) 
+				return;
 		} else {
-			if (!exists || !visible || !active ) return;
+			if (!exists || !visible || !active ) 
+				return;
 		}
 
 		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
-			if ( eventStopPropagate ) event.stopPropagation();
+			if ( eventStopPropagate ) 
+				event.stopPropagation();
 		}
 
 	}
