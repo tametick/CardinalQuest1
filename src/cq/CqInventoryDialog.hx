@@ -814,13 +814,13 @@ class CqInventoryItem extends HxlSprite {
 		_dlg.remove(this);
 		zIndex = idleZIndex;
 		_dlg.add(this);
-
-		if ( cast(_dlg.dlgEqGrid.cells[Cell], CqEquipmentCell).equipSlot != this.item.equipSlot ) {
+		var cellRef:CqEquipmentCell = cast(_dlg.dlgEqGrid.cells[Cell], CqEquipmentCell);
+		if ( cellRef.equipSlot != this.item.equipSlot ) {
 			Cell = _dlg.dlgInvGrid.getOpenCellIndex();
 			setInventoryCell(Cell);
 			return false;
 		}
-
+		cellRef.icon.visible = false;
 		cellIndex = Cell;
 		setPos(_dlg.dlgEqGrid.getCellItemPos(Cell));
 		_dlg.dlgEqGrid.setCellObj(Cell, this);

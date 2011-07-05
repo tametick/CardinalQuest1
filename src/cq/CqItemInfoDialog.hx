@@ -36,7 +36,7 @@ class CqItemInfoDialog extends HxlDialog {
 		spellSheet = null;
 		_item = null;
 
-		_icon = new HxlSprite(Width - 48 - 10, (Height-10-48));
+		_icon = new HxlSprite(Width - 28, Height - 98);
 		_icon.visible = false;
 		_itemName = new HxlText(10, 10, Std.int(Width-20));
 		_itemName.setFormat(null, 32, 0xffffff, "left", 0x010101);
