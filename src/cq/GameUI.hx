@@ -131,7 +131,6 @@ class GameUI extends HxlDialog {
 		add(panelInventory);
 
 		panelCharacter = new CqCharacterDialog(84, 0, 472, 480);
-		panelCharacter.setBackgroundColor(0xffa5a5a5);
 		panelCharacter.zIndex = 2;
 		add(panelCharacter);
 

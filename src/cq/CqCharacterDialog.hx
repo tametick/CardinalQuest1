@@ -2,6 +2,7 @@ package cq;
 
 import cq.CqActor;
 import cq.CqResources;
+import haxel.HxlSprite;
 
 
 import haxel.HxlSlidingDialog;
@@ -28,59 +29,27 @@ class CqCharacterDialog extends HxlSlidingDialog {
 	{
 		// Size: 472 x 480
 		super(X, Y, Width, Height, Direction);
-
-		txtCharName = new HxlText(20, 20, 430, "Unknown Hero");
-		txtCharName.setFormat(null, 32, 0xffffff, "left", 0x010101);
-		add(txtCharName);
-
-		txtHealthLabel = new HxlText(20, 100, 430, "Health:");
-		txtHealthLabel.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
-		add(txtHealthLabel);
-
-		valHealth = new HxlText(150, 100, 200, "0");
-		valHealth.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
-		add(valHealth);
-
-		txtAttackLabel = new HxlText(20, 130, 430, "Attack:");
-		txtAttackLabel.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
-		add(txtAttackLabel);
-
-		valAttack = new HxlText(150, 130, 200, "0");
-		valAttack.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
-		add(valAttack);
-
-		txtDefenseLabel = new HxlText(20, 160, 430, "Defense:");
-		txtDefenseLabel.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
-		add(txtDefenseLabel);
-
-		valDefense = new HxlText(150, 160, 200, "0");
-		valDefense.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
-		add(valDefense);
-
-		txtSpeedLabel = new HxlText(20, 190, 430, "Speed:");
-		txtSpeedLabel.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
-		add(txtSpeedLabel);
-
-		valSpeed = new HxlText(150, 190, 200, "0");
-		valSpeed.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
-		add(valSpeed);
-
-		txtSpiritLabel = new HxlText(20, 220, 430, "Spirit:");
-		txtSpiritLabel.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
-		add(txtSpiritLabel);
-
-		valSpirit = new HxlText(150, 220, 200, "0");
-		valSpirit.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
-		add(valSpirit);
-
-		txtVitalityLabel = new HxlText(20, 250, 430, "Vitality:");
-		txtVitalityLabel.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
-		add(txtVitalityLabel);
-
-		valVitality = new HxlText(150, 250, 200, "0");
-		valVitality.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
-		add(valVitality);
-
+		
+		var bg:HxlSprite = new HxlSprite(0, 0, SpriteMapPaper);
+		bg.zIndex = -5;
+		add(bg);
+		
+		//var textColor:Int = 0xFFFFFF;
+		var textColor:Int = 0x6D564B;
+		
+		var textBoxes:Array<String> = ["txtCharName", "txtHealthLabel", "valHealth", "txtAttackLabel", "valAttack", "txtDefenseLabel", "valDefense", "txtSpeedLabel", "valSpeed", "txtSpiritLabel", "valSpirit", "txtVitalityLabel", "valVitality"];
+		var txt_string:Array<String> = ["Unknown Hero", "Health:", "0", "Attack:", "0", "Defense:", "0", "Speed:", "0", "Spirit:", "0", "Vitality:", "0"];
+		var pos:Array<Array<Int>> = [ [ 20, 20], [20, 100], [150, 100], [20, 130], [150, 130], [20, 160], [150, 160], [20, 190], [150, 190], [20, 220], [150, 220], [20, 250], [150, 250]];
+		for (i in 0...textBoxes.length)
+		{
+			var box:HxlText = new HxlText(pos[i][0], pos[i][1], 430, txt_string[i]);
+			Reflect.setField(this, textBoxes[i], box);
+			add(box);
+			if (i == 0)
+				box.setFormat(null, 32, textColor, "left", 0x010101);
+			else
+				box.setFormat(FontAnonymousPro.instance.fontName, 16, textColor, "left", 0x010101);
+		}
 	}
 
 	public override function show(?ShowCallback:Dynamic=null) {
