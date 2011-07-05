@@ -7,7 +7,9 @@ import cq.CqPotionButton;
 import cq.CqResources;
 import cq.CqSpell;
 import cq.CqSpellButton;
+import cq.ui.CqPopup;
 import cq.ui.ItemCellGroups;
+import data.Resources;
 import haxel.GraphicCache;
 
 import data.Configuration;
@@ -78,7 +80,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		add(dlgInfo);
 
 		//on the bottom
-		dlgInvGrid = new CqInventoryGrid(DLG_OUTER_BORDER, div_u+DLG_GAP, div_l+div_r, div_b);
+		dlgInvGrid = new CqInventoryGrid(DLG_OUTER_BORDER, div_u-23, div_l+div_r, div_b);
 		add(dlgInvGrid);
 
 		itemSheet = SpriteItems.instance;
@@ -139,7 +141,11 @@ class CqInventoryDialog extends HxlSlidingDialog {
 			uiItem.setIcon(itemSprite.getFramePixels());
 		}
 		add(uiItem);
-
+		//uiItem.setPopup(new CqPopup(150,Resources.descriptions.get(Item.name));
+		uiItem.setPopup(new CqPopup(150,Item.name ));
+		add(uiItem.popup);
+		uiItem.popup.zIndex = 500;
+				
 		// If this uiItem is equippable, and affiliated slot is open, auto equip it
 		if ( Item.equipSlot != null ) {
 			if ( Item.equipSlot == POTION ) {
@@ -276,7 +282,7 @@ class CqInventoryGrid extends HxlDialog {
 		if ( !CreateCells ) return;
 		
 		var paddingX:Float = -2;
-		var paddingY:Float = -2;
+		var paddingY:Float = 10;
 		var cellSize:Int = 64;
 		var offsetX:Int = 0;
 
@@ -288,7 +294,6 @@ class CqInventoryGrid extends HxlDialog {
 				var _x:Float = offsetX + ((col) * paddingX) + (col * cellSize);
 				var _y:Float = ((row) * paddingY) + (row * cellSize);
 				var cell:CqInventoryCell = new CqInventoryCell( _x+5, _y+5, cellSize, cellSize, idx);
-				
 				cell.setGraphicKeys(CqGraphicKey.buttonSprite, CqGraphicKey.EqCellBGHighlight, CqGraphicKey.CellGlow);
 				add(cell);
 				cells.push(cell);

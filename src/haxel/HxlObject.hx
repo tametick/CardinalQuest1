@@ -29,7 +29,8 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	 * scrollFactor is initialized as (1,1) by default.
 	 */
 	public var scrollFactor:HxlPoint;
-
+	
+	public var popup:HxlSprite;
 	/**
 	 * WARNING: The origin of the sprite will default to its center.
 	 * If you change this, the visuals and the collisions will likely be
@@ -203,6 +204,8 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		mountObject = null;
 		mountOffsetX = 0;
 		mountOffsetY = 0;
+		
+		_mp = new HxlPoint();
 	}
 
 	/**
@@ -250,6 +253,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	public function kill() {
 		exists = false;
 		dead = true;
+		popup = null;
 		HxlGraphics.state.remove(this);
 	}
 
@@ -358,6 +362,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	/**
 	 * Called by the main game loop, handles motion/physics and game logic
 	 */
+	var _mp:HxlPoint;
 	public function update() {
 		updateMotion();
 		//updateFlickering();
@@ -365,8 +370,27 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 			x = mountObject.x + mountOffsetX;
 			y = mountObject.y + mountOffsetY;
 		}
+		if ( popup != null)
+		{
+			var m:HxlMouse = HxlGraphics.mouse;
+			if ( overlapsPoint(m.x, m.y))
+			{
+				popup.visible = true;
+				_mp.x = m.screenX; _mp.y = m.screenY;
+				popup.x = _mp.x-20;
+				popup.y = _mp.y+20;
+				
+			}else
+			{
+				popup.visible = false;
+			}
+		}
 	}
-
+	public function setPopup(Popup:HxlSprite)
+	{
+		popup = Popup;
+		popup.visible = false;
+	}
 	/**
 	 * Override this function to draw graphics (see <code>HxlSprite</code>).
 	 */
