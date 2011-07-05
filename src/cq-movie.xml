@@ -71,7 +71,7 @@
 	<DefineBitsJPEG id="28" file="../rsrc/cq/logo.png" />
 	<SymbolClass id="28" class="cq.SpriteLogo" />	
 	<DefineBitsJPEG id="29" file="../rsrc/cq/decorations.png" />
-	<SymbolClass id="29" class="cq.SpriteLogo" />
+	<SymbolClass id="29" class="cq.SpriteDecorations" />
 	
 	<DefineSound id="30" file="../rsrc/cq/sounds/enemyHit.mp3" />
 	<SymbolClass id="30" class="cq.EnemyHit" />
@@ -97,6 +97,21 @@
 	<SymbolClass id="40" class="cq.SpellCastNegative" />
 	<DefineSound id="41" file="../rsrc/cq/sounds/spellEquipped.mp3" />
 	<SymbolClass id="41" class="cq.SpellEquipped" />
+	<DefineSound id="42" file="../rsrc/cq/sounds/Footstep1.mp3" />
+	<SymbolClass id="42" class="cq.Footstep1" />
+	<DefineSound id="43" file="../rsrc/cq/sounds/Footstep1.mp3" />
+	<SymbolClass id="43" class="cq.Footstep1" />
+	<DefineSound id="44" file="../rsrc/cq/sounds/Footstep1.mp3" />
+	<SymbolClass id="44" class="cq.Footstep1" />
+	<DefineSound id="45" file="../rsrc/cq/sounds/Footstep1.mp3" />
+	<SymbolClass id="45" class="cq.Footstep1" />
+	<DefineSound id="46" file="../rsrc/cq/sounds/Footstep1.mp3" />
+	<SymbolClass id="46" class="cq.Footstep1" />
+	<DefineSound id="47" file="../rsrc/cq/sounds/Footstep1.mp3" />
+	<SymbolClass id="47" class="cq.Footstep1" />
+	
+	<DefineBitsJPEG id="48" file="../rsrc/cq/inv_box_02.png" />
+	<SymbolClass id="48" class="cq.UiInventoryBox" />
 	
 	<DefineABC file="../bin/cq-movie.swf" isBoot="true" />
 

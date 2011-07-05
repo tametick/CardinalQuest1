@@ -36,6 +36,12 @@ class PotionQuaffed extends Sound { public function new() { super(); } }
 class SpellCast extends Sound { public function new() { super(); } }
 class SpellCastNegative extends Sound { public function new() { super(); } }
 class SpellEquipped extends Sound { public function new() { super(); } }
+class Footstep1 extends Sound { public function new() { super(); } }
+class Footstep2 extends Sound { public function new() { super(); } }
+class Footstep3 extends Sound { public function new() { super(); } }
+class Footstep4 extends Sound { public function new() { super(); } }
+class Footstep5 extends Sound { public function new() { super(); } }
+class Footstep6 extends Sound { public function new() { super(); } }
 
 class SpriteLogo extends Bitmap { public function new() { super(); } }
 class SpriteHeart extends Bitmap { public function new() { super(); } }
