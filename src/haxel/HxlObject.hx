@@ -378,8 +378,17 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 				popup.visible = true;
 				_mp.x = m.screenX; _mp.y = m.screenY;
 				popup.x = _mp.x-20;
-				popup.y = _mp.y+20;
-				
+				popup.y = _mp.y + 20;
+				if ( popup.x + popup.width > HxlGraphics.stage.stageWidth)
+				{
+					popup.x = HxlGraphics.stage.stageWidth - popup.width;
+				}else if (popup.x < 5)
+					popup.x = 5;
+				if ( popup.y + popup.height > HxlGraphics.stage.stageHeight)
+				{
+					popup.y = HxlGraphics.stage.stageHeight - popup.height;
+				}else if (popup.y < 5)
+					popup.y = 5;
 			}else
 			{
 				popup.visible = false;
