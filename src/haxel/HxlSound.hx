@@ -90,7 +90,7 @@ class HxlSound extends HxlObject {
 	 * 
 	 * @return	This <code>FlxSound</code> instance (nice for chaining stuff together, if you're into that).
 	 */
-	public function loadEmbedded(EmbeddedSound:Class<Sound>, ?Looped:Bool=false):HxlSound {
+	public function loadEmbedded(EmbeddedSound:Class<Dynamic>, ?Looped:Bool=false):HxlSound {
 		stop();
 		init();
 		_sound = Type.createInstance(EmbeddedSound, []);

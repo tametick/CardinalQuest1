@@ -19,6 +19,7 @@ import world.Tile;
 
 import data.Registery;
 import data.Resources;
+import data.SoundEffectsManager;
 import data.Configuration;
 
 import cq.CqResources;
@@ -30,7 +31,7 @@ import cq.CqVitalBar;
 
 import playtomic.PtPlayer;
 
-import com.eclecticdesignstudio.motion.Actuate;
+import flash.media.Sound;
 
 class CqTimer {
 	public var ticks:Int;
@@ -316,10 +317,9 @@ class CqActor extends CqObject, implements Actor {
 				justAttacked = true;
 				// end turn
 				return true;
-			} else
+			} else {
 				return false;
-			
-
+			}
 		} else if (tile.loots.length > 0 && Std.is(this,CqPlayer)) {
 			var loot = tile.loots[tile.loots.length - 1];
 			if (Std.is(loot, CqChest)) {
@@ -331,7 +331,13 @@ class CqActor extends CqObject, implements Actor {
 			}
 		}
 		
+		// move
 		isMoving = true;
+		if (Std.is(this, CqPlayer)) {
+			var step = "cq.Footstep" + HxlUtil.randomIntInRange(1, 6);
+			var sound = Type.resolveClass(step);
+			SoundEffectsManager.play(sound);
+		}
 		setTilePos(Std.int(targetX), Std.int(targetY));
 		var positionOfTile:HxlPoint = level.getPixelPositionOfTile(Math.round(tilePos.x), Math.round(tilePos.y));
 		moveToPixel(state, positionOfTile.x, positionOfTile.y);
