@@ -55,5 +55,6 @@
 		<sound id="cq.PlayerMiss" name="PlayerMiss" import="sounds/playerMiss.mp3"/>
 		<sound id="cq.ChestBusted" name="ChestBusted" import="sounds/chestBusted.mp3"/>
 		<sound id="cq.Pickup" name="Pickup" import="sounds/pickup.mp3"/>
+		<sound id="cq.DoorOpen" name="DoorOpen" import="sounds/doorOpen.mp3"/>
 	</library>
 </movie>

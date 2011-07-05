@@ -13,7 +13,7 @@ import playtomic.PtPlayer;
 
 import data.Configuration;
 import data.Registery;
-
+import data.SoundEffectsManager;
 
 import world.World;
 import world.Player;
@@ -274,6 +274,7 @@ class GameState extends CqState {
 	
 	
 	function openDoor(tile:CqTile) {
+		SoundEffectsManager.play(DoorOpen);
 		var col = CqRegistery.level.getColor();
 		Registery.level.updateTileGraphic(tile.mapX, tile.mapY, SpriteTiles.instance.getSpriteIndex(col + "_door_open"));
 	}
