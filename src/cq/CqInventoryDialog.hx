@@ -49,6 +49,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	var spellSprite:HxlSprite;
 
 	static inline var DLG_OUTER_BORDER:Int 		= 10; 
+	static inline var DLG_TOP_BORDER:Int 		= 0; 
 	static inline var DLG_GAP:Int 				= 15; 
 	static inline var DLG_DIVISOR_H_PERCENT:Int = 75;
 	static inline var DLG_DIVISOR_V_PERCENT:Int = 55;
@@ -64,11 +65,11 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		
 		var div_l:Float = (Width * (DLG_DIVISOR_V_PERCENT / 100)) - DLG_OUTER_BORDER*2;
 		var div_r:Float = (Width * ((100-DLG_DIVISOR_V_PERCENT) / 100))-DLG_OUTER_BORDER*2;
-		var div_u:Float  = (Height * (DLG_DIVISOR_H_PERCENT / 100))-DLG_OUTER_BORDER*2;
-		var div_b:Float  = (Height * ((100 - DLG_DIVISOR_H_PERCENT) / 100))-DLG_OUTER_BORDER*2;
+		var div_u:Float  = (Height * (DLG_DIVISOR_H_PERCENT / 100))-DLG_TOP_BORDER*2;
+		var div_b:Float  = (Height * ((100 - DLG_DIVISOR_H_PERCENT) / 100))-DLG_TOP_BORDER*2;
 		
 		//on the left
-		dlgCharacter = new HxlDialog(DLG_OUTER_BORDER, DLG_OUTER_BORDER, div_l-DLG_OUTER_BORDER, div_u-DLG_OUTER_BORDER);
+		dlgCharacter = new HxlDialog(DLG_OUTER_BORDER, DLG_TOP_BORDER, div_l-DLG_OUTER_BORDER, div_u-DLG_OUTER_BORDER);
 		add(dlgCharacter);
 		dlgCharacter.setBackgroundGraphic(UiInventoryBox);
 		//in dlgCharacter
@@ -76,12 +77,12 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		dlgCharacter.add(dlgEqGrid);
 
 		//on the right
-		dlgInfo = new CqItemInfoDialog(div_l + DLG_GAP, DLG_OUTER_BORDER, div_r, div_u - DLG_OUTER_BORDER);
+		dlgInfo = new CqItemInfoDialog(div_l + DLG_GAP, DLG_TOP_BORDER, div_r, div_u - DLG_OUTER_BORDER);
 		dlgInfo.zIndex = 3;
 		add(dlgInfo);
 
 		//on the bottom
-		dlgInvGrid = new CqInventoryGrid(DLG_OUTER_BORDER + 5, div_u - 18, div_l + div_r, div_b);
+		dlgInvGrid = new CqInventoryGrid(DLG_OUTER_BORDER + 5, div_u - 38, div_l + div_r, div_b);
 		dlgInvGrid.zIndex = 2;
 		add(dlgInvGrid);
 
@@ -110,17 +111,12 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	
 	public function itemPickup(Item:CqItem):Bool {
 		// if item already in inventory (?)
-		//var groupc:Bool = CqInventoryDialog.itemCell_groups.containsItem("equipment", Item);
-		var anyc:Bool = CqInventoryDialog.itemCell_groups.anyGroupContainsItem(Item);
-		var itrc:Bool = false;
 		for ( cell in dlgInvGrid.cells ) {
 			if ( cell.getCellObj() != null && cell.getCellObj().item == Item ) {
-				itrc = true;
 				cell.getCellObj().updateIcon();
 				return false;
 			}
 		}
-		//trace(anyc);
 		// because of stacking (?)
 		if ( Item.equipSlot == POTION ) {
 			for ( cell in dlgPotionGrid.cells ) {
@@ -227,7 +223,6 @@ class CqInventoryDialog extends HxlSlidingDialog {
 			// stuff gets updated for the first time.. just accommodate for it
 			// now.
 			UiItem.x = UiItem.x + 10;
-			UiItem.y = UiItem.y + 10;
 		}
 		CqRegistery.player.equipItem(Item);
 		return old;
@@ -281,7 +276,7 @@ class CqInventoryGrid extends HxlDialog {
 		cells = new Array();
 
 		if ( !CreateCells ) return;
-		var paddingX:Float = -2;
+		var paddingX:Float = 3;
 		var paddingY:Float = 10;
 		var cellSize:Int = 64;
 		var offsetX:Int = 0;
@@ -367,13 +362,13 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		var icons_y:Int = icons_x;
 		
 		var icons_names:Array<String> = [ "shoes", "gloves", "armor", "jewelry", "weapon", "hat" ];
-		var icons_positions:Array<Array<Int>> = [ [8, 193], [8, 100], [8, 8], [159, 193], [159, 100], [159, 8] ];
+		var cell_positions:Array<Array<Int>> = [ [8, 183], [8, 100], [8, 12], [159, 183], [159, 100], [159, 12] ];
 		var icons_slots:Array<CqEquipSlot> = [SHOES, GLOVES, ARMOR, JEWELRY, WEAPON, HAT];
 		
 		var btn:ButtonSprite;
 		for (idx in 0...icons_names.length)
 		{
-			cell = new CqEquipmentCell(icons_slots[idx], icons_positions[idx][0]-5, icons_positions[idx][1]-5, cellSize, cellSize, idx);
+			cell = new CqEquipmentCell(icons_slots[idx], cell_positions[idx][0]-5, cell_positions[idx][1]-5, cellSize, cellSize, idx);
 			btn = new ButtonSprite();
 			cell.add(btn);
 			btn.x = btn.y = -5;

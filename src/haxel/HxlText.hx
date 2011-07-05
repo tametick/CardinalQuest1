@@ -107,7 +107,6 @@ class HxlText extends HxlSprite {
 		calcFrame();
 		return this;
 	}
-
 	/**
 	 * The text being displayed.
 	 */
@@ -310,7 +309,6 @@ class HxlText extends HxlSprite {
 		var dtf:TextFormat = _tf.defaultTextFormat;
 		return new TextFormat(dtf.font,dtf.size,dtf.color,dtf.bold,dtf.italic,dtf.underline,dtf.url,dtf.target,dtf.align);
 	}
-
 	override public function kill() {
 		_framePixels.dispose();
 		_pixels.dispose();

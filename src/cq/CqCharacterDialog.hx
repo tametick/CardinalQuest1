@@ -2,6 +2,7 @@ package cq;
 
 import cq.CqActor;
 import cq.CqResources;
+import data.Configuration;
 import haxel.HxlSprite;
 
 
@@ -34,22 +35,38 @@ class CqCharacterDialog extends HxlSlidingDialog {
 		bg.zIndex = -5;
 		add(bg);
 		
-		//var textColor:Int = 0xFFFFFF;
 		var textColor:Int = 0x6D564B;
 		
 		var textBoxes:Array<String> = ["txtCharName", "txtHealthLabel", "valHealth", "txtAttackLabel", "valAttack", "txtDefenseLabel", "valDefense", "txtSpeedLabel", "valSpeed", "txtSpiritLabel", "valSpirit", "txtVitalityLabel", "valVitality"];
 		var txt_string:Array<String> = ["Unknown Hero", "Health:", "0", "Attack:", "0", "Defense:", "0", "Speed:", "0", "Spirit:", "0", "Vitality:", "0"];
-		var pos:Array<Array<Int>> = [ [ 20, 20], [20, 100], [150, 100], [20, 130], [150, 130], [20, 160], [150, 160], [20, 190], [150, 190], [20, 220], [150, 220], [20, 250], [150, 250]];
+		var pos:Array<Array<Int>> = [ [ 40, 40], [40, 100], [190, 100], [40, 130], [190, 130], [40, 160], [190, 160], [40, 190], [190, 190], [40, 220], [190, 220], [40, 250], [190, 250]];
 		for (i in 0...textBoxes.length)
 		{
 			var box:HxlText = new HxlText(pos[i][0], pos[i][1], 430, txt_string[i]);
 			Reflect.setField(this, textBoxes[i], box);
 			add(box);
 			if (i == 0)
-				box.setFormat(null, 32, textColor, "left", 0x010101);
+				box.setFormat(null, 48, textColor, "left", 0x010101);
 			else
-				box.setFormat(FontAnonymousPro.instance.fontName, 16, textColor, "left", 0x010101);
+				box.setFormat(FontAnonymousPro.instance.fontName, 20, textColor, "left", 0x010101);
 		}
+		//char icon
+		var player = new HxlSprite(0, 0);
+		var shadow = new HxlSprite(0, 0);
+		player.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 8.0, 8.0);
+		shadow.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 8.0, 8.0);
+		player.setFrame(SpritePlayer.instance.getSpriteIndex(Type.enumConstructor(CqRegistery.player.playerClass).toLowerCase()));
+		shadow.setFrame(SpritePlayer.instance.getSpriteIndex(Type.enumConstructor(CqRegistery.player.playerClass).toLowerCase()));
+		//shadow.
+		shadow.setAlpha(0.7);
+		shadow.setColor(1);
+		add(shadow);
+		add(player);
+		shadow.x = player.x = 300;
+		shadow.y = player.y = 150;
+		shadow.x += 5;
+		shadow.y += 5;
+		
 	}
 
 	public override function show(?ShowCallback:Dynamic=null) {
