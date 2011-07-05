@@ -82,7 +82,8 @@ class HxlMenuItem extends HxlText
 		super.update();
 		if ( visible && !_mouseHover && overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y) ) {
 			//HxlGraphics.mouse.set("button");
-			mouseOverSound();
+			if(mouseOverSound!=null)
+				mouseOverSound();
 			_mouseHover = true;
 		} else if ( !visible || (_mouseHover && !overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) ) {
 			//HxlGraphics.mouse.set("auto");

@@ -10,6 +10,7 @@ import cq.CqResources;
 
 import data.Configuration;
 import data.Resources;
+import data.SoundEffectsManager;
 
 import flash.display.BitmapData;
 import flash.display.Shape;
@@ -130,7 +131,11 @@ class CreateCharState extends CqState {
 	}
 
 	function changeSelection(Target:CqClass) {
-		if ( Target == curClass ) return;
+		if ( Target == curClass ) 
+			return;
+		
+		SoundEffectsManager.play(MenuItemMouseOver);
+		
 		curClass = Target;
 		var targetX:Float = 0;
 		if ( curClass == FIGHTER ) {
@@ -178,7 +183,10 @@ class CreateCharState extends CqState {
 	}
 
 	function gotoState(TargetState:Class<HxlState>) {
-		if ( state != 1 ) return;
+		if ( state != 1 ) 
+			return;
+			
+		SoundEffectsManager.play(MenuItemClick);
 		state = 0;
 		var self = this;
 		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {

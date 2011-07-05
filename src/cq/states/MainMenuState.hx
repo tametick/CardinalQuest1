@@ -50,7 +50,7 @@ class MainMenuState extends CqState {
 			btnResumeGame.setNormalFormat(null, 40, 0xffffff, "center");
 			btnResumeGame.setHoverFormat(null, 40, 0xffff00, "center");
 			menu.addItem(btnResumeGame);
-			btnResumeGame.setCallback(function() { self.changeState(null); SoundEffectsManager.play(MenuItemClick);});
+			btnResumeGame.setCallback(function() { self.changeState(null);});
 			buttonY += 50;
 		}
 
@@ -58,21 +58,24 @@ class MainMenuState extends CqState {
 			SoundEffectsManager.play(MenuItemMouseOver);
 		};
 		
-		var btnNewGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "New Game", true, null, mouseOver);
+		var btnNewGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "New Game", true, null);
 		btnNewGame.setNormalFormat(null, 40, 0xffffff, "center");
 		btnNewGame.setHoverFormat(null, 40, 0xffff00, "center");
 		menu.addItem(btnNewGame);
-		btnNewGame.setCallback(function() { self.changeState(CreateCharState); SoundEffectsManager.play(MenuItemClick);});
+		btnNewGame.setCallback(function() { self.changeState(CreateCharState);});
 
 		buttonY += 50;
 
-		var btnCredits:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Credits", true, null, mouseOver);
+		var btnCredits:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Credits", true, null);
 		btnCredits.setNormalFormat(null, 40, 0xffffff, "center");
 		btnCredits.setHoverFormat(null, 40, 0xffff00, "center");
 		menu.addItem(btnCredits);
-		btnCredits.setCallback(function() { self.changeState(CreditsState); SoundEffectsManager.play(MenuItemClick);});
+		btnCredits.setCallback(function() { self.changeState(CreditsState); });
 
-		Actuate.tween(menu, 1, { targetY: 220 }).ease(Cubic.easeOut);
+		Actuate.tween(menu, 1, { targetY: 220 } ).ease(Cubic.easeOut);
+		
+		menu.setScrollSound(MenuItemMouseOver);
+		menu.setSelectSound(MenuItemClick);
 	}
 
 	public override function update() {
@@ -83,6 +86,7 @@ class MainMenuState extends CqState {
 	function changeState(TargetState:Class<HxlState>) {
 		if (btnClicked)
 			return;
+		
 		btnClicked = true;
 		var self = this;
 		if ( TargetState == null ) {
