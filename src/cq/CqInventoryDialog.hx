@@ -111,17 +111,12 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	
 	public function itemPickup(Item:CqItem):Bool {
 		// if item already in inventory (?)
-		//var groupc:Bool = CqInventoryDialog.itemCell_groups.containsItem("equipment", Item);
-		var anyc:Bool = CqInventoryDialog.itemCell_groups.anyGroupContainsItem(Item);
-		var itrc:Bool = false;
 		for ( cell in dlgInvGrid.cells ) {
 			if ( cell.getCellObj() != null && cell.getCellObj().item == Item ) {
-				itrc = true;
 				cell.getCellObj().updateIcon();
 				return false;
 			}
 		}
-		//trace(anyc);
 		// because of stacking (?)
 		if ( Item.equipSlot == POTION ) {
 			for ( cell in dlgPotionGrid.cells ) {
@@ -228,7 +223,6 @@ class CqInventoryDialog extends HxlSlidingDialog {
 			// stuff gets updated for the first time.. just accommodate for it
 			// now.
 			UiItem.x = UiItem.x + 10;
-			UiItem.y = UiItem.y + 10;
 		}
 		CqRegistery.player.equipItem(Item);
 		return old;
@@ -368,13 +362,13 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		var icons_y:Int = icons_x;
 		
 		var icons_names:Array<String> = [ "shoes", "gloves", "armor", "jewelry", "weapon", "hat" ];
-		var icons_positions:Array<Array<Int>> = [ [8, 193], [8, 100], [8, 8], [159, 193], [159, 100], [159, 8] ];
+		var cell_positions:Array<Array<Int>> = [ [8, 183], [8, 100], [8, 12], [159, 183], [159, 100], [159, 12] ];
 		var icons_slots:Array<CqEquipSlot> = [SHOES, GLOVES, ARMOR, JEWELRY, WEAPON, HAT];
 		
 		var btn:ButtonSprite;
 		for (idx in 0...icons_names.length)
 		{
-			cell = new CqEquipmentCell(icons_slots[idx], icons_positions[idx][0]-5, icons_positions[idx][1]-5, cellSize, cellSize, idx);
+			cell = new CqEquipmentCell(icons_slots[idx], cell_positions[idx][0]-5, cell_positions[idx][1]-5, cellSize, cellSize, idx);
 			btn = new ButtonSprite();
 			cell.add(btn);
 			btn.x = btn.y = -5;
