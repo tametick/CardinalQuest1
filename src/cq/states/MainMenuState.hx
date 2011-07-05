@@ -11,6 +11,8 @@ import haxel.HxlTimer;
 import data.MusicManager;
 import flash.ui.Mouse;
 import flash.ui.MouseCursor;
+import com.eclecticdesignstudio.motion.Actuate;
+import com.eclecticdesignstudio.motion.easing.Cubic;
 
 
 class MainMenuState extends CqState {
@@ -32,10 +34,10 @@ class MainMenuState extends CqState {
 		fadeTimer = new HxlTimer();
 		fadeTime = 0.5;
 
-		titleText = new LogoSprite((640-345)/2, (480-50)/2 - 60);
+		titleText = new LogoSprite((640-345)/2, (480-50)/2 - 55);
 		add(titleText);
 
-		menu = new HxlMenu(200, 220, 240, 200);
+		menu = new HxlMenu(200, 640, 240, 200);
 		add(menu);
 
 		var self = this;
@@ -65,9 +67,7 @@ class MainMenuState extends CqState {
 		menu.addItem(btnCredits);
 		btnCredits.setCallback(function() { self.changeState(CreditsState); });
 
-		if ( stackId == 0 ) {
-			HxlGraphics.fade.start(false, 0xff000000, fadeTime);
-		}
+		Actuate.tween(menu, fadeTime, { targetY: 220 }).ease(Cubic.easeOut);
 	}
 
 	public override function update() {

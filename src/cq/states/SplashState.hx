@@ -8,6 +8,8 @@ import haxel.HxlSprite;
 import haxel.HxlState;
 import haxel.HxlText;
 import haxel.HxlTimer;
+import com.eclecticdesignstudio.motion.Actuate;
+import com.eclecticdesignstudio.motion.easing.Cubic;
 
 class SplashState extends CqState {
 	var fadeTimer:HxlTimer;
@@ -20,14 +22,15 @@ class SplashState extends CqState {
 		super.create();
 
 		fadeTimer = new HxlTimer();
-		fadeTime = 0.5;
-		waitTime = 2.0;
+		fadeTime = 1;
+		waitTime = 0;
 		stateNum = 0;
 
-		splashText = new LogoSprite((640-345)/2, (480-50)/2);
+		splashText = new LogoSprite((640-345)/2, -50);
 		add(splashText);
 
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
+		Actuate.tween(splashText, fadeTime, { y: (480-50)/2 - 55 }).ease(Cubic.easeOut);
 	}
 
 	public override function update() {
@@ -55,10 +58,7 @@ class SplashState extends CqState {
 			return;
 		
 		stateNum = 2;
-		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
-			var newState = new MainMenuState();
-			HxlGraphics.state = newState;
-		}, true);
+		HxlGraphics.state = new MainMenuState();
 	}
 
 }
