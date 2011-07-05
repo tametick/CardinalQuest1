@@ -281,7 +281,7 @@ class CqInventoryGrid extends HxlDialog {
 		cells = new Array();
 
 		if ( !CreateCells ) return;
-		var paddingX:Float = -2;
+		var paddingX:Float = 3;
 		var paddingY:Float = 10;
 		var cellSize:Int = 64;
 		var offsetX:Int = 0;
