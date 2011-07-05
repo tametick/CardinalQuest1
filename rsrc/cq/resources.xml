@@ -3,6 +3,7 @@
 	<library>
 		<font id="cq.FontDungeon" import="Dungeon.ttf" name="FontDungeon" /> 
 		<font id="cq.FontAnonymousPro" import="AnonymousPro-Regular.ttf" name="FontAnonymousPro" /> 
+		<font id="cq.FontAnonymousProB" import="Anonymous-Pro-B.ttf" name="FontAnonymousProB" /> 
 		<bitmap id="cq.SpriteLogo" import="logo.png"/>
 		<bitmap id="cq.SpriteHeart" import="heart.png"/>
 		<bitmap id="cq.SpritePortrait" import="portrait_slots.png"/>

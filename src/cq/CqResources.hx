@@ -17,7 +17,10 @@ class FontAnonymousPro extends Font {
 	public static var instance = new FontAnonymousPro();
 	public function new() { super(); } 
 }
-
+class FontAnonymousProB extends Font { 
+	public static var instance = new FontAnonymousProB();
+	public function new() { super(); } 
+}
 class MainThemeOne extends Sound { public function new() { super(); } }
 class MainThemeTwo extends Sound { public function new() { super(); } }
 class MenuTheme extends Sound { public function new() { super(); } }
