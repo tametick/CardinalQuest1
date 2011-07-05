@@ -430,6 +430,7 @@ class HxlSprite extends HxlObject {
 			y = HxlGraphics.mouse.y - dragOffset.y;
 			dragMove();
 		}
+		super.update();
 	}
 
 	/**
