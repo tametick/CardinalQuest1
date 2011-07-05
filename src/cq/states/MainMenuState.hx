@@ -1,6 +1,7 @@
 package cq.states;
 
 import cq.CqResources;
+import data.SoundEffectsManager;
 import haxel.HxlGraphics;
 import haxel.HxlMenu;
 import haxel.HxlMenuItem;
@@ -53,7 +54,11 @@ class MainMenuState extends CqState {
 			buttonY += 50;
 		}
 
-		var btnNewGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "New Game");
+		var mouseOver= function() { 
+			SoundEffectsManager.play(MenuItemMouseOver);
+		};
+		
+		var btnNewGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "New Game", true, null, mouseOver);
 		btnNewGame.setNormalFormat(null, 40, 0xffffff, "center");
 		btnNewGame.setHoverFormat(null, 40, 0xffff00, "center");
 		menu.addItem(btnNewGame);
@@ -61,7 +66,7 @@ class MainMenuState extends CqState {
 
 		buttonY += 50;
 
-		var btnCredits:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Credits");
+		var btnCredits:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Credits", true, null, mouseOver);
 		btnCredits.setNormalFormat(null, 40, 0xffffff, "center");
 		btnCredits.setHoverFormat(null, 40, 0xffff00, "center");
 		menu.addItem(btnCredits);

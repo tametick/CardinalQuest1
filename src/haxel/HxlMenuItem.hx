@@ -21,14 +21,17 @@ class HxlMenuItem extends HxlText
 
 	public var itemCallback(getCallback, setCallback):Dynamic;
 	var _itemCallback:Dynamic;
+	
+	var mouseOverSound:Dynamic;
 
-	public function new(X:Float, Y:Float, Width:Int, ?Text:String=null, ?EmbeddedFont:Bool=true, ?FontName:String=null) {
+	public function new(X:Float, Y:Float, Width:Int, ?Text:String=null, ?EmbeddedFont:Bool=true, ?FontName:String=null,?MouseOverSound:Void->Void=null) {
 		super(X, Y, Width, Text, EmbeddedFont, FontName);
 		normalFormat = dtfCopy();
 		hoverFormat = dtfCopy();
 		showHover = false;
 		_itemCallback = function() {};
 		_mouseHover = false;
+		mouseOverSound = MouseOverSound;
 	}
 
 	public function setHover(Hover:Bool=false) {
@@ -79,6 +82,7 @@ class HxlMenuItem extends HxlText
 		super.update();
 		if ( visible && !_mouseHover && overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y) ) {
 			//HxlGraphics.mouse.set("button");
+			mouseOverSound();
 			_mouseHover = true;
 		} else if ( !visible || (_mouseHover && !overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) ) {
 			//HxlGraphics.mouse.set("auto");
