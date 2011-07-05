@@ -1,6 +1,7 @@
 package cq.states;
 
 import cq.CqResources;
+import data.SoundEffectsManager;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import haxel.HxlGraphics;
@@ -19,6 +20,7 @@ class SplashState extends CqState {
 	var splashText:HxlSprite;
 
 	public override function create() {
+		SoundEffectsManager.play(FortressGate);
 		super.create();
 
 		fadeTimer = new HxlTimer();

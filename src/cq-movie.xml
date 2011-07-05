@@ -66,8 +66,52 @@
 	<SymbolClass id="25" class="cq.UiBeltHorizontal" />
 	<DefineBitsJPEG id="26" file="../rsrc/cq/cursor.png" />
 	<SymbolClass id="26" class="cq.SpriteCursor" />	
-	<DefineBitsJPEG id="26" file="../rsrc/cq/logo.png" />
-	<SymbolClass id="26" class="cq.SpriteLogo" />	
+	<DefineBitsJPEG id="27" file="../rsrc/cq/logo.png" />
+	<SymbolClass id="27" class="cq.SpriteLogo" />	
+	<DefineBitsJPEG id="28" file="../rsrc/cq/logo.png" />
+	<SymbolClass id="28" class="cq.SpriteLogo" />	
+	<DefineBitsJPEG id="29" file="../rsrc/cq/decorations.png" />
+	<SymbolClass id="29" class="cq.SpriteDecorations" />
+	
+	<DefineSound id="30" file="../rsrc/cq/sounds/enemyHit.mp3" />
+	<SymbolClass id="30" class="cq.EnemyHit" />
+	<DefineSound id="31" file="../rsrc/cq/sounds/fortressGate.mp3" />
+	<SymbolClass id="31" class="cq.FortressGate" />
+	<DefineSound id="32" file="../rsrc/cq/sounds/itemEquipped.mp3" />
+	<SymbolClass id="32" class="cq.ItemEquipped" />
+	<DefineSound id="33" file="../rsrc/cq/sounds/levelUp.mp3" />
+	<SymbolClass id="33" class="cq.LevelUp" />
+	<DefineSound id="34" file="../rsrc/cq/sounds/menuItemClick.mp3" />
+	<SymbolClass id="34" class="cq.MenuItemClick" />
+	<DefineSound id="35" file="../rsrc/cq/sounds/menuItemMouseOver.mp3" />
+	<SymbolClass id="35" class="cq.MenuItemMouseOver" />
+	<DefineSound id="36" file="../rsrc/cq/sounds/playerHit.mp3" />
+	<SymbolClass id="36" class="cq.PlayerHit" />
+	<DefineSound id="37" file="../rsrc/cq/sounds/potionEquipped.mp3" />
+	<SymbolClass id="37" class="cq.PotionEquipped" />
+	<DefineSound id="38" file="../rsrc/cq/sounds/potionQuaffed.mp3" />
+	<SymbolClass id="38" class="cq.PotionQuaffed" />
+	<DefineSound id="39" file="../rsrc/cq/sounds/spellCast.mp3" />
+	<SymbolClass id="39" class="cq.SpellCast" />
+	<DefineSound id="40" file="../rsrc/cq/sounds/spellCastNegative.mp3" />
+	<SymbolClass id="40" class="cq.SpellCastNegative" />
+	<DefineSound id="41" file="../rsrc/cq/sounds/spellEquipped.mp3" />
+	<SymbolClass id="41" class="cq.SpellEquipped" />
+	<DefineSound id="42" file="../rsrc/cq/sounds/Footstep1.mp3" />
+	<SymbolClass id="42" class="cq.Footstep1" />
+	<DefineSound id="43" file="../rsrc/cq/sounds/Footstep1.mp3" />
+	<SymbolClass id="43" class="cq.Footstep1" />
+	<DefineSound id="44" file="../rsrc/cq/sounds/Footstep1.mp3" />
+	<SymbolClass id="44" class="cq.Footstep1" />
+	<DefineSound id="45" file="../rsrc/cq/sounds/Footstep1.mp3" />
+	<SymbolClass id="45" class="cq.Footstep1" />
+	<DefineSound id="46" file="../rsrc/cq/sounds/Footstep1.mp3" />
+	<SymbolClass id="46" class="cq.Footstep1" />
+	<DefineSound id="47" file="../rsrc/cq/sounds/Footstep1.mp3" />
+	<SymbolClass id="47" class="cq.Footstep1" />
+	
+	<DefineBitsJPEG id="48" file="../rsrc/cq/inv_box_02.png" />
+	<SymbolClass id="48" class="cq.UiInventoryBox" />
 	
 	<DefineABC file="../bin/cq-movie.swf" isBoot="true" />
 

@@ -31,5 +31,24 @@
 		<sound id="cq.BossTheme" name="BossTheme" import="boss.mp3"/>
 		<sound id="cq.WinTheme" name="WinTheme" import="win.mp3"/>
 		
+		<sound id="cq.EnemyHit" name="EnemyHit" import="sounds/enemyHit.mp3"/>
+		<sound id="cq.FortressGate" name="FortressGate" import="sounds/fortressGate.mp3"/>
+		<sound id="cq.ItemEquipped" name="ItemEquipped" import="sounds/itemEquipped.mp3"/>
+		<sound id="cq.LevelUp" name="LevelUp" import="sounds/levelUp.mp3"/>
+		<sound id="cq.MenuItemClick" name="MenuItemClick" import="sounds/menuItemClick.mp3"/>
+		<sound id="cq.MenuItemMouseOver" name="MenuItemMouseOver" import="sounds/menuItemMouseOver.mp3"/>
+		<sound id="cq.PlayerHit" name="PlayerHit" import="sounds/playerHit.mp3"/>
+		<sound id="cq.PotionEquipped" name="PotionEquipped" import="sounds/potionEquipped.mp3"/>
+		<sound id="cq.PotionQuaffed" name="PotionQuaffed" import="sounds/potionQuaffed.mp3"/>
+		<sound id="cq.SpellCast" name="SpellCast" import="sounds/spellCast.mp3"/>
+		<sound id="cq.SpellCastNegative" name="SpellCastNegative" import="sounds/spellCastNegative.mp3"/>
+		<sound id="cq.SpellEquipped" name="SpellEquipped" import="sounds/spellEquipped.mp3"/>
+		
+		<sound id="cq.Footstep1" name="Footstep1" import="sounds/Footstep1.mp3"/>
+		<sound id="cq.Footstep2" name="Footstep2" import="sounds/Footstep2.mp3"/>
+		<sound id="cq.Footstep3" name="Footstep3" import="sounds/Footstep3.mp3"/>
+		<sound id="cq.Footstep4" name="Footstep4" import="sounds/Footstep4.mp3"/>
+		<sound id="cq.Footstep5" name="Footstep5" import="sounds/Footstep5.mp3"/>
+		<sound id="cq.Footstep6" name="Footstep6" import="sounds/Footstep6.mp3"/>
 	</library>
 </movie>

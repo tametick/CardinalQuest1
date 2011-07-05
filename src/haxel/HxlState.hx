@@ -36,7 +36,6 @@ class HxlState extends Sprite {
 	var cursor:HxlSprite;
 	
 	public function new() {
-
 		super();
 		defaultGroup = new HxlGroup();
 		stackId = 0;

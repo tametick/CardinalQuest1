@@ -6,8 +6,8 @@ import flash.events.MouseEvent;
 
 class HxlMenu extends HxlDialog {
 	var items:Array<HxlMenuItem>;
-	var _scrollSound:HxlSound;
-	var _selectSound:HxlSound;
+	var _scrollSound:Class<Sound>;
+	var _selectSound:Class<Sound>;
 	var inputEnabled:Bool;
 	var currentItem:Int;
 
@@ -46,54 +46,77 @@ class HxlMenu extends HxlDialog {
 	function onKeyDown(event:KeyboardEvent) {
 		var c:Int = event.keyCode;
 		if ( c == 13 ) { // Enter
+			if ( _selectSound != null ) 
+				playSelectSound();
+				
 			if ( currentItem >= 0 ) {
 				items[currentItem].doCallback();
-				if ( _selectSound != null ) _selectSound.play();
 			}
 		} else if ( c == 38 ) { // Up
-			if ( currentItem >= 0 ) items[currentItem].setHover(false);
+			if ( _scrollSound != null ) 
+				playScrollSound();
+			
+			if ( currentItem >= 0 ) 
+				items[currentItem].setHover(false);
 			currentItem--;
-			if ( currentItem < 0 ) currentItem = items.length - 1;
+			if ( currentItem < 0 ) 
+				currentItem = items.length - 1;
 			items[currentItem].setHover(true);
-			if ( _scrollSound != null ) _scrollSound.play();
+			
 		} else if ( c == 40 ) { // Down
-			if ( currentItem >= 0 ) items[currentItem].setHover(false);
+			if ( _scrollSound != null ) 
+				playScrollSound();
+				
+			if ( currentItem >= 0 ) 
+				items[currentItem].setHover(false);
 			currentItem++;
-			if ( currentItem >= items.length ) currentItem = 0;
+			if ( currentItem >= items.length ) 
+				currentItem = 0;
 			items[currentItem].setHover(true);
-			if ( _scrollSound != null ) _scrollSound.play();
+
 		}
 	}
 
+	function playSelectSound() {
+		var snd = new HxlSound();
+		snd.loadEmbedded(_selectSound, false);
+		snd.play();
+	}
+	function playScrollSound() {
+		var snd = new HxlSound();
+		snd.loadEmbedded(_scrollSound, false);
+		snd.play();
+	}
+	
+	
 	function onMouseUp(event:MouseEvent) {
 		if ( !inputEnabled || !exists || !visible || !active || !HxlGraphics.mouse.justReleased() || (currentItem == -1)) return;
 		if ( items[currentItem].overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y) ) {
 			items[currentItem].doCallback();
-			if ( _selectSound != null ) _selectSound.play();
+			if ( _selectSound != null ) 
+				playSelectSound();
 		}
 	}
 			
-	public function setScrollSound(ScrollSound:Class<Sound>):HxlSound {
-		if ( _scrollSound == null ) _scrollSound = new HxlSound();
-		_scrollSound.loadEmbedded(ScrollSound, false);
-		return _scrollSound;
+	public function setScrollSound(ScrollSound:Class<Sound>) {
+		_scrollSound = ScrollSound;
 	}
 		
-	public function setSelectSound(SelectSound:Class<Sound>):HxlSound {
-		if ( _selectSound == null ) _selectSound = new HxlSound();
-		_selectSound.loadEmbedded(SelectSound, false);
-		return _selectSound;
+	public function setSelectSound(SelectSound:Class<Sound>){
+		_selectSound = SelectSound;
 	}
 	
 	public override function update() {
-		if ( inputEnabled == true && !visible ) toggleInput(false);
+		if ( inputEnabled == true && !visible ) 
+			toggleInput(false);
 		if ( inputEnabled ) {
 			for ( i in 0...items.length ) {
 				if ( currentItem != i && items[i].overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y) ) {
 					items[currentItem].setHover(false);
 					currentItem = i;
 					items[currentItem].setHover(true);
-					if ( _scrollSound != null ) _scrollSound.play();
+					if ( _scrollSound != null ) 
+						playScrollSound();
 					break;
 				}
 			}

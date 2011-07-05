@@ -1,6 +1,7 @@
 package cq.states;
 
 import cq.CqResources;
+import data.SoundEffectsManager;
 import haxel.HxlGraphics;
 import haxel.HxlMenu;
 import haxel.HxlMenuItem;
@@ -49,25 +50,32 @@ class MainMenuState extends CqState {
 			btnResumeGame.setNormalFormat(null, 40, 0xffffff, "center");
 			btnResumeGame.setHoverFormat(null, 40, 0xffff00, "center");
 			menu.addItem(btnResumeGame);
-			btnResumeGame.setCallback(function() { self.changeState(null); });
+			btnResumeGame.setCallback(function() { self.changeState(null);});
 			buttonY += 50;
 		}
 
-		var btnNewGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "New Game");
+		var mouseOver= function() { 
+			SoundEffectsManager.play(MenuItemMouseOver);
+		};
+		
+		var btnNewGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "New Game", true, null);
 		btnNewGame.setNormalFormat(null, 40, 0xffffff, "center");
 		btnNewGame.setHoverFormat(null, 40, 0xffff00, "center");
 		menu.addItem(btnNewGame);
-		btnNewGame.setCallback(function() { self.changeState(CreateCharState); });
+		btnNewGame.setCallback(function() { self.changeState(CreateCharState);});
 
 		buttonY += 50;
 
-		var btnCredits:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Credits");
+		var btnCredits:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Credits", true, null);
 		btnCredits.setNormalFormat(null, 40, 0xffffff, "center");
 		btnCredits.setHoverFormat(null, 40, 0xffff00, "center");
 		menu.addItem(btnCredits);
 		btnCredits.setCallback(function() { self.changeState(CreditsState); });
 
-		Actuate.tween(menu, fadeTime, { targetY: 220 }).ease(Cubic.easeOut);
+		Actuate.tween(menu, 1, { targetY: 220 } ).ease(Cubic.easeOut);
+		
+		menu.setScrollSound(MenuItemMouseOver);
+		menu.setSelectSound(MenuItemClick);
 	}
 
 	public override function update() {
@@ -78,6 +86,7 @@ class MainMenuState extends CqState {
 	function changeState(TargetState:Class<HxlState>) {
 		if (btnClicked)
 			return;
+		
 		btnClicked = true;
 		var self = this;
 		if ( TargetState == null ) {
