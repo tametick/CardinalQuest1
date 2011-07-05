@@ -49,6 +49,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	var spellSprite:HxlSprite;
 
 	static inline var DLG_OUTER_BORDER:Int 		= 10; 
+	static inline var DLG_TOP_BORDER:Int 		= 0; 
 	static inline var DLG_GAP:Int 				= 15; 
 	static inline var DLG_DIVISOR_H_PERCENT:Int = 75;
 	static inline var DLG_DIVISOR_V_PERCENT:Int = 55;
@@ -64,11 +65,11 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		
 		var div_l:Float = (Width * (DLG_DIVISOR_V_PERCENT / 100)) - DLG_OUTER_BORDER*2;
 		var div_r:Float = (Width * ((100-DLG_DIVISOR_V_PERCENT) / 100))-DLG_OUTER_BORDER*2;
-		var div_u:Float  = (Height * (DLG_DIVISOR_H_PERCENT / 100))-DLG_OUTER_BORDER*2;
-		var div_b:Float  = (Height * ((100 - DLG_DIVISOR_H_PERCENT) / 100))-DLG_OUTER_BORDER*2;
+		var div_u:Float  = (Height * (DLG_DIVISOR_H_PERCENT / 100))-DLG_TOP_BORDER*2;
+		var div_b:Float  = (Height * ((100 - DLG_DIVISOR_H_PERCENT) / 100))-DLG_TOP_BORDER*2;
 		
 		//on the left
-		dlgCharacter = new HxlDialog(DLG_OUTER_BORDER, DLG_OUTER_BORDER, div_l-DLG_OUTER_BORDER, div_u-DLG_OUTER_BORDER);
+		dlgCharacter = new HxlDialog(DLG_OUTER_BORDER, DLG_TOP_BORDER, div_l-DLG_OUTER_BORDER, div_u-DLG_OUTER_BORDER);
 		add(dlgCharacter);
 		dlgCharacter.setBackgroundGraphic(UiInventoryBox);
 		//in dlgCharacter
@@ -76,12 +77,12 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		dlgCharacter.add(dlgEqGrid);
 
 		//on the right
-		dlgInfo = new CqItemInfoDialog(div_l + DLG_GAP, DLG_OUTER_BORDER, div_r, div_u - DLG_OUTER_BORDER);
+		dlgInfo = new CqItemInfoDialog(div_l + DLG_GAP, DLG_TOP_BORDER, div_r, div_u - DLG_OUTER_BORDER);
 		dlgInfo.zIndex = 3;
 		add(dlgInfo);
 
 		//on the bottom
-		dlgInvGrid = new CqInventoryGrid(DLG_OUTER_BORDER + 5, div_u - 18, div_l + div_r, div_b);
+		dlgInvGrid = new CqInventoryGrid(DLG_OUTER_BORDER + 5, div_u - 38, div_l + div_r, div_b);
 		dlgInvGrid.zIndex = 2;
 		add(dlgInvGrid);
 
