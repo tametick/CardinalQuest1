@@ -928,6 +928,11 @@ class CqInventoryItem extends HxlSprite {
 	}
 
 	override function dragStart() {
+		if (cellEquip)
+		{
+			var cellRef:CqEquipmentCell = cast(_dlg.dlgEqGrid.cells[cellIndex], CqEquipmentCell);
+			cellRef.icon.visible = true;
+		}
 		_dlg.remove(this);
 		_dlg.dlgSpellGrid.remove(this);
 		zIndex = 500;
