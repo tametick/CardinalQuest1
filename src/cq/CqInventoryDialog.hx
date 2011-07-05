@@ -376,6 +376,7 @@ class CqEquipmentGrid extends CqInventoryGrid {
 			cell.cell_type = CqInvCellType.Equipment;
 			var icon = SpriteEquipmentIcons.getIcon(icons_names[idx], icons_size, 2.0);
 			cell.add(icon);
+			cell.icon = icon;
 			icon.x = icons_x-5;
 			icon.y = icons_y-5;
 			icon.setAlpha(0.3);
@@ -680,7 +681,7 @@ class CqEquipmentCell extends CqInventoryCell {
 	public static var highlightedCell:CqInventoryCell = null;
 	public var equipSlot:CqEquipSlot; // This should be read only
 	public var eqCellInit:Bool;
-
+	public var icon:HxlSprite;
 	public function new(EquipSlot:CqEquipSlot, ?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?CellIndex:Int=0) {
 		super(X, Y, Width, Height, CellIndex);
 		equipSlot = EquipSlot;
