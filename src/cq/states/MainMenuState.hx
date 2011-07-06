@@ -2,6 +2,7 @@ package cq.states;
 
 import cq.CqResources;
 import data.SoundEffectsManager;
+import data.Configuration;
 import haxel.HxlGraphics;
 import haxel.HxlMenu;
 import haxel.HxlMenuItem;
@@ -12,6 +13,7 @@ import haxel.HxlTimer;
 import data.MusicManager;
 import flash.ui.Mouse;
 import flash.ui.MouseCursor;
+import flash.Lib;
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;
 
@@ -63,7 +65,6 @@ class MainMenuState extends CqState {
 		btnNewGame.setHoverFormat(null, 40, 0xffff00, "center");
 		menu.addItem(btnNewGame);
 		btnNewGame.setCallback(function() { self.changeState(CreateCharState);});
-
 		buttonY += 50;
 
 		var btnCredits:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Credits", true, null);
@@ -71,7 +72,18 @@ class MainMenuState extends CqState {
 		btnCredits.setHoverFormat(null, 40, 0xffff00, "center");
 		menu.addItem(btnCredits);
 		btnCredits.setCallback(function() { self.changeState(CreditsState); });
-
+		buttonY += 50;
+		
+		if (Configuration.standAlone) {
+			var btnQuit:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Quit", true, null);
+			btnQuit.setNormalFormat(null, 40, 0xffffff, "center");
+			btnQuit.setHoverFormat(null, 40, 0xffff00, "center");
+			menu.addItem(btnQuit);
+			btnQuit.setCallback(function() { Lib.fscommand("quit"); } );
+			
+			buttonY += 50;			
+		}
+		
 		Actuate.tween(menu, 1, { targetY: 220 } ).ease(Cubic.easeOut);
 		
 		menu.setScrollSound(MenuItemMouseOver);

@@ -99,7 +99,7 @@ class HxlGame extends Sprite {
 		paused = false;
 		_autoPause = true;
 		_created = false;
-		addEventListener(Event.ENTER_FRAME, create,false,0,true);
+		addEventListener(Event.ENTER_FRAME, create, false, 0, true);
 	}
 
 	/**
