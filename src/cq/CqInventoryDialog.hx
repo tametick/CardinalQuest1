@@ -141,7 +141,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		add(uiItem);
 		uiItem.setPopup(new CqPopup(100,Item.name ));
 		add(uiItem.popup);
-		uiItem.popup.zIndex = 500;
+		uiItem.popup.zIndex = 600;
 				
 		// If this uiItem is equippable, and affiliated slot is open, auto equip it
 		if ( Item.equipSlot != null ) {
@@ -164,7 +164,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 					if ( cell.getCellObj() == null ) {
 						uiItem.setSpellCell(cell.cellIndex);
 						
-						GameUI.instance.updateCharge(cast(cell, CqSpellCell).btn);
+						//GameUI.instance.updateCharge(cast(cell, CqSpellCell).btn);
 						return false;
 					}
 				}
@@ -462,7 +462,6 @@ class CqSpellGrid extends CqInventoryGrid {
 			cells.push(btnCell.cell);
 			buttons.push(btnCell);
 		}
-		CqInventoryDialog.itemCell_groups.add("spells", cells);
 	}
 
 	public override function getCellItemPos(Cell:Int):HxlPoint {
@@ -837,7 +836,7 @@ class CqInventoryItem extends HxlSprite {
 		if (cellSpell) {
 			// if it was already in a different spell cell before moving to the new spell cell
 			CqRegistery.player.equippedSpells[cellIndex] = null;
-			_dlg.dlgSpellGrid.forceClearCharge(cellIndex);
+			//_dlg.dlgSpellGrid.forceClearCharge(cellIndex);
 		}
 		
 		_dlg.dlgSpellGrid.remove(this);
@@ -935,7 +934,7 @@ class CqInventoryItem extends HxlSprite {
 		}
 		_dlg.remove(this);
 		_dlg.dlgSpellGrid.remove(this);
-		zIndex = 500;
+		zIndex = 400;
 		_dlg.add(this);
 		_dlg.dlgEqGrid.onItemDrag(this.item);
 		_dlg.dlgSpellGrid.onItemDrag(this.item);
@@ -997,9 +996,7 @@ class CqInventoryItem extends HxlSprite {
 					CqRegistery.player.unequipItem(this.item);
 				} else if ( cellSpell ) {
 					// Clearing out a spell cell
-					_dlg.dlgSpellGrid.clearCharge(cellIndex);
 					_dlg.dlgSpellGrid.setCellObj(cellIndex, null);
-
 					//GameUI.instance.updateCharge(spellBtn, CqRegistery.player.spiritPoints);
 				} else if ( cellPotion ) {
 					// Clearing out a potion cell
@@ -1085,6 +1082,9 @@ class CqInventoryItem extends HxlSprite {
 			}
 			// If there was no eligible drop target, revert to pre drag position
 			setPos(dragStartPoint);
+			
+			if (cellEquip)
+				cast(_dlg.dlgEqGrid.cells[cellIndex], CqEquipmentCell).icon.visible = false;
 		}
 		_dlg.dlgEqGrid.onItemDragStop();
 		_dlg.dlgSpellGrid.onItemDragStop();

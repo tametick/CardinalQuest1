@@ -320,8 +320,9 @@ class HxlGame extends Sprite {
 		stage.addEventListener(KeyboardEvent.KEY_DOWN, HxlGraphics.keys.handleKeyDown,false,0,true);
 		stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp,false,0,true);
 		stage.addEventListener(MouseEvent.MOUSE_DOWN, HxlGraphics.mouse.handleMouseDown,false,0,true);
+		//stage.addEventListener(MouseEvent.MOUSE_OUT, HxlGraphics.mouse.handleMouseDown,false,0,true);
 		stage.addEventListener(MouseEvent.MOUSE_UP, HxlGraphics.mouse.handleMouseUp,false,0,true);
-		stage.addEventListener(MouseEvent.MOUSE_OUT, HxlGraphics.mouse.handleMouseOut,false,0,true);
+		stage.addEventListener(MouseEvent.MOUSE_OUT, HxlGraphics.mouse.handleMouseUp,false,0,true);
 		stage.addEventListener(MouseEvent.MOUSE_OVER, HxlGraphics.mouse.handleMouseOver,false,0,true);
 
 		//Sound Tray popup

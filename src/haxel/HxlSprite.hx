@@ -8,6 +8,7 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.geom.ColorTransform;
 import flash.events.MouseEvent;
+import flash.Lib;
 
 #if flash9
 import flash.display.BlendMode;
@@ -798,9 +799,11 @@ class HxlSprite extends HxlObject {
 	public function toggleDrag(Toggle:Bool) {
 		if ( !dragEnabled && Toggle ) {
 			addEventListener(MouseEvent.MOUSE_DOWN, onDragMouseDown,false,0,true);
+			Lib.current.stage.addEventListener(MouseEvent.MOUSE_OUT, onDragMouseUp,false,0,true);
 			addEventListener(MouseEvent.MOUSE_UP, onDragMouseUp,false,0,true);
 		} else { //if ( dragEnabled && !Toggle ) {
 			removeEventListener(MouseEvent.MOUSE_DOWN, onDragMouseDown);
+			Lib.current.stage.removeEventListener(MouseEvent.MOUSE_OUT, onDragMouseUp);
 			removeEventListener(MouseEvent.MOUSE_UP, onDragMouseUp);
 			if ( isDragging && HxlGraphics.mouse.dragSprite == this ) {
 				HxlGraphics.mouse.dragSprite = null;
@@ -810,7 +813,7 @@ class HxlSprite extends HxlObject {
 		dragEnabled = Toggle;
 		isDragging = false;
 		dragStopPoint = null;
-		dragStartPoint = null;
+		//dragStartPoint = null;
 		dragOffset = null;
 	}
 /*
