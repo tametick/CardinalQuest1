@@ -27,11 +27,11 @@ class SplashState extends CqState {
 	var splashText:HxlSprite;
 
 	public override function create() {
-		if(Configuration.standAlone) {
+		if (Configuration.standAlone) {
 			Lib.current.stage.align = StageAlign.TOP;
 			Lib.current.stage.showDefaultContextMenu = false;
 			Lib.current.stage.scaleMode = StageScaleMode.SHOW_ALL;
-			Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+			Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN;
 			Mouse.hide();
 			Lib.fscommand("trapallkeys", "true");
 		}
