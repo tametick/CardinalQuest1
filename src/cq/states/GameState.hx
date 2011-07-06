@@ -39,6 +39,7 @@ class GameState extends CqState {
 		HxlGraphics.fade.start(false, 0x00000000, 0.25);
 		
 		cursor.setFrame(SpriteCursor.instance.getSpriteIndex("up"));
+		cursor.scrollFactor.y = cursor.scrollFactor.x = 0;
 		//loadingBox = new HxlLoadingBox();
 		//add(loadingBox);
 	}

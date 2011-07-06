@@ -11,7 +11,10 @@ import data.Configuration;
 import flash.Lib;
 
 import playtomic.Playtomic;
-
+/*
+ * spell reset
+ * 
+ */
 class Main {
 	public static function main() {
 		#if flash9
@@ -26,6 +29,7 @@ class Main {
 
 	public function new() {		
 		Lib.current.addChild(new Game());
+		
 	}	
 }
 

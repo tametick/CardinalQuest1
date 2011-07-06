@@ -3,6 +3,9 @@ import flash.display.BitmapData;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 import haxel.HxlGraphics;
+import haxel.HxlGroup;
+import haxel.HxlSprite;
+import haxel.HxlState;
 import haxel.HxlText;
 
 /**
@@ -15,8 +18,10 @@ class CqPopup extends HxlText
 	var AddBold:Bool;
 	var boldStart:Int;
 	var boldEnd:Int;
-	public function new(Width:Int,Text:String) 
+	var parent:HxlGroup;
+	public function new(Width:Int,Text:String,Parent:HxlGroup) 
 	{
+		parent = Parent;
 		super(0, 0, Width, Text);
 		setFormat("FontAnonymousPro", 15, 0xC2AC30, "left", 1);
 	}
@@ -38,6 +43,10 @@ class CqPopup extends HxlText
 		_regen = true;
 		calcFrame();
 		_regen = false;
+	}
+	override function onRemove(state:HxlState):Void
+	{
+		parent.remove(this);
 	}
 	override function calcFrame() {
 		if (_regen) {

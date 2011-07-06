@@ -99,8 +99,8 @@ class HxlState extends Sprite {
 		defaultGroup.update();
 		
 		if(cursor!=null) {
-			cursor.x = HxlGraphics.mouse.x;
-			cursor.y = HxlGraphics.mouse.y;
+			cursor.x = HxlGraphics.mouse.screenX;
+			cursor.y = HxlGraphics.mouse.screenY;
 		}
 		
 		if ( initialized == -1 ) {

@@ -139,7 +139,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 			uiItem.setIcon(itemSprite.getFramePixels());
 		}
 		add(uiItem);
-		uiItem.setPopup(new CqPopup(100,Item.name ));
+		uiItem.setPopup(new CqPopup(100,Item.name,this ));
 		add(uiItem.popup);
 		uiItem.popup.zIndex = 600;
 				
@@ -934,6 +934,7 @@ class CqInventoryItem extends HxlSprite {
 		}
 		_dlg.remove(this);
 		_dlg.dlgSpellGrid.remove(this);
+		_dlg.dlgPotionGrid.remove(this);
 		zIndex = 400;
 		_dlg.add(this);
 		_dlg.dlgEqGrid.onItemDrag(this.item);
@@ -959,7 +960,6 @@ class CqInventoryItem extends HxlSprite {
 					// Moving the other item into a spell cell
 					other.setSpellCell(cellIndex);
 					var spellBtn = cast(getSpellCell(cellIndex), CqSpellCell).btn;
-					
 					if (other != this)
 						GameUI.instance.updateCharge(spellBtn);
 					// todo: equip spell
@@ -1023,18 +1023,6 @@ class CqInventoryItem extends HxlSprite {
 					if ( CqInventoryCell.highlightedCell.dropCell ) {
 						// This item is being dropped
 						_dlg.remove(this);
-						
-						/*
-						var itemTilePos = Registery.player.getTilePos();
-						item.setTilePos(itemTilePos);
-						item.visible = true;
-						item.alpha = 1.0;
-						HxlGraphics.state.add(this.item);
-						var positionOfTile:HxlPoint = Registery.level.getPixelPositionOfTile(itemTilePos.x, itemTilePos.y);
-						this.item.x = positionOfTile.x;
-						this.item.y = positionOfTile.y;
-						*/
-						
 						destroy();
 						
 						CqRegistery.player.removeInventory(this.item);
@@ -1053,15 +1041,20 @@ class CqInventoryItem extends HxlSprite {
 				cellIndex = CqInventoryCell.highlightedCell.cellIndex;
 			}
 		} else {
-			if ( item.consumable ) {
+			if (cellPotion)
+			{
+				_dlg.remove(this);
+				_dlg.dlgPotionGrid.add(this);
+			}
+			/*if ( item.consumable || cellPotion ) {
 				// If this item is a consumable, and was dropped on the doll, use it
 				//TODO: make this more accurate.
 				var myX = x + origin.x;
 				var myY = y + origin.y;
 				var objX = _dlg.dlgCharacter.x;
 				var objY = _dlg.dlgCharacter.y;
-				var objW = _dlg.dlgCharacter.width;
-				var objH = _dlg.dlgCharacter.height;
+				var objW = 300;//_dlg.dlgCharacter.width;
+				var objH = 300;//_dlg.dlgCharacter.height;
 				if ( (myX >= objX) || (myX <= objX+objW) || (myY >= objY) || (myY <= objY+objH) ) {
 					CqRegistery.player.use(item);
 					item.stackSize--;
@@ -1075,16 +1068,11 @@ class CqInventoryItem extends HxlSprite {
 						_dlg.dlgSpellGrid.onItemDragStop();
 						_dlg.dlgPotionGrid.onItemDragStop();
 						return;
-					} else {
-						updateIcon();
-					}
+					} 
 				}
-			}
+			}*/
 			// If there was no eligible drop target, revert to pre drag position
 			setPos(dragStartPoint);
-			
-			if (cellEquip)
-				cast(_dlg.dlgEqGrid.cells[cellIndex], CqEquipmentCell).icon.visible = false;
 		}
 		_dlg.dlgEqGrid.onItemDragStop();
 		_dlg.dlgSpellGrid.onItemDragStop();
