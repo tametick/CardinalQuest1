@@ -1,14 +1,17 @@
 package cq;
+
 import cq.states.GameState;
 import cq.states.SplashState;
+import cq.CqResources;
 import haxel.HxlPreloader;
 import haxel.HxlGame;
 import haxel.HxlGraphics;
 import haxel.HxlState;
-import cq.CqResources;
 import data.Configuration;
 
 import flash.Lib;
+import flash.system.Capabilities;
+import haxe.Timer;
 
 import playtomic.Playtomic;
 
@@ -25,7 +28,13 @@ class Main {
 	}
 
 	public function new() {		
-		Lib.current.addChild(new Game());
+		if (StringTools.startsWith(Capabilities.os, "Mac")) {
+			// mac requires a delay for properly full-screening
+			Timer.delay(function() { Lib.current.addChild(new Game()); }, 1000);
+		} else {
+			Lib.current.addChild(new Game());
+		}
+			
 	}	
 }
 
@@ -36,7 +45,7 @@ class Game extends HxlGame {
 		HxlState.bgColor = 0xFF000000;
 		Playtomic.create();
 		
-		super(640, 480, SplashState, 1, FontDungeon.instance.fontName);
+		super(640, 480, SplashState, 1, FontDungeon.instance.fontName);		
 		//super(640, 480, GameState, 1, FontDungeon.instance.fontName);
 	}
 }
