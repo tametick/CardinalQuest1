@@ -126,6 +126,8 @@ class CqInventoryDialog extends HxlSlidingDialog {
 				}
 			}
 		}
+		// select picked up item
+		dlgInfo.setItem(Item);
 		
 		var uiItem:CqInventoryItem = new CqInventoryItem(this, 2, 2);
 		uiItem.toggleDrag(true);
