@@ -957,135 +957,132 @@ class CqInventoryItem extends HxlSprite {
 		_dlg.dlgPotionGrid.onItemDrag(this.item);
 		super.dragStart();
 	}
-
+	// If the user was hovering an eligable drop target, act on it
 	override function dragStop() {
-		// If the user was hovering an eligable drop target, act on it
+		
 		var dragStopCell:CqInventoryCell = CqInventoryCell.highlightedCell;
-		var dragStopCell_class:String = Type.enumConstructor(Type.typeof(dragStopCell));
-		trace(dragStopCell_class);
+		var dragStopCell_class:Dynamic = Type.getClass(dragStopCell);
+		var dragStopCell_type:String = (cellEquip?"equip":"") + (cellSpell?"spell":"") + (cellPotion?"potion":"");
+		
 		if ( dragStopCell != null ) {
 			if ( dragStopCell.getCellObj() != null ) {
 				// There was already an item in the target cell, switch places with it
 				var other:CqInventoryItem = dragStopCell.getCellObj();
 				
-				if ( cellEquip ) {
-					// Unequipping current item (?)
-					CqRegistery.player.unequipItem(item);
-					// Moving the other item into an equipment cell (?)
-					if ( other.setEquipmentCell(cellIndex) && other!=this) 
-						CqRegistery.player.equipItem(other.item);
-				} else if ( cellSpell ) {
-					// Moving the other item into a spell cell
-					other.setSpellCell(cellIndex);
-					var spellBtn = cast(getSpellCell(cellIndex), CqSpellCell).btn;
-					if (other != this)
-						GameUI.instance.updateCharge(spellBtn);
-					// todo: equip spell
-				} else if ( cellPotion ) {
-					// Moving the other item into a potion cell
-					other.setPotionCell(cellIndex);
-				} else {
-					// Moving the other item into an inventory cell
-					other.setInventoryCell(cellIndex);
+				switch(dragStopCell_type)
+				{
+					case "equip":
+						// Unequipping current item (?)
+						CqRegistery.player.unequipItem(item);
+						// Moving the other item into an equipment cell (?)
+						if ( other.setEquipmentCell(cellIndex) && other!=this) 
+							CqRegistery.player.equipItem(other.item);
+					case "spell":
+						// Moving the other item into a spell cell
+						other.setSpellCell(cellIndex);
+						var spellBtn = cast(getSpellCell(cellIndex), CqSpellCell).btn;
+						if (other != this)
+							GameUI.instance.updateCharge(spellBtn);
+					case "potion":
+						// Moving the other item into a potion cell
+						other.setPotionCell(cellIndex);
+					default:
+						// Moving the other item into an inventory cell
+						other.setInventoryCell(cellIndex);
 				}
 				
-				if ( Std.is(dragStopCell, CqSpellCell) ) {
-					// Moving this item into a spell cell
-					setSpellCell(dragStopCell.cellIndex);
-					// todo: equip spell
-				} else if ( Std.is(dragStopCell, CqPotionCell) ) {
-					// Moving this item into a potion cell
-					setPotionCell(dragStopCell.cellIndex);
-				} else if ( Std.is(dragStopCell, CqEquipmentCell) ) {
-					// Moving this item into an equipment cell
-					setEquipmentCell(dragStopCell.cellIndex);
-					CqRegistery.player.equipItem(this.item);
-				} else {
-					// Moving this item into an inventory cell
-					setInventoryCell(dragStopCell.cellIndex);
+				switch(dragStopCell_class)
+				{
+					case CqSpellCell:
+						// Moving this item into a spell cell
+						setSpellCell(dragStopCell.cellIndex);
+					case CqPotionCell:
+						// Moving this item into a potion cell
+						setPotionCell(dragStopCell.cellIndex);
+					case CqEquipmentCell:
+						// Moving this item into an equipment cell
+						setEquipmentCell(dragStopCell.cellIndex);
+						CqRegistery.player.equipItem(this.item);
+					default:
+						// Moving this item into an inventory cell
+						setInventoryCell(dragStopCell.cellIndex);
 				}
-				
 				cellIndex = dragStopCell.cellIndex;
 			} else {
 				// The target cell was empty.. clear out my old cell and fill the new one
-				if ( cellEquip ) {
-					// Clearing out an equipment cell
-					_dlg.dlgEqGrid.setCellObj(cellIndex, null);
-					CqRegistery.player.unequipItem(this.item);
-				} else if ( cellSpell ) {
-					// Clearing out a spell cell
-					var cellIndexNew = dragStopCell.cellIndex;
-					var spellCell = getSpellCell(cellIndex); 
-					var spellBtn = spellCell.btn;
-					_dlg.dlgSpellGrid.setCellObj(cellIndex, null);
-					setSpellCell(dragStopCell.cellIndex);
-					GameUI.instance.updateCharge(spellBtn);
-				} else if ( cellPotion ) {
-					// Clearing out a potion cell
-					_dlg.dlgPotionGrid.setCellObj(cellIndex, null);
-				} else {
-					// Clearing out an inventory cell
-					_dlg.dlgInvGrid.setCellObj(cellIndex, null);
-					
+				switch(dragStopCell_type)
+				{
+					case "equip":
+						// Clearing out an equipment cell
+						_dlg.dlgEqGrid.setCellObj(cellIndex, null);
+						CqRegistery.player.unequipItem(this.item);
+					case "spell":
+						// Clearing out a spell cell
+						var cellIndexNew = dragStopCell.cellIndex;
+						var spellCell = getSpellCell(cellIndex); 
+						var spellBtn = spellCell.btn;
+						_dlg.dlgSpellGrid.setCellObj(cellIndex, null);
+						setSpellCell(dragStopCell.cellIndex);
+						GameUI.instance.updateCharge(spellBtn);
+					case "potion":
+						// Clearing out a potion cell
+						_dlg.dlgPotionGrid.setCellObj(cellIndex, null);
+					default:
+						// Clearing out an inventory cell
+						_dlg.dlgInvGrid.setCellObj(cellIndex, null);
 				}
-				if ( Std.is(dragStopCell, CqSpellCell) ) {
-					// Moving this item into a spell cell
-					setSpellCell(dragStopCell.cellIndex);
-					var spellCell = getSpellCell(dragStopCell.cellIndex); 
-					var spellBtn = spellCell.btn;
-					GameUI.instance.updateCharge(spellBtn);
-					if(clearCharge)_dlg.dlgSpellGrid.forceClearCharge(dragStopCell.cellIndex);
-					// todo: equip spell
-				} else if ( Std.is(dragStopCell, CqPotionCell) ) {
-					// Moving this item into a potion cell
-					setPotionCell(dragStopCell.cellIndex);
-				} else if ( Std.is(dragStopCell, CqEquipmentCell) ) {
-					// Moving this item into an equipment cell
-					setEquipmentCell(dragStopCell.cellIndex);
-					CqRegistery.player.equipItem(this.item);
-				} else {
-					if ( dragStopCell.dropCell ) {
-						// This item is being dropped
-						_dlg.remove(this);
-						destroy();
-						
-						CqRegistery.player.removeInventory(this.item);
-						_dlg.dlgEqGrid.onItemDragStop();
-						_dlg.dlgSpellGrid.onItemDragStop();
-						_dlg.dlgPotionGrid.onItemDragStop();
-						_dlg.dlgInfo.clearInfo();
-						
-						//_dlg.gameui.checkTileItems(CqRegistery.player);
-						
-						return;
-					} else {
-						setInventoryCell(dragStopCell.cellIndex);
-					}
+				
+				switch(dragStopCell_class){
+					case CqSpellCell:
+						// Moving this item into a spell cell
+						setSpellCell(dragStopCell.cellIndex);
+						var spellCell = getSpellCell(dragStopCell.cellIndex); 
+						var spellBtn = spellCell.btn;
+						GameUI.instance.updateCharge(spellBtn);
+						if(clearCharge)_dlg.dlgSpellGrid.forceClearCharge(dragStopCell.cellIndex);
+					case CqPotionCell:
+						// Moving this item into a potion cell
+						setPotionCell(dragStopCell.cellIndex);
+					case CqEquipmentCell:
+						// Moving this item into an equipment cell
+						setEquipmentCell(dragStopCell.cellIndex);
+						CqRegistery.player.equipItem(this.item);
+					default:
+						if ( dragStopCell.dropCell ) {
+							// This item is being dropped
+							_dlg.remove(this);
+							destroy();
+							CqRegistery.player.removeInventory(this.item);
+							_dlg.dlgEqGrid.onItemDragStop();
+							_dlg.dlgSpellGrid.onItemDragStop();
+							_dlg.dlgPotionGrid.onItemDragStop();
+							_dlg.dlgInfo.clearInfo();
+							
+							//_dlg.gameui.checkTileItems(CqRegistery.player);
+							
+							return;
+						} else {
+							setInventoryCell(dragStopCell.cellIndex);
+						}
 				}
 				cellIndex = dragStopCell.cellIndex;
 			}
 		} else {
+			//if stuff was done right, these further lines wouldnt be needed
 			if ( cellSpell )
 			{
 				_dlg.remove(this);
 				_dlg.dlgSpellGrid.add(this);
 			}
-			/*if (cellPotion)
+			if (cellPotion)
 			{
 				_dlg.remove(this);
 				_dlg.dlgPotionGrid.add(this);
 				setPos(dragStartPoint);
-			}*/
+			}
 			if ( item.consumable ) {
-				// If this item is a consumable, and was dropped on the doll, use it
-				//TODO: make this more accurate.
-				var myX = x + origin.x;
-				var myY = y + origin.y;
-				var objX = _dlg.dlgCharacter.x+80;
-				var objY = _dlg.dlgCharacter.y+40;
-				var objW = 80;
-				var objH = 200;
-				if ( (myX >= objX) || (myX <= objX+objW) || (myY >= objY) || (myY <= objY+objH) ) {
+				// If this item is a consumable, and was dropped on the silhouette, use it
+				if ( isOnCharSilhouette() ) {
 					CqRegistery.player.use(item);
 					item.stackSize--;
 					if ( item.stackSize <= 0 ) {
@@ -1098,10 +1095,9 @@ class CqInventoryItem extends HxlSprite {
 						_dlg.dlgSpellGrid.onItemDragStop();
 						_dlg.dlgPotionGrid.onItemDragStop();
 						return;
-					} 
+					}
 				}
 			}
-			//trace(dragStartPoint.x + " " + dragStartPoint.y + " " + this.x + " " + y);
 			// If there was no eligible drop target, revert to pre drag position
 			setPos(dragStartPoint);
 		}
@@ -1109,5 +1105,16 @@ class CqInventoryItem extends HxlSprite {
 		_dlg.dlgSpellGrid.onItemDragStop();
 		_dlg.dlgPotionGrid.onItemDragStop();
 		super.dragStop();
+	}
+	//is this CQinventoryItem currently over the position of the character equipment silhouette
+	inline function isOnCharSilhouette():Bool
+	{
+		var myX = x + origin.x;
+		var myY = y + origin.y;
+		var objX = _dlg.dlgCharacter.x+80;
+		var objY = _dlg.dlgCharacter.y+40;
+		var objW = 80;
+		var objH = 200;
+		return  ( (myX >= objX) || (myX <= objX + objW) || (myY >= objY) || (myY <= objY + objH) );
 	}
 }
