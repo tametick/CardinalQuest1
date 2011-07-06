@@ -2,8 +2,15 @@ package cq.states;
 
 import cq.CqResources;
 import data.SoundEffectsManager;
+import data.Configuration;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
+import flash.Lib;
+import flash.ui.Mouse;
+import flash.display.StageScaleMode;
+import flash.display.StageAlign;
+import flash.display.StageDisplayState;
+import flash.ui.ContextMenu;
 import haxel.HxlGraphics;
 import haxel.HxlSprite;
 import haxel.HxlState;
@@ -20,6 +27,15 @@ class SplashState extends CqState {
 	var splashText:HxlSprite;
 
 	public override function create() {
+		if (Configuration.standAlone) {
+			Lib.current.stage.align = StageAlign.TOP;
+			Lib.current.stage.showDefaultContextMenu = false;
+			Lib.current.stage.scaleMode = StageScaleMode.SHOW_ALL;
+			Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN;
+			Mouse.hide();
+			Lib.fscommand("trapallkeys", "true");
+		}
+		
 		SoundEffectsManager.play(FortressGate);
 		super.create();
 

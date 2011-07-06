@@ -8,7 +8,7 @@
     <movie fps="60" />
     <movie width="640" />
     <movie height="480" />
-    <movie version="10" />
+    <movie version="9" />
     <movie background="#000000" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
@@ -20,7 +20,7 @@
     <option directives="" />
     <option flashStrict="True" />
     <option mainClass="cq.Main" />
-    <option enabledebug="True" />
+    <option enabledebug="False" />
     <option additional="-swf-lib lib/playtomic.swf" />
   </build>
   <!-- haxelib libraries -->
@@ -53,6 +53,6 @@
   <!-- Other project options -->
   <options>
     <option showHiddenPaths="False" />
-    <option testMovie="Default" />
+    <option testMovie="ExternalPlayer" />
   </options>
 </project>
