@@ -427,7 +427,6 @@ class CqSpellGrid extends CqInventoryGrid {
 		
 		GameUI.instance.updateCharge(buttons[Cell],0);
 	}
-	
 	public function clearCharge(Cell:Int) {
 		buttons[Cell].getSpell().spiritPoints = 0;
 		GameUI.instance.updateCharge(buttons[Cell]);
@@ -712,6 +711,7 @@ class CqInventoryItem extends HxlSprite {
 	var idleZIndex:Int;
 	var dragZIndex:Int;
 	var cellIndex:Int;
+	var clearCharge:Bool;
 	public var cellEquip:Bool;
 	public var cellSpell:Bool;
 	public var cellPotion:Bool;
@@ -842,7 +842,9 @@ class CqInventoryItem extends HxlSprite {
 		_dlg.dlgSpellGrid.remove(this);
 		_dlg.remove(this);
 		zIndex = idleZIndex;
-
+		if (_dlg.dlgSpellGrid.cells.length <= Cell)
+			return false;
+		
 		if ( cast(_dlg.dlgSpellGrid.cells[Cell], CqEquipmentCell).equipSlot != this.item.equipSlot ) {
 			Cell = _dlg.dlgInvGrid.getOpenCellIndex();
 			setInventoryCell(Cell);
@@ -932,6 +934,17 @@ class CqInventoryItem extends HxlSprite {
 			var cellRef:CqEquipmentCell = cast(_dlg.dlgEqGrid.cells[cellIndex], CqEquipmentCell);
 			cellRef.icon.visible = true;
 		}
+		//if its moved from an spell cell, make it not clear charge after dragging stops
+		if (item.equipSlot == CqEquipSlot.SPELL)
+		{
+			if (cellSpell)
+			{
+				clearCharge = false;
+			}else
+			{
+				clearCharge = true;
+			}
+		}
 		_dlg.remove(this);
 		_dlg.dlgSpellGrid.remove(this);
 		_dlg.dlgPotionGrid.remove(this);
@@ -996,14 +1009,19 @@ class CqInventoryItem extends HxlSprite {
 					CqRegistery.player.unequipItem(this.item);
 				} else if ( cellSpell ) {
 					// Clearing out a spell cell
+					var cellIndexNew = CqInventoryCell.highlightedCell.cellIndex;
+					var spellCell = getSpellCell(cellIndex); 
+					var spellBtn = spellCell.btn;
 					_dlg.dlgSpellGrid.setCellObj(cellIndex, null);
-					//GameUI.instance.updateCharge(spellBtn, CqRegistery.player.spiritPoints);
+					setSpellCell(CqInventoryCell.highlightedCell.cellIndex);
+					GameUI.instance.updateCharge(spellBtn);
 				} else if ( cellPotion ) {
 					// Clearing out a potion cell
 					_dlg.dlgPotionGrid.setCellObj(cellIndex, null);
 				} else {
 					// Clearing out an inventory cell
 					_dlg.dlgInvGrid.setCellObj(cellIndex, null);
+					
 				}
 				if ( Std.is(CqInventoryCell.highlightedCell, CqSpellCell) ) {
 					// Moving this item into a spell cell
@@ -1011,6 +1029,7 @@ class CqInventoryItem extends HxlSprite {
 					var spellCell = getSpellCell(CqInventoryCell.highlightedCell.cellIndex); 
 					var spellBtn = spellCell.btn;
 					GameUI.instance.updateCharge(spellBtn);
+					if(clearCharge)_dlg.dlgSpellGrid.forceClearCharge(CqInventoryCell.highlightedCell.cellIndex);
 					// todo: equip spell
 				} else if ( Std.is(CqInventoryCell.highlightedCell, CqPotionCell) ) {
 					// Moving this item into a potion cell
@@ -1046,15 +1065,20 @@ class CqInventoryItem extends HxlSprite {
 				_dlg.remove(this);
 				_dlg.dlgPotionGrid.add(this);
 			}
-			/*if ( item.consumable || cellPotion ) {
+			if ( cellSpell )
+			{
+				_dlg.remove(this);
+				_dlg.dlgSpellGrid.add(this);
+			}
+			if ( item.consumable || cellPotion ) {
 				// If this item is a consumable, and was dropped on the doll, use it
 				//TODO: make this more accurate.
 				var myX = x + origin.x;
 				var myY = y + origin.y;
-				var objX = _dlg.dlgCharacter.x;
-				var objY = _dlg.dlgCharacter.y;
-				var objW = 300;//_dlg.dlgCharacter.width;
-				var objH = 300;//_dlg.dlgCharacter.height;
+				var objX = _dlg.dlgCharacter.x+80;
+				var objY = _dlg.dlgCharacter.y+40;
+				var objW = 80;
+				var objH = 200;
 				if ( (myX >= objX) || (myX <= objX+objW) || (myY >= objY) || (myY <= objY+objH) ) {
 					CqRegistery.player.use(item);
 					item.stackSize--;
@@ -1070,7 +1094,7 @@ class CqInventoryItem extends HxlSprite {
 						return;
 					} 
 				}
-			}*/
+			}
 			// If there was no eligible drop target, revert to pre drag position
 			setPos(dragStartPoint);
 		}

@@ -289,6 +289,8 @@ class HxlText extends HxlSprite {
 		if ((_framePixels == null) || (_framePixels.width != _pixels.width) || (_framePixels.height != _pixels.height)) {
 			_framePixels = new BitmapData(_pixels.width,_pixels.height,true,0);
 		}
+		width = _framePixels.width;
+		height = _framePixels.height;
 		_framePixels.copyPixels(_pixels,_flashRect,_flashPointZero);
 		if (HxlGraphics.showBounds) {
 			drawBounds();

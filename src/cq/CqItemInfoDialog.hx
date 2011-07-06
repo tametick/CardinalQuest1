@@ -40,8 +40,9 @@ class CqItemInfoDialog extends HxlDialog {
 		_icon.visible = false;
 		_itemName = new HxlText(10, 10, Std.int(Width-20));
 		_itemName.setFormat(null, 30, 0xffffff, "left", 0x010101);
+		
 		_itemName.visible = false;
-		_itemDesc = new HxlText(10, _itemName.y+_itemName.height+15, Std.int(Width-20));
+		_itemDesc = new HxlText(10, 30, Std.int(Width-20));
 		_itemDesc.setFormat(FontAnonymousPro.instance.fontName, 16, 0xdddddd, "left", 0x010101);
 		_itemDesc.visible = false;
 		_itemStats = new HxlText(10, 45, Std.int(Width-48-20));
@@ -58,6 +59,7 @@ class CqItemInfoDialog extends HxlDialog {
 		_item = Item;
 		_itemName.text = Item.name;
 		_itemDesc.text = Resources.descriptions.get(Item.name);
+		_itemDesc.y = _itemName.y + _itemName.height + 2;
 		if ( Std.is(Item, CqSpell) ) {
 			spellSprite.setFrame(spellSheet.getSpriteIndex(Item.spriteIndex));
 			_icon.pixels = spellSprite.getFramePixels();
