@@ -10,6 +10,7 @@ import flash.ui.Mouse;
 import flash.display.StageScaleMode;
 import flash.display.StageAlign;
 import flash.display.StageDisplayState;
+import flash.system.Capabilities;
 import flash.ui.ContextMenu;
 import haxel.HxlGraphics;
 import haxel.HxlSprite;
@@ -29,11 +30,15 @@ class SplashState extends CqState {
 	public override function create() {
 		if (Configuration.standAlone) {
 			Lib.current.stage.align = StageAlign.TOP;
-			Lib.current.stage.showDefaultContextMenu = false;
 			Lib.current.stage.scaleMode = StageScaleMode.SHOW_ALL;
 			Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN;
 			Mouse.hide();
-			Lib.fscommand("trapallkeys", "true");
+			
+			if (!StringTools.startsWith(Capabilities.os, "Mac")) {
+				// for windows
+				Lib.fscommand("trapallkeys", "true");
+				Lib.current.stage.showDefaultContextMenu = false;
+			}
 		}
 		
 		SoundEffectsManager.play(FortressGate);
