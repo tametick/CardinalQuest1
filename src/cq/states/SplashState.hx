@@ -5,6 +5,7 @@ import data.SoundEffectsManager;
 import data.Configuration;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
+import flash.geom.Rectangle;
 import flash.Lib;
 import flash.ui.Mouse;
 import flash.display.StageScaleMode;
@@ -32,6 +33,7 @@ class SplashState extends CqState {
 			Lib.current.stage.align = StageAlign.TOP;
 			Lib.current.stage.scaleMode = StageScaleMode.SHOW_ALL;
 			Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN;
+			Lib.current.stage.fullScreenSourceRect = new Rectangle(0,0,640,480);
 			Mouse.hide();
 			
 			if (!StringTools.startsWith(Capabilities.os, "Mac")) {

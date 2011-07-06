@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Cardinal Quest Alpha 0.2</title>
+	<title>Cardinal Quest Beta 4</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="language" content="en" />
 	<meta name="description" content="" />
@@ -20,7 +20,7 @@
 			bgcolor: "#FFFFFF"
 		};
 		var attributes = {
-			id:"cq-0.2"
+			id:"cq-0.4"
 		};
 		swfobject.embedSWF("cq-index.swf", "altContent", 640, 480, "10", "expressInstall.swf", flashvars, params, attributes);
 	</script>
@@ -61,7 +61,7 @@
 </head>
 <body>
 	<div id="wrapper">
-		<h1>Cardinal Quest 0.2</h1>
+		<h1>Cardinal Quest 0.4</h1>
 		<div id="altContent">
 			<p>Flash player not found!</p>
 			<p><a href="http://www.adobe.com/go/getflashplayer"><img 

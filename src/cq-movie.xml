@@ -99,19 +99,35 @@
 	<SymbolClass id="41" class="cq.SpellEquipped" />
 	<DefineSound id="42" file="../rsrc/cq/sounds/Footstep1.mp3" />
 	<SymbolClass id="42" class="cq.Footstep1" />
-	<DefineSound id="43" file="../rsrc/cq/sounds/Footstep1.mp3" />
-	<SymbolClass id="43" class="cq.Footstep1" />
-	<DefineSound id="44" file="../rsrc/cq/sounds/Footstep1.mp3" />
-	<SymbolClass id="44" class="cq.Footstep1" />
-	<DefineSound id="45" file="../rsrc/cq/sounds/Footstep1.mp3" />
-	<SymbolClass id="45" class="cq.Footstep1" />
-	<DefineSound id="46" file="../rsrc/cq/sounds/Footstep1.mp3" />
-	<SymbolClass id="46" class="cq.Footstep1" />
-	<DefineSound id="47" file="../rsrc/cq/sounds/Footstep1.mp3" />
-	<SymbolClass id="47" class="cq.Footstep1" />
+	<DefineSound id="43" file="../rsrc/cq/sounds/Footstep2.mp3" />
+	<SymbolClass id="43" class="cq.Footstep2" />
+	<DefineSound id="44" file="../rsrc/cq/sounds/Footstep3.mp3" />
+	<SymbolClass id="44" class="cq.Footstep3" />
+	<DefineSound id="45" file="../rsrc/cq/sounds/Footstep4.mp3" />
+	<SymbolClass id="45" class="cq.Footstep4" />
+	<DefineSound id="46" file="../rsrc/cq/sounds/Footstep5.mp3" />
+	<SymbolClass id="46" class="cq.Footstep5" />
+	<DefineSound id="47" file="../rsrc/cq/sounds/Footstep6.mp3" />
+	<SymbolClass id="47" class="cq.Footstep6" />
 	
 	<DefineBitsJPEG id="48" file="../rsrc/cq/inv_box_02.png" />
 	<SymbolClass id="48" class="cq.UiInventoryBox" />
+
+	<DefineSound id="49" file="../rsrc/cq/sounds/playerMiss.mp3" />
+	<SymbolClass id="49" class="cq.PlayerMiss" />
+	<DefineSound id="50" file="../rsrc/cq/sounds/chestBusted.mp3" />
+	<SymbolClass id="50" class="cq.ChestBusted" />
+	<DefineSound id="51" file="../rsrc/cq/sounds/pickup.mp3" />
+	<SymbolClass id="51" class="cq.Pickup" />
+	<DefineSound id="52" file="../rsrc/cq/sounds/doorOpen.mp3" />
+	<SymbolClass id="52" class="cq.DoorOpen" />
+	<DefineSound id="53" file="../rsrc/cq/sounds/death.mp3" />
+	<SymbolClass id="53" class="cq.Death" />
+	<DefineSound id="54" file="../rsrc/cq/sounds/enemyMiss.mp3" />
+	<SymbolClass id="54" class="cq.EnemyMiss" />
+	
+	<DefineBitsJPEG id="55" file="../rsrc/cq/map_paper.png" />
+	<SymbolClass id="55" class="cq.SpriteMapPaper" />
 	
 	<DefineABC file="../bin/cq-movie.swf" isBoot="true" />
 
