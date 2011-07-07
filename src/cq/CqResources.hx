@@ -69,7 +69,6 @@ class LogoSprite extends HxlSprite {
 	}
 }
 class CursorSprite extends HxlSprite {
-	public static var instance:CursorSprite;	
 	public function new(?CursorName:String = "diagonal", ?X:Float = 0, ?Y:Float = 0) {
 		super(X,Y);
 		loadGraphic(SpriteCursor, true, false, 32, 32);

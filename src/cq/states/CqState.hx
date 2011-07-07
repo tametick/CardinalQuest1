@@ -11,10 +11,10 @@ import flash.errors.TypeError;
 
 class CqState extends HxlState {
 	public override function create() {
-		if(CursorSprite.instance == null)
-			CursorSprite.instance = new CursorSprite();
-		cursor = CursorSprite.instance;
-		cursor.setFrame(SpriteCursor.instance.getSpriteIndex("diagonal"));
+		if(cursor==null){
+			cursor = new CursorSprite();
+			cursor.setFrame(SpriteCursor.instance.getSpriteIndex("diagonal"));
+		}
 		
 		super.create();
 	}
