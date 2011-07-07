@@ -48,7 +48,7 @@ class CqSpellFactory {
 		
 		var newSpellName = HxlUtil.getRandomElement(remainingSpells);
 		
-		// every spell is only given once
+		// uncomment if you want every spell is only be given once
 		//remainingSpells.remove(newSpellName);
 		
 		initDescriptions();
@@ -94,12 +94,12 @@ class CqSpellFactory {
 				spell.spiritPointsRequired = 720;
 			case SHADOW_WALK:
 				spell.duration = 120;
-				spell.specialEffects.add(new CqSpecialEffectValue("invisible", "true"));
+				spell.specialEffects.add(new CqSpecialEffectValue("invisible"));
 				spell.spiritPointsRequired = 720;
 			case CHARM_MONSTER:
 				spell.duration = 120;
 				spell.targetsOther = true;
-				spell.specialEffects.add(new CqSpecialEffectValue("charm", "true"));
+				spell.specialEffects.add(new CqSpecialEffectValue("charm"));
 				spell.spiritPointsRequired = 720;
 			case POLYMORPH:
 			case SLEEP:
@@ -110,7 +110,7 @@ class CqSpellFactory {
 			case FEAR:
 				spell.duration = 240;
 				spell.targetsOther = true;
-				spell.specialEffects.add(new CqSpecialEffectValue("fear", "true"));
+				spell.specialEffects.add(new CqSpecialEffectValue("fear"));
 				spell.spiritPointsRequired = 720;
 			case MAGIC_MIRROR: 
 			case STONE_SKIN: 
@@ -120,6 +120,8 @@ class CqSpellFactory {
 				spell.spiritPointsRequired = 720;			
 			
 			case BLINK:
+				spell.specialEffects.add(new CqSpecialEffectValue("blink"));
+				spell.spiritPointsRequired = 720;
 			case MAGIC_ARMOR: 
 				spell.duration = 120;
 				spell.buffs.set("defense", 3);
