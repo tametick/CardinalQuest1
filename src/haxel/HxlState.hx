@@ -33,7 +33,11 @@ class HxlState extends Sprite {
 	var initialized:Int;
 	//var loadingBox:LoadingBox;
 	
-	var cursor:HxlSprite;
+	var cursor(getCursor, setCursor):HxlSprite;
+	
+	static var _cursor:HxlSprite;
+	function getCursor() { return _cursor; }
+	function setCursor(c:HxlSprite) { return _cursor=c; }
 	
 	public function new() {
 		super();
