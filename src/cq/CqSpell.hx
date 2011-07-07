@@ -86,6 +86,10 @@ class CqSpellFactory {
 				spell.specialEffects.add(new CqSpecialEffectValue("invisible", "true"));
 				spell.spiritPointsRequired = 720;
 			case CHARM_MONSTER:
+				spell.duration = 120;
+				spell.targetsOther = true;
+				spell.specialEffects.add(new CqSpecialEffectValue("charm", "true"));
+				spell.spiritPointsRequired = 720;
 			case POLYMORPH:
 			case SLEEP: 
 			case FEAR: 

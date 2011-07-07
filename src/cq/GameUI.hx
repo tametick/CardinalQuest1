@@ -564,9 +564,12 @@ class GameUI extends HxlDialog {
 			targetString = TargetText + ": Select A Target";
 		}
 		if ( !Toggle ) {
-			if ( instance.targetSprite != null ) instance.targetSprite.visible = false;
-			if ( instance.targetText != null ) instance.targetText.visible = false;
-			if ( targetSpell != null ) targetSpell = null;
+			if ( instance.targetSprite != null ) 
+				instance.targetSprite.visible = false;
+			if ( instance.targetText != null ) 
+				instance.targetText.visible = false;
+			if ( targetSpell != null ) 
+				targetSpell = null;
 		}
 	}
 

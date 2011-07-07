@@ -244,6 +244,11 @@ class CqActor extends CqObject, implements Actor {
 					///todo: Playtomic recording
 					HxlGraphics.pushState(new GameOverState());
 				}
+			} else {
+				var mob = cast(other, CqMob);
+				// remove other
+				Registery.level.removeMobFromLevel(state, mob);
+				mob.doDeathEffect();
 			}
 		}
 	}
@@ -540,6 +545,10 @@ class CqActor extends CqObject, implements Actor {
 					GameUI.showEffectText(other, "Healed", 0x0000ff);
 				}
 			}
+		} else if (effect.name == "charm") {
+			other.faction = faction;
+			other.specialEffects.set(effect.name, effect);
+			GameUI.showEffectText(other, "Charm", 0x0000ff);
 		} else {
 			if (other == null) {
 				specialEffects.set(effect.name, effect);
@@ -583,7 +592,7 @@ class CqPlayer extends CqActor, implements Player {
 				attack = 5;
 				defense = 2;
 				speed = 3;
-				spirit = 1;
+				spirit = 20;
 				vitality = 5;
 				damage = new Range(1, 1);
 			case WIZARD:
@@ -775,6 +784,8 @@ class CqPlayer extends CqActor, implements Player {
 }
 
 class CqMob extends CqActor, implements Mob {
+	public static inline var FACTION = 1;
+	
 	static var sprites = SpriteMonsters.instance;
 	public var type:CqMobType;
 	public var xpValue:Int;
@@ -785,7 +796,7 @@ class CqMob extends CqActor, implements Mob {
 		xpValue = 1;
 		
 		loadGraphic(SpriteMonsters, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
-		faction = 1;
+		faction = FACTION;
 		aware = 0;
 		type = Type.createEnum(CqMobType,  typeName.toUpperCase());
 		visible = false;
@@ -828,9 +839,31 @@ class CqMob extends CqActor, implements Mob {
 		return Registery.level.getTile(Math.round(p.x), Math.round(p.y)).isBlockingView();
 	}
 	
+	
+	function getClosestMob():CqActor {
+		var minDist:Float = Registery.level.heightInTiles + Registery.level.widthInTiles;
+		var target:CqMob = null;
+		for (mob in Registery.level.mobs) {
+			var dist = HxlUtil.distance( getTilePos(), mob.getTilePos());
+			if (dist < minDist && mob!=this){
+				minDist = dist;
+				target = cast(mob,CqMob);
+			}
+		}
+		
+		return target;
+	}
+	
 	static var direction:HxlPoint;
 	function actAware(state:HxlState):Bool {
-		var line = HxlUtil.getLine(tilePos, Registery.player.tilePos, isBlocking);
+		var target:CqActor = cast(Registery.player,CqActor);
+		if (target.faction == faction) {
+			target = getClosestMob();
+			if (target == null)
+				target = cast(Registery.player,CqActor);
+		}
+			
+		var line = HxlUtil.getLine(tilePos, target.tilePos, isBlocking);
 		var dest = line[1];
 		
 		if (dest == null)

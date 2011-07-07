@@ -276,11 +276,15 @@ class CqLevel extends Level {
 							creature.visibleEffects.remove(t.buffName);
 						}
 						
-						if (HxlUtil.contains(specialEffects.iterator(), t.specialEffect)) {
+						if (HxlUtil.contains(specialEffects.keys(), t.specialEffect.name)) {
 							var currentEffect = specialEffects.get(t.specialEffect.name);
 							
 							GameUI.showEffectText(creature, "" + t.specialEffect.name + " expired", 0xff0000);
 							creature.specialEffects.remove(t.specialEffect.name);
+							
+							if (currentEffect.name == "charm"){
+								creature.faction = CqMob.FACTION;
+							}
 						}
 						
 						expired.push(t);
