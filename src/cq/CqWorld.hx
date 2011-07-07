@@ -39,16 +39,6 @@ class CqTile extends Tile {
 		super(X, Y, Rect);
 		visible = false;
 	}
-	
-/*	[edit] no need anymore, decorations added in a different place. is CqTile class needed anymore?
- *  todo = render decorations
-	override function render() {
-		super.render();
-		if ( decorations.length>0 ) {
-			...
-		}
-	}
- */
 }
 
 class CqLevel extends Level {
@@ -226,7 +216,7 @@ class CqLevel extends Level {
 		cast(getTile(pos.x, pos.y), CqTile).loots.push(chest);
 	}
 	
-	function createAndaddMob(pos:HxlPoint, levelIndex:Int) {
+	public function createAndaddMob(pos:HxlPoint, levelIndex:Int,?additionalAdd:Bool = false):CqMob {
 		var pixelPos = getPixelPositionOfTile(pos.x, pos.y);
 		var mob:CqMob; 
 		if ( Math.random() < 0.1) {
@@ -235,13 +225,15 @@ class CqLevel extends Level {
 		} else {
 			mob = CqMobFactory.newMobFromLevel(pixelPos.x, pixelPos.y, levelIndex);
 		}
-		
 		// add to level mobs list
 		mobs.push(mob);
+		// for creating mobs not when initializing the level.
+		if (additionalAdd)HxlGraphics.state.add(mob);
 		// add to tile actors list
 		cast(getTile(pos.x, pos.y), CqTile).actors.push(mob);
 		// call world's ActorAdded static method
 		CqWorld.onActorAdded(mob);
+		return mob;
 	}
 	
 	public override function tick(state:HxlState) {
@@ -288,6 +280,14 @@ class CqLevel extends Level {
 									creature.faction = CqMob.FACTION;
 								case "sleep":
 									creature.speed = currentEffect.value;
+								case "polymorph":
+									/*other.specialEffects.set(effect.name, effect);
+									GameUI.showEffectText(other, "Morph", 0xA81CE3);
+									var se = other.specialEffects;
+									Registery.level.removeMobFromLevel(HxlGraphics.state, cast(other, CqMob));
+									var mob = CqRegistery.level.createAndaddMob(other.getTilePos(), Std.int(Math.random() * CqRegistery.player.level),true);
+									CqRegistery.level.updateFieldOfView(HxlGraphics.state);
+									cast(mob, CqActor).specialEffects = se;*/
 							}
 						}
 						

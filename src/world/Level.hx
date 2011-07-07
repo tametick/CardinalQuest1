@@ -1,6 +1,7 @@
 package world;
 
 import com.eclecticdesignstudio.motion.Actuate;
+import cq.CqActor;
 import cq.CqDecoration;
 import data.Resources;
 import flash.display.Bitmap;
@@ -87,6 +88,7 @@ class Level extends HxlTilemap
 		mobTile.actors.remove(mob);
 		
 		state.remove(mob);
+		if(cast(mob, CqActor).healthBar != null)state.remove(cast(mob, CqActor).healthBar);
 		if (mobs.length == 0)
 		levelComplete();
 	}
