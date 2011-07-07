@@ -118,7 +118,6 @@ class CqSpellFactory {
 				spell.buffs.set("defense", 5);
 				spell.buffs.set("speed", -1);
 				spell.spiritPointsRequired = 720;			
-			
 			case BLINK:
 				spell.specialEffects.add(new CqSpecialEffectValue("blink"));
 				spell.spiritPointsRequired = 720;

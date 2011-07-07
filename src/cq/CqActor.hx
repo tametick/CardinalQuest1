@@ -524,7 +524,9 @@ class CqActor extends CqObject, implements Actor {
 	function applyEffect(effect:CqSpecialEffectValue, other:CqActor) {
 		HxlLog.append("applied special effect: " + effect.name);
 		
-		if (effect.name == "heal") {
+		switch(effect.name){
+		
+		case "heal":
 			if (effect.value == "full"){
 				if (other == null) {
 					healthBar.visible = true;
@@ -546,19 +548,21 @@ class CqActor extends CqObject, implements Actor {
 					GameUI.showEffectText(other, "Healed", 0x0080FF);
 				}
 			}
-		} else if (effect.name == "charm") {
+		case "charm":
 			other.faction = faction;
 			other.specialEffects.set(effect.name, effect);
 			GameUI.showEffectText(other, "Charm", 0xFF8040);
-		} else if (effect.name == "fear") {
+		case "fear":
 			other.specialEffects.set(effect.name, effect);
 			GameUI.showEffectText(other, "Fear", 0x008080);
-		} else if (effect.name == "sleep") {
+		case "sleep":
 			effect.value = other.speed;
 			other.speed = 0;
 			other.specialEffects.set(effect.name, effect);
 			GameUI.showEffectText(other, "Sleep", 0xFFFF00);
-		} else {
+		case "blink":
+			//todo
+		default:
 			if (other == null) {
 				specialEffects.set(effect.name, effect);
 				GameUI.showEffectText(this, "" + effect.name+ ": " + effect.value, 0x0000ff);
