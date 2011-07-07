@@ -46,7 +46,6 @@ class GameState extends CqState {
 	
 	public override function update() {
 		super.update();
-		var diagonal = SpriteCursor.instance.getSpriteIndex("diagonal");
 		var up = SpriteCursor.instance.getSpriteIndex("up");
 		
 		if ( initialized < 1 ) 
@@ -54,9 +53,7 @@ class GameState extends CqState {
 			
 		if ( GameUI.isTargeting ) {
 			gameUI.updateTargeting();
-			cursor.angle = 0;
-			if(cursor.getFrame()!=diagonal)
-				cursor.setFrame(diagonal);
+			setDiagonalCursor();
 		} else {
 			if (isPlayerActing) {
 				if (GameUI.currentPanel == null || !GameUI.currentPanel.isBlockingInput ) {
@@ -70,11 +67,9 @@ class GameState extends CqState {
 		var target:HxlPoint = Registery.level.getTargetAccordingToMousePosition(dx, dy);
 		
 		if ( gameUI.overlapsPoint( HxlGraphics.mouse.x, HxlGraphics.mouse.y)||
-		     Math.abs(dx) < Configuration.zoomedTileSize() && Math.abs(dy) < Configuration.zoomedTileSize() 
+		     Math.abs(dx) < Configuration.zoomedTileSize() && Math.abs(dy) < Configuration.zoomedTileSize()/2 
 		   ) {
-			cursor.angle = 0;
-			if(cursor.getFrame()!=diagonal)
-				cursor.setFrame(diagonal);
+			setDiagonalCursor();
 		} else {
 			if(cursor.getFrame()!=up)
 				cursor.setFrame(up);
