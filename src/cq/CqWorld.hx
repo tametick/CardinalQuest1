@@ -332,9 +332,12 @@ class CqWorld extends World {
 
 	public function new() {
 		super();
-		
+
 		onNewLevel = new List();
-		CqSpellFactory.remainingSpells = SpriteSpells.instance.spriteNames[0].copy();
+		CqSpellFactory.remainingSpells = [];
+		for(line in SpriteSpells.instance.spriteNames)
+			CqSpellFactory.remainingSpells = CqSpellFactory.remainingSpells.concat(line);
+		
 		goToLevel(currentLevelIndex);
 	}
 

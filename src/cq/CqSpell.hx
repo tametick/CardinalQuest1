@@ -85,6 +85,23 @@ class CqSpellFactory {
 				spell.duration = 120;
 				spell.specialEffects.add(new CqSpecialEffectValue("invisible", "true"));
 				spell.spiritPointsRequired = 720;
+			case CHARM_MONSTER:
+			case POLYMORPH:
+			case SLEEP: 
+			case FEAR: 
+			case MAGIC_MIRROR: 
+			case STONE_SKIN: 
+			case BLINK:
+			case MAGIC_ARMOR: 
+				spell.duration = 120;
+				spell.buffs.set("defense", 3);
+				spell.spiritPointsRequired = 720;
+			case PASS_WALL:
+			case TELEPORT: 
+			case REVEAL_MAP:
+			case HEAL:
+				spell.specialEffects.add(new CqSpecialEffectValue("heal","full"));
+				spell.spiritPointsRequired = 720;
 		}
 		
 		return spell;
@@ -112,4 +129,16 @@ enum CqSpellType {
 	BLESS_WEAPON; 
 	HASTE; 
 	SHADOW_WALK;
+	CHARM_MONSTER; 
+	POLYMORPH; 
+	SLEEP; 
+	FEAR; 
+	MAGIC_MIRROR; 
+	STONE_SKIN; 
+	BLINK;
+	MAGIC_ARMOR; 
+	PASS_WALL;
+	TELEPORT; 
+	REVEAL_MAP; 
+	HEAL;
 }

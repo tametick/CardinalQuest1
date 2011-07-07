@@ -20,7 +20,7 @@
     <option directives="" />
     <option flashStrict="True" />
     <option mainClass="cq.Main" />
-    <option enabledebug="False" />
+    <option enabledebug="True" />
     <option additional="-swf-lib lib/playtomic.swf" />
   </build>
   <!-- haxelib libraries -->
