@@ -56,7 +56,7 @@ class CqSpellFactory {
 		switch(type) {
 			case FREEZE:
 				spell.targetsOther = true;
-				spell.duration = 120;
+				spell.duration = 180;
 				spell.buffs.set("speed", -3);
 				spell.spiritPointsRequired = 720;
 			case FIREBALL:
@@ -91,7 +91,11 @@ class CqSpellFactory {
 				spell.specialEffects.add(new CqSpecialEffectValue("charm", "true"));
 				spell.spiritPointsRequired = 720;
 			case POLYMORPH:
-			case SLEEP: 
+			case SLEEP:
+				spell.duration = 120;
+				spell.targetsOther = true;
+				spell.specialEffects.add(new CqSpecialEffectValue("sleep", 0));
+				spell.spiritPointsRequired = 720;
 			case FEAR:
 				spell.duration = 240;
 				spell.targetsOther = true;

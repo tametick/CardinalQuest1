@@ -536,7 +536,7 @@ class CqActor extends CqObject, implements Actor {
 						var player = CqRegistery.player;
 						player.infoViewHealthBar.updateValue();
 					}
-					GameUI.showEffectText(this, "Healed", 0x0000ff);
+					GameUI.showEffectText(this, "Healed", 0x0080FF);
 				} else {
 					healthBar.visible = true;
 					other.hp = other.maxHp;
@@ -545,17 +545,22 @@ class CqActor extends CqObject, implements Actor {
 						var player = CqRegistery.player;
 						player.infoViewHealthBar.updateValue();
 					}
-					GameUI.showEffectText(other, "Healed", 0x0000ff);
+					GameUI.showEffectText(other, "Healed", 0x0080FF);
 				}
 			}
 		} else if (effect.name == "charm") {
 			other.faction = faction;
 			other.specialEffects.set(effect.name, effect);
-			GameUI.showEffectText(other, "Charm", 0x0099ff);
+			GameUI.showEffectText(other, "Charm", 0xFF8040);
 		} else if (effect.name == "fear") {
 			other.afraid = true;
 			other.specialEffects.set(effect.name, effect);
-			GameUI.showEffectText(other, "Fear", 0x0099ff);
+			GameUI.showEffectText(other, "Fear", 0x008080);
+		} else if (effect.name == "sleep") {
+			effect.value = other.speed;
+			other.speed = 0;
+			other.specialEffects.set(effect.name, effect);
+			GameUI.showEffectText(other, "Sleep", 0xFFFF00);
 		} else {
 			if (other == null) {
 				specialEffects.set(effect.name, effect);

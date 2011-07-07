@@ -287,7 +287,9 @@ class CqLevel extends Level {
 								case "charm":
 									creature.faction = CqMob.FACTION;
 								case "fear":
-									cast(creature,CqMob).afraid = false;
+									creature.afraid = false;
+								case "sleep":
+									creature.speed = currentEffect.value;
 							}
 						}
 						
@@ -305,7 +307,7 @@ class CqLevel extends Level {
 			var speed = creature.speed;
 			// Apply speed buffs
 			speed += creature.buffs.get("speed");
-			speed = Std.int(Math.max(speed, 1));
+			speed = Std.int(Math.max(speed, 0));
 			// apply spirit buffs
 			var spirit = creature.spirit;
 			var specialActive = creature.visibleEffects.length >0;
