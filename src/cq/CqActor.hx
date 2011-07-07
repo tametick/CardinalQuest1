@@ -561,7 +561,11 @@ class CqActor extends CqObject, implements Actor {
 			other.specialEffects.set(effect.name, effect);
 			GameUI.showEffectText(other, "Sleep", 0xFFFF00);
 		case "blink":
-			//todo
+			var tileLocation = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), Registery.level.mapData, SpriteTiles.instance.walkableAndSeeThroughTiles);
+			var pixelLocation = Registery.level.getPixelPositionOfTile(tileLocation.x,tileLocation.y);
+			setTilePos(Std.int(tileLocation.x), Std.int(tileLocation.y));
+			moveToPixel(HxlGraphics.state, pixelLocation.x, pixelLocation.y);
+			Registery.level.updateFieldOfView(HxlGraphics.state,true);
 		default:
 			if (other == null) {
 				specialEffects.set(effect.name, effect);

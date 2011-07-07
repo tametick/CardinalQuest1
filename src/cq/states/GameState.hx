@@ -139,7 +139,7 @@ class GameState extends CqState {
 				player.give(CqItemType.RED_POTION);
 				player.give(CqItemType.RED_POTION);
 				player.give(CqItemType.PURPLE_POTION);
-				player.give(CqSpellType.BERSERK);
+				player.give(CqSpellType.BLINK);
 			case WIZARD:
 				player.give(CqItemType.STAFF);
 				player.give(CqItemType.RED_POTION);
