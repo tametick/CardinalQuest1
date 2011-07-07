@@ -53,7 +53,6 @@ class CqActor extends CqObject, implements Actor {
 	public var moveSpeed:Float;	
 	public var visionRadius:Float;
 	public var faction:Int;
-	public var afraid:Bool;
 	
 	public var actionPoints:Int;
 	
@@ -131,8 +130,6 @@ class CqActor extends CqObject, implements Actor {
 		bobCounter = 0.0;
 		bobCounterInc = 0.1;
 		bobMult = 5.0;
-		
-		afraid = false;
 	}
 	
 	function initBuffs(){
@@ -553,7 +550,6 @@ class CqActor extends CqObject, implements Actor {
 			other.specialEffects.set(effect.name, effect);
 			GameUI.showEffectText(other, "Charm", 0xFF8040);
 		} else if (effect.name == "fear") {
-			other.afraid = true;
 			other.specialEffects.set(effect.name, effect);
 			GameUI.showEffectText(other, "Fear", 0x008080);
 		} else if (effect.name == "sleep") {
@@ -883,7 +879,7 @@ class CqMob extends CqActor, implements Mob {
 		if (dest == null)
 			return true;
 		
-		if ( !afraid && Std.is(this, CqMob) && equippedSpells.length > 0) {
+		if ( !specialEffects.exists("fear") && Std.is(this, CqMob) && equippedSpells.length > 0) {
 			// Try casting spell first
 			
 			var spell:CqSpell = null;
@@ -918,7 +914,7 @@ class CqMob extends CqActor, implements Mob {
 				dx = 0;
 		}
 		
-		if (afraid) {
+		if (specialEffects.exists("fear")) {
 			dx *= -1;
 			dy *= -1;
 		}

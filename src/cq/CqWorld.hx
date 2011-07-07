@@ -286,8 +286,6 @@ class CqLevel extends Level {
 							switch(currentEffect.name){
 								case "charm":
 									creature.faction = CqMob.FACTION;
-								case "fear":
-									creature.afraid = false;
 								case "sleep":
 									creature.speed = currentEffect.value;
 							}
