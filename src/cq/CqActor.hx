@@ -53,6 +53,7 @@ class CqActor extends CqObject, implements Actor {
 	public var moveSpeed:Float;	
 	public var visionRadius:Float;
 	public var faction:Int;
+	public var afraid:Bool;
 	
 	public var actionPoints:Int;
 	
@@ -130,6 +131,8 @@ class CqActor extends CqObject, implements Actor {
 		bobCounter = 0.0;
 		bobCounterInc = 0.1;
 		bobMult = 5.0;
+		
+		afraid = false;
 	}
 	
 	function initBuffs(){
@@ -548,7 +551,11 @@ class CqActor extends CqObject, implements Actor {
 		} else if (effect.name == "charm") {
 			other.faction = faction;
 			other.specialEffects.set(effect.name, effect);
-			GameUI.showEffectText(other, "Charm", 0x0000ff);
+			GameUI.showEffectText(other, "Charm", 0x0099ff);
+		} else if (effect.name == "fear") {
+			other.afraid = true;
+			other.specialEffects.set(effect.name, effect);
+			GameUI.showEffectText(other, "Fear", 0x0099ff);
 		} else {
 			if (other == null) {
 				specialEffects.set(effect.name, effect);
@@ -789,6 +796,7 @@ class CqMob extends CqActor, implements Mob {
 	static var sprites = SpriteMonsters.instance;
 	public var type:CqMobType;
 	public var xpValue:Int;
+	
 	var aware:Int;
 		
 	public function new(X:Float, Y:Float, typeName:String) {
@@ -798,6 +806,7 @@ class CqMob extends CqActor, implements Mob {
 		loadGraphic(SpriteMonsters, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 		faction = FACTION;
 		aware = 0;
+
 		type = Type.createEnum(CqMobType,  typeName.toUpperCase());
 		visible = false;
 		
@@ -863,13 +872,13 @@ class CqMob extends CqActor, implements Mob {
 				target = cast(Registery.player,CqActor);
 		}
 			
-		var line = HxlUtil.getLine(tilePos, target.tilePos, isBlocking);
+		var line:Array<HxlPoint> = HxlUtil.getLine(tilePos, target.tilePos, isBlocking);
 		var dest = line[1];
 		
 		if (dest == null)
 			return true;
 		
-		if ( Std.is(this, CqMob) && equippedSpells.length > 0) {
+		if ( !afraid && Std.is(this, CqMob) && equippedSpells.length > 0) {
 			// Try casting spell first
 			
 			var spell:CqSpell = null;
@@ -902,6 +911,11 @@ class CqMob extends CqActor, implements Mob {
 				dy = 0;
 			else
 				dx = 0;
+		}
+		
+		if (afraid) {
+			dx *= -1;
+			dy *= -1;
 		}
 		
 		if(direction==null)

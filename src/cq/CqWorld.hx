@@ -282,8 +282,12 @@ class CqLevel extends Level {
 							GameUI.showEffectText(creature, "" + t.specialEffect.name + " expired", 0xff0000);
 							creature.specialEffects.remove(t.specialEffect.name);
 							
-							if (currentEffect.name == "charm"){
-								creature.faction = CqMob.FACTION;
+							
+							switch(currentEffect.name){
+								case "charm":
+									creature.faction = CqMob.FACTION;
+								case "fear":
+									cast(creature,CqMob).afraid = false;
 							}
 						}
 						

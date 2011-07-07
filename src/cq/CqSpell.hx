@@ -92,7 +92,11 @@ class CqSpellFactory {
 				spell.spiritPointsRequired = 720;
 			case POLYMORPH:
 			case SLEEP: 
-			case FEAR: 
+			case FEAR:
+				spell.duration = 240;
+				spell.targetsOther = true;
+				spell.specialEffects.add(new CqSpecialEffectValue("fear", "true"));
+				spell.spiritPointsRequired = 720;
 			case MAGIC_MIRROR: 
 			case STONE_SKIN: 
 				spell.duration = 120;
