@@ -276,7 +276,7 @@ class CqLevel extends Level {
 							creature.visibleEffects.remove(t.buffName);
 						}
 						
-						if (HxlUtil.contains(specialEffects.keys(), t.specialEffect.name)) {
+						if (t.specialEffect != null && HxlUtil.contains(specialEffects.keys(), t.specialEffect.name)) {
 							var currentEffect = specialEffects.get(t.specialEffect.name);
 							
 							GameUI.showEffectText(creature, "" + t.specialEffect.name + " expired", 0xff0000);

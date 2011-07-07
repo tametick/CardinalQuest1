@@ -95,6 +95,11 @@ class CqSpellFactory {
 			case FEAR: 
 			case MAGIC_MIRROR: 
 			case STONE_SKIN: 
+				spell.duration = 120;
+				spell.buffs.set("defense", 5);
+				spell.buffs.set("speed", -1);
+				spell.spiritPointsRequired = 720;			
+			
 			case BLINK:
 			case MAGIC_ARMOR: 
 				spell.duration = 120;
@@ -105,7 +110,7 @@ class CqSpellFactory {
 			case REVEAL_MAP:
 			case HEAL:
 				spell.specialEffects.add(new CqSpecialEffectValue("heal","full"));
-				spell.spiritPointsRequired = 720;
+				spell.spiritPointsRequired = 720*4;
 		}
 		
 		return spell;
