@@ -562,6 +562,24 @@ class CqActor extends CqObject, implements Actor {
 			GameUI.showEffectText(other, "Sleep", 0xFFFF00);
 		case "blink":
 			//todo
+		case "polymorph":
+			other.specialEffects.set(effect.name, effect);
+			GameUI.showEffectText(other, "Morph", 0xA81CE3);
+			var _se = other.specialEffects;
+			var _hp = other.hp;
+			Registery.level.removeMobFromLevel(HxlGraphics.state, cast(other, CqMob));
+			var mob = CqRegistery.level.createAndaddMob(other.getTilePos(), Std.int(Math.random() * CqRegistery.player.level),true);
+			CqRegistery.level.updateFieldOfView(HxlGraphics.state);
+			GameUI.instance.addHealthBar(cast(mob, CqActor));
+			
+			var casted:CqActor = cast(mob, CqActor);
+			casted.specialEffects = _se;
+			casted.hp = _hp;
+			casted.healthBar.setTween(false);
+			casted.healthBar.visible = true;
+			casted.healthBar.render();
+			casted.healthBar.setTween(true);
+			casted.healthBar.updateValue(_hp);
 		default:
 			if (other == null) {
 				specialEffects.set(effect.name, effect);
