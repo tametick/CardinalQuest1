@@ -29,7 +29,7 @@ import flash.geom.Rectangle;
 class CqSpecialEffectValue {
 	public var name:String;
 	public var value:Dynamic;
-	public function new(name:String, value:Dynamic) {
+	public function new(name:String, ?value:Dynamic=null) {
 		this.name = name;
 		this.value = value;
 	}

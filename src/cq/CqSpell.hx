@@ -25,7 +25,18 @@ class CqSpellFactory {
 		Resources.descriptions.set("Bless weapon", "Blesses the currently wielded weapon, providing a temporary boost to its effectivness.");
 		Resources.descriptions.set("Haste", "Makes you faster and more nimble.");
 		Resources.descriptions.set("Shadow walk", "Renders you invisible for a few seconds.");
-		
+		Resources.descriptions.set("Charm monster","Charms a foe and temporarily brings them to your side."); 
+		Resources.descriptions.set("Polymorph","Transoform a creature into another form."); 
+		Resources.descriptions.set("Sleep","Puts a monster into a deep slumber."); 
+		Resources.descriptions.set("Fear","Makes a monster flee in horror."); 
+		Resources.descriptions.set("Magic mirror","Creates a duplicate to draw enemeies away from you."); 
+		Resources.descriptions.set("Stone skin","Hardens your skin, rendering you tough but slow."); 
+		Resources.descriptions.set("Blink","Transports you to a random location.");
+		Resources.descriptions.set("Magic armor","Engulfs you in a magical protective aura."); 
+		Resources.descriptions.set("Pass wall","Enables walking through walls as if they were thin air.");
+		Resources.descriptions.set("Teleport","Transports you to a specific location of your choice."); 
+		Resources.descriptions.set("Reveal map","Reveals the laout of the current floor"); 
+		Resources.descriptions.set("Heal","Restores health and vigor.");
 		inited = true;
 	}
 	
@@ -37,7 +48,7 @@ class CqSpellFactory {
 		
 		var newSpellName = HxlUtil.getRandomElement(remainingSpells);
 		
-		// every spell is only given once
+		// uncomment if you want every spell is only be given once
 		//remainingSpells.remove(newSpellName);
 		
 		initDescriptions();
@@ -83,12 +94,12 @@ class CqSpellFactory {
 				spell.spiritPointsRequired = 720;
 			case SHADOW_WALK:
 				spell.duration = 120;
-				spell.specialEffects.add(new CqSpecialEffectValue("invisible", "true"));
+				spell.specialEffects.add(new CqSpecialEffectValue("invisible"));
 				spell.spiritPointsRequired = 720;
 			case CHARM_MONSTER:
 				spell.duration = 120;
 				spell.targetsOther = true;
-				spell.specialEffects.add(new CqSpecialEffectValue("charm", "true"));
+				spell.specialEffects.add(new CqSpecialEffectValue("charm"));
 				spell.spiritPointsRequired = 720;
 			case POLYMORPH:
 				spell.duration = 480;
@@ -103,7 +114,7 @@ class CqSpellFactory {
 			case FEAR:
 				spell.duration = 240;
 				spell.targetsOther = true;
-				spell.specialEffects.add(new CqSpecialEffectValue("fear", "true"));
+				spell.specialEffects.add(new CqSpecialEffectValue("fear"));
 				spell.spiritPointsRequired = 720;
 			case MAGIC_MIRROR: 
 			
@@ -112,9 +123,9 @@ class CqSpellFactory {
 				spell.buffs.set("defense", 5);
 				spell.buffs.set("speed", -1);
 				spell.spiritPointsRequired = 720;			
-			
 			case BLINK:
-			
+				spell.specialEffects.add(new CqSpecialEffectValue("blink"));
+				spell.spiritPointsRequired = 720;
 			case MAGIC_ARMOR: 
 				spell.duration = 120;
 				spell.buffs.set("defense", 3);

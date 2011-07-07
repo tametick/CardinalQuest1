@@ -239,7 +239,8 @@ class CqActor extends CqObject, implements Actor {
 					player.hp = player.maxHp;
 					player.healthBar.updateValue();
 					player.infoViewHealthBar.updateValue();
-					player.healthBar.visible = true;					
+					player.healthBar.visible = true;
+					Registery.level.updateFieldOfView(HxlGraphics.state,true);
 				} else {
 					///todo: Playtomic recording
 					HxlGraphics.pushState(new GameOverState());
@@ -523,7 +524,9 @@ class CqActor extends CqObject, implements Actor {
 	function applyEffect(effect:CqSpecialEffectValue, other:CqActor) {
 		HxlLog.append("applied special effect: " + effect.name);
 		
-		if (effect.name == "heal") {
+		switch(effect.name){
+		
+		case "heal":
 			if (effect.value == "full"){
 				if (other == null) {
 					healthBar.visible = true;
@@ -545,38 +548,21 @@ class CqActor extends CqObject, implements Actor {
 					GameUI.showEffectText(other, "Healed", 0x0080FF);
 				}
 			}
-		} else if (effect.name == "charm") {
+		case "charm":
 			other.faction = faction;
 			other.specialEffects.set(effect.name, effect);
 			GameUI.showEffectText(other, "Charm", 0xFF8040);
-		} else if (effect.name == "fear") {
+		case "fear":
 			other.specialEffects.set(effect.name, effect);
 			GameUI.showEffectText(other, "Fear", 0x008080);
-		} else if (effect.name == "sleep") {
+		case "sleep":
 			effect.value = other.speed;
 			other.speed = 0;
 			other.specialEffects.set(effect.name, effect);
 			GameUI.showEffectText(other, "Sleep", 0xFFFF00);
-		}else if (effect.name == "polymorph") {
-			other.specialEffects.set(effect.name, effect);
-			GameUI.showEffectText(other, "Morph", 0xA81CE3);
-			var _se = other.specialEffects;
-			var _hp = other.hp;
-			Registery.level.removeMobFromLevel(HxlGraphics.state, cast(other, CqMob));
-			var mob = CqRegistery.level.createAndaddMob(other.getTilePos(), Std.int(Math.random() * CqRegistery.player.level),true);
-			CqRegistery.level.updateFieldOfView(HxlGraphics.state);
-			GameUI.instance.addHealthBar(cast(mob, CqActor));
-			
-			var casted:CqActor = cast(mob, CqActor);
-			casted.specialEffects = _se;
-			casted.hp = _hp;
-			casted.healthBar.setTween(false);
-			casted.healthBar.visible = true;
-			casted.healthBar.updateValue(_hp);
-			casted.healthBar.render();// = true;
-			casted.healthBar.setTween(true);
-			casted.healthBar.updateValue(_hp);
-		} else {
+		case "blink":
+			//todo
+		default:
 			if (other == null) {
 				specialEffects.set(effect.name, effect);
 				GameUI.showEffectText(this, "" + effect.name+ ": " + effect.value, 0x0000ff);
