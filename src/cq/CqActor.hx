@@ -452,6 +452,14 @@ class CqActor extends CqObject, implements Actor {
 		}
 	}
 	
+	public function useAt(itemOrSpell:CqItem, tile:CqTile) {
+		if(itemOrSpell.specialEffects != null){
+			for ( effect in itemOrSpell.specialEffects) {
+				applyEffectAt(effect, tile);
+			}
+		}
+	}
+	
 	public function use(itemOrSpell:CqItem, ?other:CqActor=null) {
 		// todo
 		HxlLog.append("using item or spell");
@@ -521,6 +529,17 @@ class CqActor extends CqObject, implements Actor {
 		
 	}
 
+	function applyEffectAt(effect:CqSpecialEffectValue, tile:CqTile) {
+		switch(effect.name){
+		
+		case "teleport":
+			var pixelLocation = Registery.level.getPixelPositionOfTile(tile.mapX,tile.mapY);
+			setTilePos(Std.int(tile.mapX), Std.int(tile.mapY));
+			moveToPixel(HxlGraphics.state, pixelLocation.x, pixelLocation.y);
+			Registery.level.updateFieldOfView(HxlGraphics.state,true);
+		}
+	}
+	
 	function applyEffect(effect:CqSpecialEffectValue, other:CqActor) {
 		HxlLog.append("applied special effect: " + effect.name);
 		

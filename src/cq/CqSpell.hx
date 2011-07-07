@@ -126,7 +126,10 @@ class CqSpellFactory {
 				spell.buffs.set("defense", 3);
 				spell.spiritPointsRequired = 720;
 			case PASS_WALL:
-			case TELEPORT: 
+			case TELEPORT:
+				spell.targetsEmptyTile = true;
+				spell.specialEffects.add(new CqSpecialEffectValue("teleport"));
+				spell.spiritPointsRequired = 720*2;
 			case REVEAL_MAP:
 			case HEAL:
 				spell.specialEffects.add(new CqSpecialEffectValue("heal","full"));
@@ -139,6 +142,7 @@ class CqSpellFactory {
 
 class CqSpell extends CqItem {
 	public var targetsOther:Bool;
+	public var targetsEmptyTile:Bool;
 	public var spiritPoints:Int;
 	public var spiritPointsRequired:Int;
 	

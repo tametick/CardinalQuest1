@@ -14,6 +14,9 @@ import cq.CqVitalBar;
 import cq.CqResources;
 import cq.CqGraphicKey;
 import haxel.HxlGroup;
+import haxel.HxlUtil;
+import haxel.HxlTilemap;
+
 
 import data.Configuration;
 import data.Registery;
@@ -80,6 +83,7 @@ class GameUI extends HxlDialog {
 	// State & helper vars
 	public static var currentPanel:HxlSlidingDialog = null;
 	public static var isTargeting:Bool = false;
+	public static var isTargetingEmptyTile:Bool = false;
 	public static var targetString:String = "";
 	public static var targetSpell:CqSpellButton = null;
 	var targetLastPos:HxlPoint;
@@ -89,6 +93,7 @@ class GameUI extends HxlDialog {
 		super(0, 0, HxlGraphics.width, HxlGraphics.height);
 
 		isTargeting = false;
+		isTargetingEmptyTile = false;
 		targetLastPos = null;
 		targetString = "";
 		targetSpell = null;
@@ -558,8 +563,9 @@ class GameUI extends HxlDialog {
 		infoViewXpBar.updateValue(xpTotal);
 	}
 
-	public static function setTargeting(Toggle:Bool, ?TargetText:String=null) {
+	public static function setTargeting(Toggle:Bool, ?TargetText:String=null, ?TargetsEmptyTile=false) {
 		isTargeting = Toggle;
+		isTargetingEmptyTile = TargetsEmptyTile; 
 		if ( TargetText != null ) {
 			targetString = TargetText + ": Select A Target";
 		}
@@ -604,14 +610,25 @@ class GameUI extends HxlDialog {
 			targetSprite.y = worldPos.y;
 
 			var tile:CqTile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)), CqTile);
-			//tile.color = 0xbbffbb;
-			if ( tile == null || tile.actors.length <= 0 ) {
-				targetSprite.color = 0xff0000;
-			} else {
-				if ( cast(tile.actors[0], CqActor).faction != 0 ) {
-					targetSprite.color = 0x00ff00;
-				} else {
+			if (isTargetingEmptyTile) {
+				if ( tile == null || tile.actors.length > 0 || tile.visibility == Visibility.UNSEEN) {
 					targetSprite.color = 0xff0000;
+				} else {
+					if (HxlUtil.contains(SpriteTiles.instance.walkableAndSeeThroughTiles.iterator(), tile.dataNum)) {
+						targetSprite.color = 0x00ff00;
+					} else {
+						targetSprite.color = 0xff0000;
+					}
+				}
+			} else {
+				if ( tile == null || tile.actors.length <= 0 || tile.visibility == Visibility.UNSEEN) {
+					targetSprite.color = 0xff0000;
+				} else {
+					if ( cast(tile.actors[0], CqActor).faction != 0 ) {
+						targetSprite.color = 0x00ff00;
+					} else {
+						targetSprite.color = 0xff0000;
+					}
 				}
 			}
 
@@ -630,17 +647,32 @@ class GameUI extends HxlDialog {
 		var targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
 		var targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
 		var tile:CqTile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)), CqTile);
-		if ( tile == null || tile.actors.length <= 0 ) {
-			GameUI.setTargeting(false);
-		} else {
-			if ( cast(tile.actors[0], CqActor).faction != 0 ) {
-				var player = CqRegistery.player;
-				player.use(targetSpell.getSpell(), cast(tile.actors[0], CqActor));
-				targetSpell.getSpell().spiritPoints = 0;
-				GameUI.instance.updateCharge(targetSpell);
+		if (isTargetingEmptyTile) {
+			if ( tile == null || tile.actors.length > 0) {
 				GameUI.setTargeting(false);
 			} else {
+				if (HxlUtil.contains(SpriteTiles.instance.walkableAndSeeThroughTiles.iterator(), tile.dataNum)) {
+					cast(Registery.player,CqActor).useAt(targetSpell.getSpell(), tile);
+					targetSpell.getSpell().spiritPoints = 0;
+					GameUI.instance.updateCharge(targetSpell);
+					GameUI.setTargeting(false);
+				} else {
+					GameUI.setTargeting(false);
+				}
+			}
+		} else {
+			if ( tile == null || tile.actors.length <= 0 ) {
 				GameUI.setTargeting(false);
+			} else {
+				if ( cast(tile.actors[0], CqActor).faction != 0 ) {
+					var player = CqRegistery.player;
+					player.use(targetSpell.getSpell(), cast(tile.actors[0], CqActor));
+					targetSpell.getSpell().spiritPoints = 0;
+					GameUI.instance.updateCharge(targetSpell);
+					GameUI.setTargeting(false);
+				} else {
+					GameUI.setTargeting(false);
+				}
 			}
 		}
 

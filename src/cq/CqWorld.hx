@@ -39,16 +39,6 @@ class CqTile extends Tile {
 		super(X, Y, Rect);
 		visible = false;
 	}
-	
-/*	[edit] no need anymore, decorations added in a different place. is CqTile class needed anymore?
- *  todo = render decorations
-	override function render() {
-		super.render();
-		if ( decorations.length>0 ) {
-			...
-		}
-	}
- */
 }
 
 class CqLevel extends Level {

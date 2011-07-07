@@ -95,6 +95,9 @@ class CqSpellButton extends HxlDialog {
 				if ( spell.targetsOther ) {
 					GameUI.setTargeting(true, spell.name);
 					GameUI.setTargetingSpell(this);
+				} else if (spell.targetsEmptyTile) {
+					GameUI.setTargeting(true, spell.name, true);
+					GameUI.setTargetingSpell(this);					
 				} else {
 					GameUI.setTargeting(false);
 					CqRegistery.player.use(spellObj.item, null);
