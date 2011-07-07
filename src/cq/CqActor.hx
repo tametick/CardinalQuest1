@@ -239,7 +239,8 @@ class CqActor extends CqObject, implements Actor {
 					player.hp = player.maxHp;
 					player.healthBar.updateValue();
 					player.infoViewHealthBar.updateValue();
-					player.healthBar.visible = true;					
+					player.healthBar.visible = true;
+					Registery.level.updateFieldOfView(HxlGraphics.state,true);
 				} else {
 					///todo: Playtomic recording
 					HxlGraphics.pushState(new GameOverState());
