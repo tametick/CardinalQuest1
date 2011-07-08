@@ -357,7 +357,7 @@ class CqWorld extends World {
 			CqSpellFactory.remainingSpells = CqSpellFactory.remainingSpells.concat(line);
 		
 		// no passwall for now
-		CqSpellFactory.remainingSpells.remove("ass_wall");
+		CqSpellFactory.remainingSpells.remove("pass_wall");
 			
 		goToLevel(currentLevelIndex);
 	}
