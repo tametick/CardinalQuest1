@@ -3,7 +3,7 @@ package cq;
 import data.Configuration;
 
 class CqConfiguration extends Configuration {
-	public static var chestsPerLevel = 18;
+	public static var chestsPerLevel = 58;
 	public static var spellsPerLevel = 2;
 	public static var mobsPerLevel = 36;
 	public static var lastLevel = 7;

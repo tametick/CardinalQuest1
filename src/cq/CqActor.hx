@@ -463,14 +463,24 @@ class CqActor extends CqObject, implements Actor {
 	public function use(itemOrSpell:CqItem, ?other:CqActor=null) {
 		// todo
 		HxlLog.append("using item or spell");
-		
 		// add buffs
 		if(itemOrSpell.buffs != null) {
 			for (buff in itemOrSpell.buffs.keys()) {
 				var val = itemOrSpell.buffs.get(buff);
-				var text = (val>0?"+":"") + val + " " + buff;
+				var text = (val > 0?"+":"") + val + " " + buff;
+				var c:Int;
+				switch(buff) {
+					case "attack":
+						c = 0x4BE916;
+					case "defense":
+						c = 0x381AE6;
+					case "speed":
+						c = 0xEDD112;
+					default:
+						c = 0xFFFFFF;
+				}
 				if (other == null) {
-					GameUI.showEffectText(this,text, 0x00ff00);
+					GameUI.showEffectText(this,text, c);
 					
 					// apply to self
 					buffs.set(buff, buffs.get(buff) + itemOrSpell.buffs.get(buff));
@@ -547,7 +557,6 @@ class CqActor extends CqObject, implements Actor {
 	
 	function applyEffect(effect:CqSpecialEffectValue, other:CqActor) {
 		HxlLog.append("applied special effect: " + effect.name);
-		
 		switch(effect.name){
 		
 		case "heal":

@@ -518,7 +518,6 @@ class CqPotionGrid extends CqInventoryGrid {
 			add(btnCell);
 			cells.push(btnCell.cell);
 		}
-		CqInventoryDialog.itemCell_groups.add("potions", cells);
 
 	}
 

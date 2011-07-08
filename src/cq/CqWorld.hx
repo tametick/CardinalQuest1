@@ -274,7 +274,7 @@ class CqLevel extends Level {
 							// remove buff effect
 							var newVal = buffs.get(t.buffName) - t.buffValue;
 							var text:String = Std.string(t.buffValue);
-							GameUI.showEffectText(creature, (text.charAt(0) == "-"?"":"+") + t.buffValue + " " + t.buffName , 0xff0000);
+							GameUI.showEffectText(creature, (-t.buffValue) + " " + t.buffName , 0xff0000);
 							buffs.set(t.buffName, newVal);
 						} 
 						
@@ -296,13 +296,8 @@ class CqLevel extends Level {
 								case "sleep":
 									creature.speed = currentEffect.value;
 								case "polymorph":
-									/*other.specialEffects.set(effect.name, effect);
-									GameUI.showEffectText(other, "Morph", 0xA81CE3);
-									var se = other.specialEffects;
-									Registery.level.removeMobFromLevel(HxlGraphics.state, cast(other, CqMob));
-									var mob = CqRegistery.level.createAndaddMob(other.getTilePos(), Std.int(Math.random() * CqRegistery.player.level),true);
-									CqRegistery.level.updateFieldOfView(HxlGraphics.state);
-									cast(mob, CqActor).specialEffects = se;*/
+								default:
+									//
 							}
 						}
 						

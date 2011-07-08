@@ -154,7 +154,9 @@ class GameState extends CqState {
 				player.give(CqItemType.GREEN_POTION);
 				player.give(CqSpellType.SHADOW_WALK);
 		}
-
+		player.maxHp *= 10;
+		player.defense *= 10;
+		
 		PtPlayer.ClassSelected(chosenClass);
 		
 		var self = this;
