@@ -216,6 +216,21 @@ class CqLevel extends Level {
 		cast(getTile(pos.x, pos.y), CqTile).loots.push(chest);
 	}
 	
+	public function createAndAddMirror(pos:HxlPoint, levelIndex:Int,?additionalAdd:Bool = false,player:CqPlayer):CqMob
+	{
+		var tpos = getTilePos(pos.x, pos.y, false);
+		var mob:CqMob = CqMobFactory.newMobFromLevel(tpos.x, tpos.y, levelIndex + 1, player);
+		mob.faction = player.faction;
+		// add to level mobs list
+		mobs.push(mob);
+		// for creating mobs not when initializing the level.
+		if (additionalAdd)HxlGraphics.state.add(mob);
+		// add to tile actors list
+		cast(getTile(pos.x, pos.y), CqTile).actors.push(mob);
+		// call world's ActorAdded static method
+		CqWorld.onActorAdded(mob);
+		return mob;
+	}
 	public function createAndaddMob(pos:HxlPoint, levelIndex:Int,?additionalAdd:Bool = false):CqMob {
 		var pixelPos = getPixelPositionOfTile(pos.x, pos.y);
 		var mob:CqMob; 
@@ -259,7 +274,7 @@ class CqLevel extends Level {
 							// remove buff effect
 							var newVal = buffs.get(t.buffName) - t.buffValue;
 							var text:String = Std.string(t.buffValue);
-							GameUI.showEffectText(creature, (text.charAt(0) == "-"?"":"+") + t.buffValue + " " + t.buffName , 0xff0000);
+							GameUI.showEffectText(creature, (-t.buffValue) + " " + t.buffName , 0xff0000);
 							buffs.set(t.buffName, newVal);
 						} 
 						
@@ -281,13 +296,8 @@ class CqLevel extends Level {
 								case "sleep":
 									creature.speed = currentEffect.value;
 								case "polymorph":
-									/*other.specialEffects.set(effect.name, effect);
-									GameUI.showEffectText(other, "Morph", 0xA81CE3);
-									var se = other.specialEffects;
-									Registery.level.removeMobFromLevel(HxlGraphics.state, cast(other, CqMob));
-									var mob = CqRegistery.level.createAndaddMob(other.getTilePos(), Std.int(Math.random() * CqRegistery.player.level),true);
-									CqRegistery.level.updateFieldOfView(HxlGraphics.state);
-									cast(mob, CqActor).specialEffects = se;*/
+								default:
+									//
 							}
 						}
 						

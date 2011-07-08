@@ -117,7 +117,10 @@ class CqSpellFactory {
 				spell.specialEffects.add(new CqSpecialEffectValue("fear"));
 				spell.spiritPointsRequired = 720;
 			case MAGIC_MIRROR: 
-			
+				spell.duration = 480;
+				spell.targetsEmptyTile = true;
+				spell.specialEffects.add(new CqSpecialEffectValue("magic_mirror"));
+				spell.spiritPointsRequired = 780;
 			case STONE_SKIN: 
 				spell.duration = 120;
 				spell.buffs.set("defense", 5);
