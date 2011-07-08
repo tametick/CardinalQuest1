@@ -139,7 +139,7 @@ class GameState extends CqState {
 				player.give(CqItemType.RED_POTION);
 				player.give(CqItemType.RED_POTION);
 				player.give(CqItemType.PURPLE_POTION);
-				player.give(CqSpellType.BLINK);
+				player.give(CqSpellType.BERSERK);
 			case WIZARD:
 				player.give(CqItemType.STAFF);
 				player.give(CqItemType.RED_POTION);
@@ -173,8 +173,9 @@ class GameState extends CqState {
 	override function onKeyUp(event:KeyboardEvent) {		
 		if ( HxlGraphics.keys.justReleased("ESCAPE") ) {
 			// If user was in targeting mode, cancel it
-			if ( GameUI.isTargeting ) 
+			if ( GameUI.isTargeting ) {
 				GameUI.setTargeting(false);
+			}
 			HxlGraphics.pushState(new MainMenuState());
 		}
 	}
