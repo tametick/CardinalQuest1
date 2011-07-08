@@ -539,7 +539,9 @@ class CqActor extends CqObject, implements Actor {
 			Registery.level.updateFieldOfView(HxlGraphics.state, true);
 		case "magic_mirror":
 			var mob = CqRegistery.level.createAndAddMirror(new HxlPoint(tile.mapX,tile.mapY), CqRegistery.player.level, true,CqRegistery.player);
+			GameUI.showEffectText(mob, "Mirror", 0x2DB6D2);
 			mob.speed = 0;
+			Registery.level.updateFieldOfView(HxlGraphics.state, true);
 		}
 	}
 	
