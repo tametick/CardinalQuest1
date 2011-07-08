@@ -574,12 +574,10 @@ class CqActor extends CqObject, implements Actor {
 			
 			var casted:CqActor = cast(mob, CqActor);
 			casted.specialEffects = _se;
-			casted.hp = _hp;
 			casted.healthBar.setTween(false);
-			casted.healthBar.visible = true;
-			casted.healthBar.render();
-			casted.healthBar.setTween(true);
 			casted.healthBar.updateValue(_hp);
+			casted.healthBar.setTween(true);
+			casted.healthBar.visible = true;
 		default:
 			if (other == null) {
 				specialEffects.set(effect.name, effect);
