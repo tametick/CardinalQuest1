@@ -216,6 +216,21 @@ class CqLevel extends Level {
 		cast(getTile(pos.x, pos.y), CqTile).loots.push(chest);
 	}
 	
+	public function createAndAddMirror(pos:HxlPoint, levelIndex:Int,?additionalAdd:Bool = false,player:CqPlayer):CqMob
+	{
+		var tpos = getTilePos(pos.x, pos.y, false);
+		var mob:CqMob = CqMobFactory.newMobFromLevel(tpos.x, tpos.y, levelIndex + 1, player);
+		mob.faction = player.faction;
+		// add to level mobs list
+		mobs.push(mob);
+		// for creating mobs not when initializing the level.
+		if (additionalAdd)HxlGraphics.state.add(mob);
+		// add to tile actors list
+		cast(getTile(pos.x, pos.y), CqTile).actors.push(mob);
+		// call world's ActorAdded static method
+		CqWorld.onActorAdded(mob);
+		return mob;
+	}
 	public function createAndaddMob(pos:HxlPoint, levelIndex:Int,?additionalAdd:Bool = false):CqMob {
 		var pixelPos = getPixelPositionOfTile(pos.x, pos.y);
 		var mob:CqMob; 

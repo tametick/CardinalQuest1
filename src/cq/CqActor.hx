@@ -536,7 +536,10 @@ class CqActor extends CqObject, implements Actor {
 			var pixelLocation = Registery.level.getPixelPositionOfTile(tile.mapX,tile.mapY);
 			setTilePos(Std.int(tile.mapX), Std.int(tile.mapY));
 			moveToPixel(HxlGraphics.state, pixelLocation.x, pixelLocation.y);
-			Registery.level.updateFieldOfView(HxlGraphics.state,true);
+			Registery.level.updateFieldOfView(HxlGraphics.state, true);
+		case "magic_mirror":
+			var mob = CqRegistery.level.createAndAddMirror(new HxlPoint(tile.mapX,tile.mapY), CqRegistery.player.level, true,CqRegistery.player);
+			mob.speed = 0;
 		}
 	}
 	
@@ -594,7 +597,7 @@ class CqActor extends CqObject, implements Actor {
 			var mob = CqRegistery.level.createAndaddMob(other.getTilePos(), Std.int(Math.random() * CqRegistery.player.level),true);
 			CqRegistery.level.updateFieldOfView(HxlGraphics.state);
 			GameUI.instance.addHealthBar(cast(mob, CqActor));
-			
+			//health bar hacks
 			var casted:CqActor = cast(mob, CqActor);
 			casted.specialEffects = _se;
 			casted.healthBar.setTween(false);
@@ -644,7 +647,7 @@ class CqPlayer extends CqActor, implements Player {
 				attack = 5;
 				defense = 2;
 				speed = 3;
-				spirit = 1;
+				spirit = 100;
 				vitality = 5;
 				damage = new Range(1, 1);
 			case WIZARD:
@@ -844,18 +847,24 @@ class CqMob extends CqActor, implements Mob {
 	
 	var aware:Int;
 		
-	public function new(X:Float, Y:Float, typeName:String) {
+	public function new(X:Float, Y:Float, typeName:String,?player:Bool = false) {
 		super(X, Y);
 		xpValue = 1;
 		
-		loadGraphic(SpriteMonsters, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
+		if(player)
+			loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
+		else
+			loadGraphic(SpriteMonsters, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 		faction = FACTION;
 		aware = 0;
 
 		type = Type.createEnum(CqMobType,  typeName.toUpperCase());
 		visible = false;
 		
-		addAnimation("idle", [sprites.getSpriteIndex(typeName)], 0 );
+		if(player)
+			addAnimation("idle", [SpritePlayer.instance.getSpriteIndex(Type.enumConstructor(CqRegistery.player.playerClass).toLowerCase())], 0 );
+		else
+			addAnimation("idle", [sprites.getSpriteIndex(typeName)], 0 );
 		play("idle");
 	}
 	
@@ -1016,17 +1025,29 @@ class CqMobFactory {
 		
 		if(Resources.descriptions==null)
 			Resources.descriptions = new Hash<String>();
-		Resources.descriptions.set("Fighter", "A mighty warrior, possesing unparralleld strength and vigor.");
+		Resources.descriptions.set("Fighter", "A mighty warrior, possesing unparralleled strength and vigor.");
 		Resources.descriptions.set("Wizard", "A wise mage who masterd the secrets of magic.");
 		Resources.descriptions.set("Thief", "A cunning and agile rogue, his speed allows for a swift escape.");
 		
 		inited = true;
 	}
 	
-	public static function newMobFromLevel(X:Float, Y:Float, level:Int):CqMob {
+	public static function newMobFromLevel(X:Float, Y:Float, level:Int,?player:CqPlayer = null):CqMob {
 		initDescriptions();
-		
-		var typeName = null;
+		var mob;
+		var typeName:String = "";
+		if (player != null) {
+			typeName = HxlUtil.getRandomElement(SpriteMonsters.bandits);
+			mob = new CqMob(X, Y, typeName.toLowerCase(),true);
+			mob.attack = player.attack;
+			mob.defense = player.defense;
+			mob.speed = player.speed;
+			mob.spirit = player.spirit;
+			mob.hp = mob.maxHp = mob.vitality = player.maxHp;
+			mob.damage = player.damage;
+			mob.xpValue = player.xp;
+			return mob;
+		}
 		switch(level+1) {
 			case 1:
 				typeName = HxlUtil.getRandomElement(SpriteMonsters.bandits);
@@ -1067,7 +1088,7 @@ class CqMobFactory {
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.minotauers);
 		}
 		
-		var mob = new CqMob(X, Y, typeName.toLowerCase());
+		mob = new CqMob(X, Y, typeName.toLowerCase());
 		
 		switch(mob.type) {
 			case BANDIT_LONG_SWORDS, BANDIT_SHORT_SWORDS, BANDIT_SINGLE_LONG_SWORD, BANDIT_KNIVES:
@@ -1160,4 +1181,5 @@ enum CqMobType {
 	ELEMENTAL_GREEN; ELEMENTAL_WHITE; ELEMENTAL_RED; ELEMENTAL_BLUE;
 	WEREWOLF_GRAY; WEREWOLF_BLUE; WEREWOLF_PURPLE;
 	MINOTAUER; MINOTAUER_AXE; MINOTAUER_SWORD;
+	
 }
