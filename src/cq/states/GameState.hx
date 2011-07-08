@@ -139,7 +139,7 @@ class GameState extends CqState {
 				player.give(CqItemType.RED_POTION);
 				player.give(CqItemType.RED_POTION);
 				player.give(CqItemType.PURPLE_POTION);
-				player.give(CqSpellType.MAGIC_MIRROR);
+				player.give(CqSpellType.BERSERK);
 			case WIZARD:
 				player.give(CqItemType.STAFF);
 				player.give(CqItemType.RED_POTION);
@@ -154,8 +154,6 @@ class GameState extends CqState {
 				player.give(CqItemType.GREEN_POTION);
 				player.give(CqSpellType.SHADOW_WALK);
 		}
-		player.maxHp *= 10;
-		player.defense *= 10;
 		
 		PtPlayer.ClassSelected(chosenClass);
 		
