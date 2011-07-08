@@ -227,6 +227,50 @@ class Level extends HxlTilemap
 			}
 		}
 	}
+	
+	inline function isBlockedFromAllSides(x:Int,y:Int):Bool {
+		var blocked = (x == 0 || getTile(x - 1, y).isBlockingMovement());
+		blocked = blocked && (x == widthInTiles - 1 || getTile(x + 1, y).isBlockingMovement());
+		blocked = blocked && (y == heightInTiles - 1 || getTile(x, y + 1).isBlockingMovement());
+		blocked = blocked && (y == 0 || getTile(x, y - 1).isBlockingMovement());
+		
+		blocked = blocked && ((x==0 || y==0)  ||  getTile(x - 1, y-1).isBlockingMovement());
+		blocked = blocked && ((x==widthInTiles-1 || y==heightInTiles-1)  ||  getTile(x + 1, y+1).isBlockingMovement());
+		blocked = blocked && ((x==0 || y==heightInTiles-1) ||  getTile(x-1, y + 1).isBlockingMovement());
+		blocked = blocked && ((x==widthInTiles-1 || y==0)  ||  getTile(x+1, y - 1).isBlockingMovement());
+		
+		return blocked;
+	}
+	
+	public function showAll(state:HxlState) {
+		for ( x in 0...widthInTiles-1 ) {
+			for ( y in 0...heightInTiles - 1) {
+				if(!isBlockedFromAllSides(x,y)){
+					var tile = cast(getTile(x, y),Tile);
+
+					firstSeen(state, this, new HxlPoint(x, y));
+					tile.visible = true;
+					tile.color = 0xffffff;
+						
+					for (loot in tile.loots)
+						cast(loot,HxlSprite).visible = true;
+					for (actor in tile.actors)
+						cast(actor,HxlSprite).visible = true;
+					for (decoration in tile.decorations)
+						cast(decoration,HxlSprite).visible = true;
+				}
+			}
+		}
+	}
+
+	/** gets called for each tile first time seen. */
+	static function firstSeen(state:HxlState,map:Level,p:HxlPoint) { 
+		var t:Tile = map.getTile(Math.round(p.x), Math.round(p.y));
+		if (t.visibility == Visibility.UNSEEN && Math.random() < CHANCE_DECORATION)
+			map.addDecoration(t, state);
+		t.visibility = Visibility.IN_SIGHT ; 
+	}
+	
 	var dest:HxlPoint;
 	public function updateFieldOfView(state:HxlState,?skipTween:Bool = false, ?gradientColoring:Bool = true, ?seenTween:Int = 64, ?inSightTween:Int=255) {
 		var player = Registery.player;
@@ -260,14 +304,8 @@ class Level extends HxlTilemap
 			}
 		} else {
 			var map:Level = this;
-			//the function that gets called for each tile first time seen.
-			var firstSeen = function(p:HxlPoint) { 
-				var t:Tile = map.getTile(Math.round(p.x), Math.round(p.y));
-				if (t.visibility == Visibility.UNSEEN && Math.random() < CHANCE_DECORATION)					
-					map.addDecoration(t, state);
-				t.visibility = Visibility.IN_SIGHT ; 
-			}
-			HxlUtil.markFieldOfView(player.tilePos, player.visionRadius, this,true,firstSeen);
+			
+			HxlUtil.markFieldOfView(player.tilePos, player.visionRadius, this, true, function(p:HxlPoint) { firstSeen(state, map, p); } );
 		}
 		
 		for ( x in left...right+1 ) {

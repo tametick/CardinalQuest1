@@ -567,6 +567,8 @@ class CqActor extends CqObject, implements Actor {
 					GameUI.showEffectText(other, "Healed", 0x0080FF);
 				}
 			}
+		case "reveal":
+			Registery.level.showAll(HxlGraphics.state);
 		case "charm":
 			other.faction = faction;
 			other.specialEffects.set(effect.name, effect);

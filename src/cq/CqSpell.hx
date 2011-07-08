@@ -137,6 +137,8 @@ class CqSpellFactory {
 				spell.specialEffects.add(new CqSpecialEffectValue("teleport"));
 				spell.spiritPointsRequired = 720*2;
 			case REVEAL_MAP:
+				spell.specialEffects.add(new CqSpecialEffectValue("reveal"));
+				spell.spiritPointsRequired = 720;
 			
 			case HEAL:
 				spell.specialEffects.add(new CqSpecialEffectValue("heal","full"));
