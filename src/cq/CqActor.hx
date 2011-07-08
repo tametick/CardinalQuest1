@@ -585,6 +585,22 @@ class CqActor extends CqObject, implements Actor {
 			setTilePos(Std.int(tileLocation.x), Std.int(tileLocation.y));
 			moveToPixel(HxlGraphics.state, pixelLocation.x, pixelLocation.y);
 			Registery.level.updateFieldOfView(HxlGraphics.state,true);
+		case "polymorph":
+			other.specialEffects.set(effect.name, effect);
+			GameUI.showEffectText(other, "Morph", 0xA81CE3);
+			var _se = other.specialEffects;
+			var _hp = other.hp;
+			Registery.level.removeMobFromLevel(HxlGraphics.state, cast(other, CqMob));
+			var mob = CqRegistery.level.createAndaddMob(other.getTilePos(), Std.int(Math.random() * CqRegistery.player.level),true);
+			CqRegistery.level.updateFieldOfView(HxlGraphics.state);
+			GameUI.instance.addHealthBar(cast(mob, CqActor));
+			
+			var casted:CqActor = cast(mob, CqActor);
+			casted.specialEffects = _se;
+			casted.healthBar.setTween(false);
+			casted.healthBar.updateValue(_hp);
+			casted.healthBar.setTween(true);
+			casted.healthBar.visible = true;
 		default:
 			if (other == null) {
 				specialEffects.set(effect.name, effect);

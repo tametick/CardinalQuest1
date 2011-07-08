@@ -102,6 +102,10 @@ class CqSpellFactory {
 				spell.specialEffects.add(new CqSpecialEffectValue("charm"));
 				spell.spiritPointsRequired = 720;
 			case POLYMORPH:
+				spell.duration = 480;
+				spell.targetsOther = true;
+				spell.specialEffects.add(new CqSpecialEffectValue("polymorph", "true"));
+				spell.spiritPointsRequired = 860;
 			case SLEEP:
 				spell.duration = 120;
 				spell.targetsOther = true;
@@ -113,6 +117,7 @@ class CqSpellFactory {
 				spell.specialEffects.add(new CqSpecialEffectValue("fear"));
 				spell.spiritPointsRequired = 720;
 			case MAGIC_MIRROR: 
+			
 			case STONE_SKIN: 
 				spell.duration = 120;
 				spell.buffs.set("defense", 5);
@@ -126,11 +131,13 @@ class CqSpellFactory {
 				spell.buffs.set("defense", 3);
 				spell.spiritPointsRequired = 720;
 			case PASS_WALL:
+			
 			case TELEPORT:
 				spell.targetsEmptyTile = true;
 				spell.specialEffects.add(new CqSpecialEffectValue("teleport"));
 				spell.spiritPointsRequired = 720*2;
 			case REVEAL_MAP:
+			
 			case HEAL:
 				spell.specialEffects.add(new CqSpecialEffectValue("heal","full"));
 				spell.spiritPointsRequired = 720*4;
