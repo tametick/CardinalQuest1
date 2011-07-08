@@ -133,8 +133,6 @@ class CqSpellFactory {
 				spell.duration = 120;
 				spell.buffs.set("defense", 3);
 				spell.spiritPointsRequired = 720;
-			case PASS_WALL:
-			
 			case TELEPORT:
 				spell.targetsEmptyTile = true;
 				spell.specialEffects.add(new CqSpecialEffectValue("teleport"));
