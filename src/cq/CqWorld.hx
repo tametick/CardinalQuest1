@@ -356,6 +356,9 @@ class CqWorld extends World {
 		for(line in SpriteSpells.instance.spriteNames)
 			CqSpellFactory.remainingSpells = CqSpellFactory.remainingSpells.concat(line);
 		
+		// no passwall for now
+		CqSpellFactory.remainingSpells.remove("ass_wall");
+			
 		goToLevel(currentLevelIndex);
 	}
 
