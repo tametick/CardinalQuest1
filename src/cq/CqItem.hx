@@ -37,31 +37,50 @@ class CqSpecialEffectValue {
 
 class CqLootFactory {
 	static var inited = false;
+	static var itemArray:Array<String>;
 	static function initDescriptions() {
 		if (inited)
 			return;
 		
+		if (itemArray == null)
+		{
+			itemArray = SpriteItems.instance.potions;
+		}
 		if(Resources.descriptions==null)
 			Resources.descriptions = new Hash<String>();
-		Resources.descriptions.set("Healing Potion", "A small vial containing a fragrant, red salve. It restores life when applied.");
-		Resources.descriptions.set("Coca-leaf Cocktail","This mysterious beverage grants great speed when quaffed.");
-		Resources.descriptions.set("Elixir of the Elephant","This elixir temporarily protects the drinker's body with a thick hide.");
-		Resources.descriptions.set("Elixir of the Hawk","This elixir temporarily grants ultra-human eyesight and reflexes.");
-		Resources.descriptions.set("Elixir of the Lion","This elixir temporarily increases the drinker's strength immensely.");
-		Resources.descriptions.set("Boots of Escape", "These finely crafted leather boots allow the wearer to run with great speed.");
-		Resources.descriptions.set("Hermes' Sandals","These winged sandals are made of imperishable gold and allow the wearer to move as swiftly as any bird.");
-		Resources.descriptions.set("Leather Armor","This armor is made of leather that was boiled in wax for extra toughness.");
-		Resources.descriptions.set("Breastplate", "This iron breastplate offers excellent protection to vital organs without limiting mobility.");
-		Resources.descriptions.set("Ring of Wisdom","This small, silver ring imbues its wearer with uncanny wisdom.");
-		Resources.descriptions.set("Amulet of Enlightenment","Enlightenment permeates this simple looking amulet, granting its wearer the spirit of the gods.");
-		Resources.descriptions.set("Cap of Endurance", "This steel skullcap protects the head without restricting the wearer's ability to wear fashionable hats.");
-		Resources.descriptions.set("Helm of Hardiness", "This helm is crafted by dwarven smiths in the Roshaggon mines, using an alloy jealously kept secret.");
-		Resources.descriptions.set("Gloves of Dexterity","The swiftness of these hand gloves allow their wearer to perform faster in battle.");
-		Resources.descriptions.set("Achilles' Bracer","This magical bronze bracer contains within it the great warrior's spirit.");
-		Resources.descriptions.set("Short Sword", "A one handed hilt attached to a thrusting blade approximately 60cm in length.");
-		Resources.descriptions.set("Long Sword","Long swords have long cruciform hilts with grips and double-edged blades over one meter long.");
-		Resources.descriptions.set("Staff","A sturdy shaft of hardwood with metal tips.");
-		Resources.descriptions.set("Dagger", "A double-edged blade used for stabbing or thrusting.");
+			Resources.descriptions.set("Healing Potion", "A small vial containing a fragrant, red salve. It restores life when applied.");
+			Resources.descriptions.set("Coca-leaf Cocktail","This mysterious beverage grants great speed when quaffed.");
+			Resources.descriptions.set("Elixir of the Elephant","This elixir temporarily protects the drinker's body with a thick hide.");
+			Resources.descriptions.set("Elixir of the Hawk","This elixir temporarily grants ultra-human eyesight and reflexes.");
+			Resources.descriptions.set("Elixir of the Lion","This elixir temporarily increases the drinker's strength immensely.");
+			Resources.descriptions.set("Boots of Escape", "These finely crafted leather boots allow the wearer to run with great speed.");
+			Resources.descriptions.set("Hermes' Sandals","These winged sandals are made of imperishable gold and allow the wearer to move as swiftly as any bird.");
+			Resources.descriptions.set("Leather Armor","This armor is made of leather that was boiled in wax for extra toughness.");
+			Resources.descriptions.set("Breastplate", "This iron breastplate offers excellent protection to vital organs without limiting mobility.");
+			Resources.descriptions.set("Ring of Wisdom","This small, silver ring imbues its wearer with uncanny wisdom.");
+			Resources.descriptions.set("Amulet of Enlightenment","Enlightenment permeates this simple looking amulet, granting its wearer the spirit of the gods.");
+			Resources.descriptions.set("Cap of Endurance", "This steel skullcap protects the head without restricting the wearer's ability to wear fashionable hats.");
+			Resources.descriptions.set("Helm of Hardiness", "This helm is crafted by dwarven smiths in the Roshaggon mines, using an alloy jealously kept secret.");
+			Resources.descriptions.set("Gloves of Dexterity","The swiftness of these hand gloves allow their wearer to perform faster in battle.");
+			Resources.descriptions.set("Achilles' Bracer","This magical bronze bracer contains within it the great warrior's spirit.");
+			Resources.descriptions.set("Short Sword", "A one handed hilt attached to a thrusting blade approximately 60cm in length.");
+			Resources.descriptions.set("Long Sword","Long swords have long cruciform hilts with grips and double-edged blades over one meter long.");
+			Resources.descriptions.set("Staff","A sturdy shaft of hardwood with metal tips.");
+			Resources.descriptions.set("Dagger", "A double-edged blade used for stabbing or thrusting.");
+			
+			Resources.descriptions.set("Axe", "A mighty axe, good for chopping wood and flesh.");
+			Resources.descriptions.set("Hardened Batlle Axe", "Crafted from the finest of metals, this axe can deal lethal slashing, cleaving and slicing blows.");
+			Resources.descriptions.set("Broad Claymore", "An ancient weapon, many bards have sung about glorious victories won with it.");
+			Resources.descriptions.set("Kings Golden Helm", "Made of pure gold, gives you unbreachable head protection, and irresistible looks.");
+			Resources.descriptions.set("Beastly Mace", "A mighty huge and spiky mace, made for fast swinging and powerfull rips.");
+			Resources.descriptions.set("Twin Bladed Katana", "An Ancient weapon, crafted by masters of the craft, from the far east.");
+			Resources.descriptions.set("Full Helmet of Vitality", "");
+			Resources.descriptions.set("Full Plate Armor", "A classic well tested model of armor, highly praised by knights from around the globe.");
+			Resources.descriptions.set("Rogues' Cloak of Swiftness", "Made from enchanted cloth, both light and durable. Wearing this feel like touching the sky.");
+			Resources.descriptions.set("Gauntlets of Sturdiness", "The floral decorations on these gauntlets give confidence that they're crafted skillfully and with attention to detail.");
+			Resources.descriptions.set("Supernatural Amulet", "");
+			Resources.descriptions.set("Ring of Rubies", "You sense a powerfull force in this ring, feels like life itself is flowing from it.");
+			Resources.descriptions.set("Lizards' Tundra Boots", "Made for the toughest of conditions, able to withstand both ice and fire, gives you superior mobility on every terrain.");
 		
 		inited = true;
 	}
@@ -73,25 +92,25 @@ class CqLootFactory {
 		
 		
 		switch(type) {
-			case WINGED_SANDLES, BOOTS:
+			case WINGED_SANDLES, BOOTS, TUNDRA_BOOTS:
 				item.equipSlot = CqEquipSlot.SHOES;
-			case LEATHER_ARMOR, BRESTPLATE:
+			case LEATHER_ARMOR, BRESTPLATE, FULL_PLATE_MAIL, CLOAK:
 				item.equipSlot = CqEquipSlot.ARMOR;
-			case RING, AMULET:
+			case RING, AMULET,GEMMED_AMULET, GEMMED_RING:
 				item.equipSlot = CqEquipSlot.JEWELRY;
-			case CAP, HELM:
+			case CAP, HELM, GOLDEN_HELM, FULL_HELM:
 				item.equipSlot = CqEquipSlot.HAT;
-			case GLOVE, BRACELET:
+			case GLOVE, BRACELET, GAUNTLET:
 				item.equipSlot = CqEquipSlot.GLOVES;
-			case STAFF, DAGGER, SHORT_SWORD, LONG_SWORD:
+			case STAFF, DAGGER, SHORT_SWORD, LONG_SWORD, AXE, BATTLE_AXE, CLAYMORE, MACE, SPIKE_SWORD:
 				item.equipSlot = CqEquipSlot.WEAPON;
 			case GREEN_POTION, PURPLE_POTION, BLUE_POTION, YELLOW_POTION, RED_POTION:
 				item.equipSlot = CqEquipSlot.POTION;
 			default:
 				item.equipSlot = null;
 		}
-		
 		switch(type) {
+			//POTIONS
 			case GREEN_POTION:
 				item.name = "Elixir of the Hawk";
 				item.consumable = true;
@@ -121,42 +140,73 @@ class CqLootFactory {
 				item.consumable = true;
 				item.specialEffects.add(new CqSpecialEffectValue("heal","full"));
 				item.stackSizeMax = -1;
-			
+			//BOOTS
 			case BOOTS:
 				item.name ="Boots of Escape";
 				item.buffs.set("speed", 1);
 			case WINGED_SANDLES:
 				item.name =	"Hermes' Sandals";
 				item.buffs.set("speed", 2);
-				
+			case TUNDRA_BOOTS:
+				item.name =	"Lizards' Tundra Boots";
+				item.buffs.set("speed", 2);
+				item.buffs.set("defense", 1);
+			//ARMORS
 			case LEATHER_ARMOR:
 				item.name ="Leather Armor";
 				item.buffs.set("defense", 1);
 			case BRESTPLATE:
 				item.name ="Breastplate";
 				item.buffs.set("defense", 2);
-			
+			case FULL_PLATE_MAIL:
+				item.name ="Full Plate Armor";
+				item.buffs.set("defense", 3);
+			case CLOAK:
+				item.name ="Rogues' Cloak of Swiftness";
+				item.buffs.set("defense", 2);
+				item.buffs.set("speed", 2);
+			//JEWELRY
 			case RING:
 				item.name ="Ring of Wisdom";
 				item.buffs.set("spirit", 1);
 			case AMULET:
 				item.name ="Amulet of Enlightenment";
 				item.buffs.set("spirit", 2);
-			
+			case GEMMED_AMULET:
+				item.name ="Supernatural Amulet";
+				item.buffs.set("spirit", 2);
+				item.buffs.set("speed", 1);
+				item.buffs.set("defense", 1);
+			case GEMMED_RING:
+				item.name ="Ring of Rubies";
+				item.buffs.set("life", 3);
+				item.buffs.set("spirit",2);
+			//HELMETS
 			case CAP:
 				item.name ="Cap of Endurance";
 				item.buffs.set("life", 1);
 			case HELM:
 				item.name ="Helm of Hardiness";
 				item.buffs.set("life", 2);
-			
+			case GOLDEN_HELM:
+				item.name = "Kings Golden Helm";
+				item.buffs.set("life", 2);
+				item.buffs.set("defense", 3);
+			case FULL_HELM:
+				item.name = "Full Helmet of Vitality";
+				item.buffs.set("life", 4);
+			//GLOVES
 			case GLOVE:
 				item.name ="Gloves of Dexterity";
 				item.buffs.set("attack", 1);
 			case BRACELET:
 				item.name ="Achilles' Bracer";
 				item.buffs.set("attack", 2);
-			
+			case GAUNTLET:
+				item.name ="Gauntlets of Sturdiness";
+				item.buffs.set("attack", 2);
+				item.buffs.set("defense", 2);
+			//WEAPONS
 			case DAGGER:
 				item.name ="Dagger";
 				item.damage = new Range(1, 2);
@@ -169,10 +219,29 @@ class CqLootFactory {
 			case LONG_SWORD:
 				item.name ="Long Sword";
 				item.damage = new Range(2, 4);
-			
+				//add stats
+			case AXE:
+				item.name = "Axe";
+				item.damage = new Range(4, 6);
+			case BATTLE_AXE:
+				item.name = "Hardened Batlle Axe";
+				item.damage = new Range(5, 12);
+				item.buffs.set("speed", -2);
+			case MACE:
+				item.name = "Beastly Mace";
+				item.damage = new Range(4, 11);
+			case CLAYMORE:
+				item.name = "Broad Claymore";
+				item.damage = new Range(6, 10);
+				item.buffs.set("speed", -1);
+			case SPIKE_SWORD:
+				item.name ="Twin Bladed Katana";
+				item.damage = new Range(5, 12);
+				item.buffs.set("defense", -2);
+				item.buffs.set("speed", 2);
 			default:
+				throw "forgot something";
 		}
-	
 		return item;
 	}
 	
@@ -411,10 +480,20 @@ class CqChest extends CqItem {
 		for ( Callback in onBust ) Callback(this);
 
 		// create random item
-		var typeName = null;
+		var typeName:String = null;
 		do {
-			// doubling chance of getting a potion
-			typeName = HxlUtil.getRandomElement(Type.getEnumConstructs(CqItemType).concat(["PURPLE_POTION","GREEN_POTION","BLUE_POTION","YELLOW_POTION","RED_POTION"])); 
+			// 50% chance of getting a potion
+			if (Math.random() < 0.5)
+				typeName = HxlUtil.getRandomElement(SpriteItems.instance.potions);
+			else
+			{
+				//get random element, except the potions
+				var li:Array<String> = Type.getEnumConstructs(CqItemType);
+				var isNotPotion = function (a:String):Bool { return (!Lambda.has(SpriteItems.instance.potions, a)); }
+				//var filter:Array<String> = Lambda.filter( li , isNotPotion);
+				var filter = Lambda.filter(li, isNotPotion);
+				typeName = HxlUtil.getRandomElement(filter);
+			}
 		} while (typeName == "CHEST");
 		
 		var item = CqLootFactory.newItem(x, y, Type.createEnum(CqItemType,  typeName));
@@ -455,7 +534,19 @@ enum CqItemType {
 	YELLOW_POTION;
 	RED_POTION;
 	HELM;
-	// todo: add new items from spritesheet
+	AXE;
+	BATTLE_AXE;
+	CLAYMORE;
+	GOLDEN_HELM;
+	MACE;
+	SPIKE_SWORD;
+	FULL_HELM;
+	FULL_PLATE_MAIL;
+	CLOAK;
+	GAUNTLET;
+	GEMMED_AMULET;
+	GEMMED_RING;
+	TUNDRA_BOOTS;
 }
 
 enum CqEquipSlot {
