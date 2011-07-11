@@ -462,7 +462,7 @@ class CqItem extends GameObjectImpl, implements Loot {
  * Chests are encountered in the dungeon and once detroyed drop a random item
  */
 class CqChest extends CqItem {
-
+	static var equipment:Array<String>;
 	var onBust:List<Dynamic>;
 
 	public function new(X:Float, Y:Float) {
@@ -475,24 +475,38 @@ class CqChest extends CqItem {
 		onBust.add(Callback);
 	}
 
-	public function bust(state:HxlState) {
+	public function bust(state:HxlState,level:Int) {
 
 		for ( Callback in onBust ) Callback(this);
 
 		// create random item
 		var typeName:String = null;
 		do {
-			// 50% chance of getting a potion
-			if (Math.random() < 0.5)
-				typeName = HxlUtil.getRandomElement(SpriteItems.instance.potions);
+			// chance of getting a potion
+			if (Math.random() < CqConfiguration.dropPotionChance)
+				typeName = HxlUtil.getRandomElement(SpriteItems.instance.potions).toUpperCase();
 			else
 			{
-				//get random element, except the potions
-				var li:Array<String> = Type.getEnumConstructs(CqItemType);
-				var isNotPotion = function (a:String):Bool { return (!Lambda.has(SpriteItems.instance.potions, a)); }
-				//var filter:Array<String> = Lambda.filter( li , isNotPotion);
-				var filter = Lambda.filter(li, isNotPotion);
-				typeName = HxlUtil.getRandomElement(filter);
+				//set up equipment array. means filter out potions from the item enum.
+				if (equipment == null)
+				{
+					var li:Array<String> 			= Type.getEnumConstructs(CqItemType);
+					var upperCasePotions			= Lambda.map(SpriteItems.instance.potions, function (a:String):String { return a.toUpperCase(); });
+					var isNotPotion:String->Bool	= function (a:String):Bool { return (!Lambda.has(upperCasePotions, a)); }
+					CqChest.equipment				= Lambda.array(Lambda.filter(li, isNotPotion));
+				}
+				
+				var itemsPerLevel:Int = Math.floor( equipment.length / CqConfiguration.lastLevel );
+				
+				if (Math.random() < CqConfiguration.betterItemChance)
+					level = level + 1;
+				
+				//get random element, by level. this algo might not be perfect, but it works.
+				var itemIndex:Int = Math.floor( (level * itemsPerLevel) + (Math.random() * itemsPerLevel) );
+				
+				if (itemIndex >= equipment.length)
+					itemIndex = equipment.length - 1;
+				typeName	= equipment[itemIndex];
 			}
 		} while (typeName == "CHEST");
 		

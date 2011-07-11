@@ -185,7 +185,7 @@ class CqActor extends CqObject, implements Actor {
 	
 	public function attackObject(state:HxlState, other:GameObject) {
 		var chest = cast(other, CqChest);
-		chest.bust(state);
+		chest.bust(state,CqRegistery.world.currentLevelIndex);
 	}
 	
 	public function doInjure(?dmgTotal:Int=0) {
@@ -1065,37 +1065,37 @@ class CqMobFactory {
 			case 1:
 				typeName = HxlUtil.getRandomElement(SpriteMonsters.bandits);
 			case 2:
-				if(Math.random()<0.7)
+				if(Math.random()<CqConfiguration.strongerEnemyChance)
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.bandits);
 				else
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.kobolds);
 			case 3:
-				if(Math.random()<0.7)
+				if(Math.random()<CqConfiguration.strongerEnemyChance)
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.kobolds);
 				else
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.succubi);
 			case 4:
-				if(Math.random()<0.7)
+				if(Math.random()<CqConfiguration.strongerEnemyChance)
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.succubi);
 				else
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.spiders);
 			case 5:
-				if(Math.random()<0.7)
+				if(Math.random()<CqConfiguration.strongerEnemyChance)
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.spiders);
 				else
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.apes);
 			case 6:
-				if (Math.random() < 0.7)
+				if (Math.random() < CqConfiguration.strongerEnemyChance)
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.apes);
 				else
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.elementeals);
 			case 7:
-				if(Math.random()<0.7)
+				if(Math.random()<CqConfiguration.strongerEnemyChance)
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.elementeals);
 				else
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.werewolves);
 			case 8,9:// for "out of depth" enemies in the 8th level 
-				if(Math.random()<0.7)
+				if(Math.random()<CqConfiguration.strongerEnemyChance)
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.werewolves);
 				else
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.minotauers);

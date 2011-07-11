@@ -3,15 +3,19 @@ package cq;
 import data.Configuration;
 
 class CqConfiguration extends Configuration {
-	public static var chestsPerLevel = 18;
-	public static var spellsPerLevel = 2;
-	public static var mobsPerLevel = 36;
-	public static var lastLevel = 7;
+	public inline static var chestsPerLevel = 108;
+	public inline static var spellsPerLevel = 2;
+	public inline static var mobsPerLevel = 36;
+	public inline static var lastLevel = 7;
 	
-	public static function getLevelWidth(?level:Int=0) { 
+	public inline static var betterItemChance:Float = 0.1;
+	public inline static var strongerEnemyChance:Float = 0.7;
+	public inline static var dropPotionChance:Float = 0.4;
+	
+	public inline static function getLevelWidth(?level:Int=0) { 
 		return 32; 
 	}
-	public static function getLevelHeight(?level:Int=0) {
+	public inline static function getLevelHeight(?level:Int=0) {
 		return 32; 
 	}
 }
