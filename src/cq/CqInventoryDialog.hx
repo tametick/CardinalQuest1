@@ -962,12 +962,11 @@ class CqInventoryItem extends HxlSprite {
 		var dragStopCell:CqInventoryCell = CqInventoryCell.highlightedCell;
 		var dragStopCell_class:Dynamic = Type.getClass(dragStopCell);
 		var dragStopCell_type:String = (cellEquip?"equip":"") + (cellSpell?"spell":"") + (cellPotion?"potion":"");
-		
+		//trace(dragStopCell_type);
 		if ( dragStopCell != null ) {
+			var other:CqInventoryItem = dragStopCell.getCellObj();
 			if ( dragStopCell.getCellObj() != null ) {
 				// There was already an item in the target cell, switch places with it
-				var other:CqInventoryItem = dragStopCell.getCellObj();
-				
 				switch(dragStopCell_type)
 				{
 					case "equip":
@@ -989,7 +988,6 @@ class CqInventoryItem extends HxlSprite {
 						// Moving the other item into an inventory cell
 						other.setInventoryCell(cellIndex);
 				}
-				
 				switch(dragStopCell_class)
 				{
 					case CqSpellCell:
@@ -1002,14 +1000,16 @@ class CqInventoryItem extends HxlSprite {
 						// Moving this item into an equipment cell
 						setEquipmentCell(dragStopCell.cellIndex);
 						CqRegistery.player.equipItem(this.item);
-					default:
+					case CqInventoryCell:
 						// Moving this item into an inventory cell
 						setInventoryCell(dragStopCell.cellIndex);
+					default:
+						trace("unknown cell class");
 				}
 				cellIndex = dragStopCell.cellIndex;
 			} else {
 				// The target cell was empty.. clear out my old cell and fill the new one
-				switch(dragStopCell_type)
+				switch(dragStopCell_type)//where it came from
 				{
 					case "equip":
 						// Clearing out an equipment cell
@@ -1026,11 +1026,11 @@ class CqInventoryItem extends HxlSprite {
 					case "potion":
 						// Clearing out a potion cell
 						_dlg.dlgPotionGrid.setCellObj(cellIndex, null);
+						//setPotionCell(cellIndex); //might help with the bug, investigate more.
 					default:
 						// Clearing out an inventory cell
 						_dlg.dlgInvGrid.setCellObj(cellIndex, null);
 				}
-				
 				switch(dragStopCell_class){
 					case CqSpellCell:
 						// Moving this item into a spell cell
@@ -1056,7 +1056,6 @@ class CqInventoryItem extends HxlSprite {
 							_dlg.dlgSpellGrid.onItemDragStop();
 							_dlg.dlgPotionGrid.onItemDragStop();
 							_dlg.dlgInfo.clearInfo();
-							
 							//_dlg.gameui.checkTileItems(CqRegistery.player);
 							
 							return;
