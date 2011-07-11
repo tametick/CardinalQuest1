@@ -200,7 +200,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 								if ( Item.equalTo( cell.getCellObj().item))
 								{
 									remove(uiItem);
-									GameUI.showTextNotification("identical item destroyed dfg dffg fg");
+									GameUI.showTextNotification("identical item destroyed");
 									return false;
 								}
 							}

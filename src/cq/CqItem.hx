@@ -496,16 +496,18 @@ class CqChest extends CqItem {
 					CqChest.equipment				= Lambda.array(Lambda.filter(li, isNotPotion));
 				}
 				
-				var itemsPerLevel:Int = Math.floor( equipment.length / CqConfiguration.lastLevel );
+				var itemsPerLevel:Int = Math.ceil( equipment.length / CqConfiguration.lastLevel );
 				
 				if (Math.random() < CqConfiguration.betterItemChance)
 					level = level + 1;
 				
 				//get random element, by level. this algo might not be perfect, but it works.
-				var itemIndex:Int = Math.floor( (level * itemsPerLevel) + (Math.random() * itemsPerLevel) );
+				var itemIndex:Int = Math.floor( (level * itemsPerLevel) + (Math.random() * (itemsPerLevel+Math.random()*2)) - Math.random()*3);
 				
 				if (itemIndex >= equipment.length)
 					itemIndex = equipment.length - 1;
+				if (itemIndex < 0)
+					itemIndex = 0;
 				typeName	= equipment[itemIndex];
 			}
 		} while (typeName == "CHEST");
