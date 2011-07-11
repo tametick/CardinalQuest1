@@ -13,6 +13,7 @@ import cq.CqWorld;
 import cq.CqVitalBar;
 import cq.CqResources;
 import cq.CqGraphicKey;
+import cq.ui.CqTextNotification;
 import haxel.HxlGroup;
 import haxel.HxlUtil;
 import haxel.HxlTilemap;
@@ -55,7 +56,8 @@ class GameUI extends HxlDialog {
 	var leftButtons:HxlButtonContainer;
 	var dlgSpellGrid:CqSpellGrid;
 	var dlgPotionGrid:CqPotionGrid;
-
+	// Notification area
+	public static var notifications:CqTextNotification;
 	// View state panels
 	var panelMap:CqMapDialog;
 	var panelInventory:CqInventoryDialog;
@@ -122,6 +124,8 @@ class GameUI extends HxlDialog {
 		dlgPotionGrid = new CqPotionGrid(130, HxlGraphics.height-84, 380, 84);
 		add(dlgPotionGrid);
 
+		notifications = new CqTextNotification(300, 0);
+		add(notifications);
 		/**
 		 * View state panels
 		 **/
@@ -557,7 +561,9 @@ class GameUI extends HxlDialog {
 		txt.zIndex = 4;
 		HxlGraphics.state.add(txt);
 	}
-	
+	public static function showTextNotification(message:String, ?color:Int = 0xDE913A) {
+		notifications.notify(message, color);
+	}
 	public function doPlayerGainXP(?xpTotal:Int=0) {
 		xpBar.updateValue(xpTotal);
 		infoViewXpBar.updateValue(xpTotal);

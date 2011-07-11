@@ -74,11 +74,11 @@ class CqLootFactory {
 			Resources.descriptions.set("Kings Golden Helm", "Made of pure gold, gives you unbreachable head protection, and irresistible looks.");
 			Resources.descriptions.set("Beastly Mace", "A mighty huge and spiky mace, made for fast swinging and powerfull rips.");
 			Resources.descriptions.set("Twin Bladed Katana", "An Ancient weapon, crafted by masters of the craft, from the far east.");
-			Resources.descriptions.set("Full Helmet of Vitality", "");
+			Resources.descriptions.set("Full Helmet of Vitality", "Originally worn by dark priests, this helmet helps you tap into energies of the full moon.");
 			Resources.descriptions.set("Full Plate Armor", "A classic well tested model of armor, highly praised by knights from around the globe.");
 			Resources.descriptions.set("Rogues' Cloak of Swiftness", "Made from enchanted cloth, both light and durable. Wearing this feel like touching the sky.");
 			Resources.descriptions.set("Gauntlets of Sturdiness", "The floral decorations on these gauntlets give confidence that they're crafted skillfully and with attention to detail.");
-			Resources.descriptions.set("Supernatural Amulet", "");
+			Resources.descriptions.set("Supernatural Amulet", "Inscribed upon this amulet, are magic runes, which yield gains in many attributes for the wearer.");
 			Resources.descriptions.set("Ring of Rubies", "You sense a powerfull force in this ring, feels like life itself is flowing from it.");
 			Resources.descriptions.set("Lizards' Tundra Boots", "Made for the toughest of conditions, able to withstand both ice and fire, gives you superior mobility on every terrain.");
 		
@@ -444,11 +444,11 @@ class CqItem extends GameObjectImpl, implements Loot {
 		var sumBuffsThis:Float  = HxlUtil.sumHashInt(buffs);
 		var sumBuffsOther:Float = HxlUtil.sumHashInt(other.buffs);
 		
-		var dmgThis:Float  = damage.start + damage.end;
-		var dmgOther:Float = other.damage.start + other.damage.end;
-		if (dmgThis > dmgOther)
+		var dmgAvgThis:Float  = (damage.start + damage.end)/2;
+		var dmgAvgOther:Float = (other.damage.start + other.damage.end)/2;
+		if (dmgAvgThis > dmgAvgOther)
 			sumBuffsThis++;
-		else if(dmgThis < dmgOther)
+		else if(dmgAvgThis < dmgAvgOther)
 			sumBuffsOther++;
 		//do nothing if damage is equal
 		if ( sumBuffsOther == 0) sumBuffsOther = 0.1;

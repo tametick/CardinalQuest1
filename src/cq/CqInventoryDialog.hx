@@ -114,6 +114,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		for ( cell in dlgInvGrid.cells ) {
 			if ( cell.getCellObj() != null && cell.getCellObj().item == Item ) {
 				cell.getCellObj().updateIcon();
+				GameUI.showTextNotification("already have item");
 				return false;
 			}
 		}
@@ -186,18 +187,20 @@ class CqInventoryDialog extends HxlSlidingDialog {
 							{	//equip if item is better
 								var old:CqInventoryItem = equipItem(cell, Item, uiItem);
 								//if old is non plain add to inv
+								//TODO check if its not accidentally destroyed here
 								if (!old.item.isMagical && !old.item.isSuperb && !old.item.isWondrous)
 									return false;
 							}else if (!Item.isMagical && !Item.isSuperb && !Item.isWondrous && preference <1)
 							{	//if item is worse than current, and is plain - destroy it
+								GameUI.showTextNotification("weak item destroyed");
 								remove(uiItem);
 								return false;
 							}else
 							{	//if item is not better, and not plain - add to inventory
 								if ( Item.equalTo( cell.getCellObj().item))
 								{
-									//remove old
 									remove(uiItem);
+									GameUI.showTextNotification("identical item destroyed dfg dffg fg");
 									return false;
 								}
 							}

@@ -49,7 +49,7 @@ class CqSpellFactory {
 		var newSpellName = HxlUtil.getRandomElement(remainingSpells);
 		
 		// uncomment if you want every spell is only be given once
-		//remainingSpells.remove(newSpellName);
+		remainingSpells.remove(newSpellName);
 		
 		initDescriptions();
 		return newSpell(X, Y, Type.createEnum(CqSpellType,  newSpellName.toUpperCase()));
@@ -140,7 +140,6 @@ class CqSpellFactory {
 			case REVEAL_MAP:
 				spell.specialEffects.add(new CqSpecialEffectValue("reveal"));
 				spell.spiritPointsRequired = 720;
-			
 			case HEAL:
 				spell.specialEffects.add(new CqSpecialEffectValue("heal","full"));
 				spell.spiritPointsRequired = 720*4;
@@ -171,17 +170,17 @@ enum CqSpellType {
 	ENFEEBLE_MONSTER; 
 	BLESS_WEAPON; 
 	HASTE; 
-	SHADOW_WALK;
-	CHARM_MONSTER; 
 	POLYMORPH; 
-	SLEEP; 
+	SHADOW_WALK;
+	MAGIC_ARMOR;
+	CHARM_MONSTER; 
+	REVEAL_MAP; 
+	BLINK;
+	SLEEP;
+	HEAL;
 	FEAR; 
 	MAGIC_MIRROR; 
 	STONE_SKIN; 
-	BLINK;
-	MAGIC_ARMOR; 
 	//PASS_WALL;
 	TELEPORT; 
-	REVEAL_MAP; 
-	HEAL;
 }
