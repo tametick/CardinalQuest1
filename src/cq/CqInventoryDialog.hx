@@ -118,9 +118,9 @@ class CqInventoryDialog extends HxlSlidingDialog {
 			uiItem.setIcon(itemSprite.getFramePixels());
 		}
 		//popup
-		uiItem.setPopup(new CqPopup(100,Item.name,this ));
-		add(uiItem.popup);
-		uiItem.popup.zIndex = 600;
+		uiItem.setPopup(new CqPopup(100,Item.name,gameui ));
+		gameui.add(uiItem.popup);
+		uiItem.popup.zIndex = 1000;
 		return uiItem;
 	}
 	/**
