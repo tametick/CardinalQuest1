@@ -110,7 +110,7 @@ class GameState extends CqState {
 	}
 
 	override function init() {
-		scroller = new CqTextScroller(IntroScreen, 1, "Intro");
+		scroller = new CqTextScroller(IntroScreen, 1, "Intro screen");
 		var introText:String = "Hi this is intro text\n a new line \n the end.";
 		scroller.addColumn(100, 400, introText, false, FontAnonymousPro.instance.fontName);
 		add(scroller);

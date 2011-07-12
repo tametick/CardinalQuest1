@@ -207,7 +207,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 								{
 									remove(uiItem);
 									uiItem.destroy();
-									GameUI.showTextNotification("I already have this.");
+									GameUI.showTextNotification("I already have this.",0xE1CC37);
 									return false;
 								}
 							}

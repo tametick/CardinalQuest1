@@ -29,6 +29,12 @@ class HxlText extends HxlSprite {
 	var _regen:Bool;
 	var _shadow:Int;
 
+	//added boldness support
+	var AddBold:Bool;
+	var boldStart:Int;
+	var boldEnd:Int;
+	var boldFont:String;
+	
 	/**
 	 * Creates a new <code>HxlText</code> object at the specified position.
 	 * 
@@ -189,7 +195,32 @@ class HxlText extends HxlSprite {
 		calcFrame();
 		return Font;
 	}
-
+	/**
+	 * makes an area of the text bold(actually just changes the font in an area)
+	 * @param	beginChar boldness beginning character number
+	 * @param	endChar boldness ending character number
+	 * @param	boldFontName 
+	 */
+	public function setBold(beginChar:Int,endChar:Int,boldFontName:String):Void
+	{
+		//return to bounds
+		if (beginChar >= endChar)
+			return;
+		if (beginChar < 0)
+			beginChar = 0;
+		if (endChar < 0)
+			endChar = 0;
+		if (endChar >= text.length)
+			endChar = text.length - 1;
+			
+		AddBold = true;
+		boldFont = boldFontName;
+		boldStart = beginChar;
+		boldEnd   = endChar;
+		_regen = true;
+		calcFrame();
+		_regen = false;
+	}
 	/**
 	 * The alignment of the font ("left", "right", or "center").
 	 */
@@ -280,17 +311,21 @@ class HxlText extends HxlSprite {
 				_tf.setTextFormat(new TextFormat(tfa.font,tfa.size,tfa.color,null,null,null,null,null,tfa.align));
 				var tmpHeight:Float = _tf.textHeight;
 			}
+			//addboldness
+			if (AddBold)
+			{
+				tfa = _tf.getTextFormat();
+				tfa.font = boldFont;
+				_tf.setTextFormat(tfa, boldStart, boldEnd);
+			}
 			//Actually draw the text onto the buffer
 			_pixels.draw(_tf,_mtx,_ct);
-			_tf.setTextFormat(new TextFormat(tf.font,tf.size,tf.color,null,null,null,null,null,tf.align));
+			_tf.setTextFormat(new TextFormat(tf.font, tf.size, tf.color, null, null, null, null, null, tf.align));
 		}
-		
 		//Finally, update the visible pixels
 		if ((_framePixels == null) || (_framePixels.width != _pixels.width) || (_framePixels.height != _pixels.height)) {
 			_framePixels = new BitmapData(_pixels.width,_pixels.height,true,0);
 		}
-		width = _framePixels.width;
-		height = _framePixels.height;
 		_framePixels.copyPixels(_pixels,_flashRect,_flashPointZero);
 		if (HxlGraphics.showBounds) {
 			drawBounds();
