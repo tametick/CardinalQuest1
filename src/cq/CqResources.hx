@@ -62,6 +62,7 @@ class SpriteInfo extends Bitmap { public function new() { super(); } }
 class UiBeltHorizontal extends Bitmap { public function new() { super(); } }
 class UiInventoryBox extends Bitmap { public function new() { super(); } }
 class SpriteMapPaper extends Bitmap { public function new() { super(); } }
+class IntroScreen extends Bitmap { public function new() { super(); } }
 class LogoSprite extends HxlSprite {
 	public function new(?X:Float = 0, ?Y:Float = 0) {
 		super(X,Y);

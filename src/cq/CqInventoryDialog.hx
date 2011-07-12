@@ -171,7 +171,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 				for ( cell in dlgSpellGrid.cells ) {
 					if ( cell.getCellObj() == null ) {
 						uiItem.setSpellCell(cell.cellIndex);
-						
+						cell.getCellObj().updateIcon();
 						return false;
 					}
 				}
@@ -183,7 +183,8 @@ class CqInventoryDialog extends HxlSlidingDialog {
 						if (cell.getCellObj() == null) {
 							//if slot was empty - equip
 							
-							var old:CqInventoryItem = equipItem(cell, Item, uiItem);
+							uiItem = equipItem(cell, Item, uiItem);
+							cell.getCellObj().updateIcon();
 							return true;
 						} else {
 							var preference:Float = shouldEquipItemInCell(cast(cell, CqEquipmentCell), Item);
@@ -205,6 +206,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 								if ( Item.equalTo( cell.getCellObj().item))
 								{
 									remove(uiItem);
+									uiItem.destroy();
 									GameUI.showTextNotification("I already have this.");
 									return false;
 								}
@@ -214,16 +216,15 @@ class CqInventoryDialog extends HxlSlidingDialog {
 				}
 			}
 		}
-
 		var emptyCell:CqInventoryCell = getEmptyCell();
-		if(emptyCell != null ){
+		if (emptyCell != null ) {
+				
 			uiItem.setInventoryCell(emptyCell.cellIndex);
 			return true;
 		} else {
 			throw "no room in inventory, should not happen because pick up should have not been allowed!";
 		}
 	}
-	
 	private function equipItem(Cell:CqInventoryCell, Item:CqItem, UiItem:CqInventoryItem):CqInventoryItem {
 		var old:CqInventoryItem = cast(Cell, CqEquipmentCell).clearCellObj();
 		

@@ -1,6 +1,9 @@
 package cq.states;
 
+import com.eclecticdesignstudio.motion.Actuate;
 import cq.CqRegistery;
+import cq.ui.CqTextScroller;
+import flash.display.Bitmap;
 import haxel.HxlPoint;
 import haxel.HxlSound;
 import haxel.HxlState;
@@ -31,10 +34,10 @@ class GameState extends CqState {
 	var gameUI:GameUI;
 	public var chosenClass:CqClass;
 	var isPlayerActing:Bool;
-
+	private var started:Bool;
 	public override function create() {
 		super.create();
-		
+		started = false;
 		chosenClass = FIGHTER;
 		HxlGraphics.fade.start(false, 0x00000000, 0.25);
 		
@@ -46,8 +49,8 @@ class GameState extends CqState {
 	
 	public override function update() {
 		super.update();
+		if (!started) return;
 		var up = SpriteCursor.instance.getSpriteIndex("up");
-		
 		if ( initialized < 1 ) 
 			return;
 			
@@ -107,32 +110,44 @@ class GameState extends CqState {
 	}
 
 	override function init() {
+		scroller = new CqTextScroller(IntroScreen, 1, "Intro");
+		var introText:String = "Hi this is intro text\n a new line \n the end.";
+		scroller.addColumn(100, 400, introText, false, FontAnonymousPro.instance.fontName);
+		add(scroller);
+		scroller.startScroll();
+		scroller.onComplete(realInit);
+	}
+	function realInit() {
+		remove(scroller);
+		started = true;
+		
 		initRegistry();
 		Playtomic.play();
 		var world = CqRegistery.world;
 		var player = CqRegistery.player;
 		
 		add(world.currentLevel);
+		world.currentLevel.updateFieldOfView(this, true);
 		
-		world.currentLevel.updateFieldOfView(this,true);
 
 		// create and init the game gui
 		// todo: do not recreate if already exists from previous games?
-		gameUI = new GameUI();
-		gameUI.zIndex = 50;
-		add(gameUI);
-		gameUI.initChests();
-		gameUI.initHealthBars();
-		
-		gameUI.addHealthBar(player);
-		gameUI.addXpBar(player);
-				
+		if(gameUI == null){
+			gameUI = new GameUI();
+			gameUI.zIndex = 50;
+			add(gameUI);
+			gameUI.initChests();
+			gameUI.initHealthBars();
+			
+			gameUI.addHealthBar(player);
+			gameUI.addXpBar(player);
+		}
 		player.addOnPickup(gameUI.itemPickup);
 		player.addOnInjure(gameUI.doPlayerInjureEffect);
 		player.addOnKill(gameUI.doPlayerInjureEffect);
 		player.addOnGainXP(gameUI.doPlayerGainXP);
 		player.addOnMove(gameUI.checkTileItems);
-		
+
 		switch(chosenClass) {
 			case FIGHTER:
 				player.give(CqItemType.SHORT_SWORD);
@@ -195,6 +210,7 @@ class GameState extends CqState {
 	}
 	
 	var tmpPoint:HxlPoint;
+	private var scroller:CqTextScroller;
 	private function act() {
 		if ( GameUI.isTargeting ) {
 			return;
