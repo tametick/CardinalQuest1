@@ -132,8 +132,8 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		// if item already in inventory (?)
 		for ( cell in dlgInvGrid.cells ) {
 			if ( cell.getCellObj() != null && cell.getCellObj().item.equalTo(Item) ) {
-				//GameUI.showTextNotification("already have item");
-				//return false;
+				GameUI.showTextNotification("I already have this.");
+				return false;
 			}
 		}
 		// because of stacking (?)
@@ -197,7 +197,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 									return false;
 							}else if (!Item.isMagical && !Item.isSuperb && !Item.isWondrous && preference <1)
 							{	//if item is worse than current, and is plain - destroy it
-								GameUI.showTextNotification("weak item destroyed");
+								GameUI.showTextNotification("I don't need this.");
 								remove(uiItem);
 								return false;
 							}else
@@ -205,7 +205,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 								if ( Item.equalTo( cell.getCellObj().item))
 								{
 									remove(uiItem);
-									GameUI.showTextNotification("identical item destroyed");
+									GameUI.showTextNotification("I already have this.");
 									return false;
 								}
 							}

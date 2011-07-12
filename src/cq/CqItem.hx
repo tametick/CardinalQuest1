@@ -425,6 +425,8 @@ class CqItem extends GameObjectImpl, implements Loot {
 	public function equalTo(other:CqItem):Bool {
 		if (isSuperb != other.isSuperb || isWondrous != other.isWondrous || isMagical != other.isMagical)
 			return false;
+		if (spriteIndex != other.spriteIndex)
+			return false;
 		var itr:Iterator<String> = buffs.keys();
 		while (itr.hasNext())
 		{
@@ -538,7 +540,6 @@ enum CqItemType {
 	BLUE_POTION;
 	YELLOW_POTION;
 	RED_POTION;
-
 	//
 	LEATHER_ARMOR;
 	DAGGER;
@@ -570,15 +571,6 @@ enum CqItemType {
 	SPIKE_SWORD;
 	GOLDEN_HELM;
 	GEMMED_RING;
-	
-	
-	
-	
-	
-	
-	
-	
-
 }
 
 enum CqEquipSlot {
