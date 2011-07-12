@@ -12,6 +12,7 @@ import haxel.HxlTimer;
 class GameOverState extends CqState {
 
 	var fadeTime:Float;
+	private var scroller:CqTextScroller;
 
 	public override function create() {
 		super.create();
@@ -19,20 +20,11 @@ class GameOverState extends CqState {
 		fadeTime = 0.5;
 		
 		stackRender = true;
-
-		//game over message?
-		//you're food for the minions now
-		//rest in peace
-		//your body crumbles, your soul fades away
-		//You succumb to a greater foe
-		//You breathe your' last
-		var scroller:CqTextScroller = new CqTextScroller(null, 1, "You breathe your' last",0x990000);
-		var Text:String = "The evil forces were too strong for you,\n now you perish for eternity...";
-		scroller.addColumn(200, 400, Text, false, FontAnonymousPro.instance.fontName,20,0x990000);
+		
+		scroller = new CqTextScroller(DeathScreen, 1, "Game over",0x766223);
 		add(scroller);
 		scroller.startScroll();
 		scroller.onComplete(nextScreen);
-
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
 	}
 

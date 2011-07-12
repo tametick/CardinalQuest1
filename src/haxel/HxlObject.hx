@@ -211,18 +211,22 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	/**
 	 * Call this function to figure out the on-screen position of the object.
 	 * 
-	 * @param	P	Takes a <code>Point</code> object and assigns the post-scrolled X and Y values of this object to it.
+	 * @param	P	Takes a <code>Pt</code> object and assigns the post-scrolled X and Y values of this object to it.
 	 * 
-	 * @return	The <code>Point</code> you passed in, or a new <code>Point</code> if you didn't pass one, containing the screen X and Y position of this object.
+	 * @return	The <code>Pt</code> you passed in, or a new <code>Pt</code> if you didn't pass one, containing the screen X and Y position of this object.
 	 */
-	public function getScreenXY(?Point:HxlPoint=null):HxlPoint {
-		if (Point == null) Point = new HxlPoint();
-		if ( scrollFactor == null ) {
+	public function getScreenXY(?Pt:HxlPoint=null):HxlPoint {
+		if (Pt == null) Pt = new HxlPoint();
+		if ( scrollFactor == null ) {	
 			var scrollFactor = new HxlPoint(1,1);
 		}
-		Point.x = HxlUtil.floor(x + HxlUtil.roundingError)+HxlUtil.floor(HxlGraphics.scroll.x*scrollFactor.x);
-		Point.y = HxlUtil.floor(y + HxlUtil.roundingError)+HxlUtil.floor(HxlGraphics.scroll.y*scrollFactor.y);
-		return Point;
+		if (HxlGraphics.scroll == null ) {
+			HxlGraphics.scroll = new Point(0,0);
+		}
+
+		Pt.x = HxlUtil.floor(x + HxlUtil.roundingError)+HxlUtil.floor(HxlGraphics.scroll.x*scrollFactor.x);
+		Pt.y = HxlUtil.floor(y + HxlUtil.roundingError)+HxlUtil.floor(HxlGraphics.scroll.y*scrollFactor.y);
+		return Pt;
 	}
 
 	/**
