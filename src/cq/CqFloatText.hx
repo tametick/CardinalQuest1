@@ -17,7 +17,7 @@ class CqFloatText extends HxlText {
 		//note: hardcoded max width of 500
 		setProperties(false, false, false);
 		setFormat(Font, FontSize, Color, Alignment, 0x010101);
-		width = (Alignment=="left"||Alignment=="center")?(_tf.getLineMetrics(0).width):500;
+		width = (Alignment=="left"||Alignment=="center")?(_tf.getLineMetrics(0).width+10):500;
 		_regen = true;
 		calcFrame();
 		x -= _pixels.width / 2;

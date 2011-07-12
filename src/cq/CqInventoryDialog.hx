@@ -104,6 +104,25 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		CqInventoryItem.backgroundSelectedKey = CqGraphicKey.ItemSelectedBG;
 	}
 
+	function createUIItem(Item:CqItem,dialog:CqInventoryDialog):CqInventoryItem {
+		//basic stuff
+		var uiItem:CqInventoryItem = new CqInventoryItem(dialog, 2, 2);
+		uiItem.toggleDrag(true);
+		uiItem.zIndex = 5;
+		uiItem.item = Item;
+		if ( Std.is(Item, CqSpell) ) {
+			spellSprite.setFrame(spellSheet.getSpriteIndex(Item.spriteIndex));
+			uiItem.setIcon(spellSprite.getFramePixels());
+		} else {
+			itemSprite.setFrame(itemSheet.getSpriteIndex(Item.spriteIndex));
+			uiItem.setIcon(itemSprite.getFramePixels());
+		}
+		//popup
+		uiItem.setPopup(new CqPopup(100,Item.name,this ));
+		add(uiItem.popup);
+		uiItem.popup.zIndex = 600;
+		return uiItem;
+	}
 	/**
 	 * True - added to inventory or equipped
 	 * False - destroyed or added to potion/spell belts
@@ -112,10 +131,9 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	public function itemPickup(Item:CqItem):Bool {
 		// if item already in inventory (?)
 		for ( cell in dlgInvGrid.cells ) {
-			if ( cell.getCellObj() != null && cell.getCellObj().item == Item ) {
-				cell.getCellObj().updateIcon();
-				GameUI.showTextNotification("already have item");
-				return false;
+			if ( cell.getCellObj() != null && cell.getCellObj().item.equalTo(Item) ) {
+				//GameUI.showTextNotification("already have item");
+				//return false;
 			}
 		}
 		// because of stacking (?)
@@ -129,24 +147,11 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		}
 		// select picked up item
 		dlgInfo.setItem(Item);
-		
-		var uiItem:CqInventoryItem = new CqInventoryItem(this, 2, 2);
-		uiItem.toggleDrag(true);
-		uiItem.zIndex = 5;
-		uiItem.item = Item;
-		if ( Std.is(Item, CqSpell) ) {
-			spellSprite.setFrame(spellSheet.getSpriteIndex(Item.spriteIndex));
-			uiItem.setIcon(spellSprite.getFramePixels());
-		} else {
-			itemSprite.setFrame(itemSheet.getSpriteIndex(Item.spriteIndex));
-			uiItem.setIcon(itemSprite.getFramePixels());
-		}
+		//create ui item
+		var uiItem:CqInventoryItem = createUIItem(Item,this);
 		add(uiItem);
-		uiItem.setPopup(new CqPopup(100,Item.name,this ));
-		add(uiItem.popup);
-		uiItem.popup.zIndex = 600;
 				
-		// If this uiItem is equippable, and affiliated slot is open, auto equip it
+		// If this Item is equippable, and affiliated slot is open, auto equip it
 		if ( Item.equipSlot != null ) {
 			if ( Item.equipSlot == POTION ) {
 				for ( cell in dlgPotionGrid.cells ) {
@@ -167,7 +172,6 @@ class CqInventoryDialog extends HxlSlidingDialog {
 					if ( cell.getCellObj() == null ) {
 						uiItem.setSpellCell(cell.cellIndex);
 						
-						//GameUI.instance.updateCharge(cast(cell, CqSpellCell).btn);
 						return false;
 					}
 				}
@@ -178,7 +182,8 @@ class CqInventoryDialog extends HxlSlidingDialog {
 						//found same quipment cell slot as item
 						if (cell.getCellObj() == null) {
 							//if slot was empty - equip
-							equipItem(cell, Item, uiItem);
+							
+							var old:CqInventoryItem = equipItem(cell, Item, uiItem);
 							return true;
 						} else {
 							var preference:Float = shouldEquipItemInCell(cast(cell, CqEquipmentCell), Item);

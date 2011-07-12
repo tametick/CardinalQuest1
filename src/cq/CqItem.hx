@@ -423,6 +423,8 @@ class CqItem extends GameObjectImpl, implements Loot {
 	}
 	
 	public function equalTo(other:CqItem):Bool {
+		if (isSuperb != other.isSuperb || isWondrous != other.isWondrous || isMagical != other.isMagical)
+			return false;
 		var itr:Iterator<String> = buffs.keys();
 		while (itr.hasNext())
 		{
@@ -481,36 +483,35 @@ class CqChest extends CqItem {
 
 		// create random item
 		var typeName:String = null;
-		do {
-			// chance of getting a potion
-			if (Math.random() < CqConfiguration.dropPotionChance)
-				typeName = HxlUtil.getRandomElement(SpriteItems.instance.potions).toUpperCase();
-			else
+		// chance of getting a potion
+		if (Math.random() < CqConfiguration.dropPotionChance)
+			typeName = HxlUtil.getRandomElement(SpriteItems.instance.potions).toUpperCase();
+		else
+		{
+			//set up equipment array. means filter out potions from the item enum.
+			if (equipment == null)
 			{
-				//set up equipment array. means filter out potions from the item enum.
-				if (equipment == null)
-				{
-					var li:Array<String> 			= Type.getEnumConstructs(CqItemType);
-					var upperCasePotions			= Lambda.map(SpriteItems.instance.potions, function (a:String):String { return a.toUpperCase(); });
-					var isNotPotion:String->Bool	= function (a:String):Bool { return (!Lambda.has(upperCasePotions, a)); }
-					CqChest.equipment				= Lambda.array(Lambda.filter(li, isNotPotion));
-				}
-				
-				var itemsPerLevel:Int = Math.ceil( equipment.length / CqConfiguration.lastLevel );
-				
-				if (Math.random() < CqConfiguration.betterItemChance)
-					level = level + 1;
-				
-				//get random element, by level. this algo might not be perfect, but it works.
-				var itemIndex:Int = Math.floor( (level * itemsPerLevel) + (Math.random() * (itemsPerLevel+Math.random()*2)) - Math.random()*3);
-				
-				if (itemIndex >= equipment.length)
-					itemIndex = equipment.length - 1;
-				if (itemIndex < 0)
-					itemIndex = 0;
-				typeName	= equipment[itemIndex];
+				var li:Array<String> 			= Type.getEnumConstructs(CqItemType);
+				var upperCasePotions			= Lambda.map(SpriteItems.instance.potions, function (a:String):String { return a.toUpperCase(); });
+				var isNotPotion:String->Bool	= function (a:String):Bool { return (!Lambda.has(upperCasePotions, a)); }
+				CqChest.equipment				= Lambda.array(Lambda.filter(li, isNotPotion));
+				CqChest.equipment.shift();
 			}
-		} while (typeName == "CHEST");
+			
+			var itemsPerLevel:Int = Math.ceil( equipment.length / CqConfiguration.lastLevel );
+			
+			if (Math.random() < CqConfiguration.betterItemChance)
+				level = level + 1;
+			
+			//get random element, by level. this algo might not be perfect, but it works.
+			var itemIndex:Int = Math.floor( (level * itemsPerLevel) + (Math.random() * (itemsPerLevel+Math.random()*2)) - Math.random()*3);
+			
+			if (itemIndex >= equipment.length)
+				itemIndex = equipment.length - 1;
+			if (itemIndex < 0)
+				itemIndex = 0;
+			typeName	= equipment[itemIndex];
+		}
 		
 		var item = CqLootFactory.newItem(x, y, Type.createEnum(CqItemType,  typeName));
 		
@@ -530,39 +531,54 @@ class CqChest extends CqItem {
 }
 
 enum CqItemType {
-	AMULET;
-	BOOTS;
-	LEATHER_ARMOR;
-	BRESTPLATE;
-	CHEST;
-	GLOVE;
-	CAP;
-	RING;
-	BRACELET;
-	WINGED_SANDLES;
-	STAFF;
-	DAGGER;
-	SHORT_SWORD;
-	LONG_SWORD;
+	CHEST;//chest constructor must be left on top.
+	
 	PURPLE_POTION;
 	GREEN_POTION;
 	BLUE_POTION;
 	YELLOW_POTION;
 	RED_POTION;
+
+	//
+	LEATHER_ARMOR;
+	DAGGER;
+	BOOTS;
+	STAFF;
+	GLOVE;
+	CAP;
+	SHORT_SWORD;
+	RING;
+	//
+	BRESTPLATE;
+	LONG_SWORD;
+	WINGED_SANDLES;
+	BRACELET;
 	HELM;
+	AMULET;
 	AXE;
-	BATTLE_AXE;
-	CLAYMORE;
-	GOLDEN_HELM;
-	MACE;
-	SPIKE_SWORD;
-	FULL_HELM;
-	FULL_PLATE_MAIL;
+	//
 	CLOAK;
+	MACE;
+	BATTLE_AXE;
 	GAUNTLET;
+	FULL_HELM;
 	GEMMED_AMULET;
-	GEMMED_RING;
+	//
+	FULL_PLATE_MAIL;
+	CLAYMORE;
 	TUNDRA_BOOTS;
+	SPIKE_SWORD;
+	GOLDEN_HELM;
+	GEMMED_RING;
+	
+	
+	
+	
+	
+	
+	
+	
+
 }
 
 enum CqEquipSlot {

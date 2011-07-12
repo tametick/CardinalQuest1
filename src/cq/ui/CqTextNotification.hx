@@ -45,8 +45,8 @@ class CqTextNotification extends HxlGroup
 	{
 		for ( i in 0...notifications.length)
 		{
-			var not:CqFloatText = notifications[i];
-			not.y = Ypos + (textSize * i);
+			var notif:CqFloatText = notifications[i];
+			notif.y = Ypos + (textSize * i);
 		}
 	}
 	function onTween() {
