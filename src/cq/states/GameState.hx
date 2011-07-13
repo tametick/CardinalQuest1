@@ -2,7 +2,9 @@ package cq.states;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import cq.CqConfiguration;
+import cq.CqPotionButton;
 import cq.CqRegistery;
+import cq.GameUI;
 import cq.ui.CqTextScroller;
 import flash.display.Bitmap;
 import haxel.HxlPoint;
@@ -95,34 +97,58 @@ class GameState extends CqState {
 		}
 		if (Configuration.debug)
 			checkJumpKeys();
+		checkPotionKeys();
 	}
 	
 	private function checkJumpKeys():Void 
 	{
-		if (HxlGraphics.keys.ONE)
+		if (HxlGraphics.keys.Q)
 		{
 			CqRegistery.world.goToNextLevel(this, 0);
-		}else if (HxlGraphics.keys.TWO)
+		}else if (HxlGraphics.keys.W)
 		{
 			CqRegistery.world.goToNextLevel(this, 1);
-		}else if (HxlGraphics.keys.THREE)
+		}else if (HxlGraphics.keys.E)
 		{
 			CqRegistery.world.goToNextLevel(this, 2);
-		}else if (HxlGraphics.keys.FOUR)
+		}else if (HxlGraphics.keys.R)
 		{
 			CqRegistery.world.goToNextLevel(this, 3);
-		}else if (HxlGraphics.keys.FIVE)
+		}else if (HxlGraphics.keys.T)
 		{
 			CqRegistery.world.goToNextLevel(this, 4);
-		}else if (HxlGraphics.keys.SIX)
+		}else if (HxlGraphics.keys.Y)
 		{
 			CqRegistery.world.goToNextLevel(this, 5);
-		}else if (HxlGraphics.keys.SEVEN)
+		}else if (HxlGraphics.keys.U)
 		{
 			CqRegistery.world.goToNextLevel(this, 6);
+		}else if (HxlGraphics.keys.I)
+		{
+			CqRegistery.world.goToNextLevel(this, 7);
 		}
 	}
-	
+	private function checkPotionKeys():Void 
+	{
+		var item = null;
+		if (HxlGraphics.keys.ONE)
+		{
+			item = gameUI.dlgPotionGrid.cells[0];
+		}else if (HxlGraphics.keys.TWO)
+		{
+			item = gameUI.dlgPotionGrid.cells[1];
+		}else if (HxlGraphics.keys.THREE)
+		{
+			item = gameUI.dlgPotionGrid.cells[2];
+		}else if (HxlGraphics.keys.FOUR)
+		{
+			item = gameUI.dlgPotionGrid.cells[3];
+		}
+		if (item != null)
+		{
+			cast(item, CqPotionCell).potBtn.usePotion();
+		}
+	}
 	function passTurn() {
 		var player = CqRegistery.player;
 		var level = CqRegistery.level;
@@ -188,7 +214,8 @@ class GameState extends CqState {
 				player.give(CqItemType.RED_POTION);
 				player.give(CqItemType.RED_POTION);
 				player.give(CqItemType.PURPLE_POTION);
-				player.give(CqSpellType.BERSERK);
+				player.give(CqSpellType.REVEAL_MAP);
+				player.give(CqSpellType.MAGIC_MIRROR);
 			case WIZARD:
 				player.give(CqItemType.STAFF);
 				player.give(CqItemType.RED_POTION);

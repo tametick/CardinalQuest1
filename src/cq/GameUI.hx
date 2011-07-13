@@ -54,8 +54,8 @@ class GameUI extends HxlDialog {
 
 	// Main UI containers
 	var leftButtons:HxlButtonContainer;
-	var dlgSpellGrid:CqSpellGrid;
-	var dlgPotionGrid:CqPotionGrid;
+	public var dlgSpellGrid:CqSpellGrid;
+	public var dlgPotionGrid:CqPotionGrid;
 	// Notification area
 	public static var notifications:CqTextNotification;
 	// View state panels

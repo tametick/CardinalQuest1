@@ -52,22 +52,26 @@ class CqPotionButton extends HxlDialog {
 	function clickMouseDown(event:MouseEvent) {
 		if (!exists || !visible || !active || Std.is(GameUI.currentPanel,CqInventoryDialog) ) 
 			return;
-		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
-			if ( cell.getCellObj() != null ) {
-				var cellObj = cell.getCellObj();
-				var item:CqItem = cellObj.item;
-				HxlLog.append("Using potion");
-				event.stopPropagation();
-				CqRegistery.player.use(item);
-				item.stackSize--;
-				if ( item.stackSize <= 0 ) {
-					_dlg.remove(cellObj);
-					cell.setCellObj(null);
-					cellObj.destroy();
-					CqRegistery.player.removeInventory(item);
-				} else {
-					cell.getCellObj().updateIcon();
-				}
+		if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
+			event.stopPropagation();
+			usePotion();
+		}
+	}
+	public function usePotion()
+	{
+		if ( cell.getCellObj() != null ) {
+			var cellObj = cell.getCellObj();
+			var item:CqItem = cellObj.item;
+			HxlLog.append("Using potion");
+			CqRegistery.player.use(item);
+			item.stackSize--;
+			if ( item.stackSize <= 0 ) {
+				_dlg.remove(cellObj);
+				cell.setCellObj(null);
+				cellObj.destroy();
+				CqRegistery.player.removeInventory(item);
+			} else {
+				cell.getCellObj().updateIcon();
 			}
 		}
 	}
