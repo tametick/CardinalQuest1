@@ -59,7 +59,7 @@ class GameUI extends HxlDialog {
 	// Notification area
 	public static var notifications:CqTextNotification;
 	// View state panels
-	var panelMap:CqMapDialog;
+	public var panelMap:CqMapDialog;
 	var panelInventory:CqInventoryDialog;
 	var panelCharacter:CqCharacterDialog;
 	var panelLog:CqMessageDialog;
