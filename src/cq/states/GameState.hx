@@ -4,6 +4,7 @@ import com.eclecticdesignstudio.motion.Actuate;
 import cq.CqConfiguration;
 import cq.CqPotionButton;
 import cq.CqRegistery;
+import cq.CqSpellButton;
 import cq.GameUI;
 import cq.ui.CqTextScroller;
 import flash.display.Bitmap;
@@ -143,10 +144,35 @@ class GameState extends CqState {
 		}else if (HxlGraphics.keys.FOUR)
 		{
 			item = gameUI.dlgPotionGrid.cells[3];
+		}else if (HxlGraphics.keys.FIVE)
+		{
+			item = gameUI.dlgPotionGrid.cells[4];
 		}
 		if (item != null)
 		{
 			cast(item, CqPotionCell).potBtn.usePotion();
+		}
+		var item = null;
+		//spells
+		if (HxlGraphics.keys.SIX)
+		{
+			item = gameUI.dlgSpellGrid.cells[0];
+		}else if (HxlGraphics.keys.SEVEN)
+		{
+			item = gameUI.dlgSpellGrid.cells[1];
+		}else if (HxlGraphics.keys.EIGHT)
+		{
+			item = gameUI.dlgSpellGrid.cells[2];
+		}else if (HxlGraphics.keys.NINE)
+		{
+			item = gameUI.dlgSpellGrid.cells[3];
+		}else if (HxlGraphics.keys.ZERO)
+		{
+			item = gameUI.dlgSpellGrid.cells[4];
+		}
+		if (item != null)
+		{
+			cast(item, CqSpellCell).btn.useSpell();
 		}
 	}
 	function passTurn() {

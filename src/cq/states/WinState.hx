@@ -1,5 +1,6 @@
 package cq.states;
 
+import cq.CqActor;
 import cq.CqResources;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
@@ -29,8 +30,13 @@ class WinState extends CqState {
 		gameOverText = new HxlText(0, (480-72)/2, 640, "You Win!");
 		gameOverText.setFormat(null, 72, 0xffffff, "center");
 		add(gameOverText);
-
-		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
+		
+		var x:Int = 40;
+		var y:Int = 40;
+		var boss:CqMob = CqMobFactory.newMobFromLevel(x, y, 99);
+		HxlGraphics.follow(boss);
+		//HxlGraphics.fade.start(false, 0xff000000, fadeTime);
+		
 	}
 
 	public override function update() {
@@ -38,8 +44,8 @@ class WinState extends CqState {
 		setDiagonalCursor();
 		
 		if ( stateNum == 0 && fadeTimer.delta() >= fadeTime ) {
-			fadeTimer.reset();
-			stateNum = 1;
+			//fadeTimer.reset();
+			//stateNum = 1;
 		}
 	}
 

@@ -81,35 +81,36 @@ class CqSpellButton extends HxlDialog {
 	function clickMouseDown(event:MouseEvent) {
 		if (!exists || !visible || !active || Std.is(GameUI.currentPanel,CqInventoryDialog) ) 
 			return;
-		if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
-			var spellObj = cell.getCellObj();
-			if ( spellObj != null ) {
-				var spell = cast(spellObj.item, CqSpell);
-				var player = CqRegistery.player;
-				if ( spell.spiritPoints < spell.spiritPointsRequired ) {
-					event.stopPropagation();
-					return;
-				}
-				
-		
-				if ( spell.targetsOther ) {
-					GameUI.setTargeting(true, spell.name);
-					GameUI.setTargetingSpell(this);
-				} else if (spell.targetsEmptyTile) {
-					GameUI.setTargeting(true, spell.name, true);
-					GameUI.setTargetingSpell(this);					
-				} else {
-					GameUI.setTargeting(false);
-					CqRegistery.player.use(spellObj.item, null);
-					spell.spiritPoints = 0;
-					GameUI.instance.updateCharge(this);
-				}
-
-				event.stopPropagation();
+		if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y))
+			useSpell(event);
+	}
+	public function useSpell(?event:MouseEvent = null)
+	{
+		var spellObj = cell.getCellObj();
+		if ( spellObj != null ) {
+			var spell = cast(spellObj.item, CqSpell);
+			var player = CqRegistery.player;
+			if ( spell.spiritPoints < spell.spiritPointsRequired ) {
+				if(event!=null)event.stopPropagation();
+				return;
 			}
+			
+			if ( spell.targetsOther ) {
+				GameUI.setTargeting(true, spell.name);
+				GameUI.setTargetingSpell(this);
+			} else if (spell.targetsEmptyTile) {
+				GameUI.setTargeting(true, spell.name, true);
+				GameUI.setTargetingSpell(this);					
+			} else {
+				GameUI.setTargeting(false);
+				CqRegistery.player.use(spellObj.item, null);
+				spell.spiritPoints = 0;
+				GameUI.instance.updateCharge(this);
+			}
+
+			if(event!=null)event.stopPropagation();
 		}
 	}
-
 	function clickMouseUp(event:MouseEvent) {
 		if (!exists || !visible || !active || Std.is(GameUI.currentPanel,CqInventoryDialog) ) 
 			return;

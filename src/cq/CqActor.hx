@@ -1100,6 +1100,9 @@ class CqMobFactory {
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.werewolves);
 				else
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.minotauers);
+			case 100:
+				//ending boss
+				typeName = HxlUtil.getRandomElement(SpriteMonsters.minotauers);
 		}
 		
 		mob = new CqMob(X, Y, typeName.toLowerCase());
