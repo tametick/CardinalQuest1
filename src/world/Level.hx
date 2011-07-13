@@ -89,10 +89,19 @@ class Level extends HxlTilemap
 		mobTile.actors.remove(mob);
 		
 		state.remove(mob);
-		if (cast(mob, CqActor).healthBar != null) state.remove(cast(mob, CqActor).healthBar);
+		if (cast(mob, CqActor).healthBar != null) 
+			state.remove(cast(mob, CqActor).healthBar);
 		
-		for (m in mobs)
-			if (cast(m, CqActor).faction != CqRegistery.player.faction) return;
+		for (m in mobs) {
+			if (cast(m, CqActor).faction != CqRegistery.player.faction) 
+			{
+				return;
+			}
+			if (cast(m, CqActor).isCharmed)
+			{
+				return;
+			}
+		}
 			
 		levelComplete();
 	}

@@ -53,6 +53,7 @@ class CqActor extends CqObject, implements Actor {
 	public var moveSpeed:Float;	
 	public var visionRadius:Float;
 	public var faction:Int;
+	public var isCharmed:Bool;
 	
 	public var actionPoints:Int;
 	
@@ -130,6 +131,7 @@ class CqActor extends CqObject, implements Actor {
 		bobCounter = 0.0;
 		bobCounterInc = 0.1;
 		bobMult = 5.0;
+		isCharmed = false;
 	}
 	
 	function initBuffs(){
@@ -554,6 +556,7 @@ class CqActor extends CqObject, implements Actor {
 			var mob = CqRegistery.level.createAndAddMirror(new HxlPoint(tile.mapX,tile.mapY), CqRegistery.player.level, true,CqRegistery.player);
 			GameUI.showEffectText(mob, "Mirror", 0x2DB6D2);
 			mob.speed = 0;
+			mob.faction = CqRegistery.player.faction;
 			effect.value = mob;
 			specialEffects.set(effect.name, effect);
 			Registery.level.updateFieldOfView(HxlGraphics.state, true);
@@ -591,6 +594,7 @@ class CqActor extends CqObject, implements Actor {
 			GameUI.instance.panelMap.updateDialog();
 		case "charm":
 			other.faction = faction;
+			other.isCharmed = true;
 			other.specialEffects.set(effect.name, effect);
 			GameUI.showEffectText(other, "Charm", 0xFF8040);
 		case "fear":
@@ -667,7 +671,7 @@ class CqPlayer extends CqActor, implements Player {
 				defense = 2;
 				speed = 3;
 				spirit = 1;
-				vitality = 5;
+				vitality = 500;
 				damage = new Range(1, 1);
 			case WIZARD:
 				attack = 2;
@@ -869,7 +873,7 @@ class CqMob extends CqActor, implements Mob {
 	public function new(X:Float, Y:Float, typeName:String,?player:Bool = false) {
 		super(X, Y);
 		xpValue = 1;
-		
+		isCharmed = false;
 		if(player)
 			loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 		else
