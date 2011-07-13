@@ -285,16 +285,19 @@ class CqLevel extends Level {
 						if (t.specialEffect != null && HxlUtil.contains(specialEffects.keys(), t.specialEffect.name)) {
 							var currentEffect = specialEffects.get(t.specialEffect.name);
 							
-							GameUI.showEffectText(creature, "" + t.specialEffect.name + " expired", 0xff0000);
+							if(t.specialEffect.name == "magic_mirror")
+								GameUI.showEffectText(creature, "" + "magic mirror" + " expired", 0xff0000);
+							else
+								GameUI.showEffectText(creature, "" + t.specialEffect.name + " expired", 0xff0000);
 							creature.specialEffects.remove(t.specialEffect.name);
-							
 							
 							switch(currentEffect.name){
 								case "charm":
 									creature.faction = CqMob.FACTION;
 								case "sleep":
 									creature.speed = currentEffect.value;
-								case "polymorph":
+								case "magic_mirror":
+									removeMobFromLevel(HxlGraphics.state, cast(currentEffect.value, CqMob));
 								default:
 									//
 							}

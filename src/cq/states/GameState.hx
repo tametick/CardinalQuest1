@@ -227,6 +227,7 @@ class GameState extends CqState {
 			
 			gameUI.addHealthBar(player);
 			gameUI.addXpBar(player);
+			world.addOnNewLevel(gameUI.panelMap.updateDialog);
 		}
 		player.addOnPickup(gameUI.itemPickup);
 		player.addOnInjure(gameUI.doPlayerInjureEffect);
@@ -241,6 +242,7 @@ class GameState extends CqState {
 				player.give(CqItemType.RED_POTION);
 				player.give(CqItemType.PURPLE_POTION);
 				player.give(CqSpellType.REVEAL_MAP);
+				player.give(CqSpellType.CHARM_MONSTER);
 				player.give(CqSpellType.MAGIC_MIRROR);
 			case WIZARD:
 				player.give(CqItemType.STAFF);

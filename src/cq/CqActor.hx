@@ -456,6 +456,9 @@ class CqActor extends CqObject, implements Actor {
 		if(itemOrSpell.specialEffects != null){
 			for ( effect in itemOrSpell.specialEffects) {
 				applyEffectAt(effect, tile);
+				if (itemOrSpell.duration > -1) {
+						timers.push(new CqTimer(itemOrSpell.duration, null, -1, effect));
+				}
 			}
 		}
 	}
@@ -551,6 +554,8 @@ class CqActor extends CqObject, implements Actor {
 			var mob = CqRegistery.level.createAndAddMirror(new HxlPoint(tile.mapX,tile.mapY), CqRegistery.player.level, true,CqRegistery.player);
 			GameUI.showEffectText(mob, "Mirror", 0x2DB6D2);
 			mob.speed = 0;
+			effect.value = mob;
+			specialEffects.set(effect.name, effect);
 			Registery.level.updateFieldOfView(HxlGraphics.state, true);
 		}
 	}
