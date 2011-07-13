@@ -39,12 +39,17 @@ class CqSpellFactory {
 		Resources.descriptions.set("Heal","Restores health and vigor.");
 		inited = true;
 	}
-	
+	public static function resetRemainigSpells()
+	{
+		CqSpellFactory.remainingSpells = [];
+		for(line in SpriteSpells.instance.spriteNames)
+			CqSpellFactory.remainingSpells = CqSpellFactory.remainingSpells.concat(line);
+		// no passwall for now
+		CqSpellFactory.remainingSpells.remove("pass_wall");
+	}
 	public static function newRandomSpell(X:Float, Y:Float) {
-		if (remainingSpells.length < 1){
-			trace("todo: add more spells");
-			return null;
-		}
+		if (remainingSpells.length < 1)
+			resetRemainigSpells();
 		
 		var newSpellName = HxlUtil.getRandomElement(remainingSpells);
 		

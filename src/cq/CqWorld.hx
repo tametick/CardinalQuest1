@@ -261,7 +261,6 @@ class CqLevel extends Level {
 			var buffs = creature.buffs;
 			var specialEffects = creature.specialEffects;
 			var visibleEffects = creature.visibleEffects;
-			//game over check, for it to work with magic mirror and charm
 			// remove timed out buffs & visibleEffects
 			var timers = creature.timers;
 			if (timers.length>0) {
@@ -352,12 +351,7 @@ class CqWorld extends World {
 		super();
 
 		onNewLevel = new List();
-		CqSpellFactory.remainingSpells = [];
-		for(line in SpriteSpells.instance.spriteNames)
-			CqSpellFactory.remainingSpells = CqSpellFactory.remainingSpells.concat(line);
-		
-		// no passwall for now
-		CqSpellFactory.remainingSpells.remove("pass_wall");
+		CqSpellFactory.resetRemainigSpells();
 			
 		goToLevel(currentLevelIndex);
 	}
