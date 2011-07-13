@@ -254,6 +254,7 @@ class CqLevel extends Level {
 	public override function tick(state:HxlState) {
 		var creatures:Array<CqActor> = new Array<CqActor>();
 		creatures.push(CqRegistery.player);
+		var hasEnemies:Bool = false;
 		for (mob in mobs)
 			creatures.push(cast(mob, CqActor));
 			
@@ -261,7 +262,9 @@ class CqLevel extends Level {
 			var buffs = creature.buffs;
 			var specialEffects = creature.specialEffects;
 			var visibleEffects = creature.visibleEffects;
-			
+			//game over check, for it to work with magic mirror and charm
+			if (creature.faction != CqRegistery.player.faction)
+				hasEnemies = true;
 			// remove timed out buffs & visibleEffects
 			var timers = creature.timers;
 			if (timers.length>0) {
@@ -337,6 +340,11 @@ class CqLevel extends Level {
 					creature.actionPoints = 0;
 				}
 			}
+			//game win check
+			if (!hasEnemies && mobs.length == 0)
+			{
+				//
+			}
 		}
 	}
 
@@ -377,10 +385,12 @@ class CqWorld extends World {
 		doOnNewLevel();
 	}
 	
-	public override function goToNextLevel(state:HxlState) {
+	public override function goToNextLevel(state:HxlState,?jumpToLevel:Int = -1) {
 		state.remove(currentLevel);
-		
-		currentLevelIndex++;
+		if (jumpToLevel > -1)
+			currentLevelIndex = jumpToLevel;
+		else
+			currentLevelIndex++;
 		goToLevel(currentLevelIndex);
 		CqRegistery.player.infoViewFloor.setText("Floor " +(currentLevelIndex + 1));
 

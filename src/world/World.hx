@@ -13,5 +13,5 @@ class World
 		//levels = new Array<Level>();
 	}
 	
-	public function goToNextLevel(state:HxlState){}
+	public function goToNextLevel(state:HxlState,?jumpToLevel:Int = -1){}
 }

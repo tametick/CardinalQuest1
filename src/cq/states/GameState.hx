@@ -1,6 +1,7 @@
 package cq.states;
 
 import com.eclecticdesignstudio.motion.Actuate;
+import cq.CqConfiguration;
 import cq.CqRegistery;
 import cq.ui.CqTextScroller;
 import flash.display.Bitmap;
@@ -8,6 +9,7 @@ import haxel.HxlPoint;
 import haxel.HxlSound;
 import haxel.HxlState;
 import haxel.HxlGraphics;
+import haxel.HxlTextInput;
 import haxel.HxlUtil;
 import haxel.HxlSprite;
 
@@ -90,6 +92,34 @@ class GameState extends CqState {
 				if (cursor.angle != 270)
 					cursor.angle = 270;
 			}
+		}
+		if (Configuration.debug)
+			checkJumpKeys();
+	}
+	
+	private function checkJumpKeys():Void 
+	{
+		if (HxlGraphics.keys.ONE)
+		{
+			CqRegistery.world.goToNextLevel(this, 0);
+		}else if (HxlGraphics.keys.TWO)
+		{
+			CqRegistery.world.goToNextLevel(this, 1);
+		}else if (HxlGraphics.keys.THREE)
+		{
+			CqRegistery.world.goToNextLevel(this, 2);
+		}else if (HxlGraphics.keys.FOUR)
+		{
+			CqRegistery.world.goToNextLevel(this, 3);
+		}else if (HxlGraphics.keys.FIVE)
+		{
+			CqRegistery.world.goToNextLevel(this, 4);
+		}else if (HxlGraphics.keys.SIX)
+		{
+			CqRegistery.world.goToNextLevel(this, 5);
+		}else if (HxlGraphics.keys.SEVEN)
+		{
+			CqRegistery.world.goToNextLevel(this, 6);
 		}
 	}
 	

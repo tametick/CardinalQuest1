@@ -21,7 +21,7 @@ class GameOverState extends CqState {
 		
 		stackRender = true;
 		
-		scroller = new CqTextScroller(DeathScreen, 1, "Game over",0x766223);
+		scroller = new CqTextScroller(DeathScreen, 1, "Game over",0x657873);
 		add(scroller);
 		scroller.startScroll();
 		scroller.onComplete(nextScreen);
