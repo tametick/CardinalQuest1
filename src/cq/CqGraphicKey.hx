@@ -17,6 +17,7 @@ enum CqGraphicKey{
 	EqCellBGHighlight;
 	CellGlow;
 	ChestEffectParticle;
+	SpellEffectParticle;
 	InjureEffectParticle;
 	CharCreateSelector;
 	chargeRadial;
