@@ -40,9 +40,10 @@ class GameState extends CqState {
 	public var chosenClass:CqClass;
 	var isPlayerActing:Bool;
 	private var started:Bool;
+	private var endingAnim:Bool;
 	public override function create() {
 		super.create();
-		started = false;
+		started = endingAnim = false;
 		chosenClass = FIGHTER;
 		HxlGraphics.fade.start(false, 0x00000000, 0.25);
 		
@@ -51,10 +52,9 @@ class GameState extends CqState {
 		//loadingBox = new HxlLoadingBox();
 		//add(loadingBox);
 	}
-	
 	public override function update() {
 		super.update();
-		if (!started) return;
+		if (!started || endingAnim) return;
 		var up = SpriteCursor.instance.getSpriteIndex("up");
 		if ( initialized < 1 ) 
 			return;
@@ -98,6 +98,7 @@ class GameState extends CqState {
 		}
 		if (Configuration.debug)
 			checkJumpKeys();
+			
 		checkPotionKeys();
 	}
 	
@@ -241,15 +242,15 @@ class GameState extends CqState {
 				player.give(CqItemType.RED_POTION);
 				player.give(CqItemType.RED_POTION);
 				player.give(CqItemType.PURPLE_POTION);
-				player.give(CqSpellType.REVEAL_MAP);
-				player.give(CqSpellType.CHARM_MONSTER);
-				player.give(CqSpellType.MAGIC_MIRROR);
+				player.give(CqSpellType.BERSERK);
+				CqSpellFactory.remainingSpells.remove(HxlUtil.enumToString(CqSpellType.BERSERK));
 			case WIZARD:
 				player.give(CqItemType.STAFF);
 				player.give(CqItemType.RED_POTION);
 				player.give(CqItemType.RED_POTION);
 				player.give(CqItemType.BLUE_POTION);
 				player.give(CqSpellType.FIREBALL);
+				CqSpellFactory.remainingSpells.remove(HxlUtil.enumToString(CqSpellType.FIREBALL));
 			case THIEF:
 				player.give(CqItemType.DAGGER);
 				player.give(CqItemType.RED_POTION);
@@ -257,6 +258,7 @@ class GameState extends CqState {
 				player.give(CqItemType.YELLOW_POTION);
 				player.give(CqItemType.GREEN_POTION);
 				player.give(CqSpellType.SHADOW_WALK);
+				CqSpellFactory.remainingSpells.remove(HxlUtil.enumToString(CqSpellType.SHADOW_WALK));
 		}
 		
 		PtPlayer.ClassSelected(chosenClass);
@@ -379,5 +381,14 @@ class GameState extends CqState {
 		SoundEffectsManager.play(DoorOpen);
 		var col = CqRegistery.level.getColor();
 		Registery.level.updateTileGraphic(tile.mapX, tile.mapY, SpriteTiles.instance.getSpriteIndex(col + "_door_open"));
+	}
+	public function startBossAnim()
+	{
+		endingAnim = true;
+		var tileLocation:HxlPoint = HxlUtil.getRandomTileWithDistance(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), Registery.level.mapData, SpriteTiles.instance.walkableAndSeeThroughTiles,CqRegistery.player.tilePos,20);
+		var pixelLocation = Registery.level.getPixelPositionOfTile(tileLocation.x,tileLocation.y);
+		var boss:CqMob = CqRegistery.level.createAndaddMob(tileLocation, 99, true);
+		CqRegistery.level.updateFieldOfView(HxlGraphics.state,boss);
+		HxlGraphics.follow(boss,200);
 	}
 }

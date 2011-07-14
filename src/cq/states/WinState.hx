@@ -1,13 +1,18 @@
 package cq.states;
 
 import cq.CqActor;
+import cq.CqConfiguration;
+import cq.CqRegistery;
 import cq.CqResources;
+import data.Registery;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import haxel.HxlGraphics;
+import haxel.HxlPoint;
 import haxel.HxlState;
 import haxel.HxlText;
 import haxel.HxlTimer;
+import haxel.HxlUtil;
 
 class WinState extends CqState {
 
@@ -31,10 +36,7 @@ class WinState extends CqState {
 		gameOverText.setFormat(null, 72, 0xffffff, "center");
 		add(gameOverText);
 		
-		var x:Int = 40;
-		var y:Int = 40;
-		var boss:CqMob = CqMobFactory.newMobFromLevel(x, y, 99);
-		HxlGraphics.follow(boss);
+
 		//HxlGraphics.fade.start(false, 0xff000000, fadeTime);
 		
 	}
@@ -42,7 +44,8 @@ class WinState extends CqState {
 	public override function update() {
 		super.update();	
 		setDiagonalCursor();
-		
+		HxlGraphics.doFollow();
+		trace("fdg");
 		if ( stateNum == 0 && fadeTimer.delta() >= fadeTime ) {
 			//fadeTimer.reset();
 			//stateNum = 1;

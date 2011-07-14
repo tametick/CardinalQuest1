@@ -616,8 +616,8 @@ class CqActor extends CqObject, implements Actor {
 			GameUI.showEffectText(other, "Morph", 0xA81CE3);
 			var _se = other.specialEffects;
 			var _hp = other.hp;
+			var mob = CqRegistery.level.createAndaddMob(other.getTilePos(), Std.int(Math.random() * CqRegistery.player.level), true);
 			Registery.level.removeMobFromLevel(HxlGraphics.state, cast(other, CqMob));
-			var mob = CqRegistery.level.createAndaddMob(other.getTilePos(), Std.int(Math.random() * CqRegistery.player.level),true);
 			CqRegistery.level.updateFieldOfView(HxlGraphics.state);
 			GameUI.instance.addHealthBar(cast(mob, CqActor));
 			//health bar hacks
@@ -1109,7 +1109,7 @@ class CqMobFactory {
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.werewolves);
 				else
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.minotauers);
-			case 100:
+			case 99,100,101:
 				//ending boss
 				typeName = HxlUtil.getRandomElement(SpriteMonsters.minotauers);
 		}

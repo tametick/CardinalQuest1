@@ -348,7 +348,18 @@ class HxlUtil {
 		
 		return new HxlPoint(x,y);
 	}
-	
+	public static function getRandomTileWithDistance<T>(width:Int, height:Int, map:Array<Array<T>>, tileTypesToGet:Array<T>,distanceFrom:HxlPoint,minDistance:Int = 0):HxlPoint {
+		var x , y = 0;
+		var dist:Float = 0;
+		var pt:HxlPoint = new HxlPoint(0, 0);
+		do {
+			pt.x = randomInt(width);
+			pt.y = randomInt(height);
+			dist = distance(distanceFrom, pt);
+		} while ( !contains(tileTypesToGet.iterator(),map[Std.int(pt.y)][Std.int(pt.x)])|| dist < minDistance);
+		
+		return pt;
+	}
 	public static function cloneMap<T>(map:Array<Array<T>>):Array<Array<T>> {
 		var newMap = new Array<Array<T>>();
 		for (y in 0...map.length) {

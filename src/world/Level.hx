@@ -4,6 +4,7 @@ import com.eclecticdesignstudio.motion.Actuate;
 import cq.CqActor;
 import cq.CqDecoration;
 import cq.CqRegistery;
+import cq.states.GameState;
 import data.Resources;
 import flash.display.Bitmap;
 import com.baseoneonline.haxe.astar.PathMap;
@@ -94,13 +95,9 @@ class Level extends HxlTilemap
 		
 		for (m in mobs) {
 			if (cast(m, CqActor).faction != CqRegistery.player.faction) 
-			{
 				return;
-			}
 			if (cast(m, CqActor).isCharmed)
-			{
 				return;
-			}
 		}
 			
 		levelComplete();
@@ -172,7 +169,8 @@ class Level extends HxlTilemap
 	//public function 
 	function levelComplete() {
 		if (index == CqConfiguration.lastLevel)
-			HxlGraphics.pushState(new WinState());
+			cast(HxlGraphics.state,GameState).startBossAnim();
+			//HxlGraphics.pushState(new WinState());
 	}
 	
 	override public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {
@@ -285,8 +283,12 @@ class Level extends HxlTilemap
 	}
 	
 	var dest:HxlPoint;
-	public function updateFieldOfView(state:HxlState,?skipTween:Bool = false, ?gradientColoring:Bool = true, ?seenTween:Int = 64, ?inSightTween:Int=255) {
-		var player = Registery.player;
+	public function updateFieldOfView(state:HxlState,?otherActorHighlight:Actor,?skipTween:Bool = false, ?gradientColoring:Bool = true, ?seenTween:Int = 64, ?inSightTween:Int=255) {
+		var player:Actor = null;
+		if (otherActorHighlight == null)
+			player = Registery.player;
+		else
+			player = otherActorHighlight;
 		
 		var bottom = Std.int(Math.min(heightInTiles - 1, player.tilePos.y + (player.visionRadius+1)));
 		var top = Std.int(Math.max(0, player.tilePos.y - (player.visionRadius+1)));
