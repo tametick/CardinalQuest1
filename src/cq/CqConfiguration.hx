@@ -3,9 +3,9 @@ package cq;
 import data.Configuration;
 
 class CqConfiguration extends Configuration {
-	public inline static var chestsPerLevel = 18;
+	public inline static var chestsPerLevel = 12;
 	public inline static var spellsPerLevel = 2;
-	public inline static var mobsPerLevel = 36;
+	public inline static var mobsPerLevel = 18;
 	public inline static var lastLevel = 7;
 	
 	public inline static var playerLives = 1;
