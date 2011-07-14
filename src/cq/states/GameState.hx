@@ -198,8 +198,27 @@ class GameState extends CqState {
 			scroller.addColumn(100, 400, introText, false, FontAnonymousPro.instance.fontName);
 			add(scroller);
 			scroller.startScroll();
-			scroller.onComplete(realInit);
+			scroller.onComplete(classEntry);
 		}
+	}
+	function classEntry()
+	{
+		remove(scroller);
+		var classBG:Class<Bitmap> = null;
+		switch(chosenClass){
+			case CqClass.FIGHTER:
+				classBG = SpriteKnightEntry;
+			case CqClass.THIEF:
+				classBG = SpriteThiefEntry;
+			case CqClass.WIZARD:
+				classBG = SpriteWizardEntry;
+		}
+		scroller = new CqTextScroller(classBG, 1);
+		var introText:String = "You enter the dark dungeon...";
+		scroller.addColumn(100, 400, introText, false, FontAnonymousPro.instance.fontName);
+		add(scroller);
+		scroller.startScroll();
+		scroller.onComplete(realInit);
 	}
 	function realInit() {
 		if(scroller!=null)remove(scroller);
@@ -389,6 +408,11 @@ class GameState extends CqState {
 		var pixelLocation = Registery.level.getPixelPositionOfTile(tileLocation.x,tileLocation.y);
 		var boss:CqMob = CqRegistery.level.createAndaddMob(tileLocation, 99, true);
 		CqRegistery.level.updateFieldOfView(HxlGraphics.state,boss);
-		HxlGraphics.follow(boss,200);
+		HxlGraphics.follow(boss, 200);
+		//find an empty tile for portal
+		//do {
+			
+		//} while 
+		//boss.actInDirection(this, target);
 	}
 }

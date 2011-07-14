@@ -261,22 +261,36 @@ class GameUI extends HxlDialog {
 		var player = CqRegistery.player;
 		var level  = CqRegistery.level;
 		
+		//heart n coin info
 		infoViewHearts = new HxlGroup();
 		infoViewHearts.zIndex = zIndex+1;
 		infoViewHearts.width = 50;
 		infoViewHearts.height = 20;
-		infoViewHearts.x = infoViewXpBar.x+4;
-		infoViewHearts.y = infoViewXpBar.y+infoViewXpBar.height+3;
+		infoViewHearts.x = infoViewXpBar.x-5;
+		infoViewHearts.y = infoViewXpBar.y + infoViewXpBar.height + 3;
+		//lives
 		var heart = new HeartSprite();
-		heart.scrollFactor.x = heart.scrollFactor.y = 0;
-		infoViewHearts.add(heart);		
-		var lives = new HxlText(heart.x + heart.width + 2, 0, Std.int(infoViewHearts.width - heart.width), "x " + player.lives, true, FontAnonymousPro.instance.fontName);
+		heart.scale = new HxlPoint(0.7, 0.7);
+		var lives = new HxlText(heart.x + heart.width-3, 0, Std.int(infoViewHearts.width - heart.width), "x" + player.lives, true, FontAnonymousPro.instance.fontName);
 		player.infoViewLives = lives;
-		lives.setSize(fontSize);
-		lives.scrollFactor.x = lives.scrollFactor.y = 0;
+		
+		//coins
+		var coin = new CoinSprite(30, -2);
+		coin.scale = heart.scale;
+		var coins = new HxlText(coin.x + coin.width-3, 0, Std.int(infoViewHearts.width - coin.width), ""+player.money, true, FontAnonymousPro.instance.fontName);
+		player.infoViewMoney = coins;
+		
+		coins.setSize(10);
+		lives.setSize(10);
+		
+		coin.scrollFactor.x = coin.scrollFactor.y = heart.scrollFactor.x = heart.scrollFactor.y = coins.scrollFactor.x = coins.scrollFactor.y = lives.scrollFactor.x = lives.scrollFactor.y =0;
 		infoViewHearts.add(lives);
+		infoViewHearts.add(heart);
+		infoViewHearts.add(coins);
+		infoViewHearts.add(coin);
 		add(infoViewHearts);
 
+		//level info
 		infoViewLevel = new HxlText(infoViewXpBar.x, infoViewHearts.y + infoViewHearts.height - 2, Std.int(btnInfoView.width), "Level " + player.level, true, FontAnonymousPro.instance.fontName);
 		infoViewLevel.zIndex = zIndex+1;
 		player.infoViewLevel = infoViewLevel;

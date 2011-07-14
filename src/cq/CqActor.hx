@@ -651,12 +651,14 @@ class CqPlayer extends CqActor, implements Player {
 	public var infoViewHealthBar:CqHealthBar;
 	public var infoViewXpBar:CqXpBar;
 	public var infoViewLives:HxlText;
+	public var infoViewMoney:HxlText;
 	public var infoViewLevel:HxlText;
 	public var infoViewFloor:HxlText;
 
 	
 	public var xp:Int;
 	public var level:Int;
+	public var money:Int;
 
 	var onPickup:List<Dynamic>;
 	var onGainXP:List<Dynamic>;
@@ -692,7 +694,7 @@ class CqPlayer extends CqActor, implements Player {
 		super(X, Y);
 
 		lives = CqConfiguration.playerLives;
-		
+		money = 0;
 		for (s in 0...5)
 			equippedSpells[s] = null;
 		

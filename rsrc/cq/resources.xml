@@ -30,6 +30,9 @@
 		<bitmap id="cq.UiInventoryBox" import="inv_box_02.png"/>
 		<bitmap id="cq.IntroScreen" import="Minator_intro_01.png"/>
 		<bitmap id="cq.DeathScreen" import="death.png"/>
+		<bitmap id="cq.SpriteKnightEntry" import="Knight_entry_03.png"/>
+		<bitmap id="cq.SpriteWizardEntry" import="Wizard_entry_02.png"/>
+		<bitmap id="cq.SpriteThiefEntry" import="Thief_entry_03.png"/>
 		
 		<sound id="cq.MainThemeOne" name="MainThemeOne" import="main1.mp3"/>
 		<sound id="cq.MainThemeTwo" name="MainThemeTwo" import="main2.mp3"/>

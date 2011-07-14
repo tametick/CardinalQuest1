@@ -54,6 +54,7 @@ class Death extends Sound { public function new() { super(); } }
 
 class SpriteLogo extends Bitmap { public function new() { super(); } }
 class SpriteHeart extends Bitmap { public function new() { super(); } }
+class SpriteCoin extends Bitmap { public function new() { super(); } }
 class SpriteStartButton extends Bitmap { public function new() { super(); } }
 class SpriteButtonBg extends Bitmap { public function new() { super(); } }
 class SpriteItemSlot1 extends Bitmap { public function new() { super(); } }
@@ -64,6 +65,9 @@ class UiInventoryBox extends Bitmap { public function new() { super(); } }
 class SpriteMapPaper extends Bitmap { public function new() { super(); } }
 class IntroScreen extends Bitmap { public function new() { super(); } }
 class DeathScreen extends Bitmap { public function new() { super(); } }
+class SpriteKnightEntry extends Bitmap { public function new() { super(); } }
+class SpriteWizardEntry extends Bitmap { public function new() { super(); } }
+class SpriteThiefEntry extends Bitmap { public function new() { super(); } }
 
 class LogoSprite extends HxlSprite {
 	public function new(?X:Float = 0, ?Y:Float = 0) {
@@ -99,7 +103,7 @@ class HeartSprite extends HxlSprite {
 class CoinSprite extends HxlSprite {
 	public function new(?X:Float=0, ?Y:Float=0) {
 		super(X,Y);
-		loadGraphic(SpriteHeart, false, false, 18, 18);
+		loadGraphic(SpriteCoin, false, false, 18, 18);
 	}
 }
 class SpritePortrait extends HxlSpriteSheet { 
