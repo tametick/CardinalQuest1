@@ -284,7 +284,7 @@ class CqLevel extends Level {
 						
 						if (t.specialEffect != null && HxlUtil.contains(specialEffects.keys(), t.specialEffect.name)) {
 							var currentEffect = specialEffects.get(t.specialEffect.name);
-							
+		
 							if(t.specialEffect.name == "magic_mirror")
 								GameUI.showEffectText(creature, "" + "magic mirror" + " expired", 0xff0000);
 							else
@@ -298,7 +298,13 @@ class CqLevel extends Level {
 								case "sleep":
 									creature.speed = currentEffect.value;
 								case "magic_mirror":
-									removeMobFromLevel(HxlGraphics.state, cast(currentEffect.value, CqMob));
+									//spell particle effect
+									var mob:CqMob = cast(currentEffect.value, CqMob);
+									var eff:CqEffectSpell = new CqEffectSpell(mob.x+mob.width/2, mob.y+mob.height/2);
+									eff.zIndex = 1000;
+									HxlGraphics.state.add(eff);
+									eff.start(true, 1.0, 10);
+									removeMobFromLevel(HxlGraphics.state, mob);
 								default:
 									//
 							}
@@ -325,7 +331,7 @@ class CqLevel extends Level {
 			spirit += creature.buffs.get("spirit");
 			spirit = Std.int(Math.max(spirit, 1));
 			
-			// Charge action & spirit points				
+			// Charge action & spirit points
 			creature.actionPoints += speed;
 			if (!specialActive) {
 				for (s in creature.equippedSpells) {

@@ -44,7 +44,7 @@ class CqFloatText extends HxlText {
 			.onComplete(function() {
 				Actuate.update(function(params:Dynamic) {
 					self.alpha = params.Alpha;
-				}, 1.0, { Alpha: 1.0 }, { Alpha: 0.0 } ).onComplete(function() { self.destroy(); onTweened(); } );
+				}, 0.5, { Alpha: 1.0 }, { Alpha: 0.0 } ).onComplete(function() { self.destroy(); onTweened(); } );
 			});
 	}
 

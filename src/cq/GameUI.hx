@@ -574,10 +574,23 @@ class GameUI extends HxlDialog {
 		showEffectText(Actor, ""+Damage, 0xff2222);
 	}
 	
-	public static function showEffectText(actor:CqActor, text:String, color:Int) {
-		var txt:CqFloatText = new CqFloatText(actor.x + (actor.width/2), actor.y - 16, text, color, 24);
+	static function effectDone() {
+		effectQueue.shift();
+		if (effectQueue.length > 0)
+			startEffectText(effectQueue.shift());
+	}
+	static var effectQueue:Array<CqFloatText> = new Array<CqFloatText>();
+	static function startEffectText(txt:CqFloatText)
+	{
+		txt.InitSemiCustomTween(0.3, { y: txt.y - 20,alpha:0.5 }, effectDone);
 		txt.zIndex = 4;
 		HxlGraphics.state.add(txt);
+	}
+	public static function showEffectText(actor:CqActor, text:String, color:Int) {
+		var fltxt:CqFloatText = new CqFloatText(actor.x + (actor.width / 2), actor.y - 16, text, color, 24, false);
+		effectQueue.push(fltxt);
+		if (effectQueue.length == 1)
+			startEffectText(fltxt);
 	}
 	public static function showTextNotification(message:String, ?color:Int = 0xDE913A) {
 		notifications.notify(message, color);
