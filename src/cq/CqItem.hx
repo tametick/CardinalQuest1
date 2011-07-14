@@ -439,7 +439,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 	/**
 	 * <1 other is worse 1 == equal, >1 other is better
 	 * */
-	public function compareTo(other:CqItem) {
+	public function compareTo(other:CqItem):Float {
 		if (other.equipSlot != equipSlot)
 			return 0.0;
 			
@@ -460,6 +460,12 @@ class CqItem extends GameObjectImpl, implements Loot {
 		
 		return preference;
 	}
+	public function getMonetaryValue():Int {
+		var sumBuffsThis:Float  = HxlUtil.sumHashInt(buffs);
+		var dmgAvgThis:Float  = (damage.start + damage.end)/2;
+		return Math.ceil((sumBuffsThis + dmgAvgThis) / 2);
+	}
+	
 }
 
 /**

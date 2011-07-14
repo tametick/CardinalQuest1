@@ -774,7 +774,10 @@ class CqPlayer extends CqActor, implements Player {
 			give(CqSpellFactory.newSpell(-1, -1, spellType));
 		}
 	}
-	
+	public function giveMoney(amount:Int)
+	{
+		infoViewMoney.setText(""+(Std.parseInt(infoViewMoney.text) + amount));
+	}
 	//pickup item from map
 	public function pickup(state:HxlState, item:CqItem) {
 		// remove item from map

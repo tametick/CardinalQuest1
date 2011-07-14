@@ -131,6 +131,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		for ( cell in dlgInvGrid.cells ) {
 			if ( cell.getCellObj() != null && cell.getCellObj().item.equalTo(Item) ) {
 				GameUI.showTextNotification("I already have this.");
+				CqRegistery.player.giveMoney( Item.getMonetaryValue() );
 				return false;
 			}
 		}
@@ -197,15 +198,17 @@ class CqInventoryDialog extends HxlSlidingDialog {
 							}else if (!Item.isMagical && !Item.isSuperb && !Item.isWondrous && preference <1)
 							{	//if item is worse than current, and is plain - destroy it
 								GameUI.showTextNotification("I don't need this.");
+								CqRegistery.player.giveMoney( Item.getMonetaryValue() );
 								remove(uiItem);
 								return false;
 							}else
 							{	//if item is not better, and not plain - add to inventory
 								if ( Item.equalTo( cell.getCellObj().item))
 								{
+									CqRegistery.player.giveMoney( Item.getMonetaryValue() );
+									GameUI.showTextNotification("I already have this.",0xE1CC37);
 									remove(uiItem);
 									uiItem.destroy();
-									GameUI.showTextNotification("I already have this.",0xE1CC37);
 									return false;
 								}
 							}
@@ -1055,6 +1058,7 @@ class CqInventoryItem extends HxlSprite {
 					default:
 						if ( dragStopCell.dropCell ) {
 							// This item is being dropped
+							CqRegistery.player.giveMoney( item.getMonetaryValue() );
 							_dlg.remove(this);
 							destroy();
 							CqRegistery.player.removeInventory(this.item);
