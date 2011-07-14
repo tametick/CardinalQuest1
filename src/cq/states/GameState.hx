@@ -52,6 +52,11 @@ class GameState extends CqState {
 		//loadingBox = new HxlLoadingBox();
 		//add(loadingBox);
 	}
+	public override function destroy() {
+		remove(gameUI);
+		gameUI.destroy();
+		add(CqRegistery.world.currentLevel);
+	}
 	public override function update() {
 		super.update();
 		if (!started || endingAnim) return;

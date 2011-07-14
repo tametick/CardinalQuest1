@@ -233,7 +233,11 @@ class GameUI extends HxlDialog {
 		panelInventory.dlgSpellGrid = dlgSpellGrid;
 		panelInventory.dlgPotionGrid = dlgPotionGrid;
 	}
-		
+	override public function destroy() {
+		remove(dlgPotionGrid);
+		remove(dlgSpellGrid);
+		super.destroy();
+	}
 	override public function overlapsPoint(X:Float, Y:Float, ?PerPixel:Bool = false):Bool {
 		return leftButtons.overlapsPoint(X, Y) ||
 		     dlgSpellGrid.overlapsPoint(X, Y) ||
