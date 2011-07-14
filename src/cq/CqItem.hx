@@ -249,16 +249,23 @@ class CqLootFactory {
 		if (Item.equipSlot == CqEquipSlot.SPELL || Item.equipSlot == CqEquipSlot.POTION)
 			// sorry, not enchanting potions & spells!
 			return;
-		
 		switch(DungeonLevel) {
 			case 0, 1:
 				Item.isSuperb = true;
+				Item.setGlow(true);
+				Item.customGlow(0x206CDF);
 			case 2, 3:
 				Item.isMagical = true;
+				Item.setGlow(true);
+				Item.customGlow(0x3CDA25);
 			case 4, 5:
 				Item.isSuperb = true;
 				Item.isMagical = true;
+				Item.setGlow(true);
+				Item.customGlow(0x1FE0D7);
 			case 6, 7, 8: // 8 is for out of depth items on level 7
+				Item.setGlow(true);
+				Item.customGlow(0xE7A918);
 				Item.isSuperb = true;
 				Item.isWondrous = true;
 		}
@@ -368,7 +375,6 @@ class CqItem extends GameObjectImpl, implements Loot {
 		stackSizeMax = 1;
 
 		isGlowing = false;
-		
 		glowSpriteKey = CqGraphicKey.ItemGlow(typeName);
 		//TODO: move to game ui, to be with the rest of graphic cache creation
 		glowRect = new Rectangle(0, 0, 48, 48);
@@ -384,7 +390,16 @@ class CqItem extends GameObjectImpl, implements Loot {
 			glow = null;
 		}
 	}
-
+	public function customGlow(color:Int)
+	{
+		var tmp:BitmapData = new BitmapData(48, 48, true, 0x0);
+		tmp.copyPixels(getFramePixels(), new Rectangle(0, 0, 32, 32), new Point(8, 8), null, null, true);
+		var glow:GlowFilter = new GlowFilter(color, 0.9, 16.0, 16.0, 1.6, 1, false, false);
+		tmp.applyFilter(tmp, glowRect, new Point(0, 0), glow);
+		GraphicCache.addBitmapData(tmp, glowSpriteKey);
+		glowSprite = tmp;
+		glow = null;
+	}
 	public function setGlow(Toggle:Bool) {
 		isGlowing = Toggle;
 	}
@@ -506,29 +521,38 @@ class CqChest extends CqItem {
 				CqChest.equipment.shift();
 			}
 			
-			var itemsPerLevel:Int = Math.ceil( equipment.length / CqConfiguration.lastLevel );
-			
 			if (Math.random() < CqConfiguration.betterItemChance)
 				level = level + 1;
+				
+			var itemsPerLevelVariety:Int = 6;
+			var itemsPerLevelShift:Int = 3;
 			
-			//get random element, by level. this algo might not be perfect, but it works.
-			var itemIndex:Int = Math.floor( (level * itemsPerLevel) + (Math.random() * (itemsPerLevel+Math.random()*2)) - Math.random()*3);
-			
+			var cap:Int = itemsPerLevelVariety+((level) * itemsPerLevelShift);		
+			if (cap >= equipment.length)//make last level items have same variety
+				cap = equipment.length-1;
+			var minimum:Int = cap - itemsPerLevelVariety;
+
+			var itemIndex:Int = minimum + Math.floor( Math.random() * cap);
+			//back to bounds, just in case
 			if (itemIndex >= equipment.length)
 				itemIndex = equipment.length - 1;
 			if (itemIndex < 0)
 				itemIndex = 0;
+				
 			typeName	= equipment[itemIndex];
 		}
 		
 		var item = CqLootFactory.newItem(x, y, Type.createEnum(CqItemType,  typeName));
 		
-		if (Math.random() < 0.1)
+		if (Math.random() < CqConfiguration.EnchantItemChance)
+		{
 			// 10% chance of magical item
 			CqLootFactory.enchantItem(item, Registery.level.index);
-		else if (Math.random() < 0.01)
+		}else if (Math.random() < CqConfiguration.BetterEnchantItemChance)
+		{
 			// another 1% chance of out-of-depth magical item
-			CqLootFactory.enchantItem(item, Registery.level.index+1);
+			CqLootFactory.enchantItem(item, Registery.level.index + 1);
+		}
 		
 		// add item to level
 		Registery.level.addLootToLevel(state, item);
