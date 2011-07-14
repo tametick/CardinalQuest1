@@ -96,6 +96,12 @@ class HeartSprite extends HxlSprite {
 		loadGraphic(SpriteHeart, false, false, 18, 18);
 	}
 }
+class CoinSprite extends HxlSprite {
+	public function new(?X:Float=0, ?Y:Float=0) {
+		super(X,Y);
+		loadGraphic(SpriteHeart, false, false, 18, 18);
+	}
+}
 class SpritePortrait extends HxlSpriteSheet { 
 	public static var instance = new SpritePortrait();
 	public function new() {

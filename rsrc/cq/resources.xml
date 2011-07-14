@@ -6,6 +6,7 @@
 		<font id="cq.FontAnonymousProB" import="Anonymous-Pro-B.ttf" name="FontAnonymousProB" /> 
 		<bitmap id="cq.SpriteLogo" import="logo.png"/>
 		<bitmap id="cq.SpriteHeart" import="heart.png"/>
+		<bitmap id="cq.SpriteCoin" import="coin.png"/>
 		<bitmap id="cq.SpritePortrait" import="portrait_slots.png"/>
 		<bitmap id="cq.SpriteInfo" import="info_slot.png"/>
 		<bitmap id="cq.SpriteCursor" import="cursor.png"/>

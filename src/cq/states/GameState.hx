@@ -96,36 +96,32 @@ class GameState extends CqState {
 					cursor.angle = 270;
 			}
 		}
-		if (Configuration.debug)
-			checkJumpKeys();
-			
-		checkPotionKeys();
 	}
 	
 	private function checkJumpKeys():Void 
 	{
-		if (HxlGraphics.keys.Q)
+		if (HxlGraphics.keys.justReleased("Q"))
 		{
 			CqRegistery.world.goToNextLevel(this, 0);
-		}else if (HxlGraphics.keys.W)
+		}else if (HxlGraphics.keys.justReleased("W"))
 		{
 			CqRegistery.world.goToNextLevel(this, 1);
-		}else if (HxlGraphics.keys.E)
+		}else if (HxlGraphics.keys.justReleased("E"))
 		{
 			CqRegistery.world.goToNextLevel(this, 2);
-		}else if (HxlGraphics.keys.R)
+		}else if (HxlGraphics.keys.justReleased("R"))
 		{
 			CqRegistery.world.goToNextLevel(this, 3);
-		}else if (HxlGraphics.keys.T)
+		}else if (HxlGraphics.keys.justReleased("T"))
 		{
 			CqRegistery.world.goToNextLevel(this, 4);
-		}else if (HxlGraphics.keys.Y)
+		}else if (HxlGraphics.keys.justReleased("Y"))
 		{
 			CqRegistery.world.goToNextLevel(this, 5);
-		}else if (HxlGraphics.keys.U)
+		}else if (HxlGraphics.keys.justReleased("U"))
 		{
 			CqRegistery.world.goToNextLevel(this, 6);
-		}else if (HxlGraphics.keys.I)
+		}else if (HxlGraphics.keys.justReleased("I"))
 		{
 			CqRegistery.world.goToNextLevel(this, 7);
 		}
@@ -133,19 +129,19 @@ class GameState extends CqState {
 	private function checkPotionKeys():Void 
 	{
 		var item = null;
-		if (HxlGraphics.keys.ONE)
+		if (HxlGraphics.keys.justReleased("ONE"))
 		{
 			item = gameUI.dlgPotionGrid.cells[0];
-		}else if (HxlGraphics.keys.TWO)
+		}else if (HxlGraphics.keys.justReleased("TWO"))
 		{
 			item = gameUI.dlgPotionGrid.cells[1];
-		}else if (HxlGraphics.keys.THREE)
+		}else if (HxlGraphics.keys.justReleased("THREE"))
 		{
 			item = gameUI.dlgPotionGrid.cells[2];
-		}else if (HxlGraphics.keys.FOUR)
+		}else if (HxlGraphics.keys.justReleased("FOUR"))
 		{
 			item = gameUI.dlgPotionGrid.cells[3];
-		}else if (HxlGraphics.keys.FIVE)
+		}else if (HxlGraphics.keys.justReleased("FIVE"))
 		{
 			item = gameUI.dlgPotionGrid.cells[4];
 		}
@@ -153,21 +149,21 @@ class GameState extends CqState {
 		{
 			cast(item, CqPotionCell).potBtn.usePotion();
 		}
-		var item = null;
+		item = null;
 		//spells
-		if (HxlGraphics.keys.SIX)
+		if (HxlGraphics.keys.justReleased("SIX"))
 		{
 			item = gameUI.dlgSpellGrid.cells[0];
-		}else if (HxlGraphics.keys.SEVEN)
+		}else if (HxlGraphics.keys.justReleased("SEVEN"))
 		{
 			item = gameUI.dlgSpellGrid.cells[1];
-		}else if (HxlGraphics.keys.EIGHT)
+		}else if (HxlGraphics.keys.justReleased("EIGHT"))
 		{
 			item = gameUI.dlgSpellGrid.cells[2];
-		}else if (HxlGraphics.keys.NINE)
+		}else if (HxlGraphics.keys.justReleased("NINE"))
 		{
 			item = gameUI.dlgSpellGrid.cells[3];
-		}else if (HxlGraphics.keys.ZERO)
+		}else if (HxlGraphics.keys.justReleased("ZERO"))
 		{
 			item = gameUI.dlgSpellGrid.cells[4];
 		}
@@ -284,6 +280,10 @@ class GameState extends CqState {
 			}
 			HxlGraphics.pushState(new MainMenuState());
 		}
+		if (Configuration.debug)
+			checkJumpKeys();
+			
+		checkPotionKeys();
 	}
 
 	override function onMouseDown(event:MouseEvent) {
