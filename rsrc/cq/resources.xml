@@ -28,10 +28,10 @@
 		<bitmap id="cq.UiBeltVertical" import="Belt_vert_metal.png"/>
 		<bitmap id="cq.UiBeltHorizontal" import="Belt_horiz_leather.png"/>
 		<bitmap id="cq.UiInventoryBox" import="inv_box_02.png"/>
-		<bitmap id="cq.IntroScreen" import="Minator_intro_01.png"/>
+		<bitmap id="cq.IntroScreen" import="Minator_intro_02.png"/>
 		<bitmap id="cq.DeathScreen" import="death.png"/>
 		<bitmap id="cq.SpriteKnightEntry" import="Knight_entry_03.png"/>
-		<bitmap id="cq.SpriteWizardEntry" import="Wizard_entry_02.png"/>
+		<bitmap id="cq.SpriteWizardEntry" import="Wizard_entry_03.png"/>
 		<bitmap id="cq.SpriteThiefEntry" import="Thief_entry_03.png"/>
 		
 		<sound id="cq.MainThemeOne" name="MainThemeOne" import="main1.mp3"/>
