@@ -47,7 +47,7 @@ class GameState extends CqState {
 		chosenClass = FIGHTER;
 		HxlGraphics.fade.start(false, 0x00000000, 0.25);
 		
-		cursor.setFrame(SpriteCursor.instance.getSpriteIndex("up"));
+		cursor.setFrame(SpriteCursor.instance.getSpriteIndex("diagonal"));
 		cursor.scrollFactor.y = cursor.scrollFactor.x = 0;
 		//loadingBox = new HxlLoadingBox();
 		//add(loadingBox);
@@ -64,7 +64,7 @@ class GameState extends CqState {
 		if ( initialized < 1 ) 
 			return;
 			
-		if ( GameUI.isTargeting ) {
+		if ( GameUI.isTargeting) {
 			gameUI.updateTargeting();
 			setDiagonalCursor();
 		} else {
@@ -103,8 +103,7 @@ class GameState extends CqState {
 		}
 	}
 	
-	private function checkJumpKeys():Void 
-	{
+	private function checkJumpKeys():Void {
 		if (HxlGraphics.keys.justReleased("Q"))
 		{
 			CqRegistery.world.goToNextLevel(this, 0);
@@ -131,8 +130,7 @@ class GameState extends CqState {
 			CqRegistery.world.goToNextLevel(this, 7);
 		}
 	}
-	private function checkPotionKeys():Void 
-	{
+	private function checkPotionKeys():Void {
 		var item = null;
 		if (HxlGraphics.keys.justReleased("ONE"))
 		{
@@ -197,10 +195,12 @@ class GameState extends CqState {
 		classEntry();
 			CqConfiguration.chestsPerLevel = 100;
 	}
-	function classEntry()
-	{
-		if (scroller != null)
+	
+	function classEntry() {
+		if (scroller != null){
 			remove(scroller);
+			scroller = null;
+		}
 			
 		var classBG:Class<Bitmap> = null;
 		switch(chosenClass){
@@ -218,9 +218,12 @@ class GameState extends CqState {
 		scroller.startScroll();
 		scroller.onComplete(realInit);
 	}
+	
 	function realInit() {
-		if (scroller != null)
+		if (scroller != null) {
 			remove(scroller);
+			scroller = null;
+		}
 				
 		started = true;
 		initRegistry();
