@@ -194,21 +194,13 @@ class GameState extends CqState {
 	}
 
 	override function init() {
-		if (Configuration.debug)
-		{
-			realInit();
-		}else{
-			scroller = new CqTextScroller(IntroScreen, 1, "Intro screen");
-			var introText:String = "Hi this is intro text\n a new line \n the end.";
-			scroller.addColumn(100, 400, introText, false, FontAnonymousPro.instance.fontName);
-			add(scroller);
-			scroller.startScroll();
-			scroller.onComplete(classEntry);
-		}
+		classEntry();
 	}
 	function classEntry()
 	{
-		remove(scroller);
+		if (scroller != null)
+			remove(scroller);
+			
 		var classBG:Class<Bitmap> = null;
 		switch(chosenClass){
 			case CqClass.FIGHTER:
@@ -219,14 +211,16 @@ class GameState extends CqState {
 				classBG = SpriteWizardEntry;
 		}
 		scroller = new CqTextScroller(classBG, 1);
-		var introText:String = "You enter the dark dungeon...";
+		var introText:String = "You enter the dark dungeon...\n\nYou feel this text is a placeholder and needs replacement.";
 		scroller.addColumn(100, 400, introText, false, FontAnonymousPro.instance.fontName);
 		add(scroller);
 		scroller.startScroll();
 		scroller.onComplete(realInit);
 	}
 	function realInit() {
-		if(scroller!=null)remove(scroller);
+		if (scroller != null)
+			remove(scroller);
+				
 		started = true;
 		initRegistry();
 		Playtomic.play();
