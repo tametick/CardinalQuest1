@@ -70,7 +70,8 @@ class CqTextScroller extends HxlGroup
 		{
 			//end this
 			HxlGraphics.stage.removeEventListener(MouseEvent.CLICK, onClick);
-			if(OnComplete!=null)OnComplete();
+			if (OnComplete != null)
+				OnComplete();
 		}
 		clicks++;
 	}

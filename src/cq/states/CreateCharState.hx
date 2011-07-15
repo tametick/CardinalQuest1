@@ -53,15 +53,14 @@ class CreateCharState extends CqState {
 			self.state = 1;
 		});
 	}
-	
+		
 	function realInit() {
 		if (scroller != null)
 			remove(scroller);
-			
+		
 		var titleText:HxlText = new HxlText(0, 0, 640, "Create Character");
 		titleText.setFormat(null, 72, 0xffffff, "center");
 		add(titleText);
-
 		
 		var btnStart:HxlButton = new HxlButton(Std.int((640 - 90) / 2), 430, 90, 28);
 		var btnStartBg:HxlSprite = new HxlSprite(btnStart.x, btnStart.y);
@@ -136,7 +135,14 @@ class CreateCharState extends CqState {
 
 		curClass = FIGHTER;
 	}
-	
+	/*
+	function removeScrollerAndFade() {
+		if (scroller != null) {
+			remove(scroller);
+			scroller = null;
+			HxlGraphics.fade.start( false, 0xff000000, fadeTime, realInit, true );
+		}
+	}*/
 	
 	override function init() {
 		scroller = new CqTextScroller(IntroScreen, 1, "Intro screen");
@@ -144,6 +150,7 @@ class CreateCharState extends CqState {
 		scroller.addColumn(100, 400, introText, false, FontAnonymousPro.instance.fontName);
 		add(scroller);
 		scroller.startScroll();
+		//scroller.onComplete(removeScrollerAndFade);
 		scroller.onComplete(realInit);
 	}
 
