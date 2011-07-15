@@ -1109,14 +1109,14 @@ class CqInventoryItem extends HxlSprite {
 					CqRegistery.player.equipItem(this.item);
 					//trace("move up");
 				}
-				trace("move new to others place");
+				//trace("move new to others place");
 				setEquipmentCell(dragStopCell.cellIndex);
 				
 			case CqInventoryCell:
 				// Moving this item into an inventory cell
 				setInventoryCell(dragStopCell.cellIndex);
 			default:
-				trace("unknown cell class");
+				//trace("unknown cell class");
 		}
 		cellIndex = dragStopCell.cellIndex;
 	}

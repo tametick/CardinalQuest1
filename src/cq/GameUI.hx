@@ -590,7 +590,7 @@ class GameUI extends HxlDialog {
 	public static function showEffectText(actor:CqActor, text:String, color:Int) {
 		var fltxt:CqFloatText = new CqFloatText(actor.x + (actor.width / 2), actor.y - 16, text, color, 24, false);
 		effectQueue.push(fltxt);
-		if (effectQueue.length == 1)
+		if (effectQueue.length == 1 || effectQueue.length >3)
 			startEffectText(fltxt);
 	}
 	public static function showTextNotification(message:String, ?color:Int = 0xDE913A) {
