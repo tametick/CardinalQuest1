@@ -196,6 +196,7 @@ class GameState extends CqState {
 	override function init() {
 		if (Configuration.debug)
 		{
+			CqConfiguration.chestsPerLevel = 100;
 			realInit();
 		}else{
 			scroller = new CqTextScroller(IntroScreen, 1, "Intro screen");

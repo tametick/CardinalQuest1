@@ -711,7 +711,6 @@ class CqPlayer extends CqActor, implements Player {
 			vitality = 500;
 			attack = 500;
 			CqConfiguration.playerLives = 9;
-			CqConfiguration.chestsPerLevel = 100;
 		}
 		super(X, Y);
 
