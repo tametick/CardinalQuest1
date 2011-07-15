@@ -118,13 +118,14 @@ class GameUI extends HxlDialog {
 		leftButtons.scrollFactor.x = leftButtons.scrollFactor.y = 0;
 		add(leftButtons);
 
-		dlgSpellGrid = new CqSpellGrid(HxlGraphics.width-84, 30, 84, 380);
+		dlgSpellGrid = new CqSpellGrid(HxlGraphics.width - 84, 30, 84, 380);
 		add(dlgSpellGrid);
 
-		dlgPotionGrid = new CqPotionGrid(130, HxlGraphics.height-84, 380, 84);
+		dlgPotionGrid = new CqPotionGrid(130, HxlGraphics.height - 84, 380, 84);
 		add(dlgPotionGrid);
 
 		notifications = new CqTextNotification(300, 0);
+		notifications.zIndex = 3;
 		add(notifications);
 		/**
 		 * View state panels
