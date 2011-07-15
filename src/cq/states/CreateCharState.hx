@@ -3,6 +3,7 @@ package cq.states;
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;
 import cq.CqGraphicKey;
+import cq.ui.CqTextScroller;
 import haxel.GraphicCache;
 
 import cq.CqActor;
@@ -38,18 +39,28 @@ class CreateCharState extends CqState {
 	var selectBox:HxlSprite;
 	var curClass:CqClass;
 
+	private var scroller:CqTextScroller;
+	
 	public override function create() {
 		super.create();
 		
 		CqMobFactory.initDescriptions();
-
 		fadeTime = 0.5;
 		state = 0;
 
+		var self = this;
+		HxlGraphics.fade.start(false, 0xff000000, fadeTime, function() {
+			self.state = 1;
+		});
+	}
+		
+	function realInit() {
+		if (scroller != null)
+			remove(scroller);
+		
 		var titleText:HxlText = new HxlText(0, 0, 640, "Create Character");
 		titleText.setFormat(null, 72, 0xffffff, "center");
 		add(titleText);
-
 		
 		var btnStart:HxlButton = new HxlButton(Std.int((640 - 90) / 2), 430, 90, 28);
 		var btnStartBg:HxlSprite = new HxlSprite(btnStart.x, btnStart.y);
@@ -67,7 +78,6 @@ class CreateCharState extends CqState {
 		});
 
 		var playerSprites = SpritePlayer.instance;
-		var self = this;
 
 		var sprFighter = new HxlSprite(0, 0);
 		sprFighter.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 4.0, 4.0);
@@ -124,10 +134,24 @@ class CreateCharState extends CqState {
 		txtDesc.text = Resources.descriptions.get("Fighter");
 
 		curClass = FIGHTER;
-
-		HxlGraphics.fade.start(false, 0xff000000, fadeTime, function() {
-			self.state = 1;
-		});
+	}
+	/*
+	function removeScrollerAndFade() {
+		if (scroller != null) {
+			remove(scroller);
+			scroller = null;
+			HxlGraphics.fade.start( false, 0xff000000, fadeTime, realInit, true );
+		}
+	}*/
+	
+	override function init() {
+		scroller = new CqTextScroller(IntroScreen, 1, "Intro screen");
+		var introText:String = "This is intro text\n a new line \n the end.";
+		scroller.addColumn(100, 400, introText, false, FontAnonymousPro.instance.fontName);
+		add(scroller);
+		scroller.startScroll();
+		//scroller.onComplete(removeScrollerAndFade);
+		scroller.onComplete(realInit);
 	}
 
 	function changeSelection(Target:CqClass) {
