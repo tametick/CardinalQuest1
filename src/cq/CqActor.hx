@@ -685,11 +685,11 @@ class CqPlayer extends CqActor, implements Player {
 		playerClass = PlayerClass;
 		switch(playerClass) {
 			case FIGHTER:
-				attack = 500;
+				attack = 5;
 				defense = 2;
 				speed = 3;
 				spirit = 1;
-				vitality = 500;
+				vitality = 5;
 				damage = new Range(1, 1);
 			case WIZARD:
 				attack = 2;
@@ -706,7 +706,13 @@ class CqPlayer extends CqActor, implements Player {
 				vitality = 2;
 				damage = new Range(1, 1);
 		}
-		
+		if (Configuration.debug)
+		{
+			vitality = 500;
+			attack = 500;
+			CqConfiguration.playerLives = 9;
+			CqConfiguration.chestsPerLevel = 100;
+		}
 		super(X, Y);
 
 		lives = CqConfiguration.playerLives;
