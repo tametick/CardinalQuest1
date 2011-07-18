@@ -6,6 +6,7 @@ import cq.CqSpell;
 import cq.CqActor;
 import haxel.HxlSprite;
 import world.Decoration;
+import cq.effects.CqEffectSpell;
 
 import generators.BSP;
 import world.World;

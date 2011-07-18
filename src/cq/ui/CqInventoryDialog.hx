@@ -1,12 +1,12 @@
-package cq;
+package cq.ui;
 
 import cq.CqActor;
 import cq.CqItem;
-import cq.CqItemInfoDialog;
-import cq.CqPotionButton;
+import cq.ui.CqItemInfoDialog;
+import cq.ui.CqPotionButton;
 import cq.CqResources;
 import cq.CqSpell;
-import cq.CqSpellButton;
+import cq.ui.CqSpellButton;
 import cq.ui.CqPopup;
 import data.Resources;
 import flash.filters.GlowFilter;
@@ -218,7 +218,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 									GameUI.showTextNotification("I can drop the old one now.",0xBFE137);
 									remove(old);
 									old.destroy();
-									return false;
+									//return false;
 								}else
 								{
 									//trace("old is not pln, so add");
@@ -238,12 +238,11 @@ class CqInventoryDialog extends HxlSlidingDialog {
 									uiItem.destroy();
 									return false;
 								}else if (!old.item.isMagical && !old.item.isSuperb && !old.item.isWondrous){
-										//trace("old is plain, so destroy");
+										//trace("new is magic, old is plain");
 										CqRegistery.player.giveMoney( old.item.getMonetaryValue() );
-										GameUI.showTextNotification("I can drop the old one now.",0xBFE137);
+										GameUI.showTextNotification("I can drop the old one now.",0x3967DF);
 										remove(old);
 										old.destroy();
-										return false;
 								}else
 								{
 									//trace("old is not pln, so add");

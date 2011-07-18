@@ -1,4 +1,4 @@
-package cq;
+package cq.effects;
 
 import flash.display.BitmapData;
 
@@ -10,13 +10,13 @@ import haxel.HxlUtil;
 
 import cq.CqGraphicKey;
 
-class CqEffectChest extends HxlEmitter {
+class CqEffectSpell extends HxlEmitter {
 
 	public function new(?X:Float=0, ?Y:Float=0) {
 		super(X, Y);
-		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.ChestEffectParticle)) {
-			var bmp:BitmapData = HxlGradient.RectData(12, 12, [0xe1e1e1, 0x5e5e5e], [0.7, 0.55], Math.PI/2, 12.0);
-			GraphicCache.addBitmapData(bmp, CqGraphicKey.ChestEffectParticle);
+		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.SpellEffectParticle)) {
+			var bmp:BitmapData = HxlGradient.RectData(12, 12, [0xF0F1D1, 0x999122], [0.7, 0.55], Math.PI/2, 12.0);
+			GraphicCache.addBitmapData(bmp, CqGraphicKey.SpellEffectParticle);
 		}
 		setAlphaVelocity(-5, -2);
 		gravity = 0.0;
@@ -36,7 +36,7 @@ class CqEffectChest extends HxlEmitter {
 		var sh:Float;
 		if (Multiple) {
 			s = new HxlSprite(0,0);
-			s.loadCachedGraphic(CqGraphicKey.ChestEffectParticle);
+			s.loadCachedGraphic(CqGraphicKey.SpellEffectParticle);
 			tf = Math.floor(s.width/s.height);
 		}
 		for (i in 0...Quantity) {
@@ -45,19 +45,19 @@ class CqEffectChest extends HxlEmitter {
 				r = Math.floor(HxlUtil.random()*tf);
 				if (BakedRotations > 0) {
 					//s.loadRotatedGraphic(Graphics,BakedRotations,r);
-					s.loadCachedGraphic(CqGraphicKey.ChestEffectParticle);		
+					s.loadCachedGraphic(CqGraphicKey.SpellEffectParticle);		
 				} else {
 					//s.loadGraphic(Graphics,true);
-					s.loadCachedGraphic(CqGraphicKey.ChestEffectParticle);
+					s.loadCachedGraphic(CqGraphicKey.SpellEffectParticle);
 					s.frame = r;
 				}
 			} else {
 				if (BakedRotations > 0) {
 					//s.loadRotatedGraphic(Graphics,BakedRotations);
-					s.loadCachedGraphic(CqGraphicKey.ChestEffectParticle);
+					s.loadCachedGraphic(CqGraphicKey.SpellEffectParticle);
 				} else {
 					//s.loadGraphic(Graphics);
-					s.loadCachedGraphic(CqGraphicKey.ChestEffectParticle);
+					s.loadCachedGraphic(CqGraphicKey.SpellEffectParticle);
 				}
 			}
 			if (Collide > 0) {

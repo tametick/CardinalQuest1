@@ -1,7 +1,7 @@
-package cq;
+package cq.ui;
 
 import cq.GameUI;
-import cq.CqInventoryDialog;
+import cq.ui.CqInventoryDialog;
 import cq.CqItem;
 import cq.CqResources;
 import cq.CqSpell;

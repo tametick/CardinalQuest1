@@ -27,7 +27,8 @@ import cq.CqItem;
 import cq.CqSpell;
 import cq.CqWorld;
 import cq.GameUI;
-import cq.CqVitalBar;
+import cq.ui.CqVitalBar;
+import cq.effects.CqEffectSpell;
 
 import playtomic.PtPlayer;
 

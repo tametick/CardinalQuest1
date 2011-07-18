@@ -2,7 +2,7 @@ package world;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import cq.CqActor;
-import cq.CqDecoration;
+import cq.ui.CqDecoration;
 import cq.CqRegistery;
 import cq.states.GameState;
 import data.Resources;
@@ -401,8 +401,10 @@ class Level extends HxlTilemap
 			if ( player.tilePos.y < heightInTiles ) {
 					targetTile.y = 1;
 			}
-		} 
-		
+		} else if ( HxlGraphics.keys.ENTER )
+		{
+			return targetTile;
+		}
 		if (targetTile.x == 0 && targetTile.y == 0)
 			return null;
 		return targetTile;

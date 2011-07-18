@@ -1,4 +1,4 @@
-package cq;
+package cq.ui;
 
 import haxel.HxlUtil;
 import world.Decoration;
