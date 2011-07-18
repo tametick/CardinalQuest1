@@ -2,6 +2,8 @@ package cq.ui;
 import com.eclecticdesignstudio.motion.easing.Cubic;
 import com.eclecticdesignstudio.motion.easing.Linear;
 import flash.display.Bitmap;
+import flash.events.Event;
+import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import haxel.HxlGraphics;
 import haxel.HxlGroup;
@@ -56,10 +58,11 @@ class CqTextScroller extends HxlGroup
 			add(titleTxt);
 		}
 		Actuate.timer(MinimumDuration).onComplete(afterMinimum);
-		HxlGraphics.stage.addEventListener(MouseEvent.CLICK, onClick);
+		HxlGraphics.stage.addEventListener(MouseEvent.CLICK, onAction);
+		HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_DOWN, onAction);
 	}
 	private function afterMinimum() { respondInput = true; } 
-	private function onClick(e:MouseEvent):Void 
+	private function onAction(e:Event):Void 
 	{
 		if (!respondInput)
 			return;
@@ -69,7 +72,8 @@ class CqTextScroller extends HxlGroup
 		}else
 		{
 			//end this
-			HxlGraphics.stage.removeEventListener(MouseEvent.CLICK, onClick);
+			HxlGraphics.stage.removeEventListener(MouseEvent.CLICK, onAction);
+			HxlGraphics.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onAction);
 			if (OnComplete != null)
 				OnComplete();
 		}
