@@ -629,13 +629,13 @@ class CqInventoryCell extends HxlDialog {
 			initDropCell();
 	}
 	function initDropCell()	{
-		var icon = SpriteEquipmentIcons.getIcon("destory", 16, 2.0);
+		var icon = SpriteEquipmentIcons.getIcon("destroy", 16, 2.0);
 		icon.setAlpha(0.3);
 		add(icon);
 		icon.x += 13;
 		icon.y += 3;
 			
-		var droptext:HxlText = new HxlText(-5, 35, Std.int(width), "Destory");
+		var droptext:HxlText = new HxlText(-5, 35, Std.int(width), "Destroy");
 		droptext.setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101);
 		droptext.zIndex = 10;
 		droptext.setAlpha(0.3);
