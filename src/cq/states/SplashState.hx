@@ -38,7 +38,7 @@ class SplashState extends CqState {
 			
 			if (!StringTools.startsWith(Capabilities.os, "Mac")) {
 				// for windows
-				Lib.fscommand("trapallkeys", "true");
+				//Lib.fscommand("trapallkeys", "true");
 				Lib.current.stage.showDefaultContextMenu = false;
 			}
 		}
