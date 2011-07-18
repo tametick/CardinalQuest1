@@ -2,10 +2,11 @@ package cq.states;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import cq.CqConfiguration;
-import cq.CqPotionButton;
+import cq.ui.CqPotionButton;
 import cq.CqRegistery;
-import cq.CqSpellButton;
+import cq.ui.CqSpellButton;
 import cq.GameUI;
+import cq.ui.CqMapDialog;
 import cq.ui.CqTextScroller;
 import flash.display.Bitmap;
 import haxel.HxlPoint;
@@ -68,8 +69,9 @@ class GameState extends CqState {
 			gameUI.updateTargeting();
 			setDiagonalCursor();
 		} else {
+			actKeys();
 			if (isPlayerActing) {
-				if (GameUI.currentPanel == null || !GameUI.currentPanel.isBlockingInput ) {
+				if (GameUI.currentPanel == null || !GameUI.currentPanel.isBlockingInput) {
 					act();
 				}
 			}
@@ -103,6 +105,11 @@ class GameState extends CqState {
 		}
 	}
 	
+	private function actKeys():Void 
+	{
+		act(true);
+	}
+	
 	private function checkJumpKeys():Void {
 		if (HxlGraphics.keys.justReleased("Q"))
 		{
@@ -125,26 +132,27 @@ class GameState extends CqState {
 		}else if (HxlGraphics.keys.justReleased("U"))
 		{
 			CqRegistery.world.goToNextLevel(this, 6);
-		}else if (HxlGraphics.keys.justReleased("I"))
+		}else if (HxlGraphics.keys.justReleased("A"))
 		{
 			CqRegistery.world.goToNextLevel(this, 7);
 		}
 	}
-	private function checkPotionKeys():Void {
+	private function checkGameKeys():Void {
 		var item = null;
-		if (HxlGraphics.keys.justReleased("ONE"))
+		//potions
+		if (HxlGraphics.keys.justReleased("SIX"))
 		{
 			item = gameUI.dlgPotionGrid.cells[0];
-		}else if (HxlGraphics.keys.justReleased("TWO"))
+		}else if (HxlGraphics.keys.justReleased("SEVEN"))
 		{
 			item = gameUI.dlgPotionGrid.cells[1];
-		}else if (HxlGraphics.keys.justReleased("THREE"))
+		}else if (HxlGraphics.keys.justReleased("EIGHT"))
 		{
 			item = gameUI.dlgPotionGrid.cells[2];
-		}else if (HxlGraphics.keys.justReleased("FOUR"))
+		}else if (HxlGraphics.keys.justReleased("NINE"))
 		{
 			item = gameUI.dlgPotionGrid.cells[3];
-		}else if (HxlGraphics.keys.justReleased("FIVE"))
+		}else if (HxlGraphics.keys.justReleased("ZERO"))
 		{
 			item = gameUI.dlgPotionGrid.cells[4];
 		}
@@ -154,25 +162,36 @@ class GameState extends CqState {
 		}
 		item = null;
 		//spells
-		if (HxlGraphics.keys.justReleased("SIX"))
+		if (HxlGraphics.keys.justReleased("ONE"))
 		{
 			item = gameUI.dlgSpellGrid.cells[0];
-		}else if (HxlGraphics.keys.justReleased("SEVEN"))
+		}else if (HxlGraphics.keys.justReleased("TWO"))
 		{
 			item = gameUI.dlgSpellGrid.cells[1];
-		}else if (HxlGraphics.keys.justReleased("EIGHT"))
+		}else if (HxlGraphics.keys.justReleased("THREE"))
 		{
 			item = gameUI.dlgSpellGrid.cells[2];
-		}else if (HxlGraphics.keys.justReleased("NINE"))
+		}else if (HxlGraphics.keys.justReleased("FOUR"))
 		{
 			item = gameUI.dlgSpellGrid.cells[3];
-		}else if (HxlGraphics.keys.justReleased("ZERO"))
+		}else if (HxlGraphics.keys.justReleased("FIVE"))
 		{
 			item = gameUI.dlgSpellGrid.cells[4];
 		}
 		if (item != null)
 		{
 			cast(item, CqSpellCell).btn.useSpell();
+		}
+		//open ui
+		if (HxlGraphics.keys.justReleased("M"))
+		{
+			gameUI.showMapDlg();
+		}else if (HxlGraphics.keys.justReleased("I"))
+		{
+			gameUI.showInvDlg();
+		}else if (HxlGraphics.keys.justReleased("C"))
+		{
+			gameUI.showCharDlg();
 		}
 	}
 	function passTurn() {
@@ -306,7 +325,7 @@ class GameState extends CqState {
 		if (Configuration.debug)
 			checkJumpKeys();
 			
-		checkPotionKeys();
+		checkGameKeys();
 	}
 
 	override function onMouseDown(event:MouseEvent) {
@@ -325,7 +344,7 @@ class GameState extends CqState {
 	
 	var tmpPoint:HxlPoint;
 	private var scroller:CqTextScroller;
-	private function act() {
+	private function act(?byKey:Bool = false) {
 		if ( GameUI.isTargeting ) {
 			return;
 		}
@@ -333,20 +352,49 @@ class GameState extends CqState {
 		var level = Registery.level;
 		if (Registery.player.isMoving)
 			return;
+			
+		var target:HxlPoint;
+		var dx;
+		var dy;
+		var tile:CqTile;
+		if (byKey)
+		{
+			dx =  (Registery.player.x + Configuration.zoomedTileSize()/2);
+			dy =  (Registery.player.y + Configuration.zoomedTileSize() / 2);
+			var acts:Bool = false;
+			if (HxlGraphics.keys.pressed("UP"))
+			{
+				acts = true;
+			}else if (HxlGraphics.keys.pressed("DOWN"))
+			{
+				acts = true;
+			}else if (HxlGraphics.keys.pressed("LEFT"))
+			{
+				acts = true;
+			}else if (HxlGraphics.keys.pressed("RIGHT"))
+			{
+				acts = true;
+			}else if (HxlGraphics.keys.justPressed("ENTER"))
+			{
+				acts = true;
+			}
+			if (!acts) return;
+			target = level.getTargetAccordingToKeyPress();
+		}else {
+			dx = HxlGraphics.mouse.x - (Registery.player.x+Configuration.zoomedTileSize()/2);
+			dy = HxlGraphics.mouse.y - (Registery.player.y + Configuration.zoomedTileSize() / 2);
+			target = level.getTargetAccordingToMousePosition(dx, dy);
+		}
 		
-		var dx = HxlGraphics.mouse.x - (Registery.player.x+Configuration.zoomedTileSize()/2);
-		var dy = HxlGraphics.mouse.y - (Registery.player.y+Configuration.zoomedTileSize()/2);
-		var target:HxlPoint = level.getTargetAccordingToMousePosition(dx, dy);
 		var tile = getPlayerTile(target);
 		
-		if (Math.abs(dx) < Configuration.zoomedTileSize() && Math.abs(dy) < Configuration.zoomedTileSize() ) {
+		if (Math.abs(dx) < Configuration.zoomedTileSize() && Math.abs(dy) < Configuration.zoomedTileSize() || HxlGraphics.keys.justPressed("ENTER") ) {
 			if (tmpPoint == null)
 				tmpPoint = new HxlPoint(0, 0);
 			else {
 				tmpPoint.x = 0;
 				tmpPoint.y = 0;
 			}
-				
 			tile = getPlayerTile(tmpPoint);
 			 if (tile.loots.length > 0) {
 				 // pickup item

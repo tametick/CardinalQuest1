@@ -1,4 +1,4 @@
-package cq;
+package cq.ui;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;

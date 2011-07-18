@@ -1,7 +1,7 @@
 package cq.ui;
 import cq.CqResources;
 import haxel.HxlGroup;
-import cq.CqFloatText;
+import cq.ui.CqFloatText;
 import haxel.HxlPoint;
 
 /**

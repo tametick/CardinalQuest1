@@ -1,4 +1,4 @@
-package cq;
+package cq.effects;
 
 import flash.display.Bitmap;
 import flash.display.BitmapData;

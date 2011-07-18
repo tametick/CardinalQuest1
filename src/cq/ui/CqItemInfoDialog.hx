@@ -1,4 +1,4 @@
-package cq;
+package cq.ui;
 
 import cq.CqItem;
 import cq.CqResources;

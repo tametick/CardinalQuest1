@@ -1,18 +1,21 @@
 package cq;
 
 import cq.CqActor;
-import cq.CqEffectChest;
-import cq.CqEffectInjure;
-import cq.CqFloatText;
-import cq.CqInventoryDialog;
+import cq.effects.CqEffectChest;
+import cq.effects.CqEffectInjure;
+import cq.ui.CqFloatText;
+import cq.ui.CqInventoryDialog;
 import cq.CqItem;
-import cq.CqPotionButton;
+import cq.ui.CqPotionButton;
 import cq.CqSpell;
-import cq.CqSpellButton;
+import cq.ui.CqSpellButton;
 import cq.CqWorld;
-import cq.CqVitalBar;
+import cq.ui.CqVitalBar;
 import cq.CqResources;
 import cq.CqGraphicKey;
+import cq.ui.CqCharacterDialog;
+import cq.ui.CqMapDialog;
+import cq.ui.CqMessageDialog;
 import cq.ui.CqTextNotification;
 import haxel.HxlGroup;
 import haxel.HxlUtil;
@@ -211,9 +214,7 @@ class GameUI extends HxlDialog {
 		btnMapView = new HxlButton(0, 0, btnSize, btnSize);
 		btnMapView.loadGraphic(mapBtn,mapBtnHigh);
 		btnMapView.loadText(new HxlText(0, 40, btnSize, "Map", true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
-		btnMapView.setCallback(function() {
-			self.showPanel(self.panelMap, self.btnMapView);
-		});
+		btnMapView.setCallback(showMapDlg);
 		btnMapView.configEvent(5, true, true);
 		leftButtons.addButton(btnMapView);
 
@@ -221,9 +222,7 @@ class GameUI extends HxlDialog {
 		btnInventoryView = new HxlButton(0, 0, btnSize, btnSize);
 		btnInventoryView.loadGraphic(invBtn,invBtnHigh);
 		btnInventoryView.loadText(new HxlText(0, 40, btnSize, "Inv", true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
-		btnInventoryView.setCallback(function() {
-			self.showPanel(self.panelInventory, self.btnInventoryView);
-		});
+		btnInventoryView.setCallback(showInvDlg);
 		btnInventoryView.configEvent(5, true, true);
 		leftButtons.addButton(btnInventoryView);
 
@@ -231,9 +230,7 @@ class GameUI extends HxlDialog {
 		btnCharacterView = new HxlButton(0, 0, btnSize, btnSize);
 		btnCharacterView.loadGraphic(charBtn,charBtnHigh);
 		btnCharacterView.loadText(new HxlText(0, 40, btnSize, "Char", true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
-		btnCharacterView.setCallback(function() {
-			self.showPanel(self.panelCharacter, self.btnCharacterView);
-		});
+		btnCharacterView.setCallback(showCharDlg);
 		btnCharacterView.configEvent(5, true, true);
 		leftButtons.addButton(btnCharacterView);
 
@@ -246,6 +243,18 @@ class GameUI extends HxlDialog {
 		remove(dlgPotionGrid);
 		remove(dlgSpellGrid);
 		super.destroy();
+	}
+	public function showMapDlg()
+	{
+		showPanel(panelMap, btnMapView);
+	}
+	public function showInvDlg()
+	{
+		showPanel(panelInventory, btnInventoryView);
+	}
+	public function showCharDlg()
+	{
+		showPanel(panelCharacter, btnCharacterView);
 	}
 	override public function overlapsPoint(X:Float, Y:Float, ?PerPixel:Bool = false):Bool {
 		return leftButtons.overlapsPoint(X, Y) ||
