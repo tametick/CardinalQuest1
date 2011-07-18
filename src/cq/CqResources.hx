@@ -200,7 +200,8 @@ class SpritePlayer extends HxlSpriteSheet {
 			["berserk_fighter_long_sword", "fighter_long_sword", "wizard_long_sword","thief_long_sword","cloaked_thief_long_sword"],
 			["berserk_fighter_short_sword", "fighter_short_sword", "wizard_short_sword","thief_short_sword","cloaked_thief_short_sword"],
 			["berserk_fighter_staff", "fighter_staff", "wizard_staff","thief_staff","cloaked_thief_staff"],
-			["berserk_fighter_dagger", "fighter_dagger", "wizard_dagger","thief_dagger","cloaked_thief_dagger"]
+			["berserk_fighter_dagger", "fighter_dagger", "wizard_dagger", "thief_dagger", "cloaked_thief_dagger"],
+			["berserk_fighter_axe", "fighter_axe", "wizard_axe","thief_axe","cloaked_thief_axe"],
 		];
 	public function new() { 
 		spriteNames = SpritePlayer.spriteNames;
