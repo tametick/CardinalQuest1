@@ -73,7 +73,7 @@ class CqLootFactory {
 			Resources.descriptions.set("Broad Claymore", "An ancient weapon, many bards have sung about glorious victories won with it.");
 			Resources.descriptions.set("Kings Golden Helm", "Made of pure gold, gives you unbreachable head protection, and irresistible looks.");
 			Resources.descriptions.set("Beastly Mace", "A mighty huge and spiky mace, made for fast swinging and powerful rips.");
-			Resources.descriptions.set("Twin Bladed Katana", "An Ancient weapon, crafted by masters of the craft, from the far east.");
+			Resources.descriptions.set("Twin Bladed Katana", "An elegant weapon for a more civilized age. Crafted by a master blacksmith from the distant orient.");
 			Resources.descriptions.set("Full Helmet of Vitality", "Originally worn by dark priests, this helmet helps you tap into energies of the full moon.");
 			Resources.descriptions.set("Full Plate Armor", "A classic well tested model of armor, highly praised by knights from around the globe.");
 			Resources.descriptions.set("Rogues' Cloak of Swiftness", "Made from enchanted cloth, both light and durable. Wearing this feel like touching the sky.");
@@ -102,7 +102,7 @@ class CqLootFactory {
 				item.equipSlot = CqEquipSlot.HAT;
 			case GLOVE, BRACELET, GAUNTLET:
 				item.equipSlot = CqEquipSlot.GLOVES;
-			case STAFF, DAGGER, SHORT_SWORD, LONG_SWORD, AXE, BATTLE_AXE, CLAYMORE, MACE, SPIKE_SWORD:
+			case STAFF, DAGGER, SHORT_SWORD, LONG_SWORD, AXE, BATTLE_AXE, CLAYMORE, MACE, BROAD_SWORD:
 				item.equipSlot = CqEquipSlot.WEAPON;
 			case GREEN_POTION, PURPLE_POTION, BLUE_POTION, YELLOW_POTION, RED_POTION:
 				item.equipSlot = CqEquipSlot.POTION;
@@ -234,7 +234,7 @@ class CqLootFactory {
 				item.name = "Broad Claymore";
 				item.damage = new Range(6, 10);
 				item.buffs.set("speed", -1);
-			case SPIKE_SWORD:
+			case BROAD_SWORD:
 				item.name ="Twin Bladed Katana";
 				item.damage = new Range(5, 12);
 				item.buffs.set("defense", -2);
@@ -598,7 +598,7 @@ enum CqItemType {
 	FULL_PLATE_MAIL;
 	CLAYMORE;
 	TUNDRA_BOOTS;
-	SPIKE_SWORD;
+	BROAD_SWORD;
 	GOLDEN_HELM;
 	GEMMED_RING;
 }

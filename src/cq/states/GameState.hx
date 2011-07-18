@@ -257,7 +257,7 @@ class GameState extends CqState {
 
 		switch(chosenClass) {
 			case FIGHTER:
-				player.give(CqItemType.SHORT_SWORD);
+				player.give(CqItemType.BROAD_SWORD);
 				player.give(CqItemType.RED_POTION);
 				player.give(CqItemType.RED_POTION);
 				player.give(CqItemType.PURPLE_POTION);

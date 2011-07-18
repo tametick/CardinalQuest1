@@ -727,6 +727,7 @@ class CqPlayer extends CqActor, implements Player {
 		addAnimation("idle_short_sword", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase() + "_short_sword")], 0 );
 		addAnimation("idle_long_sword", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase() + "_long_sword")], 0 );
 		addAnimation("idle_staff", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase() + "_staff")], 0 );
+		addAnimation("idle_axe", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase() + "_axe")], 0 );
 		
 		xp = 0;
 		level = 1;
@@ -752,10 +753,23 @@ class CqPlayer extends CqActor, implements Player {
 	}
 
 	override function updateSprite() { 
-		if (equippedWeapon == null)
+		
+		
+		if (equippedWeapon == null){
 			play("idle");
-		else
-			play("idle_"+equippedWeapon.spriteIndex);
+		} else {
+			var weaponName = equippedWeapon.spriteIndex;
+			
+			// for some weapons we don't have their own player-sprites
+			switch (equippedWeapon.spriteIndex) {
+				case "battle_axe", "mace":
+					weaponName = "axe";
+				case "claymore","broad_sword":
+					weaponName = "long_sword";
+			}
+			
+			play("idle_" + weaponName);
+		}
 	}
 	
 	//give item via script/etc
