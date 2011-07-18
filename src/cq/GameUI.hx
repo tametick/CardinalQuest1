@@ -56,6 +56,8 @@ class GameUI extends HxlDialog {
 	var leftButtons:HxlButtonContainer;
 	public var dlgSpellGrid:CqSpellGrid;
 	public var dlgPotionGrid:CqPotionGrid;
+
+	public var doodads:HxlDialog;//spell charges,popups
 	// Notification area
 	public static var notifications:CqTextNotification;
 	// View state panels
@@ -105,6 +107,10 @@ class GameUI extends HxlDialog {
 		GameUI.instance = this;
 		var self = this;
 
+		doodads = new HxlDialog();
+		doodads.zIndex = 50;
+		doodads.scrollFactor.x = 0;
+		doodads.scrollFactor.y = 0;
 		/**
 		 * Create and cache graphics for use by UI widgets
 		 **/
@@ -114,7 +120,6 @@ class GameUI extends HxlDialog {
 		 * Create and init main containers
 		 **/
 		leftButtons = new HxlButtonContainer(0, 30, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
-		//leftButtons.setBackgroundColor(0x99555555, 10);
 		leftButtons.scrollFactor.x = leftButtons.scrollFactor.y = 0;
 		add(leftButtons);
 
@@ -234,6 +239,8 @@ class GameUI extends HxlDialog {
 
 		panelInventory.dlgSpellGrid = dlgSpellGrid;
 		panelInventory.dlgPotionGrid = dlgPotionGrid;
+		
+		add(doodads);
 	}
 	override public function destroy() {
 		remove(dlgPotionGrid);

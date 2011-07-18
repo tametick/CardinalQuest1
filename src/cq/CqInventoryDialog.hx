@@ -117,10 +117,9 @@ class CqInventoryDialog extends HxlSlidingDialog {
 			uiItem.setIcon(itemSprite.getFramePixels());
 		}
 		//popup
-		uiItem.setPopup(new CqPopup(100,Item.name,gameui));
-		gameui.add(uiItem.popup);
-		uiItem.popup.zIndex = gameui.dlgSpellGrid.zIndex + 50;
-		gameui.sortMembersByZIndex();
+		uiItem.setPopup(new CqPopup(100,Item.name,gameui.doodads));
+		gameui.doodads.add(uiItem.popup);
+		uiItem.popup.zIndex = 15;
 		//make magical items glow
 		if (Item.isSuperb && !Item.isMagical && !Item.isWondrous)
 		{
