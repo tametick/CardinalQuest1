@@ -124,7 +124,7 @@ class SpriteEquipmentIcons extends HxlSpriteSheet {
 	public static var instance = new SpriteEquipmentIcons();
 	public function new() {
 		spriteNames = [
-			["grey_destory", "jewelry", "hat", "destory"],
+			["grey_destroy", "jewelry", "hat", "destroy"],
 			["shoes", "armor", "gloves", "weapon"],
 		];
 		super(0);
