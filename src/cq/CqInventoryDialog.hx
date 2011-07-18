@@ -9,6 +9,7 @@ import cq.CqSpell;
 import cq.CqSpellButton;
 import cq.ui.CqPopup;
 import data.Resources;
+import flash.filters.GlowFilter;
 import haxel.GraphicCache;
 
 import data.Configuration;
@@ -116,9 +117,28 @@ class CqInventoryDialog extends HxlSlidingDialog {
 			uiItem.setIcon(itemSprite.getFramePixels());
 		}
 		//popup
-		uiItem.setPopup(new CqPopup(100,Item.name,gameui ));
+		uiItem.setPopup(new CqPopup(100,Item.name,gameui));
 		gameui.add(uiItem.popup);
-		uiItem.popup.zIndex = 1000;
+		uiItem.popup.zIndex = gameui.dlgSpellGrid.zIndex + 50;
+		gameui.sortMembersByZIndex();
+		//make magical items glow
+		if (Item.isSuperb && !Item.isMagical && !Item.isWondrous)
+		{
+			uiItem.customGlow(0x206CDF);
+			uiItem.setGlow(true);
+		}else if (Item.isMagical && !Item.isSuperb)
+		{
+			uiItem.customGlow(0x3CDA25);
+			uiItem.setGlow(true);
+		}else if (Item.isMagical && Item.isSuperb)
+		{
+			uiItem.customGlow(0x1FE0D7);
+			uiItem.setGlow(true);
+		}else if (Item.isWondrous && Item.isSuperb)
+		{
+			uiItem.customGlow(0xE7A918);
+			uiItem.setGlow(true);
+		}
 		return uiItem;
 	}
 	/**
@@ -147,9 +167,9 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		// select picked up item
 		dlgInfo.setItem(Item);
 		//create ui item
+		
 		var uiItem:CqInventoryItem = createUIItem(Item,this);
 		add(uiItem);
-				
 		// If this Item is equippable, and affiliated slot is open, auto equip it
 		if ( Item.equipSlot != null ) {
 			if ( Item.equipSlot == POTION ) {
@@ -748,6 +768,9 @@ class CqInventoryItem extends HxlSprite {
 	var selected:Bool;
 	//var stackText:HxlText;
 	//var stackSize:Int;
+	var isGlowing:Bool;
+	var glowSprite:BitmapData;
+	var glowRect:Rectangle;
 
 	public function new(Dialog:CqInventoryDialog, ?X:Float=0, ?Y:Float=0) {
 		super(X, Y);
@@ -763,6 +786,8 @@ class CqInventoryItem extends HxlSprite {
 		zIndex = idleZIndex;
 		setSelected(false);
 		//stackSize = 1;
+		glowRect = new Rectangle(0, 0, 58, 58);
+		isGlowing = false;
 	}
 
 	public function removeFromDialog() {
@@ -782,7 +807,28 @@ class CqInventoryItem extends HxlSprite {
 			if ( icon != null ) setIcon(icon);
 		}
 	}
-
+	public function customGlow(color:Int)
+	{
+		var tmp:BitmapData = new BitmapData(48, 48, true, 0x0);
+		tmp.copyPixels(getFramePixels(), new Rectangle(0, 0, 48, 48), new Point(0, 0), null, null, true);
+		var glow:GlowFilter = new GlowFilter(color, 0.9, 16.0, 16.0, 1.6, 1, false, false);
+		tmp.applyFilter(tmp, glowRect, new Point(0, 0), glow);
+		glowSprite = tmp;
+		glow = null;
+	}
+	public function setGlow(Toggle:Bool) {
+		isGlowing = Toggle;
+		if (isGlowing)
+			renderGlow();
+	}
+	
+	function renderGlow() {
+		getScreenXY(_point);
+		_flashPoint.x = _point.x - 8;
+		_flashPoint.y = _point.y - 8;
+		_pixels.copyPixels(glowSprite, glowRect, _flashPoint, null, null, true);
+		setPixels(glowSprite);
+	}
 	public function updateIcon() {
 		setIcon(icon);
 	}
@@ -802,6 +848,8 @@ class CqInventoryItem extends HxlSprite {
 			temp.copyPixels(txt.pixels, new Rectangle(0, 0, txt.width, txt.height), new Point(0, (height-2-txt.height)), null, null, true);
 		}
 		pixels = temp;
+		if (isGlowing)
+			renderGlow();
 	}
 
 	/**

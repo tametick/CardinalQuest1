@@ -229,7 +229,7 @@ class CqActor extends CqObject, implements Actor {
 				SoundEffectsManager.play(Death);
 				if (player.lives >= 1) {
 					player.lives--;
-					player.infoViewLives.setText("x " + player.lives);
+					player.infoViewLives.setText("x" + player.lives);
 					
 					var startingPostion = Registery.level.getPixelPositionOfTile(
 												Registery.level.startingLocation.x,

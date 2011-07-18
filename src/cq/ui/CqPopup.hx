@@ -15,8 +15,8 @@ import haxel.HxlText;
 
 class CqPopup extends HxlText
 {
-	var parent:HxlGroup;
-	public function new(Width:Int,Text:String,Parent:HxlGroup) 
+	var parent:Dynamic;
+	public function new(Width:Int,Text:String,Parent:Dynamic) 
 	{
 		parent = Parent;
 		super(0, 0, Width, Text);

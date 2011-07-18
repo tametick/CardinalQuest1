@@ -60,7 +60,7 @@ class GameUI extends HxlDialog {
 	public static var notifications:CqTextNotification;
 	// View state panels
 	public var panelMap:CqMapDialog;
-	var panelInventory:CqInventoryDialog;
+	public var panelInventory:CqInventoryDialog;
 	var panelCharacter:CqCharacterDialog;
 	var panelLog:CqMessageDialog;
 
@@ -119,6 +119,7 @@ class GameUI extends HxlDialog {
 		add(leftButtons);
 
 		dlgSpellGrid = new CqSpellGrid(HxlGraphics.width - 84, 30, 84, 380);
+		dlgSpellGrid.zIndex = 1;
 		add(dlgSpellGrid);
 
 		dlgPotionGrid = new CqPotionGrid(130, HxlGraphics.height - 84, 380, 84);
