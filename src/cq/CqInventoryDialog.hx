@@ -227,6 +227,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 								}
 							}else if (preference < 1)
 							{	
+								var old:CqInventoryItem = cell.getCellObj();
 								//trace("new is worse");
 								//if new is worse than old, and is plain - destroy it
 								if (!Item.isMagical && !Item.isSuperb && !Item.isWondrous)
@@ -237,6 +238,17 @@ class CqInventoryDialog extends HxlSlidingDialog {
 									remove(uiItem);
 									uiItem.destroy();
 									return false;
+								}else if (!old.item.isMagical && !old.item.isSuperb && !old.item.isWondrous){
+										//trace("old is plain, so destroy");
+										CqRegistery.player.giveMoney( old.item.getMonetaryValue() );
+										GameUI.showTextNotification("I can drop the old one now.",0xBFE137);
+										remove(old);
+										old.destroy();
+										return false;
+								}else
+								{
+									//trace("old is not pln, so add");
+									uiItem = old;
 								}
 							}else
 							{	
@@ -823,6 +835,7 @@ class CqInventoryItem extends HxlSprite {
 	}
 	
 	function renderGlow() {
+		//return;
 		getScreenXY(_point);
 		_flashPoint.x = _point.x - 8;
 		_flashPoint.y = _point.y - 8;
