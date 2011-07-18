@@ -314,7 +314,8 @@ class GameState extends CqState {
 		Registery.player = new CqPlayer(chosenClass);
 	}
 	
-	override function onKeyUp(event:KeyboardEvent) {		
+	override function onKeyUp(event:KeyboardEvent) {	
+		if (!started || endingAnim) return;
 		if ( HxlGraphics.keys.justReleased("ESCAPE") ) {
 			// If user was in targeting mode, cancel it
 			if ( GameUI.isTargeting ) {
@@ -463,12 +464,11 @@ class GameState extends CqState {
 		var tileLocation:HxlPoint = HxlUtil.getRandomTileWithDistance(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), Registery.level.mapData, SpriteTiles.instance.walkableAndSeeThroughTiles,CqRegistery.player.tilePos,20);
 		var pixelLocation = Registery.level.getPixelPositionOfTile(tileLocation.x,tileLocation.y);
 		var boss:CqMob = CqRegistery.level.createAndaddMob(tileLocation, 99, true);
+		boss.visionRadius = 20;
 		CqRegistery.level.updateFieldOfView(HxlGraphics.state,boss);
 		HxlGraphics.follow(boss, 200);
 		//find an empty tile for portal
-		//do {
-			
-		//} while 
-		//boss.actInDirection(this, target);
+		var targetLocation:HxlPoint = HxlUtil.getRandomTileWithDistance(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), Registery.level.mapData, SpriteTiles.instance.walkableAndSeeThroughTiles,tileLocation,1);
+		boss.actInDirection(this, targetLocation);
 	}
 }

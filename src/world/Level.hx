@@ -284,16 +284,16 @@ class Level extends HxlTilemap
 	
 	var dest:HxlPoint;
 	public function updateFieldOfView(state:HxlState,?otherActorHighlight:Actor,?skipTween:Bool = false, ?gradientColoring:Bool = true, ?seenTween:Int = 64, ?inSightTween:Int=255) {
-		var player:Actor = null;
+		var actor:Actor = null;
 		if (otherActorHighlight == null)
-			player = Registery.player;
+			actor = Registery.player;
 		else
-			player = otherActorHighlight;
+			actor = otherActorHighlight;
 		
-		var bottom = Std.int(Math.min(heightInTiles - 1, player.tilePos.y + (player.visionRadius+1)));
-		var top = Std.int(Math.max(0, player.tilePos.y - (player.visionRadius+1)));
-		var right = Std.int(Math.min(widthInTiles - 1, player.tilePos.x + (player.visionRadius+1)));
-		var left = Std.int(Math.max(0, player.tilePos.x - (player.visionRadius+1)));
+		var bottom = Std.int(Math.min(heightInTiles - 1, actor.tilePos.y + (actor.visionRadius+1)));
+		var top = Std.int(Math.max(0, actor.tilePos.y - (actor.visionRadius+1)));
+		var right = Std.int(Math.min(widthInTiles - 1, actor.tilePos.x + (actor.visionRadius+1)));
+		var left = Std.int(Math.max(0, actor.tilePos.x - (actor.visionRadius+1)));
 		var tile:HxlTile;
 		
 		// reset previously seen tiles
@@ -306,13 +306,13 @@ class Level extends HxlTilemap
 			}
 		}
 
-		if ( isBlockingView(Std.int(player.tilePos.x), Std.int(player.tilePos.y)) ) {
-			// if player is on a view blocking tile, only show adjacent tiles
+		if ( isBlockingView(Std.int(actor.tilePos.x), Std.int(actor.tilePos.y)) ) {
+			// if actor is on a view blocking tile, only show adjacent tiles
 			var adjacent = new Array();
 			adjacent = [[ -1, -1], [0, -1], [1, -1], [ -1, 0], [1, 0], [ -1, 1], [0, 1], [1, 1]];
 			for ( i in adjacent ) {
-				var xx = Std.int(player.tilePos.x + i[0]);
-				var yy = Std.int(player.tilePos.y + i[1]);
+				var xx = Std.int(actor.tilePos.x + i[0]);
+				var yy = Std.int(actor.tilePos.y + i[1]);
 				if (yy < heightInTiles && xx < widthInTiles && yy >= 0 && xx >= 0) {
 					cast(getTile(xx, yy), Tile).visibility = Visibility.IN_SIGHT;
 				}
@@ -320,7 +320,7 @@ class Level extends HxlTilemap
 		} else {
 			var map:Level = this;
 			
-			HxlUtil.markFieldOfView(player.tilePos, player.visionRadius, this, true, function(p:HxlPoint) { firstSeen(state, map, p); } );
+			HxlUtil.markFieldOfView(actor.tilePos, actor.visionRadius, this, true, function(p:HxlPoint) { firstSeen(state, map, p); } );
 		}
 		
 		for ( x in left...right+1 ) {
@@ -333,10 +333,10 @@ class Level extends HxlTilemap
 					dest.y = y;
 				}
 					
-				var dist = HxlUtil.distance(player.tilePos, dest);
+				var dist = HxlUtil.distance(actor.tilePos, dest);
 
 				var Ttile:Tile = cast(tile, Tile);
-				var normColor:Int = normalizeColor(dist, player.visionRadius, seenTween, inSightTween);
+				var normColor:Int = normalizeColor(dist, actor.visionRadius, seenTween, inSightTween);
 				switch (tile.visibility) {
 					case Visibility.IN_SIGHT:
 						tile.visible = true;
@@ -346,9 +346,9 @@ class Level extends HxlTilemap
 						for (actor in Ttile.actors)
 							cast(actor,HxlSprite).visible = true;
 						
-						Ttile.colorTo(normColor, player.moveSpeed);
+						Ttile.colorTo(normColor, actor.moveSpeed);
 						for (decoration in Ttile.decorations)
-							decoration.colorTo(normColor, player.moveSpeed);
+							decoration.colorTo(normColor, actor.moveSpeed);
 					case Visibility.SEEN:
 						tile.visible = true;
 						
@@ -357,9 +357,9 @@ class Level extends HxlTilemap
 						for (actor in Ttile.actors)
 							cast(actor,HxlSprite).visible = false;
 						
-						Ttile.colorTo(seenTween, player.moveSpeed);
+						Ttile.colorTo(seenTween, actor.moveSpeed);
 						for (decoration in Ttile.decorations)
-							decoration.colorTo(seenTween, player.moveSpeed);
+							decoration.colorTo(seenTween, actor.moveSpeed);
 					case Visibility.UNSEEN:
 				}
 			}

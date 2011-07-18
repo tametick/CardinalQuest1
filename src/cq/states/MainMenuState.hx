@@ -73,7 +73,6 @@ class MainMenuState extends CqState {
 		menu.addItem(btnCredits);
 		btnCredits.setCallback(function() { self.changeState(CreditsState); });
 		buttonY += 50;
-		
 		if (Configuration.standAlone) {
 			var btnQuit:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Quit", true, null);
 			btnQuit.setNormalFormat(null, 40, 0xffffff, "center");
