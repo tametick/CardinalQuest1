@@ -424,8 +424,12 @@ class GameState extends CqState {
 				dx = 0;
 			else
 				dy = 0;
-			
-			target = level.getTargetAccordingToMousePosition(dx, dy);
+			//we already have target, but this smoothes out movement
+			if(byKey)
+				target = level.getTargetAccordingToKeyPress();
+			else
+				target = level.getTargetAccordingToMousePosition(dx, dy);
+				
 			tile = getPlayerTile(target);
 			if ( !isBlockingMovement(target) ) {
 				CqRegistery.player.actInDirection(this,target);
