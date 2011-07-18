@@ -184,6 +184,7 @@ class CreateCharState extends CqState {
 		if ( HxlGraphics.keys.justReleased("ESCAPE") ) {
 			gotoState(MainMenuState);
 		} else if (HxlGraphics.keys.justReleased("LEFT")) {
+			if (curClass == null) return;
 			switch(curClass) {
 				case FIGHTER:
 					changeSelection(WIZARD);
@@ -193,6 +194,7 @@ class CreateCharState extends CqState {
 					changeSelection(THIEF);
 			}
 		} else if (HxlGraphics.keys.justReleased("RIGHT")) {
+			if (curClass == null) return;
 			switch(curClass) {
 				case FIGHTER:
 					changeSelection(THIEF);

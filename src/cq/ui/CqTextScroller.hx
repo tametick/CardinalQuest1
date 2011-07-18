@@ -59,7 +59,7 @@ class CqTextScroller extends HxlGroup
 		}
 		Actuate.timer(MinimumDuration).onComplete(afterMinimum);
 		HxlGraphics.stage.addEventListener(MouseEvent.CLICK, onAction);
-		HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_DOWN, onAction);
+		HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_UP, onAction);
 	}
 	private function afterMinimum() { respondInput = true; } 
 	private function onAction(e:Event):Void 
@@ -73,7 +73,7 @@ class CqTextScroller extends HxlGroup
 		{
 			//end this
 			HxlGraphics.stage.removeEventListener(MouseEvent.CLICK, onAction);
-			HxlGraphics.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onAction);
+			HxlGraphics.stage.removeEventListener(KeyboardEvent.KEY_UP, onAction);
 			if (OnComplete != null)
 				OnComplete();
 		}
