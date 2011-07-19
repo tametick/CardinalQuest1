@@ -1086,8 +1086,8 @@ class CqMobFactory {
 		
 		if(Resources.descriptions==null)
 			Resources.descriptions = new Hash<String>();
-		Resources.descriptions.set("Fighter", "A mighty warrior, possesing unparralleled strength and vigor.");
-		Resources.descriptions.set("Wizard", "A wise mage who masterd the secrets of magic.");
+		Resources.descriptions.set("Fighter", "A mighty warrior, possessing unparalleled strength and vigor.");
+		Resources.descriptions.set("Wizard", "A wise mage who mastered the secrets of magic.");
 		Resources.descriptions.set("Thief", "A cunning and agile rogue, his speed allows for a swift escape.");
 		
 		inited = true;
@@ -1175,16 +1175,16 @@ class CqMobFactory {
 				mob.attack = 3;
 				mob.defense = 4;
 				mob.speed = 4;
-				mob.spirit = 3;
+				mob.spirit = 4;
 				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(2,8);
-				mob.damage = new Range(1, 3);
+				mob.damage = new Range(2, 4);
 				mob.xpValue = 25;
 				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.ENFEEBLE_MONSTER));
 			case SPIDER_YELLOW, SPIDER_RED, SPIDER_GRAY, SPIDER_GREEN:
-				mob.attack = 4;
+				mob.attack = 5;
 				mob.defense = 3;
 				mob.speed = 2;
-				mob.spirit = 3;
+				mob.spirit = 4;
 				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(3,12);
 				mob.damage = new Range(2, 8);
 				mob.xpValue = 50;
@@ -1192,14 +1192,14 @@ class CqMobFactory {
 			case APE_BLUE, APE_BLACK, APE_RED, APE_WHITE:
 				mob.attack = 4;
 				mob.defense = 4;
-				mob.speed = 5;
+				mob.speed = 6;
 				mob.spirit = 3;
 				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(4,16);
-				mob.damage = new Range(2, 4);
+				mob.damage = new Range(3, 5);
 				mob.xpValue = 125;
 			case ELEMENTAL_GREEN, ELEMENTAL_WHITE, ELEMENTAL_RED, ELEMENTAL_BLUE:
-				mob.attack = 5;
-				mob.defense = 5;
+				mob.attack = 6;
+				mob.defense = 6;
 				mob.speed = 2;
 				mob.spirit = 3;
 				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(6,24);
@@ -1209,16 +1209,16 @@ class CqMobFactory {
 			case WEREWOLF_GRAY, WEREWOLF_BLUE, WEREWOLF_PURPLE:
 				mob.attack = 5;
 				mob.defense = 5;
-				mob.speed = 7;
-				mob.spirit = 3;
+				mob.speed = 8;
+				mob.spirit = 4;
 				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(8,32);
 				mob.damage = new Range(4,8);
 				mob.xpValue = 500;
 				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.HASTE));
 			case MINOTAUER, MINOTAUER_AXE, MINOTAUER_SWORD:
-				mob.attack = 5;
+				mob.attack = 6;
 				mob.defense = 3;
-				mob.speed = 5;
+				mob.speed = 6;
 				mob.spirit = 3;
 				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(12,48);
 				mob.damage = new Range(4, 32);

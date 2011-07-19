@@ -73,7 +73,7 @@ class CqMapDialog extends HxlSlidingDialog {
 		var mapH:Int = Registery.level.heightInTiles;
 		var graph = mapShape.graphics;
 		var Color:Int;
-		var Alpha = 0.5;
+		var Alpha = 0.7;
 		var SightColor:Int = 0x222222;
 		var SeenColor:Int = 0x111111;
 		var WallSightColor:Int = 0x333399;
