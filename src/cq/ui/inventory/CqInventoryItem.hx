@@ -32,14 +32,14 @@ class CqInventoryItem extends HxlSprite {
 	var dragZIndex:Int;
 	var cellIndex:Int;
 	var clearCharge:Bool;
+	
 	//these are true only when the item is in that particular cell, to see if goes where use cQitem.equipSlot
 	public var cellEquip:Bool;
 	public var cellSpell:Bool;
 	public var cellPotion:Bool;
 	public var item:CqItem;
+	
 	var selected:Bool;
-	//var stackText:HxlText;
-	//var stackSize:Int;
 	var isGlowing:Bool;
 	var glowSprite:BitmapData;
 	var glowRect:Rectangle;
@@ -57,7 +57,6 @@ class CqInventoryItem extends HxlSprite {
 		item = null;
 		zIndex = idleZIndex;
 		setSelected(false);
-		//stackSize = 1;
 		glowRect = new Rectangle(0, 0, 58, 58);
 		isGlowing = false;
 	}
@@ -187,7 +186,6 @@ class CqInventoryItem extends HxlSprite {
 		if (cellSpell) {
 			// if it was already in a different spell cell before moving to the new spell cell
 			CqRegistery.player.equippedSpells[cellIndex] = null;
-			//_dlg.dlgSpellGrid.forceClearCharge(cellIndex);
 		}
 		
 		_dlg.dlgSpellGrid.remove(this);
@@ -336,7 +334,6 @@ class CqInventoryItem extends HxlSprite {
 	//when user drops item in same place he picked it up
 	private function stopdrag_gotoSameCell(dragStopCell_class:Dynamic, dragStopCell_type:String, dragStopCell:CqInventoryCell):Void 
 	{
-		//trace("s c");
 		switch(dragStopCell_class) {
 			case CqSpellCell:
 				// Moving this item into a spell cell
@@ -355,12 +352,10 @@ class CqInventoryItem extends HxlSprite {
 	
 	//when user drops item on another item
 	private function stopdrag_gotoOccupiedCell(dragStopCell_class:Dynamic, dragStopCell_type:String, dragStopCell:CqInventoryCell,dragStop_cell_obj:CqInventoryItem) {
-		//trace("o c");
 		// There was already an item in the target cell, switch places with it
 		switch(dragStopCell_type) {
 			case "equip":
 				// Unequipping current item (?)
-				//trace("from eq cell");
 			case "spell":
 				// Moving the other item into a spell cell
 				dragStop_cell_obj.setSpellCell(cellIndex);
@@ -371,33 +366,21 @@ class CqInventoryItem extends HxlSprite {
 				// Moving the other item into a potion cell
 				dragStop_cell_obj.setPotionCell(cellIndex);
 			default:
-			
 				// Moving the other item into an inventory cell
 				dragStop_cell_obj.setInventoryCell(cellIndex);
 		}
 		
 		if (item.equipSlot != CqEquipSlot.POTION &&  item.equipSlot != CqEquipSlot.SPELL) {
-			if (cellEquip || dragStop_cell_obj.cellEquip)
-			{
-				//trace("equip aboom");
+			if (cellEquip || dragStop_cell_obj.cellEquip) {
 				if (dragStop_cell_obj.item != item)
 					CqRegistery.player.unequipItem(item);
-					CqRegistery.player.equipItem(dragStop_cell_obj.item);
-					dragStop_cell_obj.setEquipmentCell(cellIndex);
-					//trace("old over new");
+				
+				CqRegistery.player.equipItem(dragStop_cell_obj.item);
+				dragStop_cell_obj.setEquipmentCell(cellIndex);
 			}
-			//else trace("equip new, unequip old not ceq");
-			//trace("equip block");
-			
-			// Moving the other item into an equipment cell (?)
-			//CqRegistery.player.unequipItem(other.item);
-			//if ( other.setEquipmentCell(cellIndex) && other!=this) 
-			//	CqRegistery.player.equipItem(item);
 		}
 		
-		// here i need the cases.
-		//moving from inv to equip:
-		
+		// moving from inv to equip:
 		switch(dragStopCell_class) {
 			case CqSpellCell:
 				// Moving this item into a spell cell
@@ -407,39 +390,33 @@ class CqInventoryItem extends HxlSprite {
 				setPotionCell(dragStopCell.cellIndex);
 			case CqEquipmentCell:
 				// Moving this item into an equipment cell
-				//trace("move to eqcell");
-				if (dragStop_cell_obj != this)
-				{
+				if (dragStop_cell_obj != this) {
 					CqRegistery.player.unequipItem(dragStop_cell_obj.item);
 					CqRegistery.player.equipItem(this.item);
-					//trace("move up");
 				}
-				//trace("move new to others place");
+				//move new to other's place
 				setEquipmentCell(dragStopCell.cellIndex);
 				
 			case CqInventoryCell:
 				// Moving this item into an inventory cell
 				setInventoryCell(dragStopCell.cellIndex);
 			default:
-				//trace("unknown cell class");
+				//unknown cell class
 		}
 		cellIndex = dragStopCell.cellIndex;
 	}
 	
 	//return to pre drag position, when item dropped on invalid area
 	private function stopdrag_revert() {
-		//trace("rv");
 		_dlg.remove(this);
 		setPos(dragStartPoint);
 		
 		//if last cell was of type == item equipslot, means its from that dialog, so add there
-		if (item.equipSlot == CqEquipSlot.POTION && cellPotion)
-		{
+		if (item.equipSlot == CqEquipSlot.POTION && cellPotion) {
 			_dlg.dlgPotionGrid.add(this);
-		}else if (item.equipSlot == CqEquipSlot.SPELL && cellSpell)
-		{
+		} else if (item.equipSlot == CqEquipSlot.SPELL && cellSpell) {
 			_dlg.dlgSpellGrid.add(this);
-		}else {
+		} else {
 			//else add to inv
 			_dlg.dlgInvGrid.add(this);
 		}
@@ -447,8 +424,6 @@ class CqInventoryItem extends HxlSprite {
 	
 	// when item dropped on a empty cell
 	private function stopdrag_gotoEmptyCell(dragStopCell_class:Dynamic,dragStopCell_type:String,dragStopCell:CqInventoryCell) {
-		//trace("e c");
-		
 		switch(dragStopCell_type) {
 			//where it came from
 			
@@ -467,7 +442,6 @@ class CqInventoryItem extends HxlSprite {
 			case "potion":
 				// Clearing out a potion cell
 				_dlg.dlgPotionGrid.setCellObj(cellIndex, null);
-				//setPotionCell(cellIndex); //might help with the bug, investigate more.
 			default:
 				// Clearing out an inventory cell
 				_dlg.dlgInvGrid.setCellObj(cellIndex, null);
@@ -499,7 +473,6 @@ class CqInventoryItem extends HxlSprite {
 					_dlg.dlgSpellGrid.onItemDragStop();
 					_dlg.dlgPotionGrid.onItemDragStop();
 					_dlg.dlgInfo.clearInfo();
-					//_dlg.gameui.checkTileItems(CqRegistery.player);
 					return;
 				} else {
 					setInventoryCell(dragStopCell.cellIndex);
