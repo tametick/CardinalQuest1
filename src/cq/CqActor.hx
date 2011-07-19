@@ -687,12 +687,12 @@ class CqPlayer extends CqActor, implements Player {
 				defense = 2;
 				speed = 3;
 				spirit = 1;
-				vitality = 5;
+				vitality = 4;
 				damage = new Range(1, 1);
 			case WIZARD:
 				attack = 2;
 				defense = 2;
-				speed = 4;
+				speed = 3;
 				spirit = 5;
 				vitality = 3;
 				damage = new Range(1, 1);
