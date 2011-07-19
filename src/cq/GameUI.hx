@@ -1,10 +1,10 @@
 package cq;
 
+import cq.ui.inventory.CqInventoryDialog;
 import cq.CqActor;
 import cq.effects.CqEffectChest;
 import cq.effects.CqEffectInjure;
 import cq.ui.CqFloatText;
-import cq.ui.CqInventoryDialog;
 import cq.CqItem;
 import cq.ui.CqPotionButton;
 import cq.CqSpell;

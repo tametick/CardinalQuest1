@@ -1,4 +1,4 @@
-package cq.ui;
+package cq.ui.inventory;
 
 import cq.ui.CqItemInfoDialog;
 import cq.ui.CqPotionButton;
