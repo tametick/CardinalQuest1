@@ -146,7 +146,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	public function itemPickup(Item:CqItem):Bool {
 		// if an equivalent item already in inventory, destory picked up item
 		for ( cell in dlgInvGrid.cells ) {
-			if ( cell.getCellObj() != null && cell.getCellObj().item.equalTo(Item) ) {
+			if ( cell.getCellObj() != null && cell.getCellObj().item.equalTo(Item) && Item.equipSlot != SPELL) {
 				GameUI.showTextNotification("I already have this.");
 				CqRegistery.player.giveMoney( Item.getMonetaryValue() );
 				return false;

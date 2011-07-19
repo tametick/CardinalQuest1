@@ -467,10 +467,13 @@ class GameState extends CqState {
 		var pixelLocation = Registery.level.getPixelPositionOfTile(tileLocation.x,tileLocation.y);
 		var boss:CqMob = CqRegistery.level.createAndaddMob(tileLocation, 99, true);
 		boss.visionRadius = 20;
-		CqRegistery.level.updateFieldOfView(HxlGraphics.state,boss);
 		HxlGraphics.follow(boss, 200);
+		CqRegistery.level.updateFieldOfView(HxlGraphics.state,boss);
 		//find an empty tile for portal
-		var targetLocation:HxlPoint = HxlUtil.getRandomTileWithDistance(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), Registery.level.mapData, SpriteTiles.instance.walkableAndSeeThroughTiles,tileLocation,1);
-		boss.actInDirection(this, targetLocation);
+		var targetLocation:HxlPoint = tileLocation;
+		targetLocation.x--;
+		//var boss2:CqMob = CqRegistery.level.createAndaddMob(targetLocation, 99, true);
+		//boss.actInDirection(this, targetLocation);
+		//CqRegistery.level.updateFieldOfView(HxlGraphics.state,boss);
 	}
 }
