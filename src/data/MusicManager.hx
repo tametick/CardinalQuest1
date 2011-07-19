@@ -27,4 +27,11 @@ class MusicManager {
 		currentlyPlaying = tracks.get(name);
 		currentlyPlaying.play();
 	}
+	
+	public static function stop() {
+		if (currentlyPlaying != null) {
+			currentlyPlaying.stop();
+			currentlyPlaying = null;
+		}
+	}
 }

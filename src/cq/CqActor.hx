@@ -20,6 +20,7 @@ import world.Tile;
 import data.Registery;
 import data.Resources;
 import data.SoundEffectsManager;
+import data.MusicManager;
 import data.Configuration;
 
 import cq.CqResources;
@@ -227,8 +228,8 @@ class CqActor extends CqObject, implements Actor {
 			if (Std.is(other, CqPlayer)) {
 				var player = cast(other, CqPlayer);
 				HxlLog.append("kills you");
-				SoundEffectsManager.play(Death);
 				if (player.lives >= 1) {
+					SoundEffectsManager.play(Death);
 					player.lives--;
 					player.infoViewLives.setText("x" + player.lives);
 					
@@ -244,6 +245,8 @@ class CqActor extends CqObject, implements Actor {
 					Registery.level.updateFieldOfView(HxlGraphics.state,true);
 				} else {
 					///todo: Playtomic recording
+					MusicManager.stop();
+					SoundEffectsManager.play(Lose);
 					HxlGraphics.pushState(new GameOverState());
 				}
 			} else {
