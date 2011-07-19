@@ -114,30 +114,12 @@ class GameState extends CqState {
 	}
 	
 	private function checkJumpKeys():Void {
-		if (HxlGraphics.keys.justReleased("Q"))
+		if (HxlGraphics.keys.justReleased("K") && CqRegistery.world.currentLevelIndex>0)
 		{
-			CqRegistery.world.goToNextLevel(this, 0);
-		}else if (HxlGraphics.keys.justReleased("W"))
+			CqRegistery.world.goToNextLevel(this, CqRegistery.world.currentLevelIndex-1);
+		}else if (HxlGraphics.keys.justReleased("L") && CqRegistery.world.currentLevelIndex<CqConfiguration.lastLevel)
 		{
-			CqRegistery.world.goToNextLevel(this, 1);
-		}else if (HxlGraphics.keys.justReleased("E"))
-		{
-			CqRegistery.world.goToNextLevel(this, 2);
-		}else if (HxlGraphics.keys.justReleased("R"))
-		{
-			CqRegistery.world.goToNextLevel(this, 3);
-		}else if (HxlGraphics.keys.justReleased("T"))
-		{
-			CqRegistery.world.goToNextLevel(this, 4);
-		}else if (HxlGraphics.keys.justReleased("Y"))
-		{
-			CqRegistery.world.goToNextLevel(this, 5);
-		}else if (HxlGraphics.keys.justReleased("U"))
-		{
-			CqRegistery.world.goToNextLevel(this, 6);
-		}else if (HxlGraphics.keys.justReleased("A"))
-		{
-			CqRegistery.world.goToNextLevel(this, 7);
+			CqRegistery.world.goToNextLevel(this, CqRegistery.world.currentLevelIndex+1);
 		}
 	}
 	private function checkGameKeys():Void {
@@ -368,16 +350,16 @@ class GameState extends CqState {
 			dx =  (Registery.player.x + Configuration.zoomedTileSize()/2);
 			dy =  (Registery.player.y + Configuration.zoomedTileSize() / 2);
 			var acts:Bool = false;
-			if (HxlGraphics.keys.pressed("UP"))
+			if (HxlGraphics.keys.pressed("UP") || HxlGraphics.keys.pressed("W"))
 			{
 				acts = true;
-			}else if (HxlGraphics.keys.pressed("DOWN"))
+			}else if (HxlGraphics.keys.pressed("DOWN") || HxlGraphics.keys.pressed("S"))
 			{
 				acts = true;
-			}else if (HxlGraphics.keys.pressed("LEFT"))
+			}else if (HxlGraphics.keys.pressed("LEFT") || HxlGraphics.keys.pressed("A"))
 			{
 				acts = true;
-			}else if (HxlGraphics.keys.pressed("RIGHT"))
+			}else if (HxlGraphics.keys.pressed("RIGHT") || HxlGraphics.keys.pressed("D"))
 			{
 				acts = true;
 			}else if (HxlGraphics.keys.justPressed("ENTER"))

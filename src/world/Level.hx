@@ -385,19 +385,19 @@ class Level extends HxlTilemap
 			targetTile.x = 0;
 			targetTile.y = 0;
 		}
-		if ( HxlGraphics.keys.LEFT ) {
+		if ( HxlGraphics.keys.LEFT || HxlGraphics.keys.A) {
 			if ( player.tilePos.x > 0) {
 				targetTile.x = -1;
 			}
-		} else if ( HxlGraphics.keys.RIGHT ) {
+		} else if ( HxlGraphics.keys.RIGHT || HxlGraphics.keys.D) {
 			if ( player.tilePos.x < widthInTiles) {
 				targetTile.x = 1;
 			}
-		} else if ( HxlGraphics.keys.UP ) {
+		} else if ( HxlGraphics.keys.UP || HxlGraphics.keys.W) {
 			if ( player.tilePos.y > 0 ) {
 					targetTile.y = -1;
 			}
-		} else if ( HxlGraphics.keys.DOWN ) {
+		} else if ( HxlGraphics.keys.DOWN || HxlGraphics.keys.S) {
 			if ( player.tilePos.y < heightInTiles ) {
 					targetTile.y = 1;
 			}

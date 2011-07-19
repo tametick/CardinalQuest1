@@ -183,7 +183,7 @@ class CreateCharState extends CqState {
 	override function onKeyUp(event:KeyboardEvent) { 
 		if ( HxlGraphics.keys.justReleased("ESCAPE") ) {
 			gotoState(MainMenuState);
-		} else if (HxlGraphics.keys.justReleased("LEFT")) {
+		} else if (HxlGraphics.keys.justReleased("LEFT") || HxlGraphics.keys.justReleased("A")) {
 			if (curClass == null) return;
 			switch(curClass) {
 				case FIGHTER:
@@ -193,7 +193,7 @@ class CreateCharState extends CqState {
 				case WIZARD:
 					changeSelection(THIEF);
 			}
-		} else if (HxlGraphics.keys.justReleased("RIGHT")) {
+		} else if (HxlGraphics.keys.justReleased("RIGHT") || HxlGraphics.keys.justReleased("D")) {
 			if (curClass == null) return;
 			switch(curClass) {
 				case FIGHTER:

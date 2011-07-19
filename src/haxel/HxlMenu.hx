@@ -52,7 +52,7 @@ class HxlMenu extends HxlDialog {
 			if ( currentItem >= 0 ) {
 				items[currentItem].doCallback();
 			}
-		} else if ( c == 38 ) { // Up
+		} else if ( c == 38 || c == 87 ) { // Up
 			if ( _scrollSound != null ) 
 				playScrollSound();
 			
@@ -63,7 +63,7 @@ class HxlMenu extends HxlDialog {
 				currentItem = items.length - 1;
 			items[currentItem].setHover(true);
 			
-		} else if ( c == 40 ) { // Down
+		} else if ( c == 40 || c == 83) { // Down
 			if ( _scrollSound != null ) 
 				playScrollSound();
 				
