@@ -1,12 +1,12 @@
 package cq.ui.inventory;
 
-package cq.ui.inventory;
 import haxel.HxlDialog;
 import haxel.HxlSprite;
 import haxel.HxlText;
 import haxel.HxlGraphics;
 
 import cq.CqResources;
+import cq.CqItem;
 
 // tmp
 import cq.ui.inventory.CqInventoryDialog;
