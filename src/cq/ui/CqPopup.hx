@@ -22,7 +22,7 @@ class CqPopup extends HxlText
 		super(0, 0, Width, Text);
 		setFormat("FontAnonymousPro", 15, 0xC2AC30, "left", 1);
 	}
-	override function onRemove(state:HxlState):Void
+	public override function onRemove(state:HxlState):Void
 	{
 		parent.remove(this);
 	}

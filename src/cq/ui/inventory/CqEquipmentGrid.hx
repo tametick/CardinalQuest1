@@ -5,6 +5,8 @@ import haxel.HxlPoint;
 import cq.CqResources;
 import cq.CqItem;
 
+import cq.ui.inventory.CqInventoryCell;
+
 // tmp
 import cq.ui.inventory.CqInventoryDialog;
 

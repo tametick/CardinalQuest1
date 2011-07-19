@@ -1,5 +1,6 @@
 package cq.ui;
 
+import cq.ui.inventory.CqInventoryCell;
 import cq.ui.inventory.CqInventoryDialog;
 import cq.GameUI;
 import cq.CqItem;
