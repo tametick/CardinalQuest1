@@ -117,7 +117,7 @@ class CqSpellFactory {
 				spell.specialEffects.add(new CqSpecialEffectValue("sleep", 0));
 				spell.spiritPointsRequired = 1440;
 			case FEAR:
-				spell.duration = 240;
+				spell.duration = 180;
 				spell.targetsOther = true;
 				spell.specialEffects.add(new CqSpecialEffectValue("fear"));
 				spell.spiritPointsRequired = 960;
