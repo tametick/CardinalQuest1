@@ -224,7 +224,6 @@ class CqInventoryDialog extends HxlSlidingDialog {
 									uiItem = old;
 								}
 							} else if (preference < 1) {	
-								var old:CqInventoryItem = cell.getCellObj();
 								//trace("new is worse");
 								//if new is worse than old, and is plain - destroy it
 								if (!Item.isMagical && !Item.isSuperb && !Item.isWondrous) {
@@ -234,15 +233,6 @@ class CqInventoryDialog extends HxlSlidingDialog {
 									remove(uiItem);
 									uiItem.destroy();
 									return false;
-								} else if (!old.item.isMagical && !old.item.isSuperb && !old.item.isWondrous) {
-										//trace("new is magic, old is plain");
-										CqRegistery.player.giveMoney( old.item.getMonetaryValue() );
-										GameUI.showTextNotification("I can drop the old one now.",0x3967DF);
-										remove(old);
-										old.destroy();
-								} else {
-									//trace("old is not pln, so add");
-									uiItem = old;
 								}
 							} else {	
 								//if item is not better, and not plain - add to inventory

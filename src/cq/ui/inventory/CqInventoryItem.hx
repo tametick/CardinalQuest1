@@ -96,7 +96,6 @@ class CqInventoryItem extends HxlSprite {
 	}
 	
 	function renderGlow() {
-		//return;
 		getScreenXY(_point);
 		_flashPoint.x = _point.x - 8;
 		_flashPoint.y = _point.y - 8;
