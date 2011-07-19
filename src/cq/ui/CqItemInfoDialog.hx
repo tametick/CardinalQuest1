@@ -57,7 +57,7 @@ class CqItemInfoDialog extends HxlDialog {
 
 	public function setItem(Item:CqItem) {
 		_item = Item;
-		_itemName.text = Item.name;
+		_itemName.text = Item.fullName;
 		_itemDesc.text = Resources.descriptions.get(Item.name);
 		_itemDesc.y = _itemName.y + _itemName.height + 2;
 		if ( Std.is(Item, CqSpell) ) {

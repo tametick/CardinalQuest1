@@ -118,7 +118,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		}
 		
 		//popup
-		uiItem.setPopup(new CqPopup(100,Item.name,gameui.doodads));
+		uiItem.setPopup(new CqPopup(100,Item.fullName,gameui.doodads));
 		gameui.doodads.add(uiItem.popup);
 		uiItem.popup.zIndex = 15;
 		

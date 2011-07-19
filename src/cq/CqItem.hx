@@ -271,7 +271,7 @@ class CqLootFactory {
 		}
 
 		if (Item.isSuperb) {
-			Item.name = "Superb " + Item.name;
+			//Item.name = "Superb " + Item.name;
 			switch(Item.equipSlot) {
 				case CqEquipSlot.ARMOR:
 					Item.buffs.set("defense", Item.buffs.get("defense") + 1);
@@ -309,10 +309,10 @@ class CqLootFactory {
 			
 			var extraBuff = HxlUtil.getRandomElement(buffs);
 			if (Item.isMagical) {
-				Item.name = "Magical " + Item.name;
+				//Item.name = "Magical " + Item.name;
 				Item.buffs.set(extraBuff, Item.buffs.get("extraBuff") + 1);
 			} else {// isWondrous
-				Item.name = "Wondrous " + Item.name;
+				//Item.name = "Wondrous " + Item.name;
 				Item.buffs.set(extraBuff, Item.buffs.get("extraBuff") + 2);
 			}
 		}
@@ -321,6 +321,19 @@ class CqLootFactory {
 
 class CqItem extends GameObjectImpl, implements Loot {
 	public var name:String;
+	public var fullName(getFullName, null):String;
+	
+	function getFullName():String {
+		var prefix = "";
+		if (isMagical)
+			prefix = "Magical ";
+		else if(isSuperb)
+			prefix = "Superb ";
+		else if (isWondrous)
+			prefix = "Wondrous ";
+			
+		return prefix + name;
+	}
 	
 	public var equipSlot:CqEquipSlot;
 	public var consumable:Bool;
