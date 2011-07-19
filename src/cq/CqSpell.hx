@@ -72,9 +72,9 @@ class CqSpellFactory {
 		switch(type) {
 			case FREEZE:
 				spell.targetsOther = true;
-				spell.duration = 180;
+				spell.duration = 120;
 				spell.buffs.set("speed", -3);
-				spell.spiritPointsRequired = 720;
+				spell.spiritPointsRequired = 1440;
 			case FIREBALL:
 				spell.targetsOther = true;
 				spell.damage = new Range(1, 6);
@@ -105,24 +105,24 @@ class CqSpellFactory {
 				spell.duration = 120;
 				spell.targetsOther = true;
 				spell.specialEffects.add(new CqSpecialEffectValue("charm"));
-				spell.spiritPointsRequired = 720;
+				spell.spiritPointsRequired = 1440;
 			case POLYMORPH:
-				spell.duration = 480;
+				spell.duration = 180;
 				spell.targetsOther = true;
 				spell.specialEffects.add(new CqSpecialEffectValue("polymorph", "true"));
-				spell.spiritPointsRequired = 860;
+				spell.spiritPointsRequired = 1720;
 			case SLEEP:
-				spell.duration = 120;
+				spell.duration = 90;
 				spell.targetsOther = true;
 				spell.specialEffects.add(new CqSpecialEffectValue("sleep", 0));
-				spell.spiritPointsRequired = 720;
+				spell.spiritPointsRequired = 1440;
 			case FEAR:
 				spell.duration = 240;
 				spell.targetsOther = true;
 				spell.specialEffects.add(new CqSpecialEffectValue("fear"));
 				spell.spiritPointsRequired = 720;
 			case MAGIC_MIRROR: 
-				spell.duration = 480;
+				spell.duration = 360;
 				spell.targetsEmptyTile = true;
 				spell.specialEffects.add(new CqSpecialEffectValue("magic_mirror"));
 				spell.spiritPointsRequired = 720*2;
