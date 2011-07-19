@@ -1,5 +1,7 @@
 package cq.ui;
 
+import cq.CqRegistery;
+import cq.states.GameState;
 import cq.ui.inventory.CqEquipmentCell;
 import cq.ui.inventory.CqInventoryCell;
 import cq.ui.inventory.CqInventoryDialog;
@@ -104,12 +106,13 @@ class CqSpellButton extends HxlDialog {
 				GameUI.setTargetingSpell(this);					
 			} else {
 				GameUI.setTargeting(false);
+				GameState.inst.passTurn();
 				CqRegistery.player.use(spellObj.item, null);
 				spell.spiritPoints = 0;
 				GameUI.instance.updateCharge(this);
 			}
 
-			if(event!=null)event.stopPropagation();
+			if (event != null) event.stopPropagation();
 		}
 	}
 	function clickMouseUp(event:MouseEvent) {

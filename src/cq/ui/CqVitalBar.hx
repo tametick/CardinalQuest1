@@ -35,9 +35,7 @@ class CqXpBar extends CqVitalBar {
 
 	public function new(Player:CqPlayer, ?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0, ?isDefaultBar:Bool=true) {
 		super(Player, X, Y, Width, Height,isDefaultBar);
-		if(isDefaultBar){
-			Player.xpBar = this;
-		} else if (Std.is( actor, CqPlayer)) {
+		if (Std.is( actor, CqPlayer)) {
 			var player = cast(actor, CqPlayer);
 			player.infoViewXpBar = this;
 		}

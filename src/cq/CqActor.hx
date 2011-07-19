@@ -240,9 +240,7 @@ class CqActor extends CqObject, implements Actor {
 					);
 					player.moveToPixel(state, startingPostion.x, startingPostion.y);
 					player.hp = player.maxHp;
-					player.healthBar.updateValue();
 					player.infoViewHealthBar.updateValue();
-					player.healthBar.visible = true;
 					Registery.level.updateFieldOfView(HxlGraphics.state,true);
 				} else {
 					///todo: Playtomic recording
@@ -422,7 +420,6 @@ class CqActor extends CqObject, implements Actor {
 			for (buff in item.buffs.keys()) {
 				buffs.set(buff, buffs.get(buff) + item.buffs.get(buff));
 				if (buff == "life") {
-					healthBar.updateValue();
 					if (Std.is(this, CqPlayer)) {
 						var player = CqRegistery.player;
 						player.infoViewHealthBar.updateValue();
@@ -445,7 +442,6 @@ class CqActor extends CqObject, implements Actor {
 				if (buff == "life") {
 					if (this.hp < 1)
 						this.hp = 1;
-					healthBar.updateValue();
 					if (Std.is(this, CqPlayer)) {
 						var player = CqRegistery.player;
 						player.infoViewHealthBar.updateValue();
@@ -587,7 +583,7 @@ class CqActor extends CqObject, implements Actor {
 		case "heal":
 			if (effect.value == "full"){
 				if (other == null) {
-					healthBar.visible = true;
+					if(healthBar!=null)healthBar.visible = true;
 					hp = maxHp;
 					healthBar.updateValue();
 					if (Std.is(this, CqPlayer)) {
@@ -596,9 +592,9 @@ class CqActor extends CqObject, implements Actor {
 					}
 					GameUI.showEffectText(this, "Healed", 0x0080FF);
 				} else {
-					healthBar.visible = true;
+					if(healthBar!=null)healthBar.visible = true;
 					other.hp = other.maxHp;
-					other.healthBar.updateValue();
+					if(other.healthBar!=null)other.healthBar.updateValue();
 					if (Std.is(other, CqPlayer)) {
 						var player = CqRegistery.player;
 						player.infoViewHealthBar.updateValue();
@@ -662,8 +658,6 @@ class CqPlayer extends CqActor, implements Player {
 	
 	public var playerClass:CqClass;
 	public var inventory:Array<CqItem>;
-	
-	public var xpBar:CqXpBar;
 	
 	public var infoViewHealthBar:CqHealthBar;
 	public var infoViewXpBar:CqXpBar;
@@ -863,10 +857,8 @@ class CqPlayer extends CqActor, implements Player {
 		infoViewLevel.setText("Level " + level);
 		HxlLog.append("Level " + level);
 		GameUI.showEffectText(this, "Level " + level, 0xFFFF66);
-		healthBar.visible = true;
 		maxHp += vitality;
 		hp = maxHp;
-		healthBar.updateValue();
 		infoViewHealthBar.updateValue();
 	}
 	

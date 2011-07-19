@@ -1,5 +1,6 @@
 package cq;
 
+import cq.states.GameState;
 import cq.ui.CqPotionGrid;
 import cq.ui.inventory.CqInventoryDialog;
 import cq.CqActor;
@@ -553,6 +554,8 @@ class GameUI extends HxlDialog {
 	}
 	
 	public function addHealthBar(Actor:CqActor) {
+		if (Std.is(Actor, CqPlayer))
+			return;
 		var bar:CqHealthBar = new CqHealthBar(Actor, Actor.x, Actor.y + Actor.height + 2, 32, 4);
 		HxlGraphics.state.add(bar);
 		var self = this;
@@ -561,11 +564,6 @@ class GameUI extends HxlDialog {
 			self.doInjureEffect(Actor);
 		});
 		Actor.addOnAttackMiss(doAttackMiss);
-	}
-
-	public function addXpBar(Actor:CqPlayer) {
-		xpBar = new CqXpBar(Actor, Actor.x, Actor.y + Actor.height + 5, 32, 4);
-		HxlGraphics.state.add(xpBar);
 	}
 	
 	public function doAttackMiss(?Attacker:CqActor, ?Defender:CqActor) {
@@ -617,7 +615,6 @@ class GameUI extends HxlDialog {
 		notifications.notify(message, color);
 	}
 	public function doPlayerGainXP(?xpTotal:Int=0) {
-		xpBar.updateValue(xpTotal);
 		infoViewXpBar.updateValue(xpTotal);
 	}
 
@@ -713,6 +710,7 @@ class GameUI extends HxlDialog {
 					cast(Registery.player,CqActor).useAt(targetSpell.getSpell(), tile);
 					targetSpell.getSpell().spiritPoints = 0;
 					GameUI.instance.updateCharge(targetSpell);
+					GameState.inst.passTurn();
 					GameUI.setTargeting(false);
 				} else {
 					GameUI.setTargeting(false);
@@ -727,6 +725,7 @@ class GameUI extends HxlDialog {
 					player.use(targetSpell.getSpell(), cast(tile.actors[0], CqActor));
 					targetSpell.getSpell().spiritPoints = 0;
 					GameUI.instance.updateCharge(targetSpell);
+					GameState.inst.passTurn();
 					GameUI.setTargeting(false);
 				} else {
 					GameUI.setTargeting(false);

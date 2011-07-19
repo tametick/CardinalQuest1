@@ -37,12 +37,14 @@ import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 
 class GameState extends CqState {	
+	static public var inst:GameState;
 	var gameUI:GameUI;
 	public var chosenClass:CqClass;
 	var isPlayerActing:Bool;
 	private var started:Bool;
 	private var endingAnim:Bool;
 	public override function create() {
+		inst = this;
 		super.create();
 		started = endingAnim = false;
 		chosenClass = FIGHTER;
@@ -54,6 +56,7 @@ class GameState extends CqState {
 		//add(loadingBox);
 	}
 	public override function destroy() {
+		inst = null;
 		remove(gameUI);
 		gameUI.destroy();
 		add(CqRegistery.world.currentLevel);
@@ -194,7 +197,7 @@ class GameState extends CqState {
 			gameUI.showCharDlg();
 		}
 	}
-	function passTurn() {
+	public function passTurn() {
 		var player = CqRegistery.player;
 		var level = CqRegistery.level;
 		
@@ -266,8 +269,6 @@ class GameState extends CqState {
 			gameUI.initChests();
 			gameUI.initHealthBars();
 			
-			gameUI.addHealthBar(player);
-			gameUI.addXpBar(player);
 			world.addOnNewLevel(gameUI.panelMap.updateDialog);
 		}
 		player.addOnPickup(gameUI.itemPickup);
@@ -306,7 +307,6 @@ class GameState extends CqState {
 		var self = this;
 		world.addOnNewLevel(function() {
 			self.gameUI.initHealthBars();
-			self.gameUI.addHealthBar(player);
 		});
 	}
 	
@@ -327,8 +327,6 @@ class GameState extends CqState {
 		}
 		if (Configuration.debug)
 			checkJumpKeys();
-			
-		checkGameKeys();
 	}
 
 	override function onMouseDown(event:MouseEvent) {
@@ -355,7 +353,8 @@ class GameState extends CqState {
 		var level = Registery.level;
 		if (Registery.player.isMoving)
 			return;
-			
+		//check game keys on your turn
+		checkGameKeys();
 		var target:HxlPoint;
 		var dx;
 		var dy;
