@@ -412,7 +412,17 @@ class GameUI extends HxlDialog {
 		G.lineTo(centerX, centerY);
 	}
 
-
+	public function hideCurrentPanel():Void
+	{
+		if ( currentPanel != null ) {
+				currentPanel.hide(function() { GameUI.currentPanel = null; } );
+				btnMainView.setActive(false);
+				btnMapView.setActive(false);
+				btnInventoryView.setActive(false);
+				btnCharacterView.setActive(false);
+				btnInfoView.setActive(false);
+		}
+	}
 	function showPanel(Panel:HxlSlidingDialog, ?Button:HxlButton=null) {
 		if ( HxlGraphics.mouse.dragSprite != null ) 
 			return;

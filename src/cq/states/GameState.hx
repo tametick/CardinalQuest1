@@ -323,6 +323,10 @@ class GameState extends CqState {
 			if ( GameUI.isTargeting ) {
 				GameUI.setTargeting(false);
 			}
+			if (gameUI._dialog)
+			{
+				gameUI.hideCurrentPanel();
+			}
 			HxlGraphics.pushState(new MainMenuState());
 		}
 		if (Configuration.debug)
