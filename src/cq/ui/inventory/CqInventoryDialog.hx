@@ -144,7 +144,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	 * False - destroyed or added to potion/spell belts
 	 * */
 	public function itemPickup(Item:CqItem):Bool {
-		// if item already in inventory (?)
+		// if an equivalent item already in inventory, destory picked up item
 		for ( cell in dlgInvGrid.cells ) {
 			if ( cell.getCellObj() != null && cell.getCellObj().item.equalTo(Item) ) {
 				GameUI.showTextNotification("I already have this.");
@@ -152,7 +152,8 @@ class CqInventoryDialog extends HxlSlidingDialog {
 				return false;
 			}
 		}
-		// because of stacking (?)
+		
+		// stacking was already done by CqActor.give(...), just updating potion icon
 		if ( Item.equipSlot == POTION ) {
 			for ( cell in dlgPotionGrid.cells ) {
 				if ( cell.getCellObj() != null && cell.getCellObj().item == Item ) {
@@ -169,7 +170,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		var uiItem:CqInventoryItem = createUIItem(Item,this);
 		add(uiItem);
 		
-		// If this Item is equippable, and affiliated slot is open, auto equip it
+		
 		if ( Item.equipSlot != null ) {
 			if ( Item.equipSlot == POTION ) {
 				for ( cell in dlgPotionGrid.cells ) {
@@ -196,31 +197,32 @@ class CqInventoryDialog extends HxlSlidingDialog {
 			} else {
 				//item in equipment
 				for ( cell in dlgEqGrid.cells ) {
+					//found same quipment cell slot as item
 					if (cast(cell, CqEquipmentCell).equipSlot == Item.equipSlot) {
-						//found same quipment cell slot as item
+
+						//if slot was empty - equip
 						if (cell.getCellObj() == null) {
-							//if slot was empty - equip
-							//trace("move on mpty");
 							uiItem = equipItem(cell, Item, uiItem);
 							cell.getCellObj().updateIcon();
 							return true;
 						} else {
+							
 							var preference:Float = shouldEquipItemInCell(cast(cell, CqEquipmentCell), Item);
-							//trace("equip cell not empty");
+							
+							//equip if item is better
 							if (preference > 1)	{	
-								//equip if item is better
 								var old:CqInventoryItem = equipItem(cell, Item, uiItem);
 								
-								//if old is non plain add to inv
 								if (!old.item.isMagical && !old.item.isSuperb && !old.item.isWondrous) {	
-									//trace("old is plain, so destroy");
+									// old is plain, so destroy
+									GameUI.showTextNotification("I can drop the old one now.", 0xBFE137);
 									CqRegistery.player.giveMoney( old.item.getMonetaryValue() );
-									GameUI.showTextNotification("I can drop the old one now.",0xBFE137);
 									remove(old);
 									old.destroy();
-									//return false;
+
+									return true;
 								} else {
-									//trace("old is not pln, so add");
+									// old is non plain add to inv
 									uiItem = old;
 								}
 							} else if (preference < 1) {	

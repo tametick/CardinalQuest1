@@ -773,7 +773,6 @@ class CqPlayer extends CqActor, implements Player {
 		}
 	}
 	
-	//give item via script/etc
 	public function give(?item:CqItem, ?itemType:CqItemType, ?spellType:CqSpellType) {
 		if (item != null) {
 			// add to actor inventory
@@ -810,10 +809,10 @@ class CqPlayer extends CqActor, implements Player {
 			give(CqSpellFactory.newSpell(-1, -1, spellType));
 		}
 	}
-	public function giveMoney(amount:Int)
-	{
+	public function giveMoney(amount:Int){
 		infoViewMoney.setText(""+(Std.parseInt(infoViewMoney.text) + amount));
 	}
+	
 	//pickup item from map
 	public function pickup(state:HxlState, item:CqItem) {
 		// remove item from map
