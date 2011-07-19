@@ -1,4 +1,5 @@
-package cq.ui.inventory;
+package cq.ui;
+import cq.ui.inventory.CqInventoryGrid;
 import haxel.HxlPoint;
 import haxel.HxlSprite;
 

@@ -1,5 +1,6 @@
 package cq;
 
+import cq.ui.CqPotionGrid;
 import cq.ui.inventory.CqInventoryDialog;
 import cq.CqActor;
 import cq.effects.CqEffectChest;
@@ -17,7 +18,7 @@ import cq.ui.CqCharacterDialog;
 import cq.ui.CqMapDialog;
 import cq.ui.CqMessageDialog;
 import cq.ui.CqTextNotification;
-import cq.ui.inventory.CqSpellGrid;
+import cq.ui.CqSpellGrid;
 import haxel.HxlGroup;
 import haxel.HxlUtil;
 import haxel.HxlTilemap;
