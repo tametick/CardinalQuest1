@@ -110,7 +110,7 @@ class CqSpellFactory {
 				spell.duration = 180;
 				spell.targetsOther = true;
 				spell.specialEffects.add(new CqSpecialEffectValue("polymorph", "true"));
-				spell.spiritPointsRequired = 1720;
+				spell.spiritPointsRequired = 2160;
 			case SLEEP:
 				spell.duration = 90;
 				spell.targetsOther = true;
@@ -120,7 +120,7 @@ class CqSpellFactory {
 				spell.duration = 240;
 				spell.targetsOther = true;
 				spell.specialEffects.add(new CqSpecialEffectValue("fear"));
-				spell.spiritPointsRequired = 720;
+				spell.spiritPointsRequired = 960;
 			case MAGIC_MIRROR: 
 				spell.duration = 360;
 				spell.targetsEmptyTile = true;
