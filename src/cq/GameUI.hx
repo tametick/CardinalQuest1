@@ -17,6 +17,7 @@ import cq.ui.CqCharacterDialog;
 import cq.ui.CqMapDialog;
 import cq.ui.CqMessageDialog;
 import cq.ui.CqTextNotification;
+import cq.ui.inventory.CqSpellGrid;
 import haxel.HxlGroup;
 import haxel.HxlUtil;
 import haxel.HxlTilemap;
