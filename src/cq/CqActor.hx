@@ -815,11 +815,17 @@ class CqPlayer extends CqActor, implements Player {
 	
 	//pickup item from map
 	public function pickup(state:HxlState, item:CqItem) {
-		// remove item from map
-		Registery.level.removeLootFromLevel(state, item);
-		SoundEffectsManager.play(Pickup);
-		item.doPickupEffect(); //todo: Find out if this should be apart of give()
-		give(item);
+		// if inventory is full, don't give the item
+		if (GameUI.instance.panelInventory.getEmptyCell() == null ){
+			// todo - beep
+			GameUI.showTextNotification("Inventory is full!", 0xFF001A);
+		} else {
+			// remove item from map
+			Registery.level.removeLootFromLevel(state, item);
+			SoundEffectsManager.play(Pickup);
+			item.doPickupEffect(); //todo: Find out if this should be apart of give()
+			give(item);
+		}
 	}
 
 	public function removeInventory(item:CqItem) {

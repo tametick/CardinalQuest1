@@ -4,7 +4,7 @@ import data.Configuration;
 
 class CqConfiguration extends Configuration {
 	public static var chestsPerLevel = 12;
-	public inline static var spellsPerLevel = 2;
+	public static var spellsPerLevel = 2;
 	public inline static var mobsPerLevel = 18;
 	public inline static var lastLevel = 7;
 	
