@@ -51,6 +51,8 @@ class ChestBusted extends Sound { public function new() { super(); } }
 class Pickup extends Sound { public function new() { super(); } }
 class DoorOpen extends Sound { public function new() { super(); } }
 class Death extends Sound { public function new() { super(); } }
+class Lose extends Sound { public function new() { super(); } }
+class Win extends Sound { public function new() { super(); } }
 
 class SpriteLogo extends Bitmap { public function new() { super(); } }
 class SpriteHeart extends Bitmap { public function new() { super(); } }
