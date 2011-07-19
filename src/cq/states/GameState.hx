@@ -385,7 +385,8 @@ class GameState extends CqState {
 				acts = true;
 			}
 			if (!acts ) return;
-			if (gameUI._dialog && GameUI.currentPanel != gameUI.panelMap ) return;
+			if (GameUI.currentPanel != null)
+				if(GameUI.currentPanel != gameUI.panelMap) return;
 			target = level.getTargetAccordingToKeyPress();
 		}else {
 			dx = HxlGraphics.mouse.x - (Registery.player.x+Configuration.zoomedTileSize()/2);

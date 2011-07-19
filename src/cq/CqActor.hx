@@ -803,7 +803,9 @@ class CqPlayer extends CqActor, implements Player {
 			give(CqSpellFactory.newSpell(-1, -1, spellType));
 		}
 	}
-	public function giveMoney(amount:Int){
+	public function giveMoney(amount:Int) {
+		var plural:Bool = amount > 1;
+		GameUI.showEffectText(this, "+" + amount + (plural?" coins":" coin"), 0xC2881D);
 		infoViewMoney.setText(""+(Std.parseInt(infoViewMoney.text) + amount));
 	}
 	
