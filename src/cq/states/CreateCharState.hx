@@ -38,6 +38,7 @@ class CreateCharState extends CqState {
 	var txtDesc:HxlText;
 	var selectBox:HxlSprite;
 	var curClass:CqClass;
+	var storyScreen:Bool;
 
 	private var scroller:CqTextScroller;
 	
@@ -47,7 +48,7 @@ class CreateCharState extends CqState {
 		CqMobFactory.initDescriptions();
 		fadeTime = 0.5;
 		state = 0;
-
+		storyScreen = true;
 		var self = this;
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime, function() {
 			self.state = 1;
@@ -57,6 +58,7 @@ class CreateCharState extends CqState {
 	function realInit() {
 		if (scroller != null)
 			remove(scroller);
+		storyScreen = false;
 		
 		var titleText:HxlText = new HxlText(0, 0, 640, "Create Character");
 		titleText.setFormat(null, 72, 0xffffff, "center");
@@ -181,6 +183,7 @@ class CreateCharState extends CqState {
 	}
 
 	override function onKeyUp(event:KeyboardEvent) { 
+		if ( storyScreen) return;
 		if ( HxlGraphics.keys.justReleased("ESCAPE") ) {
 			gotoState(MainMenuState);
 		} else if (HxlGraphics.keys.justReleased("LEFT") || HxlGraphics.keys.justReleased("A")) {
