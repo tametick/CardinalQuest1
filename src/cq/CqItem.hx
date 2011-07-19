@@ -343,6 +343,12 @@ class CqItem extends GameObjectImpl, implements Loot {
 	public var isSuperb:Bool;
 	public var isMagical:Bool;
 	public var isWondrous:Bool;
+	
+	public var isEnchanted(getIsEnchanted, null):Bool;
+	
+	function getIsEnchanted() {
+		return isMagical || isSuperb || isWondrous;
+	}
 
 	public function new(X:Float, Y:Float, type:Dynamic) {
 		super(X, Y);

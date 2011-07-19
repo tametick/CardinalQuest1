@@ -213,7 +213,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 							if (preference > 1)	{	
 								var old:CqInventoryItem = equipItem(cell, Item, uiItem);
 								
-								if (!old.item.isMagical && !old.item.isSuperb && !old.item.isWondrous) {	
+								if (!old.item.isEnchanted) {	
 									// old is plain, so destroy
 									GameUI.showTextNotification("I can drop the old one now.", 0xBFE137);
 									CqRegistery.player.giveMoney( old.item.getMonetaryValue() );
@@ -225,21 +225,19 @@ class CqInventoryDialog extends HxlSlidingDialog {
 									// old is non plain add to inv
 									uiItem = old;
 								}
-							} else if (preference < 1) {	
-								//trace("new is worse");
+							} else if (preference < 1) {
 								//if new is worse than old, and is plain - destroy it
-								if (!Item.isMagical && !Item.isSuperb && !Item.isWondrous) {
-									//trace("new is pln, so destroy");
+								if (!Item.isEnchanted) {
 									GameUI.showTextNotification("I don't need this.");
 									CqRegistery.player.giveMoney( Item.getMonetaryValue() );
 									remove(uiItem);
 									uiItem.destroy();
+									
 									return false;
 								}
 							} else {	
-								//if item is not better, and not plain - add to inventory
-								if ( Item.equalTo( cell.getCellObj().item))	{
-									//trace("equal, so dstroy");
+								//item is the same & plain
+								if ( Item.equalTo( cell.getCellObj().item) && !Item.isEnchanted) {
 									CqRegistery.player.giveMoney( Item.getMonetaryValue() );
 									GameUI.showTextNotification("I already have this.",0xE1CC37);
 									remove(uiItem);
@@ -255,7 +253,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		
 		var emptyCell:CqInventoryCell = getEmptyCell();
 		if (emptyCell != null ) {
-			//trace("endng add to nvt");
+			// add to inventory
 			uiItem.setInventoryCell(emptyCell.cellIndex);
 			return true;
 		} else {
