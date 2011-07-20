@@ -366,7 +366,7 @@ class CqInventoryItem extends HxlSprite {
 					GameUI.instance.updateCharge(spellBtn);
 			case "potion":
 				// Moving the other item into a potion cell
-				dragStop_cell_obj.popup.setText(dragStop_cell_obj.item.fullName+"[" + (cellIndex + 6) + "]");
+				dragStop_cell_obj.popup.setText(dragStop_cell_obj.item.fullName+"[" + ((cellIndex>3)?cellIndex-4:cellIndex + 6) + "]");
 				dragStop_cell_obj.setPotionCell(cellIndex);
 			default:
 				dragStop_cell_obj.popup.setText(dragStop_cell_obj.item.fullName);
@@ -393,7 +393,7 @@ class CqInventoryItem extends HxlSprite {
 			case CqPotionCell:
 				// Moving this item into a potion cell
 				setPotionCell(dragStopCell.cellIndex);
-				popup.setText(item.fullName+"[" + (cellIndex + 6) + "]");
+				popup.setText(item.fullName+"[" + ((cellIndex>3)?cellIndex-4:cellIndex + 6) + "]");
 			case CqEquipmentCell:
 				// Moving this item into an equipment cell
 				if (dragStop_cell_obj != this) {
@@ -466,7 +466,7 @@ class CqInventoryItem extends HxlSprite {
 			case CqPotionCell:
 				// Moving this item into a potion cell
 				setPotionCell(dragStopCell.cellIndex);
-				popup.setText(item.fullName+"[" + (cellIndex+6) + "]");
+				popup.setText(item.fullName+"[" + ((cellIndex>3)?cellIndex-4:cellIndex + 6) + "]");
 			case CqEquipmentCell:
 				// Moving this item into an equipment cell
 				setEquipmentCell(dragStopCell.cellIndex);
