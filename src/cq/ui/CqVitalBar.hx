@@ -4,6 +4,12 @@ import cq.CqActor;
 
 import haxel.HxlUIBar;
 
+enum BarType {
+	DEFAULT;
+	INFO;
+	CENTRAL;
+}
+
 class CqVitalBar extends HxlUIBar {
 
 	var actor:CqActor;
@@ -33,11 +39,17 @@ class CqVitalBar extends HxlUIBar {
 
 class CqXpBar extends CqVitalBar {
 
-	public function new(Player:CqPlayer, ?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0, ?isDefaultBar:Bool=true) {
-		super(Player, X, Y, Width, Height,isDefaultBar);
+	public function new(Player:CqPlayer, ?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0, ?barType:BarType) {
+		if (barType == null)
+			barType = DEFAULT;
+		
+		super(Player, X, Y, Width, Height,barType==BarType.DEFAULT);
 		if (Std.is( actor, CqPlayer)) {
 			var player = cast(actor, CqPlayer);
-			player.infoViewXpBar = this;
+			if(barType==BarType.INFO)
+				player.infoViewXpBar = this;
+			else
+				player.centralXpBar = this;
 		}
 		
 		setFrameColor(0xff444444);
@@ -63,16 +75,22 @@ class CqXpBar extends CqVitalBar {
 
 class CqHealthBar extends CqVitalBar {
 
-	public function new(Actor:CqActor, ?X:Float = 0, ?Y:Float = 0, ?Width:Float = 0, ?Height:Float = 0, ?isDefaultBar:Bool=true) {
-		super(Actor, X, Y, Width, Height,isDefaultBar);
+	public function new(Actor:CqActor, ?X:Float = 0, ?Y:Float = 0, ?Width:Float = 0, ?Height:Float = 0, ?barType:BarType) {
+		if (barType == null)
+			barType = DEFAULT;
+		
+		super(Actor, X, Y, Width, Height,barType==BarType.DEFAULT);
 		
 		actor.addOnInjure(updateValue);
 		actor.addOnDestroy(destroy);
-		if(isDefaultBar){
+		if(barType==BarType.DEFAULT){
 			actor.healthBar = this;
 		} else if (Std.is( actor, CqPlayer)) {
 			var player = cast(actor, CqPlayer);
-			player.infoViewHealthBar = this;
+			if(barType==BarType.INFO)
+				player.infoViewHealthBar = this;
+			else
+				player.centralHealthBar = this;
 		}
 
 		

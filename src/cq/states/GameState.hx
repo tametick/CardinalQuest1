@@ -61,6 +61,13 @@ class GameState extends CqState {
 		gameUI = null;
 		add(CqRegistery.world.currentLevel);
 	}
+	
+	public override function render() {
+		if (gameUI != null)
+			gameUI.updateCentralBarsPosition();
+		super.render();
+	}
+
 	public override function update() {
 		super.update();
 		if (!started || endingAnim) return;
