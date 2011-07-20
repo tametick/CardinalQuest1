@@ -43,7 +43,7 @@ Additional Contributors
 
 /*
 Supporters
- Champion of the Land
+ Patron Saint of Cardinal Quest
   Eronarn
 
  Saviors of the Developers
