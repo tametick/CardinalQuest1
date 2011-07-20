@@ -241,7 +241,7 @@ class CqActor extends CqObject, implements Actor {
 					);
 					player.moveToPixel(state, startingPostion.x, startingPostion.y);
 					player.hp = player.maxHp;
-					player.infoViewHealthBar.updateValue();
+					player.updatePlayerHealthBars();
 					Registery.level.updateFieldOfView(HxlGraphics.state,true);
 				} else {
 					///todo: Playtomic recording
@@ -425,7 +425,7 @@ class CqActor extends CqObject, implements Actor {
 				if (buff == "life") {
 					if (Std.is(this, CqPlayer)) {
 						var player = CqRegistery.player;
-						player.infoViewHealthBar.updateValue();
+						player.updatePlayerHealthBars();
 					}
 				}
 			}
@@ -447,7 +447,7 @@ class CqActor extends CqObject, implements Actor {
 						this.hp = 1;
 					if (Std.is(this, CqPlayer)) {
 						var player = CqRegistery.player;
-						player.infoViewHealthBar.updateValue();
+						player.updatePlayerHealthBars();
 					}
 				}
 			}
@@ -586,21 +586,28 @@ class CqActor extends CqObject, implements Actor {
 		case "heal":
 			if (effect.value == "full"){
 				if (other == null) {
-					if(healthBar!=null)healthBar.visible = true;
+					if (healthBar != null)
+						healthBar.visible = true;
 					hp = maxHp;
-					healthBar.updateValue();
+					
+					if(healthBar!=null)
+						healthBar.updateValue();
+						
 					if (Std.is(this, CqPlayer)) {
 						var player = CqRegistery.player;
-						player.infoViewHealthBar.updateValue();
+						player.updatePlayerHealthBars();
 					}
 					GameUI.showEffectText(this, "Healed", 0x0080FF);
 				} else {
 					if(healthBar!=null)healthBar.visible = true;
 					other.hp = other.maxHp;
-					if(other.healthBar!=null)other.healthBar.updateValue();
+					
+					if (other.healthBar != null)
+						other.healthBar.updateValue();
+						
 					if (Std.is(other, CqPlayer)) {
 						var player = CqRegistery.player;
-						player.infoViewHealthBar.updateValue();
+						player.updatePlayerHealthBars();
 					}
 					GameUI.showEffectText(other, "Healed", 0x0080FF);
 				}
@@ -664,6 +671,10 @@ class CqPlayer extends CqActor, implements Player {
 	
 	public var infoViewHealthBar:CqHealthBar;
 	public var infoViewXpBar:CqXpBar;
+	
+	public var centralHealthBar:CqHealthBar;
+	public var centralXpBar:CqXpBar;
+	
 	public var infoViewLives:HxlText;
 	public var infoViewMoney:HxlText;
 	public var infoViewLevel:HxlText;
@@ -704,8 +715,7 @@ class CqPlayer extends CqActor, implements Player {
 				vitality = 2;
 				damage = new Range(1, 1);
 		}
-		if (Configuration.debug)
-		{
+		if (Configuration.debug) {
 			vitality = 500;
 			attack = 500;
 			CqConfiguration.playerLives = 9;
@@ -864,7 +874,12 @@ class CqPlayer extends CqActor, implements Player {
 		GameUI.showEffectText(this, "Level " + level, 0xFFFF66);
 		maxHp += vitality;
 		hp = maxHp;
+		updatePlayerHealthBars();
+	}
+	
+	public function updatePlayerHealthBars() {
 		infoViewHealthBar.updateValue();
+		centralHealthBar.updateValue();
 	}
 	
 	public override function actInDirection(state:HxlState, targetTile:HxlPoint):Bool {
@@ -892,15 +907,6 @@ class CqPlayer extends CqActor, implements Player {
 			}
 		}
 		super.moveToPixel(state, X, Y);
-	//TODO: this code is repeated in the super, not sure why its here....
-	//so commented out. IF no bugs happen, probalby fine to remove.
-	/*	isMoving = true;
-		if ( Y < y ) bobDir = 0;
-		else if ( X > x ) bobDir = 1;
-		else if ( Y > y ) bobDir = 2;
-		else if ( X < x ) bobDir = 3;
-		bobCounter = 0.0;
-		Actuate.tween(this, moveSpeed, { x: X, y: Y } ).onComplete(moveStop,[state]);*/
 	}
 }
 
