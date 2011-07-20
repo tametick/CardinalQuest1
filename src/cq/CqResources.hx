@@ -65,6 +65,7 @@ class SpriteInfo extends Bitmap { public function new() { super(); } }
 class UiBeltHorizontal extends Bitmap { public function new() { super(); } }
 class UiInventoryBox extends Bitmap { public function new() { super(); } }
 class SpriteMapPaper extends Bitmap { public function new() { super(); } }
+class SpriteCharPaper extends Bitmap { public function new() { super(); } }
 class IntroScreen extends Bitmap { public function new() { super(); } }
 class DeathScreen extends Bitmap { public function new() { super(); } }
 class SpriteKnightEntry extends Bitmap { public function new() { super(); } }
@@ -120,6 +121,20 @@ class SpritePortrait extends HxlSpriteSheet {
 	
 	public static function getIcon(IconName:CqClass, Size:Int, Zoom:Float):HxlSprite {
 		return HxlSpriteSheet.getSprite(SpritePortrait, instance.getSpriteIndex(HxlUtil.enumToString(IconName)), Size, Zoom);
+	}
+}
+class SpritePortraitPaper extends HxlSpriteSheet { 
+	public static var instance = new SpritePortraitPaper();
+	public function new() {
+		spriteNames = [HxlUtil.enumToStringArray(
+		
+			[CqClass.THIEF, CqClass.FIGHTER, CqClass.WIZARD]
+		)];
+		super(0);
+	} 
+	
+	public static function getIcon(IconName:CqClass, Size:Int, Zoom:Float):HxlSprite {
+		return HxlSpriteSheet.getSprite(SpritePortraitPaper, instance.getSpriteIndex(HxlUtil.enumToString(IconName)), Size, Zoom);
 	}
 }
 class SpriteEquipmentIcons extends HxlSpriteSheet { 

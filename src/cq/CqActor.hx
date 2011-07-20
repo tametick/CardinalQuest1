@@ -1091,7 +1091,7 @@ class CqMobFactory {
 		
 		if(Resources.descriptions==null)
 			Resources.descriptions = new Hash<String>();
-		Resources.descriptions.set("Fighter", "A mighty warrior, possessing unparalleled strength and vigor.");
+		Resources.descriptions.set("Fighter", "A mighty warrior, possessing unparalleled strength and vigor. ");
 		Resources.descriptions.set("Wizard", "A wise mage who mastered the secrets of magic.");
 		Resources.descriptions.set("Thief", "A cunning and agile rogue, his speed allows for a swift escape.");
 		

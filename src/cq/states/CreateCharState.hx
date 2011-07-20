@@ -5,6 +5,7 @@ import com.eclecticdesignstudio.motion.easing.Cubic;
 import cq.CqGraphicKey;
 import cq.ui.CqTextScroller;
 import haxel.GraphicCache;
+import haxel.HxlSpriteSheet;
 
 import cq.CqActor;
 import cq.CqResources;
@@ -27,6 +28,9 @@ import haxel.HxlState;
 import haxel.HxlText;
 
 class CreateCharState extends CqState {
+	
+	static var class_buttons_y:Int = 135;
+	
 	var fadeTime:Float;
 	var state:Int;
 	var btnFighter:HxlButton;
@@ -39,8 +43,10 @@ class CreateCharState extends CqState {
 	var selectBox:HxlSprite;
 	var curClass:CqClass;
 	var storyScreen:Bool;
-
-	private var scroller:CqTextScroller;
+	var portrait:HxlSprite;
+	var playerSprites:HxlSpriteSheet;
+	
+	var scroller:CqTextScroller;
 	
 	public override function create() {
 		super.create();
@@ -54,12 +60,14 @@ class CreateCharState extends CqState {
 			self.state = 1;
 		});
 	}
-		
 	function realInit() {
 		if (scroller != null)
 			remove(scroller);
 		storyScreen = false;
 		
+		//paper bg
+		var bg:HxlSprite = new HxlSprite(40, 250, SpriteCharPaper);
+		add(bg);
 		var titleText:HxlText = new HxlText(0, 0, 640, "Create Character");
 		titleText.setFormat(null, 72, 0xffffff, "center");
 		add(titleText);
@@ -73,49 +81,47 @@ class CreateCharState extends CqState {
 		btnStart.loadGraphic(new StartButtonSprite(),btnStartHigh);
 		btnStart.loadText(new HxlText(0, -7, 90, "Start", true, null).setFormat(null, 32, 0xffffff, "center", 0x010101));
 
-		add(btnStartBg);
-		add(btnStart);
 		var self = this;
 		btnStart.setCallback(function() {
 			self.gotoState(GameState);
 		});
 
-		var playerSprites = SpritePlayer.instance;
+		playerSprites= SpritePlayer.instance;
 
 		var sprFighter = new HxlSprite(0, 0);
 		sprFighter.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 4.0, 4.0);
 		sprFighter.setFrame(playerSprites.getSpriteIndex("fighter"));
-		btnFighter = new HxlButton(138, 175);
+		btnFighter = new HxlButton(138, class_buttons_y);
 		btnFighter.loadGraphic(sprFighter);
 		add(btnFighter);
 		btnFighter.setCallback(function() { self.changeSelection(FIGHTER); });
-		txtFighter = new HxlText(95, 250, 150, "Fighter");
+		txtFighter = new HxlText(95, class_buttons_y+sprFighter.height, 150, "Fighter");
 		txtFighter.setFormat(null, 32, 0xffffff, "center", 0x010101);
 		add(txtFighter);
 
 		var sprThief = new HxlSprite(0, 0);
 		sprThief.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 4.0, 4.0);
 		sprThief.setFrame(playerSprites.getSpriteIndex("thief"));
-		btnThief = new HxlButton(288, 175);
+		btnThief = new HxlButton(288, class_buttons_y);
 		btnThief.loadGraphic(sprThief);
 		add(btnThief);
 		btnThief.setCallback(function() { self.changeSelection(THIEF); });
-		txtThief = new HxlText(245, 250, 150, "Thief");
+		txtThief = new HxlText(245, class_buttons_y+sprThief.height, 150, "Thief");
 		txtThief.setFormat(null, 32, 0xffffff, "center", 0x010101);
 		add(txtThief);
 
 		var sprWizard = new HxlSprite(0, 0);
 		sprWizard.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 4.0, 4.0);
 		sprWizard.setFrame(playerSprites.getSpriteIndex("wizard"));
-		btnWizard = new HxlButton(438, 175);
+		btnWizard = new HxlButton(438, class_buttons_y);
 		btnWizard.loadGraphic(sprWizard);
 		add(btnWizard);
 		btnWizard.setCallback(function() { self.changeSelection(WIZARD); });
-		txtWizard = new HxlText(395, 250, 150, "Wizard");
+		txtWizard = new HxlText(395, class_buttons_y+sprWizard.height, 150, "Wizard");
 		txtWizard.setFormat(null, 32, 0xffffff, "center", 0x010101);
 		add(txtWizard);
 
-		selectBox = new HxlSprite(105, 160);
+		selectBox = new HxlSprite(105, class_buttons_y-20);
 		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.CharCreateSelector) ) {
 			var target:Shape = new Shape();
 			target.graphics.lineStyle(5, 0xffffff00);
@@ -131,11 +137,20 @@ class CreateCharState extends CqState {
 		}
 		add(selectBox);
 
-		txtDesc = new HxlText(30, 325, HxlGraphics.width - 60);
-		txtDesc.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "center", 0x010101);
+		txtDesc = new HxlText(140, 280, HxlGraphics.width - 200);
+		txtDesc.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
 		add(txtDesc);
 		txtDesc.text = Resources.descriptions.get("Fighter");
 
+		portrait = SpritePortraitPaper.getIcon(FIGHTER, 100 , 1.0);
+		portrait.x = 60;
+		portrait.y = 280;
+		add(portrait);
+		
+		add(btnStartBg);
+		add(btnStart);
+		
+		
 		curClass = FIGHTER;
 	}
 	/*
@@ -168,12 +183,15 @@ class CreateCharState extends CqState {
 		if ( curClass == FIGHTER ) {
 			targetX = 105;
 			txtDesc.text = Resources.descriptions.get("Fighter");
+			portrait.setFrame(1);
 		} else if ( curClass == THIEF ) {
 			targetX = 255;
 			txtDesc.text = Resources.descriptions.get("Thief");
+			portrait.setFrame(0);
 		} else if ( curClass == WIZARD ) {
 			targetX = 405;
 			txtDesc.text = Resources.descriptions.get("Wizard");
+			portrait.setFrame(2);
 		}
 		Actuate.tween(selectBox, 0.25, { x: targetX }).ease(Cubic.easeOut);
 	}

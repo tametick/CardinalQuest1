@@ -1,9 +1,11 @@
 package cq.ui;
 
 import cq.CqActor;
+import cq.CqRegistery;
 import cq.CqResources;
 import data.Configuration;
 import haxel.HxlSprite;
+import haxel.HxlUtil;
 
 
 import haxel.HxlSlidingDialog;
@@ -36,9 +38,9 @@ class CqCharacterDialog extends HxlSlidingDialog {
 		add(bg);
 		
 		var textColor:Int = 0x6D564B;
-		
+		var player_class:String = HxlUtil.capitalizeFirstCharacter(HxlUtil.enumToString(CqRegistery.player.playerClass,false).toLowerCase());
 		var textBoxes:Array<String> = ["txtCharName", "txtHealthLabel", "valHealth", "txtAttackLabel", "valAttack", "txtDefenseLabel", "valDefense", "txtSpeedLabel", "valSpeed", "txtSpiritLabel", "valSpirit", "txtVitalityLabel", "valVitality"];
-		var txt_string:Array<String> = ["Unknown Hero", "Health:", "0", "Attack:", "0", "Defense:", "0", "Speed:", "0", "Spirit:", "0", "Vitality:", "0"];
+		var txt_string:Array<String> = [player_class, "Health:", "0", "Attack:", "0", "Defense:", "0", "Speed:", "0", "Spirit:", "0", "Vitality:", "0"];
 		var pos:Array<Array<Int>> = [ [ 40, 40], [40, 100], [190, 100], [40, 130], [190, 130], [40, 160], [190, 160], [40, 190], [190, 190], [40, 220], [190, 220], [40, 250], [190, 250]];
 		for (i in 0...textBoxes.length)
 		{

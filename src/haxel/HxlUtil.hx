@@ -438,4 +438,8 @@ class HxlUtil {
 		}
 		return sum;
 	}
+	public static function capitalizeFirstCharacter(str:String):String
+	{
+		return str.charAt(0).toUpperCase()+str.substr(1);
+	}
 }
