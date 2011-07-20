@@ -33,12 +33,15 @@ class CqEffectInjure extends HxlEmitter {
 		}
 		switch(cacheStatus){
 			case 0:
-				cacheStatus = usingCache = 1;	
+				cacheStatus = 1;
+				usingCache = 1;	
 				setAlphaVelocity(-5, -2);
 				gravity = 0.0;
 				currentFrame = 0;
 				makeSprites();
 			case 1:
+				//kill();
+				//return;
 				usingCache = 0;	
 				setAlphaVelocity(-5, -2);
 				gravity = 0.0;
@@ -108,7 +111,7 @@ class CqEffectInjure extends HxlEmitter {
 	override function update()
 	{
 		if (0 == usingCache)//uncached run
-			super.update();
+			super.updateEmitter();
 		else
 			updateMembers();
 	}
@@ -121,13 +124,13 @@ class CqEffectInjure extends HxlEmitter {
 		currentFrame++;
 		if (2 == usingCache) {
 			if (currentFrame >= effectCache.length)
+			
 			{
 				kill();
-				return;
 			}else {	
 				frameBitmap.pixels = effectCache[currentFrame];
 			}
-		}else if(1 == usingCache){
+		}else{
 			super.updateEmitter();
 			var frame:BitmapData = new BitmapData(hs<<1,hs<<1,true,0);
 			var o:HxlSprite;
