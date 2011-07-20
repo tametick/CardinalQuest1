@@ -65,6 +65,7 @@ class CreateCharState extends CqState {
 		add(titleText);
 		
 		var btnStart:HxlButton = new HxlButton(Std.int((640 - 90) / 2), 430, 90, 28);
+		btnStart.setEventUseCapture(true);
 		var btnStartBg:HxlSprite = new HxlSprite(btnStart.x, btnStart.y);
 		btnStartBg.loadGraphic(SpriteButtonBg, false, false, 90, 26);
 		var btnStartHigh = new StartButtonSprite();

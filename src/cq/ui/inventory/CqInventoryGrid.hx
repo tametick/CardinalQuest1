@@ -44,15 +44,17 @@ class CqInventoryGrid extends HxlDialog {
 		dropCell.dropCell = true;
 		dropCell.setGraphicKeys(CqGraphicKey.EquipmentCellBG,CqGraphicKey.DropCellBGHighlight,CqGraphicKey.CellGlow);
 	}
-	override public function destroy():Void
+	override public function kill():Void
 	{
 		for ( i in 0...cells.length ) {
 			if ( cells[i].getCellObj() != null ) cells[i].getCellObj().destroy();
-			cells[i].destroy();
+			cells[i].clearCellObj();
+			cells[i].kill();
 			remove(cells[i]);
 		}
 		cells = new Array();
 		super.destroy();
+		super.kill();
 	}
 	public function getOpenCellIndex():Int {
 		for ( i in 0...cells.length ) {

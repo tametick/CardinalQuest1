@@ -49,7 +49,6 @@ class GameState extends CqState {
 		started = endingAnim = false;
 		chosenClass = FIGHTER;
 		HxlGraphics.fade.start(false, 0x00000000, 0.25);
-		
 		cursor.setFrame(SpriteCursor.instance.getSpriteIndex("diagonal"));
 		cursor.scrollFactor.y = cursor.scrollFactor.x = 0;
 		//loadingBox = new HxlLoadingBox();
@@ -57,7 +56,7 @@ class GameState extends CqState {
 	}
 	public override function destroy() {
 		inst = null;
-		gameUI.destroy();
+		gameUI.kill();
 		remove(gameUI);
 		gameUI = null;
 		add(CqRegistery.world.currentLevel);

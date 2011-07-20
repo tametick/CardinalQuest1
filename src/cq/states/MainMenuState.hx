@@ -64,7 +64,7 @@ class MainMenuState extends CqState {
 		btnNewGame.setNormalFormat(null, 40, 0xffffff, "center");
 		btnNewGame.setHoverFormat(null, 40, 0xffff00, "center");
 		menu.addItem(btnNewGame);
-		btnNewGame.setCallback(function() { if(GameUI.instance!=null)GameUI.instance.destroy();self.changeState(CreateCharState);});
+		btnNewGame.setCallback(function() { if(GameUI.instance!=null)GameUI.instance.kill();self.changeState(CreateCharState);});
 		buttonY += 50;
 
 		var btnCredits:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Credits", true, null);

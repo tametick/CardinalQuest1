@@ -21,6 +21,7 @@ import cq.ui.CqMessageDialog;
 import cq.ui.CqTextNotification;
 import cq.ui.CqSpellGrid;
 import haxel.HxlGroup;
+import haxel.HxlState;
 import haxel.HxlUtil;
 import haxel.HxlTilemap;
 
@@ -242,19 +243,13 @@ class GameUI extends HxlDialog {
 		
 		add(doodads);
 	}
-	override public function destroy() {
-		remove(dlgPotionGrid);
-		dlgPotionGrid.destroy();
-		remove(dlgSpellGrid);
-		dlgSpellGrid.destroy();
-		remove(panelCharacter);
-		remove(panelInventory);
-		panelInventory.destroy();
-		remove(panelMap);
-		remove(panelLog);
-		remove(notifications);
-		remove(doodads);
+	override public function kill() {
+		GameUI.instance = null;
+		dlgPotionGrid.kill();
+		dlgSpellGrid.kill();
+		clearEventListeners();
 		super.destroy();
+		super.kill();
 	}
 	public function showMapDlg()
 	{
@@ -547,7 +542,12 @@ class GameUI extends HxlDialog {
 			Player.pickup(HxlGraphics.state, item);
 		}
 	}
-	
+	override public function onAdd(state:HxlState) {
+		//trace("gui added");	
+	}
+	override public function onRemove(state:HxlState) {
+		//trace("gui rmv");	
+	}
 	public function itemPickup(Item:CqItem) {
 		if(panelInventory.itemPickup(Item))
 			btnInventoryView.doFlash();
@@ -715,6 +715,8 @@ class GameUI extends HxlDialog {
 	}
 
 	public function targetingMouseDown() {
+		if (!exists || !visible)
+			return;
 		if ( targetSpell == null ) {
 			GameUI.setTargeting(false);
 		}

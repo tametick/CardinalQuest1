@@ -252,7 +252,7 @@ class CqInventoryItem extends HxlSprite {
 	}
 
 	private override function onDragMouseDown(event:MouseEvent) {
-		if ( !Std.is(GameUI.currentPanel,CqInventoryDialog) ) 
+		if ( !Std.is(GameUI.currentPanel,CqInventoryDialog) || !exists || !visible || !active || !dragEnabled) 
 			return;
 		super.onDragMouseDown(event);
 		if ( isDragging ) {
