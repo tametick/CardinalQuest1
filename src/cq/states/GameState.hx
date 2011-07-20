@@ -57,8 +57,9 @@ class GameState extends CqState {
 	}
 	public override function destroy() {
 		inst = null;
-		remove(gameUI);
 		gameUI.destroy();
+		remove(gameUI);
+		gameUI = null;
 		add(CqRegistery.world.currentLevel);
 	}
 	public override function update() {

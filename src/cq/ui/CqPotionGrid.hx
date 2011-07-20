@@ -40,7 +40,6 @@ class CqPotionGrid extends CqInventoryGrid {
 		}
 
 	}
-
 	public function onItemDrag(Item:CqItem) {
 		for( i in 0...cells.length ) {
 			var Cell:CqPotionCell = cast(cells[i], CqPotionCell);
