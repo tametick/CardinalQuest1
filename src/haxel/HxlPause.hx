@@ -29,14 +29,10 @@ class HxlPause extends HxlGroup {
 		scrollFactor.y = 0;
 		var w:Int = 80;
 		var h:Int = 92;
-		//x = (HxlGraphics.width-w)/2;
-		//y = (HxlGraphics.height - h) / 2;
-		add((new HxlSprite()).createGraphic(HxlGraphics.width, HxlGraphics.height, 0xaa000000, true), true);
-		var notif:HxlText = new HxlText(HxlGraphics.width / 2-80, 80, 500, "Press mouse or any key to resume");
-		notif.setSize(20);
-		notif.alignment = "left";
-		add(notif);
-		return;
+		x = (HxlGraphics.width-w)/2;
+		y = (HxlGraphics.height-h)/2;
+		add((new HxlSprite()).createGraphic(w,h,0xaa000000,true),true);			
+		(cast( add(new HxlText(0,0,w,"this game is"),true), HxlText)).alignment = "center";
 		add((new HxlText(0,10,w,"PAUSED")).setFormat("",16,0xffffff,"center"),true);
 		//add(new HxlSprite(4,36,ImgKeyP),true);
 		add(new HxlText(16,36,w-16,"Pause Game"),true);

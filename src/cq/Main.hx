@@ -3,6 +3,7 @@ package cq;
 import cq.states.GameState;
 import cq.states.SplashState;
 import cq.CqResources;
+import cq.ui.CqPause;
 import haxel.HxlPreloader;
 import haxel.HxlGame;
 import haxel.HxlGraphics;
@@ -26,7 +27,7 @@ class Main {
 		#elseif iphone
 		new Main();
 		#elseif cpp
-		Lib.create(function(){new Main();},640,480,60,0xffffff,(1*Lib.HARDWARE) | Lib.RESIZABLE);
+		Lib.create(function(){new Main();},Configuration.app_width,Configuration.app_height,60,0xffffff,(1*Lib.HARDWARE) | Lib.RESIZABLE);
 		#end
 	}
 
@@ -52,6 +53,8 @@ class Game extends HxlGame {
 			super(640, 480, GameState, 1, FontDungeon.instance.fontName);
 		else
 			super(640, 480, SplashState, 1, FontDungeon.instance.fontName);		
+		
+		pause = new CqPause();
 		
 	}
 }
