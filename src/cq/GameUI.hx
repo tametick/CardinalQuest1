@@ -244,7 +244,16 @@ class GameUI extends HxlDialog {
 	}
 	override public function destroy() {
 		remove(dlgPotionGrid);
+		dlgPotionGrid.destroy();
 		remove(dlgSpellGrid);
+		dlgSpellGrid.destroy();
+		remove(panelCharacter);
+		remove(panelInventory);
+		panelInventory.destroy();
+		remove(panelMap);
+		remove(panelLog);
+		remove(notifications);
+		remove(doodads);
 		super.destroy();
 	}
 	public function showMapDlg()
