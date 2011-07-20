@@ -20,4 +20,5 @@ class CqPopup extends HxlText{
 		parent.remove(this);
 	}
 	
+	
 }
