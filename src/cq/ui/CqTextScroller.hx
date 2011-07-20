@@ -12,13 +12,9 @@ import haxel.HxlSprite;
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.actuators.GenericActuator;
 import haxel.HxlText;
-/**
- * ...
- * @author joris
- */
 
-class CqTextScroller extends HxlGroup
-{
+
+class CqTextScroller extends HxlGroup {
 	static var To_Y:Int = 10;
 	inline static var Duration:Int = 10;
 	inline static var MinimumDuration:Float = 0.3;
@@ -31,8 +27,7 @@ class CqTextScroller extends HxlGroup
 	var OnComplete:Void->Void;
 	var to_y:Int;
 	var respondInput:Bool;//so you wouldnt accidentally close the window
-	public function new(bg:Class<Bitmap>, scrollDuration:Float, ?Title:String = "", ?TitleColor:Int = 0xFFFFFF) 
-	{
+	public function new(bg:Class<Bitmap>, scrollDuration:Float, ?Title:String = "", ?TitleColor:Int = 0xFFFFFF) {
 		super();
 		clicks = 0;
 		respondInput = false;
@@ -62,8 +57,7 @@ class CqTextScroller extends HxlGroup
 		HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_UP, onAction);
 	}
 	private function afterMinimum() { respondInput = true; } 
-	private function onAction(e:Event):Void 
-	{
+	private function onAction(e:Event){
 		if (!respondInput)
 			return;
 		if (clicks == 0)
@@ -80,8 +74,7 @@ class CqTextScroller extends HxlGroup
 		clicks++;
 	}
 	
-	private function finishTweens():Void 
-	{
+	public function finishTweens() {
 		if (cols.length == 0) 
 			return;
 		Actuate.pauseAll();
@@ -90,16 +83,14 @@ class CqTextScroller extends HxlGroup
 			col.y = to_y;
 		}
 	}
-	public function addColumn(X:Int, W:Int, text:String,?embeddedfont:Bool = true,?fontName:String = "",?fontSize:Int = 20,?color:Int = 0xFFFFFF)
-	{
+	public function addColumn(X:Int, W:Int, text:String,?embeddedfont:Bool = true,?fontName:String = "",?fontSize:Int = 16,?color:Int = 0xFFFFFF) {
 		var text:HxlText = new HxlText(X, 0, W, text, embeddedfont, fontName);
 		text.setFormat(fontName, fontSize, color, "left");
 		add(text);
 		cols.push(text);
 		text.y = HxlGraphics.stage.stageHeight;
 	}
-	public function startScroll()
-	{
+	public function startScroll() {
 		if (cols.length == 0) 
 			return;
 		for (col in cols)
@@ -108,8 +99,7 @@ class CqTextScroller extends HxlGroup
 		}
 	}
 	
-	public function onComplete(handler:Void->Void):Void 
-	{
+	public function onComplete(handler:Void->Void):Void {
 		OnComplete = handler;
 	}
 }
