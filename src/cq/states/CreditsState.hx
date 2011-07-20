@@ -23,24 +23,49 @@ class CreditsState extends CqState {
 		var title:HxlText = new HxlText(0, y, 640, "Credits", true,null , 60, textColor, "center");
 		y += Std.int(title.height+10);
 		add(title);
-
-		var titleProgramming:HxlText = new HxlText(0, y, 640, "Credits", true,null , 60, textColor, "center");
-		y += Std.int(title.height+10);
-		add(title);
 		
-		
-		var col1:String = 
-"Programming:\n\tIdo Yehieli & Joris Cizikas\n" +
-"Graphics:\n\tJagosh Kalezich\n" ;//+
-"\n" +
-"Music:\tWhitaker Blackall\n";
+/*		
+Programming
+ Ido Yehieli
+ Joris Cizikas
 
+Graphics
+ Jagosh Kalezich
+ 
+Music
+ Whitaker Blackall
+ 
+Additional Contributors 
+ Corey Martin (programming)
+ West Clendinning (graphics) 
+ Stephen Challener (graphics)
+*/
 
 /*
-		scroller.addColumn(40, 270, col1, false, FontAnonymousPro.instance.fontName,18);
-		scroller.addColumn(40+270+20, 270, col2, false, FontAnonymousPro.instance.fontName);
+Supporters
+ Champion of the Land
+  Eronarn
+
+ Saviors of the Developers
+  Ainars Skromanis
+  Joshua Day
+  Mister Dilettante
+ 
+ Master Supporters
+  Mike Welsh
+  Ido Rosen
+  Madrobby
+ 
+ Hero Supporters
+  Kornel Kisielewicz
+  Jens Bergensten
+  Eben Howard
+  Mongrol
+  Tam Toucan
+  Twpage
+  Brian Rinaldi
 */
-		//add(scroller);
+
 	}
 	
 
