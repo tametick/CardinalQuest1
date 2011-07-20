@@ -428,6 +428,7 @@ class HxlGroup extends HxlObject {
 	 * override this function to handle custom input and perform collisions.
 	 */
 	public override function update() {
+		super.update();
 		saveOldPosition();
 		updateMotion();
 		if ( mountObject != null ) {

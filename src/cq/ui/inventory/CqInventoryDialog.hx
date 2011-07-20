@@ -176,7 +176,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 				for ( cell in dlgPotionGrid.cells ) {
 					if ( cell.getCellObj() == null ) {
 						uiItem.setPotionCell(cell.cellIndex);
-						uiItem.popup.setText(Item.fullName+"[" + ((cell.cellIndex>3)?cell.cellIndex-4:cell.cellIndex + 6) + "]");
+						uiItem.popup.setText(Item.fullName+" key[" + ((cell.cellIndex>3)?cell.cellIndex-4:cell.cellIndex + 6) + "]");
 						if ( !cast(cell, CqPotionCell).eqCellInit ) {
 							// Mysterious things happen with positioning before the ui
 							// stuff gets updated for the first time.. just accommodate for it
@@ -191,7 +191,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 				for ( cell in dlgSpellGrid.cells ) {
 					if ( cell.getCellObj() == null ) {
 						uiItem.setSpellCell(cell.cellIndex);
-						uiItem.popup.setText(Item.fullName+"[" + (cell.cellIndex + 1) + "]");
+						uiItem.popup.setText(Item.fullName+" key[" + (cell.cellIndex + 1) + "]");
 						cell.getCellObj().updateIcon();
 						return false;
 					}

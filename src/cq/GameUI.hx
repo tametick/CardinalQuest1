@@ -1,6 +1,7 @@
 package cq;
 
 import cq.states.GameState;
+import cq.ui.CqPopup;
 import cq.ui.CqPotionGrid;
 import cq.ui.inventory.CqInventoryDialog;
 import cq.CqActor;
@@ -217,6 +218,7 @@ class GameUI extends HxlDialog {
 		addInfoButtonTexts();
 		addCentralBars();
 		
+		var pop:CqPopup;
 		// map
 		btnMapView = new HxlButton(0, 0, btnSize, btnSize);
 		btnMapView.loadGraphic(mapBtn,mapBtnHigh);
@@ -224,6 +226,10 @@ class GameUI extends HxlDialog {
 		btnMapView.setCallback(showMapDlg);
 		btnMapView.configEvent(5, true, true);
 		leftButtons.addButton(btnMapView);
+		pop = new CqPopup(80, "key[M]", doodads);
+		pop.zIndex = 15;
+		btnMapView.setPopup(pop);
+		doodads.add(pop);
 
 		// inv
 		btnInventoryView = new HxlButton(0, 0, btnSize, btnSize);
@@ -232,6 +238,10 @@ class GameUI extends HxlDialog {
 		btnInventoryView.setCallback(showInvDlg);
 		btnInventoryView.configEvent(5, true, true);
 		leftButtons.addButton(btnInventoryView);
+		pop = new CqPopup(80, "key[I]", doodads);
+		pop.zIndex = 15;
+		btnInventoryView.setPopup(pop);
+		doodads.add(pop);
 
 		// stats
 		btnCharacterView = new HxlButton(0, 0, btnSize, btnSize);
@@ -239,6 +249,10 @@ class GameUI extends HxlDialog {
 		btnCharacterView.loadText(new HxlText(0, 40, btnSize, "Char", true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
 		btnCharacterView.setCallback(showCharDlg);
 		btnCharacterView.configEvent(5, true, true);
+		pop = new CqPopup(80, "key[C]", doodads);
+		pop.zIndex = 15;
+		btnCharacterView.setPopup(pop);
+		doodads.add(pop);
 		leftButtons.addButton(btnCharacterView);
 
 		panelInventory.dlgSpellGrid = dlgSpellGrid;
