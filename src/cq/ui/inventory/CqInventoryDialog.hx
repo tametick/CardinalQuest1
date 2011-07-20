@@ -118,7 +118,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		}
 		
 		//popup
-		uiItem.setPopup(new CqPopup(100,Item.fullName,gameui.doodads));
+		uiItem.setPopup(new CqPopup(120,Item.fullName,gameui.doodads));
 		gameui.doodads.add(uiItem.popup);
 		uiItem.popup.zIndex = 15;
 		
@@ -176,6 +176,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 				for ( cell in dlgPotionGrid.cells ) {
 					if ( cell.getCellObj() == null ) {
 						uiItem.setPotionCell(cell.cellIndex);
+						uiItem.popup.setText(Item.fullName+"[" + ((cell.cellIndex>3)?cell.cellIndex-4:cell.cellIndex + 6) + "]");
 						if ( !cast(cell, CqPotionCell).eqCellInit ) {
 							// Mysterious things happen with positioning before the ui
 							// stuff gets updated for the first time.. just accommodate for it
@@ -190,6 +191,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 				for ( cell in dlgSpellGrid.cells ) {
 					if ( cell.getCellObj() == null ) {
 						uiItem.setSpellCell(cell.cellIndex);
+						uiItem.popup.setText(Item.fullName+"[" + (cell.cellIndex + 1) + "]");
 						cell.getCellObj().updateIcon();
 						return false;
 					}
@@ -255,6 +257,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		if (emptyCell != null ) {
 			// add to inventory
 			uiItem.setInventoryCell(emptyCell.cellIndex);
+			uiItem.popup.setText(Item.fullName);
 			return true;
 		} else {
 			throw "no room in inventory, should not happen because pick up should have not been allowed!";

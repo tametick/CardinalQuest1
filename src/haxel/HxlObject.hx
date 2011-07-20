@@ -30,7 +30,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	 */
 	public var scrollFactor:HxlPoint;
 	
-	public var popup:HxlSprite;
+	public var popup:HxlText;
 	/**
 	 * WARNING: The origin of the sprite will default to its center.
 	 * If you change this, the visuals and the collisions will likely be
@@ -400,7 +400,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 			}
 		}
 	}
-	public function setPopup(Popup:HxlSprite)
+	public function setPopup(Popup:HxlText)
 	{
 		popup = Popup;
 		popup.visible = false;
