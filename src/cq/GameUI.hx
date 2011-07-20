@@ -300,8 +300,8 @@ class GameUI extends HxlDialog {
 		centralHealthBar.scrollFactor.x = centralHealthBar.scrollFactor.y = 0;
 		centralXpBar.scrollFactor.x = centralXpBar.scrollFactor.y = 0;
 		
-		centralHealthBar.zIndex = zIndex + 1000;
-		centralXpBar.zIndex = zIndex + 1000;
+		centralHealthBar.zIndex = zIndex ;
+		centralXpBar.zIndex = zIndex;
 		
 		add(centralHealthBar);
 		add(centralXpBar);

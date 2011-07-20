@@ -24,6 +24,9 @@ class CreditsState extends CqState {
 		y += Std.int(title.height+10);
 		add(title);
 
+		var titleProgramming:HxlText = new HxlText(0, y, 640, "Credits", true,null , 60, textColor, "center");
+		y += Std.int(title.height+10);
+		add(title);
 		
 		
 		var col1:String = 
