@@ -40,6 +40,9 @@ class MainMenuState extends CqState {
 		titleText = new LogoSprite((640-345)/2, (480-50)/2 - 55);
 		add(titleText);
 
+		var copyright = new HxlText(0, 459, 640, "Copyright 2011 Ido Yehieli.",true,FontAnonymousPro.instance.fontName,18);
+		add(copyright);
+		
 		menu = new HxlMenu(200, 640, 240, 200);
 		add(menu);
 
