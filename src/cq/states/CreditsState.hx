@@ -1,7 +1,6 @@
 package cq.states;
 
 import cq.CqResources;
-import cq.ui.CqTextScroller;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import haxel.HxlGraphics;
@@ -15,19 +14,32 @@ class CreditsState extends CqState {
 	public override function create() {
 		super.create();
 
-		//fadeTimer = new HxlTimer();
 		fadeTime = 0.5;
-
-
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
 		
-		var scroller:CqTextScroller = new CqTextScroller(null, 1, "Credits");
-		var introText:String = "THis is the credits";
-		scroller.addColumn(100, 400, introText, false, FontAnonymousPro.instance.fontName);
-		add(scroller);
-		scroller.startScroll();
-		scroller.onComplete(nextScreen);
+		var textColor = 0xffffff;
+		var y:Int = 10;
+		
+		var title:HxlText = new HxlText(0, y, 640, "Credits", true,null , 60, textColor, "center");
+		y += Std.int(title.height+10);
+		add(title);
+
+		
+		
+		var col1:String = 
+"Programming:\n\tIdo Yehieli & Joris Cizikas\n" +
+"Graphics:\n\tJagosh Kalezich\n" ;//+
+"\n" +
+"Music:\tWhitaker Blackall\n";
+
+
+/*
+		scroller.addColumn(40, 270, col1, false, FontAnonymousPro.instance.fontName,18);
+		scroller.addColumn(40+270+20, 270, col2, false, FontAnonymousPro.instance.fontName);
+*/
+		//add(scroller);
 	}
+	
 
 	public override function update() {
 		super.update();
@@ -35,13 +47,13 @@ class CreditsState extends CqState {
 		
 	}
 
-	/*override function onMouseDown(event:MouseEvent) {
+	override function onMouseDown(event:MouseEvent) {
 		nextScreen();
 	}
 	
 	override function onKeyUp(event:KeyboardEvent) { 
 		nextScreen();
-	}*/
+	}
 
 	function nextScreen() {
 
