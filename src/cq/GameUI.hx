@@ -86,7 +86,9 @@ class GameUI extends HxlDialog {
 	var infoViewFloor:HxlText;
 	
 	// Misc UI elements
-	var xpBar:CqXpBar;
+	var centralHealthBar:CqHealthBar;
+	var centralXpBar:CqXpBar;
+	
 	var targetSprite:HxlSprite;
 	var targetText:HxlText;
 
@@ -212,6 +214,7 @@ class GameUI extends HxlDialog {
 		leftButtons.addButton(btnInfoView);
 		addInfoButtonBars();
 		addInfoButtonTexts();
+		addCentralBars();
 		
 		// map
 		btnMapView = new HxlButton(0, 0, btnSize, btnSize);
@@ -273,12 +276,39 @@ class GameUI extends HxlDialog {
 		var xShift = (leftButtons.width - width) / 4;
 		var yShift = btnMainView.height-3;
 
-		infoViewHpBar = new CqHealthBar(CqRegistery.player, leftButtons.x+btnInfoView.x+xShift, leftButtons.y+btnMainView.y+yShift,width, height,false);
-		infoViewXpBar = new CqXpBar(CqRegistery.player, infoViewHpBar.x, infoViewHpBar.y+infoViewHpBar.height, width, height, false);
+		infoViewHpBar = new CqHealthBar(CqRegistery.player, leftButtons.x+btnInfoView.x+xShift, leftButtons.y+btnMainView.y+yShift,width, height,BarType.INFO);
+		infoViewXpBar = new CqXpBar(CqRegistery.player, infoViewHpBar.x, infoViewHpBar.y+infoViewHpBar.height, width, height, BarType.INFO);
 		infoViewHpBar.scrollFactor.x = infoViewHpBar.scrollFactor.y = 0;
 		infoViewXpBar.scrollFactor.x = infoViewXpBar.scrollFactor.y = 0;
 		add(infoViewHpBar);
 		add(infoViewXpBar);
+	}
+	
+	function addCentralBars() {
+		var width = 32;
+		var height = 4;
+		
+		var xShift = CqRegistery.player.getScreenXY().x+2;
+		var yShift = CqRegistery.player.getScreenXY().y + Configuration.zoomedTileSize()+2;
+		
+		centralHealthBar = new CqHealthBar(CqRegistery.player, xShift, yShift,width, height, BarType.CENTRAL);
+		centralXpBar = new CqXpBar(CqRegistery.player, xShift, yShift+centralHealthBar.height, width, height, BarType.CENTRAL);
+		centralHealthBar.scrollFactor.x = centralHealthBar.scrollFactor.y = 0;
+		centralXpBar.scrollFactor.x = centralXpBar.scrollFactor.y = 0;
+		
+		centralHealthBar.zIndex = zIndex + 1000;
+		centralXpBar.zIndex = zIndex + 1000;
+		
+		add(centralHealthBar);
+		add(centralXpBar);
+	}
+	
+	public function updateCentralBarsPosition() {
+		centralHealthBar.targetX = CqRegistery.player.getScreenXY().x+2;
+		centralHealthBar.targetY = CqRegistery.player.getScreenXY().y + Configuration.zoomedTileSize()+2;
+		
+		centralXpBar.targetX = centralHealthBar.targetX;
+		centralXpBar.targetY = centralHealthBar.targetY + centralHealthBar.height;
 	}
 	
 	function addInfoButtonTexts() {
@@ -626,6 +656,7 @@ class GameUI extends HxlDialog {
 	}
 	public function doPlayerGainXP(?xpTotal:Int=0) {
 		infoViewXpBar.updateValue(xpTotal);
+		centralXpBar.updateValue(xpTotal);
 	}
 
 	public static function setTargeting(Toggle:Bool, ?TargetText:String=null, ?TargetsEmptyTile=false) {
