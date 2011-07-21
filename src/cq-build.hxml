@@ -1,7 +1,7 @@
 -main CqPreloader
 --flash-use-stage
 -swf-version 10
--swf-header 640:480:60:ffffff
+-swf-header 640:480:30:ffffff
 -swf ../bin/cq-preloader.swf
 
 --next

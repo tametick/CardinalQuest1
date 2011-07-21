@@ -369,7 +369,7 @@ class CqInventoryItem extends HxlSprite {
 				// Unequipping current item (?)
 			case "spell":
 				// Moving the other item into a spell cell
-				dragStop_cell_obj.popup.setText(dragStop_cell_obj.item.fullName+" key[" + (cellIndex + 1) + "]");
+				dragStop_cell_obj.popup.setText(dragStop_cell_obj.item.fullName+"\n[hotkey " + (cellIndex + 1) + "]");
 				
 				dragStop_cell_obj.setSpellCell(cellIndex);
 				var spellBtn = cast(getSpellCell(cellIndex), CqSpellCell).btn;
@@ -377,7 +377,7 @@ class CqInventoryItem extends HxlSprite {
 					GameUI.instance.updateCharge(spellBtn);
 			case "potion":
 				// Moving the other item into a potion cell
-				dragStop_cell_obj.popup.setText(dragStop_cell_obj.item.fullName+" key[" + ((cellIndex>3)?cellIndex-4:cellIndex + 6) + "]");
+				dragStop_cell_obj.popup.setText(dragStop_cell_obj.item.fullName+"\n[hotkey " + ((cellIndex>3)?cellIndex-4:cellIndex + 6) + "]");
 				dragStop_cell_obj.setPotionCell(cellIndex);
 			default:
 				dragStop_cell_obj.popup.setText(dragStop_cell_obj.item.fullName);
@@ -400,11 +400,11 @@ class CqInventoryItem extends HxlSprite {
 			case CqSpellCell:
 				// Moving this item into a spell cell
 				setSpellCell(dragStopCell.cellIndex);
-				popup.setText(item.fullName+" key[" + (cellIndex + 1) + "]");
+				popup.setText(item.fullName+"\n[hotkey " + (cellIndex + 1) + "]");
 			case CqPotionCell:
 				// Moving this item into a potion cell
 				setPotionCell(dragStopCell.cellIndex);
-				popup.setText(item.fullName+" key[" + ((cellIndex>3)?cellIndex-4:cellIndex + 6) + "]");
+				popup.setText(item.fullName+"\n[hotkey " + ((cellIndex>3)?cellIndex-4:cellIndex + 6) + "]");
 			case CqEquipmentCell:
 				// Moving this item into an equipment cell
 				if (dragStop_cell_obj != this) {
@@ -473,11 +473,11 @@ class CqInventoryItem extends HxlSprite {
 				var spellBtn = spellCell.btn;
 				GameUI.instance.updateCharge(spellBtn);
 				if (clearCharge)_dlg.dlgSpellGrid.forceClearCharge(dragStopCell.cellIndex);
-				popup.setText(item.fullName+" key[" + (cellIndex+1) + "]");
+				popup.setText(item.fullName+"\n[hotkey " + (cellIndex+1) + "]");
 			case CqPotionCell:
 				// Moving this item into a potion cell
 				setPotionCell(dragStopCell.cellIndex);
-				popup.setText(item.fullName+" key[" + ((cellIndex>3)?cellIndex-4:cellIndex + 6) + "]");
+				popup.setText(item.fullName+"\n[hotkey " + ((cellIndex>3)?cellIndex-4:cellIndex + 6) + "]");
 			case CqEquipmentCell:
 				// Moving this item into an equipment cell
 				setEquipmentCell(dragStopCell.cellIndex);

@@ -29,12 +29,13 @@ class SplashState extends CqState {
 	var splashText:HxlSprite;
 
 	public override function create() {
+		Lib.current.stage.scaleMode = StageScaleMode.SHOW_ALL;
+		Lib.current.stage.align = StageAlign.TOP;
+		Lib.current.stage.fullScreenSourceRect = new Rectangle(0, 0, 640, 480);
+		Mouse.hide();
+		
 		if (Configuration.standAlone) {
-			Lib.current.stage.align = StageAlign.TOP;
-			Lib.current.stage.scaleMode = StageScaleMode.SHOW_ALL;
 			Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN;
-			Lib.current.stage.fullScreenSourceRect = new Rectangle(0,0,640,480);
-			Mouse.hide();
 			
 			if (!StringTools.startsWith(Capabilities.os, "Mac")) {
 				// for windows
