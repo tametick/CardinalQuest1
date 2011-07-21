@@ -205,7 +205,7 @@ class GameState extends CqState {
 	override function init() {
 		classEntry();
 		if(Configuration.debug){
-			CqConfiguration.chestsPerLevel = 200;
+			CqConfiguration.chestsPerLevel = 100;
 			CqConfiguration.spellsPerLevel = 50;
 		}
 	}
