@@ -13,7 +13,7 @@
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
-    <class path="." />
+    <class path="src" />
   </classpaths>
   <!-- Build options -->
   <build>
@@ -42,7 +42,7 @@
   <!-- Executed before build -->
   <preBuildCommand />
   <!-- Executed after build -->
-  <postBuildCommand alwaysRun="False">haxe app.hxml</postBuildCommand>
+  <postBuildCommand alwaysRun="False">build.bat</postBuildCommand>
   <!-- Other project options -->
   <options>
     <option showHiddenPaths="False" />

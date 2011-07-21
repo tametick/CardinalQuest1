@@ -1,0 +1,12 @@
+-main App
+-neko app.n
+-lib swhx
+-debug
+
+--next
+-debug
+-main Client
+-swf9 ui.swf
+-swf-header 640:480:30:000000
+-lib swhx
+
