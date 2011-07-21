@@ -11,8 +11,8 @@ class App {
 		swhx.Application.init();
 		
         // create a window with title
-        var window = new swhx.Window("Cardinal Quest",640,480, swhx.Window.WF_TRANSPARENT);
-        
+        var window = new swhx.Window("Cardinal Quest",640,480, swhx.Window.WF_FULLSCREEN);
+/*        
 		// create an incoming communication Server
         var context = new haxe.remoting.Context();
 		context.addObject("App", App); 
@@ -29,18 +29,27 @@ class App {
 			// systools.Dialogs.message("DumpLayout:", cnx.Flash.dumpLayout.call([]), false);
 			//trace( cnx.Flash.dumpLayout.call([]));
 		}
-		
+	*/	
+	
+		var flash = new swhx.Flash(window);
+	
         // set the HTML attributes of this flash object
         flash.setAttribute("src", "cq.swf");
 		flash.setAttribute("id","cq-1.0");
         
 		// activate the Client object
         flash.start();		
-
-        // display the window
-        window.visible = true;
-		window.width = 641;
-		//window.fullscreen =true;
+		window.visible = true;
+		
+		window.onRightClick = function () {
+			trace("onRightClick!");
+			// toggle full screen mode:
+			window.fullscreen = !window.fullscreen;
+			// don't forward this event to Flash:
+			return false;
+		}
+		
+		window.fullscreen =true;
 		
         // enter the system event loop (will exit when window is closed)
         swhx.Application.loop();
