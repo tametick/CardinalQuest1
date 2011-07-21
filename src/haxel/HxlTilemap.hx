@@ -105,7 +105,7 @@ class HxlTilemap extends HxlObject {
 	/**
 	 * The tilemap constructor just initializes some basic variables.
 	 */
-	public function new()
+	public function new(TileW:Int,tileH:Int)
 	{
 		super();
 		auto = OFF;
@@ -116,8 +116,8 @@ class HxlTilemap extends HxlObject {
 		heightInTiles = 0;
 		totalTiles = 0;
 		//_data = null;
-		_tileWidth = 0;
-		_tileHeight = 0;
+		_tileWidth = TileW;
+		_tileHeight = tileH;
 		//_rects = null;
 		_pixels = null;
 		_block = new HxlObject();
@@ -132,6 +132,11 @@ class HxlTilemap extends HxlObject {
 		blend = null;
 
 		tileClass = HxlTile;
+		if (tmpRect == null)
+			tmpRect = new Rectangle(0, 0, _tileWidth, _tileHeight);
+		
+		if (tmpBitmap == null)
+			tmpBitmap = new BitmapData(_tileWidth, _tileHeight, true, 0x00ffffff);
 	}
 
 	/**
@@ -314,21 +319,9 @@ class HxlTilemap extends HxlObject {
 	static var originPoint:Point = new Point(0, 0);
 	function renderTilemap() {
 		//Bounding box display options
-		var tileBitmap:BitmapData;
-		if (HxlGraphics.showBounds) {
-			tileBitmap = _bbPixels;
-		} else {
-			tileBitmap = _pixels;
-		}
-
+		var tileBitmap:BitmapData = _pixels;//no bounding,becouse its already commented out
 		
-		if (tmpRect == null)
-			tmpRect = new Rectangle(0, 0, _tileWidth, _tileHeight);
-		
-		if (tmpBitmap == null)
-			tmpBitmap = new BitmapData(_tileWidth, _tileHeight, true, 0x00ffffff);
-		else
-			tmpBitmap.fillRect(tmpRect, 0x00ffffff);
+		tmpBitmap.fillRect(tmpRect, 0x00ffffff);
 		
 
 		getScreenXY(_point);
@@ -355,12 +348,12 @@ class HxlTilemap extends HxlObject {
 						HxlGraphics.buffer.copyPixels(tile.altBitmap, tmpRect, _flashPoint, null, null, true);*/
 					} else {
 						#if flash9
-						_mtx.identity();
-						_mtx.translate(_flashPoint.x, _flashPoint.y);
-						tmpBitmap.fillRect( tmpRect, 0xffFF0000);
-						tmpBitmap.copyPixels(tileBitmap, tile.bitmapRect, originPoint, null, null, true);
+						//_mtx.identity();
+						//_mtx.translate(_flashPoint.x, _flashPoint.y);
+						//tmpBitmap.fillRect( tmpRect, 0xffFF0000);
+						tmpBitmap.copyPixels(tileBitmap, tile.bitmapRect, originPoint, null, null, false);
 						tmpBitmap.colorTransform( tmpRect,  tile._ct);
-						HxlGraphics.buffer.copyPixels(tmpBitmap, tmpRect, _flashPoint, null, null, true);
+						HxlGraphics.buffer.copyPixels(tmpBitmap, tmpRect, _flashPoint, null, null, false);
 						#else
 						// TODO: Get this working in CPP
 						HxlGraphics.buffer.copyPixels(tileBitmap, tile.bitmapRect, _flashPoint, null, null, true);

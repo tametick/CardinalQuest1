@@ -145,7 +145,7 @@ class CqSpellFactory {
 				spell.spiritPointsRequired = 720*2;
 			case REVEAL_MAP:
 				spell.specialEffects.add(new CqSpecialEffectValue("reveal"));
-				spell.spiritPointsRequired = 720;
+				spell.spiritPointsRequired = 7200;
 			case HEAL:
 				spell.specialEffects.add(new CqSpecialEffectValue("heal","full"));
 				spell.spiritPointsRequired = 720*4;

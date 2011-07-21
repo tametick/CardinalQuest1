@@ -273,14 +273,12 @@ class GameState extends CqState {
 				player.give(CqItemType.RED_POTION);
 				player.give(CqItemType.PURPLE_POTION);
 				player.give(CqSpellType.BERSERK);
-				CqSpellFactory.remainingSpells.remove(HxlUtil.enumToString(CqSpellType.BERSERK));
 			case WIZARD:
 				player.give(CqItemType.STAFF);
 				player.give(CqItemType.RED_POTION);
 				player.give(CqItemType.RED_POTION);
 				player.give(CqItemType.BLUE_POTION);
 				player.give(CqSpellType.FIREBALL);
-				CqSpellFactory.remainingSpells.remove(HxlUtil.enumToString(CqSpellType.FIREBALL));
 			case THIEF:
 				player.give(CqItemType.DAGGER);
 				player.give(CqItemType.RED_POTION);
@@ -288,7 +286,6 @@ class GameState extends CqState {
 				player.give(CqItemType.YELLOW_POTION);
 				player.give(CqItemType.GREEN_POTION);
 				player.give(CqSpellType.SHADOW_WALK);
-				CqSpellFactory.remainingSpells.remove(HxlUtil.enumToString(CqSpellType.SHADOW_WALK));
 		}
 		
 		PtPlayer.ClassSelected(chosenClass);

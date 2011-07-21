@@ -20,7 +20,6 @@ class CqTextScroller extends HxlGroup {
 	inline static var MinimumDuration:Float = 0.3;
 	
 	var withTitle:Bool;
-	var title:String;
 	var cols:Array<HxlText>;
 	var clicks:Int;
 	var tweens:Array<GenericActuator>;
@@ -33,7 +32,6 @@ class CqTextScroller extends HxlGroup {
 		respondInput = false;
 		cols = new Array<HxlText>();
 		tweens = new Array<GenericActuator>();
-		title = Title;
 		to_y = To_Y;
 		if(bg != null){
 			var splash:HxlSprite = new HxlSprite(0, 0, bg);
@@ -45,7 +43,7 @@ class CqTextScroller extends HxlGroup {
 			splash.x = (splash.width*sx)-splash.width;
 			splash.scale = new HxlPoint(sx * 1.1, sy * 1.1);
 		}
-		if (title.length > 0)
+		if (Title.length > 0)
 		{
 			var titleTxt:HxlText = new HxlText(0, To_Y, 640, Title);
 			titleTxt.setFormat(null, 72, TitleColor, "center");

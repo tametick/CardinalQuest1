@@ -31,7 +31,6 @@ class CachingEmitter extends HxlEmitter {
 	var frameBitmap:HxlSprite;
 	var particleKey:CqGraphicKey;
 	var colorTint:Int;
-	var ct:ColorTransform;
 	public function new(CacheNumber:UInt,ParticleKey:CqGraphicKey,?X:Float=0, ?Y:Float=0,?ColorTint:Int = -1) {
 		super(X, Y);
 		//get real cachenum
@@ -45,7 +44,6 @@ class CachingEmitter extends HxlEmitter {
 		}
 		particleKey = ParticleKey;
 		colorTint   = ColorTint;
-		ct = new ColorTransform((colorTint >> 16) / 255.0, (colorTint >> 8 & 0xff) / 255.0, (colorTint & 0xff) / 255.0);
 		
 		if (cacheStatus.length <= Std.int(cacheNum))
 		{

@@ -58,7 +58,7 @@ class CqLevel extends Level {
 	}
 	
 	public function new(index:Int) {
-		super(index);
+		super(index,Configuration.tileSize*2,Configuration.tileSize*2);
 		
 		if(index==0)
 			MusicManager.play(MainThemeOne);

@@ -17,10 +17,10 @@ import haxel.HxlUtil;
 import cq.CqGraphicKey;
 
 class CqEffectInjure extends CachingEmitter {
-	static var UNIQUE_EFFECT_ID:UInt = 2;
+	static var UNIQUE_EFFECT_ID:UInt = 5;
 	public function new(?X:Float=0, ?Y:Float=0) {
 		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.InjureEffectParticle) ) {
-			var bmp:BitmapData = HxlGradient.CircleData(4, [0xdd1111, 0x3e0101], [1.0, 0.65], Math.PI/2);
+			var bmp:BitmapData = HxlGradient.CircleData(4, [0xdd1111, 0x3E0101], [1.0, 0.65], Math.PI/2);
 			GraphicCache.addBitmapData(bmp, CqGraphicKey.InjureEffectParticle);
 		}
 		setAlphaVelocity(-5, -2);

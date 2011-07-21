@@ -28,6 +28,9 @@ class CqCharacterDialog extends HxlSlidingDialog {
 	var valVitality:HxlText;
 	var valHealth:HxlText;
 
+	static inline var textBoxes:Array<String> = ["txtCharName", "txtHealthLabel", "valHealth", "txtAttackLabel", "valAttack", "txtDefenseLabel", "valDefense", "txtSpeedLabel", "valSpeed", "txtSpiritLabel", "valSpirit", "txtVitalityLabel", "valVitality"];
+	static inline var pos:Array<Array<Int>> = [ [ 40, 40], [40, 100], [190, 100], [40, 130], [190, 130], [40, 160], [190, 160], [40, 190], [190, 190], [40, 220], [190, 220], [40, 250], [190, 250]];
+		
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0)
 	{
 		// Size: 472 x 480
@@ -38,10 +41,8 @@ class CqCharacterDialog extends HxlSlidingDialog {
 		add(bg);
 		
 		var textColor:Int = 0x6D564B;
-		var player_class:String = HxlUtil.capitalizeFirstCharacter(HxlUtil.enumToString(CqRegistery.player.playerClass,false).toLowerCase());
-		var textBoxes:Array<String> = ["txtCharName", "txtHealthLabel", "valHealth", "txtAttackLabel", "valAttack", "txtDefenseLabel", "valDefense", "txtSpeedLabel", "valSpeed", "txtSpiritLabel", "valSpirit", "txtVitalityLabel", "valVitality"];
+		var player_class:String = HxlUtil.capitalizeFirstCharacter(HxlUtil.enumToString(CqRegistery.player.playerClass, false).toLowerCase());
 		var txt_string:Array<String> = [player_class, "Health:", "0", "Attack:", "0", "Defense:", "0", "Speed:", "0", "Spirit:", "0", "Vitality:", "0"];
-		var pos:Array<Array<Int>> = [ [ 40, 40], [40, 100], [190, 100], [40, 130], [190, 130], [40, 160], [190, 160], [40, 190], [190, 190], [40, 220], [190, 220], [40, 250], [190, 250]];
 		for (i in 0...textBoxes.length)
 		{
 			var box:HxlText = new HxlText(pos[i][0], pos[i][1], 430, txt_string[i]);

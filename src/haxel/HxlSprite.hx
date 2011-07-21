@@ -371,7 +371,6 @@ class HxlSprite extends HxlObject {
 		if (HxlObject._refreshBounds) {
 			calcFrame();
 		}
-		
 		if ( _alpha <= 0 ) return;
 		if ( scale.x <= 0 || scale.y <= 0 ) return;
 
@@ -384,7 +383,6 @@ class HxlSprite extends HxlObject {
 			HxlGraphics.buffer.copyPixels(_framePixels,_flashRect,_flashPoint,null,null,true);
 			return;
 		}
-		
 		//Advanced render
 		_mtx.identity();
 		_mtx.translate(-origin.x,-origin.y);
@@ -658,6 +656,7 @@ class HxlSprite extends HxlObject {
 	 * @private
 	 */
 	public function setColor(Color:Int):Int {
+		return color;
 		Color &= 0x00ffffff;
 		if (_color == Color) return Color;
 		_color = Color;

@@ -35,8 +35,8 @@ class Level extends HxlTilemap
 	
 	var ptLevel:PtLevel;
 	
-	public function new(index:Int) {
-		super();
+	public function new(index:Int,tileW:Int,tileH:Int) {
+		super(tileW,tileH);
 		
 		this.index = index;
 		mobs = new Array();
@@ -322,7 +322,6 @@ class Level extends HxlTilemap
 			
 			HxlUtil.markFieldOfView(actor.tilePos, actor.visionRadius, this, true, function(p:HxlPoint) { firstSeen(state, map, p); } );
 		}
-		
 		for ( x in left...right+1 ) {
 			for ( y in top...bottom+1 ) {
 				tile = getTile(x, y);
@@ -334,9 +333,9 @@ class Level extends HxlTilemap
 				}
 					
 				var dist = HxlUtil.distance(actor.tilePos, dest);
-
 				var Ttile:Tile = cast(tile, Tile);
 				var normColor:Int = normalizeColor(dist, actor.visionRadius, seenTween, inSightTween);
+				var dimness = (actor.visionRadius-dist) / actor.visionRadius;
 				switch (tile.visibility) {
 					case Visibility.IN_SIGHT:
 						tile.visible = true;
@@ -345,9 +344,10 @@ class Level extends HxlTilemap
 							cast(loot,HxlSprite).visible = true;
 						for (actor in Ttile.actors)
 							cast(actor,HxlSprite).visible = true;
-						
 						Ttile.colorTo(normColor, actor.moveSpeed);
+						//Ttile.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
 						for (decoration in Ttile.decorations)
+							//decoration.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
 							decoration.colorTo(normColor, actor.moveSpeed);
 					case Visibility.SEEN:
 						tile.visible = true;
@@ -358,8 +358,11 @@ class Level extends HxlTilemap
 							cast(actor,HxlSprite).visible = false;
 						
 						Ttile.colorTo(seenTween, actor.moveSpeed);
+						//Ttile.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
 						for (decoration in Ttile.decorations)
+							//decoration.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
 							decoration.colorTo(seenTween, actor.moveSpeed);
+							
 					case Visibility.UNSEEN:
 				}
 			}

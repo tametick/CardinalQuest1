@@ -390,7 +390,6 @@ class GameUI extends HxlDialog {
 
 	public override function update() {
 		super.update();
-		updateCharges();
 	}
 
 	public function updateCharges() {

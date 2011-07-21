@@ -20,7 +20,7 @@ class GraphicCache
 	 **/
 	public static function getBitmap(Key:Dynamic):BitmapData {
 		var keyStr:String = HxlUtil.enumToString( Key );
-		if ( Key == null || !checkBitmapCache(Key) ) 
+		if ( Key == null || !checkBitmapCacheStr(keyStr) ) 
 			return createBitmap(20, 20, 0xff0000); 
 		return Reflect.field(cache, keyStr);
 	}
@@ -95,15 +95,15 @@ class GraphicCache
 			Reflect.deleteField(cache, fieldName);
 		}
 	}
-	
 	public static function addBitmapData(Graphic:BitmapData, ?Key:Dynamic=null, ?Force:Bool=false):BitmapData {
-		var keystr:String = '';
+		var inc:Int;
+		var ukey:String;
+		var keystr:String;
 		if(Key == null) {
 			keystr = "data-"+Graphic.width+"x"+Graphic.height;
 			if ( Reflect.hasField(cache, keystr) && (Reflect.field(cache, keystr) != null)) {
 				//Generate a unique key
-				var inc:Int = 0;
-				var ukey:String;
+				inc = 0;
 				do { ukey = keystr + inc++;
 				} while((Reflect.hasField(cache, ukey)) && (Reflect.field(cache, ukey) != null));
 				keystr = ukey;
