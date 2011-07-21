@@ -37,7 +37,7 @@ class CqInventoryItem extends HxlSprite {
 	public var cellEquip:Bool;
 	public var cellSpell:Bool;
 	public var cellPotion:Bool;
-	public var item:CqItem;
+	public var item(getItem, setItem):CqItem;
 	
 	var selected:Bool;
 	var isGlowing:Bool;
@@ -61,6 +61,17 @@ class CqInventoryItem extends HxlSprite {
 		isGlowing = false;
 	}
 
+	private function getItem():CqItem
+	{
+		return item;
+	}
+	private function setItem(value:CqItem):CqItem
+	{
+		item = value;
+		if(item != null)item.uiItem = this;
+		return item;
+	}
+	
 	public function removeFromDialog() {
 		_dlg.remove(this);
 	}

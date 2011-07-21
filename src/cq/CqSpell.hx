@@ -1,5 +1,6 @@
 package cq;
 
+import cq.ui.CqSpellButton;
 import haxel.HxlUtil;
 
 import cq.CqItem;
@@ -159,7 +160,6 @@ class CqSpell extends CqItem {
 	public var targetsEmptyTile:Bool;
 	public var spiritPoints:Int;
 	public var spiritPointsRequired:Int;
-	
 	public function new(X:Float, Y:Float, type:CqSpellType) {
 		super(X, Y, type);
 		equipSlot = SPELL;

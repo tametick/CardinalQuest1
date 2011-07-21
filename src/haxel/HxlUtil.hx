@@ -1,6 +1,7 @@
 package haxel;
 
 import com.eclecticdesignstudio.motion.Actuate;
+import flash.display.BitmapData;
 import flash.net.URLRequest;
 import flash.Lib;
 
@@ -48,7 +49,34 @@ class HxlUtil {
 		rgb[2] = Color & 0xFF;
 		return rgb;
 	}
+	public static function averageColour( source:BitmapData ):UInt
+	{
+		var red:Float = 0;
+		var green:Float = 0;
+		var blue:Float = 0;
 
+		var count:Int = 0;
+		var pixel:Float;
+
+		for ( x in 0...source.width)
+		{
+			for ( y in 0...source.height)
+			{
+				pixel = source.getPixel(x, y);
+
+				red += Std.int(pixel) >> 16 & 0xFF;
+				green += Std.int(pixel) >> 8 & 0xFF;
+				blue += Std.int(pixel) & 0xFF;
+
+				count++;
+			}
+		}
+		red /= count;
+		green /= count;
+		blue /= count;
+
+		return (Std.int(red) << 16 | Std.int(green) << 8 | Std.int(blue));
+	}
 	public static function colorInt(Red:Int, Green:Int, Blue:Int):Int {
 		return (Math.round(Red) << 16) | (Math.round(Green) << 8) | Math.round(Blue);
 	}

@@ -2,6 +2,7 @@ package cq;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;
+import cq.ui.inventory.CqInventoryItem;
 import haxel.GraphicCache;
 
 import data.Configuration;
@@ -356,6 +357,8 @@ class CqItem extends GameObjectImpl, implements Loot {
 	public var isSuperb:Bool;
 	public var isMagical:Bool;
 	public var isWondrous:Bool;
+	
+	public var uiItem:CqInventoryItem;
 	
 	public var isEnchanted(getIsEnchanted, null):Bool;
 	

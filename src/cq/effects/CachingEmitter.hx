@@ -2,6 +2,7 @@ package cq.effects;
 
 import flash.display.Bitmap;
 import flash.display.BitmapData;
+import flash.geom.ColorTransform;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import haxel.HxlGraphics;
@@ -21,16 +22,30 @@ class CachingEmitter extends HxlEmitter {
 	static var effectCache:Array<Array<BitmapData>> = new Array<Array<BitmapData>>();
 	static var cacheStatus:Array<UInt> = new Array<UInt>();//0-nobody filling it up, 1-somebody filling it up, 2-filled up
 	static var hs:Int = 100;//half size of frame bitmap
+	static var cacheIds:Hash<Int> = new Hash<Int>();
+	static var lastID:UInt = 0;
 	var cacheNum:UInt;//each different effects, must use a different cache num.
 	var usingCache:UInt;//0-isnt using, normal op. 1-this is filling it up. 2-using filled up cache
 	
 	var currentFrame:Int;
 	var frameBitmap:HxlSprite;
 	var particleKey:CqGraphicKey;
-	public function new(CacheNum:UInt,ParticleKey:CqGraphicKey,?X:Float=0, ?Y:Float=0) {
+	var colorTint:Int;
+	var ct:ColorTransform;
+	public function new(CacheNumber:UInt,ParticleKey:CqGraphicKey,?X:Float=0, ?Y:Float=0,?ColorTint:Int = -1) {
 		super(X, Y);
-		cacheNum    = CacheNum;
+		//get real cachenum
+		if (cacheIds.exists(CacheNumber+""))
+		{
+			cacheNum  = cacheIds.get(CacheNumber + "");
+		}else {
+			lastID = lastID + 1;
+			cacheNum  = lastID;
+			cacheIds.set(lastID + "", lastID);
+		}
 		particleKey = ParticleKey;
+		colorTint   = ColorTint;
+		ct = new ColorTransform((colorTint >> 16) / 255.0, (colorTint >> 8 & 0xff) / 255.0, (colorTint & 0xff) / 255.0);
 		
 		if (cacheStatus.length <= Std.int(cacheNum))
 		{
@@ -52,8 +67,6 @@ class CachingEmitter extends HxlEmitter {
 				currentFrame = 0;
 				makeSprites();
 			case 1:
-				//kill();
-				//return;
 				usingCache = 0;	
 				setAlphaVelocity(-5, -2);
 				gravity = 0.0;
@@ -168,7 +181,7 @@ class CachingEmitter extends HxlEmitter {
 					argb += (Std.int(o.alpha * 255) << 24);
 					argb += 0xFFFFFF;
 					alphaBitmapData.floodFill(0, 0, argb );
-					frame.copyPixels(o.pixels, rect, dest,alphaBitmapData,pt,true);
+					frame.copyPixels(o.pixels, rect, dest, alphaBitmapData, pt, true);
 				}
 			}
 			effectCache[cacheNum].push(frame);

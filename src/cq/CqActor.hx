@@ -2,6 +2,7 @@ package cq;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import cq.states.GameOverState;
+import flash.display.BitmapData;
 import haxel.HxlText;
 
 import haxel.HxlLog;
@@ -455,6 +456,7 @@ class CqActor extends CqObject, implements Actor {
 	}
 	
 	public function useAt(itemOrSpell:CqItem, tile:CqTile) {
+		var Effectcolor:UInt = HxlUtil.averageColour(itemOrSpell.pixels);
 		if(itemOrSpell.specialEffects != null){
 			for ( effect in itemOrSpell.specialEffects) {
 				applyEffectAt(effect, tile);
@@ -465,13 +467,14 @@ class CqActor extends CqObject, implements Actor {
 		}
 		//special effect
 		var pos:HxlPoint = CqRegistery.level.getTilePos(tile.mapX, tile.mapY, true);
-		var eff:CqEffectSpell = new CqEffectSpell(pos.x, pos.y);
+		var eff:CqEffectSpell = new CqEffectSpell(pos.x, pos.y,Effectcolor);
 		eff.zIndex = 1000;
 		HxlGraphics.state.add(eff);
 		eff.start(true, 1.0, 10);
 	}
 	
-	public function use(itemOrSpell:CqItem, ?other:CqActor=null) {
+	public function use(itemOrSpell:CqItem, ?other:CqActor = null) {
+		var Effectcolor:UInt = HxlUtil.averageColour(itemOrSpell.uiItem.pixels);
 		// todo
 		HxlLog.append("using item or spell");
 		// add buffs
@@ -496,7 +499,7 @@ class CqActor extends CqObject, implements Actor {
 					// apply to self
 					buffs.set(buff, buffs.get(buff) + itemOrSpell.buffs.get(buff));
 					//special effect
-					var eff:CqEffectSpell = new CqEffectSpell(x+this.width/2, y+this.width/2);
+					var eff:CqEffectSpell = new CqEffectSpell(x+this.width/2, y+this.width/2,Effectcolor);
 					eff.zIndex = 1000;
 					HxlGraphics.state.add(eff);
 					eff.start(true, 1.0, 10);
@@ -519,7 +522,7 @@ class CqActor extends CqObject, implements Actor {
 		}
 		if(other != null){
 			//special effect
-			var eff:CqEffectSpell = new CqEffectSpell(other.x+other.width/2, other.y+other.height/2);
+			var eff:CqEffectSpell = new CqEffectSpell(other.x+other.width/2, other.y+other.height/2,Effectcolor);
 			eff.zIndex = 1000;
 			HxlGraphics.state.add(eff);
 			eff.start(true, 1.0, 10);

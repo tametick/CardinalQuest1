@@ -609,7 +609,8 @@ class HxlSprite extends HxlObject {
 		_framePixels.copyPixels(_pixels,_flashRect,_flashPointZero);
 		_flashRect.x = _flashRect.y = 0;
 		#if flash9  //TODO: get color transform working in cpp
-		if (_ct != null) _framePixels.colorTransform(_flashRect,_ct);
+		if (_ct != null)
+			_framePixels.colorTransform(_flashRect, _ct);
 		#else
 		#end
 		if (HxlGraphics.showBounds) {
