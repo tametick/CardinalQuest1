@@ -29,6 +29,7 @@ import haxel.HxlTilemap;
 
 import data.Configuration;
 import data.Registery;
+import data.SoundEffectsManager;
 
 import world.Player;
 import world.Tile;
@@ -772,7 +773,8 @@ class GameUI extends HxlDialog {
 				GameUI.setTargeting(false);
 			} else {
 				if (HxlUtil.contains(SpriteTiles.instance.walkableAndSeeThroughTiles.iterator(), tile.dataNum)) {
-					cast(Registery.player,CqActor).useAt(targetSpell.getSpell(), tile);
+					cast(Registery.player, CqActor).useAt(targetSpell.getSpell(), tile);
+					SoundEffectsManager.play(SpellCast);
 					targetSpell.getSpell().spiritPoints = 0;
 					GameUI.instance.updateCharge(targetSpell);
 					GameState.inst.passTurn();
@@ -788,6 +790,7 @@ class GameUI extends HxlDialog {
 				if ( cast(tile.actors[0], CqActor).faction != 0 ) {
 					var player = CqRegistery.player;
 					player.use(targetSpell.getSpell(), cast(tile.actors[0], CqActor));
+					SoundEffectsManager.play(SpellCast);
 					targetSpell.getSpell().spiritPoints = 0;
 					GameUI.instance.updateCharge(targetSpell);
 					GameState.inst.passTurn();

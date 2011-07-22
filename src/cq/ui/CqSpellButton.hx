@@ -17,6 +17,7 @@ import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
+import data.SoundEffectsManager;
 
 import haxel.HxlButton;
 import haxel.HxlDialog;
@@ -110,6 +111,7 @@ class CqSpellButton extends HxlDialog {
 				CqRegistery.player.use(spellObj.item, null);
 				spell.spiritPoints = 0;
 				GameUI.instance.updateCharge(this);
+				SoundEffectsManager.play(SpellCast);
 			}
 
 			if (event != null) event.stopPropagation();
