@@ -96,21 +96,25 @@ class GameState extends CqState {
 		   ) {
 			setDiagonalCursor();
 		} else {
-			if(cursor.getFrame()!=up)
-				cursor.setFrame(up);
-			
-			if(target.x==0 && target.y==1){
-				if (cursor.angle != 180)
-					cursor.angle = 180;
-			} else if(target.x==0 && target.y==-1){
-				if (cursor.angle != 0)
-					cursor.angle = 0;
-			} else if(target.x==1 && target.y==0){
-				if (cursor.angle != 90)
-					cursor.angle = 90;
-			} else if(target.x==-1 && target.y==0){
-				if (cursor.angle != 270)
-					cursor.angle = 270;
+			if (GameUI.isTargeting) {
+				setDiagonalCursor();
+			} else {
+				if(cursor.getFrame()!=up)
+					cursor.setFrame(up);
+				
+				if(target.x==0 && target.y==1){
+					if (cursor.angle != 180)
+						cursor.angle = 180;
+				} else if(target.x==0 && target.y==-1){
+					if (cursor.angle != 0)
+						cursor.angle = 0;
+				} else if(target.x==1 && target.y==0){
+					if (cursor.angle != 90)
+						cursor.angle = 90;
+				} else if(target.x==-1 && target.y==0){
+					if (cursor.angle != 270)
+						cursor.angle = 270;
+				}
 			}
 		}
 	}
