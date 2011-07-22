@@ -68,7 +68,8 @@ class CqInventoryItem extends HxlSprite {
 	private function setItem(value:CqItem):CqItem
 	{
 		item = value;
-		if(item != null)item.uiItem = this;
+		if (item != null)
+			item.uiItem = this;
 		return item;
 	}
 	

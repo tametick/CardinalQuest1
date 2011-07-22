@@ -5,10 +5,10 @@
     <movie disabled="False" />
     <movie input="" />
     <movie path="bin\cq.swf" />
-    <movie fps="60" />
+    <movie fps="30" />
     <movie width="640" />
     <movie height="480" />
-    <movie version="9" />
+    <movie version="10" />
     <movie background="#000000" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
@@ -21,7 +21,7 @@
     <option flashStrict="True" />
     <option mainClass="cq.Main" />
     <option enabledebug="True" />
-    <option additional="-swf-lib lib/playtomic.swf" />
+    <option additional="-swf-lib lib/playtomic.swf&#xA;-swf-version 10.1" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>

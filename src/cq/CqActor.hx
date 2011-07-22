@@ -3,6 +3,7 @@ package cq;
 import com.eclecticdesignstudio.motion.Actuate;
 import cq.states.GameOverState;
 import flash.display.BitmapData;
+import haxel.HxlSprite;
 import haxel.HxlText;
 
 import haxel.HxlLog;
@@ -473,10 +474,19 @@ class CqActor extends CqObject, implements Actor {
 		eff.start(true, 1.0, 10);
 	}
 	
+	static var tmpSpellSprite  = new HxlSprite();
 	public function use(itemOrSpell:CqItem, ?other:CqActor = null) {
-		var Effectcolor:UInt = HxlUtil.averageColour(itemOrSpell.uiItem.pixels);
-		// todo
-		HxlLog.append("using item or spell");
+		var source:BitmapData;
+		if(itemOrSpell.uiItem==null) {
+			// only happens when enemies try to use a spell
+			tmpSpellSprite.loadGraphic(SpriteSpells, true, false, Configuration.tileSize, Configuration.tileSize);
+			tmpSpellSprite.setFrame(SpriteSpells.instance.getSpriteIndex(itemOrSpell.spriteIndex));
+			source = tmpSpellSprite.getFramePixels();
+		} else {
+			source = itemOrSpell.uiItem.pixels;
+		}
+		var Effectcolor:UInt = HxlUtil.averageColour(source);
+			
 		// add buffs
 		if(itemOrSpell.buffs != null) {
 			for (buff in itemOrSpell.buffs.keys()) {
@@ -719,9 +729,9 @@ class CqPlayer extends CqActor, implements Player {
 				damage = new Range(1, 1);
 		}
 		if (Configuration.debug) {
-			vitality = 500;
+			vitality = 10;
 			attack = 500;
-			CqConfiguration.playerLives = 9;
+			CqConfiguration.playerLives = 4;
 		}
 		super(X, Y);
 
