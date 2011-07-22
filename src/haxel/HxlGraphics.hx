@@ -1,6 +1,8 @@
 package haxel;
 
 import cq.CqGraphicKey;
+import cq.states.GameState;
+
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Stage;
@@ -41,6 +43,7 @@ class HxlGraphics {
 	 * Internal tracker for game pause state.
 	 */
 	static var _pause:Bool;
+	static public var justUnpaused:Bool;
 	/**
 	 * Whether you are running in Debug or Release mode.
 	 */
@@ -681,21 +684,23 @@ class HxlGraphics {
 		return _pause;
 	}
 	
-	/**
-	 * @private
-	 */
+
 	public static function setPause(Pause:Bool):Bool {
 		var op:Bool = _pause;
-		_pause = Pause;
-		if (_pause != op) {
-			if (_pause) {
+		if (Pause != op) {
+			if (Pause) {
+				justUnpaused = true;
+				mouse.reset();
 				_game.pauseGame();
 				pauseSounds();
 			} else {
+				mouse.reset();
+				justUnpaused = true;
 				_game.unpauseGame();
 				playSounds();
 			}
 		}
+		_pause = Pause;
 		return Pause;
 	}
 

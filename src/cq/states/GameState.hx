@@ -40,9 +40,9 @@ class GameState extends CqState {
 	static public var inst:GameState;
 	var gameUI:GameUI;
 	public var chosenClass:CqClass;
-	var isPlayerActing:Bool;
-	private var started:Bool;
-	private var endingAnim:Bool;
+	public var isPlayerActing:Bool;
+	public var started:Bool;
+	var endingAnim:Bool;
 	public override function create() {
 		inst = this;
 		super.create();
@@ -320,18 +320,25 @@ class GameState extends CqState {
 	}
 
 	override function onMouseDown(event:MouseEvent) {
-		if (!started || endingAnim) return;
+		if (HxlGraphics.justUnpaused) {
+			HxlGraphics.justUnpaused = false;
+			return;
+		}		
+		
+		if (!started || endingAnim) 
+			return;
 		if ( GameUI.isTargeting ) {
 			gameUI.targetingMouseDown();
 			return;
 		}
-		
-		isPlayerActing = true;
 
+		isPlayerActing = true;
 	}
 	
 	override function onMouseUp(event:MouseEvent) {
-		if (!started || endingAnim) return;
+		if (!started || endingAnim)
+			return;
+			
 		isPlayerActing = false;
 	}
 	

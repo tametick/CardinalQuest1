@@ -18,17 +18,15 @@ class CqPause extends HxlGroup {
 	var ImgKey0:Class<Bitmap>;
 	var ImgKeyP:Class<Bitmap>;
 
-	/**
-	 * Constructor.
-	 */
-	public function new()
-	{
+	public function new() {
 		super();
 		scrollFactor.x = 0;
 		scrollFactor.y = 0;
 		add((new HxlSprite()).createGraphic(Configuration.app_width, Configuration.app_height, 0xaa000000, true), true);
-		var notif:HxlText = new HxlText(0, 80, Configuration.app_width, "Click to resume",true,null,48,0xffffff,"center");
-		add(notif);
+		
+		//var notif:HxlText = new HxlText(0, 80, 640, "Click to resume",true,null,48,0xffffff,"center");
+		//add(notif);
+		
 		return;
 	}
 
