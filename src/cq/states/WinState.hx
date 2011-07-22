@@ -4,11 +4,13 @@ import cq.CqActor;
 import cq.CqConfiguration;
 import cq.CqRegistery;
 import cq.CqResources;
+import cq.ui.CqTextScroller;
 import data.Registery;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import haxel.HxlGraphics;
 import haxel.HxlPoint;
+import haxel.HxlSprite;
 import haxel.HxlState;
 import haxel.HxlText;
 import haxel.HxlTimer;
@@ -16,28 +18,35 @@ import haxel.HxlUtil;
 
 class WinState extends CqState {
 
-	var fadeTimer:HxlTimer;
-	var fadeTime:Float;
-	var waitTime:Float;
-	var stateNum:Int;
-	var gameOverText:HxlText;
-
+	private var fadeTime:Float;
+	private var bg:HxlSprite;
+	private var lights:HxlSprite;
+	private var figure:HxlSprite;
+	private var Figurescale:HxlPoint;
+	private var scroller:CqTextScroller;
 	public override function create() {
 		super.create();
 
-		fadeTimer = new HxlTimer();
-		fadeTime = 0.5;
-		waitTime = 2.0;
-		stateNum = 0;
+		fadeTime = 3;
 		
 		stackRender = true;
-
-		gameOverText = new HxlText(0, (480-72)/2, 640, "You Win!");
-		gameOverText.setFormat(null, 72, 0xffffff, "center");
-		add(gameOverText);
 		
-
-		//HxlGraphics.fade.start(false, 0xff000000, fadeTime);
+		scroller = new CqTextScroller(null, 5);
+		scroller.addColumn(150, 400, "The evil minotaur has escaped, but you can still catch him, next time...", false, FontDungeon.instance.fontName, 30, 0x0C11F1);
+		Figurescale = new HxlPoint(2.0, 2.0);
+		figure = new HxlSprite(85, 40, VortexFigure, Figurescale.x, Figurescale.y);
+		bg = new HxlSprite(0, 0, VortexScreen);
+		lights = new HxlSprite(0, 0, VortexLightsScreen);
+		add(figure);
+		figure.zIndex = 10;
+		scroller.zIndex = 11;
+		add(lights);
+		add(bg);
+		add(scroller);
+		defaultGroup.sortMembersByZIndex();
+		scroller.setMinimumTime(2);
+		scroller.onComplete(nextScreen);
+		scroller.startScroll(100,16);
 		
 	}
 
@@ -45,20 +54,19 @@ class WinState extends CqState {
 		super.update();	
 		setDiagonalCursor();
 		HxlGraphics.doFollow();
-		if ( stateNum == 0 && fadeTimer.delta() >= fadeTime ) {
-			//fadeTimer.reset();
-			//stateNum = 1;
-		}
+		bg.angle++;
+		lights.angle += 0.7;
+		
+		figure.angle-= 0.4;
+		Figurescale.y = Figurescale.x *= 0.993;
+		figure.scale = Figurescale;
+		
 	}
-
 	override function onMouseDown(event:MouseEvent) {
-		if ( stateNum != 1 ) 
-			return;
-		nextScreen();
+		return;
 	}
 
 	function nextScreen() {
-		stateNum = 2;
 		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
 			var newState = new MainMenuState();
 			HxlGraphics.state = newState;

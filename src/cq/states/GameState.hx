@@ -320,6 +320,7 @@ class GameState extends CqState {
 	}
 
 	override function onMouseDown(event:MouseEvent) {
+		if (!started || endingAnim) return;
 		if ( GameUI.isTargeting ) {
 			gameUI.targetingMouseDown();
 			return;
@@ -330,13 +331,14 @@ class GameState extends CqState {
 	}
 	
 	override function onMouseUp(event:MouseEvent) {
+		if (!started || endingAnim) return;
 		isPlayerActing = false;
 	}
 	
 	var tmpPoint:HxlPoint;
 	private var scroller:CqTextScroller;
 	private function act(?byKey:Bool = false) {
-		if ( GameUI.isTargeting ) {
+		if ( GameUI.isTargeting ||!started || endingAnim) {
 			return;
 		}
 		
@@ -463,6 +465,7 @@ class GameState extends CqState {
 		//find an empty tile for portal
 		var targetLocation:HxlPoint = tileLocation;
 		targetLocation.x--;
+		HxlGraphics.pushState(new WinState());
 		//var boss2:CqMob = CqRegistery.level.createAndaddMob(targetLocation, 99, true);
 		//boss.actInDirection(this, targetLocation);
 		//CqRegistery.level.updateFieldOfView(HxlGraphics.state,boss);

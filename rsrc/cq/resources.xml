@@ -32,6 +32,9 @@
 		<bitmap id="cq.UiInventoryBox" import="inv_box_02.png"/>
 		<bitmap id="cq.IntroScreen" import="Minator_intro_02.png"/>
 		<bitmap id="cq.DeathScreen" import="death.png"/>
+		<bitmap id="cq.VortexScreen" import="Vortex_swirl.png"/>
+		<bitmap id="cq.VortexLightsScreen" import="Vortex_lights.png"/>
+		<bitmap id="cq.VortexFigure" import="vortex_figure.png"/>
 		<bitmap id="cq.SpriteKnightEntry" import="Knight_entry_03.png"/>
 		<bitmap id="cq.SpriteWizardEntry" import="Wizard_entry_03.png"/>
 		<bitmap id="cq.SpriteThiefEntry" import="Thief_entry_03.png"/>

@@ -490,6 +490,7 @@ class CqInventoryItem extends HxlSprite {
 					CqRegistery.player.giveMoney( item.getMonetaryValue() );
 					_dlg.remove(this);
 					destroy();
+					kill();
 					CqRegistery.player.removeInventory(this.item);
 					_dlg.dlgEqGrid.onItemDragStop();
 					_dlg.dlgSpellGrid.onItemDragStop();

@@ -729,7 +729,7 @@ class CqPlayer extends CqActor, implements Player {
 				damage = new Range(1, 1);
 		}
 		if (Configuration.debug) {
-			vitality = 10;
+			vitality = 500;
 			attack = 500;
 			CqConfiguration.playerLives = 4;
 		}

@@ -16,23 +16,28 @@ import haxel.HxlText;
 
 class CqTextScroller extends HxlGroup {
 	static var To_Y:Int = 10;
-	inline static var Duration:Int = 10;
-	inline static var MinimumDuration:Float = 0.3;
+	static var Duration:Int = 10;
+	static var MinimumDuration:Float = 0.3;
+	
+	public var scrolling:Bool;
 	
 	var withTitle:Bool;
 	var cols:Array<HxlText>;
 	var clicks:Int;
 	var tweens:Array<GenericActuator>;
 	var OnComplete:Void->Void;
+	var minimumDuration:Float;
 	var to_y:Int;
 	var respondInput:Bool;//so you wouldnt accidentally close the window
 	public function new(bg:Class<Bitmap>, scrollDuration:Float, ?Title:String = "", ?TitleColor:Int = 0xFFFFFF) {
 		super();
 		clicks = 0;
+		scrolling = false;
 		respondInput = false;
 		cols = new Array<HxlText>();
 		tweens = new Array<GenericActuator>();
 		to_y = To_Y;
+		minimumDuration = MinimumDuration;
 		if(bg != null){
 			var splash:HxlSprite = new HxlSprite(0, 0, bg);
 			add(splash);
@@ -50,9 +55,12 @@ class CqTextScroller extends HxlGroup {
 			to_y += Std.int(titleTxt.height+10);
 			add(titleTxt);
 		}
-		Actuate.timer(MinimumDuration).onComplete(afterMinimum);
 		HxlGraphics.stage.addEventListener(MouseEvent.CLICK, onAction);
 		HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_UP, onAction);
+	}
+	public function setMinimumTime(value:Float):Void
+	{
+		minimumDuration = value;
 	}
 	private function afterMinimum() { respondInput = true; } 
 	private function onAction(e:Event){
@@ -76,6 +84,7 @@ class CqTextScroller extends HxlGroup {
 		if (cols.length == 0) 
 			return;
 		Actuate.pauseAll();
+		scrolling = false;
 		for (col in cols)
 		{
 			col.y = to_y;
@@ -88,16 +97,23 @@ class CqTextScroller extends HxlGroup {
 		cols.push(text);
 		text.y = HxlGraphics.stage.stageHeight;
 	}
-	public function startScroll() {
+	public function startScroll(?PosY:Int = -1,?duration:Int = -1) {
+		if (PosY != -1)
+			to_y = PosY;
+		if (duration != -1)
+			Duration = duration;
 		if (cols.length == 0) 
 			return;
+		Actuate.timer(minimumDuration).onComplete(afterMinimum);
 		for (col in cols)
 		{
+			scrolling = true;
 			tweens.push( Actuate.tween(col, Duration, { y:to_y } , true));
 		}
 	}
 	
 	public function onComplete(handler:Void->Void):Void {
+		scrolling = false;
 		OnComplete = handler;
 	}
 }

@@ -68,7 +68,6 @@ class CqLootFactory {
 			Resources.descriptions.set("Long Sword","Long swords have long cruciform hilts with grips and double-edged blades over one meter long.");
 			Resources.descriptions.set("Staff","A sturdy shaft of hardwood with metal tips.");
 			Resources.descriptions.set("Dagger", "A double-edged blade used for stabbing or thrusting.");
-			
 			Resources.descriptions.set("Axe", "A mighty axe, good for chopping wood and flesh.");
 			Resources.descriptions.set("Hardened Battle Axe", "Crafted from the finest of metals, this axe can deal lethal slashing, cleaving and slicing blows.");
 			Resources.descriptions.set("Broad Claymore", "An ancient weapon, many bards have sung about glorious victories won with it.");
@@ -220,7 +219,6 @@ class CqLootFactory {
 			case LONG_SWORD:
 				item.name ="Long Sword";
 				item.damage = new Range(2, 4);
-				//add stats
 			case AXE:
 				item.name = "Axe";
 				item.damage = new Range(4, 6);
