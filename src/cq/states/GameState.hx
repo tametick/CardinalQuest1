@@ -70,10 +70,16 @@ class GameState extends CqState {
 
 	public override function update() {
 		super.update();
-		if (!started || endingAnim) return;
-		var up = SpriteCursor.instance.getSpriteIndex("up");
-		if ( initialized < 1 ) 
+		if (!started || endingAnim) 
 			return;
+			
+		var up = SpriteCursor.instance.getSpriteIndex("up");
+		if ( initialized < 1 ) {
+			return;
+		} else if ( initialized == 1 ) {
+			initialized = 2;
+			gameUI.updateCharges();
+		}
 			
 		if ( GameUI.isTargeting) {
 			gameUI.updateTargeting();
