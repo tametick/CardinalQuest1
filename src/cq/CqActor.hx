@@ -1034,6 +1034,7 @@ class CqMob extends CqActor, implements Mob {
 					use(spell, cast(Registery.player,CqActor));
 				else
 					use(spell, this);
+				SoundEffectsManager.play(SpellCastNegative);
 				
 				spell.spiritPoints = 0;
 				// end turn
