@@ -9,7 +9,6 @@ class HxlGroup extends HxlObject {
 	var _last:HxlPoint;
 	var _first:Bool;
 	public var initialized:Bool;
-
 	public function new() {
 		super();
 		_group = true;
@@ -18,7 +17,6 @@ class HxlGroup extends HxlObject {
 		_first = true;
 		initialized = false;
 	}
-
 	/**
 	 * Adds a new <code>HxlObject</code> subclass (HxlSprite, HxlBlock, etc) to the list of children
 	 *

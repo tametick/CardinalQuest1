@@ -603,7 +603,7 @@ class HxlSprite extends HxlObject {
 		_flashRect.x = rx;
 		_flashRect.y = ry;
 		//TODO: right now _framePixels needs to be cleared each frame because it isn't copying alpha pixels correctly
-		_framePixels.fillRect(new Rectangle(0, 0, _framePixels.width, _framePixels.height), 0x00FFFFFF);
+		//_framePixels.fillRect(new Rectangle(0, 0, _framePixels.width, _framePixels.height), 0x00FFFFFF);
 		_framePixels.copyPixels(_pixels,_flashRect,_flashPointZero);
 		_flashRect.x = _flashRect.y = 0;
 		#if flash9  //TODO: get color transform working in cpp

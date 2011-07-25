@@ -35,7 +35,7 @@ class WinState extends CqState {
 		scroller.addColumn(150, 400, "The evil minotaur has escaped, but you can still catch him, next time...", false, FontDungeon.instance.fontName, 30, 0x0C11F1);
 		Figurescale = new HxlPoint(2.0, 2.0);
 		figure = new HxlSprite(85, 40, VortexFigure, Figurescale.x, Figurescale.y);
-		bg = new HxlSprite(0, 0, VortexScreen);
+		bg = new HxlSprite(50, 50, VortexScreen);
 		lights = new HxlSprite(0, 0, VortexLightsScreen);
 		add(figure);
 		figure.zIndex = 10;
@@ -61,9 +61,6 @@ class WinState extends CqState {
 		Figurescale.y = Figurescale.x *= 0.993;
 		figure.scale = Figurescale;
 		
-	}
-	override function onMouseDown(event:MouseEvent) {
-		return;
 	}
 
 	function nextScreen() {
