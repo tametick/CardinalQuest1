@@ -1,0 +1,90 @@
+<?xml version = "1.0" encoding="ISO-8859-1" ?>
+<setup name = "ogresamples" platform = "win32">
+	<locales default = "en">
+		<label id = "basedir">
+			<string language = "en">Base directory</string>
+			<string language = "de">Basisverzeichnis</string>
+		</label>
+		<label id = "gfxengine">
+			<string language = "en">Graphics engine</string>
+			<string language = "de">Grafikengine</string>
+		</label>
+		<label id = "shadercomp">
+			<string language = "en">Shader compiler</string>
+			<string language = "de">Shadercompiler</string>
+		</label>
+		<label id = "vcredist">
+			<string language = "en">Visual Studio 2005 - Runtime Environment</string>
+			<string language = "de">Visual Studio 2005 - Laufzeitumgebung</string>
+		</label>
+		<label id = "modules">
+			<string language = "en">Sample modules</string>
+			<string language = "de">Beispielmodule</string>
+		</label>
+		<label id = "config">
+			<string language = "en">Configuration</string>
+			<string language = "de">Konfiguration</string>
+		</label>
+	</locales>
+	<directory alias = "basedir">
+		<copy file = "SampleBrowser.exe" verify = "true" />
+		<copy file = "OgreMain.dll" verify = "true" alias = "gfxengine" />
+		<copy file = "OgreRTShaderSystem.dll" alias = "gfxengine" />
+		<copy file = "OgreTerrain.dll" alias = "gfxengine" />
+		<copy file = "OgrePaging.dll" alias = "gfxengine" />
+		<copy file = "Plugin_BSPSceneManager.dll" alias = "gfxengine" />
+		<copy file = "Plugin_CgProgramManager.dll" alias = "gfxengine" />
+		<copy file = "Plugin_OctreeSceneManager.dll" alias = "gfxengine" />
+		<copy file = "Plugin_OctreeZone.dll" alias = "gfxengine" />
+		<copy file = "Plugin_ParticleFX.dll" alias = "gfxengine" />
+		<copy file = "Plugin_PCZSceneManager.dll" alias = "gfxengine" />
+		<copy file = "Plugin_JadeDSOgre.dll" alias = "gfxengine" />
+		<copy file = "RenderSystem_Direct3D9.dll" alias = "gfxengine" />
+		<copy file = "RenderSystem_GL.dll" alias = "gfxengine" />
+		<copy file = "OIS.dll" verify = "true"  alias = "gfxengine"/>
+		<copy file = "cg.dll" verify = "true" alias = "shadercomp" />
+		<copy file = "Sample_BezierPatch.dll" alias = "modules" />
+		<copy file = "Sample_BSP.dll" alias = "modules" />
+		<copy file = "Sample_CameraTrack.dll" alias = "modules" />
+		<copy file = "Sample_CelShading.dll" alias = "modules" />
+		<copy file = "Sample_Character.dll" alias = "modules" />
+		<copy file = "Sample_Compositor.dll" alias = "modules" />
+		<copy file = "Sample_CubeMapping.dll" alias = "modules" />
+		<copy file = "Sample_DeferredShading.dll" alias = "modules" />
+		<copy file = "Sample_Dot3Bump.dll" alias = "modules" />
+		<copy file = "Sample_DynTex.dll" alias = "modules" />
+		<copy file = "Sample_FacialAnimation.dll" alias = "modules" />
+		<copy file = "Sample_Fresnel.dll" alias = "modules" />
+		<copy file = "Sample_Grass.dll" alias = "modules" />
+		<copy file = "Sample_Instancing.dll" alias = "modules" />
+		<copy file = "Sample_Isosurf.dll" alias = "modules" />
+		<copy file = "Sample_Lighting.dll" alias = "modules" />
+		<copy file = "Sample_Ocean.dll" alias = "modules" />
+		<copy file = "Sample_ParticleFX.dll" alias = "modules" />
+		<copy file = "Sample_ParticleGS.dll" alias = "modules" />
+		<copy file = "Sample_ShaderSystem.dll" alias = "modules" />
+		<copy file = "Sample_Shadows.dll" alias = "modules" />
+		<copy file = "Sample_SkeletalAnimation.dll" alias = "modules" />
+		<copy file = "Sample_SkyBox.dll" alias = "modules" />
+		<copy file = "Sample_SkyDome.dll" alias = "modules" />
+		<copy file = "Sample_SkyPlane.dll" alias = "modules" />
+		<copy file = "Sample_Smoke.dll" alias = "modules" />
+		<copy file = "Sample_SphereMapping.dll" alias = "modules" />
+		<copy file = "Sample_Terrain.dll" alias = "modules" />
+		<copy file = "Sample_TextureFX.dll" alias = "modules" />
+		<copy file = "Sample_Transparency.dll" alias = "modules" />
+		<copy file = "Sample_VolumeTex.dll" alias = "modules" />
+		<copy file = "Sample_Water.dll" alias = "modules" />
+		<copy file = "plugins.cfg" alias = "config" />
+		<copy file = "quakemap.cfg" alias = "config" />
+		<copy file = "samples.cfg" alias = "config" />
+		<copy file = "resources.cfg" alias = "config" />
+		<win32:link name = "OGRE Sample Browser" target = "SampleBrowser.exe" description = "Developed under the MIT-License" alias = "config" />
+	</directory>
+	<temporary>
+		<copy file = "vc_red.cab" alias = "vcredist" />
+		<execute file = "vc_red.msi" arguments = "/quiet /norestart" alias = "vcredist" />
+		<remove file = "vc_red.cab" alias = "vcredist" cancel = "false" />
+		<remove file = "vc_red.msi" alias = "vcredist" cancel = "false" />
+	</temporary>
+</setup>
