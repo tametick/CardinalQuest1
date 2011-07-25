@@ -1,6 +1,7 @@
 package cq;
 
 import cq.states.GameState;
+import cq.states.HelpState;
 import cq.states.MainMenuState;
 import cq.ui.CqPopup;
 import cq.ui.CqPotionGrid;
@@ -173,12 +174,14 @@ class GameUI extends HxlDialog {
 		menuButton.getText().angle = -90;
 		menuButton.setCallback(pressMenu);
 		
-		pop = new CqPopup(100,"Menu[hotkey ESC]", this);
+		pop = new CqPopup(150,"[hotkey ESC]", doodads);
 		pop.zIndex = 15;
 		menuButton.setPopup(pop);
-		pop = new CqPopup(100,"Help[hotkey F1]", this);
+		doodads.add(pop);
+		pop = new CqPopup(150,"[hotkey F1]", doodads);
 		pop.zIndex = 15;
 		helpButton.setPopup(pop);
+		doodads.add(pop);
 		
 		add(helpButton);
 		add(menuButton);
@@ -305,6 +308,7 @@ class GameUI extends HxlDialog {
 	
 	private function pressHelp():Void 
 	{
+		HxlGraphics.pushState(new HelpState());
 	}
 	private function pressMenu():Void
 	{

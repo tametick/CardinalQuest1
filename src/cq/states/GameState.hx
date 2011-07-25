@@ -326,6 +326,17 @@ class GameState extends CqState {
 			}
 			HxlGraphics.pushState(new MainMenuState());
 		}
+		if ( HxlGraphics.keys.justReleased("F1") ) {
+			// If user was in targeting mode, cancel it
+			if ( GameUI.isTargeting ) {
+				GameUI.setTargeting(false);
+			}
+			if (gameUI._dialog)
+			{
+				gameUI.hideCurrentPanel();
+			}
+			HxlGraphics.pushState(new HelpState());
+		}
 		if (Configuration.debug)
 			checkJumpKeys();
 	}
