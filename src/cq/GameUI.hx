@@ -111,7 +111,7 @@ class GameUI extends HxlDialog {
 
 		isTargeting = false;
 		isTargetingEmptyTile = false;
-		targetLastPos = null;
+		targetLastPos = new HxlPoint(0,0);
 		targetString = "";
 		targetSpell = null;
 		currentPanel = null;
@@ -750,19 +750,27 @@ class GameUI extends HxlDialog {
 				targetSpell = null;
 		}
 	}
-
+	public static function setTargetingPos(pos:HxlPoint):Void
+	{
+		if (isTargeting)
+		{
+			if (instance.targetLastPos == null) instance.targetLastPos = new HxlPoint();
+			instance.targetLastPos.x = pos.x;
+			instance.targetLastPos.y = pos.y;
+		}
+	}
 	public static function setTargetingSpell(Spell:CqSpellButton) {
 		targetSpell = Spell;
 	}
 
-	public function updateTargeting() {
+	public function updateTargeting(mouse:Bool = true) {
 		if ( targetSprite == null ) {
 			targetSprite = new HxlSprite(0, 0);
 			targetSprite.createGraphic(Configuration.zoomedTileSize(), Configuration.zoomedTileSize(), 0x88ffffff, false, CqGraphicKey.targetSprite);
 			targetSprite.zIndex = 1;
 			targetSprite.color = 0x00ff00;
 			HxlGraphics.state.add(targetSprite);
-			targetLastPos = null;
+			//targetLastPos = null;
 		} else if ( targetSprite.visible == false ) targetSprite.visible = true;
 		if ( targetText == null && GameUI.targetString != "" ) {
 			targetText = new HxlText( 80, HxlGraphics.height - 130, HxlGraphics.width - 160, GameUI.targetString );
@@ -773,14 +781,41 @@ class GameUI extends HxlDialog {
 			targetText.visible = true;
 			targetText.setText(GameUI.targetString);
 		}
-		var targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
-		var targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
-
-		if ( targetLastPos == null || targetLastPos.x != targetX || targetLastPos.y != targetY ) {
-			var worldPos:HxlPoint = Registery.level.getTilePos(Std.int(targetX), Std.int(targetY));
+		var targetX:Float = 0;
+		var targetY:Float = 0;
+		if (mouse)
+		{
+			targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
+			targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
+		}else
+		{
+			var newPos:HxlPoint = CqRegistery.level.getTargetAccordingToKeyPress(targetLastPos);
+			if (newPos != null)
+			{
+				if (newPos.x == 0 && newPos.y == 0)
+				{
+					targetLastPos.x += newPos.x;
+					targetLastPos.y += newPos.y;
+					targetingExecute(false);
+					return;
+				}else
+				{
+					targetX = targetLastPos.x+newPos.x;
+					targetY = targetLastPos.y+newPos.y;
+				}
+			}else
+			{
+				targetX = targetLastPos.x;
+				targetY = targetLastPos.y;
+				
+			}
+			
+		}
+		//
+		if (targetLastPos.x != targetX || targetLastPos.y != targetY ) {
+			var worldPos:HxlPoint = Registery.level.getPixelPositionOfTile(Std.int(targetX), Std.int(targetY));
 			targetSprite.x = worldPos.x;
 			targetSprite.y = worldPos.y;
-
 			var tile:CqTile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)), CqTile);
 			if (isTargetingEmptyTile) {
 				if ( tile == null || tile.actors.length > 0 || tile.visibility == Visibility.UNSEEN) {
@@ -803,24 +838,30 @@ class GameUI extends HxlDialog {
 					}
 				}
 			}
-
-			if ( targetLastPos == null ) 
-				targetLastPos = new HxlPoint();
-			
 			targetLastPos.x = targetX;
 			targetLastPos.y = targetY;
 		}
 	}
 
-	public function targetingMouseDown() {
+	public function targetingExecute(mouse:Bool) {
 		if (!exists || !visible)
 			return;
 		if ( targetSpell == null ) {
 			GameUI.setTargeting(false);
 		}
-		var targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
-		var targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
-		var tile:CqTile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)), CqTile);
+		var tile:CqTile = null;
+		var targetX:Float;
+		var targetY:Float;
+		if (mouse)
+		{
+			targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
+			targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
+			tile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)), CqTile);
+		}else {
+			tile = cast(Registery.level.getTile(Std.int(targetLastPos.x), Std.int(targetLastPos.y)), CqTile);
+		}
+			
+		
 		if (isTargetingEmptyTile) {
 			if ( tile == null || tile.actors.length > 0) {
 				GameUI.setTargeting(false);

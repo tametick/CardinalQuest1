@@ -379,8 +379,17 @@ class Level extends HxlTilemap
 	}
 	
 	var targetTile:HxlPoint;
-	public function getTargetAccordingToKeyPress():HxlPoint {
-		var player = Registery.player;
+	/**
+	 * checks the directional and wasd keys, returns custompoint+direction of keys pressed
+	 * @param	?fromCustomPoint if not null uses this as starting point, otherwise uses players tilePos.
+	 * @return starting position + direction, or just starting position if enter is pressed, or null if nothing is pressed
+	 */
+	public function getTargetAccordingToKeyPress(?fromCustomPoint:HxlPoint = null):HxlPoint {
+		var pos:HxlPoint;
+		if(fromCustomPoint == null)
+			pos = Registery.player.tilePos;
+		else
+			pos = fromCustomPoint;
 		
 		if (targetTile == null)
 			targetTile = new HxlPoint(0, 0);
@@ -389,19 +398,19 @@ class Level extends HxlTilemap
 			targetTile.y = 0;
 		}
 		if ( HxlGraphics.keys.LEFT || HxlGraphics.keys.A) {
-			if ( player.tilePos.x > 0) {
+			if ( pos.x > 0) {
 				targetTile.x = -1;
 			}
 		} else if ( HxlGraphics.keys.RIGHT || HxlGraphics.keys.D) {
-			if ( player.tilePos.x < widthInTiles) {
+			if ( pos.x < widthInTiles) {
 				targetTile.x = 1;
 			}
 		} else if ( HxlGraphics.keys.UP || HxlGraphics.keys.W) {
-			if ( player.tilePos.y > 0 ) {
+			if ( pos.y > 0 ) {
 					targetTile.y = -1;
 			}
 		} else if ( HxlGraphics.keys.DOWN || HxlGraphics.keys.S) {
-			if ( player.tilePos.y < heightInTiles ) {
+			if ( pos.y < heightInTiles ) {
 					targetTile.y = 1;
 			}
 		} else if ( HxlGraphics.keys.ENTER )

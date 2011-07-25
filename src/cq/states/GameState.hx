@@ -45,11 +45,12 @@ class GameState extends CqState {
 	public var chosenClass:CqClass;
 	public var isPlayerActing:Bool;
 	public var started:Bool;
+	var lastMouse:Bool;
 	var endingAnim:Bool;
 	public override function create() {
 		inst = this;
 		super.create();
-		started = endingAnim = false;
+		lastMouse = started = endingAnim = false;
 		chosenClass = FIGHTER;
 		HxlGraphics.fade.start(false, 0x00000000, 0.25);
 		cursor.setFrame(SpriteCursor.instance.getSpriteIndex("diagonal"));
@@ -88,7 +89,9 @@ class GameState extends CqState {
 			
 		if (Timer.stamp() - msMoveStamp > msHideDelay) cursor.visible = false;
 		if ( GameUI.isTargeting) {
-			gameUI.updateTargeting();
+			if (CqRegistery.level.getTargetAccordingToKeyPress()!=CqRegistery.player.tilePos&&CqRegistery.level.getTargetAccordingToKeyPress()!=null)
+				lastMouse = false;
+			gameUI.updateTargeting(lastMouse);
 			setDiagonalCursor();
 		} else {
 			actKeys();
@@ -319,7 +322,7 @@ class GameState extends CqState {
 	
 	override function onKeyUp(event:KeyboardEvent) {	
 		if (!started || endingAnim) return;
-		if ( HxlGraphics.keys.justReleased("ESCAPE") ) {
+		if ( HxlGraphics.keys.justReleased("F1") || HxlGraphics.keys.justReleased("ESCAPE")) {
 			// If user was in targeting mode, cancel it
 			if ( GameUI.isTargeting ) {
 				GameUI.setTargeting(false);
@@ -328,18 +331,10 @@ class GameState extends CqState {
 			{
 				gameUI.hideCurrentPanel();
 			}
-			HxlGraphics.pushState(new MainMenuState());
-		}
-		if ( HxlGraphics.keys.justReleased("F1") ) {
-			// If user was in targeting mode, cancel it
-			if ( GameUI.isTargeting ) {
-				GameUI.setTargeting(false);
-			}
-			if (gameUI._dialog)
-			{
-				gameUI.hideCurrentPanel();
-			}
-			HxlGraphics.pushState(new HelpState());
+			if(HxlGraphics.keys.justReleased("F1"))
+				HxlGraphics.pushState(new HelpState());
+			else
+				HxlGraphics.pushState(new MainMenuState());
 		}
 		if (Configuration.debug)
 			checkJumpKeys();
@@ -349,6 +344,7 @@ class GameState extends CqState {
 	{
 		msMoveStamp = Timer.stamp();
 		cursor.visible = true;
+		lastMouse = true;
 	}
 	override function onMouseDown(event:MouseEvent) {
 		if (HxlGraphics.justUnpaused) {
@@ -359,7 +355,7 @@ class GameState extends CqState {
 		if (!started || endingAnim) 
 			return;
 		if ( GameUI.isTargeting ) {
-			gameUI.targetingMouseDown();
+			gameUI.targetingExecute(true);
 			return;
 		}
 
@@ -391,26 +387,14 @@ class GameState extends CqState {
 		var tile:CqTile;
 		if (byKey)
 		{
-			dx =  (Registery.player.x + Configuration.zoomedTileSize()/2);
+			dx =  (Registery.player.x + Configuration.zoomedTileSize() / 2);
 			dy =  (Registery.player.y + Configuration.zoomedTileSize() / 2);
-			var acts:Bool = false;
-			if (HxlGraphics.keys.pressed("UP") || HxlGraphics.keys.pressed("W"))
-			{
+			acts = false;
+			if (HxlGraphics.keys.pressed("UP") || HxlGraphics.keys.pressed("W") || HxlGraphics.keys.pressed("DOWN") || HxlGraphics.keys.pressed("S") || HxlGraphics.keys.pressed("LEFT") || HxlGraphics.keys.pressed("A") || HxlGraphics.keys.pressed("RIGHT") || HxlGraphics.keys.pressed("D") || HxlGraphics.keys.justPressed("ENTER"))
 				acts = true;
-			}else if (HxlGraphics.keys.pressed("DOWN") || HxlGraphics.keys.pressed("S"))
-			{
-				acts = true;
-			}else if (HxlGraphics.keys.pressed("LEFT") || HxlGraphics.keys.pressed("A"))
-			{
-				acts = true;
-			}else if (HxlGraphics.keys.pressed("RIGHT") || HxlGraphics.keys.pressed("D"))
-			{
-				acts = true;
-			}else if (HxlGraphics.keys.justPressed("ENTER"))
-			{
-				acts = true;
-			}
-			if (!acts ) return;
+			else
+				return;
+			lastMouse = false;
 			if (GameUI.currentPanel != null)
 				if(GameUI.currentPanel != gameUI.panelMap) return;
 			target = level.getTargetAccordingToKeyPress();
@@ -519,6 +503,7 @@ class GameState extends CqState {
 	private var boss:CqMob;
 	private var BossTargetDir:HxlPoint;
 	private var portalSprite:HxlSprite;
+	private var acts:Bool;
 	public function startBossAnim()
 	{
 		//state vars

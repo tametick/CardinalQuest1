@@ -113,7 +113,8 @@ class CqSpellButton extends HxlDialog {
 				GameUI.instance.updateCharge(this);
 				SoundEffectsManager.play(SpellCast);
 			}
-
+			//event == null means it was called by keypress. which in turn means we want to start targeting from players pos.
+			if (event == null) GameUI.setTargetingPos(player.tilePos);
 			if (event != null) event.stopPropagation();
 		}
 	}
