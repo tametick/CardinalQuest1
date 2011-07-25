@@ -16,9 +16,9 @@ class CqPotionGrid extends CqInventoryGrid {
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100) {
 		super(X, Y, Width, Height, false);
 		
-		belt = new HxlSprite(-13, 8);
+		belt = new HxlSprite(-40, 8);
 		belt.zIndex = -1;
-		belt.loadGraphic(UiBeltHorizontal, false, false, 406, 71);
+		belt.loadGraphic(UiBeltHorizontal, false, false, 460, 71);
 		add(belt);
 		
 		cells = new Array();
