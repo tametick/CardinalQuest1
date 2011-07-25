@@ -218,7 +218,10 @@ class HxlButton extends HxlGroup {
 		_onT.scrollFactor = scrollFactor;
 		return this;
 	}
-
+	public function getText():HxlText
+	{
+		return _offT;
+	}
 	/**
 	 * Called by the game loop automatically, handles mouseover and click detection.
 	 */

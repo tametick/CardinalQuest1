@@ -75,6 +75,7 @@ class VortexFigure extends Bitmap { public function new() { super(); } }
 class SpriteKnightEntry extends Bitmap { public function new() { super(); } }
 class SpriteWizardEntry extends Bitmap { public function new() { super(); } }
 class SpriteThiefEntry extends Bitmap { public function new() { super(); } }
+class SpriteHelpOverlay extends Bitmap { public function new() { super(); } }
 
 class LogoSprite extends HxlSprite {
 	public function new(?X:Float = 0, ?Y:Float = 0) {

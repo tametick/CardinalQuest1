@@ -76,6 +76,7 @@ class GameState extends CqState {
 		if (!started || endingAnim) return;
 		var up = SpriteCursor.instance.getSpriteIndex("up");
 		if ( initialized < 1 ) {
+		{
 			return;
 		} else if ( initialized == 1 ) {
 			initialized = 2;
@@ -325,6 +326,17 @@ class GameState extends CqState {
 			}
 			HxlGraphics.pushState(new MainMenuState());
 		}
+		if ( HxlGraphics.keys.justReleased("F1") ) {
+			// If user was in targeting mode, cancel it
+			if ( GameUI.isTargeting ) {
+				GameUI.setTargeting(false);
+			}
+			if (gameUI._dialog)
+			{
+				gameUI.hideCurrentPanel();
+			}
+			HxlGraphics.pushState(new HelpState());
+		}
 		if (Configuration.debug)
 			checkJumpKeys();
 	}
@@ -423,7 +435,6 @@ class GameState extends CqState {
 		} else if ( !isBlockingMovement(target) ) {
 			// move or attack in chosen tile
 			Registery.player.actInDirection(this, target);
-			
 			// if player just attacked don't continue moving
 			if (CqRegistery.player.justAttacked)
 				isPlayerActing = false;
@@ -448,6 +459,9 @@ class GameState extends CqState {
 				CqRegistery.player.actInDirection(this,target);
 			} else if (HxlUtil.contains(SpriteTiles.instance.doors.iterator(), tile.dataNum)){
 				openDoor(tile);
+			}else
+			{
+				return;
 			}
 		}
 		
