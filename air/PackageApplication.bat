@@ -1,3 +1,5 @@
+copy ..\bin\cq.swf bin\cq.swf
+
 @echo off
 
 :: AIR application packaging
