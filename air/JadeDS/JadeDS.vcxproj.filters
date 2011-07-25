@@ -18,5 +18,8 @@
     <ClCompile Include="jade.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="JadeListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
