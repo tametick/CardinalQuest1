@@ -75,7 +75,7 @@ class GameState extends CqState {
 			
 		if (!started || endingAnim) return;
 		var up = SpriteCursor.instance.getSpriteIndex("up");
-		if ( initialized < 1 ) 
+		if ( initialized < 1 ) {
 			return;
 		} else if ( initialized == 1 ) {
 			initialized = 2;
