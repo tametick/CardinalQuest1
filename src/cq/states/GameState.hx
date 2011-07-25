@@ -70,11 +70,12 @@ class GameState extends CqState {
 
 	public override function update() {
 		super.update();
-		if (!started || endingAnim) 
-			return;
+		if (endingAnim)
+			doEndingAnimation();
 			
+		if (!started || endingAnim) return;
 		var up = SpriteCursor.instance.getSpriteIndex("up");
-		if ( initialized < 1 ) {
+		if ( initialized < 1 ) 
 			return;
 		} else if ( initialized == 1 ) {
 			initialized = 2;
@@ -257,7 +258,6 @@ class GameState extends CqState {
 		
 		add(world.currentLevel);
 		world.currentLevel.updateFieldOfView(this, true);
-		
 
 		// create and init the game gui
 		// todo: do not recreate if already exists from previous games?
@@ -470,21 +470,75 @@ class GameState extends CqState {
 		var col = CqRegistery.level.getColor();
 		Registery.level.updateTileGraphic(tile.mapX, tile.mapY, SpriteTiles.instance.getSpriteIndex(col + "_door_open"));
 	}
+	private function startMovingBoss():Void
+	{
+		Actuate.timer(1.8).onComplete(gotoWinState);
+		CqRegistery.level.updateFieldOfView(HxlGraphics.state, boss);
+		HxlGraphics.follow(boss, 1000);		
+		
+		//HxlGraphics.follow(boss);
+		startedMoving = true;
+	}
+	private function doEndingAnimation():Void
+	{
+		portalSprite.angle -= 0.5;
+		if (!startedMoving)
+			return;
+		HxlGraphics.follow(boss, 1000);
+		boss.x = boss.x + BossTargetDir.x;
+		boss.y = boss.y + (BossTargetDir.y);
+	}
+	private function RemoveGameUI():Void
+	{
+		gameUI.destroy();
+	}
+	private var startedMoving:Bool;
+	private var boss:CqMob;
+	private var BossTargetDir:HxlPoint;
+	private var portalSprite:HxlSprite;
 	public function startBossAnim()
 	{
+		//state vars
 		endingAnim = true;
+		startedMoving = false;
+		
+		//create minotaur on location
 		var tileLocation:HxlPoint = HxlUtil.getRandomTileWithDistance(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), Registery.level.mapData, SpriteTiles.instance.walkableAndSeeThroughTiles,CqRegistery.player.tilePos,20);
-		var pixelLocation = Registery.level.getPixelPositionOfTile(tileLocation.x,tileLocation.y);
-		var boss:CqMob = CqRegistery.level.createAndaddMob(tileLocation, 99, true);
+		boss = CqRegistery.level.createAndaddMob(tileLocation, 99, true);
 		boss.visionRadius = 20;
-		HxlGraphics.follow(boss, 200);
-		CqRegistery.level.updateFieldOfView(HxlGraphics.state,boss);
+		boss.zIndex = 1001;
 		//find an empty tile for portal
-		var targetLocation:HxlPoint = tileLocation;
-		targetLocation.x--;
-		HxlGraphics.pushState(new WinState());
-		//var boss2:CqMob = CqRegistery.level.createAndaddMob(targetLocation, 99, true);
-		//boss.actInDirection(this, targetLocation);
-		//CqRegistery.level.updateFieldOfView(HxlGraphics.state,boss);
+		BossTargetDir = new HxlPoint(0, 0);
+		if (!CqRegistery.level.isBlockingMovement(Std.int(tileLocation.x), Std.int(tileLocation.y - 1),false))
+		{// y -1
+			BossTargetDir.y = -1;
+		}else if (!CqRegistery.level.isBlockingMovement(Std.int(tileLocation.x), Std.int(tileLocation.y + 1),false))
+		{// y +1
+			BossTargetDir.y = 1;
+		}else if (!CqRegistery.level.isBlockingMovement(Std.int(tileLocation.x - 1), Std.int(tileLocation.y),false))
+		{// x -1
+			BossTargetDir.x = -1;
+		}else if (!CqRegistery.level.isBlockingMovement(Std.int(tileLocation.x + 1), Std.int(tileLocation.y),false))
+		{// x +1
+			BossTargetDir.x = 1;
+		}
+		//create portal
+		var portalPos:HxlPoint = CqRegistery.level.getPixelPositionOfTile(tileLocation.x + BossTargetDir.x, tileLocation.y + BossTargetDir.y, true);
+		portalSprite = new HxlSprite(portalPos.x, portalPos.y, VortexScreen, 0.15, 0.15);
+		trace(tileLocation + " " + Std.int(tileLocation.x + BossTargetDir.x)+" "+Std.int(tileLocation.y + BossTargetDir.y));
+		portalSprite.x -= portalSprite.width / 2+Configuration.tileSize;
+		portalSprite.y -= portalSprite.height / 2;
+		portalSprite.zIndex = 1000;
+		add(portalSprite);
+		//gameui and start boss anim timers
+		Actuate.timer(2).onComplete(startMovingBoss);
+		Actuate.timer(0.5).onComplete(RemoveGameUI);
+	}
+	private function gotoWinState():Void
+	{
+		HxlGraphics.fade.start(true, 0xff000000, 1, function() {
+			var newState = new WinState();
+			HxlGraphics.state = newState;
+		}, true);
 	}
 }
