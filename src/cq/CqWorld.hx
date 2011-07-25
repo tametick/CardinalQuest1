@@ -57,15 +57,19 @@ class CqLevel extends Level {
 			return "red";
 	}
 	
-	public function new(index:Int) {
-		super(index,Configuration.tileSize*2,Configuration.tileSize*2);
-		
+	public static function playMusicByIndex(index:Int):Void
+	{
 		if(index==0)
 			MusicManager.play(MainThemeOne);
 		else if (index == 4)
 			MusicManager.play(MainThemeTwo);
 		else if (index == 7)
 			MusicManager.play(BossTheme);
+	}
+	public function new(index:Int) {
+		super(index,Configuration.tileSize*2,Configuration.tileSize*2);
+		
+		playMusicByIndex(index);
 		
 		tileClass = CqTile;
 		

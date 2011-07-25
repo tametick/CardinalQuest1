@@ -308,11 +308,13 @@ class GameUI extends HxlDialog {
 	
 	private function pressHelp():Void 
 	{
-		HxlGraphics.pushState(new HelpState());
+		if (Std.is(HxlGraphics.getState(), GameState))
+			HxlGraphics.pushState(new HelpState());
 	}
 	private function pressMenu():Void
 	{
-		HxlGraphics.pushState(new MainMenuState());
+		if (Std.is(HxlGraphics.getState(), GameState))
+			HxlGraphics.pushState(new MainMenuState());
 	}
 	override public function kill() {
 		GameUI.instance = null;

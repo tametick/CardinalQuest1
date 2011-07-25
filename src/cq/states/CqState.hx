@@ -15,7 +15,7 @@ class CqState extends HxlState {
 			cursor = new CursorSprite();
 			cursor.setFrame(SpriteCursor.instance.getSpriteIndex("diagonal"));
 		}
-		
+		cursor.visible = true;
 		super.create();
 	}
 	
