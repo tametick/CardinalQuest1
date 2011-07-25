@@ -1,6 +1,7 @@
 package cq;
 
 import cq.states.GameState;
+import cq.states.MainMenuState;
 import cq.ui.CqPopup;
 import cq.ui.CqPotionGrid;
 import cq.ui.inventory.CqInventoryDialog;
@@ -130,6 +131,7 @@ class GameUI extends HxlDialog {
 		/**
 		 * Create and init main containers
 		 **/
+		var pop:CqPopup;
 		leftButtons = new HxlButtonContainer(0, 30, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
 		leftButtons.scrollFactor.x = leftButtons.scrollFactor.y = 0;
 		add(leftButtons);
@@ -138,9 +140,49 @@ class GameUI extends HxlDialog {
 		dlgSpellGrid.zIndex = 1;
 		add(dlgSpellGrid);
 
-		dlgPotionGrid = new CqPotionGrid(130, HxlGraphics.height - 84, 380, 84);
+		dlgPotionGrid = new CqPotionGrid(102, HxlGraphics.height - 84, 460, 84);
 		add(dlgPotionGrid);
 
+		//menu/help
+		var MenuSprite = new ButtonSprite();
+		var MenuSpriteH = new ButtonSprite();
+		var HelpSprite = new ButtonSprite();
+		var HelpSpriteH = new ButtonSprite();
+		_point.x = 0.44;
+		_point.y = 1;
+		
+		MenuSpriteH.setAlpha(0.6);
+		HelpSpriteH.setAlpha(0.6);
+		
+		MenuSprite.scale = MenuSpriteH.scale = _point.clone();
+		HelpSprite.scale = HelpSpriteH.scale = _point.clone();
+		
+		var btnSize:Int = 64;
+		var menuButton:HxlButton = new HxlButton(Std.int(dlgPotionGrid.x-8), Std.int(dlgPotionGrid.y+10), 25, btnSize);
+		var helpButton:HxlButton = new HxlButton(Std.int(dlgPotionGrid.x+381), Std.int(dlgPotionGrid.y+10), 25, btnSize);
+		helpButton.loadGraphic(HelpSprite,HelpSpriteH);
+		menuButton.loadGraphic(MenuSprite,MenuSpriteH);
+		helpButton.configEvent(5, true, true);
+		menuButton.configEvent(5, true, true);
+		
+		helpButton.loadText(new HxlText(15, 32, btnSize, "Help", true).setFormat(FontDungeon.instance.fontName, 23, 0xffffff, "center", 0x010101));
+		helpButton.getText().angle = 90;
+		helpButton.setCallback(pressHelp);
+		
+		menuButton.loadText(new HxlText(-14, 32, btnSize, "Menu", true).setFormat(FontDungeon.instance.fontName, 23, 0xffffff, "center", 0x010101));
+		menuButton.getText().angle = -90;
+		menuButton.setCallback(pressMenu);
+		
+		pop = new CqPopup(100,"Menu[hotkey ESC]", this);
+		pop.zIndex = 15;
+		menuButton.setPopup(pop);
+		pop = new CqPopup(100,"Help[hotkey F1]", this);
+		pop.zIndex = 15;
+		helpButton.setPopup(pop);
+		
+		add(helpButton);
+		add(menuButton);
+		
 		notifications = new CqTextNotification(300, 0);
 		notifications.zIndex = 3;
 		add(notifications);
@@ -200,7 +242,7 @@ class GameUI extends HxlDialog {
 		var btnSize:Int = 64;
 		menuBelt = new HxlSprite(6, -13);
 		menuBelt.zIndex = 0;
-		menuBelt.loadGraphic(UiBeltVertical, true, false, 71, 406, false);
+		menuBelt.loadGraphic(UiBeltVertical, true, false, 71, 460, false);
 		menuBelt.setFrame(1);
 		leftButtons.add(menuBelt);
 		
@@ -219,7 +261,6 @@ class GameUI extends HxlDialog {
 		addInfoButtonTexts();
 		addCentralBars();
 		
-		var pop:CqPopup;
 		// map
 		btnMapView = new HxlButton(0, 0, btnSize, btnSize);
 		btnMapView.loadGraphic(mapBtn,mapBtnHigh);
@@ -260,6 +301,14 @@ class GameUI extends HxlDialog {
 		panelInventory.dlgPotionGrid = dlgPotionGrid;
 		
 		add(doodads);
+	}
+	
+	private function pressHelp():Void 
+	{
+	}
+	private function pressMenu():Void
+	{
+		HxlGraphics.pushState(new MainMenuState());
 	}
 	override public function kill() {
 		GameUI.instance = null;
