@@ -379,8 +379,15 @@ class HxlUtil {
 	public static function getRandomTileWithDistance<T>(width:Int, height:Int, map:Array<Array<T>>, tileTypesToGet:Array<T>,distanceFrom:HxlPoint,minDistance:Int = 0):HxlPoint {
 		var x , y = 0;
 		var dist:Float = 0;
+		var i:Int = 0;
 		var pt:HxlPoint = new HxlPoint(0, 0);
 		do {
+			i++;
+			if (i > 50) 
+			{//lower the barrier if it cant find empty tiles.
+				minDistance--;
+				i++;
+			}
 			pt.x = randomInt(width);
 			pt.y = randomInt(height);
 			dist = distance(distanceFrom, pt);
