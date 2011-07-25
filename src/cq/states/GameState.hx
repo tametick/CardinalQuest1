@@ -9,6 +9,8 @@ import cq.GameUI;
 import cq.ui.CqMapDialog;
 import cq.ui.CqTextScroller;
 import flash.display.Bitmap;
+import haxe.Stack;
+import haxe.Timer;
 import haxel.HxlPoint;
 import haxel.HxlSound;
 import haxel.HxlState;
@@ -38,6 +40,7 @@ import flash.events.MouseEvent;
 
 class GameState extends CqState {	
 	static public var inst:GameState;
+	static private var msHideDelay:Float = 3;
 	var gameUI:GameUI;
 	public var chosenClass:CqClass;
 	public var isPlayerActing:Bool;
@@ -53,6 +56,7 @@ class GameState extends CqState {
 		cursor.scrollFactor.y = cursor.scrollFactor.x = 0;
 		//loadingBox = new HxlLoadingBox();
 		//add(loadingBox);
+		msMoveStamp = Timer.stamp();
 	}
 	public override function destroy() {
 		inst = null;
@@ -76,13 +80,13 @@ class GameState extends CqState {
 		if (!started || endingAnim) return;
 		var up = SpriteCursor.instance.getSpriteIndex("up");
 		if ( initialized < 1 ) {
-		{
 			return;
 		} else if ( initialized == 1 ) {
 			initialized = 2;
 			gameUI.updateCharges();
 		}
 			
+		if (Timer.stamp() - msMoveStamp > msHideDelay) cursor.visible = false;
 		if ( GameUI.isTargeting) {
 			gameUI.updateTargeting();
 			setDiagonalCursor();
@@ -340,7 +344,12 @@ class GameState extends CqState {
 		if (Configuration.debug)
 			checkJumpKeys();
 	}
-
+	var msMoveStamp:Float;
+	override function onMouseMove(event:MouseEvent)
+	{
+		msMoveStamp = Timer.stamp();
+		cursor.visible = true;
+	}
 	override function onMouseDown(event:MouseEvent) {
 		if (HxlGraphics.justUnpaused) {
 			HxlGraphics.justUnpaused = false;
