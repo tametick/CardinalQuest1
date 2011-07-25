@@ -759,6 +759,12 @@ class GameUI extends HxlDialog {
 			if (instance.targetLastPos == null) instance.targetLastPos = new HxlPoint();
 			instance.targetLastPos.x = pos.x;
 			instance.targetLastPos.y = pos.y;
+			if (instance.targetSprite != null)
+			{
+				var wPos:HxlPoint = Registery.level.getPixelPositionOfTile(Std.int(pos.x), Std.int(pos.y));
+				instance.targetSprite.x = wPos.x;
+				instance.targetSprite.y = wPos.y;
+			}
 		}
 	}
 	public static function setTargetingSpell(Spell:CqSpellButton) {
@@ -772,6 +778,9 @@ class GameUI extends HxlDialog {
 			targetSprite.zIndex = 1;
 			targetSprite.color = 0x00ff00;
 			HxlGraphics.state.add(targetSprite);
+			var wPos:HxlPoint = Registery.level.getPixelPositionOfTile(Std.int(targetLastPos.x), Std.int(targetLastPos.y));
+			targetSprite.x = wPos.x;
+			targetSprite.y = wPos.y;
 			//targetLastPos = null;
 		} else if ( targetSprite.visible == false ) targetSprite.visible = true;
 		if ( targetText == null && GameUI.targetString != "" ) {
