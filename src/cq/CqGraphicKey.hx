@@ -23,6 +23,7 @@ enum CqGraphicKey{
 	chargeRadial;
 	targetSprite;
 	buttonSprite;
+	xball(color:Float);
 	ItemGlow( type: String );
 	FromClass(className:String, Frame:Int, width:Float, height:Float);
 	OneColor(Width:Float, Height:Float, Color:Float);

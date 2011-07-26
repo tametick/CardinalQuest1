@@ -313,6 +313,8 @@ class GameState extends CqState {
 		world.addOnNewLevel(function() {
 			self.gameUI.initHealthBars();
 		});
+		update();
+		gameUI.pressHelp(false);
 	}
 	
 	public function initRegistry(){

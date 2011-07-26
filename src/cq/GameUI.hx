@@ -306,12 +306,12 @@ class GameUI extends HxlDialog {
 		add(doodads);
 	}
 	
-	private function pressHelp():Void 
+	public function pressHelp(?playSound:Bool = true):Void 
 	{
 		if (Std.is(HxlGraphics.getState(), GameState))
 		{
 			HxlGraphics.pushState(new HelpState());
-			SoundEffectsManager.play(MenuItemClick);
+			if(playSound)SoundEffectsManager.play(MenuItemClick);
 		}
 	}
 	private function pressMenu():Void
@@ -915,5 +915,21 @@ class GameUI extends HxlDialog {
 			}
 		}
 
+	}
+	
+	static public function shootFireBall(from:HxlPoint, to:HxlPoint, color:UInt):Void 
+	{
+		var fireball:HxlSprite = new HxlSprite();
+		if (GraphicCache.checkBitmapCache(CqGraphicKey.xball(color)))
+		{
+			//fireball.loadCachedGraphic(CqGraphicKey.xball(color));
+		}else
+		{
+			//var tmp:BitmapData = new BitmapData(79, 79, true, 0x0);
+			//tmp.copyPixels(GraphicCache.getBitmap(CqGraphicKey.InventoryCellBG), new Rectangle(0, 0, size, size), new Point(19, 19), null, null, true);
+			//var glow:GlowFilter = new GlowFilter(0x00ff00, 0.9, 15.0, 15.0, 1.6, 1, false, true);
+			//tmp.applyFilter(tmp, new Rectangle(0, 0, 79, 79), new Point(0, 0), glow);
+			//GraphicCache.addBitmapData(tmp, CqGraphicKey.CellGlow);
+		}
 	}
 }

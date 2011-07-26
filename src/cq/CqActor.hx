@@ -489,6 +489,11 @@ class CqActor extends CqObject, implements Actor {
 		
 		if (itemOrSpell.equipSlot == POTION)
 			SoundEffectsManager.play(SpellEquipped);
+			
+		if (itemOrSpell.fullName == "Fireball")
+		{
+			GameUI.shootFireBall(tilePos, other.tilePos, 0xDA1F1F);
+		}
 		// add buffs
 		if(itemOrSpell.buffs != null) {
 			for (buff in itemOrSpell.buffs.keys()) {
