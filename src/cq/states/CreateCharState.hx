@@ -72,7 +72,7 @@ class CreateCharState extends CqState {
 		titleText.setFormat(null, 72, 0xffffff, "center");
 		add(titleText);
 		
-		var btnStart:HxlButton = new HxlButton(Std.int((640 - 90) / 2), 430, 90, 28);
+		var btnStart:HxlButton = new HxlButton(490, 390, 90, 28);
 		btnStart.setEventUseCapture(true);
 		var btnStartBg:HxlSprite = new HxlSprite(btnStart.x, btnStart.y);
 		btnStartBg.loadGraphic(SpriteButtonBg, false, false, 90, 26);
@@ -144,7 +144,7 @@ class CreateCharState extends CqState {
 
 		portrait = SpritePortraitPaper.getIcon(FIGHTER, 100 , 1.0);
 		portrait.x = 60;
-		portrait.y = 280;
+		portrait.y = 290;
 		add(portrait);
 		
 		add(btnStartBg);
