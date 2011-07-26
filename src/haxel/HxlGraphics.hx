@@ -44,10 +44,6 @@ class HxlGraphics {
 	 */
 	static var _pause:Bool;
 	static public var justUnpaused:Bool;
-	/**
-	 * Whether you are running in Debug or Release mode.
-	 */
-	//public static var debug:Bool;
 
 	/**
 	 * Width of the screen in game pixels.
