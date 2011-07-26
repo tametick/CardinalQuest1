@@ -476,6 +476,25 @@ class CqActor extends CqObject, implements Actor {
 	
 	static var tmpSpellSprite  = new HxlSprite();
 	public function use(itemOrSpell:CqItem, ?other:CqActor = null) {
+		if (itemOrSpell.fullName == "Fireball" && other!=null)
+		{
+			if(Std.is(this,CqPlayer))
+				GameUI.instance.shootXBall(this, other, 0xDA1F1F,itemOrSpell);
+			else
+			{
+				var c:UInt = HxlUtil.averageColour(this._framePixels);
+				GameUI.instance.shootXBall(this, other, c,itemOrSpell);
+			}
+		}else
+		{
+			useOn(itemOrSpell, this, other);
+		}
+	}
+	public static function useOn(itemOrSpell:CqItem,actor:CqActor, other:CqActor)
+	{
+		if (itemOrSpell.equipSlot == POTION)
+			SoundEffectsManager.play(SpellEquipped);
+			
 		var source:BitmapData;
 		if(itemOrSpell.uiItem==null) {
 			// only happens when enemies try to use a spell
@@ -486,14 +505,6 @@ class CqActor extends CqObject, implements Actor {
 			source = itemOrSpell.uiItem.pixels;
 		}
 		var Effectcolor:UInt = HxlUtil.averageColour(source);
-		
-		if (itemOrSpell.equipSlot == POTION)
-			SoundEffectsManager.play(SpellEquipped);
-			
-		if (itemOrSpell.fullName == "Fireball")
-		{
-			GameUI.shootFireBall(tilePos, other.tilePos, 0xDA1F1F);
-		}
 		// add buffs
 		if(itemOrSpell.buffs != null) {
 			for (buff in itemOrSpell.buffs.keys()) {
@@ -511,19 +522,19 @@ class CqActor extends CqObject, implements Actor {
 						c = 0xFFFFFF;
 				}
 				if (other == null) {
-					GameUI.showEffectText(this, text, c);
+					GameUI.showEffectText(actor, text, c);
 					
 					// apply to self
-					buffs.set(buff, buffs.get(buff) + itemOrSpell.buffs.get(buff));
+					actor.buffs.set(buff, actor.buffs.get(buff) + itemOrSpell.buffs.get(buff));
 					//special effect
-					var eff:CqEffectSpell = new CqEffectSpell(x+this.width/2, y+this.width/2,Effectcolor);
+					var eff:CqEffectSpell = new CqEffectSpell(actor.x+actor.width/2,actor.y+actor.width/2,Effectcolor);
 					eff.zIndex = 1000;
 					HxlGraphics.state.add(eff);
 					eff.start(true, 1.0, 10);
 					
 					// add timer
 					if (itemOrSpell.duration > -1) {
-						timers.push(new CqTimer(itemOrSpell.duration, buff, itemOrSpell.buffs.get(buff),null));
+						actor.timers.push(new CqTimer(itemOrSpell.duration, buff, itemOrSpell.buffs.get(buff),null));
 					}
 				} else {
 					GameUI.showEffectText(other, text, 0x00ff00);
@@ -547,39 +558,36 @@ class CqActor extends CqObject, implements Actor {
 		// apply special effect
 		if(itemOrSpell.specialEffects != null){
 			for ( effect in itemOrSpell.specialEffects) {
-				applyEffect(effect, other);
+				actor.applyEffect(effect, other);
 				
 				if (itemOrSpell.duration > -1) {
 					if (other == null)
-						timers.push(new CqTimer(itemOrSpell.duration, null, -1, effect));
+						actor.timers.push(new CqTimer(itemOrSpell.duration, null, -1, effect));
 					else
 						other.timers.push(new CqTimer(itemOrSpell.duration, null, -1, effect));
 				}
 			}
 		}
-		
 		// apply damage
 		if (itemOrSpell.damage != null && itemOrSpell.damage.end>0 ) {
 			var dmg = HxlUtil.randomIntInRange(itemOrSpell.damage.start, itemOrSpell.damage.end);
 			if (other == null) {
-				hp -= dmg;
-				var lif = hp + buffs.get("life");
+				actor.hp -= dmg;
+				var lif = actor.hp + actor.buffs.get("life");
 				if (lif > 0)
-					injureActor(this, dmg);
+					actor.injureActor(actor, dmg);
 				else
-					killActor(HxlGraphics.state,this,dmg);
+					actor.killActor(HxlGraphics.state,actor,dmg);
 			} else {
 				other.hp -= dmg;
 				var lif = other.hp + other.buffs.get("life");
 				if (lif > 0)
-					injureActor(other, dmg);
+					actor.injureActor(other, dmg);
 				else
-					killActor(HxlGraphics.state,other,dmg);
+					actor.killActor(HxlGraphics.state,other,dmg);
 			}
 		}
-		
 	}
-
 	function applyEffectAt(effect:CqSpecialEffectValue, tile:CqTile) {
 		switch(effect.name){
 		
@@ -738,6 +746,7 @@ class CqPlayer extends CqActor, implements Player {
 		if (Configuration.debug) {
 			vitality = 500;
 			attack = 500;
+			spirit = 100;
 			CqConfiguration.playerLives = 4;
 		}
 		super(X, Y);

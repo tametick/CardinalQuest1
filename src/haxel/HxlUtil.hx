@@ -49,7 +49,7 @@ class HxlUtil {
 		rgb[2] = Color & 0xFF;
 		return rgb;
 	}
-	public static function averageColour( source:BitmapData ):UInt
+	public static function averageColour( source:BitmapData,?ignoreAlpha:Bool = true):UInt
 	{
 		var red:Float = 0;
 		var green:Float = 0;
@@ -62,13 +62,15 @@ class HxlUtil {
 		{
 			for ( y in 0...source.height)
 			{
-				pixel = source.getPixel(x, y);
+				if (!ignoreAlpha || (source.getPixel32(x,y) >> 24 & 0xFF) == 255)
+				{
+					pixel = source.getPixel(x, y);
+					red += Std.int(pixel) >> 16 & 0xFF;
+					green += Std.int(pixel) >> 8 & 0xFF;
+					blue += Std.int(pixel) & 0xFF;
 
-				red += Std.int(pixel) >> 16 & 0xFF;
-				green += Std.int(pixel) >> 8 & 0xFF;
-				blue += Std.int(pixel) & 0xFF;
-
-				count++;
+					count++;
+				}
 			}
 		}
 		red /= count;
@@ -77,6 +79,10 @@ class HxlUtil {
 
 		return (Std.int(red) << 16 | Std.int(green) << 8 | Std.int(blue));
 	}
+	public static inline function angleBetween(p0:HxlPoint, p1:HxlPoint) : Float
+    {
+        return Math.atan2(p0.y, p0.x) - Math.atan2(p1.y, p1.x);
+    }
 	public static function colorInt(Red:Int, Green:Int, Blue:Int):Int {
 		return (Math.round(Red) << 16) | (Math.round(Green) << 8) | Math.round(Blue);
 	}

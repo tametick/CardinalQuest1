@@ -425,17 +425,17 @@ class HxlTilemap extends HxlObject {
 	 * @return HxlPoint object
 	 */
 	var pos:HxlPoint;
-	public function getTilePos(X:Dynamic, Y:Dynamic, ?Center:Bool=false):HxlPoint {
+	public function getTilePos(X:Float, Y:Float, ?Center:Bool=false):HxlPoint {
 		if (pos == null)
 			pos = new HxlPoint();
 			
-		pos.x = x + (X * _tileWidth);
-		pos.y = y + (Y * _tileHeight);
+		pos.x = this.x + (Std.int(X) * _tileWidth);
+		pos.y = this.y + (Std.int(Y) * _tileHeight);
 		if ( Center ) {
 			pos.x += (_tileWidth / 2);
 			pos.y += (_tileHeight / 2);
 		}
-		return pos;
+		return pos.clone();
 	}
 
 	/**

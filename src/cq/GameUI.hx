@@ -1,5 +1,11 @@
 package cq;
 
+import com.eclecticdesignstudio.motion.Actuate;
+import com.eclecticdesignstudio.motion.actuators.GenericActuator;
+import com.eclecticdesignstudio.motion.actuators.SimpleActuator;
+import com.eclecticdesignstudio.motion.easing.Cubic;
+import com.eclecticdesignstudio.motion.easing.Elastic;
+import com.eclecticdesignstudio.motion.easing.Linear;
 import cq.states.GameState;
 import cq.states.HelpState;
 import cq.states.MainMenuState;
@@ -23,10 +29,13 @@ import cq.ui.CqMapDialog;
 import cq.ui.CqMessageDialog;
 import cq.ui.CqTextNotification;
 import cq.ui.CqSpellGrid;
+import flash.display.BitmapData;
+import flash.display.Shape;
 import haxel.HxlGroup;
 import haxel.HxlState;
 import haxel.HxlUtil;
 import haxel.HxlTilemap;
+import world.GameObject;
 
 
 import data.Configuration;
@@ -38,9 +47,7 @@ import world.Tile;
 import world.World;
 
 import flash.display.Bitmap;
-import flash.display.BitmapData;
 import flash.display.Graphics;
-import flash.display.Shape;
 import flash.filters.GlowFilter;
 import flash.geom.ColorTransform;
 import flash.geom.Matrix;
@@ -108,7 +115,6 @@ class GameUI extends HxlDialog {
 	
 	public override function new() {
 		super(0, 0, HxlGraphics.width, HxlGraphics.height);
-
 		isTargeting = false;
 		isTargetingEmptyTile = false;
 		targetLastPos = new HxlPoint(0,0);
@@ -916,20 +922,54 @@ class GameUI extends HxlDialog {
 		}
 
 	}
-	
-	static public function shootFireBall(from:HxlPoint, to:HxlPoint, color:UInt):Void 
+	public function shootXBall(actor:CqActor, other:CqActor, color:UInt,spell:CqItem):Void 
 	{
-		var fireball:HxlSprite = new HxlSprite();
+		var ball:HxlSprite = new HxlSprite();
+		/*var ang:Float = HxlUtil.angleBetween(fromTile, toObj.tilePos) * 360/ (Math.PI*2);
+		ang = ang < 0? 360 - ang:ang;
+		ang += 90;
+		ball.angle = ang;*/
 		if (GraphicCache.checkBitmapCache(CqGraphicKey.xball(color)))
 		{
-			//fireball.loadCachedGraphic(CqGraphicKey.xball(color));
+			ball.loadCachedGraphic(CqGraphicKey.xball(color));
 		}else
 		{
-			//var tmp:BitmapData = new BitmapData(79, 79, true, 0x0);
-			//tmp.copyPixels(GraphicCache.getBitmap(CqGraphicKey.InventoryCellBG), new Rectangle(0, 0, size, size), new Point(19, 19), null, null, true);
-			//var glow:GlowFilter = new GlowFilter(0x00ff00, 0.9, 15.0, 15.0, 1.6, 1, false, true);
-			//tmp.applyFilter(tmp, new Rectangle(0, 0, 79, 79), new Point(0, 0), glow);
-			//GraphicCache.addBitmapData(tmp, CqGraphicKey.CellGlow);
+			var tmp:BitmapData = new BitmapData(12, 17, true, 0x0);
+			var s:Shape = new Shape();
+			var g:Graphics = s.graphics;
+			g.beginFill(color, 0.7);
+			g.drawEllipse(1, 1, 10, 15);
+			var lighter:UInt = color; //+ 0x151511;
+			//if (lighter > 0xFFFFFF) lighter = 0xFFFFFF;
+			g.beginFill(lighter, 1);
+			g.drawEllipse(3, 3, 6, 11);
+			tmp.draw(s);
+			var glow:GlowFilter = new GlowFilter(color, 0.9, 15.0, 15.0, 1.6, 2, false, false);
+			tmp.applyFilter(tmp, new Rectangle(0, 0, 12, 17), new Point(1, 1), glow);
+			GraphicCache.addBitmapData(tmp, CqGraphicKey.xball(color));
+			ball.setPixels(tmp);
 		}
+		var fromPixel:HxlPoint = new HxlPoint(actor.x + Configuration.tileSize / 2, actor.y+Configuration.tileSize / 2);
+		ball.x = fromPixel.x;
+		ball.y = fromPixel.y;
+		ball.zIndex = 5;
+		HxlGraphics.state.add(ball);
+		var tween:GenericActuator  = Actuate.tween(ball, 1, { x:other.x, y:other.y} );
+		tween.onComplete(onXBallHit, [ball,actor,other,spell]).onUpdate(updateXBall,[ball,other,tween]);
+	}
+	
+	private function updateXBall(ball:HxlSprite,other:CqActor,actuator:GenericActuator):Void 
+	{
+		var prop:Dynamic = actuator.getProperties();
+		ball.angle += 20;
+		prop.x = other.x+Configuration.tileSize/2;
+		prop.y = other.y+Configuration.tileSize/2;
+		cast(actuator, SimpleActuator).changeProperties();
+	}
+	
+	private function onXBallHit(ball:HxlSprite,actor:CqActor,other:CqActor,spell:CqItem):Void 
+	{
+		HxlGraphics.state.remove(ball);
+		CqActor.useOn(spell, actor, other);
 	}
 }
