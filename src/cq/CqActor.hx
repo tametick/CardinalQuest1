@@ -486,7 +486,9 @@ class CqActor extends CqObject, implements Actor {
 			source = itemOrSpell.uiItem.pixels;
 		}
 		var Effectcolor:UInt = HxlUtil.averageColour(source);
-			
+		
+		if (itemOrSpell.equipSlot == POTION)
+			SoundEffectsManager.play(SpellEquipped);
 		// add buffs
 		if(itemOrSpell.buffs != null) {
 			for (buff in itemOrSpell.buffs.keys()) {

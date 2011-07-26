@@ -1,5 +1,6 @@
 package cq.ui.inventory;
 
+import data.SoundEffectsManager;
 import flash.display.BitmapData;
 import flash.filters.GlowFilter;
 import flash.geom.Point;
@@ -376,10 +377,12 @@ class CqInventoryItem extends HxlSprite {
 				var spellBtn = cast(getSpellCell(cellIndex), CqSpellCell).btn;
 				if (dragStop_cell_obj != this)
 					GameUI.instance.updateCharge(spellBtn);
+				SoundEffectsManager.play(SpellEquipped);
 			case "potion":
 				// Moving the other item into a potion cell
 				dragStop_cell_obj.popup.setText(dragStop_cell_obj.item.fullName+"\n[hotkey " + ((cellIndex>3)?cellIndex-4:cellIndex + 6) + "]");
 				dragStop_cell_obj.setPotionCell(cellIndex);
+				SoundEffectsManager.play(PotionEquipped);
 			default:
 				dragStop_cell_obj.popup.setText(dragStop_cell_obj.item.fullName);
 				// Moving the other item into an inventory cell
@@ -474,11 +477,13 @@ class CqInventoryItem extends HxlSprite {
 				var spellBtn = spellCell.btn;
 				GameUI.instance.updateCharge(spellBtn);
 				if (clearCharge)_dlg.dlgSpellGrid.forceClearCharge(dragStopCell.cellIndex);
-				popup.setText(item.fullName+"\n[hotkey " + (cellIndex+1) + "]");
+				popup.setText(item.fullName + "\n[hotkey " + (cellIndex + 1) + "]");
+				SoundEffectsManager.play(SpellEquipped);
 			case CqPotionCell:
 				// Moving this item into a potion cell
 				setPotionCell(dragStopCell.cellIndex);
-				popup.setText(item.fullName+"\n[hotkey " + ((cellIndex>3)?cellIndex-4:cellIndex + 6) + "]");
+				popup.setText(item.fullName + "\n[hotkey " + ((cellIndex > 3)?cellIndex - 4:cellIndex + 6) + "]");
+				SoundEffectsManager.play(PotionEquipped);
 			case CqEquipmentCell:
 				// Moving this item into an equipment cell
 				setEquipmentCell(dragStopCell.cellIndex);

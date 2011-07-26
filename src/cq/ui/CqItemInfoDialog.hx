@@ -3,6 +3,9 @@ package cq.ui;
 import cq.CqItem;
 import cq.CqResources;
 import cq.CqSpell;
+import flash.text.engine.LineJustification;
+import flash.text.StyleSheet;
+import flash.text.TextRenderer;
 
 import data.Configuration;
 import data.Resources;
@@ -38,14 +41,13 @@ class CqItemInfoDialog extends HxlDialog {
 
 		_icon = new HxlSprite(Width - 28, Height - 98);
 		_icon.visible = false;
-		_itemName = new HxlText(10, 10, Std.int(Width-20));
+		_itemName = new HxlText(10, 10, Std.int(Width - 20));
 		_itemName.setFormat(null, 30, 0xffffff, "left", 0x010101);
-		
 		_itemName.visible = false;
-		_itemDesc = new HxlText(10, 30, Std.int(Width-20));
+		_itemDesc = new HxlText(9, 30, Std.int(Width-20));
 		_itemDesc.setFormat(FontAnonymousPro.instance.fontName, 16, 0xdddddd, "left", 0x010101);
 		_itemDesc.visible = false;
-		_itemStats = new HxlText(10, 45, Std.int(Width-48-20));
+		_itemStats = new HxlText(9, 45, Std.int(Width-48-20));
 		_itemStats.setFormat(FontAnonymousPro.instance.fontName, 16, 0x4DE16B, "left", 0x010101);
 		_itemStats.visible = false;
 
@@ -59,7 +61,7 @@ class CqItemInfoDialog extends HxlDialog {
 		_item = Item;
 		_itemName.text = Item.fullName;
 		_itemDesc.text = Resources.descriptions.get(Item.name);
-		_itemDesc.y = _itemName.y + _itemName.height + 2;
+		_itemDesc.y = _itemName.y + _itemName.height - 2;
 		if ( Std.is(Item, CqSpell) ) {
 			spellSprite.setFrame(spellSheet.getSpriteIndex(Item.spriteIndex));
 			_icon.pixels = spellSprite.getFramePixels();
@@ -93,7 +95,7 @@ class CqItemInfoDialog extends HxlDialog {
 				statStr += str;
 			}
 			if ( statStr != "" ) {
-				_itemStats.y = _itemDesc.y + _itemDesc.height + 10;
+				_itemStats.y = _itemDesc.y + _itemDesc.height + 3;
 				_itemStats.text = statStr;
 				_itemStats.visible = true;
 			}			

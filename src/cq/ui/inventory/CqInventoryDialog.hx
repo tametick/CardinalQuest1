@@ -12,6 +12,7 @@ import cq.CqGraphicKey;
 import cq.CqRegistery;
 import data.Resources;
 import data.Configuration;
+import data.SoundEffectsManager;
 import haxel.GraphicCache;
 import world.Tile;
 
@@ -184,6 +185,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 							uiItem.x = uiItem.x + cast(cell, CqPotionCell).potBtn.x;
 							uiItem.y = uiItem.y + cast(cell, CqPotionCell).potBtn.y;
 						}
+						SoundEffectsManager.play(PotionEquipped);
 						return false;
 					}
 				}
@@ -193,6 +195,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 						uiItem.setSpellCell(cell.cellIndex);
 						uiItem.popup.setText(Item.fullName+"\n[hotkey " + (cell.cellIndex + 1) + "]");
 						cell.getCellObj().updateIcon();
+						SoundEffectsManager.play(SpellEquipped);
 						return false;
 					}
 				}

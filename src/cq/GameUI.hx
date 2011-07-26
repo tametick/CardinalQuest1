@@ -309,12 +309,18 @@ class GameUI extends HxlDialog {
 	private function pressHelp():Void 
 	{
 		if (Std.is(HxlGraphics.getState(), GameState))
+		{
 			HxlGraphics.pushState(new HelpState());
+			SoundEffectsManager.play(MenuItemClick);
+		}
 	}
 	private function pressMenu():Void
 	{
 		if (Std.is(HxlGraphics.getState(), GameState))
+		{
 			HxlGraphics.pushState(new MainMenuState());
+			SoundEffectsManager.play(MenuItemClick);
+		}
 	}
 	override public function kill() {
 		GameUI.instance = null;
@@ -326,14 +332,17 @@ class GameUI extends HxlDialog {
 	}
 	public function showMapDlg()
 	{
+		SoundEffectsManager.play(MenuItemClick);
 		showPanel(panelMap, btnMapView);
 	}
 	public function showInvDlg()
 	{
+		SoundEffectsManager.play(MenuItemClick);
 		showPanel(panelInventory, btnInventoryView);
 	}
 	public function showCharDlg()
 	{
+		SoundEffectsManager.play(MenuItemClick);
 		showPanel(panelCharacter, btnCharacterView);
 	}
 	override public function overlapsPoint(X:Float, Y:Float, ?PerPixel:Bool = false):Bool {

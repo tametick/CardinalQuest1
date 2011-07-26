@@ -8,6 +8,7 @@ import cq.ui.CqSpellButton;
 import cq.GameUI;
 import cq.ui.CqMapDialog;
 import cq.ui.CqTextScroller;
+import data.MusicManager;
 import flash.display.Bitmap;
 import haxe.Stack;
 import haxe.Timer;
@@ -538,9 +539,17 @@ class GameState extends CqState {
 		portalSprite.y -= portalSprite.height / 2;
 		portalSprite.zIndex = 1000;
 		add(portalSprite);
+		//
 		//gameui and start boss anim timers
-		Actuate.timer(2).onComplete(startMovingBoss);
+		Actuate.timer(8).onComplete(startMovingBoss);
+		Actuate.timer(2).onComplete(playWinSound);
 		Actuate.timer(0.5).onComplete(RemoveGameUI);
+	}
+	
+	private function playWinSound():Void 
+	{
+		MusicManager.stop();
+		SoundEffectsManager.play(Win);
 	}
 	private function gotoWinState():Void
 	{
