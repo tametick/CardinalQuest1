@@ -316,7 +316,8 @@ class GameState extends CqState {
 		});
 		update();
 		gameUI.pressHelp(false);
-		CqRegistery.world.goToNextLevel(this, 6);
+		if(Configuration.debug)
+			CqRegistery.world.goToNextLevel(this, Configuration.debugStartingLevel);
 	}
 	
 	public function initRegistry(){
