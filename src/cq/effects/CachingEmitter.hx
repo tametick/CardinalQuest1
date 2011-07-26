@@ -140,6 +140,8 @@ class CachingEmitter extends HxlEmitter {
 		if (0 == usingCache)//uncached run
 		{
 			super.updateMembers();
+			//for(u in 0...10)
+			//	super.emitParticle();
 			super.updateEmitter();
 		}
 		else
@@ -175,7 +177,7 @@ class CachingEmitter extends HxlEmitter {
 					rect.height = o.height + 2;
 					var argb:UInt = 0;
 					o.alpha += Math.random() * 0.06;
-					o.alpha -= Math.random() * 0.08;
+					//o.alpha -= Math.random() * 0.0;
 					argb += (Std.int(o.alpha * 255) << 24);
 					argb += 0xFFFFFF;
 					alphaBitmapData.floodFill(0, 0, argb );

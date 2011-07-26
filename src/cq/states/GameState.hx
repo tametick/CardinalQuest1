@@ -87,8 +87,9 @@ class GameState extends CqState {
 			initialized = 2;
 			gameUI.updateCharges();
 		}
-			
+		//hide mouse after idle some time	
 		if (Timer.stamp() - msMoveStamp > msHideDelay) cursor.visible = false;
+		
 		if ( GameUI.isTargeting) {
 			if (CqRegistery.level.getTargetAccordingToKeyPress()!=CqRegistery.player.tilePos&&CqRegistery.level.getTargetAccordingToKeyPress()!=null)
 				lastMouse = false;
@@ -102,7 +103,7 @@ class GameState extends CqState {
 				}
 			}
 		}
-		
+		//set cursor direction
 		var dx = HxlGraphics.mouse.x - (Registery.player.x+Configuration.zoomedTileSize()/2);
 		var dy = HxlGraphics.mouse.y - (Registery.player.y+Configuration.zoomedTileSize()/2);
 		var target:HxlPoint = Registery.level.getTargetAccordingToMousePosition(dx, dy);
@@ -247,7 +248,7 @@ class GameState extends CqState {
 		}
 		scroller = new CqTextScroller(classBG, 1);
 		var introText:String = "You enter the dark dungeon...\n\nYou feel this text is a placeholder and needs replacement.";
-		scroller.addColumn(100, 400, introText, false, FontAnonymousPro.instance.fontName);
+		scroller.addColumn(100, 400, introText, false, FontAnonymousPro.instance.fontName,30);
 		add(scroller);
 		scroller.startScroll();
 		scroller.onComplete(realInit);
@@ -315,6 +316,7 @@ class GameState extends CqState {
 		});
 		update();
 		gameUI.pressHelp(false);
+		CqRegistery.world.goToNextLevel(this, 6);
 	}
 	
 	public function initRegistry(){

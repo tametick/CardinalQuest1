@@ -112,7 +112,19 @@ class SimpleActuator extends GenericActuator {
 		initialized = true;
 		
 	}
-	
+	public function changeProperties()
+	{
+		var details:PropertyDetails;
+		var start:Float;
+		for (i in Reflect.fields (properties)) {
+			
+			start = Reflect.field (target, i);
+			details = new PropertyDetails (target, i, start, Reflect.field (properties, i) - start);
+			propertyDetails.push (details);
+			
+		}
+		detailsLength = propertyDetails.length;
+	}
 	
 	private override function move () {
 		

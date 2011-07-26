@@ -165,7 +165,7 @@ class CreateCharState extends CqState {
 	override function init() {
 		scroller = new CqTextScroller(IntroScreen, 1, "Intro screen");
 		var introText:String = "This is intro text\n a new line \n the end.";
-		scroller.addColumn(100, 400, introText, false, FontAnonymousPro.instance.fontName);
+		scroller.addColumn(100, 400, introText, false, FontAnonymousPro.instance.fontName,30);
 		add(scroller);
 		scroller.startScroll();
 		//scroller.onComplete(removeScrollerAndFade);
