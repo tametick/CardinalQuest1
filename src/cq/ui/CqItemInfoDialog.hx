@@ -88,7 +88,6 @@ class CqItemInfoDialog extends HxlDialog {
 				var str = "";
 				for ( key in _item.buffs.keys() ) {
 					if ( _item.buffs.get(key) > 0 ) str += "+";
-					else if ( _item.buffs.get(key) < 0 ) str += "-";
 					var keyname:String = key.substr(0,1).toUpperCase() + key.substr(1);
 					str += "" + _item.buffs.get(key) + " " + keyname + "\n";
 				}
