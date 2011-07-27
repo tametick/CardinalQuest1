@@ -30,7 +30,7 @@ class CqSpellFactory {
 		Resources.descriptions.set("Polymorph","Transoform a creature into another form."); 
 		Resources.descriptions.set("Sleep","Puts a monster into a deep slumber."); 
 		Resources.descriptions.set("Fear","Makes a monster flee in horror."); 
-		Resources.descriptions.set("Magic mirror","Creates a duplicate to draw enemeies away from you."); 
+		Resources.descriptions.set("Magic mirror","Creates a duplicate to draw enemies away from you."); 
 		Resources.descriptions.set("Stone skin","Hardens your skin, rendering you tough but slow."); 
 		Resources.descriptions.set("Blink","Transports you to a random location.");
 		Resources.descriptions.set("Magic armor","Engulfs you in a magical protective aura."); 

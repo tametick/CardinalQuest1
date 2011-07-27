@@ -87,6 +87,14 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 
 		JadeListener jl;
 
+		/* keep jl alive and listening:
+
+		while(true)
+			JadeSDK::getConnection()->updateStateSync(100,myListenerPtr);
+
+		*/
+
+		
 		if(JadeSDK::Connection::init("ogresamples") != JadeSDK::Success)
 			throw std::exception("Jade:DS Client not running or\r\nproduct not installed properly.");
 
@@ -102,6 +110,9 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 		delete filePtr;
 
 		JadeSDK::Connection::getConnection()->close();
+
+		
+
 	} catch(std::exception &e) {
 		MessageBox(NULL,e.what(),"Error during start",MB_OK|MB_ICONHAND);
 	}
