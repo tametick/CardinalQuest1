@@ -19,7 +19,7 @@ class HelpState extends CqState {
 		if (GameUI.showInvHelp)
 			overlay = new HxlSprite(0, 0,SpriteInvHelpOverlay);
 		else
-			overlay = new HxlSprite( -7, -48, SpriteHelpOverlay);
+			overlay = new HxlSprite( 0, 0, SpriteHelpOverlay);
 		btn.add(overlay);
 		btn.setEventPriority(-1);
 		btn.setEventStopPropagate(true);

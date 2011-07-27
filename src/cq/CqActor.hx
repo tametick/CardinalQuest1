@@ -681,10 +681,10 @@ class CqActor extends CqObject, implements Actor {
 		default:
 			if (other == null) {
 				specialEffects.set(effect.name, effect);
-				GameUI.showEffectText(this, "" + effect.name+ ": " + effect.value, 0x8606F9);
+				GameUI.showEffectText(this, "" + effect.name+ (effect.value==null?"":(": " + effect.value)), 0x8606F9);
 			} else {
 				other.specialEffects.set(effect.name, effect);
-				GameUI.showEffectText(other, "" + effect.name+ ": " + effect.value, 0x0000ff);
+				GameUI.showEffectText(other, "" + effect.name+(effect.value==null?"":(": " + effect.value)), 0x0000ff);
 			}
 		}
 	}
