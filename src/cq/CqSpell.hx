@@ -20,7 +20,7 @@ class CqSpellFactory {
 			Resources.descriptions = new Hash<String>();
 		
 		Resources.descriptions.set("Freeze", "Freezes a monster in place for a short duration.");
-		Resources.descriptions.set("Fireball", "Hurls a ball of fire that explodes on impact. Its power increases alongside your's");
+		Resources.descriptions.set("Fireball", "Hurls a ball of fire that explodes on impact. The spell's power increases alongside your's");
 		Resources.descriptions.set("Berserk", "Induces a berserked rage that greatly increases you strength and speed.");
 		Resources.descriptions.set("Enfeeble monster", "Weakens monsters and renders them less dangerous.");
 		Resources.descriptions.set("Bless weapon", "Blesses the currently wielded weapon, providing a temporary boost to its effectivness.");

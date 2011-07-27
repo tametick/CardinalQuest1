@@ -75,6 +75,7 @@ class HxlKeyboard {
 	public var DOWN:Bool;
 	public var LEFT:Bool;
 	public var RIGHT:Bool;
+	public var NONUMLOCK_5:Bool;
 	
 	/**
 	 * @private
@@ -157,6 +158,7 @@ class HxlKeyboard {
 		addKey("DOWN",40);
 		addKey("LEFT",37);
 		addKey("RIGHT",39);
+		addKey("NONUMLOCK_5",12);
 	}
 
 	/**
