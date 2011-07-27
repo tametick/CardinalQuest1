@@ -315,32 +315,13 @@ class GameUI extends HxlDialog {
 		
 		add(doodads);
 	}
-	//might need this soon
-	/*public function setActive(Active:Bool)
-	{
-		active = Active;
-		if (!Active)
-		{
-			btnCharacterView.setEventStopPropagate(false);
-			btnInfoView.setEventStopPropagate(false);
-			btnInventoryView.setEventStopPropagate(false);
-			btnMainView.setEventStopPropagate(false);
-			btnMapView.setEventStopPropagate(false);
-		}else
-		{
-			btnCharacterView.setEventStopPropagate(true);
-			btnInfoView.setEventStopPropagate(true);
-			btnInventoryView.setEventStopPropagate(true);
-			btnMainView.setEventStopPropagate(true);
-			btnMapView.setEventStopPropagate(true);
-		}
-	}*/
 	public function pressHelp(?playSound:Bool = true):Void 
 	{
 		if (Std.is(HxlGraphics.getState(), GameState))
 		{
-			showInvHelp = false;
 			instance.setActive();
+			if (currentPanel == panelInventory) showInvHelp = true;
+			else showInvHelp = false;
 			HxlGraphics.pushState(new HelpState());
 			if (playSound)SoundEffectsManager.play(MenuItemClick);
 		}
@@ -364,6 +345,9 @@ class GameUI extends HxlDialog {
 				if (Std.is(doodad, HxlSprite))
 					cast(doodad, HxlSprite).visible = false;
 			}
+			btnCharacterView.setActive(false);
+			btnInventoryView.setActive(false);
+			btnMapView.setActive(false);
 		}
 	}
 	override public function kill() {
