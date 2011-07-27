@@ -175,6 +175,15 @@ class SpriteEffects extends HxlSpriteSheet {
 		super(0);
 	} 
 }
+class SpriteSoundToggle extends HxlSpriteSheet { 
+	public static var instance = new SpriteSoundToggle();
+	public function new() {
+		spriteNames = [
+			["on","off"]
+		];
+		super(0);
+	} 
+}
 class SpriteItems extends HxlSpriteSheet { 
 	public static var instance = new SpriteItems();
 	

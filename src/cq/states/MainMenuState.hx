@@ -11,6 +11,7 @@ import haxel.HxlGraphics;
 import haxel.HxlMenu;
 import haxel.HxlMenuItem;
 import haxel.HxlSprite;
+import haxel.HxlSpriteSheet;
 import haxel.HxlState;
 import haxel.HxlText;
 import haxel.HxlTimer;
@@ -41,6 +42,8 @@ class MainMenuState extends CqState {
 	var btnToggleSFX:HxlButton;
 	var musicText:HxlText;
 	var sfxText:HxlText;
+	var tglMusicIcon:HxlSprite;
+	var tglSFXIcon:HxlSprite;
 	
 	public function new()
 	{
@@ -58,16 +61,27 @@ class MainMenuState extends CqState {
 		titleText = new LogoSprite((640-345)/2, (480-50)/2 - 55);
 		add(titleText);
 
-		btnToggleMusic = new HxlButton(300, 459, 100, 20,toggleMusic,0,0.1);
-		musicText = new HxlText(0, 0, 100, "Music is on", true, FontAnonymousPro.instance.fontName, 14);
+		
+		tglMusicIcon = new HxlSprite(42,-3);
+		tglMusicIcon.loadGraphic(SpriteSoundToggle, true, false, 48, 48,false,0.5,0.5);
+		tglMusicIcon.setFrame(1);
+		
+		btnToggleMusic = new HxlButton(450, 454, 63, 20, toggleMusic, 0, 0);
+		btnToggleMusic.add(tglMusicIcon);
+		musicText = new HxlText(0, 0, 100, "Music", true, FontAnonymousPro.instance.fontName, 14);
 		btnToggleMusic.loadText(musicText);
 		btnToggleMusic.setOn(true);
 		if (!musicOn)
 			toggleMusic();
 		add(btnToggleMusic);
 		
-		btnToggleSFX = new HxlButton(450, 459, 100, 20,toggleSFX,0,0.1);
-		sfxText = new HxlText(0, 0, 100, "SFX is on", true, FontAnonymousPro.instance.fontName, 14);
+		tglSFXIcon = new HxlSprite(26,-4);
+		tglSFXIcon.loadGraphic(SpriteSoundToggle, true, false, 48, 48,false,0.5,0.5);
+		tglSFXIcon.setFrame(1);
+		
+		btnToggleSFX = new HxlButton(550, 454, 48, 20, toggleSFX, 0, 0);
+		btnToggleSFX.add(tglSFXIcon);
+		sfxText = new HxlText(0, 0, 100, "SFX", true, FontAnonymousPro.instance.fontName, 14);
 		btnToggleSFX.loadText(sfxText);
 		btnToggleSFX.setOn(true);
 		if (!sfxOn)
@@ -137,23 +151,19 @@ class MainMenuState extends CqState {
 		musicOn = on;
 		if (on)
 		{
-			musicText.setText("Music is on");
 			MusicManager.resume();
+			tglMusicIcon.setFrame(1);
 		}else
 		{
 			MusicManager.pause();
-			musicText.setText("Music is off");
+			tglMusicIcon.setFrame(0);
 		}
 	}
 	private function toggleSFX():Void 
 	{
 		btnToggleSFX.setOn(!btnToggleSFX.getOn());
-		var on:Bool = btnToggleSFX.getOn();
-		SoundEffectsManager.enabled = sfxOn = on;
-		if (on)
-			sfxText.setText("SFX is on");
-		else
-			sfxText.setText("SFX is off");
+		SoundEffectsManager.enabled = sfxOn = btnToggleSFX.getOn();
+		tglSFXIcon.setFrame((sfxOn?1:0));
 		
 	}
 	function changeState(TargetState:Class<HxlState>) {
