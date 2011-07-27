@@ -9,6 +9,8 @@
 	<description></description> 
 	<copyright>Ido Yehieli 2011</copyright> 
 	
+	<supportedProfiles>desktop extendedDesktop</supportedProfiles>
+	
 	<initialWindow> 
 		<title>Cardinal Quest</title> 
 		<content>cq.swf</content> 
