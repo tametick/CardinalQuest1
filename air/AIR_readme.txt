@@ -1,29 +1,20 @@
-For Developing AIR applications, you need the runtime and the SDK.
+AIR for desktop instructions
 
-Runtime: http://get.adobe.com/air/
-SDK: http://www.adobe.com/products/air/tools/sdk/
+1. Configuration
 
-Install the runtime and unzip the SDK somewhere.
-
-Finally, you need the haxe air library. This is easiest installed by executing
-"haxelib install air" from a prompt.
-
-After this, starting the test project should be as simple as pressing F5 in FlashDevelop.
+	- edit 'bat\SetupSDK.bat' for the path to Flex SDK
 
 
-Instructions for DISTRIBUTING* your application:
+2. Creating a self-signed certificate:
 
-1. Creating a self-signed certificate:
-- Edit CreateCertificate.bat to change the path to AIR SDK, unless you have set AIRSDK.
-- Edit CreateCertificate.bat to set your certificate password (and name if you like)
-- Run CreateCertificate.bat to generate your self-signed certificate
-- Wait a minute before packaging.
+	- run 'bat\CreateCertificate.bat' to generate your self-signed certificate,
 
-2. Packaging the application:
-- Edit PackageApplication.bat and change the path to AIR SDK, unless you have set AIRSDK.
-- If you have a signed certificate, edit PackageApplication.bat to change the path to the certificate
-- Run PackageApplication.bat, you will be prompted for the certificate password
-  (note that you may not see '***' when typing your password - it works anyway)
-- The packaged application should appear in your project in a new 'air' directory.
+	(!) wait a minute before packaging.
 
-* to test your application from FlashDevelop, just press F5 as usual.
+
+3. Run/debug from FlashDevelop as usual (build F8, build&run F5 or Ctrl+Enter)
+
+
+4. Packaging for release:
+
+	- run 'PackageApp.bat' to only create the AIR setup
