@@ -236,7 +236,8 @@ class GameState extends CqState {
 			remove(scroller);
 			scroller = null;
 		}
-			
+		if(Configuration.debug)
+			chosenClass = Configuration.debugStartingClass;	
 		var classBG:Class<Bitmap> = null;
 		switch(chosenClass){
 			case CqClass.FIGHTER:
@@ -307,7 +308,7 @@ class GameState extends CqState {
 				player.give(CqItemType.GREEN_POTION);
 				player.give(CqSpellType.SHADOW_WALK);
 		}
-		
+
 		PtPlayer.ClassSelected(chosenClass);
 		
 		var self = this;

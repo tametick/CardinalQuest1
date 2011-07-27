@@ -20,7 +20,7 @@ class CqSpellFactory {
 			Resources.descriptions = new Hash<String>();
 		
 		Resources.descriptions.set("Freeze", "Freezes a monster in place for a short duration.");
-		Resources.descriptions.set("Fireball", "Hurls a ball of fire that explodes on impact.");
+		Resources.descriptions.set("Fireball", "Hurls a ball of fire that explodes on impact. Its power increases alongside your's");
 		Resources.descriptions.set("Berserk", "Induces a berserked rage that greatly increases you strength and speed.");
 		Resources.descriptions.set("Enfeeble monster", "Weakens monsters and renders them less dangerous.");
 		Resources.descriptions.set("Bless weapon", "Blesses the currently wielded weapon, providing a temporary boost to its effectivness.");
@@ -60,7 +60,32 @@ class CqSpellFactory {
 		initDescriptions();
 		return newSpell(X, Y, Type.createEnum(CqSpellType,  newSpellName.toUpperCase()));
 	}
-	
+	public static function getfireBalldamageByLevel(level:Int):Range
+	{
+		var dmg:Range;
+		switch(level) {
+			case 0:
+				dmg = new Range(1, 3);
+			case 1:
+				dmg = new Range(2, 3);
+			case 2:
+				dmg = new Range(2, 4);
+			case 3:
+				dmg = new Range(3, 5);
+			case 4:
+				dmg = new Range(3, 7);
+			case 5:
+				dmg = new Range(4, 8);
+			case 6:
+				dmg = new Range(5, 9);
+			case 7:
+				dmg = new Range(5, 11);
+			default:
+				dmg = new Range(6, 12);
+			
+		}
+		return dmg;
+	}
 	public static function newSpell(X:Float, Y:Float, type:CqSpellType):CqSpell {
 		initDescriptions();
 		
@@ -78,6 +103,7 @@ class CqSpellFactory {
 				spell.spiritPointsRequired = 1440;
 			case FIREBALL:
 				spell.targetsOther = true;
+				//gets modified to character level when spell is casted
 				spell.damage = new Range(1, 6);
 				spell.spiritPointsRequired = 720;
 			case BERSERK:
