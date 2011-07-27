@@ -155,7 +155,7 @@ class HxlSlidingDialog extends HxlDialog
 		}
 		if ( showCallback ) {
 			showCallback();
-			//showCallback = null;
+			showCallback = null;
 		}
 	}
 	

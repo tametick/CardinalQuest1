@@ -315,9 +315,10 @@ class GameState extends CqState {
 			self.gameUI.initHealthBars();
 		});
 		update();
-		gameUI.pressHelp(false);
 		if(Configuration.debug)
 			CqRegistery.world.goToNextLevel(this, Configuration.debugStartingLevel);
+		else
+			gameUI.pressHelp(false);
 	}
 	
 	public function initRegistry(){
@@ -337,10 +338,13 @@ class GameState extends CqState {
 			{
 				gameUI.hideCurrentPanel();
 			}
-			if(HxlGraphics.keys.justReleased("F1"))
+			if (HxlGraphics.keys.justReleased("F1")){
+				gameUI.setActive();
 				HxlGraphics.pushState(new HelpState());
-			else
+			}else{
+				gameUI.setActive();
 				HxlGraphics.pushState(new MainMenuState());
+			}
 		}
 		if (Configuration.debug)
 			checkJumpKeys();

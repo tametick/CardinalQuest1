@@ -1,8 +1,11 @@
 package cq.states;
 
 import cq.CqResources;
+import cq.GameUI;
+import data.Configuration;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
+import haxel.HxlButton;
 import haxel.HxlGraphics;
 import haxel.HxlSprite;
 
@@ -10,10 +13,17 @@ class HelpState extends CqState {
 
 	public override function create() {
 		super.create();
-		var overlay:HxlSprite = new HxlSprite(0, 0, SpriteHelpOverlay);
-		overlay.x = -7;
-		overlay.y = -48;
-		add(overlay);
+		
+		var btn:HxlButton = new HxlButton(0, 0, Configuration.app_width, Configuration.app_height,nextScreen,0,true);
+		var overlay:HxlSprite;
+		if (GameUI.showInvHelp)
+			overlay = new HxlSprite(0, 0,SpriteInvHelpOverlay);
+		else
+			overlay = new HxlSprite( -7, -48, SpriteHelpOverlay);
+		btn.add(overlay);
+		btn.setEventPriority(-1);
+		btn.setEventStopPropagate(true);
+		add(btn);
 	}
 	
 	public override function update() {

@@ -110,6 +110,8 @@ class GameUI extends HxlDialog {
 	public static var isTargetingEmptyTile:Bool = false;
 	public static var targetString:String = "";
 	public static var targetSpell:CqSpellButton = null;
+	public static var hasShownInv:Bool;
+	public static var showInvHelp:Bool;
 	var targetLastPos:HxlPoint;
 	public static var instance:GameUI = null;
 	
@@ -117,7 +119,9 @@ class GameUI extends HxlDialog {
 		super(0, 0, HxlGraphics.width, HxlGraphics.height);
 		isTargeting = false;
 		isTargetingEmptyTile = false;
-		targetLastPos = new HxlPoint(0,0);
+		targetLastPos = new HxlPoint(0, 0);
+		hasShownInv = false;
+		showInvHelp = false;
 		targetString = "";
 		targetSpell = null;
 		currentPanel = null;
@@ -293,11 +297,11 @@ class GameUI extends HxlDialog {
 		pop.zIndex = 15;
 		btnInventoryView.setPopup(pop);
 		doodads.add(pop);
-
 		// stats
 		btnCharacterView = new HxlButton(0, 0, btnSize, btnSize);
 		btnCharacterView.loadGraphic(charBtn,charBtnHigh);
 		btnCharacterView.loadText(new HxlText(0, 40, btnSize, "Char", true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
+		
 		btnCharacterView.setCallback(showCharDlg);
 		btnCharacterView.configEvent(5, true, true);
 		pop = new CqPopup(100, "\n[hotkey C]", doodads);
@@ -311,21 +315,55 @@ class GameUI extends HxlDialog {
 		
 		add(doodads);
 	}
-	
+	//might need this soon
+	/*public function setActive(Active:Bool)
+	{
+		active = Active;
+		if (!Active)
+		{
+			btnCharacterView.setEventStopPropagate(false);
+			btnInfoView.setEventStopPropagate(false);
+			btnInventoryView.setEventStopPropagate(false);
+			btnMainView.setEventStopPropagate(false);
+			btnMapView.setEventStopPropagate(false);
+		}else
+		{
+			btnCharacterView.setEventStopPropagate(true);
+			btnInfoView.setEventStopPropagate(true);
+			btnInventoryView.setEventStopPropagate(true);
+			btnMainView.setEventStopPropagate(true);
+			btnMapView.setEventStopPropagate(true);
+		}
+	}*/
 	public function pressHelp(?playSound:Bool = true):Void 
 	{
 		if (Std.is(HxlGraphics.getState(), GameState))
 		{
+			showInvHelp = false;
+			instance.setActive();
 			HxlGraphics.pushState(new HelpState());
-			if(playSound)SoundEffectsManager.play(MenuItemClick);
+			if (playSound)SoundEffectsManager.play(MenuItemClick);
 		}
 	}
 	private function pressMenu():Void
 	{
 		if (Std.is(HxlGraphics.getState(), GameState))
 		{
+			hideCurrentPanel();
+			instance.setActive();
 			HxlGraphics.pushState(new MainMenuState());
 			SoundEffectsManager.play(MenuItemClick);
+		}
+	}
+	public function setActive(?toggle:Bool = false)
+	{
+		if (!toggle){
+			//later add ui button deactivation
+			for (doodad in doodads.members)
+			{
+				if (Std.is(doodad, HxlSprite))
+					cast(doodad, HxlSprite).visible = false;
+			}
 		}
 	}
 	override public function kill() {
@@ -338,16 +376,30 @@ class GameUI extends HxlDialog {
 	}
 	public function showMapDlg()
 	{
+		if (!Std.is(HxlGraphics.getState(), GameState)) return;
 		SoundEffectsManager.play(MenuItemClick);
 		showPanel(panelMap, btnMapView);
 	}
 	public function showInvDlg()
 	{
+		if (!Std.is(HxlGraphics.getState(), GameState)) return;
 		SoundEffectsManager.play(MenuItemClick);
-		showPanel(panelInventory, btnInventoryView);
+		if (!hasShownInv)
+		{
+			hasShownInv = true;
+			showInvHelp = true;
+			showPanel(panelInventory, btnInventoryView, function() {
+				instance.setActive();
+				HxlGraphics.pushState(new HelpState());
+			});
+		}else
+		{
+			showPanel(panelInventory, btnInventoryView);
+		}
 	}
 	public function showCharDlg()
 	{
+		if (!Std.is(HxlGraphics.getState(), GameState)) return;
 		SoundEffectsManager.play(MenuItemClick);
 		showPanel(panelCharacter, btnCharacterView);
 	}
@@ -532,6 +584,7 @@ class GameUI extends HxlDialog {
 
 	public function hideCurrentPanel():Void
 	{
+		if (!active) return;
 		if ( currentPanel != null ) {
 			currentPanel.hide(function() { GameUI.currentPanel = null; } );
 			btnMainView.setActive(false);
@@ -541,10 +594,10 @@ class GameUI extends HxlDialog {
 			btnInfoView.setActive(false);
 		}
 	}
-	function showPanel(Panel:HxlSlidingDialog, ?Button:HxlButton=null) {
+	function showPanel(Panel:HxlSlidingDialog, ?Button:HxlButton = null, ?showCallback:Dynamic) {
+		if (!active) return;
 		if ( HxlGraphics.mouse.dragSprite != null ) 
 			return;
-		
 		// If user was in targeting mode, cancel it
 		if ( GameUI.isTargeting ) 
 			GameUI.setTargeting(false);
@@ -564,14 +617,14 @@ class GameUI extends HxlDialog {
 		} else {
 			if ( currentPanel == null ) {
 				currentPanel = Panel;
-				Panel.show();
+				Panel.show(showCallback);
 			} else {
 				if ( currentPanel!=Panel ) {
 					// A view state other than main is already active: 
 					// Hide that one first before showing the selected one
 					currentPanel.hide(function() {
 						GameUI.currentPanel = Panel;
-						GameUI.currentPanel.show();
+						GameUI.currentPanel.show(showCallback);
 					});
 				} else {
 					// User clicked on a view state button which is already active, switch back to main view state

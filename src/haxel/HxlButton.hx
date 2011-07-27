@@ -69,17 +69,23 @@ class HxlButton extends HxlGroup {
 	 * @param	Y			The Y position of the button.
 	 * @param	Callback	The function to call whenever the button is clicked.
 	 */
-	public function new(X:Int,Y:Int,?Width:Int=100,?Height:Int=20,?Callback:Dynamic=null, ?ScrollFactor:Float=0.0) {
+	public function new(X:Int,Y:Int,?Width:Int=100,?Height:Int=20,?Callback:Dynamic=null, ?ScrollFactor:Float=0.0,?backgroundTransparent:Bool = false) {
 		super();
 		x = X;
 		y = Y;
 		width = Width;
 		height = Height;
 		scrollFactor.x = scrollFactor.y = ScrollFactor;
-		_off = new HxlSprite().createGraphic(Math.floor(width),Math.floor(height),0xff7f7f7f);
+		if (backgroundTransparent)
+			_off = new HxlSprite().createGraphic(Math.floor(width), Math.floor(height), 0x007f7f7f);
+		else
+			_off = new HxlSprite().createGraphic(Math.floor(width), Math.floor(height), 0xff7f7f7f);
 		//_off.solid = false;
 		add(_off,true);
-		_on  = new HxlSprite().createGraphic(Math.floor(width),Math.floor(height),0xffffffff);
+		if (backgroundTransparent)
+			_on = new HxlSprite().createGraphic(Math.floor(width), Math.floor(height), 0x00ffffff);
+		else
+			_on = new HxlSprite().createGraphic(Math.floor(width), Math.floor(height), 0xffffffff);
 		//_on.solid = false;
 		add(_on,true);
 		_active = null;
@@ -340,7 +346,7 @@ class HxlButton extends HxlGroup {
 	}
 
 	function onMouseDown(event:MouseEvent) {
-		if ( !eventUseCapture ) {
+		if ( !eventUseCapture) {
 			if (!exists || !visible || !active || !HxlGraphics.mouse.justPressed() ) 
 				return;
 		} else {
@@ -349,7 +355,7 @@ class HxlButton extends HxlGroup {
 		}
 
 		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
-			if ( eventStopPropagate ) 
+			if ( eventStopPropagate) 
 				event.stopPropagation();
 		}
 
