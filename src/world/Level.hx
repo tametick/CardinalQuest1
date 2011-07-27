@@ -413,7 +413,7 @@ class Level extends HxlTilemap
 			if ( pos.y < heightInTiles ) {
 					targetTile.y = 1;
 			}
-		} else if ( HxlGraphics.keys.ENTER )
+		} else if ( HxlGraphics.keys.ENTER || HxlGraphics.keys.NONUMLOCK_5)
 		{
 			return targetTile;
 		}
