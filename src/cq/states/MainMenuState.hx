@@ -4,6 +4,7 @@ import cq.CqRegistery;
 import cq.CqResources;
 import cq.CqWorld;
 import cq.GameUI;
+import cq.Main;
 import data.SoundEffectsManager;
 import data.Configuration;
 import haxel.HxlButton;
@@ -131,7 +132,10 @@ class MainMenuState extends CqState {
 			menu.addItem(btnQuit);
 			
 			if (Configuration.air) {
-				btnQuit.setCallback(function() { NativeApplication.nativeApplication.exit(); } );
+				btnQuit.setCallback(function() { 
+					Game.jadeDS.exit(); 
+					NativeApplication.nativeApplication.exit(); 
+				} );
 			} else {
 				btnQuit.setCallback(function() { Lib.fscommand("quit"); } );
 			}

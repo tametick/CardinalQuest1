@@ -12,13 +12,17 @@ import data.Configuration;
 
 import flash.Lib;
 import flash.system.Capabilities;
+import flash.filesystem.File;
+import flash.desktop.NativeProcess;
+import flash.desktop.NativeProcessStartupInfo;
+import flash.events.IOErrorEvent;
+import flash.events.ProgressEvent;
+import flash.events.NativeProcessExitEvent;
+
 import haxe.Timer;
 
 import playtomic.Playtomic;
-/*
- * spell reset
- * 
- */
+
 class Main {
 	public static function main() {
 		#if flash9
@@ -32,18 +36,48 @@ class Main {
 	}
 
 	public function new() {		
-		if (StringTools.startsWith(Capabilities.os, "Mac")) {
+/*		if (StringTools.startsWith(Capabilities.os, "Mac")) {
 			// mac requires a delay for properly full-screening
 			Timer.delay(function() { Lib.current.addChild(new Game()); }, 1000);
-		} else {
+		} else {*/
 			Lib.current.addChild(new Game());
-		}
+		/*}*/
 			
 	}	
 }
 
 class Game extends HxlGame {
+	public static var jadeDS:Dynamic;
+	static var jadeDSStartupInfo:Dynamic;
+	
+	function onStdinError(arg:Dynamic) {
+		trace(arg);
+	}
+	
+	function onStdoutData(arg:Dynamic) {
+		trace(arg);
+	}
+	
+	function jadeExitHandler(arg:Dynamic) {
+		trace(arg);
+	}
+	
 	public function new() {
+		#if air
+			var path = File.applicationDirectory+"Debug/";
+			var JADEDS_FILE = new File(path + "JadeDS.exe");
+
+			jadeDSStartupInfo = new NativeProcessStartupInfo();
+			jadeDSStartupInfo.executable = JADEDS_FILE;
+			jadeDSStartupInfo.workingDirectory = new File(path);
+			
+			jadeDS = new NativeProcess();	
+			jadeDS.addEventListener(IOErrorEvent.STANDARD_INPUT_IO_ERROR, onStdinError);
+			jadeDS.addEventListener(ProgressEvent.STANDARD_ERROR_DATA, onStdoutData);
+			jadeDS.addEventListener(NativeProcessExitEvent.EXIT, jadeExitHandler);
+			jadeDS.start(jadeDSStartupInfo);
+		#end
+
 		Configuration.tileSize = 16;
 		Configuration.zoom = 2.0;
 		HxlState.bgColor = 0xFF000000;
@@ -56,6 +90,5 @@ class Game extends HxlGame {
 		
 		pause = new CqPause();
 		useDefaultHotKeys = false;
-		
 	}
 }
