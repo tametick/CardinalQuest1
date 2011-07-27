@@ -71,7 +71,7 @@ class CqLootFactory {
 			Resources.descriptions.set("Axe", "A mighty axe, good for chopping wood and flesh.");
 			Resources.descriptions.set("Hardened Battle Axe", "Crafted from the finest of metals, this axe can deal lethal slashing, cleaving and slicing blows.");
 			Resources.descriptions.set("Broad Claymore", "An ancient weapon, many bards have sung about glorious victories won with it.");
-			Resources.descriptions.set("Kings Golden Helm", "Made of pure gold, gives you unbreachable head protection, and irresistible looks.");
+			Resources.descriptions.set("King's Golden Helm", "Made of pure gold, gives you unbreachable head protection, and irresistible looks.");
 			Resources.descriptions.set("Beastly Mace", "A mighty huge and spiky mace, made for fast swinging and powerful rips.");
 			Resources.descriptions.set("Twin Bladed Katana", "An elegant weapon for a more civilized age. Crafted by a master blacksmith from the distant orient.");
 			Resources.descriptions.set("Full Helmet of Vitality", "Originally worn by dark priests, this helmet helps you tap into energies of the full moon.");
@@ -189,7 +189,7 @@ class CqLootFactory {
 				item.name ="Helm of Hardiness";
 				item.buffs.set("life", 2);
 			case GOLDEN_HELM:
-				item.name = "Kings Golden Helm";
+				item.name = "King's Golden Helm";
 				item.buffs.set("life", 2);
 				item.buffs.set("defense", 3);
 			case FULL_HELM:
