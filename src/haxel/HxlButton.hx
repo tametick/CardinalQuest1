@@ -1,5 +1,6 @@
 package haxel;
 
+import data.SoundEffectsManager;
 import flash.events.MouseEvent;
 import flash.media.Sound;
 
@@ -49,7 +50,7 @@ class HxlButton extends HxlGroup {
 	var _isDisabled:Bool;
 
 	// Sounds for various events
-	var clickSound:HxlSound;
+	var clickSound:Class<Sound>;
 
 	var eventPriority:Int;
 	var eventUseCapture:Bool;
@@ -132,10 +133,8 @@ class HxlButton extends HxlGroup {
 		eventStopPropagate = StopPropagate;
 	}
 
-	public function setClickSound(ClickSound:Class<Sound>):HxlSound {
-		if ( clickSound == null ) clickSound = new HxlSound();
-		clickSound.loadEmbedded(ClickSound, false);
-		return clickSound;
+	public function setClickSound(ClickSound:Class<Sound>) {
+		clickSound = ClickSound;
 	}
 
 	public function setCallback(?Callback:Dynamic=null) {
@@ -341,7 +340,7 @@ class HxlButton extends HxlGroup {
 			if ( _callback != null ) 
 				_callback();
 			if ( clickSound != null ) 
-				clickSound.play();
+				SoundEffectsManager.play(clickSound);
 			if ( eventStopPropagate ) 
 				event.stopPropagation();
 		}

@@ -40,6 +40,7 @@ class MainMenuState extends CqState {
 	var btnToggleMusic:HxlButton;
 	var btnToggleSFX:HxlButton;
 	var musicText:HxlText;
+	var sfxText:HxlText;
 	
 	public function new()
 	{
@@ -65,12 +66,19 @@ class MainMenuState extends CqState {
 			toggleMusic();
 		add(btnToggleMusic);
 		
+		btnToggleSFX = new HxlButton(450, 459, 100, 20,toggleSFX,0,0.1);
+		sfxText = new HxlText(0, 0, 100, "SFX is on", true, FontAnonymousPro.instance.fontName, 14);
+		btnToggleSFX.loadText(sfxText);
+		btnToggleSFX.setOn(true);
+		if (!sfxOn)
+			toggleSFX();
+		add(btnToggleSFX);
+		
 		var copyright = new HxlText(0, 459, 640, "Copyright 2011 Ido Yehieli.",true,FontAnonymousPro.instance.fontName,18);
 		add(copyright);
 		
 		menu = new HxlMenu(200, 640, 240, 200);
 		add(menu);
-
 		var self = this;
 
 		var buttonY:Int = 0;
@@ -138,6 +146,13 @@ class MainMenuState extends CqState {
 	}
 	private function toggleSFX():Void 
 	{
+		btnToggleSFX.setOn(!btnToggleSFX.getOn());
+		var on:Bool = btnToggleSFX.getOn();
+		SoundEffectsManager.enabled = sfxOn = on;
+		if (on)
+			sfxText.setText("SFX is on");
+		else
+			sfxText.setText("SFX is off");
 		
 	}
 	function changeState(TargetState:Class<HxlState>) {

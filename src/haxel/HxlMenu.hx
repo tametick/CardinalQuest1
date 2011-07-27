@@ -1,5 +1,6 @@
 package haxel;
 
+import data.SoundEffectsManager;
 import flash.media.Sound;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
@@ -78,14 +79,10 @@ class HxlMenu extends HxlDialog {
 	}
 
 	function playSelectSound() {
-		var snd = new HxlSound();
-		snd.loadEmbedded(_selectSound, false);
-		snd.play();
+		SoundEffectsManager.play(_selectSound);
 	}
 	function playScrollSound() {
-		var snd = new HxlSound();
-		snd.loadEmbedded(_scrollSound, false);
-		snd.play();
+		SoundEffectsManager.play(_scrollSound);
 	}
 	
 	
