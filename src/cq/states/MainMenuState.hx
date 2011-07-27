@@ -123,6 +123,7 @@ class MainMenuState extends CqState {
 		
 		menu.setScrollSound(MenuItemMouseOver);
 		menu.setSelectSound(MenuItemClick);
+		update();
 	}
 
 	public override function update() {
