@@ -103,6 +103,9 @@ class CqActor extends CqObject, implements Actor {
 	
 	public var healthBar:CqHealthBar;
 
+	//track last horizontal direction, for sprite flipping
+	var lastDirX:Int;
+	
 	public function new(X:Float, Y:Float) {
 		super(X, Y);
 
@@ -136,6 +139,8 @@ class CqActor extends CqObject, implements Actor {
 		bobCounterInc = 0.1;
 		bobMult = 5.0;
 		isCharmed = false;
+		
+		lastDirX = 0;
 	}
 	
 	function initBuffs(){
@@ -327,7 +332,6 @@ class CqActor extends CqObject, implements Actor {
 		var level = Registery.level;
 		
 		var tile = cast(level.getTile(targetX,  targetY),CqTile);
-		
 		if (level.isBlockingMovement(Math.round(targetX),  Math.round(targetY)))
 			return false;
 		
@@ -362,6 +366,16 @@ class CqActor extends CqObject, implements Actor {
 			var sound = Type.resolveClass(step);
 			SoundEffectsManager.play(sound);
 		}
+		//flip sprite
+		var dirx:Int = tile.mapX - Std.int(tilePos.x);
+		if (dirx != 0 && dirx != lastDirX)
+		{
+			_facing = Std.int((-dirx + 1) / 2);
+			if (Std.is(this, CqPlayer))
+				_facing = (_facing == 1?0:1);
+			calcFrame();
+		}
+		lastDirX = dirx;
 		setTilePos(Std.int(targetX), Std.int(targetY));
 		var positionOfTile:HxlPoint = level.getPixelPositionOfTile(Math.round(tilePos.x), Math.round(tilePos.y));
 		moveToPixel(state, positionOfTile.x, positionOfTile.y);

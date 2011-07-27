@@ -1,5 +1,6 @@
 package haxel;
 
+import cq.CqActor;
 import cq.CqGraphicKey;
 import flash.display.BitmapData;
 import flash.display.Bitmap;
@@ -585,7 +586,8 @@ class HxlSprite extends HxlObject {
 		//Handle sprite sheets
 		var w:Int;
 		if (_flipped != 0) {
-			w = _flipped;
+			w = _pixels.width;
+			//w = _flipped;
 		} else {
 			w = _pixels.width;
 		}
@@ -595,28 +597,38 @@ class HxlSprite extends HxlObject {
 		}
 		
 		//handle reversed sprites
-		if (_flipped != 0 && (_facing == LEFT)) {
+		/*if (_flipped != 0 && (_facing == LEFT)) {
 			rx = (_flipped<<1)-rx-frameWidth;
-		}
-		
+		}*/
+
 		//Update display bitmap
 		_flashRect.x = rx;
 		_flashRect.y = ry;
 		//TODO: right now _framePixels needs to be cleared each frame because it isn't copying alpha pixels correctly
 		//_framePixels.fillRect(new Rectangle(0, 0, _framePixels.width, _framePixels.height), 0x00FFFFFF);
-		_framePixels.copyPixels(_pixels,_flashRect,_flashPointZero);
+		_framePixels.copyPixels(_pixels, _flashRect, _flashPointZero);
+		
+		
+		if (_facing == LEFT) {
+			var matrix : Matrix = new Matrix();
+			matrix.scale( -1, 1);
+			matrix.translate(_framePixels.width, 0);
+			var t:BitmapData = _framePixels.clone();
+			_framePixels.fillRect(new Rectangle(0, 0, _framePixels.width, _framePixels.height), 0);
+			_framePixels.draw(t, matrix);
+		}
 		_flashRect.x = _flashRect.y = 0;
 		#if flash9  //TODO: get color transform working in cpp
 		if (_ct != null)
 			_framePixels.colorTransform(_flashRect, _ct);
 		#else
 		#end
+		
 		if (HxlGraphics.showBounds) {
 			drawBounds();
 		}
 		if (_callback != null) _callback(_curAnim.name,_curFrame,_caf);
 	}
-
 	/**
 	 * Triggered whenever this sprite is launched by a <code>HxlEmitter</code>.
 	 */
