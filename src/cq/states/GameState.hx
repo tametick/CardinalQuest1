@@ -236,7 +236,8 @@ class GameState extends CqState {
 			remove(scroller);
 			scroller = null;
 		}
-			
+		if(Configuration.debug)
+			chosenClass = Configuration.debugStartingClass;	
 		var classBG:Class<Bitmap> = null;
 		switch(chosenClass){
 			case CqClass.FIGHTER:
@@ -307,7 +308,7 @@ class GameState extends CqState {
 				player.give(CqItemType.GREEN_POTION);
 				player.give(CqSpellType.SHADOW_WALK);
 		}
-		
+
 		PtPlayer.ClassSelected(chosenClass);
 		
 		var self = this;
@@ -396,7 +397,7 @@ class GameState extends CqState {
 			dx =  (Registery.player.x + Configuration.zoomedTileSize() / 2);
 			dy =  (Registery.player.y + Configuration.zoomedTileSize() / 2);
 			acts = false;
-			if (HxlGraphics.keys.pressed("UP") || HxlGraphics.keys.pressed("W") || HxlGraphics.keys.pressed("DOWN") || HxlGraphics.keys.pressed("S") || HxlGraphics.keys.pressed("LEFT") || HxlGraphics.keys.pressed("A") || HxlGraphics.keys.pressed("RIGHT") || HxlGraphics.keys.pressed("D") || HxlGraphics.keys.justPressed("ENTER"))
+			if (HxlGraphics.keys.pressed("UP") || HxlGraphics.keys.pressed("W") || HxlGraphics.keys.pressed("DOWN") || HxlGraphics.keys.pressed("S") || HxlGraphics.keys.pressed("LEFT") || HxlGraphics.keys.pressed("A") || HxlGraphics.keys.pressed("RIGHT") || HxlGraphics.keys.pressed("D") || HxlGraphics.keys.justPressed("ENTER") || HxlGraphics.keys.justPressed("NONUMLOCK_5"))
 				acts = true;
 			else
 				return;
@@ -412,7 +413,7 @@ class GameState extends CqState {
 		
 		var tile = getPlayerTile(target);
 		
-		if (Math.abs(dx) < Configuration.zoomedTileSize() && Math.abs(dy) < Configuration.zoomedTileSize() || HxlGraphics.keys.justPressed("ENTER") ) {
+		if (Math.abs(dx) < Configuration.zoomedTileSize() && Math.abs(dy) < Configuration.zoomedTileSize() || HxlGraphics.keys.justPressed("ENTER") || HxlGraphics.keys.justPressed("NONUMLOCK_5") ) {
 			if (tmpPoint == null)
 				tmpPoint = new HxlPoint(0, 0);
 			else {

@@ -492,8 +492,11 @@ class CqActor extends CqObject, implements Actor {
 	public function use(itemOrSpell:CqItem, ?other:CqActor = null) {
 		if (itemOrSpell.fullName == "Fireball" && other!=null)
 		{
-			if(Std.is(this,CqPlayer))
-				GameUI.instance.shootXBall(this, other, 0xDA1F1F,itemOrSpell);
+			if (Std.is(this, CqPlayer))
+			{
+				itemOrSpell.damage = CqSpellFactory.getfireBalldamageByLevel(CqRegistery.player.level);
+				GameUI.instance.shootXBall(this, other, 0xDA1F1F, itemOrSpell);
+			}
 			else
 			{
 				var c:UInt = HxlUtil.averageColour(this._framePixels);
