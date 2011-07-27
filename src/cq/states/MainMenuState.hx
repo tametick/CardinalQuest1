@@ -20,6 +20,7 @@ import flash.Lib;
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;
 
+import flash.desktop.NativeApplication;
 
 class MainMenuState extends CqState {
 	var fadeTimer:HxlTimer;
@@ -83,7 +84,12 @@ class MainMenuState extends CqState {
 			btnQuit.setNormalFormat(null, 40, 0xffffff, "center");
 			btnQuit.setHoverFormat(null, 40, 0xffff00, "center");
 			menu.addItem(btnQuit);
-			btnQuit.setCallback(function() { Lib.fscommand("quit"); } );
+			
+			if (Configuration.air) {
+				btnQuit.setCallback(function() { NativeApplication.nativeApplication.exit(); } );
+			} else {
+				btnQuit.setCallback(function() { Lib.fscommand("quit"); } );
+			}
 			
 			buttonY += 50;			
 		}
