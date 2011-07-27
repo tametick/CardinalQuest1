@@ -69,23 +69,25 @@ class HxlButton extends HxlGroup {
 	 * @param	Y			The Y position of the button.
 	 * @param	Callback	The function to call whenever the button is clicked.
 	 */
-	public function new(X:Int,Y:Int,?Width:Int=100,?Height:Int=20,?Callback:Dynamic=null, ?ScrollFactor:Float=0.0,?backgroundTransparent:Bool = false) {
+	public function new(X:Int,Y:Int,?Width:Int=100,?Height:Int=20,?Callback:Dynamic=null, ?ScrollFactor:Float=0.0,?backgroundTransparency:Float = 1) {
 		super();
 		x = X;
 		y = Y;
 		width = Width;
 		height = Height;
 		scrollFactor.x = scrollFactor.y = ScrollFactor;
-		if (backgroundTransparent)
-			_off = new HxlSprite().createGraphic(Math.floor(width), Math.floor(height), 0x007f7f7f);
-		else
-			_off = new HxlSprite().createGraphic(Math.floor(width), Math.floor(height), 0xff7f7f7f);
+		//cal background color
+		var argb:UInt = 0;
+		argb += (Std.int(backgroundTransparency * 255) << 24);
+		argb += 0x7f7f7f;
+		_off = new HxlSprite().createGraphic(Math.floor(width), Math.floor(height), argb);
 		//_off.solid = false;
-		add(_off,true);
-		if (backgroundTransparent)
-			_on = new HxlSprite().createGraphic(Math.floor(width), Math.floor(height), 0x00ffffff);
-		else
-			_on = new HxlSprite().createGraphic(Math.floor(width), Math.floor(height), 0xffffffff);
+		add(_off, true);
+		
+		var argb:UInt = 0;
+		argb += (Std.int(backgroundTransparency * 255) << 24);
+		argb += 0xffffff;
+		_on = new HxlSprite().createGraphic(Math.floor(width), Math.floor(height), argb);
 		//_on.solid = false;
 		add(_on,true);
 		_active = null;

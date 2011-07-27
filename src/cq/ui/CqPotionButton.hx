@@ -1,5 +1,6 @@
 package cq.ui;
 
+import cq.states.GameState;
 import cq.ui.inventory.CqEquipmentCell;
 import cq.ui.inventory.CqInventoryCell;
 import cq.ui.inventory.CqInventoryDialog;
@@ -52,7 +53,7 @@ class CqPotionButton extends HxlDialog {
 	}
 
 	function clickMouseDown(event:MouseEvent) {
-		if (!exists || !visible || !active || Std.is(GameUI.currentPanel,CqInventoryDialog) ) 
+		if (!exists || !visible || !active || Std.is(GameUI.currentPanel,CqInventoryDialog) || HxlGraphics.state != GameState.inst ) 
 			return;
 		if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
 			event.stopPropagation();

@@ -10,11 +10,11 @@ import haxel.HxlGraphics;
 import haxel.HxlSprite;
 
 class HelpState extends CqState {
-
+	public static var instance(getInstance, null):HelpState;
+	private static var _intance:HelpState;
 	public override function create() {
 		super.create();
-		
-		var btn:HxlButton = new HxlButton(0, 0, Configuration.app_width, Configuration.app_height,nextScreen,0,true);
+		var btn:HxlButton = new HxlButton(0, 0, Configuration.app_width, Configuration.app_height,nextScreen,0,0);
 		var overlay:HxlSprite;
 		if (GameUI.showInvHelp)
 			overlay = new HxlSprite(0, 0,SpriteInvHelpOverlay);
@@ -41,6 +41,12 @@ class HelpState extends CqState {
 
 	function nextScreen() {
 		HxlGraphics.popState();
+	}
+	private static function getInstance():HelpState
+	{
+		if (_intance == null)
+		 _intance = new HelpState();
+		return _intance;
 	}
 
 }

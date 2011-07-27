@@ -35,7 +35,7 @@ class GameOverState extends CqState {
 
 	function nextScreen() {
 		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
-			var newState = new MainMenuState();
+			var newState = MainMenuState.instance;
 			HxlGraphics.state = newState;
 		}, true);
 	}

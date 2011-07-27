@@ -6,6 +6,7 @@ import cq.CqWorld;
 import cq.GameUI;
 import data.SoundEffectsManager;
 import data.Configuration;
+import haxel.HxlButton;
 import haxel.HxlGraphics;
 import haxel.HxlMenu;
 import haxel.HxlMenuItem;
@@ -22,6 +23,10 @@ import com.eclecticdesignstudio.motion.easing.Cubic;
 
 
 class MainMenuState extends CqState {
+	public static var instance(getInstance, null):MainMenuState;
+	private static var _intance:MainMenuState;
+	private static var musicOn:Bool;
+	private static var sfxOn:Bool;
 	var fadeTimer:HxlTimer;
 	var fadeTime:Float;
 	var titleText:HxlSprite;
@@ -32,6 +37,16 @@ class MainMenuState extends CqState {
 	var btnCredits:HxlMenuItem;
 	var btnClicked:Bool;
 
+	var btnToggleMusic:HxlButton;
+	var btnToggleSFX:HxlButton;
+	var musicText:HxlText;
+	
+	public function new()
+	{
+		super();
+		musicOn = true;
+		sfxOn = true;
+	}
 	public override function create() {
 		btnClicked = false;
 		super.create();
@@ -42,6 +57,14 @@ class MainMenuState extends CqState {
 		titleText = new LogoSprite((640-345)/2, (480-50)/2 - 55);
 		add(titleText);
 
+		btnToggleMusic = new HxlButton(300, 459, 100, 20,toggleMusic,0,0.1);
+		musicText = new HxlText(0, 0, 100, "Music is on", true, FontAnonymousPro.instance.fontName, 14);
+		btnToggleMusic.loadText(musicText);
+		btnToggleMusic.setOn(true);
+		if (!musicOn)
+			toggleMusic();
+		add(btnToggleMusic);
+		
 		var copyright = new HxlText(0, 459, 640, "Copyright 2011 Ido Yehieli.",true,FontAnonymousPro.instance.fontName,18);
 		add(copyright);
 		
@@ -98,7 +121,25 @@ class MainMenuState extends CqState {
 		super.update();
 		setDiagonalCursor();
 	}
-
+	private function toggleMusic():Void 
+	{
+		btnToggleMusic.setOn(!btnToggleMusic.getOn());
+		var on:Bool = btnToggleMusic.getOn();
+		musicOn = on;
+		if (on)
+		{
+			musicText.setText("Music is on");
+			MusicManager.resume();
+		}else
+		{
+			MusicManager.pause();
+			musicText.setText("Music is off");
+		}
+	}
+	private function toggleSFX():Void 
+	{
+		
+	}
 	function changeState(TargetState:Class<HxlState>) {
 		if (btnClicked)
 			return;
@@ -123,6 +164,11 @@ class MainMenuState extends CqState {
 			}	
 		}, true);
 	}
-
+	private static function getInstance():MainMenuState
+	{
+		if (_intance == null)
+		 _intance = new MainMenuState();
+		return _intance;
+	}
 
 }

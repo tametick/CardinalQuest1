@@ -55,6 +55,7 @@ class Game extends HxlGame {
 			super(640, 480, SplashState, 1, FontDungeon.instance.fontName);		
 		
 		pause = new CqPause();
+		useDefaultHotKeys = false;
 		
 	}
 }

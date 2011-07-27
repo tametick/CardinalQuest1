@@ -84,7 +84,7 @@ class SplashState extends CqState {
 			return;
 		
 		stateNum = 2;
-		HxlGraphics.state = new MainMenuState();
+		HxlGraphics.state = MainMenuState.instance;
 	}
 
 }

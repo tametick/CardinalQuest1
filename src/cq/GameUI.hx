@@ -332,7 +332,7 @@ class GameUI extends HxlDialog {
 				hideCurrentPanel(pressHelp);
 				return;
 			}
-			HxlGraphics.pushState(new HelpState());
+			HxlGraphics.pushState(HelpState.instance);
 		}
 	}
 	public function pressMenu(?playSound:Bool = false):Void
@@ -347,7 +347,7 @@ class GameUI extends HxlDialog {
 				hideCurrentPanel(pressMenu);
 			}else {
 				instance.setActive(false);
-				HxlGraphics.pushState(new MainMenuState());
+				HxlGraphics.pushState(MainMenuState.instance);
 			}
 		}
 	}
@@ -389,7 +389,7 @@ class GameUI extends HxlDialog {
 			showInvHelp = true;
 			showPanel(panelInventory, btnInventoryView, function() {
 				instance.setActive();
-				HxlGraphics.pushState(new HelpState());
+				HxlGraphics.pushState(HelpState.instance);
 			});
 		}else
 		{
