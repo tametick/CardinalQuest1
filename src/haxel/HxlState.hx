@@ -140,7 +140,11 @@ class HxlState extends Sprite {
 	
 	function init() { }
 	function onKeyUp(event:KeyboardEvent) { }
-	function onKeyDown(event:KeyboardEvent) { }
+	function onKeyDown(event:KeyboardEvent) { 
+		if (event.charCode == 27) {
+			event.preventDefault();
+		}
+	}
 	function onMouseDown(event:MouseEvent) { }
 	function onMouseUp(event:MouseEvent) { }
 	function onMouseOver(event:MouseEvent) { }
@@ -183,7 +187,7 @@ class HxlState extends Sprite {
 		HxlGraphics.stage.addEventListener(Type, Listener, UseCapture, Priority, UseWeakReference);
 		eventListeners.push( {Type: Type, Listener: Listener, UseCapture: UseCapture} );
 	}
-
+/*
 	function _removeEventListener(Type:String, Listener:Dynamic) {
 		HxlGraphics.stage.removeEventListener(Type, Listener);
 		for ( i in 0...eventListeners.length ) {
@@ -193,7 +197,7 @@ class HxlState extends Sprite {
 				break;
 			}
 		}
-	}
+	}*/
 
 	function clearEventListeners() {
 		while ( eventListeners.length > 0 ) {

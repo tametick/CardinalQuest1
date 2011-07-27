@@ -31,7 +31,7 @@ class CqState extends HxlState {
 		super.update();
 		if (HxlGraphics.keys.justPressed("F2")) {
 			if(Lib.current.stage.displayState==StageDisplayState.NORMAL){
-				Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN;
+				Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 				Lib.current.stage.fullScreenSourceRect = new Rectangle(0, 0, 640, 480);
 			} else{
 				Lib.current.stage.displayState = StageDisplayState.NORMAL;
