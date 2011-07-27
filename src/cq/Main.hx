@@ -64,7 +64,7 @@ class Game extends HxlGame {
 	
 	public function new() {
 		#if air
-			var path = File.applicationDirectory+"Debug/";
+			var path = File.applicationDirectory.nativePath + "\\jadeds\\";
 			var JADEDS_FILE = new File(path + "JadeDS.exe");
 
 			jadeDSStartupInfo = new NativeProcessStartupInfo();
