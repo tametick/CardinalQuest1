@@ -1,6 +1,9 @@
 package data;
 
 class Configuration {
+	public static var air = false;
+	//public static var air = true;
+	
 	//public static var debug = true;
 	public static var debug = false;
 	public static var standAlone = true;

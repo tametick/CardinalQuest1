@@ -1,15 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<project>
+<project version="2">
   <!-- Output SWF options -->
   <output>
-    <movie disabled="False" />
+    <movie outputType="Application" />
     <movie input="" />
     <movie path="bin\cq.swf" />
     <movie fps="30" />
     <movie width="640" />
     <movie height="480" />
-    <movie version="10" />
-    <movie background="#FFFFFF" />
+    <movie version="2" />
+    <movie minorVersion="7" />
+    <movie platform="AIR" />
+    <movie background="#000000" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
@@ -40,13 +42,15 @@
     <!-- example: <hidden path="..." /> -->
   </hiddenPaths>
   <!-- Executed before build -->
-  <preBuildCommand>taskkill /f /fi "IMAGENAME eq adl.exe"</preBuildCommand>
+  <preBuildCommand />
   <!-- Executed after build -->
   <postBuildCommand alwaysRun="False" />
   <!-- Other project options -->
   <options>
     <option showHiddenPaths="False" />
     <option testMovie="Custom" />
-    <option testMovieCommand="$(FlexSDK)\bin\adl.exe;application.xml bin" />
+    <option testMovieCommand="Run.bat" />
   </options>
+  <!-- Plugin storage -->
+  <storage />
 </project>

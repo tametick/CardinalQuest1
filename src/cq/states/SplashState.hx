@@ -35,7 +35,7 @@ class SplashState extends CqState {
 		Mouse.hide();
 		
 		if (Configuration.standAlone) {
-			Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN;
+			Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 			
 			if (!StringTools.startsWith(Capabilities.os, "Mac")) {
 				// for windows
