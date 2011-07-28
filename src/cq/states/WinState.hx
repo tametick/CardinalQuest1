@@ -32,7 +32,7 @@ class WinState extends CqState {
 		stackRender = true;
 		
 		scroller = new CqTextScroller(null, 5);
-		scroller.addColumn(80, 480, "The evil minotaur has escaped, but you can still catch him, next time...", false, FontDungeon.instance.fontName, 30, 0x0C11F1);
+		scroller.addColumn(80, 480, " As you slay the last of his servants, Asterion mutters an ancient incantation.\n\n A shimmering portal appears and the minotaur steps inside.\n\n While celebrating Asterion’s demise would be premature, Hallemot is once again safe - for the time being...", false, FontDungeon.instance.fontName, 30);
 		Figurescale = new HxlPoint(2.0, 2.0);
 		figure = new HxlSprite(85, 40, VortexFigure, Figurescale.x, Figurescale.y);
 		bg = new HxlSprite(50, 50, VortexScreen);
@@ -46,7 +46,7 @@ class WinState extends CqState {
 		defaultGroup.sortMembersByZIndex();
 		scroller.setMinimumTime(2);
 		scroller.onComplete(nextScreen);
-		scroller.startScroll(100,16);
+		scroller.startScroll(0,16);
 		
 	}
 
