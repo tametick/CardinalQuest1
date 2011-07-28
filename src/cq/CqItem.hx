@@ -61,7 +61,7 @@ class CqLootFactory {
 			Resources.descriptions.set("Ring of Wisdom","This small, silver ring imbues its wearer with uncanny wisdom.");
 			Resources.descriptions.set("Amulet of Enlightenment","Enlightenment permeates this simple looking amulet, granting its wearer the spirit of the gods.");
 			Resources.descriptions.set("Cap of Endurance", "This steel skullcap protects the head without restricting the wearer's ability to wear fashionable hats.");
-			Resources.descriptions.set("Helm of Hardiness", "This helm is crafted by dwarven smiths in the Roshaggon mines, using an alloy jealously kept secret.");
+			Resources.descriptions.set("Helm of Hardiness", "This helm is crafted by dwarven smiths in the Roshaggon mines using an alloy jealously kept secret.");
 			Resources.descriptions.set("Gloves of Dexterity","The swiftness of these hand gloves allow their wearer to perform faster in battle.");
 			Resources.descriptions.set("Achilles' Bracer","This magical bronze bracer contains within it the great warrior's spirit.");
 			Resources.descriptions.set("Short Sword", "A one handed hilt attached to a thrusting blade approximately 60cm in length.");
@@ -70,17 +70,17 @@ class CqLootFactory {
 			Resources.descriptions.set("Dagger", "A double-edged blade used for stabbing or thrusting.");
 			Resources.descriptions.set("Axe", "A mighty axe, good for chopping wood and flesh.");
 			Resources.descriptions.set("Hardened Battle Axe", "Crafted from the finest of metals, this axe can deal lethal slashing, cleaving and slicing blows.");
-			Resources.descriptions.set("Broad Claymore", "An ancient weapon, many bards have sung about glorious victories won with it.");
+			Resources.descriptions.set("Broad Claymore", "An ancient weapon. Many bards have sung about glorious victories won with it.");
 			Resources.descriptions.set("King's Golden Helm", "Made of pure gold, gives you unbreachable head protection, and irresistible looks.");
-			Resources.descriptions.set("Beastly Mace", "A mighty huge and spiky mace, made for fast swinging and powerful rips.");
-			Resources.descriptions.set("Twin Bladed Katana", "An elegant weapon for a more civilized age. Crafted by a master blacksmith from the distant orient.");
+			Resources.descriptions.set("Beastly Mace", "A mighty huge and spiky mace made for fast swinging and powerful rips.");
+			Resources.descriptions.set("Twin Bladed Katana", "An elegant weapon for a more civilized age, crafted by a master blacksmith from the distant orient.");
 			Resources.descriptions.set("Full Helmet of Vitality", "Originally worn by dark priests, this helmet helps you tap into energies of the full moon.");
-			Resources.descriptions.set("Full Plate Armor", "A classic well tested model of armor, highly praised by knights from around the globe.");
-			Resources.descriptions.set("Rogues' Cloak of Swiftness", "Made from enchanted cloth, both light and durable. Wearing this feel like touching the sky.");
-			Resources.descriptions.set("Gauntlets of Sturdiness", "The floral decorations on these gauntlets give confidence that they're crafted skillfully and with attention to detail.");
-			Resources.descriptions.set("Supernatural Amulet", "Inscribed upon this amulet, are magic runes, which yield gains in many attributes for the wearer.");
-			Resources.descriptions.set("Ring of Rubies", "You sense a powerful force in this ring, feels like life itself is flowing from it.");
-			Resources.descriptions.set("Tundra Lizard Boots", "Made for the toughest of conditions, able to withstand both ice and fire, gives you superior mobility on every terrain.");
+			Resources.descriptions.set("Full Plate Armor", "A classic, well tested model of armor highly praised by knights from around the globe.");
+			Resources.descriptions.set("Rogues' Cloak of Swiftness", "Made from enchanted cloth, both light and durable. Wearing this feels like touching the sky.");
+			Resources.descriptions.set("Gauntlets of Sturdiness", "These decorated gauntlets are crafted skillfully and with attention to detail.");
+			Resources.descriptions.set("Supernatural Amulet", "Inscribed upon this amulet, are magic runes, which yield many benefits for the wearer.");
+			Resources.descriptions.set("Ring of Rubies", "You sense a powerful force in this ring. It feels like life itself is flowing from it.");
+			Resources.descriptions.set("Tundra Lizard Boots", "Made for the toughest of conditions, these boots give you superior mobility on every terrain.");
 		
 		inited = true;
 	}

@@ -425,7 +425,7 @@ class GameState extends CqState {
 		//stairs popup
 		if (HxlUtil.contains(SpriteTiles.instance.stairsDown.iterator(), tile.dataNum))
 		{
-			CqRegistery.player.popup.setText("Click or press Enter to go downstairs");
+			CqRegistery.player.popup.setText("Click go downstairs\n[hotkey enter]");
 		}else {
 			CqRegistery.player.popup.setText("");
 		}

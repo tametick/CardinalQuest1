@@ -20,23 +20,23 @@ class CqSpellFactory {
 			Resources.descriptions = new Hash<String>();
 		
 		Resources.descriptions.set("Freeze", "Freezes a monster in place for a short duration.");
-		Resources.descriptions.set("Fireball", "Hurls a ball of fire that explodes on impact. The spell's power increases alongside your's");
+		Resources.descriptions.set("Fireball", "Hurls a ball of fire that explodes on impact.");
 		Resources.descriptions.set("Berserk", "Induces a berserked rage that greatly increases you strength and speed.");
 		Resources.descriptions.set("Enfeeble monster", "Weakens monsters and renders them less dangerous.");
 		Resources.descriptions.set("Bless weapon", "Blesses the currently wielded weapon, providing a temporary boost to its effectivness.");
 		Resources.descriptions.set("Haste", "Makes you faster and more nimble.");
 		Resources.descriptions.set("Shadow walk", "Renders you invisible for a few seconds.");
 		Resources.descriptions.set("Charm monster","Charms a foe and temporarily brings them to your side."); 
-		Resources.descriptions.set("Polymorph","Transoform a creature into another form."); 
+		Resources.descriptions.set("Polymorph","Transform a creature into another form."); 
 		Resources.descriptions.set("Sleep","Puts a monster into a deep slumber."); 
 		Resources.descriptions.set("Fear","Makes a monster flee in horror."); 
-		Resources.descriptions.set("Magic mirror","Creates a duplicate to draw enemies away from you."); 
+		Resources.descriptions.set("Magic mirror","Creates a duplicate of yourself to draw enemies away."); 
 		Resources.descriptions.set("Stone skin","Hardens your skin, rendering you tough but slow."); 
 		Resources.descriptions.set("Blink","Transports you to a random location.");
 		Resources.descriptions.set("Magic armor","Engulfs you in a magical protective aura."); 
 		Resources.descriptions.set("Pass wall","Enables walking through walls as if they were thin air.");
 		Resources.descriptions.set("Teleport","Transports you to a specific location of your choice."); 
-		Resources.descriptions.set("Reveal map","Reveals the laout of the current floor"); 
+		Resources.descriptions.set("Reveal map","Reveals the layout of the current floor."); 
 		Resources.descriptions.set("Heal","Restores health and vigor.");
 		inited = true;
 	}
