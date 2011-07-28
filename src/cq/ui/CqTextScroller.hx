@@ -25,6 +25,7 @@ class CqTextScroller extends HxlGroup {
 	var cols:Array<HxlText>;
 	var clicks:Int;
 	var tweens:Array<GenericActuator>;
+	var tweenStatus:Array<Bool>;
 	var OnComplete:Void->Void;
 	var minimumDuration:Float;
 	var to_y:Int;
@@ -36,6 +37,7 @@ class CqTextScroller extends HxlGroup {
 		respondInput = false;
 		cols = new Array<HxlText>();
 		tweens = new Array<GenericActuator>();
+		tweenStatus = new Array<Bool>();
 		to_y = To_Y;
 		minimumDuration = MinimumDuration;
 		if(bg != null){
@@ -84,6 +86,7 @@ class CqTextScroller extends HxlGroup {
 		if (cols.length == 0) 
 			return;
 		Actuate.pauseAll();
+		clicks++;
 		scrolling = false;
 		for (col in cols)
 		{
@@ -95,6 +98,7 @@ class CqTextScroller extends HxlGroup {
 		text.setFormat(fontName, fontSize, color, "left");
 		add(text);
 		cols.push(text);
+		tweenStatus.push(false);
 		text.y = HxlGraphics.stage.stageHeight;
 	}
 	public function startScroll(?PosY:Int = -1,?duration:Int = -1) {
@@ -108,8 +112,19 @@ class CqTextScroller extends HxlGroup {
 		for (col in cols)
 		{
 			scrolling = true;
-			tweens.push( Actuate.tween(col, Duration, { y:to_y } , true));
+			tweens.push( Actuate.tween(col, Duration, { y:to_y } , true).onComplete(oncolumnScrolled,[col]));
 		}
+	}
+	
+	private function oncolumnScrolled(column:HxlText):Void 
+	{
+		var allFinished:Bool = true;
+		for (i in 0...cols.length)
+		{
+			if (cols[i] == column) tweenStatus[i] = true;
+			if (tweenStatus[i] == false) allFinished = false;
+		}
+		if (allFinished) finishTweens();
 	}
 	
 	public function onComplete(handler:Void->Void):Void {

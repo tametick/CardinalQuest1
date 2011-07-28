@@ -1,5 +1,6 @@
 package cq.ui.inventory;
 
+import cq.states.GameState;
 import data.SoundEffectsManager;
 import flash.display.BitmapData;
 import flash.filters.GlowFilter;
@@ -265,7 +266,7 @@ class CqInventoryItem extends HxlSprite {
 	}
 
 	private override function onDragMouseDown(event:MouseEvent) {
-		if ( !Std.is(GameUI.currentPanel,CqInventoryDialog) || !exists || !visible || !active || !dragEnabled) 
+		if ( !Std.is(GameUI.currentPanel,CqInventoryDialog) || !exists || !visible || !active || !dragEnabled || HxlGraphics.state != GameState.inst) 
 			return;
 		super.onDragMouseDown(event);
 		if ( isDragging ) {
