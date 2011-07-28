@@ -13,10 +13,12 @@ class GameOverState extends CqState {
 
 	var fadeTime:Float;
 	private var scroller:CqTextScroller;
+	static var complete;
 
 	public override function create() {
 		super.create();
 
+		complete = false;
 		fadeTime = 0.5;
 		
 		stackRender = true;
@@ -25,12 +27,28 @@ class GameOverState extends CqState {
 		add(scroller);
 		scroller.startScroll();
 		scroller.onComplete(nextScreen);
-		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
+		HxlGraphics.fade.start(false, 0xff000000, fadeTime, function() { complete = true; } );
 	}
 
 	public override function update() {
 		super.update();	
 		setDiagonalCursor();
+		if ( HxlGraphics.keys.justReleased("ESCAPE") )
+			nextScreen();
+	}
+	
+	override private function onKeyUp(event:KeyboardEvent) {
+		super.onKeyUp(event);
+		
+		if (complete)
+			nextScreen();
+	}
+	
+	override private function onMouseUp(event:MouseEvent) {
+		super.onMouseUp(event);
+		
+		if (complete)
+			nextScreen();		
 	}
 
 	function nextScreen() {

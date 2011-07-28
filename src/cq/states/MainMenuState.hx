@@ -134,7 +134,9 @@ class MainMenuState extends CqState {
 			
 			if (Configuration.air) {
 				btnQuit.setCallback(function() { 
+				  #if air	
 					Game.jadeDS.exit(); 
+				  #end	
 					NativeApplication.nativeApplication.exit(); 
 				} );
 			} else {
