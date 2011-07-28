@@ -248,8 +248,10 @@ class GameState extends CqState {
 				classBG = SpriteWizardEntry;
 		}
 		scroller = new CqTextScroller(classBG, 1);
-		var introText:String = "You enter the dark dungeon...\n\nYou feel this text is a placeholder and needs replacement.";
-		scroller.addColumn(100, 400, introText, false, FontAnonymousPro.instance.fontName,30);
+		var introText:String = " You enter the dark domicile of the evil minotaur.\n\n In the distance, you can hear the chatter of the vile creatures that inhabit it.\n\n Your adventure begins...";
+
+
+		scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,30);
 		add(scroller);
 		scroller.startScroll();
 		scroller.onComplete(realInit);
