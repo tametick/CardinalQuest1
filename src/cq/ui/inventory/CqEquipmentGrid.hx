@@ -1,5 +1,7 @@
 package cq.ui.inventory;
 
+import cq.states.GameState;
+import haxel.HxlGraphics;
 import haxel.HxlPoint;
 
 import cq.CqResources;
@@ -64,6 +66,8 @@ class CqEquipmentGrid extends CqInventoryGrid {
 	}
 
 	public function onItemDrag(Item:CqItem) {
+		if (HxlGraphics.state != GameState.inst)
+			return;
 		for( i in 0...cells.length ) {
 			var Cell:CqEquipmentCell = cast(cells[i], CqEquipmentCell);
 			if ( Item.equipSlot == Cell.equipSlot ) {
