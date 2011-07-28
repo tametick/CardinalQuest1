@@ -38,8 +38,7 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		var icons_y:Int = icons_x;
 		
 		var btn:ButtonSprite;
-		for (idx in 0...icons_names.length)
-		{
+		for (idx in 0...icons_names.length)	{
 			cell = new CqEquipmentCell(icons_slots[idx], cell_positions[idx][0]-5, cell_positions[idx][1]-5, cellSize, cellSize, idx);
 			btn = new ButtonSprite();
 			cell.add(btn);

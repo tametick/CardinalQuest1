@@ -24,7 +24,8 @@ class CqEquipmentCell extends CqInventoryCell {
 	}
 
 	override function setHighlighted(Toggle:Bool) {
-		if ( Toggle && cast(HxlGraphics.mouse.dragSprite, CqInventoryItem).item.equipSlot != equipSlot ) return; 
+		if ( Toggle && cast(HxlGraphics.mouse.dragSprite, CqInventoryItem).item.equipSlot != equipSlot ) 
+			return; 
 		super.setHighlighted(Toggle);
 	}
 
