@@ -21,7 +21,7 @@ class CqSpellFactory {
 		
 		Resources.descriptions.set("Freeze", "Freezes a monster in place for a short duration.");
 		Resources.descriptions.set("Fireball", "Hurls a ball of fire that explodes on impact.");
-		Resources.descriptions.set("Berserk", "Induces a berserked rage that greatly increases you strength and speed.");
+		Resources.descriptions.set("Berserk", "Induces a berserked rage that greatly increases your strength and speed.");
 		Resources.descriptions.set("Enfeeble monster", "Weakens monsters and renders them less dangerous.");
 		Resources.descriptions.set("Bless weapon", "Blesses the currently wielded weapon, providing a temporary boost to its effectivness.");
 		Resources.descriptions.set("Haste", "Makes you faster and more nimble.");
