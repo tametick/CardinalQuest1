@@ -2,6 +2,7 @@ package cq;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import cq.states.GameOverState;
+import cq.ui.CqPopup;
 import flash.display.BitmapData;
 import haxel.HxlSprite;
 import haxel.HxlText;
@@ -102,7 +103,8 @@ class CqActor extends CqObject, implements Actor {
 	public var justAttacked:Bool;
 	
 	public var healthBar:CqHealthBar;
-
+	
+	public var name:String;
 	//track last horizontal direction, for sprite flipping
 	var lastDirX:Int;
 	
@@ -1144,6 +1146,7 @@ class CqMobFactory {
 		
 		if(Resources.descriptions==null)
 			Resources.descriptions = new Hash<String>();
+			
 		Resources.descriptions.set("Fighter", "A mighty warrior, possessing unparalleled strength and vigor. ");
 		Resources.descriptions.set("Wizard", "A wise mage who mastered the secrets of magic.");
 		Resources.descriptions.set("Thief", "A cunning and agile rogue, his speed allows for a swift escape.");
@@ -1157,7 +1160,7 @@ class CqMobFactory {
 		var typeName:String = "";
 		if (player != null) {
 			typeName = HxlUtil.getRandomElement(SpriteMonsters.bandits);
-			mob = new CqMob(X, Y, typeName.toLowerCase(),true);
+			mob = new CqMob(X, Y, typeName.toLowerCase(), true);
 			mob.attack = player.attack;
 			mob.defense = player.defense;
 			mob.speed = player.speed;
@@ -1167,51 +1170,75 @@ class CqMobFactory {
 			mob.xpValue = player.xp;
 			return mob;
 		}
+		var shortName:String = "";
 		switch(level+1) {
 			case 1:
 				typeName = HxlUtil.getRandomElement(SpriteMonsters.bandits);
+				shortName = "Bandit";
 			case 2:
-				if(Math.random()<CqConfiguration.strongerEnemyChance)
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.bandits);
-				else
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.kobolds);
-			case 3:
-				if(Math.random()<CqConfiguration.strongerEnemyChance)
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.kobolds);
-				else
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.succubi);
-			case 4:
-				if(Math.random()<CqConfiguration.strongerEnemyChance)
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.succubi);
-				else
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.spiders);
-			case 5:
-				if(Math.random()<CqConfiguration.strongerEnemyChance)
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.spiders);
-				else
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.apes);
-			case 6:
 				if (Math.random() < CqConfiguration.strongerEnemyChance)
+				{
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.bandits);
+					shortName = "Bandit";
+				}else{
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.kobolds);
+					shortName = "Kobold";
+				}
+			case 3:
+				if(Math.random()<CqConfiguration.strongerEnemyChance){
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.kobolds);
+					shortName = "Kobold";
+				}else{
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.succubi);
+					shortName = "Succubi";
+				}
+			case 4:
+				if(Math.random()<CqConfiguration.strongerEnemyChance){
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.succubi);
+					shortName = "Succubi";
+				}else{
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.spiders);
+					shortName = "Spider";
+				}
+			case 5:
+				if (Math.random() < CqConfiguration.strongerEnemyChance){
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.spiders);
+					shortName = "Spider";
+				}else{
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.apes);
-				else
+					shortName = "Ape";
+				}
+			case 6:
+				if (Math.random() < CqConfiguration.strongerEnemyChance){
+					typeName = HxlUtil.getRandomElement(SpriteMonsters.apes);
+					shortName = "Ape";
+				}else{
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.elementeals);
+					shortName = "Elemental";
+				}
 			case 7:
-				if(Math.random()<CqConfiguration.strongerEnemyChance)
+				if(Math.random()<CqConfiguration.strongerEnemyChance){
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.elementeals);
-				else
+					shortName = "Elemental";
+				}else{
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.werewolves);
+					shortName = "Werewolf";
+				}
 			case 8,9:// for "out of depth" enemies in the 8th level 
-				if(Math.random()<CqConfiguration.strongerEnemyChance)
+				if (Math.random() < CqConfiguration.strongerEnemyChance) {
+					shortName = "Werewolf";
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.werewolves);
-				else
+				}else {
+					shortName = "Minotaur";
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.minotauers);
+				}
 			case 99,100,101:
 				//ending boss
 				typeName = HxlUtil.getRandomElement(SpriteMonsters.minotauers);
+				shortName = "";
 		}
-		
 		mob = new CqMob(X, Y, typeName.toLowerCase());
-		
+		mob.name = shortName;
 		switch(mob.type) {
 			case BANDIT_LONG_SWORDS, BANDIT_SHORT_SWORDS, BANDIT_SINGLE_LONG_SWORD, BANDIT_KNIVES:
 				mob.attack = 2;

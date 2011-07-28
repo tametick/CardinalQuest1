@@ -2,6 +2,7 @@ package cq.states;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import cq.CqConfiguration;
+import cq.ui.CqPopup;
 import cq.ui.CqPotionButton;
 import cq.CqRegistery;
 import cq.ui.CqSpellButton;
@@ -260,7 +261,7 @@ class GameState extends CqState {
 			remove(scroller);
 			scroller = null;
 		}
-				
+			
 		started = true;
 		initRegistry();
 		Playtomic.play();
@@ -272,14 +273,20 @@ class GameState extends CqState {
 
 		// create and init the game gui
 		// todo: do not recreate if already exists from previous games?
-		if(gameUI == null){
-			gameUI = new GameUI();
+		if (gameUI == null) {
+			gameUI = new GameUI();		
 			gameUI.zIndex = 50;
 			add(gameUI);
 			gameUI.initChests();
 			gameUI.initHealthBars();
-			
+			gameUI.initPopups();
 			world.addOnNewLevel(gameUI.panelMap.updateDialog);
+			world.addOnNewLevel(gameUI.initPopups);
+			
+			var player:CqPlayer = CqRegistery.player;
+			var pop:CqPopup = new CqPopup(180, "", gameUI.doodads);
+			gameUI.doodads.add(pop);
+			player.setPopup(pop);
 		}
 		player.addOnPickup(gameUI.itemPickup);
 		player.addOnInjure(gameUI.doPlayerInjureEffect);
@@ -413,6 +420,13 @@ class GameState extends CqState {
 		
 		var tile = getPlayerTile(target);
 		
+		//stairs popup
+		if (HxlUtil.contains(SpriteTiles.instance.stairsDown.iterator(), tile.dataNum))
+		{
+			CqRegistery.player.popup.setText("Click or press Enter to go downstairs");
+		}else {
+			CqRegistery.player.popup.setText("");
+		}
 		if (Math.abs(dx) < Configuration.zoomedTileSize() && Math.abs(dy) < Configuration.zoomedTileSize() || HxlGraphics.keys.justPressed("ENTER") || HxlGraphics.keys.justPressed("NONUMLOCK_5") ) {
 			if (tmpPoint == null)
 				tmpPoint = new HxlPoint(0, 0);
@@ -428,6 +442,7 @@ class GameState extends CqState {
 			} else if (HxlUtil.contains(SpriteTiles.instance.stairsDown.iterator(), tile.dataNum)) {
 				// descend
 				Registery.world.goToNextLevel(this);
+				CqRegistery.player.popup.setText("");
 			}
 			//clicking on ones-self should only do one turn
 			isPlayerActing = false;

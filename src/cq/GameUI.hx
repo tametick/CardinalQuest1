@@ -1010,6 +1010,17 @@ class GameUI extends HxlDialog {
 		tween.onComplete(onXBallHit, [ball,actor,other,spell]).onUpdate(updateXBall,[ball,other,tween]);
 	}
 	
+	public function initPopups():Void 
+	{
+		for ( actor in CqRegistery.level.mobs ) {
+				var cqMob:CqActor = cast(actor, CqActor);
+				var pop:CqPopup = new CqPopup(150, cqMob.name, doodads);
+				cqMob.setPopup(pop);
+				doodads.add(pop);
+		}
+
+	}
+	
 	private function updateXBall(ball:HxlSprite,other:CqActor,actuator:GenericActuator):Void 
 	{
 		var prop:Dynamic = actuator.getProperties();
