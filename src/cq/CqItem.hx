@@ -175,8 +175,7 @@ class CqLootFactory {
 			case GEMMED_AMULET:
 				item.name ="Supernatural Amulet";
 				item.buffs.set("spirit", 2);
-				item.buffs.set("speed", 1);
-				item.buffs.set("defense", 1);
+				item.buffs.set("defense", 2);
 			case GEMMED_RING:
 				item.name ="Ring of Rubies";
 				item.buffs.set("life", 3);
@@ -309,10 +308,10 @@ class CqLootFactory {
 			var extraBuff = HxlUtil.getRandomElement(buffs);
 			if (Item.isMagical) {
 				//Item.name = "Magical " + Item.name;
-				Item.buffs.set(extraBuff, Item.buffs.get("extraBuff") + 1);
+				Item.buffs.set(extraBuff, Item.buffs.get(extraBuff) + 1);
 			} else {// isWondrous
 				//Item.name = "Wondrous " + Item.name;
-				Item.buffs.set(extraBuff, Item.buffs.get("extraBuff") + 2);
+				Item.buffs.set(extraBuff, Item.buffs.get(extraBuff) + 2);
 			}
 		}
 	}
