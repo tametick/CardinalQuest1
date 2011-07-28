@@ -9,6 +9,7 @@ import flash.ui.Mouse;
 
 import haxel.HxlObject;
 import data.Registery;
+import data.Configuration;
 
 class HxlState extends Sprite {
 
@@ -121,7 +122,9 @@ class HxlState extends Sprite {
 				_addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown,false,0,true);
 				_addEventListener(MouseEvent.MOUSE_UP, onMouseUp,false,0,true);
 				_addEventListener(MouseEvent.MOUSE_OVER, onMouseOver,false,0,true);
-				_addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove,false,0,true);
+				_addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
+				if(Configuration.air)
+					_addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, onRightMouseDown,false,0,true);
 			}
 			init();
 			initialized = 1;
@@ -146,6 +149,10 @@ class HxlState extends Sprite {
 		}
 	}
 	function onMouseDown(event:MouseEvent) { }
+	function onRightMouseDown(event:MouseEvent) { 
+		event.preventDefault();
+		Mouse.hide();
+	}
 	function onMouseUp(event:MouseEvent) { }
 	function onMouseOver(event:MouseEvent) { }
 	function onMouseMove(event:MouseEvent) { }
