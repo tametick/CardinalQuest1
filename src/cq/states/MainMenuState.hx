@@ -64,26 +64,27 @@ class MainMenuState extends CqState {
 		add(titleText);
 
 		
-		tglMusicIcon = new HxlSprite(42,-3);
+		tglMusicIcon = new HxlSprite(45,0);
 		tglMusicIcon.loadGraphic(SpriteSoundToggle, true, false, 48, 48,false,0.5,0.5);
 		tglMusicIcon.setFrame(1);
 		
-		btnToggleMusic = new HxlButton(450, 454, 63, 20, toggleMusic, 0, 0);
+		var musicWidth = 70;
+		btnToggleMusic = new HxlButton(640-musicWidth, 0,musicWidth, 20, toggleMusic, 0, 0);
 		btnToggleMusic.add(tglMusicIcon);
-		musicText = new HxlText(0, 0, 100, "Music", true, FontAnonymousPro.instance.fontName, 14);
+		musicText = new HxlText(0, 3, 100, "Music", true, FontAnonymousPro.instance.fontName, 14);
 		btnToggleMusic.loadText(musicText);
 		btnToggleMusic.setOn(true);
 		if (!musicOn)
 			toggleMusic();
 		add(btnToggleMusic);
 		
-		tglSFXIcon = new HxlSprite(26,-4);
+		tglSFXIcon = new HxlSprite(45,0);
 		tglSFXIcon.loadGraphic(SpriteSoundToggle, true, false, 48, 48,false,0.5,0.5);
 		tglSFXIcon.setFrame(1);
 		
-		btnToggleSFX = new HxlButton(550, 454, 48, 20, toggleSFX, 0, 0);
+		btnToggleSFX = new HxlButton(Std.int(btnToggleMusic.x), Std.int(btnToggleMusic.y+btnToggleMusic.height), musicWidth, 20, toggleSFX, 0, 0);
 		btnToggleSFX.add(tglSFXIcon);
-		sfxText = new HxlText(0, 0, 100, "SFX", true, FontAnonymousPro.instance.fontName, 14);
+		sfxText = new HxlText(0, 3, 100, "Sound", true, FontAnonymousPro.instance.fontName, 14);
 		btnToggleSFX.loadText(sfxText);
 		btnToggleSFX.setOn(true);
 		if (!sfxOn)
