@@ -30,7 +30,7 @@ class CqTextScroller extends HxlGroup {
 	var minimumDuration:Float;
 	var to_y:Int;
 	var respondInput:Bool;//so you wouldnt accidentally close the window
-	public function new(bg:Class<Bitmap>, scrollDuration:Float, ?Title:String = "", ?TitleColor:Int = 0xFFFFFF) {
+	public function new(bg:Class<Bitmap>, scrollDuration:Float, ?Title:String = "", ?TitleColor:Int = 0xFFFFFF, ?ShadowColor:Int = 0x010101) {
 		super();
 		clicks = 0;
 		scrolling = false;
@@ -53,7 +53,7 @@ class CqTextScroller extends HxlGroup {
 		if (Title.length > 0)
 		{
 			var titleTxt:HxlText = new HxlText(0, To_Y, 640, Title);
-			titleTxt.setFormat(null, 72, TitleColor, "center");
+			titleTxt.setFormat(null, 72, TitleColor, "center",ShadowColor);
 			to_y += Std.int(titleTxt.height+10);
 			add(titleTxt);
 		}
@@ -93,9 +93,9 @@ class CqTextScroller extends HxlGroup {
 			col.y = to_y;
 		}
 	}
-	public function addColumn(X:Int, W:Int, text:String,?embeddedfont:Bool = true,?fontName:String = "",?fontSize:Int = 16,?color:Int = 0xFFFFFF) {
+	public function addColumn(X:Int, W:Int, text:String,?embeddedfont:Bool = true,?fontName:String = "",?fontSize:Int = 16,?color:Int = 0xFFFFFF, ?shadowColor:Int = 0x010101) {
 		var text:HxlText = new HxlText(X, 0, W, text, embeddedfont, fontName);
-		text.setFormat(fontName, fontSize, color, "left");
+		text.setFormat(fontName, fontSize, color, "left",shadowColor);
 		add(text);
 		cols.push(text);
 		tweenStatus.push(false);

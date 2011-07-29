@@ -98,7 +98,7 @@ class HxlText extends HxlSprite {
 	 * 
 	 * @return	This HxlText instance (nice for chaining stuff together, if you're into that).
 	 */
-	public function setFormat(?Font:String=null,?Size:Int=12,?Color:Int=0xffffff,?Alignment:String=null,?ShadowColor:Int=0):HxlText {
+	public function setFormat(?Font:String=null,?Size:Int=12,?Color:Int=0xffffff,?Alignment:String=null,?ShadowColor:Int=0x010101):HxlText {
 		if (Font == null) {
 			Font = "";
 		}
