@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <application xmlns="http://ns.adobe.com/air/application/2.7">
 	
-	<id>cq</id> 
+	<id>CardinalQuest</id> 
 	<versionNumber>1.0</versionNumber> 
-	<filename>cq</filename> 
+	<filename>Cardinal Quest</filename> 
 	
 	<name>Cardinal Quest</name> 
-	<description></description> 
+	<description>Hack and slash your way through a randomly generated dungeon:  a new adventure awaits every time you play the game!</description> 
 	<copyright>Ido Yehieli 2011</copyright> 
 	
 	<supportedProfiles>desktop extendedDesktop</supportedProfiles>

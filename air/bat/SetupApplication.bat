@@ -20,11 +20,11 @@ set APP_DIR=bin
 set FILE_OR_DIR=-C %APP_DIR% .
 
 :: Your application ID (must match <id> of Application descriptor)
-set APP_ID=cq
+set APP_ID=CardinalQuest
 
 :: Output
 set AIR_PATH=air
-set AIR_NAME=cq
+set AIR_NAME=CardinalQuest
 
 
 :validation
