@@ -1015,6 +1015,7 @@ class GameUI extends HxlDialog {
 		for ( actor in CqRegistery.level.mobs ) {
 				var cqMob:CqActor = cast(actor, CqActor);
 				var pop:CqPopup = new CqPopup(150, cqMob.name, doodads);
+				pop.visible = false;
 				cqMob.setPopup(pop);
 				doodads.add(pop);
 		}

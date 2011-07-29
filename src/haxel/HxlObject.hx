@@ -378,21 +378,18 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		if ( popup != null)
 		{
 			var m:HxlMouse = HxlGraphics.mouse;
-			if ( overlapsPoint(m.x, m.y))
-			{
+			if ( overlapsPoint(m.x, m.y) && visible) {
 				popup.visible = true;
 				_mp.x = m.screenX; _mp.y = m.screenY;
 				popup.x = _mp.x-20;
 				popup.y = _mp.y + 20;
-				if ( popup.x + popup.width > HxlGraphics.stage.stageWidth)
-				{
+				if ( popup.x + popup.width > HxlGraphics.stage.stageWidth)	{
 					popup.x = HxlGraphics.stage.stageWidth - popup.width;
-				}else if (popup.x < 5)
+				} else if (popup.x < 5)
 					popup.x = 5;
-				if ( popup.y + popup.height > HxlGraphics.stage.stageHeight)
-				{
+				if ( popup.y + popup.height > HxlGraphics.stage.stageHeight){
 					popup.y = HxlGraphics.stage.stageHeight - popup.height;
-				}else if (popup.y < 5)
+				} else if (popup.y < 5)
 					popup.y = 5;
 			}else
 			{
@@ -400,11 +397,16 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 			}
 		}
 	}
-	public function setPopup(Popup:HxlText)
-	{
+	
+	public function setPopup(Popup:HxlText)	{
 		popup = Popup;
 		popup.visible = false;
 	}
+	
+	public function getPopup() {
+		return popup;
+	}
+	
 	/**
 	 * Override this function to draw graphics (see <code>HxlSprite</code>).
 	 */

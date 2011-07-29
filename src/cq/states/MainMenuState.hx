@@ -121,13 +121,14 @@ class MainMenuState extends CqState {
 		menu.addItem(btnNewGame);
 		btnNewGame.setCallback(function() { if(GameUI.instance!=null)GameUI.instance.kill();self.changeState(CreateCharState);});
 		buttonY += 50;
-
+/*
 		var btnCredits:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Credits", true, null);
 		btnCredits.setNormalFormat(null, 40, 0xffffff, "center");
 		btnCredits.setHoverFormat(null, 40, 0xffff00, "center");
 		menu.addItem(btnCredits);
 		btnCredits.setCallback(function() { self.changeState(CreditsState); });
 		buttonY += 50;
+		*/
 		if (Configuration.standAlone) {
 			var btnQuit:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Quit", true, null);
 			btnQuit.setNormalFormat(null, 40, 0xffffff, "center");

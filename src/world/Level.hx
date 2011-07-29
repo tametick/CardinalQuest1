@@ -335,15 +335,21 @@ class Level extends HxlTilemap
 				var dist = HxlUtil.distance(actor.tilePos, dest);
 				var Ttile:Tile = cast(tile, Tile);
 				var normColor:Int = normalizeColor(dist, actor.visionRadius, seenTween, inSightTween);
-				var dimness = (actor.visionRadius-dist) / actor.visionRadius;
+				var dimness = (actor.visionRadius - dist) / actor.visionRadius;
 				switch (tile.visibility) {
 					case Visibility.IN_SIGHT:
 						tile.visible = true;
 						
 						for (loot in Ttile.loots)
 							cast(loot,HxlSprite).visible = true;
-						for (actor in Ttile.actors)
-							cast(actor,HxlSprite).visible = true;
+						for (actor in Ttile.actors) {
+							cast(actor, HxlSprite).visible = true;
+/*							var pop = cast(actor, HxlSprite).getPopup();
+							if (pop != null){
+								pop.visible = true;
+								trace("1"+pop.visible);
+							}*/
+						}
 						Ttile.colorTo(normColor, actor.moveSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
 						for (decoration in Ttile.decorations)
@@ -354,8 +360,13 @@ class Level extends HxlTilemap
 						
 						for (loot in Ttile.loots)
 							cast(loot,HxlSprite).visible = false;
-						for (actor in Ttile.actors)
-							cast(actor,HxlSprite).visible = false;
+						for (actor in Ttile.actors) {
+							cast(actor, HxlSprite).visible = false;
+							var pop = cast(actor, HxlSprite).getPopup();
+							if (pop != null){
+								pop.visible = false;
+							}
+						}
 						
 						Ttile.colorTo(seenTween, actor.moveSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
@@ -364,6 +375,12 @@ class Level extends HxlTilemap
 							decoration.colorTo(seenTween, actor.moveSpeed);
 							
 					case Visibility.UNSEEN:
+						for (actor in Ttile.actors) {
+							var pop = cast(actor, HxlSprite).getPopup();
+							if (pop != null){
+								pop.visible = false;
+							}
+						}
 				}
 			}
 		}
