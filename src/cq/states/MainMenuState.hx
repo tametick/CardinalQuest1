@@ -104,7 +104,10 @@ class MainMenuState extends CqState {
 			btnResumeGame.setNormalFormat(null, 40, 0xffffff, "center");
 			btnResumeGame.setHoverFormat(null, 40, 0xffff00, "center");
 			menu.addItem(btnResumeGame);
-			btnResumeGame.setCallback(function() {CqLevel.playMusicByIndex(CqRegistery.level.index);self.changeState(null);});
+			btnResumeGame.setCallback(function() { 
+				CqLevel.playMusicByIndex(CqRegistery.level.index);
+				self.changeState(null);
+			});
 			buttonY += 50;
 		}
 
