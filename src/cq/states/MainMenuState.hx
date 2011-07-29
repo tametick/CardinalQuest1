@@ -28,7 +28,6 @@ import flash.desktop.NativeApplication;
 class MainMenuState extends CqState {
 	public static var instance(getInstance, null):MainMenuState;
 	private static var _intance:MainMenuState;
-	private static var musicOn:Bool;
 	private static var sfxOn:Bool;
 	var fadeTimer:HxlTimer;
 	var fadeTime:Float;
@@ -50,7 +49,7 @@ class MainMenuState extends CqState {
 	public function new()
 	{
 		super();
-		musicOn = true;
+		HxlState.musicOn = true;
 		sfxOn = true;
 	}
 	public override function create() {
@@ -74,7 +73,7 @@ class MainMenuState extends CqState {
 		musicText = new HxlText(0, 3, 100, "Music", true, FontAnonymousPro.instance.fontName, 14);
 		btnToggleMusic.loadText(musicText);
 		btnToggleMusic.setOn(true);
-		if (!musicOn)
+		if (!HxlState.musicOn)
 			toggleMusic();
 		add(btnToggleMusic);
 		
@@ -161,7 +160,7 @@ class MainMenuState extends CqState {
 	{
 		btnToggleMusic.setOn(!btnToggleMusic.getOn());
 		var on:Bool = btnToggleMusic.getOn();
-		musicOn = on;
+		HxlState.musicOn = on;
 		if (on)
 		{
 			MusicManager.resume();

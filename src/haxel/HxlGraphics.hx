@@ -17,6 +17,8 @@ import haxel.HxlQuake;
 import haxel.HxlFade;
 import haxel.HxlObject;
 
+import data.MusicManager;
+
 class HxlGraphics {
 
 	/**
@@ -614,7 +616,7 @@ class HxlGraphics {
 	 * Internal helper, pauses all game sounds.
 	 */
 	static function pauseSounds() {
-		if ((music != null) && music.active) {
+		/*if ((music != null) && music.active) {
 			music.pause();
 		}
 		var s:HxlSound;
@@ -624,13 +626,15 @@ class HxlGraphics {
 			if ((s != null) && s.active) {
 				s.pause();
 			}
-		}
+		}*/
+		MusicManager.pause();
 	}
 	
 	/**
-	 * Internal helper, pauses all game sounds.
+	 * Internal helper, unpauses all game sounds.
 	 */
 	static function playSounds() {
+		/*
 		if ((music != null) && music.active) {
 			music.play();
 		}
@@ -641,7 +645,9 @@ class HxlGraphics {
 			if ((s != null) && s.active) {
 				s.play();
 			}
-		}
+		}*/
+		if(HxlState.musicOn)
+			MusicManager.resume();
 	}
 
 	/**
