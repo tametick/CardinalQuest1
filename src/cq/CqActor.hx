@@ -115,6 +115,8 @@ class CqActor extends CqObject, implements Actor {
 
 		actionPoints = 0;
 		moveSpeed = 0.2;
+		//if (Configuration.debug)
+			//moveSpeed = 0.05;
 		visionRadius = 8.2;
 		
 		maxHp = vitality;
@@ -334,7 +336,7 @@ class CqActor extends CqObject, implements Actor {
 		var level = Registery.level;
 		
 		var tile = cast(level.getTile(targetX,  targetY),CqTile);
-		if (level.isBlockingMovement(Math.round(targetX),  Math.round(targetY)))
+		if (level.isBlockingMovement(Math.round(targetX),  Math.round(targetY)) && (!Configuration.debugMoveThroughWalls) || level.getTile(targetX,targetY) == null )
 			return false;
 		
 		if (tile.actors.length > 0) {
@@ -501,6 +503,7 @@ class CqActor extends CqObject, implements Actor {
 			}
 			else
 			{
+				itemOrSpell.damage = CqSpellFactory.getfireBalldamageByLevel(5);
 				var c:UInt = HxlUtil.averageColour(this._framePixels);
 				GameUI.instance.shootXBall(this, other, c,itemOrSpell);
 			}

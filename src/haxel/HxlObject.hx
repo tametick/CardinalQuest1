@@ -378,7 +378,8 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		if ( popup != null)
 		{
 			var m:HxlMouse = HxlGraphics.mouse;
-			if ( overlapsPoint(m.x, m.y) && visible) {
+			if ( overlapsPoint(m.x, m.y) && visible)
+			{
 				popup.visible = true;
 				_mp.x = m.screenX; _mp.y = m.screenY;
 				popup.x = _mp.x-20;

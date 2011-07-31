@@ -1,6 +1,7 @@
 package haxel;
 
 import com.eclecticdesignstudio.motion.Actuate;
+import cq.CqRegistery;
 import flash.display.BitmapData;
 import flash.net.URLRequest;
 import flash.Lib;
@@ -382,7 +383,7 @@ class HxlUtil {
 		
 		return new HxlPoint(x,y);
 	}
-	public static function getRandomTileWithDistance<T>(width:Int, height:Int, map:Array<Array<T>>, tileTypesToGet:Array<T>,distanceFrom:HxlPoint,minDistance:Int = 0):HxlPoint {
+	public static function getRandomTileWithDistance<T>(width:Int, height:Int, map:Array<Array<T>>, tileTypesToGet:Array<T>, distanceFrom:HxlPoint, minDistance:Int = 0):HxlPoint{
 		var x , y = 0;
 		var dist:Float = 0;
 		var i:Int = 0;
@@ -397,7 +398,7 @@ class HxlUtil {
 			pt.x = randomInt(width);
 			pt.y = randomInt(height);
 			dist = distance(distanceFrom, pt);
-		} while ( !contains(tileTypesToGet.iterator(),map[Std.int(pt.y)][Std.int(pt.x)])|| dist < minDistance);
+		} while ( !contains(tileTypesToGet.iterator(),map[Math.floor(pt.y)][Math.floor(pt.x)])|| dist < minDistance);
 		
 		return pt;
 	}
@@ -482,5 +483,25 @@ class HxlUtil {
 	public static function capitalizeFirstCharacter(str:String):String
 	{
 		return str.charAt(0).toUpperCase()+str.substr(1);
+	}
+	
+	public static function getRandomWalkableTileWithDistance<T>(width:Int, height:Int, map:Array<Array<T>>, distanceFrom:HxlPoint, minDistance:Int = 0):HxlPoint{
+		var x , y = 0;
+		var dist:Float = 0;
+		var i:Int = 0;
+		var pt:HxlPoint = new HxlPoint(0, 0);
+		do {
+			i++;
+			if (i > 50) 
+			{//lower the barrier if it cant find empty tiles.
+				minDistance--;
+				i++;
+			}
+			pt.x = randomInt(width);
+			pt.y = randomInt(height);
+			dist = distance(distanceFrom, pt);
+		} while ( CqRegistery.level.isBlockingMovement(Math.floor(pt.x),Math.floor(pt.y))|| dist < minDistance);
+		
+		return pt;
 	}
 }

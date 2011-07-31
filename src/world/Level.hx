@@ -385,6 +385,86 @@ class Level extends HxlTilemap
 			}
 		}
 	}
+	public function updateFieldOfViewByPoint(state:HxlState, tilePos:HxlPoint,visionRadius:Int,tweenSpeed:Int, ?seenTween:Int = 64, ?inSightTween:Int=255):Void 
+	{
+		var bottom = Std.int(Math.min(heightInTiles - 1, tilePos.y + (visionRadius+1)));
+		var top = Std.int(Math.max(0, tilePos.y - (visionRadius+1)));
+		var right = Std.int(Math.min(widthInTiles - 1, tilePos.x + (visionRadius+1)));
+		var left = Std.int(Math.max(0, tilePos.x - (visionRadius+1)));
+		var tile:HxlTile;
+		
+		// reset previously seen tiles
+		for ( x in left...right+1 ) {
+			for ( y in top...bottom+1 ) {
+				tile = getTile(x, y);
+				if ( tile.visibility == Visibility.IN_SIGHT ) {
+					tile.visibility = Visibility.SEEN;
+				}
+			}
+		}
+
+		if ( isBlockingView(Std.int(tilePos.x), Std.int(tilePos.y)) ) {
+			// if point is on a view blocking tile, only show adjacent tiles
+			var adjacent = new Array();
+			adjacent = [[ -1, -1], [0, -1], [1, -1], [ -1, 0], [1, 0], [ -1, 1], [0, 1], [1, 1]];
+			for ( i in adjacent ) {
+				var xx = Std.int(tilePos.x + i[0]);
+				var yy = Std.int(tilePos.y + i[1]);
+				if (yy < heightInTiles && xx < widthInTiles && yy >= 0 && xx >= 0) {
+					cast(getTile(xx, yy), Tile).visibility = Visibility.IN_SIGHT;
+				}
+			}
+		} else {
+			var map:Level = this;
+			
+			HxlUtil.markFieldOfView(tilePos, visionRadius, this, true, function(p:HxlPoint) { firstSeen(state, map, p); } );
+		}
+		for ( x in left...right+1 ) {
+			for ( y in top...bottom+1 ) {
+				tile = getTile(x, y);
+				if (dest == null){
+					dest = new HxlPoint(x, y);
+				} else {
+					dest.x = x;
+					dest.y = y;
+				}
+					
+				var dist = HxlUtil.distance(tilePos, dest);
+				var Ttile:Tile = cast(tile, Tile);
+				var normColor:Int = normalizeColor(dist, visionRadius, seenTween, inSightTween);
+				var dimness = (visionRadius-dist) / visionRadius;
+				switch (tile.visibility) {
+					case Visibility.IN_SIGHT:
+						tile.visible = true;
+						
+						for (loot in Ttile.loots)
+							cast(loot,HxlSprite).visible = true;
+						for (actor in Ttile.actors)
+							cast(actor,HxlSprite).visible = true;
+						Ttile.colorTo(normColor, tweenSpeed);
+						//Ttile.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
+						for (decoration in Ttile.decorations)
+							//decoration.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
+							decoration.colorTo(normColor, tweenSpeed);
+					case Visibility.SEEN:
+						tile.visible = true;
+						
+						for (loot in Ttile.loots)
+							cast(loot,HxlSprite).visible = false;
+						for (actor in Ttile.actors)
+							cast(actor,HxlSprite).visible = false;
+						
+						Ttile.colorTo(seenTween, tweenSpeed);
+						//Ttile.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
+						for (decoration in Ttile.decorations)
+							//decoration.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
+							decoration.colorTo(seenTween, tweenSpeed);
+							
+					case Visibility.UNSEEN:
+				}
+			}
+		}
+	}
 	function colorTo(target:Dynamic,Speed:Float,ToColor:Float,onComplete:Dynamic) {
 		Actuate.update(target, Speed, {Color: HxlUtil.colorRGB(_color)[0]}, {Color: ToColor})
 				.onComplete(onComplete);

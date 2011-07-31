@@ -13,13 +13,16 @@ import data.MusicManager;
 import flash.display.Bitmap;
 import haxe.Stack;
 import haxe.Timer;
+import haxel.HxlGroup;
 import haxel.HxlPoint;
 import haxel.HxlSound;
 import haxel.HxlState;
 import haxel.HxlGraphics;
 import haxel.HxlTextInput;
+import haxel.HxlTilemap;
 import haxel.HxlUtil;
 import haxel.HxlSprite;
+import world.Actor;
 
 import playtomic.Playtomic;
 import playtomic.PtPlayer;
@@ -78,9 +81,13 @@ class GameState extends CqState {
 	public override function update() {
 		super.update();
 		if (endingAnim)
+		{
+			cursor.visible = false;
 			doEndingAnimation();
+			return;
+		}
 			
-		if (!started || endingAnim) return;
+		if (!started) return;
 		var up = SpriteCursor.instance.getSpriteIndex("up");
 		if ( initialized < 1 ) {
 			return;
@@ -89,7 +96,7 @@ class GameState extends CqState {
 			gameUI.updateCharges();
 		}
 		//hide mouse after idle some time	
-		if (Timer.stamp() - msMoveStamp > msHideDelay) cursor.visible = false;
+		if (Timer.stamp() - msMoveStamp > msHideDelay || endingAnim) cursor.visible = false;
 		
 		if ( GameUI.isTargeting) {
 			if (CqRegistery.level.getTargetAccordingToKeyPress()!=CqRegistery.player.tilePos&&CqRegistery.level.getTargetAccordingToKeyPress()!=null)
@@ -325,8 +332,10 @@ class GameState extends CqState {
 			self.gameUI.initHealthBars();
 		});
 		update();
-		if(Configuration.debug)
+		if (Configuration.debug) {
+			player.give(CqSpellType.REVEAL_MAP);
 			CqRegistery.world.goToNextLevel(this, Configuration.debugStartingLevel);
+		}
 		else
 			gameUI.pressHelp(false);
 	}
@@ -421,7 +430,10 @@ class GameState extends CqState {
 		}
 		
 		var tile = getPlayerTile(target);
-		
+		if (tile == null) {
+			passTurn();
+			return;
+		}
 		//stairs popup
 		if (HxlUtil.contains(SpriteTiles.instance.stairsDown.iterator(), tile.dataNum))
 		{
@@ -449,7 +461,7 @@ class GameState extends CqState {
 			//clicking on ones-self should only do one turn
 			isPlayerActing = false;
 			// wait
-		} else if ( !isBlockingMovement(target) ) {
+		} else if ( !isBlockingMovement(target) || (Configuration.debugMoveThroughWalls && Configuration.debug)) {
 			// move or attack in chosen tile
 			Registery.player.actInDirection(this, target);
 			// if player just attacked don't continue moving
@@ -492,6 +504,7 @@ class GameState extends CqState {
 	
 	
 	function getPlayerTile(target:HxlPoint):CqTile {
+		if (target == null ||Registery.level.getTile(Std.int(Registery.player.tilePos.x + target.x), Std.int(Registery.player.tilePos.y + target.y) ) == null) return null;
 		return cast(Registery.level.getTile(Std.int(Registery.player.tilePos.x + target.x), Std.int(Registery.player.tilePos.y + target.y)), CqTile);
 	}
 	
@@ -504,9 +517,8 @@ class GameState extends CqState {
 	private function startMovingBoss():Void
 	{
 		Actuate.timer(1.8).onComplete(gotoWinState);
-		CqRegistery.level.updateFieldOfView(HxlGraphics.state, boss);
-		HxlGraphics.follow(boss, 1000);		
-		
+		//CqRegistery.level.updateFieldOfView(HxlGraphics.state, boss);
+		HxlGraphics.follow(boss);		
 		//HxlGraphics.follow(boss);
 		startedMoving = true;
 	}
@@ -515,12 +527,15 @@ class GameState extends CqState {
 		portalSprite.angle -= 0.5;
 		if (!startedMoving)
 			return;
-		HxlGraphics.follow(boss, 1000);
-		boss.x = boss.x + BossTargetDir.x;
-		boss.y = boss.y + (BossTargetDir.y);
+		HxlGraphics.quake.stop();
+		HxlGraphics.follow(boss);
+		boss.x = boss.x + BossTargetDir.x*0.4;
+		boss.y = boss.y + BossTargetDir.y*0.4;
 	}
 	private function RemoveGameUI():Void
 	{
+		HxlGraphics.quake.start();
+		cursor.visible = false;
 		gameUI.destroy();
 	}
 	private var startedMoving:Bool;
@@ -528,43 +543,57 @@ class GameState extends CqState {
 	private var BossTargetDir:HxlPoint;
 	private var portalSprite:HxlSprite;
 	private var acts:Bool;
+	private var bossgroup:HxlGroup;
 	public function startBossAnim()
 	{
 		//state vars
 		endingAnim = true;
 		startedMoving = false;
-		
+		bossgroup = new HxlGroup();
+		bossgroup.zIndex = 1001;
+		add(bossgroup);
 		//create minotaur on location
-		var tileLocation:HxlPoint = HxlUtil.getRandomTileWithDistance(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), Registery.level.mapData, SpriteTiles.instance.walkableAndSeeThroughTiles,CqRegistery.player.tilePos,20);
-		boss = CqRegistery.level.createAndaddMob(tileLocation, 99, true);
-		boss.visionRadius = 20;
-		boss.zIndex = 1001;
+		var bosstilePos:HxlPoint = HxlUtil.getRandomWalkableTileWithDistance(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), Registery.level.mapData, CqRegistery.player.tilePos,20);
+		
+		var bosstilePosX:Int = Math.floor(bosstilePos.x);
+		var bosstilePosY:Int = Math.floor(bosstilePos.y);
+		var pixelTilePos:HxlPoint = CqRegistery.level.getTilePos(bosstilePosX, bosstilePosY, false);
+		
+		bossgroup.x = pixelTilePos.x;
+		bossgroup.y = pixelTilePos.y;
+		boss = CqMobFactory.newMobFromLevel(0, 0, 99);
+		bossgroup.add(boss);
+		
+		CqRegistery.level.updateFieldOfViewByPoint(HxlGraphics.state, bosstilePos, 20, 1);
+		boss.visible = true;
+		
 		//find an empty tile for portal
 		BossTargetDir = new HxlPoint(0, 0);
-		if (!CqRegistery.level.isBlockingMovement(Std.int(tileLocation.x), Std.int(tileLocation.y - 1),false))
-		{// y -1
+		if (!CqRegistery.level.isBlockingMovement(bosstilePosX, bosstilePosY - 1,false))
+		{// y -1 
 			BossTargetDir.y = -1;
-		}else if (!CqRegistery.level.isBlockingMovement(Std.int(tileLocation.x), Std.int(tileLocation.y + 1),false))
-		{// y +1
+		}else if (!CqRegistery.level.isBlockingMovement(bosstilePosX, bosstilePosY + 1,false))
+		{// y +1 
 			BossTargetDir.y = 1;
-		}else if (!CqRegistery.level.isBlockingMovement(Std.int(tileLocation.x - 1), Std.int(tileLocation.y),false))
-		{// x -1
+		}else if (!CqRegistery.level.isBlockingMovement(bosstilePosX-1, bosstilePosY,false))
+		{// x -1 
 			BossTargetDir.x = -1;
-		}else if (!CqRegistery.level.isBlockingMovement(Std.int(tileLocation.x + 1), Std.int(tileLocation.y),false))
-		{// x +1
+		}else if (!CqRegistery.level.isBlockingMovement(bosstilePosX+1, bosstilePosY,false))
+		{// x +1 
 			BossTargetDir.x = 1;
 		}
 		//create portal
-		var portalPos:HxlPoint = CqRegistery.level.getPixelPositionOfTile(tileLocation.x + BossTargetDir.x, tileLocation.y + BossTargetDir.y, true);
-		portalSprite = new HxlSprite(portalPos.x, portalPos.y, VortexScreen, 0.15, 0.15);
-		trace(tileLocation + " " + Std.int(tileLocation.x + BossTargetDir.x)+" "+Std.int(tileLocation.y + BossTargetDir.y));
-		portalSprite.x -= portalSprite.width / 2+Configuration.tileSize;
-		portalSprite.y -= portalSprite.height / 2;
-		portalSprite.zIndex = 1000;
-		add(portalSprite);
-		//
-		//gameui and start boss anim timers
-		Actuate.timer(8).onComplete(startMovingBoss);
+		
+		var ts:Int = Configuration.tileSize;
+		var portalPos:HxlPoint = new HxlPoint(boss.x + (ts *2* BossTargetDir.x), boss.y + (ts *2* BossTargetDir.y));
+		portalPos.x   -= ts / 2;
+		portalPos.y   -= ts / 2;
+		portalSprite = new HxlSprite(portalPos.x, portalPos.y, VortexScreen, 0.10, 0.10);
+		portalSprite.scrollFactor = boss.scrollFactor;
+		bossgroup.add(portalSprite);
+
+		//gameui and start boss anim timer
+		Actuate.timer(3).onComplete(startMovingBoss);
 		Actuate.timer(2).onComplete(playWinSound);
 		Actuate.timer(0.5).onComplete(RemoveGameUI);
 	}
