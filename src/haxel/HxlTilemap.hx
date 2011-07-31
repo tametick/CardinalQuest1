@@ -429,8 +429,8 @@ class HxlTilemap extends HxlObject {
 		if (pos == null)
 			pos = new HxlPoint();
 			
-		pos.x = this.x + (Std.int(X) * _tileWidth);
-		pos.y = this.y + (Std.int(Y) * _tileHeight);
+		pos.x = this.x + (Math.floor(X) * _tileWidth);
+		pos.y = this.y + (Math.floor(Y) * _tileHeight);
 		if ( Center ) {
 			pos.x += (_tileWidth / 2);
 			pos.y += (_tileHeight / 2);

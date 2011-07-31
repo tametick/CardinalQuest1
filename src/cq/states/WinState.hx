@@ -28,7 +28,7 @@ class WinState extends CqState {
 		super.create();
 
 		fadeTime = 3;
-		
+		cursor.visible = true;
 		stackRender = true;
 		
 		scroller = new CqTextScroller(null, 5);
@@ -66,7 +66,7 @@ class WinState extends CqState {
 	function nextScreen() {
 		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
 			var newState = MainMenuState.instance;
-			HxlGraphics.state = newState;
+			HxlGraphics.setState(newState);
 		}, true);
 	}
 	

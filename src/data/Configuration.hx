@@ -9,8 +9,11 @@ class Configuration {
 	public static var debug = false;
 	public static var standAlone = true;
 	//public static var standAlone = false;
+	
+
 	public static var debugStartingLevel:Int = 1;
 	public static var debugStartingClass:CqClass = WIZARD;
+	static public var debugMoveThroughWalls:Bool = false;
 	
 	public static var app_width:Int = 640;
 	public static var app_height:Int = 480;
