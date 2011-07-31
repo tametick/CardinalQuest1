@@ -49,6 +49,7 @@ class GameState extends CqState {
 	var gameUI:GameUI;
 	public var chosenClass:CqClass;
 	public var isPlayerActing:Bool;
+	public var resumeActingTime:Float;//time till when acting is blocked
 	public var started:Bool;
 	var lastMouse:Bool;
 	var endingAnim:Bool;
@@ -62,7 +63,7 @@ class GameState extends CqState {
 		cursor.scrollFactor.y = cursor.scrollFactor.x = 0;
 		//loadingBox = new HxlLoadingBox();
 		//add(loadingBox);
-		msMoveStamp = Timer.stamp();
+		resumeActingTime = msMoveStamp = Timer.stamp();
 	}
 	public override function destroy() {
 		inst = null;
@@ -104,7 +105,6 @@ class GameState extends CqState {
 			gameUI.updateTargeting(lastMouse);
 			setDiagonalCursor();
 		} else {
-			actKeys();
 			if (isPlayerActing) {
 				if (GameUI.currentPanel == null || !GameUI.currentPanel.isBlockingInput) {
 					act();
@@ -142,11 +142,6 @@ class GameState extends CqState {
 				}
 			}
 		}
-	}
-	
-	private function actKeys():Void 
-	{
-		act(true);
 	}
 	
 	private function checkJumpKeys():Void {
@@ -361,6 +356,8 @@ class GameState extends CqState {
 				gameUI.pressMenu(false);
 			}
 		}
+		lkey = 0;
+		isPlayerActing = false;
 		if (Configuration.debug)
 			checkJumpKeys();
 	}
@@ -377,7 +374,7 @@ class GameState extends CqState {
 			return;
 		}		
 		
-		if (!started || endingAnim) 
+		if (!started || endingAnim || Timer.stamp() < resumeActingTime) 
 			return;
 		if ( GameUI.isTargeting ) {
 			gameUI.targetingExecute(true);
@@ -393,15 +390,24 @@ class GameState extends CqState {
 			
 		isPlayerActing = false;
 	}
-	
+	var lkey:UInt;
+	override function onKeyDown(event:KeyboardEvent) 
+	{
+		super.onKeyDown(event);
+		if (lkey == event.keyCode)
+			return;
+		lkey = event.keyCode;
+		if(CqRegistery.level != null && CqRegistery.level.getTargetAccordingToKeyPress()!=null && Timer.stamp() > resumeActingTime)
+			isPlayerActing = true;
+	}
 	var tmpPoint:HxlPoint;
 	private var scroller:CqTextScroller;
-	private function act(?byKey:Bool = false) {
+	private function act() {
 		if ( GameUI.isTargeting ||!started || endingAnim) {
 			return;
 		}
-		
 		var level = Registery.level;
+		var player = CqRegistery.player;
 		if (Registery.player.isMoving)
 			return;
 		//check game keys on your turn
@@ -410,22 +416,15 @@ class GameState extends CqState {
 		var dx;
 		var dy;
 		var tile:CqTile;
-		if (byKey)
+		if (level.getTargetAccordingToKeyPress()!=null)
 		{
-			dx =  (Registery.player.x + Configuration.zoomedTileSize() / 2);
-			dy =  (Registery.player.y + Configuration.zoomedTileSize() / 2);
-			acts = false;
-			if (HxlGraphics.keys.pressed("UP") || HxlGraphics.keys.pressed("W") || HxlGraphics.keys.pressed("DOWN") || HxlGraphics.keys.pressed("S") || HxlGraphics.keys.pressed("LEFT") || HxlGraphics.keys.pressed("A") || HxlGraphics.keys.pressed("RIGHT") || HxlGraphics.keys.pressed("D") || HxlGraphics.keys.justPressed("ENTER") || HxlGraphics.keys.justPressed("NONUMLOCK_5"))
-				acts = true;
-			else
-				return;
-			lastMouse = false;
-			if (GameUI.currentPanel != null)
-				if(GameUI.currentPanel != gameUI.panelMap) return;
+			dx =  (player.x + Configuration.zoomedTileSize() / 2);
+			dy =  (player.y + Configuration.zoomedTileSize() / 2);
 			target = level.getTargetAccordingToKeyPress();
+			lastMouse = false;//for targeting
 		}else {
-			dx = HxlGraphics.mouse.x - (Registery.player.x+Configuration.zoomedTileSize()/2);
-			dy = HxlGraphics.mouse.y - (Registery.player.y + Configuration.zoomedTileSize() / 2);
+			dx = HxlGraphics.mouse.x - (player.x+Configuration.zoomedTileSize()/2);
+			dy = HxlGraphics.mouse.y - (player.y + Configuration.zoomedTileSize() / 2);
 			target = level.getTargetAccordingToMousePosition(dx, dy);
 		}
 		
@@ -437,9 +436,9 @@ class GameState extends CqState {
 		//stairs popup
 		if (HxlUtil.contains(SpriteTiles.instance.stairsDown.iterator(), tile.dataNum))
 		{
-			CqRegistery.player.popup.setText("Click go downstairs\n[hotkey enter]");
+			player.popup.setText("Click go downstairs\n[hotkey enter]");
 		}else {
-			CqRegistery.player.popup.setText("");
+			player.popup.setText("");
 		}
 		if (Math.abs(dx) < Configuration.zoomedTileSize() && Math.abs(dy) < Configuration.zoomedTileSize() || HxlGraphics.keys.justPressed("ENTER") || HxlGraphics.keys.justPressed("NONUMLOCK_5") ) {
 			if (tmpPoint == null)
@@ -452,21 +451,23 @@ class GameState extends CqState {
 			 if (tile.loots.length > 0) {
 				 // pickup item
 				var item = cast(tile.loots[tile.loots.length - 1], CqItem);
-				CqRegistery.player.pickup(this, item);
+				player.pickup(this, item);
 			} else if (HxlUtil.contains(SpriteTiles.instance.stairsDown.iterator(), tile.dataNum)) {
 				// descend
 				Registery.world.goToNextLevel(this);
-				CqRegistery.player.popup.setText("");
+				player.popup.setText("");
 			}
 			//clicking on ones-self should only do one turn
 			isPlayerActing = false;
 			// wait
 		} else if ( !isBlockingMovement(target) || (Configuration.debugMoveThroughWalls && Configuration.debug)) {
 			// move or attack in chosen tile
-			Registery.player.actInDirection(this, target);
+			player.actInDirection(this, target);
 			// if player just attacked don't continue moving
-			if (CqRegistery.player.justAttacked)
+			if (player.justAttacked) {
+				resumeActingTime = Timer.stamp() + player.moveSpeed;
 				isPlayerActing = false;
+			}
 				
 		} else if(HxlUtil.contains(SpriteTiles.instance.doors.iterator(),tile.dataNum)){
 			// open door
@@ -478,14 +479,14 @@ class GameState extends CqState {
 			else
 				dy = 0;
 			//we already have target, but this smoothes out movement
-			if(byKey)
+			if(level.getTargetAccordingToKeyPress()!=null&&level.getTargetAccordingToKeyPress()!=player.tilePos)
 				target = level.getTargetAccordingToKeyPress();
 			else
 				target = level.getTargetAccordingToMousePosition(dx, dy);
 				
 			tile = getPlayerTile(target);
 			if ( !isBlockingMovement(target) ) {
-				CqRegistery.player.actInDirection(this,target);
+				player.actInDirection(this,target);
 			} else if (HxlUtil.contains(SpriteTiles.instance.doors.iterator(), tile.dataNum)){
 				openDoor(tile);
 			}else

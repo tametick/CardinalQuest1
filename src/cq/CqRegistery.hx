@@ -30,6 +30,8 @@ class CqRegistery {
 	}
 	
 	static function getLevel():CqLevel {
+		if (world == null || world.currentLevel == null)
+			return null;
 		return cast(world.currentLevel,CqLevel);
 	}
 }
