@@ -253,10 +253,12 @@ class CqLootFactory {
 				Item.setGlow(true);
 				Item.customGlow(0x206CDF);
 			case 2, 3:
+				trace("2,3");
 				Item.isMagical = true;
 				Item.setGlow(true);
 				Item.customGlow(0x3CDA25);
 			case 4, 5:
+				trace("4,5");
 				Item.isSuperb = true;
 				Item.isMagical = true;
 				Item.setGlow(true);
@@ -324,11 +326,11 @@ class CqItem extends GameObjectImpl, implements Loot {
 	function getFullName():String {
 		var prefix = "";
 		if (isMagical)
-			prefix = "Magical ";
-		else if(isSuperb)
-			prefix = "Superb ";
-		else if (isWondrous)
-			prefix = "Wondrous ";
+			prefix = prefix+"Magical ";
+		if(isSuperb)
+			prefix = prefix+"Superb ";
+		if (isWondrous)
+			prefix = prefix+"Wondrous ";
 			
 		return prefix + name;
 	}
