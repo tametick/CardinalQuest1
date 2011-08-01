@@ -77,6 +77,7 @@
 		<sound id="cq.Win" name="Win" import="sounds/win.mp3"/>
 		
 		<bitmap id="cq.SpriteCredits" import="Credits.png"/>
+		<bitmap id="cq.SpriteHighScoresBg" import="HighscoresBg.png"/>
 		
 	</library>
 </movie>

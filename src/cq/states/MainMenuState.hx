@@ -122,13 +122,21 @@ class MainMenuState extends CqState {
 		btnNewGame.setCallback(function() { if(GameUI.instance!=null)GameUI.instance.kill();self.changeState(CreateCharState);});
 		buttonY += 50;
 
-		var btnCredits:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Credits", true, null);
-		btnCredits.setNormalFormat(null, 40, 0xffffff, "center");
-		btnCredits.setHoverFormat(null, 40, 0xffff00, "center");
-		menu.addItem(btnCredits);
-		btnCredits.setCallback(function() { HxlGraphics.pushState(new CreditsState()); });
-		buttonY += 50;
-
+		if ( stackId == 0 ) {
+			var btnCredits:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Credits", true, null);
+			btnCredits.setNormalFormat(null, 40, 0xffffff, "center");
+			btnCredits.setHoverFormat(null, 40, 0xffff00, "center");
+			menu.addItem(btnCredits);
+			btnCredits.setCallback(function() { HxlGraphics.pushState(new CreditsState()); });
+			buttonY += 50;
+			
+			var btnHiscores:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Highscores", true, null);
+			btnHiscores.setNormalFormat(null, 40, 0xffffff, "center");
+			btnHiscores.setHoverFormat(null, 40, 0xffff00, "center");
+			menu.addItem(btnHiscores);
+			btnHiscores.setCallback(function() { HxlGraphics.pushState(new HighScoreState()); });
+			buttonY += 50;
+		}
 		//if (Configuration.standAlone) {
 			var btnQuit:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Quit", true, null);
 			btnQuit.setNormalFormat(null, 40, 0xffffff, "center");
