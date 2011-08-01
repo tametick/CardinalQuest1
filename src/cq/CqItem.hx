@@ -563,14 +563,14 @@ class CqChest extends CqItem {
 		
 		var item = CqLootFactory.newItem(x, y, Type.createEnum(CqItemType,  typeName));
 		
-		if (Math.random() < CqConfiguration.EnchantItemChance)
-		{
+		if (Math.random() < CqConfiguration.EnchantItemChance) {
 			// 10% chance of magical item
-			CqLootFactory.enchantItem(item, Registery.level.index);
-		}else if (Math.random() < CqConfiguration.BetterEnchantItemChance)
-		{
-			// another 1% chance of out-of-depth magical item
-			CqLootFactory.enchantItem(item, Registery.level.index + 1);
+			if (Math.random() < CqConfiguration.BetterEnchantItemChance){
+				// 1% chance of that item being out-of-depth
+				CqLootFactory.enchantItem(item, Registery.level.index + 1);
+			} else {
+				CqLootFactory.enchantItem(item, Registery.level.index);
+			}
 		}
 		
 		// add item to level

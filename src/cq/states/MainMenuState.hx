@@ -129,7 +129,8 @@ class MainMenuState extends CqState {
 		btnCredits.setCallback(function() { self.changeState(CreditsState); });
 		buttonY += 50;
 		*/
-		if (Configuration.standAlone) {
+
+		//if (Configuration.standAlone) {
 			var btnQuit:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Quit", true, null);
 			btnQuit.setNormalFormat(null, 40, 0xffffff, "center");
 			btnQuit.setHoverFormat(null, 40, 0xffff00, "center");
@@ -147,7 +148,7 @@ class MainMenuState extends CqState {
 			}
 			
 			buttonY += 50;			
-		}
+		//}
 		
 		Actuate.tween(menu, 1, { targetY: 220 } ).ease(Cubic.easeOut);
 		
