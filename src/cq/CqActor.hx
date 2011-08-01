@@ -876,7 +876,7 @@ class CqPlayer extends CqActor, implements Player {
 	//pickup item from map
 	public function pickup(state:HxlState, item:CqItem) {
 		// if inventory is full, don't give the item
-		if (GameUI.instance.panelInventory.getEmptyCell() == null ){
+		if (GameUI.instance.panelInventory.getEmptyCell() == null && item.equipSlot != POTION ){
 			// todo - beep
 			GameUI.showTextNotification("Inventory is full!", 0xFF001A);
 		} else {
@@ -935,6 +935,11 @@ class CqPlayer extends CqActor, implements Player {
 	
 	public override function actInDirection(state:HxlState, targetTile:HxlPoint):Bool {
 		lastTile = tilePos;
+		var currentTile = cast(Registery.level.getTile(Std.int(lastTile.x), Std.int(lastTile.y)), Tile);
+		if ( currentTile.loots.length > 0 ) {
+			var item = cast(currentTile.loots[currentTile.loots.length - 1], CqItem);
+			item.setGlow(false);
+		}
 		return super.actInDirection(state, targetTile);
 	}
 
@@ -943,7 +948,7 @@ class CqPlayer extends CqActor, implements Player {
 		var currentTile = cast(Registery.level.getTile(Std.int(tilePos.x), Std.int(tilePos.y)), Tile);
 		var currentTileIndex = currentTile.dataNum;
 		if ( currentTile.loots.length > 0 ) {
-			var item = cast(currentTile.loots[currentTile.loots.length-1], CqItem);
+			var item = cast(currentTile.loots[currentTile.loots.length - 1], CqItem);
 			item.setGlow(true);
 		}
 	}
