@@ -58,6 +58,7 @@ class GameState extends CqState {
 		super.create();
 		lastMouse = started = endingAnim = false;
 		chosenClass = FIGHTER;
+		HxlGraphics.keys.onJustPressed = onKeyJustPressed;
 		HxlGraphics.fade.start(false, 0x00000000, 0.25);
 		cursor.setFrame(SpriteCursor.instance.getSpriteIndex("diagonal"));
 		cursor.scrollFactor.y = cursor.scrollFactor.x = 0;
@@ -67,6 +68,7 @@ class GameState extends CqState {
 	}
 	public override function destroy() {
 		inst = null;
+		HxlGraphics.keys.onJustPressed = null;
 		gameUI.kill();
 		remove(gameUI);
 		gameUI = null;
@@ -99,6 +101,7 @@ class GameState extends CqState {
 		//hide mouse after idle some time	
 		if (Timer.stamp() - msMoveStamp > msHideDelay || endingAnim) cursor.visible = false;
 		
+		checkInvKeys();
 		if ( GameUI.isTargeting) {
 			if (CqRegistery.level.getTargetAccordingToKeyPress()!=CqRegistery.player.tilePos&&CqRegistery.level.getTargetAccordingToKeyPress()!=null)
 				lastMouse = false;
@@ -106,6 +109,8 @@ class GameState extends CqState {
 			setDiagonalCursor();
 		} else {
 			if (isPlayerActing) {
+				if ( HxlGraphics.keys.F1 || HxlGraphics.keys.ESCAPE)
+					return;
 				if (GameUI.currentPanel == null || !GameUI.currentPanel.isBlockingInput) {
 					act();
 				}
@@ -153,62 +158,68 @@ class GameState extends CqState {
 			CqRegistery.world.goToNextLevel(this, CqRegistery.world.currentLevelIndex+1);
 		}
 	}
-	private function checkGameKeys():Void {
+	private function checkInvKeys():Void
+	{
+		//open ui
+		if (HxlGraphics.keys.justPressed("M"))
+		{
+			gameUI.showMapDlg();
+		}else if (HxlGraphics.keys.justPressed("I"))
+		{
+			gameUI.showInvDlg();
+		}else if (HxlGraphics.keys.justPressed("C"))
+		{
+			gameUI.showCharDlg();
+		}
+	}
+	private function checkGamePassTurnKeys():Bool {
 		var item = null;
 		//potions
-		if (HxlGraphics.keys.justReleased("SIX"))
+		if (HxlGraphics.keys.justPressed("SIX"))
 		{
 			item = gameUI.dlgPotionGrid.cells[0];
-		}else if (HxlGraphics.keys.justReleased("SEVEN"))
+		}else if (HxlGraphics.keys.justPressed("SEVEN"))
 		{
 			item = gameUI.dlgPotionGrid.cells[1];
-		}else if (HxlGraphics.keys.justReleased("EIGHT"))
+		}else if (HxlGraphics.keys.justPressed("EIGHT"))
 		{
 			item = gameUI.dlgPotionGrid.cells[2];
-		}else if (HxlGraphics.keys.justReleased("NINE"))
+		}else if (HxlGraphics.keys.justPressed("NINE"))
 		{
 			item = gameUI.dlgPotionGrid.cells[3];
-		}else if (HxlGraphics.keys.justReleased("ZERO"))
+		}else if (HxlGraphics.keys.justPressed("ZERO"))
 		{
 			item = gameUI.dlgPotionGrid.cells[4];
 		}
 		if (item != null)
 		{
 			cast(item, CqPotionCell).potBtn.usePotion();
+			return true;
 		}
 		item = null;
 		//spells
-		if (HxlGraphics.keys.justReleased("ONE"))
+		if (HxlGraphics.keys.justPressed("ONE"))
 		{
 			item = gameUI.dlgSpellGrid.cells[0];
-		}else if (HxlGraphics.keys.justReleased("TWO"))
+		}else if (HxlGraphics.keys.justPressed("TWO"))
 		{
 			item = gameUI.dlgSpellGrid.cells[1];
-		}else if (HxlGraphics.keys.justReleased("THREE"))
+		}else if (HxlGraphics.keys.justPressed("THREE"))
 		{
 			item = gameUI.dlgSpellGrid.cells[2];
-		}else if (HxlGraphics.keys.justReleased("FOUR"))
+		}else if (HxlGraphics.keys.justPressed("FOUR"))
 		{
 			item = gameUI.dlgSpellGrid.cells[3];
-		}else if (HxlGraphics.keys.justReleased("FIVE"))
+		}else if (HxlGraphics.keys.justPressed("FIVE"))
 		{
 			item = gameUI.dlgSpellGrid.cells[4];
 		}
 		if (item != null)
 		{
 			cast(item, CqSpellCell).btn.useSpell();
+			return true;
 		}
-		//open ui
-		if (HxlGraphics.keys.justReleased("M"))
-		{
-			gameUI.showMapDlg();
-		}else if (HxlGraphics.keys.justReleased("I"))
-		{
-			gameUI.showInvDlg();
-		}else if (HxlGraphics.keys.justReleased("C"))
-		{
-			gameUI.showCharDlg();
-		}
+		return false;
 	}
 	public function passTurn() {
 		var player = CqRegistery.player;
@@ -356,7 +367,6 @@ class GameState extends CqState {
 				gameUI.pressMenu(false);
 			}
 		}
-		lkey = 0;
 		isPlayerActing = false;
 		if (Configuration.debug)
 			checkJumpKeys();
@@ -390,20 +400,17 @@ class GameState extends CqState {
 			
 		isPlayerActing = false;
 	}
-	var lkey:UInt;
-	override function onKeyDown(event:KeyboardEvent) 
-	{
-		super.onKeyDown(event);
-		if (lkey == event.keyCode)
+	function onKeyJustPressed(event:KeyboardEvent) {
+		if (!started || endingAnim || Timer.stamp() < resumeActingTime) 
 			return;
-		lkey = event.keyCode;
-		if(CqRegistery.level != null && CqRegistery.level.getTargetAccordingToKeyPress()!=null && Timer.stamp() > resumeActingTime)
+		if(CqRegistery.level != null && Timer.stamp() > resumeActingTime)
 			isPlayerActing = true;
 	}
 	var tmpPoint:HxlPoint;
 	private var scroller:CqTextScroller;
 	private function act() {
-		if ( GameUI.isTargeting ||!started || endingAnim) {
+		if ( GameUI.isTargeting || !started || endingAnim) {
+			isPlayerActing = false;
 			return;
 		}
 		var level = Registery.level;
@@ -411,18 +418,28 @@ class GameState extends CqState {
 		if (Registery.player.isMoving)
 			return;
 		//check game keys on your turn
-		checkGameKeys();
+		if (checkGamePassTurnKeys())
+		{
+			passTurn();
+			return;
+		}
 		var target:HxlPoint;
 		var dx;
 		var dy;
 		var tile:CqTile;
-		if (level.getTargetAccordingToKeyPress()!=null)
+		var ktg:HxlPoint = level.getTargetAccordingToKeyPress();
+		if (ktg != null )
 		{
 			dx =  (player.x + Configuration.zoomedTileSize() / 2);
 			dy =  (player.y + Configuration.zoomedTileSize() / 2);
-			target = level.getTargetAccordingToKeyPress();
+			target = ktg;
 			lastMouse = false;//for targeting
 		}else {
+			if (!HxlGraphics.mouse.pressed())
+			{
+				isPlayerActing = false;
+				return;
+			}
 			dx = HxlGraphics.mouse.x - (player.x+Configuration.zoomedTileSize()/2);
 			dy = HxlGraphics.mouse.y - (player.y + Configuration.zoomedTileSize() / 2);
 			target = level.getTargetAccordingToMousePosition(dx, dy);
@@ -430,6 +447,11 @@ class GameState extends CqState {
 		
 		var tile = getPlayerTile(target);
 		if (tile == null) {
+			if ( !HxlGraphics.keys.justPressed("ENTER") && !HxlGraphics.keys.justPressed("NONUMLOCK_5") && target.x == player.tilePos.x && target.y == player.tilePos.y)
+			{
+				isPlayerActing = false;
+				return;
+			}
 			passTurn();
 			return;
 		}

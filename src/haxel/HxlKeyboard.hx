@@ -77,6 +77,7 @@ class HxlKeyboard {
 	public var RIGHT:Bool;
 	public var NONUMLOCK_5:Bool;
 	
+	public var onJustPressed:KeyboardEvent->Void;
 	/**
 	 * @private
 	 */
@@ -229,6 +230,7 @@ class HxlKeyboard {
 		if (o.current > 0) {
 			o.current = 1;
 		} else {
+			if(onJustPressed!=null)onJustPressed(event);
 			o.current = 2;
 		}
 		Reflect.setField(this, o.name, true);
