@@ -45,10 +45,10 @@ class CqItemInfoDialog extends HxlDialog {
 		_itemName.setFormat(null, 26, 0xffffff, "left", 0x010101);
 		_itemName.visible = false;
 		_itemDesc = new HxlText(7, 30, Std.int(Width-10));
-		_itemDesc.setFormat(FontAnonymousPro.instance.fontName, 16, 0xdddddd, "left", 0x010101);
+		_itemDesc.setFormat(FontAnonymousPro.instance.fontName, 15, 0xdddddd, "left", 0x010101);
 		_itemDesc.visible = false;
 		_itemStats = new HxlText(7, 45, Std.int(Width-48-10));
-		_itemStats.setFormat(FontAnonymousPro.instance.fontName, 16, 0x4DE16B, "left", 0x010101);
+		_itemStats.setFormat(FontAnonymousPro.instance.fontName, 15, 0x4DE16B, "left", 0x010101);
 		_itemStats.visible = false;
 
 		add(_icon);

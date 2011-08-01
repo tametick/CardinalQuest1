@@ -344,11 +344,10 @@ class Level extends HxlTilemap
 							cast(loot,HxlSprite).visible = true;
 						for (actor in Ttile.actors) {
 							cast(actor, HxlSprite).visible = true;
-/*							var pop = cast(actor, HxlSprite).getPopup();
-							if (pop != null){
-								pop.visible = true;
-								trace("1"+pop.visible);
-							}*/
+							var actor:CqActor = cast(actor, CqActor);
+							var hpbar = actor.healthBar;
+							if (hpbar != null && actor.hp != actor.maxHp)
+								hpbar.visible = true;
 						}
 						Ttile.colorTo(normColor, actor.moveSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
@@ -363,9 +362,11 @@ class Level extends HxlTilemap
 						for (actor in Ttile.actors) {
 							cast(actor, HxlSprite).visible = false;
 							var pop = cast(actor, HxlSprite).getPopup();
-							if (pop != null){
+							var hpbar = cast(actor, CqActor).healthBar;
+							if (hpbar != null)
+								hpbar.visible = false;
+							if (pop != null)
 								pop.visible = false;
-							}
 						}
 						
 						Ttile.colorTo(seenTween, actor.moveSpeed);
@@ -377,9 +378,11 @@ class Level extends HxlTilemap
 					case Visibility.UNSEEN:
 						for (actor in Ttile.actors) {
 							var pop = cast(actor, HxlSprite).getPopup();
-							if (pop != null){
+							var hpbar = cast(actor, CqActor).healthBar;
+							if (hpbar != null)
+								hpbar.visible = false;
+							if (pop != null)
 								pop.visible = false;
-							}
 						}
 				}
 			}
