@@ -11,7 +11,7 @@ import haxel.HxlSprite;
 
 class HelpState extends CqState {
 	public static var instance(getInstance, null):HelpState;
-	private static var _intance:HelpState;
+	private static var _instance:HelpState;
 	public override function create() {
 		super.create();
 		var btn:HxlButton = new HxlButton(0, 0, Configuration.app_width, Configuration.app_height,nextScreen,0,0);
@@ -44,9 +44,9 @@ class HelpState extends CqState {
 	}
 	private static function getInstance():HelpState
 	{
-		if (_intance == null)
-		 _intance = new HelpState();
-		return _intance;
+		if (_instance == null)
+		 _instance = new HelpState();
+		return _instance;
 	}
 
 }
