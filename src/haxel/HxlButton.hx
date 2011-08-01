@@ -176,8 +176,8 @@ class HxlButton extends HxlGroup {
 		//_on.solid = _off.solid = false;
 		_off.scrollFactor = scrollFactor;
 		_on.scrollFactor = scrollFactor;
-		width = _off.width;
-		height = _off.height;
+		width = _off.width*_off.scale.x;
+		height = _off.height*_off.scale.y;
 		//refreshHulls();
 		_off.reset(_off.x, _off.y);
 		_on.reset(_on.x, _on.y);
