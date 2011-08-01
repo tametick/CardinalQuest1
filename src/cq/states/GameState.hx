@@ -397,7 +397,7 @@ class GameState extends CqState {
 		if (lkey == event.keyCode)
 			return;
 		lkey = event.keyCode;
-		if(CqRegistery.level != null && CqRegistery.level.getTargetAccordingToKeyPress()!=null && Timer.stamp() > resumeActingTime)
+		if(CqRegistery.level != null && Timer.stamp() > resumeActingTime)
 			isPlayerActing = true;
 	}
 	var tmpPoint:HxlPoint;
@@ -416,11 +416,12 @@ class GameState extends CqState {
 		var dx;
 		var dy;
 		var tile:CqTile;
-		if (level.getTargetAccordingToKeyPress()!=null)
+		var ktg:HxlPoint = level.getTargetAccordingToKeyPress();
+		if (ktg != null )
 		{
 			dx =  (player.x + Configuration.zoomedTileSize() / 2);
 			dy =  (player.y + Configuration.zoomedTileSize() / 2);
-			target = level.getTargetAccordingToKeyPress();
+			target = ktg;
 			lastMouse = false;//for targeting
 		}else {
 			dx = HxlGraphics.mouse.x - (player.x+Configuration.zoomedTileSize()/2);

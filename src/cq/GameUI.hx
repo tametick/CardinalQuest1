@@ -698,12 +698,6 @@ class GameUI extends HxlDialog {
 		var curPos:HxlPoint = Player.getTilePos();
 		var curTile = cast(Registery.level.getTile(Std.int(curPos.x), Std.int(curPos.y)), Tile);
 		if ( curTile.loots.length > 0 ) {
-			if (panelInventory.getEmptyCell() == null) {
-				// todo - show visual/audio feedback that inv is full
-				// todo - move this check to player.pickup
-				return;
-			}
-			
 			var item = cast(curTile.loots[curTile.loots.length - 1], CqItem);
 			Player.pickup(HxlGraphics.state, item);
 		}
