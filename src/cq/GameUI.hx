@@ -169,8 +169,8 @@ class GameUI extends HxlDialog {
 		HelpSprite.scale = HelpSpriteH.scale = _point.clone();
 		
 		var btnSize:Int = 64;
-		var menuButton:HxlButton = new HxlButton(Std.int(dlgPotionGrid.x-8), Std.int(dlgPotionGrid.y+10), 25, btnSize);
-		var helpButton:HxlButton = new HxlButton(Std.int(dlgPotionGrid.x+381), Std.int(dlgPotionGrid.y+10), 25, btnSize);
+		var menuButton:HxlButton = new HxlButton(Std.int(dlgPotionGrid.x-8), Std.int(dlgPotionGrid.y+10), 25, btnSize,pressMenu);
+		var helpButton:HxlButton = new HxlButton(Std.int(dlgPotionGrid.x+dlgPotionGrid.width-78), Std.int(dlgPotionGrid.y+10), 25, btnSize,pressHelp);
 		helpButton.loadGraphic(HelpSprite,HelpSpriteH);
 		menuButton.loadGraphic(MenuSprite,MenuSpriteH);
 		helpButton.configEvent(5, true, true);
@@ -178,11 +178,9 @@ class GameUI extends HxlDialog {
 		
 		helpButton.loadText(new HxlText(15, 32, btnSize, "Help", true).setFormat(FontDungeon.instance.fontName, 23, 0xffffff, "center", 0x010101));
 		helpButton.getText().angle = 90;
-		helpButton.setCallback(pressHelp);
 		
 		menuButton.loadText(new HxlText(-14, 32, btnSize, "Menu", true).setFormat(FontDungeon.instance.fontName, 23, 0xffffff, "center", 0x010101));
 		menuButton.getText().angle = -90;
-		menuButton.setCallback(pressMenu);
 		
 		pop = new CqPopup(150,"[hotkey ESC]", doodads);
 		pop.zIndex = 15;
