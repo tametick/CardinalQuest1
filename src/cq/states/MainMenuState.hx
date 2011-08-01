@@ -55,13 +55,22 @@ class MainMenuState extends CqState {
 	public override function create() {
 		btnClicked = false;
 		super.create();
+		
 		MusicManager.play(MenuTheme);
 		fadeTimer = new HxlTimer();
 		fadeTime = 0.5;
 
+
+		if (stackId == 0) {
+			var bg = new HxlSprite(0, 0, SpriteMainmenuBg);
+			add(bg);
+		}else
+		{
+			//blur gamestate
+		}
+		
 		titleText = new LogoSprite((640-345)/2, (480-50)/2 - 55);
 		add(titleText);
-
 		
 		tglMusicIcon = new HxlSprite(45,0);
 		tglMusicIcon.loadGraphic(SpriteSoundToggle, true, false, 48, 48,false,0.5,0.5);

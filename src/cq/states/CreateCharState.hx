@@ -30,7 +30,7 @@ import haxel.HxlText;
 class CreateCharState extends CqState {
 	
 	static var class_buttons_y:Int = 135;
-	
+	static var shownIntro:Bool = false;
 	var fadeTime:Float;
 	var state:Int;
 	var btnFighter:HxlButton;
@@ -163,13 +163,18 @@ class CreateCharState extends CqState {
 	}*/
 	
 	override function init() {
-		scroller = new CqTextScroller(IntroScreen, 1);
-		var introText:String = " The evil minotaur Asterion has terrorized the peaceful land of Hallemot for countless years.\n\n In his underground den, he and his minions enjoy the spoils of their wicked deeds.\n\n Determined to end his reign of plunder and pillage, a single hero comes forth...";
-		scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,30);
-		add(scroller);
-		scroller.startScroll();
-		//scroller.onComplete(removeScrollerAndFade);
-		scroller.onComplete(realInit);
+		if(!shownIntro){
+			scroller = new CqTextScroller(IntroScreen, 1);
+			var introText:String = " The evil minotaur Asterion has terrorized the peaceful land of Hallemot for countless years.\n\n In his underground den, he and his minions enjoy the spoils of their wicked deeds.\n\n Determined to end his reign of plunder and pillage, a single hero comes forth...";
+			scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,30);
+			add(scroller);
+			scroller.startScroll();
+			//scroller.onComplete(removeScrollerAndFade);
+			scroller.onComplete(realInit);
+			shownIntro = true;
+		}else {
+			realInit();
+		}
 	}
 
 	function changeSelection(Target:CqClass) {

@@ -43,6 +43,8 @@ class SplashState extends CqState {
 				Lib.current.stage.showDefaultContextMenu = false;
 			}
 		}
+		var bg = new HxlSprite(0, 0, SpriteMainmenuBg);
+		add(bg);
 		
 		SoundEffectsManager.play(FortressGate);
 		super.create();

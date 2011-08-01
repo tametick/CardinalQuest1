@@ -74,6 +74,7 @@ class VortexFigure extends Bitmap { public function new() { super(); } }
 
 class SpriteCredits extends Bitmap { public function new() { super(); } }
 class SpriteHighScoresBg extends Bitmap { public function new() { super(); } }
+class SpriteMainmenuBg extends Bitmap { public function new() { super(); } }
 class SpriteKnightEntry extends Bitmap { public function new() { super(); } }
 class SpriteWizardEntry extends Bitmap { public function new() { super(); } }
 class SpriteThiefEntry extends Bitmap { public function new() { super(); } }
