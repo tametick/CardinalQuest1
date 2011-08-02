@@ -1,7 +1,12 @@
 #include <exception>
 #include <windows.h>
+#include <sstream>
+#include <string>
 #include <jadesdk\jadesdk.h>
 #include <cstdio>
+
+using std::stringstream;
+
 
 class JadeListener : public JadeSDK::StateSyncListener {
 
@@ -85,10 +90,7 @@ public:
 
 int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nCmdLine) {
 	try {
-
-		JadeListener jl;
-
-		switch(JadeSDK::Connection::init("ogresamples")){
+		switch(JadeSDK::Connection::init("ogresamples",JadeSDK::PlayTime)){
 		case JadeSDK::Success:
 		case JadeSDK::AlreadyConnected:
 			break;
@@ -98,6 +100,9 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 			break;
 
 		case JadeSDK::ClientLocked:
+			throw std::exception("LittleIndie client locked - network features disabled.");
+			break;
+
 		case JadeSDK::ClientTimedOut:
 			throw std::exception("LittleIndie client not responding - network features disabled.");
 			break;
@@ -105,13 +110,27 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 		default: 
 			throw std::exception("Cardinal Quest is not installed properly on LittleIndie!");
 		}
+		
+		//JadeListener jadeListener;
+		//DWORD exitCode = STILL_ACTIVE;
+		while(true/*STILL_ACTIVE == exitCode*/){
+			JadeSDK::Connection::getConnection()->notifyTick(JadeSDK::Playing,true);
+			JadeSDK::Connection::getConnection()->updateStateSync(200/*,&jadeListener*/);
 
-		while(true)
-			JadeSDK::Connection::getConnection()->updateStateSync(100,&jl);
+	/*
+			if(0==GetExitCodeProcess("CardinalQuest.exe", &exitCode)) {
+				int i = GetLastError();
+				std::string s;
+				std::stringstream out;
+				out << i;
+				s = out.str();
+				MessageBox(NULL,s.c_str,"Error",MB_OK);
+			}*/
+		}
 
 	} catch(std::exception &e) {
-		MessageBox(NULL,e.what(),"Error during start",MB_OK|MB_ICONHAND);
 		fprintf(stderr, "Exiting jadeds.exe");
+		MessageBox(NULL,e.what(),"Error during start",MB_OK|MB_ICONHAND);
 	}
 
 	return 0;

@@ -52,7 +52,7 @@ class Game extends HxlGame {
 	
 	function onExit(arg:Dynamic) {
 		#if jadeds	
-		Game.jadeDS.exit(); 
+		Game.jadeDS.exit(true); 
 		#end
 	}
 	
