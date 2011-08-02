@@ -76,6 +76,7 @@ class HxlKeyboard {
 	public var LEFT:Bool;
 	public var RIGHT:Bool;
 	public var NONUMLOCK_5:Bool;
+	public var TAB:Bool;
 	
 	public var onJustPressed:KeyboardEvent->Void;
 	/**
@@ -160,6 +161,7 @@ class HxlKeyboard {
 		addKey("LEFT",37);
 		addKey("RIGHT",39);
 		addKey("NONUMLOCK_5",12);
+		addKey("TAB",9);
 	}
 
 	/**

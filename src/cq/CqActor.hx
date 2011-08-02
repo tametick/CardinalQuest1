@@ -876,9 +876,10 @@ class CqPlayer extends CqActor, implements Player {
 	//pickup item from map
 	public function pickup(state:HxlState, item:CqItem) {
 		// if inventory is full, don't give the item
-		if (GameUI.instance.panelInventory.getEmptyCell() == null && item.equipSlot != POTION ){
+		if (GameUI.instance.invItemManager.getEmptyCell() == null && item.equipSlot != POTION ){
 			// todo - beep
 			GameUI.showTextNotification("Inventory is full!", 0xFF001A);
+			SoundEffectsManager.play(PotionEquipped);
 		} else {
 			// remove item from map
 			Registery.level.removeLootFromLevel(state, item);

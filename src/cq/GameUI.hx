@@ -29,9 +29,12 @@ import cq.ui.CqMapDialog;
 import cq.ui.CqMessageDialog;
 import cq.ui.CqTextNotification;
 import cq.ui.CqSpellGrid;
+import cq.ui.inventory.CqInventoryItem;
+import cq.ui.inventory.CqInventoryItemManager;
 import flash.display.BitmapData;
 import flash.display.Shape;
 import haxel.HxlGroup;
+import haxel.HxlSpriteSheet;
 import haxel.HxlState;
 import haxel.HxlUtil;
 import haxel.HxlTilemap;
@@ -74,6 +77,7 @@ class GameUI extends HxlDialog {
 	var leftButtons:HxlButtonContainer;
 	public var dlgSpellGrid:CqSpellGrid;
 	public var dlgPotionGrid:CqPotionGrid;
+	public var invItemManager:CqInventoryItemManager;
 
 	public var doodads:HxlDialog;//spell charges,popups
 	// Notification area
@@ -134,11 +138,12 @@ class GameUI extends HxlDialog {
 		doodads.zIndex = 50;
 		doodads.scrollFactor.x = 0;
 		doodads.scrollFactor.y = 0;
+
 		/**
 		 * Create and cache graphics for use by UI widgets
 		 **/
 		initUIGraphics();
-
+		
 		/**
 		 * Create and init main containers
 		 **/
@@ -208,6 +213,8 @@ class GameUI extends HxlDialog {
 
 		panelInventory = new CqInventoryDialog(this, 69, 0, 472, 400);
 		panelInventory.zIndex = 2;
+		panelInventory.dlgPotionGrid = dlgPotionGrid;
+		panelInventory.dlgSpellGrid = dlgSpellGrid;
 		add(panelInventory);
 
 		panelCharacter = new CqCharacterDialog(84, 0, 472, 480);
@@ -311,8 +318,16 @@ class GameUI extends HxlDialog {
 		panelInventory.dlgSpellGrid = dlgSpellGrid;
 		panelInventory.dlgPotionGrid = dlgPotionGrid;
 		
+		invItemManager = new CqInventoryItemManager(panelInventory);
+		
 		add(doodads);
+		
+		initSheets();
+		
+		super.update();
+		updateAll();
 	}
+
 	public function pressHelp(?playSound:Bool = true):Void 
 	{
 		showInvHelp = false;
@@ -506,11 +521,6 @@ class GameUI extends HxlDialog {
 		icon.setFrame(Frame);
 		return icon;
 	}
-	
-
-	public override function update() {
-		super.update();
-	}
 
 	public function updateCharges() {
 		var player = CqRegistery.player;
@@ -691,6 +701,31 @@ class GameUI extends HxlDialog {
 			GraphicCache.addBitmapData(btn.pixels, CqGraphicKey.buttonSprite);
 		}
 	}
+	
+	private function initSheets():Void 
+	{
+		var itemSheet:HxlSpriteSheet;
+		var itemSprite:HxlSprite;
+		var spellSheet:HxlSpriteSheet;
+		var spellSprite:HxlSprite;
+		itemSheet = SpriteItems.instance;
+		var itemSheetKey:CqGraphicKey = CqGraphicKey.ItemIconSheet;
+		itemSprite = new HxlSprite(0, 0);
+		itemSprite.loadGraphic(SpriteItems, true, false, Configuration.tileSize, Configuration.tileSize, false, 3.0, 3.0);
+		panelInventory.dlgInfo.itemSheet = itemSheet;
+		panelInventory.dlgInfo.itemSprite = itemSprite;
+
+		spellSheet = SpriteSpells.instance;
+		var spellSheetKey:CqGraphicKey = CqGraphicKey.SpellIconSheet;
+		spellSprite = new HxlSprite(0, 0);
+		spellSprite.loadGraphic(SpriteSpells, true, false, Configuration.tileSize, Configuration.tileSize, false, 3.0, 3.0);
+		panelInventory.dlgInfo.spellSheet = spellSheet;
+		panelInventory.dlgInfo.spellSprite = spellSprite;
+		CqInventoryItem.spellSheet = spellSheet;
+		CqInventoryItem.spellSprite = spellSprite;
+		CqInventoryItem.itemSheet = itemSheet;
+		CqInventoryItem.itemSprite = itemSprite;
+	}
 
 	public function checkTileItems(Player:CqPlayer) {
 		var curPos:HxlPoint = Player.getTilePos();
@@ -707,7 +742,7 @@ class GameUI extends HxlDialog {
 		//trace("gui rmv");	
 	}
 	public function itemPickup(Item:CqItem) {
-		if(panelInventory.itemPickup(Item))
+		if(invItemManager.itemPickup(Item))
 			btnInventoryView.doFlash();
 	}
 

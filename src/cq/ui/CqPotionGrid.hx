@@ -43,25 +43,4 @@ class CqPotionGrid extends CqInventoryGrid {
 		}
 
 	}
-	public function onItemDrag(Item:CqItem) {
-		for( i in 0...cells.length ) {
-			var Cell:CqPotionCell = cast(cells[i], CqPotionCell);
-			if ( Item.equipSlot == Cell.equipSlot ) {
-				Cell.setGlow(true);
-			}
-		}
-	}
-
-	public function onItemDragStop() {
-		for ( i in 0...cells.length ) {
-			cells[i].setGlow(false);
-		}
-	}
-
-	public override function getCellItemPos(Cell:Int):HxlPoint {
-		if ( !initialized ) {
-			return new HxlPoint(cells[Cell].x + 2, cells[Cell].y + 2);
-		}
-		return new HxlPoint(cells[Cell].x + 2, cells[Cell].y + 2);
-	}
 }

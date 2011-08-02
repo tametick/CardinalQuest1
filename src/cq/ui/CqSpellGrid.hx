@@ -7,8 +7,6 @@ import cq.CqSpell;
 import cq.CqResources;
 import cq.ui.CqSpellButton;
 
-// tmp
-import cq.ui.inventory.CqInventoryDialog;
 
 class CqSpellGrid extends CqInventoryGrid {
 
@@ -56,28 +54,9 @@ class CqSpellGrid extends CqInventoryGrid {
 			buttons.push(btnCell);
 		}
 	}
-
-	public override function getCellItemPos(Cell:Int):HxlPoint {
-		if ( !initialized ) {
-			return new HxlPoint(cells[Cell].x + 12, cells[Cell].y + 12);
-
-		}
-		return new HxlPoint(cells[Cell].x + 2, cells[Cell].y + 2);
-	}
-
-	public function onItemDrag(Item:CqItem) {
-		for( i in 0...cells.length ) {
-			var Cell:CqSpellCell = cast(cells[i], CqSpellCell);
-			if ( Item.equipSlot == Cell.equipSlot ) {
-				Cell.setGlow(true);
-			}
-		}
-	}
-
-	public function onItemDragStop() {
-		for ( i in 0...cells.length ) {
-			cells[i].setGlow(false);
-		}
+	
+	public function getSpellCell(Index:Int):CqSpellCell {
+		return cast(cells[Index], CqSpellCell);
 	}
 
 }

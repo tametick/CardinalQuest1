@@ -7,14 +7,11 @@ import haxel.HxlPoint;
 import cq.CqResources;
 import cq.CqItem;
 
-import cq.ui.inventory.CqInventoryCell;
 
 // tmp
 import cq.ui.inventory.CqInventoryDialog;
 
 class CqEquipmentGrid extends CqInventoryGrid {
-
-	private var eqGridInit:Bool;
 
 	static var icons_names:Array<String> = [ "shoes", "gloves", "armor", "jewelry", "weapon", "hat" ];
 	static var cell_positions:Array<Array<Int>> = [ [8, 183], [8, 100], [8, 12], [159, 183], [159, 100], [159, 12] ];
@@ -24,7 +21,6 @@ class CqEquipmentGrid extends CqInventoryGrid {
 		super(X, Y, Width, Height, false);
 
 		cells = new Array();
-		eqGridInit = false;
 
 		var cellBgKey:CqGraphicKey = CqGraphicKey.EquipmentCellBG;
 		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.EqCellBGHighlight;
@@ -46,7 +42,6 @@ class CqEquipmentGrid extends CqInventoryGrid {
 			cell.add(btn);
 			btn.x = btn.y = -5;
 			cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
-			cell.cell_type = CqInvCellType.Equipment;
 			var icon = SpriteEquipmentIcons.getIcon(icons_names[idx], icons_size, 2.0);
 			cell.add(icon);
 			cell.icon = icon;
@@ -57,35 +52,12 @@ class CqEquipmentGrid extends CqInventoryGrid {
 			cells.push(cell);
 		}
 	}
-
-	public override function getCellItemPos(Cell:Int):HxlPoint {
-		if ( !initialized ) {
-			return new HxlPoint(x + cells[Cell].x + 2, y + cells[Cell].y + 2);
-		}
-		return new HxlPoint(cells[Cell].x + 2, cells[Cell].y + 2);
-	}
-
-	public function onItemDrag(Item:CqItem) {
-		if (HxlGraphics.state != GameState.inst)
-			return;
+	public function setGlowForSlot(slot:CqEquipSlot,value:Bool) {
 		for( i in 0...cells.length ) {
 			var Cell:CqEquipmentCell = cast(cells[i], CqEquipmentCell);
-			if ( Item.equipSlot == Cell.equipSlot ) {
-				Cell.setGlow(true);
+			if ( slot == Cell.equipSlot ) {
+				Cell.setGlow(value);
 			}
-		}
-	}
-
-	public function onItemDragStop() {
-		for ( i in 0...cells.length ) {
-			cells[i].setGlow(false);
-		}
-	}
-
-	public override function update() {
-		super.update();
-		if ( !eqGridInit ) {
-			eqGridInit = true;
 		}
 	}
 }

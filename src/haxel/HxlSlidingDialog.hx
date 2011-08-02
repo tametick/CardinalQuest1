@@ -143,6 +143,7 @@ class HxlSlidingDialog extends HxlDialog
 	private function shown() {
 		isDropping = false;
 		isDropped = true;
+		update();
 		switch (direction) {
 			case TOP:
 				targetY = 0;
@@ -164,6 +165,7 @@ class HxlSlidingDialog extends HxlDialog
 		isDropped = false;
 		visible = false;
 		active = false;
+		update();
 		switch (direction) {
 			case TOP:
 				targetY = 0 - height;

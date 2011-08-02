@@ -422,6 +422,20 @@ class HxlGroup extends HxlObject {
 		}
 	}
 	/**
+	 * like updateMembers, but updates each and every member. use wisely, its slower
+	 */
+	function updateAll() {
+		var o:HxlObject;
+		var l:Int = members.length;
+		for (i in 0...l) {
+			o = cast( members[i], HxlObject);
+			if ((o != null) && o.exists) {
+				o.update();
+				HxlGraphics.numUpdates++;
+			}
+		}
+	}
+	/**
 	 * Automatically goes through and calls update on everything you added,
 	 * override this function to handle custom input and perform collisions.
 	 */

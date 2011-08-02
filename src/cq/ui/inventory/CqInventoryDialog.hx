@@ -2,6 +2,7 @@ package cq.ui.inventory;
 
 import cq.ui.CqItemInfoDialog;
 import cq.ui.CqPotionButton;
+import cq.ui.CqPotionGrid;
 import cq.ui.CqSpellButton;
 import cq.ui.CqPopup;
 import cq.CqActor;
@@ -10,6 +11,7 @@ import cq.CqResources;
 import cq.CqSpell;
 import cq.CqGraphicKey;
 import cq.CqRegistery;
+import cq.ui.CqSpellGrid;
 import data.Resources;
 import data.Configuration;
 import data.SoundEffectsManager;
@@ -43,10 +45,6 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	public var dlgEqGrid:CqEquipmentGrid;
 	public var dlgSpellGrid:CqSpellGrid;
 	public var dlgPotionGrid:CqPotionGrid;
-	var itemSheet:HxlSpriteSheet;
-	var itemSprite:HxlSprite;
-	var spellSheet:HxlSpriteSheet;
-	var spellSprite:HxlSprite;
 
 	static inline var DLG_OUTER_BORDER:Int 		= 10; 
 	static inline var DLG_TOP_BORDER:Int 		= 0; 
@@ -84,230 +82,9 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		dlgInvGrid.zIndex = 2;
 		add(dlgInvGrid);
 
-		itemSheet = SpriteItems.instance;
-		var itemSheetKey:CqGraphicKey = CqGraphicKey.ItemIconSheet;
-		itemSprite = new HxlSprite(0, 0);
-		itemSprite.loadGraphic(SpriteItems, true, false, Configuration.tileSize, Configuration.tileSize, false, 3.0, 3.0);
-		dlgInfo.itemSheet = itemSheet;
-		dlgInfo.itemSprite = itemSprite;
-
-		spellSheet = SpriteSpells.instance;
-		var spellSheetKey:CqGraphicKey = CqGraphicKey.SpellIconSheet;
-		spellSprite = new HxlSprite(0, 0);
-		spellSprite.loadGraphic(SpriteSpells, true, false, Configuration.tileSize, Configuration.tileSize, false, 3.0, 3.0);
-		dlgInfo.spellSheet = spellSheet;
-		dlgInfo.spellSprite = spellSprite;
-
 		CqInventoryItem.backgroundKey = CqGraphicKey.ItemBG;
 		CqInventoryItem.backgroundSelectedKey = CqGraphicKey.ItemSelectedBG;
 	}
-
-	function createUIItem(Item:CqItem, dialog:CqInventoryDialog):CqInventoryItem {
-		
-		//basic stuff
-		var uiItem:CqInventoryItem = new CqInventoryItem(dialog, 2, 2);
-		uiItem.toggleDrag(true);
-		uiItem.zIndex = 5;
-		uiItem.item = Item;
-		
-		if ( Std.is(Item, CqSpell) ) {
-			spellSprite.setFrame(spellSheet.getSpriteIndex(Item.spriteIndex));
-			uiItem.setIcon(spellSprite.getFramePixels());
-		} else {
-			itemSprite.setFrame(itemSheet.getSpriteIndex(Item.spriteIndex));
-			uiItem.setIcon(itemSprite.getFramePixels());
-		}
-		
-		//popup
-		uiItem.setPopup(new CqPopup(180,Item.fullName,gameui.doodads));
-		gameui.doodads.add(uiItem.popup);
-		uiItem.popup.zIndex = 15;
-		
-		//make magical items glow
-		if (Item.isSuperb && !Item.isMagical && !Item.isWondrous) {
-			uiItem.customGlow(0x206CDF);
-			uiItem.setGlow(true);
-		} else if (Item.isMagical && !Item.isSuperb)	{
-			uiItem.customGlow(0x3CDA25);
-			uiItem.setGlow(true);
-		} else if (Item.isMagical && Item.isSuperb)	{
-			uiItem.customGlow(0x1FE0D7);
-			uiItem.setGlow(true);
-		} else if (Item.isWondrous && Item.isSuperb)	{
-			uiItem.customGlow(0xE7A918);
-			uiItem.setGlow(true);
-		}
-		return uiItem;
-	}
-	
-	/**
-	 * True - added to inventory or equipped
-	 * False - destroyed or added to potion/spell belts
-	 * */
-	public function itemPickup(Item:CqItem):Bool {
-		// if an equivalent item already in inventory, destory picked up item
-		for ( cell in dlgInvGrid.cells ) {
-			if ( cell.getCellObj() != null && cell.getCellObj().item.equalTo(Item) && Item.equipSlot != SPELL) {
-				GameUI.showTextNotification("I already have this.");
-				CqRegistery.player.giveMoney( Item.getMonetaryValue() );
-				return false;
-			}
-		}
-		
-		// stacking was already done by CqActor.give(...), just updating potion icon
-		if ( Item.equipSlot == POTION ) {
-			for ( cell in dlgPotionGrid.cells ) {
-				if ( cell.getCellObj() != null && cell.getCellObj().item == Item ) {
-					cell.getCellObj().updateIcon();
-					return false;
-				}
-			}
-		}
-		
-		// select picked up item
-		dlgInfo.setItem(Item);
-		
-		//create ui item
-		var uiItem:CqInventoryItem = createUIItem(Item,this);
-		add(uiItem);
-		
-		
-		if ( Item.equipSlot != null ) {
-			if ( Item.equipSlot == POTION ) {
-				for ( cell in dlgPotionGrid.cells ) {
-					if ( cell.getCellObj() == null ) {
-						uiItem.setPotionCell(cell.cellIndex);
-						uiItem.popup.setText(Item.fullName+"\n[hotkey " + ((cell.cellIndex>3)?cell.cellIndex-4:cell.cellIndex + 6) + "]");
-						if ( !cast(cell, CqPotionCell).eqCellInit ) {
-							// Mysterious things happen with positioning before the ui
-							// stuff gets updated for the first time.. just accommodate for it
-							// now.
-							uiItem.x = uiItem.x + cast(cell, CqPotionCell).potBtn.x;
-							uiItem.y = uiItem.y + cast(cell, CqPotionCell).potBtn.y;
-						}
-						SoundEffectsManager.play(PotionEquipped);
-						return false;
-					}
-				}
-			} else if ( Item.equipSlot == SPELL ) {
-				for ( cell in dlgSpellGrid.cells ) {
-					if ( cell.getCellObj() == null ) {
-						uiItem.setSpellCell(cell.cellIndex);
-						uiItem.popup.setText(Item.fullName+"\n[hotkey " + (cell.cellIndex + 1) + "]");
-						cell.getCellObj().updateIcon();
-						SoundEffectsManager.play(SpellEquipped);
-						return false;
-					}
-				}
-			} else {
-				//item in equipment
-				for ( cell in dlgEqGrid.cells ) {
-					//found same quipment cell slot as item
-					if (cast(cell, CqEquipmentCell).equipSlot == Item.equipSlot) {
-
-						//if slot was empty - equip
-						if (cell.getCellObj() == null) {
-							uiItem = equipItem(cell, Item, uiItem);
-							cell.getCellObj().updateIcon();
-							return true;
-						} else {
-							
-							var preference:Float = shouldEquipItemInCell(cast(cell, CqEquipmentCell), Item);
-							
-							//equip if item is better
-							if (preference > 1)	{	
-								var old:CqInventoryItem = equipItem(cell, Item, uiItem);
-								
-								if (!old.item.isEnchanted) {	
-									// old is plain, so destroy
-									GameUI.showTextNotification("I can drop the old one now.", 0xBFE137);
-									CqRegistery.player.giveMoney( old.item.getMonetaryValue() );
-									remove(old);
-									old.destroy();
-
-									return true;
-								} else {
-									// old is non plain add to inv
-									uiItem = old;
-								}
-							} else if (preference < 1) {
-								//if new is worse than old, and is plain - destroy it
-								if (!Item.isEnchanted) {
-									GameUI.showTextNotification("I don't need this.");
-									CqRegistery.player.giveMoney( Item.getMonetaryValue() );
-									remove(uiItem);
-									uiItem.destroy();
-									
-									return false;
-								}
-							} else {	
-								//item is the same & plain
-								if ( Item.equalTo( cell.getCellObj().item) && !Item.isEnchanted) {
-									CqRegistery.player.giveMoney( Item.getMonetaryValue() );
-									GameUI.showTextNotification("I already have this.",0xE1CC37);
-									remove(uiItem);
-									uiItem.destroy();
-									return false;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		
-		var emptyCell:CqInventoryCell = getEmptyCell();
-		if (emptyCell != null ) {
-			// add to inventory
-			uiItem.setInventoryCell(emptyCell.cellIndex);
-			uiItem.popup.setText(Item.fullName);
-			return true;
-		} else {
-			throw "no room in inventory, should not happen because pick up should have not been allowed!";
-		}
-	}
-	
-	private function equipItem(Cell:CqInventoryCell, Item:CqItem, UiItem:CqInventoryItem):CqInventoryItem {
-		var old:CqInventoryItem = cast(Cell, CqEquipmentCell).clearCellObj();
-		
-		UiItem.setEquipmentCell(Cell.cellIndex);
-		if ( !cast(Cell, CqEquipmentCell).eqCellInit ) {
-			// Mysterious things happen with positioning before the ui
-			// stuff gets updated for the first time.. just accommodate for it
-			// now.
-			UiItem.x = UiItem.x + 10;
-		}
-		
-		CqRegistery.player.equipItem(Item);
-		return old;
-	}
-	
-	
-	/**
-	 * <1 yes 1 == equal, >1 no
-	 * */
-	function shouldEquipItemInCell(Cell:CqEquipmentCell, Item:CqItem):Float {
-		if (Cell.equipSlot != Item.equipSlot)
-			return 0.0;
-		
-		if (Cell.getCellObj() == null)
-			return 2.0;
-		
-		return Item.compareTo( Cell.getCellObj().item );
-	}
-	
-	public function getEmptyCell():CqInventoryCell {
-		var emptyCell:CqInventoryCell = null;
-		for ( cell in dlgInvGrid.cells ) {
-			if ( cell.getCellObj() == null && !cell.dropCell ) {
-				emptyCell = cell;
-				break;
-			}
-		}
-		
-		return emptyCell;
-	}
-	
 
 	public override function hide(?HideCallback:Dynamic=null) {
 		super.hide(HideCallback);
@@ -317,5 +94,4 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		}
 		dlgInfo.clearInfo();
 	}
-
 }

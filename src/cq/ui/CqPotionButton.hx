@@ -36,7 +36,6 @@ class CqPotionButton extends HxlDialog {
 		cell = new CqPotionCell(this, 5, 5, 54, 54, Idx);
 		cell.setGraphicKeys(CqGraphicKey.EquipmentCellBG,CqGraphicKey.EqCellBGHighlight,CqGraphicKey.CellGlow);
 		cell.zIndex = 1;
-		cell.cell_type = CqInvCellType.Potion;
 		add(cell);
 	}
 

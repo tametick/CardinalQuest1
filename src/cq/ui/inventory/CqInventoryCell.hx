@@ -24,7 +24,6 @@ class CqInventoryCell extends HxlDialog {
 	var isHighlighted:Bool;
 	public var cellIndex:Int;
 	public var dropCell:Bool;
-	public var cell_type:CqInvCellType;
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?CellIndex:Int=0) {
 		super(X, Y, Width, Height);
 		bgHighlight = null;
@@ -131,7 +130,6 @@ class CqInventoryCell extends HxlDialog {
 	public function getCellObj():CqInventoryItem {
 		return cellObj;
 	}
-	
 	public function clearCellObj():CqInventoryItem {
 		var oldItem:CqInventoryItem = null;
 		if (cellObj != null) {
