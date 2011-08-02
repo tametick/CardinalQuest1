@@ -27,6 +27,7 @@ import flash.desktop.NativeApplication;
 
 class MainMenuState extends CqState {
 	public static var instance(getInstance, null):MainMenuState;
+	public static var message:String;
 	private static var _intance:MainMenuState;
 	private static var sfxOn:Bool;
 	var fadeTimer:HxlTimer;
@@ -154,7 +155,7 @@ class MainMenuState extends CqState {
 			
 			if (Configuration.air) {
 				btnQuit.setCallback(function() { 
-				  #if air	
+				  #if jadeds	
 					Game.jadeDS.exit(); 
 				  #end	
 					NativeApplication.nativeApplication.exit(); 
@@ -171,6 +172,9 @@ class MainMenuState extends CqState {
 		menu.setScrollSound(MenuItemMouseOver);
 		menu.setSelectSound(MenuItemClick);
 		update();
+		
+		if (message != null)
+			HxlGraphics.state.add(new HxlText(0, 0, 500, message, true, FontAnonymousProB.instance.fontName, 16));
 	}
 
 	public override function update() {

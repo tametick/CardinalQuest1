@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1A4CC2C8-5E99-4B83-AF92-7F348BEC9F20}</ProjectGuid>
     <RootNamespace>JadeDS</RootNamespace>
+    <ProjectName>JadeDSWrapper</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

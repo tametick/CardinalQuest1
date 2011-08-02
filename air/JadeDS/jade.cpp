@@ -1,6 +1,7 @@
 #include <exception>
 #include <windows.h>
 #include <jadesdk\jadesdk.h>
+#include <cstdio>
 
 class JadeListener : public JadeSDK::StateSyncListener {
 
@@ -87,34 +88,30 @@ int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,i
 
 		JadeListener jl;
 
-		/* keep jl alive and listening:
+		switch(JadeSDK::Connection::init("ogresamples")){
+		case JadeSDK::Success:
+		case JadeSDK::AlreadyConnected:
+			break;
+
+		case JadeSDK::ClientNotRunning:
+			throw std::exception("LittleIndie client is not running - network features disabled.");
+			break;
+
+		case JadeSDK::ClientLocked:
+		case JadeSDK::ClientTimedOut:
+			throw std::exception("LittleIndie client not responding - network features disabled.");
+			break;
+
+		default: 
+			throw std::exception("Cardinal Quest is not installed properly on LittleIndie!");
+		}
 
 		while(true)
-			JadeSDK::getConnection()->updateStateSync(100,myListenerPtr);
-
-		*/
-
-		
-		if(JadeSDK::Connection::init("ogresamples") != JadeSDK::Success)
-			throw std::exception("Jade:DS Client not running or\r\nproduct not installed properly.");
-
-		MessageBox(NULL,"Connected this successfully!","Success",MB_OK);
-
-		JadeSDK::MemoryFile *filePtr = JadeSDK::Connection::getConnection()->openMemoryFile("particle/smoke.particle");
-
-		if(filePtr != 0L)
-			MessageBox(NULL,(LPCSTR) filePtr->data(),"particle/smoke.particle",MB_OK);
-		else
-			MessageBox(NULL,"File not found!","particle/smoke.particle",MB_OK);
-
-		delete filePtr;
-
-		JadeSDK::Connection::getConnection()->close();
-
-		
+			JadeSDK::Connection::getConnection()->updateStateSync(100,&jl);
 
 	} catch(std::exception &e) {
 		MessageBox(NULL,e.what(),"Error during start",MB_OK|MB_ICONHAND);
+		fprintf(stderr, "Exiting jadeds.exe");
 	}
 
 	return 0;
