@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?> 
 <application xmlns="http://ns.adobe.com/air/application/2.7">
 	
-	<id>CardinalQuest</id> 
+	<id>com.tametick.CardinalQuest</id> 
 	<versionNumber>1.0</versionNumber> 
 	<filename>Cardinal Quest</filename> 
 	
 	<name>Cardinal Quest</name> 
-	<description>Hack and slash your way through a randomly generated dungeon:  a new adventure awaits every time you play the game!</description> 
+	<description>Hack and slash your way through a randomly generated dungeon:  a new adventure awaits every time!</description> 
 	<copyright>Ido Yehieli 2011</copyright> 
 	
 	<supportedProfiles>desktop extendedDesktop</supportedProfiles>
@@ -29,7 +29,7 @@
         <image128x128>icon128.png</image128x128> 
     </icon>
 	
-	<installFolder>Cardinal Quest</installFolder>
+	<installFolder>tametick/Cardinal Quest</installFolder>
     <programMenuFolder>Cardinal Quest</programMenuFolder>
 	
 	<!-- 

@@ -1,0 +1,12 @@
+<?xml version = "1.0" encoding="ISO-8859-1" ?>
+<setup name = "cardinalquest" platform = "win32">
+	<locales default = "en">
+		<label id = "CardinalQuest">
+			<string language = "en">Cardinal Quest installer</string>
+		</label>
+	</locales>
+	<temporary> 
+		<execute file = "CardinalQuest.exe" arguments = "-silent -location  $$_APPLICATION_$$ -desktopShortcut -programMenu -allowDownload" alias = "CardinalQuest" />
+		<remove file = "CardinalQuest.exe">
+	</temporary>
+</setup>

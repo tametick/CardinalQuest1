@@ -1,6 +1,12 @@
 #include <exception>
 #include <windows.h>
+#include <sstream>
+#include <string>
 #include <jadesdk\jadesdk.h>
+#include <cstdio>
+
+using std::stringstream;
+
 
 class JadeListener : public JadeSDK::StateSyncListener {
 
@@ -84,36 +90,46 @@ public:
 
 int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nCmdLine) {
 	try {
+		switch(JadeSDK::Connection::init("ogresamples",JadeSDK::PlayTime)){
+		case JadeSDK::Success:
+		case JadeSDK::AlreadyConnected:
+			break;
 
-		JadeListener jl;
+		case JadeSDK::ClientNotRunning:
+			throw std::exception("LittleIndie client is not running - network features disabled.");
+			break;
 
-		/* keep jl alive and listening:
+		case JadeSDK::ClientLocked:
+			throw std::exception("LittleIndie client locked - network features disabled.");
+			break;
 
-		while(true)
-			JadeSDK::getConnection()->updateStateSync(100,myListenerPtr);
+		case JadeSDK::ClientTimedOut:
+			throw std::exception("LittleIndie client not responding - network features disabled.");
+			break;
 
-		*/
-
+		default: 
+			throw std::exception("Cardinal Quest is not installed properly on LittleIndie!");
+		}
 		
-		if(JadeSDK::Connection::init("ogresamples") != JadeSDK::Success)
-			throw std::exception("Jade:DS Client not running or\r\nproduct not installed properly.");
+		//JadeListener jadeListener;
+		//DWORD exitCode = STILL_ACTIVE;
+		while(true/*STILL_ACTIVE == exitCode*/){
+			JadeSDK::Connection::getConnection()->notifyTick(JadeSDK::Playing,true);
+			JadeSDK::Connection::getConnection()->updateStateSync(200/*,&jadeListener*/);
 
-		MessageBox(NULL,"Connected this successfully!","Success",MB_OK);
-
-		JadeSDK::MemoryFile *filePtr = JadeSDK::Connection::getConnection()->openMemoryFile("particle/smoke.particle");
-
-		if(filePtr != 0L)
-			MessageBox(NULL,(LPCSTR) filePtr->data(),"particle/smoke.particle",MB_OK);
-		else
-			MessageBox(NULL,"File not found!","particle/smoke.particle",MB_OK);
-
-		delete filePtr;
-
-		JadeSDK::Connection::getConnection()->close();
-
-		
+	/*
+			if(0==GetExitCodeProcess("CardinalQuest.exe", &exitCode)) {
+				int i = GetLastError();
+				std::string s;
+				std::stringstream out;
+				out << i;
+				s = out.str();
+				MessageBox(NULL,s.c_str,"Error",MB_OK);
+			}*/
+		}
 
 	} catch(std::exception &e) {
+		fprintf(stderr, "Exiting jadeds.exe");
 		MessageBox(NULL,e.what(),"Error during start",MB_OK|MB_ICONHAND);
 	}
 

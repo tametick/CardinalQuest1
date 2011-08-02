@@ -30,7 +30,8 @@ class WinState extends CqState {
 		fadeTime = 3;
 		cursor.visible = true;
 		stackRender = true;
-		
+			
+		cursor.visible = false;
 		scroller = new CqTextScroller(null, 5);
 		scroller.addColumn(80, 480, " As you slay the last of his servants, Asterion mutters an ancient incantation.\n\n A shimmering portal appears and the minotaur steps inside.\n\n While celebrating Asterion’s demise would be premature, Hallemot is once again safe - for the time being...", false, FontDungeon.instance.fontName, 30);
 		Figurescale = new HxlPoint(2.0, 2.0);
@@ -64,6 +65,7 @@ class WinState extends CqState {
 	}
 
 	function nextScreen() {
+		cursor.visible = true;
 		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
 			var newState = MainMenuState.instance;
 			HxlGraphics.setState(newState);

@@ -1310,13 +1310,13 @@ class CqMobFactory {
 				mob.xpValue = 500;
 				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.HASTE));
 			case MINOTAUER, MINOTAUER_AXE, MINOTAUER_SWORD:
-				mob.attack = 6;
-				mob.defense = 3;
-				mob.speed = 6;
-				mob.spirit = 3;
-				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(12,48);
-				mob.damage = new Range(4, 32);
-				mob.xpValue = 750;
+				mob.attack = 7;
+				mob.defense = 4;
+				mob.speed = 7;
+				mob.spirit = 4;
+				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(24,48);
+				mob.damage = new Range(12, 32);
+				mob.xpValue = 950;
 				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.BERSERK));
 		}
 		

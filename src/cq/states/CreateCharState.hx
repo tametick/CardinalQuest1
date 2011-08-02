@@ -61,6 +61,7 @@ class CreateCharState extends CqState {
 		});
 	}
 	function realInit() {
+		cursor.visible	= true;
 		if (scroller != null)
 			remove(scroller);
 		storyScreen = false;
@@ -138,7 +139,7 @@ class CreateCharState extends CqState {
 		add(selectBox);
 
 		txtDesc = new HxlText(160, 280, HxlGraphics.width - 220);
-		txtDesc.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
+		txtDesc.setFormat(FontAnonymousPro.instance.fontName, 16, 0x000000, "left", 0);
 		add(txtDesc);
 		txtDesc.text = Resources.descriptions.get("Fighter");
 
@@ -163,10 +164,11 @@ class CreateCharState extends CqState {
 	}*/
 	
 	override function init() {
-		if(!shownIntro){
+		if (!shownIntro) {
+			cursor.visible	= false;
 			scroller = new CqTextScroller(IntroScreen, 1);
 			var introText:String = " The evil minotaur Asterion has terrorized the peaceful land of Hallemot for countless years.\n\n In his underground den, he and his minions enjoy the spoils of their wicked deeds.\n\n Determined to end his reign of plunder and pillage, a single hero comes forth...";
-			scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,30);
+			scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,30,0x000000,0x804040);
 			add(scroller);
 			scroller.startScroll();
 			//scroller.onComplete(removeScrollerAndFade);

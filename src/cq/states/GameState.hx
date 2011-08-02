@@ -261,10 +261,10 @@ class GameState extends CqState {
 			case CqClass.WIZARD:
 				classBG = SpriteWizardEntry;
 		}
+		
+		cursor.visible = false;
 		scroller = new CqTextScroller(classBG, 1);
-		var introText:String = " You enter the dark domicile of the evil minotaur.\n\n In the distance, you can hear the chatter of the vile creatures that inhabit it.\n\n Your adventure begins...";
-
-
+		var introText:String = " You enter the dark domicile of the evil minotaur.\n\n In the distance, you can hear the chatter of the vile creatures that inhabit the depths.\n\n Your adventure begins...";
 		scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,30);
 		add(scroller);
 		scroller.startScroll();
@@ -272,6 +272,7 @@ class GameState extends CqState {
 	}
 	
 	function realInit() {
+		cursor.visible = true;
 		if (scroller != null) {
 			remove(scroller);
 			scroller = null;
