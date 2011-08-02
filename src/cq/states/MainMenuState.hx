@@ -138,19 +138,21 @@ class MainMenuState extends CqState {
 		btnNewGame.setCallback(function() { if(GameUI.instance!=null)GameUI.instance.kill();self.changeState(CreateCharState);});
 		buttonY += 50;
 
+		
 		if ( stackId == 0 ) {
+			var sFadeTime = fadeTime;
 			var btnCredits:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Credits", true, null);
 			btnCredits.setNormalFormat(null, 40, textColor, "center");
 			btnCredits.setHoverFormat(null, 40, textHighlight, "center");
 			menu.addItem(btnCredits);
-			btnCredits.setCallback(function() { HxlGraphics.pushState(new CreditsState()); });
+			btnCredits.setCallback(function() { HxlGraphics.fade.start(true, 0xff000000, sFadeTime, function() { HxlGraphics.pushState(new CreditsState()); } ); } );
 			buttonY += 50;
 			
 			var btnHiscores:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Highscores", true, null);
 			btnHiscores.setNormalFormat(null, 40, textColor, "center");
 			btnHiscores.setHoverFormat(null, 40, textHighlight, "center");
 			menu.addItem(btnHiscores);
-			btnHiscores.setCallback(function() { HxlGraphics.pushState(new HighScoreState()); });
+			btnHiscores.setCallback(function() { HxlGraphics.fade.start(true, 0xff000000, sFadeTime, function() { HxlGraphics.pushState(new HighScoreState()); } ); } );
 			buttonY += 50;
 		}
 		//if (Configuration.standAlone) {
