@@ -138,7 +138,7 @@ class CreateCharState extends CqState {
 		add(selectBox);
 
 		txtDesc = new HxlText(160, 280, HxlGraphics.width - 220);
-		txtDesc.setFormat(FontAnonymousPro.instance.fontName, 16, 0xffffff, "left", 0x010101);
+		txtDesc.setFormat(FontAnonymousPro.instance.fontName, 16, 0x000000, "left", 0);
 		add(txtDesc);
 		txtDesc.text = Resources.descriptions.get("Fighter");
 
