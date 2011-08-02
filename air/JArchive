@@ -3,4 +3,4 @@
 -out=.\
 -ftp=
 -case=sensitive
--files=product.xml,cq_crop.png,icon32.png,fighter.png,thief.png,wizard.png
+-files=product.xml,cq_crop.png,icon32.png,fighter.png,thief.png,wizard.png,setup.xml

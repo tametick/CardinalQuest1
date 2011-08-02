@@ -65,12 +65,13 @@ class MainMenuState extends CqState {
 		if (stackId == 0) {
 			var bg = new HxlSprite(0, 0, SpriteMainmenuBg);
 			add(bg);
+			bg.zIndex--;
 		}else
 		{
 			//blur gamestate
 		}
 		
-		titleText = new LogoSprite((640-345)/2, (480-50)/2 - 55);
+		titleText = new LogoSprite((640 - 345) / 2, (480 - 50) / 2 - 55);
 		add(titleText);
 		
 		tglMusicIcon = new HxlSprite(45,0);
