@@ -1053,6 +1053,17 @@ class GameUI extends HxlDialog {
 
 	}
 	
+	public function hideAllPopups():Void 
+	{
+		for (pop in doodads.members)
+		{
+			if (Std.is(pop, CqPopup))
+			{
+				cast(pop,CqPopup).visible = false;
+			}
+		}
+	}
+	
 	private function updateXBall(ball:HxlSprite,other:CqActor,actuator:GenericActuator):Void 
 	{
 		var prop:Dynamic = actuator.getProperties();

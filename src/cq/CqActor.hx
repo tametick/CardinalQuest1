@@ -342,6 +342,16 @@ class CqActor extends CqObject, implements Actor {
 		if (tile.actors.length > 0) {
 			var other = cast(tile.actors[tile.actors.length - 1],CqActor);
 			
+			//flip sprite
+			var dirx:Int = tile.mapX - Std.int(tilePos.x);
+			if (dirx != 0 && dirx != lastDirX)
+			{
+				_facing = Std.int((-dirx + 1) / 2);
+				if (Std.is(this, CqPlayer))
+					_facing = (_facing == 1?0:1);
+				calcFrame();
+			}
+		
 			// attack enemy actor
 			if(other.faction != faction) {
 				attackOther(state, other);

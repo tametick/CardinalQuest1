@@ -85,6 +85,7 @@ class GameState extends CqState {
 		super.update();
 		if (endingAnim)
 		{
+			gameUI.hideAllPopups();
 			cursor.visible = false;
 			doEndingAnimation();
 			return;
@@ -99,7 +100,10 @@ class GameState extends CqState {
 			gameUI.updateCharges();
 		}
 		//hide mouse after idle some time	
-		if (Timer.stamp() - msMoveStamp > msHideDelay || endingAnim) cursor.visible = false;
+		if (Timer.stamp() - msMoveStamp > msHideDelay || endingAnim) {
+			gameUI.hideAllPopups();
+			cursor.visible = false;
+		}
 		
 		checkInvKeys();
 		if ( GameUI.isTargeting) {
@@ -560,6 +564,7 @@ class GameState extends CqState {
 	{
 		HxlGraphics.quake.start();
 		cursor.visible = false;
+		gameUI.hideAllPopups();
 		gameUI.destroy();
 	}
 	private var startedMoving:Bool;
