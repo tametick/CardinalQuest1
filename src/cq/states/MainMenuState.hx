@@ -117,8 +117,8 @@ class MainMenuState extends CqState {
 			textHighlight = 0xffff00;
 			
 			var btnResumeGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Resume Game");
-			btnResumeGame.setNormalFormat(null, 40, textColor, "center");
-			btnResumeGame.setHoverFormat(null, 40, textHighlight, "center");
+			btnResumeGame.setNormalFormat(null, 35, textColor, "center");
+			btnResumeGame.setHoverFormat(null, 35, textHighlight, "center");
 			menu.addItem(btnResumeGame);
 			btnResumeGame.setCallback(function() { 
 				CqLevel.playMusicByIndex(CqRegistery.level.index);
@@ -132,8 +132,8 @@ class MainMenuState extends CqState {
 		};
 		
 		var btnNewGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "New Game", true, null);
-		btnNewGame.setNormalFormat(null, 40, textColor, "center");
-		btnNewGame.setHoverFormat(null, 40, textHighlight, "center");
+		btnNewGame.setNormalFormat(null, 35, textColor, "center");
+		btnNewGame.setHoverFormat(null, 35, textHighlight, "center");
 		menu.addItem(btnNewGame);
 		btnNewGame.setCallback(function() { if(GameUI.instance!=null)GameUI.instance.kill();self.changeState(CreateCharState);});
 		buttonY += 50;
@@ -142,23 +142,23 @@ class MainMenuState extends CqState {
 		if ( stackId == 0 ) {
 			var sFadeTime = fadeTime;
 			var btnCredits:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Credits", true, null);
-			btnCredits.setNormalFormat(null, 40, textColor, "center");
-			btnCredits.setHoverFormat(null, 40, textHighlight, "center");
+			btnCredits.setNormalFormat(null, 35, textColor, "center");
+			btnCredits.setHoverFormat(null, 35, textHighlight, "center");
 			menu.addItem(btnCredits);
 			btnCredits.setCallback(function() { HxlGraphics.fade.start(true, 0xff000000, sFadeTime, function() { HxlGraphics.pushState(new CreditsState()); } ); } );
 			buttonY += 50;
 			
 			var btnHiscores:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Highscores", true, null);
-			btnHiscores.setNormalFormat(null, 40, textColor, "center");
-			btnHiscores.setHoverFormat(null, 40, textHighlight, "center");
+			btnHiscores.setNormalFormat(null, 35, textColor, "center");
+			btnHiscores.setHoverFormat(null, 35, textHighlight, "center");
 			menu.addItem(btnHiscores);
 			btnHiscores.setCallback(function() { HxlGraphics.fade.start(true, 0xff000000, sFadeTime, function() { HxlGraphics.pushState(new HighScoreState()); } ); } );
 			buttonY += 50;
 		}
 		//if (Configuration.standAlone) {
 			var btnQuit:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Quit", true, null);
-			btnQuit.setNormalFormat(null, 40, textColor, "center");
-			btnQuit.setHoverFormat(null, 40, textHighlight, "center");
+			btnQuit.setNormalFormat(null, 35, textColor, "center");
+			btnQuit.setHoverFormat(null, 35, textHighlight, "center");
 			menu.addItem(btnQuit);
 			
 			if (Configuration.air) {
