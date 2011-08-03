@@ -368,8 +368,13 @@ class GameState extends CqState {
 				gameUI.setActive();
 				gameUI.pressHelp(false);
 			}else {
-				gameUI.setActive();
-				gameUI.pressMenu(false);
+				if (GameUI.currentPanel != null)
+				{
+					gameUI.hideCurrentPanel();
+				}else{
+					gameUI.setActive();
+					gameUI.pressMenu(false);
+				}
 			}
 		}
 		isPlayerActing = false;

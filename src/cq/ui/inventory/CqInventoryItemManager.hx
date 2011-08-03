@@ -113,7 +113,7 @@ class CqInventoryItemManager
 					dlgInfo.setItem(Item);
 					return true;
 				} else {
-					
+					var hasMinusses:Bool = hasItemMinusBuffs(Item);
 					var preference:Float = shouldEquipItemInCell(cell, Item);
 					//equip if item is better
 					if (preference > 1)	{	
@@ -121,9 +121,14 @@ class CqInventoryItemManager
 						dlgInfo.setItem(Item);
 						if (!old.item.isEnchanted) {	
 							// old is plain, so destroy
-							GameUI.showTextNotification("I can drop the old one now.", 0xBFE137);
-							destroyAndGiveMoney(old.item);
-							return true;
+							if (hasMinusses) {
+								GameUI.showTextNotification("I shall keep it.", 0xBFE137);
+								uiItem = old;
+							}else{
+								GameUI.showTextNotification("I can drop the old one now.", 0xBFE137);
+								destroyAndGiveMoney(old.item);
+								return true;
+							}
 						} else {
 							// old is non plain add to inv
 							uiItem = old;
@@ -157,6 +162,18 @@ class CqInventoryItemManager
 		} else {
 			throw "no room in inventory, should not happen because pick up should have not been allowed!";
 		}
+	}
+	
+	public function hasItemMinusBuffs(item:CqItem):Bool 
+	{
+		var itr:Iterator<String> = item.buffs.keys();
+		while (itr.hasNext())
+		{
+			var key:String = itr.next();
+			if (0 > item.buffs.get(key))
+				return true;
+		}
+		return false;
 	}
 	function destroyAndGiveMoney(Item:CqItem)
 	{
