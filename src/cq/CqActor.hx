@@ -13,6 +13,7 @@ import haxel.HxlUtil;
 import haxel.HxlPoint;
 import haxel.HxlUIBar;
 import haxel.HxlGraphics;
+import haxel.HxlTilemap;
 
 import world.Mob;
 import world.Actor;
@@ -373,24 +374,34 @@ class CqActor extends CqObject, implements Actor {
 			}
 		}
 		
-		// move
+		/** Move **/
 		isMoving = true;
+		
 		if (Std.is(this, CqPlayer)) {
 			var step = "cq.Footstep" + HxlUtil.randomIntInRange(1, 6);
 			var sound = Type.resolveClass(step);
 			SoundEffectsManager.play(sound);
 		}
+		
 		//flip sprite
 		var dirx:Int = tile.mapX - Std.int(tilePos.x);
-		if (dirx != 0 && dirx != lastDirX)
-		{
+		if (dirx != 0 && dirx != lastDirX) {
 			_facing = Std.int((-dirx + 1) / 2);
 			if (Std.is(this, CqPlayer))
 				_facing = (_facing == 1?0:1);
 			calcFrame();
 		}
 		lastDirX = dirx;
+		
 		setTilePos(Std.int(targetX), Std.int(targetY));
+		
+		// set invisible if moved out of sight range
+		var tile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)),HxlTile);
+		if (tile.visibility == Visibility.IN_SIGHT)
+			visible = true;
+		else
+			visible = false;
+		
 		var positionOfTile:HxlPoint = level.getPixelPositionOfTile(Math.round(tilePos.x), Math.round(tilePos.y));
 		moveToPixel(state, positionOfTile.x, positionOfTile.y);
 		
