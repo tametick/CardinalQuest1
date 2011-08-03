@@ -16,13 +16,15 @@ class CreditsState extends CqState {
 	var entryStamp:Float;
 	var state:Int;
 	public override function create() {
+		fadeTime = 0.5;
+		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
+		
 		super.create();
 		var bg = new HxlSprite(0, 0, SpriteCredits);
 		add(bg);
 		state = 0;
 		minimumTime = 1;
 		entryStamp = Timer.stamp();
-		fadeTime = 0.5;
 	}
 	public override function update() {
 		super.update();
