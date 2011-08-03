@@ -7,6 +7,7 @@ import cq.GameUI;
 import cq.ui.CqItemInfoDialog;
 import cq.ui.CqPotionGrid;
 import cq.ui.CqSpellGrid;
+import cq.ui.inventory.CqInventoryItem;
 import data.Configuration;
 import data.SoundEffectsManager;
 import haxel.HxlGradient;
@@ -57,15 +58,6 @@ class CqInventoryItemManager
 	 * False - destroyed or added to potion/spell belts
 	 * */
 	public function itemPickup(Item:CqItem):Bool {
-		// if an equivalent item already in inventory, destory picked up item
-		for ( cell in dlgInvGrid.cells ) {
-			if ( cell.getCellObj() != null && cell.getCellObj().item.equalTo(Item) && Item.equipSlot != SPELL) {
-				GameUI.showTextNotification("I already have this.");
-				CqRegistery.player.giveMoney( Item.getMonetaryValue() );
-				return false;
-			}
-		}
-		
 		// stacking was already done by CqActor.give(...), just updating potion icon
 		if ( Item.equipSlot == POTION ) {
 			for ( cell in dlgPotionGrid.cells ) {
@@ -74,8 +66,21 @@ class CqInventoryItemManager
 					return false;
 				}
 			}
+			for ( cell in dlgInvGrid.cells ) {
+				if ( cell.getCellObj() != null && cell.getCellObj().item == Item ) {
+					cell.getCellObj().updateIcon();
+					return false;
+				}
+			}
 		}		
-		
+		// if an equivalent item already is in inventory, destory picked up item
+		for ( cell in dlgInvGrid.cells ) {
+			if ( cell.getCellObj() != null && cell.getCellObj().item.equalTo(Item) && Item.equipSlot != SPELL) {
+				GameUI.showTextNotification("I already have this.");
+				CqRegistery.player.giveMoney( Item.getMonetaryValue() );
+				return false;
+			}
+		}
 		//create ui item
 		var uiItem:CqInventoryItem = CqInventoryItem.createUIItem(Item,mainDialog);		
 		
@@ -85,7 +90,6 @@ class CqInventoryItemManager
 				for ( cell in dlgPotionGrid.cells ) {
 					if ( cell.getCellObj() == null ) {
 						uiItem.setPotionCell(cell.cellIndex);
-						uiItem.popup.setText(Item.fullName+"\n[hotkey " + ((cell.cellIndex>3)?cell.cellIndex-4:cell.cellIndex + 6) + "]");
 						return false;
 					}
 				}
@@ -94,7 +98,6 @@ class CqInventoryItemManager
 				for ( cell in dlgSpellGrid.cells ) {
 					if ( cell.getCellObj() == null ) {
 						uiItem.setSpellCell(cell.cellIndex);
-						uiItem.popup.setText(Item.fullName+"\n[hotkey " + (cell.cellIndex + 1) + "]");
 						cell.getCellObj().updateIcon();
 						SoundEffectsManager.play(SpellEquipped);
 						return false;
@@ -102,54 +105,44 @@ class CqInventoryItemManager
 				}
 			} else {
 				//item in equipment
-				for ( cell in dlgEqGrid.cells ) {
-					//found same quipment cell slot as item
-					if (cast(cell, CqEquipmentCell).equipSlot == Item.equipSlot) {
-						//if slot was empty - equip
-						if (cell.getCellObj() == null) {
-							uiItem = equipItem(cell, Item, uiItem);
-							cell.getCellObj().updateIcon();
-							dlgInfo.setItem(Item);
+				var cell:CqEquipmentCell = dlgEqGrid.getCellWithSlot(Item.equipSlot);
+				//if slot was empty - equip
+				if (cell.getCellObj() == null) {
+					uiItem = equipItem(cell, Item, uiItem);
+					cell.getCellObj().updateIcon();
+					dlgInfo.setItem(Item);
+					return true;
+				} else {
+					
+					var preference:Float = shouldEquipItemInCell(cell, Item);
+					//equip if item is better
+					if (preference > 1)	{	
+						var old:CqInventoryItem = equipItem(cell, Item, uiItem);
+						dlgInfo.setItem(Item);
+						if (!old.item.isEnchanted) {	
+							// old is plain, so destroy
+							GameUI.showTextNotification("I can drop the old one now.", 0xBFE137);
+							destroyAndGiveMoney(old.item);
 							return true;
 						} else {
+							// old is non plain add to inv
+							uiItem = old;
+						}
+					} else if (preference < 1) {
+						//if new is worse than old, and is plain - destroy it
+						if (!Item.isEnchanted) {
+							GameUI.showTextNotification("I don't need this.");
+							destroyAndGiveMoney(Item);
 							
-							var preference:Float = shouldEquipItemInCell(cast(cell, CqEquipmentCell), Item);
-							//equip if item is better
-							if (preference > 1)	{	
-								var old:CqInventoryItem = equipItem(cell, Item, uiItem);
-								dlgInfo.setItem(Item);
-								if (!old.item.isEnchanted) {	
-									// old is plain, so destroy
-									GameUI.showTextNotification("I can drop the old one now.", 0xBFE137);
-									CqRegistery.player.giveMoney( old.item.getMonetaryValue() );
-									mainDialog.remove(old);
-									old.destroy();
-
-									return true;
-								} else {
-									// old is non plain add to inv
-									uiItem = old;
-								}
-							} else if (preference < 1) {
-								//if new is worse than old, and is plain - destroy it
-								if (!Item.isEnchanted) {
-									GameUI.showTextNotification("I don't need this.");
-									CqRegistery.player.giveMoney( Item.getMonetaryValue() );
-									mainDialog.remove(uiItem);
-									uiItem.destroy();
-									
-									return false;
-								}
-							} else {	
-								//item is the same & plain
-								if ( Item.equalTo( cell.getCellObj().item) && !Item.isEnchanted) {
-									CqRegistery.player.giveMoney( Item.getMonetaryValue() );
-									GameUI.showTextNotification("I already have this.",0xE1CC37);
-									mainDialog.remove(uiItem);
-									uiItem.destroy();
-									return false;
-								}
-							}
+							return false;
+						}
+					} else {	
+						//item is the same & plain
+						if ( Item.equalTo( cell.getCellObj().item) && !Item.isEnchanted) {
+							
+							GameUI.showTextNotification("I already have this.", 0xE1CC37);
+							destroyAndGiveMoney(Item);
+							return false;
 						}
 					}
 				}
@@ -160,11 +153,17 @@ class CqInventoryItemManager
 		if (emptyCell != null ) {
 			// add to inventory
 			uiItem.setInventoryCell(emptyCell.cellIndex);
-			uiItem.popup.setText(Item.fullName);
 			return true;
 		} else {
 			throw "no room in inventory, should not happen because pick up should have not been allowed!";
 		}
+	}
+	function destroyAndGiveMoney(Item:CqItem)
+	{
+		CqRegistery.player.giveMoney( Item.getMonetaryValue() );
+		mainDialog.remove(Item.uiItem);
+		Item.uiItem.destroy();
+		Item.destroy();
 	}
 	/**
 	 * <1 yes 1 == equal, >1 no
@@ -180,7 +179,7 @@ class CqInventoryItemManager
 	}
 	
 	private function equipItem(Cell:CqInventoryCell, Item:CqItem, UiItem:CqInventoryItem):CqInventoryItem {
-		var old:CqInventoryItem = cast(Cell, CqEquipmentCell).clearCellObj();
+		var old:CqInventoryItem = Cell.clearCellObj();
 		UiItem.setEquipmentCell(Cell.cellIndex);
 		CqRegistery.player.equipItem(Item);
 		return old;
@@ -208,7 +207,36 @@ class CqInventoryItemManager
 	{
 		if ( HxlGraphics.mouse.dragSprite != null ) 
 			return;
-		//checkKeys();
+		if(GameUI.currentPanel == mainDialog)
+			checkKeys();
+		else
+			onPressedUiItem();
+	}
+	
+	public function dragStart(UiItem:CqInventoryItem):Void 
+	{
+		//if its moved from an spell cell, make it not clear charge after dragging stops
+		if (UiItem.item.equipSlot == CqEquipSlot.SPELL) {
+			if (UiItem.isInCell == SPELL)
+				UiItem.clearCharge = false;
+			else
+				UiItem.clearCharge = true;
+		}
+		mainDialog.remove(UiItem);
+		mainDialog.dlgSpellGrid.remove(UiItem);
+		mainDialog.dlgPotionGrid.remove(UiItem);
+		mainDialog.dlgInvGrid.remove(UiItem);
+		mainDialog.dlgEqGrid.remove(UiItem);
+		mainDialog.zIndex = 400;
+		UiItem.addToDialog(mainDialog);
+		switch(UiItem.item.equipSlot) {
+			case POTION:
+				mainDialog.dlgPotionGrid.setGlowForAll(true);
+			case SPELL:
+				mainDialog.dlgSpellGrid.setGlowForAll(true);
+			default:
+				mainDialog.dlgEqGrid.setGlowForSlot(UiItem.item.equipSlot, true);
+		}
 	}
 	function checkKeys() {
 		if (gridOrder == null){
@@ -252,7 +280,8 @@ class CqInventoryItemManager
 				changeCurrentGrid(-1);
 		}else if (HxlGraphics.keys.justPressed("TAB") && HxlGraphics.keys.SHIFT)
 		{
-			simpleMovement = !simpleMovement;
+			//first finish automove
+			//simpleMovement = !simpleMovement;
 		}
 		
 		if (cellId != lcellId)
@@ -273,9 +302,15 @@ class CqInventoryItemManager
 		{
 			gridOrder[markedGrid].cells[markedCellId].setGlow(true);
 		}
+		showInfo(gridOrder[currentGrid].getCellObj(cellId));
 		gridOrder[currentGrid].cells[cellId].setGlow(true);
 		
 		lcellId = cellId;
+	}
+	
+	private function showInfo(cellObj:CqInventoryItem):Void 
+	{	if(cellObj != null)
+			dlgInfo.setItem(cellObj.item);
 	}
 	function onPress(dir:String, orient:Int)
 	{
@@ -325,6 +360,9 @@ class CqInventoryItemManager
 	}
 	function changeCurrentGrid(direction:Int)
 	{
+		//todo
+		//currently disabled, becouse automove only works from inv
+		return;
 		switch(direction)
 		{
 			case 1:
@@ -351,44 +389,57 @@ class CqInventoryItemManager
 	}
 	function invKeyAction() {
 		var cellObj:CqInventoryItem = gridOrder[currentGrid].getCellObj(cellId);
-		if (cellObj != null)
+		if (cellObj != null && instaEquip)
 		{
-			if (instaEquip)
-			{
-				if (currentGrid == 0)//if inv
-				{
-					switch(cellObj.item.equipSlot) {
-						case POTION:	
-						case SPELL:
-							var emptySpellCell:Int = dlgSpellGrid.getOpenCellIndex();
-							if (emptySpellCell == -1)//just replace the first one if there no empty ones.
-								emptySpellCell = 0;
-							var replacedItem:CqInventoryItem = dlgSpellGrid.getCellObj(emptySpellCell);
-							if (replacedItem != null)
-							{
-								replacedItem.setInventoryCell(cellId);
-								replacedItem.popup.setText(replacedItem.item.fullName);		
-							}
-							
-						default:
-							//
-							var newCell:CqInventoryCell = null; 
-							for (cl in dlgEqGrid.cells) {
-								if (cast(cl, CqEquipmentCell).equipSlot == cellObj.item.equipSlot)
-								{	newCell = cl;   break;		}
-							}
-							gridOrder[currentGrid].cells[cellId].clearCellObj();
-							
-							var replacedItem:CqInventoryItem = equipItem(newCell, cellObj.item, cellObj);
-							newCell.update();
-							if(replacedItem != null){
-								replacedItem.setInventoryCell(cellId);
-								replacedItem.popup.setText(replacedItem.item.fullName);
-							}
+			autoMove(cellObj);
+		}else
+		{
+			autoMarkMove(cellObj);
+		}
+		GameUI.instance.updateCharges();
+	}
+	function autoMove(cellObj:CqInventoryItem) {
+		if (currentGrid == 0)//if inv
+		{
+			var toCell:CqInventoryCell = null;
+			cellObj.removeFromDialog();
+			switch(cellObj.item.equipSlot) {
+				case POTION:	
+					var open:Int = dlgPotionGrid.getOpenCellIndex();
+					if (open < 0)
+						return;
+					gridOrder[currentGrid].cells[cellId].setCellObj(null);
+					cellObj.setPotionCell(open);
+				case SPELL:	
+					var open:Int = dlgSpellGrid.getOpenCellIndex();
+					if (open < 0)
+						open = 0;
+					toCell = dlgSpellGrid.cells[open];
+					var replacedItem:CqInventoryItem = toCell.getCellObj();
+					cellObj.setSpellCell(open);
+					dlgSpellGrid.clearCharge(open);
+					gridOrder[currentGrid].cells[cellId].setCellObj(null);
+					if (replacedItem != null)
+						replacedItem.setInventoryCell(cellId);
+				default:
+					//
+					toCell = dlgEqGrid.getCellWithSlot(cellObj.item.equipSlot);
+					var replacedItem:CqInventoryItem = toCell.clearCellObj();
+					cellObj.setEquipmentCell(toCell.cellIndex);
+					CqRegistery.player.equipItem(cellObj.item);
+					gridOrder[currentGrid].cells[cellId].setCellObj(null);
+					toCell.update();
+					if(replacedItem != null){
+						replacedItem.setInventoryCell(cellId);
+						//CqRegistery.player.unequipItem(replacedItem.item);
 					}
-				}
 			}
 		}
+	}
+				
+	function autoMarkMove(cellObj:CqInventoryItem) {
+		//mark an object then choose other cell where to move it.
+		//in progress..
 		/*
 		if (isMarkedCell)
 		{

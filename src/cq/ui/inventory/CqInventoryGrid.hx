@@ -62,7 +62,6 @@ class CqInventoryGrid extends HxlDialog {
 		}
 		return -1;
 	}
-
 	public function getCellItemPos(Cell:Int):HxlPoint {
 		return new HxlPoint(cells[Cell].x + 2, cells[Cell].y + 2);
 
@@ -90,5 +89,13 @@ class CqInventoryGrid extends HxlDialog {
 		for ( i in 0...cells.length ) {
 			cells[i].setGlow(value);
 		}
+	}
+	
+	public function getOpenOrFirstCell():CqInventoryCell 
+	{
+		for ( i in 0...cells.length ) {
+			if ( cells[i].getCellObj() == null ) return cells[i];
+		}
+		return cells[0];
 	}
 }
