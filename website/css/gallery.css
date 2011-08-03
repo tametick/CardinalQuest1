@@ -1,12 +1,12 @@
 #slideshow {list-style:none; color:#fff}
 #slideshow span {display:none}
-#wrapper {width:550px; margin:0px auto; display:none}
+#wrapper {width:420; margin:0px auto; display:none;overflow:hidden}
 #wrapper * {margin:0; padding:0}
-#fullsize {position:relative; width:545px; height:350px; padding:2px; border:1px solid #ccc; background:#000}
-#information {position:absolute; bottom:0; width:545px; height:0; background:#000; color:#fff; overflow:hidden; z-index:200; opacity:.7; filter:alpha(opacity=70)}
+#fullsize {position:relative; width:415px; height:350px; padding:2px; border:1px solid #ccc; background:#000}
+#information {position:absolute; bottom:0; width:415px; height:0; background:#000; color:#fff; overflow:hidden; z-index:200; opacity:.7; filter:alpha(opacity=70)}
 #information h3 {padding:4px 8px 3px; font-size:14px}
 #information p {padding:0 8px 8px}
-#image {width:545px}
+#image {width:415px}
 #image img {position:absolute; z-index:25; width:auto}
 .imgnav {position:absolute; width:25%; height:306px; cursor:pointer; z-index:150}
 #imgprev {left:0; background:url(../rsrc/images/left.gif) left center no-repeat}
@@ -18,6 +18,6 @@
 #slideleft:hover {background-color:#333}
 #slideright {float:right; width:20px; height:51px; background:#222 url(../rsrc/images/scroll-right.gif) center center no-repeat}
 #slideright:hover {background-color:#333}
-#slidearea {float:left; position:relative; width:500px; margin-left:5px; height:51px; overflow:hidden}
+#slidearea {float:left; position:relative; width:380px; margin-left:5px; height:51px; overflow:hidden}
 #slider {position:absolute; left:0; height:51px}
 #slider img {cursor:pointer; border:1px solid #666; padding:2px}
