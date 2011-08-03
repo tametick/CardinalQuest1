@@ -323,11 +323,11 @@ class CqItem extends GameObjectImpl, implements Loot {
 	function getFullName():String {
 		var prefix = "";
 		if (isMagical)
-			prefix = prefix+"Magical ";
+			prefix += "Magical ";
 		if(isSuperb)
-			prefix = prefix+"Superb ";
+			prefix += "Superb ";
 		if (isWondrous)
-			prefix = prefix+"Wondrous ";
+			prefix += "Wondrous ";
 			
 		return prefix + name;
 	}
@@ -520,18 +520,18 @@ class CqChest extends CqItem {
 
 	public function bust(state:HxlState,level:Int) {
 
-		for ( Callback in onBust ) Callback(this);
+		for ( Callback in onBust ) 
+			Callback(this);
 
 		// create random item
 		var typeName:String = null;
+		
 		// chance of getting a potion
-		if (Math.random() < CqConfiguration.dropPotionChance)
+		if (Math.random() < CqConfiguration.dropPotionChance){
 			typeName = HxlUtil.getRandomElement(SpriteItems.instance.potions).toUpperCase();
-		else
-		{
+		} else {
 			//set up equipment array. means filter out potions from the item enum.
-			if (equipment == null)
-			{
+			if (equipment == null) {
 				var li:Array<String> 			= Type.getEnumConstructs(CqItemType);
 				var upperCasePotions			= Lambda.map(SpriteItems.instance.potions, function (a:String):String { return a.toUpperCase(); });
 				var isNotPotion:String->Bool	= function (a:String):Bool { return (!Lambda.has(upperCasePotions, a)); }
