@@ -138,7 +138,6 @@ class CqInventoryItemManager
 						if (!Item.isEnchanted) {
 							GameUI.showTextNotification("I don't need this.");
 							destroyAndGiveMoney(Item);
-							
 							return false;
 						}
 					} else {	

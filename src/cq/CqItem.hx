@@ -267,7 +267,6 @@ class CqLootFactory {
 				Item.isSuperb = true;
 				Item.isWondrous = true;
 		}
-
 		if (Item.isSuperb) {
 			//Item.name = "Superb " + Item.name;
 			switch(Item.equipSlot) {
@@ -485,9 +484,9 @@ class CqItem extends GameObjectImpl, implements Loot {
 		var dmgAvgThis:Float  = (damage.start + damage.end)/2;
 		var dmgAvgOther:Float = (other.damage.start + other.damage.end)/2;
 		if (dmgAvgThis > dmgAvgOther)
-			sumBuffsThis++;
+			sumBuffsThis += dmgAvgThis-dmgAvgOther;
 		else if(dmgAvgThis < dmgAvgOther)
-			sumBuffsOther++;
+			sumBuffsOther+=dmgAvgOther-dmgAvgThis;
 		//do nothing if damage is equal
 		if ( sumBuffsOther == 0) sumBuffsOther = 0.1;
 		preference = sumBuffsThis / sumBuffsOther;
