@@ -365,6 +365,17 @@ class CqActor extends CqObject, implements Actor {
 			var loot = tile.loots[tile.loots.length - 1];
 			if (Std.is(loot, CqChest)) {
 				// bust chest & don't move
+				
+				//flip sprite
+				var dirx:Int = tile.mapX - Std.int(tilePos.x);
+				if (dirx != 0 && dirx != lastDirX)
+				{
+					_facing = Std.int((-dirx + 1) / 2);
+					if (Std.is(this, CqPlayer))
+						_facing = (_facing == 1?0:1);
+					calcFrame();
+				}
+				
 				attackObject(state, loot);
 				justAttacked = true;
 				SoundEffectsManager.play(ChestBusted);
