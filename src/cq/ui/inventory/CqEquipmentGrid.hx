@@ -60,4 +60,14 @@ class CqEquipmentGrid extends CqInventoryGrid {
 			}
 		}
 	}
+	public function getCellWithSlot(slot:CqEquipSlot):CqEquipmentCell
+	{
+		for( i in 0...cells.length ) {
+			var Cell:CqEquipmentCell = cast(cells[i], CqEquipmentCell);
+			if ( slot == Cell.equipSlot ) {
+				return Cell;
+			}
+		}
+		return null;
+	}
 }

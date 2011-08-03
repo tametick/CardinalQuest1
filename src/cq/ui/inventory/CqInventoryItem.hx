@@ -43,10 +43,9 @@ class CqInventoryItem extends HxlSprite {
 	var idleZIndex:Int;
 	var dragZIndex:Int;
 	var cellIndex:Int;
-	var clearCharge:Bool;
-	
+	public var clearCharge:Bool;
 
-	var isInCell:CqEquipSlot;
+	public var isInCell:CqEquipSlot;
 	
 	public var item(default, setItem):CqItem;
 	private function setItem(value:CqItem):CqItem{
@@ -82,7 +81,7 @@ class CqInventoryItem extends HxlSprite {
 		uiItem.toggleDrag(true);
 		uiItem.zIndex = 5;
 		uiItem.item = Item;
-		
+		Item.uiItem = uiItem;
 		if ( Std.is(Item, CqSpell) ) {
 			spellSprite.setFrame(spellSheet.getSpriteIndex(Item.spriteIndex));
 			uiItem.setIcon(spellSprite.getFramePixels());
@@ -193,7 +192,7 @@ class CqInventoryItem extends HxlSprite {
 			CqRegistery.player.equippedSpells[cellIndex] = null;
 			_dlg.dlgSpellGrid.forceClearCharge(cellIndex);
 		}
-		
+		popup.setText(item.fullName);
 		zIndex = idleZIndex;
 		addToDialog(_dlg);
 		cellIndex = Cell;
@@ -207,13 +206,15 @@ class CqInventoryItem extends HxlSprite {
 	 **/
 	public function setEquipmentCell(Cell:Int):Bool {
 		zIndex = idleZIndex;
-		addToDialog(_dlg);
 		var cellRef:CqEquipmentCell = cast(_dlg.dlgEqGrid.cells[Cell], CqEquipmentCell);
 		if ( cellRef.equipSlot != this.item.equipSlot ) {
 			Cell = _dlg.dlgInvGrid.getOpenCellIndex();
 			setInventoryCell(Cell);
 			return false;
 		}
+		addToDialog(_dlg);
+
+		SoundEffectsManager.play(ItemEquipped);
 		cellRef.icon.visible = false;
 		cellIndex = Cell;
 		setPos(_dlg.dlgEqGrid.getCellItemPos(Cell));
@@ -235,12 +236,13 @@ class CqInventoryItem extends HxlSprite {
 		if (_dlg.dlgSpellGrid.cells.length <= Cell)
 			return false;
 		
-		if ( cast(_dlg.dlgSpellGrid.cells[Cell], CqEquipmentCell).equipSlot != this.item.equipSlot ) {
+		/*if ( cast(_dlg.dlgSpellGrid.cells[Cell], CqEquipmentCell).equipSlot != this.item.equipSlot ) {
 			Cell = _dlg.dlgInvGrid.getOpenCellIndex();
 			setInventoryCell(Cell);
 			return false;
-		}
-
+		}*/
+		SoundEffectsManager.play(SpellEquipped);
+		popup.setText(item.fullName+"\n[hotkey " + (Cell + 1) + "]");
 		addToDialog(_dlg.dlgSpellGrid);
 		cellIndex = Cell;
 		setPos(_dlg.dlgSpellGrid.getCellItemPos(Cell));
@@ -250,6 +252,24 @@ class CqInventoryItem extends HxlSprite {
 		CqRegistery.player.equippedSpells[cellIndex] = cast(this.item,CqSpell);
 		
 		return true;
+	}
+	
+	public function removeFromCell():Void 
+	{
+		if (isInCell == null) {
+			_dlg.dlgInvGrid.cells[cellIndex].setCellObj(null);
+		}else{
+		switch(isInCell) {
+			case POTION:
+				_dlg.dlgPotionGrid.cells[cellIndex].setCellObj(null);
+			case SPELL:
+				_dlg.dlgSpellGrid.cells[cellIndex].setCellObj(null);
+			default:
+				_dlg.dlgEqGrid.cells[cellIndex].setCellObj(null);
+			
+		}
+		}
+		cellIndex = -1;
 	}
 
 	/**
@@ -263,7 +283,8 @@ class CqInventoryItem extends HxlSprite {
 			setInventoryCell(Cell);
 			return false;
 		}
-
+		SoundEffectsManager.play(PotionEquipped);
+		popup.setText(item.fullName+"\n[hotkey " + ((Cell>3)?Cell-4:Cell + 6) + "]");
 		addToDialog(_dlg.dlgPotionGrid);
 		cellIndex = Cell;
 		setPos(_dlg.dlgPotionGrid.getCellItemPos(Cell));
@@ -317,34 +338,13 @@ class CqInventoryItem extends HxlSprite {
 			var cellRef:CqEquipmentCell = cast(_dlg.dlgEqGrid.cells[cellIndex], CqEquipmentCell);
 			cellRef.icon.visible = true;
 		}
-		
-		//if its moved from an spell cell, make it not clear charge after dragging stops
-		if (item.equipSlot == CqEquipSlot.SPELL) {
-			if (isInCell == SPELL)
-				clearCharge = false;
-			else
-				clearCharge = true;
-		}
-		_dlg.remove(this);
-		_dlg.dlgSpellGrid.remove(this);
-		_dlg.dlgPotionGrid.remove(this);
-		_dlg.dlgInvGrid.remove(this);
-		_dlg.dlgEqGrid.remove(this);
-		zIndex = 400;
-		addToDialog(_dlg);
-		switch(item.equipSlot) {
-			case POTION:
-				_dlg.dlgPotionGrid.setGlowForAll(true);
-			case SPELL:
-				_dlg.dlgSpellGrid.setGlowForAll(true);
-			default:
-				_dlg.dlgEqGrid.setGlowForSlot(item.equipSlot, true);
-		}
+		GameUI.instance.invItemManager.dragStart(this);
 		super.dragStart();
 	}
 	
 	// If the user was hovering an eligable drop target, act on it
 	override function dragStop() {
+		//todo: merge gotosamecell and revert methods.
 		removeFromDialog();
 		//collect info
 		var dragStopCell:CqInventoryCell = CqInventoryCell.highlightedCell;
@@ -389,76 +389,46 @@ class CqInventoryItem extends HxlSprite {
 				setInventoryCell(dragStopCell.cellIndex);
 		}
 	}
-	public function isInCellEquip():Bool
-	{
-		return (isInCell != null && isInCell != POTION && isInCell != SPELL);
-	}
-	public function addToDialog(dialog:HxlDialog)
-	{
-		inDialog = dialog;
-		dialog.add(this);
-	}
-	public function removeFromDialog():Void 
-	{
-		if (inDialog == null)
-			return;
-		inDialog.remove(this);
-	}
 	//when user drops item on another item
 	private function stopdrag_gotoOccupiedCell(dragStopCell_class:Dynamic, dragStopCell:CqInventoryCell,dragStop_cell_obj:CqInventoryItem) {
 		// There was already an item in the target cell, switch places with it
 		if (isInCell == null)
 		{
-			dragStop_cell_obj.popup.setText(dragStop_cell_obj.item.fullName);
 			// Moving the other item into an inventory cell
 			dragStop_cell_obj.setInventoryCell(cellIndex);	
 		}else{
 			switch(isInCell) {
 				case SPELL:
 					// Moving the other item into a spell cell
-					dragStop_cell_obj.popup.setText(dragStop_cell_obj.item.fullName+"\n[hotkey " + (cellIndex + 1) + "]");
-					
 					dragStop_cell_obj.setSpellCell(cellIndex);
 					var spellBtn = _dlg.dlgSpellGrid.getSpellCell(cellIndex).btn;
 					if (dragStop_cell_obj != this)
 						GameUI.instance.updateCharge(spellBtn);
-					SoundEffectsManager.play(SpellEquipped);
 				case POTION:
 					// Moving the other item into a potion cell
-					dragStop_cell_obj.popup.setText(dragStop_cell_obj.item.fullName+"\n[hotkey " + ((cellIndex>3)?cellIndex-4:cellIndex + 6) + "]");
 					dragStop_cell_obj.setPotionCell(cellIndex);
-					SoundEffectsManager.play(PotionEquipped);
 				default:
 					// Unequipping current item (?)
 			}
 		}
-		
-		if (item.equipSlot != CqEquipSlot.POTION &&  item.equipSlot != CqEquipSlot.SPELL) {
-			if (isInCellEquip() || dragStop_cell_obj.isInCellEquip()) {
-				if (dragStop_cell_obj.item != item)
-					CqRegistery.player.unequipItem(item);
-				
-				CqRegistery.player.equipItem(dragStop_cell_obj.item);
-				dragStop_cell_obj.setEquipmentCell(cellIndex);
-			}
+		//from equip to inv
+		if (isInCellEquip()) {
+			CqRegistery.player.unequipItem(item);
+			CqRegistery.player.equipItem(dragStop_cell_obj.item);
+			dragStop_cell_obj.setEquipmentCell(cellIndex);
 		}
 		
-		// moving from inv to equip:
 		switch(dragStopCell_class) {
 			case CqSpellCell:
-				// Moving this item into a spell cell
+				// item into a spell cell
 				setSpellCell(dragStopCell.cellIndex);
-				popup.setText(item.fullName+"\n[hotkey " + (cellIndex + 1) + "]");
 			case CqPotionCell:
-				// Moving this item into a potion cell
+				// tem into a potion cell
 				setPotionCell(dragStopCell.cellIndex);
-				popup.setText(item.fullName+"\n[hotkey " + ((cellIndex>3)?cellIndex-4:cellIndex + 6) + "]");
 			case CqEquipmentCell:
-				// Moving this item into an equipment cell
-				if (dragStop_cell_obj != this) {
-					CqRegistery.player.unequipItem(dragStop_cell_obj.item);
-					CqRegistery.player.equipItem(this.item);
-				}
+				// into an equipment cell
+				CqRegistery.player.unequipItem(dragStop_cell_obj.item);
+				CqRegistery.player.equipItem(this.item);
 				//move new to other's place
 				setEquipmentCell(dragStopCell.cellIndex);
 				
@@ -520,13 +490,9 @@ class CqInventoryItem extends HxlSprite {
 				var spellBtn = spellCell.btn;
 				GameUI.instance.updateCharge(spellBtn);
 				if (clearCharge)_dlg.dlgSpellGrid.forceClearCharge(dragStopCell.cellIndex);
-				popup.setText(item.fullName + "\n[hotkey " + (cellIndex + 1) + "]");
-				SoundEffectsManager.play(SpellEquipped);
 			case CqPotionCell:
 				// Moving this item into a potion cell
 				setPotionCell(dragStopCell.cellIndex);
-				popup.setText(item.fullName + "\n[hotkey " + ((cellIndex > 3)?cellIndex - 4:cellIndex + 6) + "]");
-				SoundEffectsManager.play(PotionEquipped);
 			case CqEquipmentCell:
 				// Moving this item into an equipment cell
 				setEquipmentCell(dragStopCell.cellIndex);
@@ -547,6 +513,22 @@ class CqInventoryItem extends HxlSprite {
 				}
 		}
 		cellIndex = dragStopCell.cellIndex;
+	}
+	
+	public function isInCellEquip():Bool
+	{
+		return (isInCell != null && isInCell != POTION && isInCell != SPELL);
+	}
+	public function addToDialog(dialog:HxlDialog)
+	{
+		inDialog = dialog;
+		dialog.add(this);
+	}
+	public function removeFromDialog():Void 
+	{
+		if (inDialog == null)
+			return;
+		inDialog.remove(this);
 	}
 	//check if this CQinventoryItem is over the char equipment silhouette
 	inline function isOnCharSilhouette():Bool {

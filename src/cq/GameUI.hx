@@ -364,6 +364,11 @@ class GameUI extends HxlDialog {
 			}
 		}
 	}
+	override public function update() 
+	{
+		invItemManager.update();
+		super.update();
+	}
 	public function setActive(?toggle:Bool = false)
 	{
 		if (!toggle){
