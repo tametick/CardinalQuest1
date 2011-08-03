@@ -81,6 +81,7 @@ class GameState extends CqState {
 		super.render();
 	}
 
+	static var keyPressCounter = 0;
 	public override function update() {
 		super.update();
 		if (endingAnim)
@@ -107,9 +108,17 @@ class GameState extends CqState {
 		
 		checkInvKeys();
 		if ( GameUI.isTargeting) {
-			if (CqRegistery.level.getTargetAccordingToKeyPress()!=CqRegistery.player.tilePos&&CqRegistery.level.getTargetAccordingToKeyPress()!=null)
+			if (CqRegistery.level.getTargetAccordingToKeyPress()!=CqRegistery.player.tilePos && CqRegistery.level.getTargetAccordingToKeyPress()!=null)
 				lastMouse = false;
-			gameUI.updateTargeting(lastMouse);
+			
+			if (!lastMouse) {
+				keyPressCounter++;
+				if(keyPressCounter>=5){
+					gameUI.updateTargeting(false);
+					keyPressCounter = 0;
+				}
+			} else
+				gameUI.updateTargeting(true);
 			setDiagonalCursor();
 		} else {
 			if (isPlayerActing) {
@@ -244,8 +253,8 @@ class GameState extends CqState {
 	override function init() {
 		classEntry();
 		if(Configuration.debug){
-			CqConfiguration.chestsPerLevel = 100;
-			CqConfiguration.spellsPerLevel = 50;
+			//CqConfiguration.chestsPerLevel = 100;
+			CqConfiguration.spellsPerLevel = 5;
 		}
 	}
 	

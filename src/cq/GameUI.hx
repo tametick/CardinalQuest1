@@ -885,7 +885,8 @@ class GameUI extends HxlDialog {
 			targetSprite.x = wPos.x;
 			targetSprite.y = wPos.y;
 			//targetLastPos = null;
-		} else if ( targetSprite.visible == false ) targetSprite.visible = true;
+		} else if ( targetSprite.visible == false ) 
+			targetSprite.visible = true;
 		if ( targetText == null && GameUI.targetString != "" ) {
 			targetText = new HxlText( 80, HxlGraphics.height - 130, HxlGraphics.width - 160, GameUI.targetString );
 			targetText.setFormat(null, 24, 0xffffff, "center", 0x010101);
@@ -897,28 +898,23 @@ class GameUI extends HxlDialog {
 		}
 		var targetX:Float = 0;
 		var targetY:Float = 0;
-		if (mouse)
-		{
+		if (mouse) {
 			targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
 			targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
-		}else
-		{
+		} else {
 			var newPos:HxlPoint = CqRegistery.level.getTargetAccordingToKeyPress(targetLastPos);
 			if (newPos != null)
 			{
-				if (newPos.x == 0 && newPos.y == 0)
-				{
+				if (newPos.x == 0 && newPos.y == 0) {
 					targetLastPos.x += newPos.x;
 					targetLastPos.y += newPos.y;
 					targetingExecute(false);
 					return;
-				}else
-				{
+				} else {
 					targetX = targetLastPos.x+newPos.x;
 					targetY = targetLastPos.y+newPos.y;
 				}
-			}else
-			{
+			} else {
 				targetX = targetLastPos.x;
 				targetY = targetLastPos.y;
 				
