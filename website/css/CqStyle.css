@@ -22,8 +22,14 @@ body,html{
 	-webkit-box-shadow: 0px 0px 45px 10px #000;
 	box-shadow: 0px 0px 45px 10px #000;*/
 }
+p{
+	margin-top:30px;
+	margin-bottom:30px;
+}
 li{
 	list-style-position:inside;
+	margin-top:10px;
+	margin-bottom:10px;
 }
 #contentArea{
 	width:900px;
@@ -45,9 +51,12 @@ h1{
 }
 #leftContainer{
 	float:left;
-	margin:5px;
-	width:500px;
-	padding:23px;
+	margin-left:auto;
+	margin-right:auto;
+	width:476px;
+	height:930px;
+	padding:18px;
+	padding-top:40px;
 	background-image: url(../rsrc/colbg.png);
 	background-repeat:no-repeat;
 }
@@ -60,7 +69,7 @@ h1{
 	float:left;
 }
 span{
-	color:#531313;
+	color:#923718;
 }
 #slides
 {
@@ -74,6 +83,5 @@ span{
 	font-family: Cust2;
 	font-size:20px;
 	padding:10px;
-	//margin:10px;
 	float:none;
 }
