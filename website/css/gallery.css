@@ -2,7 +2,7 @@
 #slideshow span {display:none}
 #wrapper {width:420; margin:0px auto; display:none}
 #wrapper * {margin:0px; padding:0px}
-#fullsize {position:relative; width:425px; height:315px; padding:0px; border:1px solid #ccc; background:#000}
+#fullsize {position:relative; width:425px; height:315px; padding:0px; border:0px solid #ccc; background:#000}
 #information {position:absolute; bottom:0px; width:425px; height:0; background:#000; color:#fff; overflow:hidden; z-index:200; opacity:.7; filter:alpha(opacity=70)}
 #information h3 {padding:4px 8px 3px; font-size:14px}
 #information p {padding:0 8px 8px}
