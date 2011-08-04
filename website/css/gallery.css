@@ -2,11 +2,11 @@
 #slideshow span {display:none}
 #wrapper {width:420; margin:0px auto; display:none;overflow:hidden}
 #wrapper * {margin:0; padding:0}
-#fullsize {position:relative; width:415px; height:350px; padding:2px; border:1px solid #ccc; background:#000}
-#information {position:absolute; bottom:0; width:415px; height:0; background:#000; color:#fff; overflow:hidden; z-index:200; opacity:.7; filter:alpha(opacity=70)}
+#fullsize {position:relative; width:425px; height:315px; padding:2px; border:1px solid #ccc; background:#000}
+#information {position:absolute; bottom:0; width:425px; height:0; background:#000; color:#fff; overflow:hidden; z-index:200; opacity:.7; filter:alpha(opacity=70)}
 #information h3 {padding:4px 8px 3px; font-size:14px}
 #information p {padding:0 8px 8px}
-#image {width:415px;height:315px}
+#image {width:425px;height:315px}
 #image img {position:absolute; z-index:25; width:auto}
 .imgnav {position:absolute; width:25%; height:306px; cursor:pointer; z-index:150}
 #imgprev {left:0; background:url(../rsrc/images/left.gif) left center no-repeat}
