@@ -1,9 +1,9 @@
 #slideshow {list-style:none; color:#fff}
 #slideshow span {display:none}
 #wrapper {width:420; margin:0px auto; display:none;overflow:hidden}
-#wrapper * {margin:0; padding:0}
+#wrapper * {margin:0px; padding:0px}
 #fullsize {position:relative; width:415px; height:350px; padding:2px; border:1px solid #ccc; background:#000}
-#information {position:absolute; bottom:0; width:415px; height:0; background:#000; color:#fff; overflow:hidden; z-index:200; opacity:.7; filter:alpha(opacity=70)}
+#information {position:absolute; bottom:0px; width:415px; height:0; background:#000; color:#fff; overflow:hidden; z-index:200; opacity:.7; filter:alpha(opacity=70)}
 #information h3 {padding:4px 8px 3px; font-size:14px}
 #information p {padding:0 8px 8px}
 #image {width:415px;height:315px}
