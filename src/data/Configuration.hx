@@ -8,6 +8,7 @@ class Configuration {
 	//public static var debug = true;
 	public static var debug = false;
 	public static var standAlone = true;
+	public static var useProductionPlaytomic:Bool = true;
 	//public static var standAlone = false;
 	
 

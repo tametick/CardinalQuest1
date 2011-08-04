@@ -72,7 +72,6 @@ class Level extends HxlTilemap
 		removeAllActors(state);
 		removeAllLoots(state);
 		removeAllDecorations(state);
-		ptLevel.finish();
 	}
 	
 	public function addMobToLevel(state:HxlState, mob:Mob) {
@@ -168,6 +167,7 @@ class Level extends HxlTilemap
 	}
 	//public function 
 	function levelComplete() {
+		ptLevel.finish();
 		if (index == CqConfiguration.lastLevel)
 			cast(HxlGraphics.state,GameState).startBossAnim();
 			//HxlGraphics.pushState(new WinState());
