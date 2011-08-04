@@ -1,5 +1,6 @@
 @font-face { font-family: Dungeon; src: url('rsrc/Dungeon.ttf'); }
 @font-face { font-family: Cust2; src: url('rsrc/AUBREY1.ttf'); }
+@font-face { font-family: Medieval; src: url('../rsrc/CloisterBlack.ttf'); }
 
 html{
 	background-image: url(../rsrc/bg.png);
@@ -26,6 +27,11 @@ p{
 	margin-top:30px;
 	margin-bottom:30px;
 }
+p:first-letter
+ { 
+ font-size:28px;
+ font-family: Medieval;
+ }
 li{
 	list-style-position:inside;
 	margin-top:10px;
