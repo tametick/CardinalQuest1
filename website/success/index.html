@@ -25,25 +25,18 @@
 		</div>
    </div>
    
-   <script type="text/javascript" src="js/compressed.js"></script>
 	<script type="text/javascript">
-		$('slideshow').style.display='none';
-		$('wrapper').style.display='block';
-		var slideshow=new TINY.slideshow("slideshow");
-		window.onload=function(){
-			slideshow.auto=true;
-			slideshow.speed=5;
-			slideshow.link="linkhover";
-			//slideshow.info="information";
-			slideshow.info=false;
-			slideshow.thumbs="slider";
-			slideshow.left="slideleft";
-			slideshow.right="slideright";
-			slideshow.scrollSpeed=4;
-			slideshow.spacing=5;
-			slideshow.active="#fff";
-			slideshow.init("slideshow","image","imgprev","imgnext","imglink");
-		}
+
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-3582984-6']);
+	  _gaq.push(['_trackPageview']);
+
+	  (function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+
 	</script>
 </body>
 </html>

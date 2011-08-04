@@ -1,5 +1,4 @@
 @font-face { font-family: Dungeon; src: url('rsrc/Dungeon.ttf'); }
-@font-face { font-family: Cust1; src: url('rsrc/Alcefun.otf'); }
 @font-face { font-family: Cust2; src: url('rsrc/AUBREY1.ttf'); }
 
 html{
@@ -7,25 +6,29 @@ html{
 	background-repeat: repeat;
 	font:11px Verdana,Arial;
 }
-html,body {
-	height:100%;
+body,html{
+	height: 100%;
+	overflow: auto;
 }
 #page {
 	background:#FFFFFF;
-	background-image: url(../rsrc/general-background.png);
+	background-image:url(../rsrc/general-background.png);
 	background-repeat:repeat-y;
-	min-height: 100%;
+	min-height: 140%;
 	width: 1300px ;
 	margin-left: auto ;
 	margin-right: auto ;
-	-moz-box-shadow: 0px 0px 45px 10px #000;
+	/*-moz-box-shadow: 0px 0px 45px 10px #000;
 	-webkit-box-shadow: 0px 0px 45px 10px #000;
-	box-shadow: 0px 0px 45px 10px #000;
+	box-shadow: 0px 0px 45px 10px #000;*/
+}
+li{
+	margin:5px;
 }
 #contentArea{
-	width: 900px ;
-	margin-left: auto ;
-	margin-right: auto ;
+	width:900px;
+	margin-left:auto;
+	margin-right:auto;
 }
 #logo{
 	width:445px;
@@ -42,7 +45,7 @@ h1{
 }
 #leftContainer{
 	float:left;
-	margin:10px;
+	margin:5px;
 	width:500px;
 	padding:23px;
 	background-image: url(../rsrc/colbg.png);
@@ -71,6 +74,4 @@ span{
 	font-family: Cust2;
 	font-size:20px;
 	margin:10px;
-	min-height:300px;
-	float:none;
 }
