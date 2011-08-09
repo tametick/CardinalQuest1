@@ -3,7 +3,7 @@
 	
 	<id>com.tametick.CardinalQuest</id> 
 	<versionNumber>1.0</versionNumber> 
-	<filename>Cardinal Quest</filename> 
+	<filename>cardinalquest</filename>
 	
 	<name>Cardinal Quest</name> 
 	<description>Hack and slash your way through a randomly generated dungeon:  a new adventure awaits every time!</description> 
@@ -29,7 +29,7 @@
         <image128x128>icon128.png</image128x128> 
     </icon>
 	
-	<installFolder>tametick/Cardinal Quest</installFolder>
+<!--	<installFolder>tametick/Cardinal Quest</installFolder> -->
     <programMenuFolder>Cardinal Quest</programMenuFolder>
 	
 	<!-- 
