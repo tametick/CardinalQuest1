@@ -90,7 +90,7 @@ public:
 
 int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nCmdLine) {
 	try {
-		switch(JadeSDK::Connection::init("ogresamples",JadeSDK::PlayTime)){
+		switch(JadeSDK::Connection::init("cardinalquest",JadeSDK::PlayTime)){
 		case JadeSDK::Success:
 		case JadeSDK::AlreadyConnected:
 			break;
