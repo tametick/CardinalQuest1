@@ -1,9 +1,9 @@
-@font-face { font-family: Dungeon; src: url('http://d12dnsmfbcrswq.cloudfront.net/rsrc/Dungeon.ttf'); }
-@font-face { font-family: Cust2; src: url('http://d12dnsmfbcrswq.cloudfront.net/rsrc/AUBREY1.ttf'); }
-@font-face { font-family: Medieval; src: url('http://d12dnsmfbcrswq.cloudfront.net/rsrc/CloisterBlack.ttf'); }
+@font-face { font-family: Dungeon; src: url('/rsrc/Dungeon.ttf'); }
+@font-face { font-family: Cust2; src: url('/rsrc/AUBREY1.ttf'); }
+@font-face { font-family: Medieval; src: url('/rsrc/CloisterBlack.ttf'); }
 
 html{
-	background-image: url(../rsrc/bg.png);
+	background-image:url(http://d12dnsmfbcrswq.cloudfront.net/rsrc/bg.png);
 	background-repeat: repeat;
 	//font:11px Verdana,Arial;
 	font-family: Cust2;
@@ -14,7 +14,7 @@ body,html{
 }
 #page {
 	background:#FFFFFF;
-	background-image:url(http://d12dnsmfbcrswq.cloudfront.net/rsrc/general-background.png);
+	background-image:url(http://d12dnsmfbcrswq.cloudfront.net/rsrc/general-background.jpg);
 	background-repeat:repeat-y;
 	min-height: 140%;
 	width: 1300px ;
@@ -60,7 +60,7 @@ h1{
 	height:1000px;
 	padding:18px;
 	padding-top:40px;
-	background-image: url(http://d12dnsmfbcrswq.cloudfront.net/rsrc/colbg.png);
+	background-image: url(http://d12dnsmfbcrswq.cloudfront.net/rsrc/colbg.jpg);
 	background-repeat:no-repeat;
 }
 a{
