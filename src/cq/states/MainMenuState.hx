@@ -155,7 +155,7 @@ class MainMenuState extends CqState {
 			btnHiscores.setCallback(function() { HxlGraphics.fade.start(true, 0xff000000, sFadeTime, function() { HxlGraphics.pushState(new HighScoreState()); } ); } );
 			buttonY += 50;
 		}
-		//if (Configuration.standAlone) {
+		if (Configuration.standAlone) {
 			var btnQuit:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Quit", true, null);
 			btnQuit.setNormalFormat(null, 35, textColor, "center");
 			btnQuit.setHoverFormat(null, 35, textHighlight, "center");
@@ -173,7 +173,7 @@ class MainMenuState extends CqState {
 			}
 			
 			buttonY += 50;			
-		//}
+		}
 		
 		Actuate.tween(menu, 1, { targetY: 220 } ).ease(Cubic.easeOut);
 		

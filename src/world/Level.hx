@@ -351,9 +351,10 @@ class Level extends HxlTilemap
 						}
 						Ttile.colorTo(normColor, actor.moveSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
-						for (decoration in Ttile.decorations)
+						for (decoration in Ttile.decorations){
 							//decoration.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
 							decoration.colorTo(normColor, actor.moveSpeed);
+						}
 					case Visibility.SEEN:
 						tile.visible = true;
 						
@@ -446,9 +447,10 @@ class Level extends HxlTilemap
 							cast(actor,HxlSprite).visible = true;
 						Ttile.colorTo(normColor, tweenSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
-						for (decoration in Ttile.decorations)
+						for (decoration in Ttile.decorations){
 							//decoration.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
 							decoration.colorTo(normColor, tweenSpeed);
+						}
 					case Visibility.SEEN:
 						tile.visible = true;
 						
