@@ -9,7 +9,7 @@
     <movie width="640" />
     <movie height="480" />
     <movie version="2" />
-    <movie minorVersion="7" />
+    <movie minorVersion="6" />
     <movie platform="AIR" />
     <movie background="#000000" />
   </output>
