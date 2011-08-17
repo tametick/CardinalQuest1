@@ -89,6 +89,8 @@ class Game extends HxlGame {
 	}
 	
 	public function new() {
+		var _mochiads_game_id:String = "f7594e4c18588dca";
+		
 		#if jadeds
 			startJadeDs();
 		#end
