@@ -67,6 +67,7 @@ class UiInventoryBox extends Bitmap { public function new() { super(); } }
 class SpriteMapPaper extends Bitmap { public function new() { super(); } }
 class SpriteCharPaper extends Bitmap { public function new() { super(); } }
 class IntroScreen extends Bitmap { public function new() { super(); } }
+class BlankScreen extends Bitmap { public function new() { super(); } }
 class DeathScreen extends Bitmap { public function new() { super(); } }
 class VortexScreen extends Bitmap { public function new() { super(); } }
 class VortexLightsScreen extends Bitmap { public function new() { super(); } }

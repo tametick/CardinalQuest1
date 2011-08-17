@@ -12,7 +12,7 @@ import haxel.HxlTimer;
 class GameOverState extends CqState {
 
 	var fadeTime:Float;
-	private var scroller:CqTextScroller;
+	var scroller:CqTextScroller;
 	static var complete;
 
 	public override function create() {
@@ -51,7 +51,7 @@ class GameOverState extends CqState {
 			nextScreen();		
 	}
 
-	function nextScreen() {
+	public function nextScreen() {
 		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
 			var newState = MainMenuState.instance;
 			HxlGraphics.state = newState;

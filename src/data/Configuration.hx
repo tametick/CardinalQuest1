@@ -7,12 +7,12 @@ class Configuration {
 	
 	//public static var debug = true;
 	public static var debug = false;
-	public static var standAlone = true;
-	public static var useProductionPlaytomic:Bool = true;
-	//public static var standAlone = false;
+	//public static var standAlone = true;
+	public static var standAlone = false;
 	
+	public static var useProductionPlaytomic:Bool = true;
 
-	public static var debugStartingLevel:Int = 1;
+	public static var debugStartingLevel:Int = 2;
 	public static var debugStartingClass:CqClass = WIZARD;
 	static public var debugMoveThroughWalls:Bool = false;
 	

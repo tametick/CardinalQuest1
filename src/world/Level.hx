@@ -111,12 +111,12 @@ class Level extends HxlTilemap
 		player.setTilePos(Std.int(startingLocation.x),Std.int(startingLocation.y));
 		player.x = getPixelPositionOfTile(player.tilePos.x, player.tilePos.y).x;
 		player.y = getPixelPositionOfTile(player.tilePos.x, player.tilePos.y).y;
-		if (player.tilePos.x != startingLocation.x || player.tilePos.y  != startingLocation.y)
+/*		if (player.tilePos.x != startingLocation.x || player.tilePos.y  != startingLocation.y)
 		{
 			trace(player.tilePos.x + " " + startingLocation.x);
 			trace(player.tilePos.y + " " + startingLocation.y);
 			trace("positions not equal! Is there a chest on player starting pos??");
-		}
+		}*/
 		state.add(player);
 		
 		for (mob in mobs)
@@ -495,10 +495,11 @@ class Level extends HxlTilemap
 		
 		if (targetTile == null)
 			targetTile = new HxlPoint(0, 0);
-		else{
+		else {
 			targetTile.x = 0;
 			targetTile.y = 0;
 		}
+		
 		if ( HxlGraphics.keys.LEFT || HxlGraphics.keys.A) {
 			if ( pos.x > 0) {
 				targetTile.x = -1;
@@ -515,12 +516,13 @@ class Level extends HxlTilemap
 			if ( pos.y < heightInTiles ) {
 					targetTile.y = 1;
 			}
-		} else if ( HxlGraphics.keys.ENTER || HxlGraphics.keys.NONUMLOCK_5)
-		{
+		} else if ( HxlGraphics.keys.ENTER || HxlGraphics.keys.NONUMLOCK_5)	{
 			return targetTile;
 		}
+		
 		if (targetTile.x == 0 && targetTile.y == 0)
 			return null;
+			
 		return targetTile;
 	}
 	

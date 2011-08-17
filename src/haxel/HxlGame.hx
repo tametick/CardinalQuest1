@@ -1,5 +1,6 @@
 package haxel;
 
+import data.Configuration;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Sprite;
@@ -208,7 +209,7 @@ class HxlGame extends Sprite {
 
 	function onKeyUp(event:KeyboardEvent) {
 		// todo: use HxlKeyboard constants instead of keycodes
-		if ((event.keyCode == 192) || (event.keyCode == 220)) {
+		if (((event.keyCode == 192) || (event.keyCode == 220)) && Configuration.debug) {
 			console.toggle();
 			return;
 		}

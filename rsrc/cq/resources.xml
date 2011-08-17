@@ -79,6 +79,7 @@
 		<bitmap id="cq.SpriteCredits" import="Credits.png"/>
 		<bitmap id="cq.SpriteHighScoresBg" import="HighscoresBg.png"/>
 		<bitmap id="cq.SpriteMainmenuBg" import="mainmenuBg.png"/>
+		<bitmap id="cq.BlankScreen" import="BlankOverlay.png"/>
 		
 	</library>
 </movie>

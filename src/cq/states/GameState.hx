@@ -163,11 +163,9 @@ class GameState extends CqState {
 	}
 	
 	private function checkJumpKeys():Void {
-		if (HxlGraphics.keys.justReleased("K") && CqRegistery.world.currentLevelIndex>0)
-		{
+		if (HxlGraphics.keys.justReleased("COMMA") && CqRegistery.world.currentLevelIndex>0) {
 			CqRegistery.world.goToNextLevel(this, CqRegistery.world.currentLevelIndex-1);
-		}else if (HxlGraphics.keys.justReleased("L") && CqRegistery.world.currentLevelIndex<CqConfiguration.lastLevel)
-		{
+		} else if (HxlGraphics.keys.justReleased("PERIOD") && CqRegistery.world.currentLevelIndex<CqConfiguration.lastLevel) {
 			CqRegistery.world.goToNextLevel(this, CqRegistery.world.currentLevelIndex+1);
 		}
 	}
@@ -447,15 +445,13 @@ class GameState extends CqState {
 		var dy;
 		var tile:CqTile;
 		var ktg:HxlPoint = level.getTargetAccordingToKeyPress();
-		if (ktg != null )
-		{
+		if (ktg != null ) {
 			dx =  (player.x + Configuration.zoomedTileSize() / 2);
 			dy =  (player.y + Configuration.zoomedTileSize() / 2);
 			target = ktg;
 			lastMouse = false;//for targeting
 		}else {
-			if (!HxlGraphics.mouse.pressed())
-			{
+			if (!HxlGraphics.mouse.pressed()) {
 				isPlayerActing = false;
 				return;
 			}
@@ -466,8 +462,7 @@ class GameState extends CqState {
 		
 		var tile = getPlayerTile(target);
 		if (tile == null) {
-			if ( !HxlGraphics.keys.justPressed("ENTER") && !HxlGraphics.keys.justPressed("NONUMLOCK_5") && target.x == player.tilePos.x && target.y == player.tilePos.y)
-			{
+			if ( !HxlGraphics.keys.justPressed("ENTER") && !HxlGraphics.keys.justPressed("NONUMLOCK_5") && target.x == player.tilePos.x && target.y == player.tilePos.y) {
 				isPlayerActing = false;
 				return;
 			}
@@ -475,12 +470,12 @@ class GameState extends CqState {
 			return;
 		}
 		//stairs popup
-		if (HxlUtil.contains(SpriteTiles.instance.stairsDown.iterator(), tile.dataNum))
-		{
+		if (HxlUtil.contains(SpriteTiles.instance.stairsDown.iterator(), tile.dataNum)) {
 			player.popup.setText("Click go downstairs\n[hotkey enter]");
-		}else {
+		} else {
 			player.popup.setText("");
 		}
+		
 		if (Math.abs(dx) < Configuration.zoomedTileSize() && Math.abs(dy) < Configuration.zoomedTileSize() || HxlGraphics.keys.justPressed("ENTER") || HxlGraphics.keys.justPressed("NONUMLOCK_5") ) {
 			if (tmpPoint == null)
 				tmpPoint = new HxlPoint(0, 0);
@@ -497,6 +492,14 @@ class GameState extends CqState {
 				// descend
 				Registery.world.goToNextLevel(this);
 				player.popup.setText("");
+				
+				#if demo
+				if (CqConfiguration.demoLastLevel == Registery.world.currentLevelIndex-1) {
+					MusicManager.stop();
+					SoundEffectsManager.play(Win);
+					HxlGraphics.pushState(new DemoOverState());
+				} 
+				#end				
 			}
 			//clicking on ones-self should only do one turn
 			isPlayerActing = false;

@@ -7,6 +7,7 @@ class CqConfiguration extends Configuration {
 	public static var spellsPerLevel = 2;
 	public inline static var mobsPerLevel = 18;
 	public inline static var lastLevel = 7;
+	public inline static var demoLastLevel = 2;	
 	
 	public static var playerLives = 1;
 	

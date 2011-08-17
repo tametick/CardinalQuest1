@@ -18,8 +18,9 @@ class Playtomic {
 		
 		if (StringTools.startsWith(loadUrl, "file://"))
 			localhost = true;
-			
-		if (!Configuration.useProductionPlaytomic) { //probably a dev build
+		
+		//probably a dev build or flash demo
+		if (!Configuration.useProductionPlaytomic || !Configuration.standAlone) { 
 			swfid = 2781;
 			guid = "abad7983339e41ac";
 		} else {
