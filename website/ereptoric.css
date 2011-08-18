@@ -1,0 +1,43 @@
+html,body {
+    margin: 0;
+    padding: 0;
+    background: #101919 url(stripes.png) repeat;
+    height: 100%; 
+    font-family: 'Geo', Helvetica, sans-serif;
+    color:#ffffff;
+    font-size: 1.3em;
+}
+h1,h2 {
+    margin: 0; 
+    padding: 0;
+}
+ul {
+    margin: 0;
+}
+a:link {color: #009090; text-decoration: none; }
+a:visited {color: #009000; text-decoration: none; }
+a:hover {color: #900090; text-decoration: none; }
+#subtitle {
+    font-size: 0.8em;
+}
+#header {
+    text-align:center;
+}
+#footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3em;
+    width: 100%;
+}
+#content {
+    padding-bottom: 3em;
+}
+#container {
+    width: 800px;
+    margin: 0 auto;
+    position: relative;
+    height: auto !important;
+    min-height: 100%;
+    height: 100%;
+}
