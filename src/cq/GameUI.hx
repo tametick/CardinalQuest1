@@ -81,7 +81,8 @@ class GameUI extends HxlDialog {
 	public var dlgPotionGrid:CqPotionGrid;
 	public var invItemManager:CqInventoryItemManager;
 	public var panels:CqPanelContainer;
-	public var doodads:HxlDialog;//spell charges,popups
+	public var doodads:HxlDialog;//spell charges
+	public var popups:HxlGroup;
 	// Notification area
 	public static var notifications:CqTextNotification;
 
@@ -136,6 +137,13 @@ class GameUI extends HxlDialog {
 		doodads.zIndex = 50;
 		doodads.scrollFactor.x = 0;
 		doodads.scrollFactor.y = 0;
+		add(doodads);
+		
+		popups = new HxlDialog();
+		popups.zIndex = 51;
+		popups.scrollFactor.x = 0;
+		popups.scrollFactor.y = 0;
+		add(popups);
 
 		/**
 		 * Create and cache graphics for use by UI widgets
@@ -227,10 +235,10 @@ class GameUI extends HxlDialog {
 		btnMapView.setCallback(showMapDlg);
 		btnMapView.configEvent(5, true, true);
 		leftButtons.addButton(btnMapView);
-		pop = new CqPopup(100, "\n[hotkey M]", doodads);
+		pop = new CqPopup(100, "\n[hotkey M]", popups);
 		pop.zIndex = 15;
 		btnMapView.setPopup(pop);
-		doodads.add(pop);
+		popups.add(pop);
 
 		// inv
 		btnInventoryView = new HxlButton(0, 0, btnSize, btnSize);
@@ -239,10 +247,10 @@ class GameUI extends HxlDialog {
 		btnInventoryView.setCallback(showInvDlg);
 		btnInventoryView.configEvent(5, true, true);
 		leftButtons.addButton(btnInventoryView);
-		pop = new CqPopup(100, "\n[hotkey I]", doodads);
+		pop = new CqPopup(100, "\n[hotkey I]", popups);
 		pop.zIndex = 15;
 		btnInventoryView.setPopup(pop);
-		doodads.add(pop);
+		popups.add(pop);
 		// stats
 		btnCharacterView = new HxlButton(0, 0, btnSize, btnSize);
 		btnCharacterView.loadGraphic(charBtn,charBtnHigh);
@@ -250,10 +258,10 @@ class GameUI extends HxlDialog {
 		
 		btnCharacterView.setCallback(showCharDlg);
 		btnCharacterView.configEvent(5, true, true);
-		pop = new CqPopup(100, "\n[hotkey C]", doodads);
+		pop = new CqPopup(100, "\n[hotkey C]", popups);
 		pop.zIndex = 15;
 		btnCharacterView.setPopup(pop);
-		doodads.add(pop);
+		popups.add(pop);
 		leftButtons.addButton(btnCharacterView);
 
 		panels.panelInventory.dlgSpellGrid = dlgSpellGrid;
@@ -261,7 +269,6 @@ class GameUI extends HxlDialog {
 		
 		invItemManager = new CqInventoryItemManager(panels.panelInventory);
 		
-		add(doodads);
 		
 		initSheets();
 		
@@ -272,6 +279,7 @@ class GameUI extends HxlDialog {
 	override public function update() 
 	{
 		invItemManager.update();
+		popups.update();
 		super.update();
 	}
 	public function setActive(?toggle:Bool = false)
@@ -899,23 +907,12 @@ class GameUI extends HxlDialog {
 	{
 		for ( actor in CqRegistery.level.mobs ) {
 				var cqMob:CqActor = cast(actor, CqActor);
-				var pop:CqPopup = new CqPopup(150, cqMob.name, doodads);
+				var pop:CqPopup = new CqPopup(150, cqMob.name, popups);
 				pop.visible = false;
 				cqMob.setPopup(pop);
-				doodads.add(pop);
+				popups.add(pop);
 		}
 
-	}
-	
-	public function hideAllPopups():Void 
-	{
-		for (pop in doodads.members)
-		{
-			if (Std.is(pop, CqPopup))
-			{
-				cast(pop,CqPopup).visible = false;
-			}
-		}
 	}
 	
 	private function updateXBall(ball:HxlSprite,other:CqActor,actuator:GenericActuator):Void 

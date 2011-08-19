@@ -341,7 +341,23 @@ class HxlGroup extends HxlObject {
 		return count;
 
 	}
-
+	/**
+	 * changes all childrens visibility to value
+	 * @return
+	 */
+	public function setChildrenVisibility(value:Bool):Void
+	{
+		var o:HxlObject;
+		var ml:Int = members.length;
+		for (i in 0...ml)
+		{
+			o = cast( members[i], HxlObject);
+			if (o != null)
+			{
+				o.visible = value;
+			}
+		}
+	}
 	/**
 	 * Returns a member at random from the group.
 	 * 

@@ -741,7 +741,7 @@ class CqActor extends CqObject, implements Actor {
 				GameUI.showEffectText(other, "" + effect.name+(effect.value==null?"":(": " + effect.value)), 0x0000ff);
 			}
 		}
-		GameUI.instance.hideAllPopups();
+		GameUI.instance.popups.setChildrenVisibility(false);
 	}
 }
 

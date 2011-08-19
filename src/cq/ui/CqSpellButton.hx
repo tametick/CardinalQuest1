@@ -46,7 +46,7 @@ class CqSpellButton extends HxlDialog {
 
 		chargeSprite = new HxlSprite(x + 5, y + 5);
 		chargeSprite.createGraphic(54, 54, 0x00010101);
-		GameUI.instance.doodads.add(chargeSprite);
+		GameUI.instance.popups.add(chargeSprite);
 		
 		chrageBmpData = new BitmapData(94, 94, true, 0x0);
 	}

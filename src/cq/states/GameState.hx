@@ -86,7 +86,7 @@ class GameState extends CqState {
 		super.update();
 		if (endingAnim)
 		{
-			gameUI.hideAllPopups();
+			gameUI.popups.setChildrenVisibility(false);
 			cursor.visible = false;
 			doEndingAnimation();
 			return;
@@ -102,7 +102,7 @@ class GameState extends CqState {
 		}
 		//hide mouse after idle some time	
 		if (Timer.stamp() - msMoveStamp > msHideDelay || endingAnim) {
-			gameUI.hideAllPopups();
+			gameUI.popups.setChildrenVisibility(false);
 			cursor.visible = false;
 		}
 		
@@ -313,8 +313,8 @@ class GameState extends CqState {
 			world.addOnNewLevel(gameUI.initPopups);
 			
 			var player:CqPlayer = CqRegistery.player;
-			var pop:CqPopup = new CqPopup(180, "", gameUI.doodads);
-			gameUI.doodads.add(pop);
+			var pop:CqPopup = new CqPopup(180, "", gameUI.popups);
+			gameUI.popups.add(pop);
 			player.setPopup(pop);
 		}
 		player.addOnPickup(gameUI.itemPickup);
@@ -578,7 +578,7 @@ class GameState extends CqState {
 	{
 		HxlGraphics.quake.start();
 		cursor.visible = false;
-		gameUI.hideAllPopups();
+		gameUI.popups.setChildrenVisibility(false);
 		gameUI.destroy();
 	}
 	private var startedMoving:Bool;

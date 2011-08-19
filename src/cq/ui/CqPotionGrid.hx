@@ -83,14 +83,14 @@ class CqPotionGrid extends CqInventoryGrid {
 		menuButton.getText().angle = -90;
 		
 		var pop:CqPopup;
-		pop = new CqPopup(150,"[hotkey ESC]", GameUI.instance.doodads);
+		pop = new CqPopup(150,"[hotkey ESC]", GameUI.instance.popups);
 		pop.zIndex = 15;
 		menuButton.setPopup(pop);
-		GameUI.instance.doodads.add(pop);
-		pop = new CqPopup(150,"[hotkey F1]", GameUI.instance.doodads);
+		GameUI.instance.popups.add(pop);
+		pop = new CqPopup(150,"[hotkey F1]", GameUI.instance.popups);
 		pop.zIndex = 15;
 		helpButton.setPopup(pop);
-		GameUI.instance.doodads.add(pop);
+		GameUI.instance.popups.add(pop);
 		
 		add(helpButton);
 		add(menuButton);

@@ -91,8 +91,8 @@ class CqInventoryItem extends HxlSprite {
 		}
 		
 		//popup
-		uiItem.setPopup(new CqPopup(180,Item.fullName,GameUI.instance.doodads));
-		GameUI.instance.doodads.add(uiItem.popup);
+		uiItem.setPopup(new CqPopup(180,Item.fullName,GameUI.instance.popups));
+		GameUI.instance.popups.add(uiItem.popup);
 		uiItem.popup.zIndex = 15;
 		
 		//make magical items glow
