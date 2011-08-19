@@ -101,15 +101,15 @@ class CqPotionGrid extends CqInventoryGrid {
 		if (Std.is(HxlGraphics.getState(), GameState))
 		{
 			GameUI.instance.setActive();
-			if (GameUI.currentPanel == GameUI.instance.panelInventory) {
+			if (GameUI.instance.panels.currentPanel == GameUI.instance.panels.panelInventory) {
 				if (playSound)
 					SoundEffectsManager.play(MenuItemClick);
 				GameUI.showInvHelp = true;
 			}
-			else if(GameUI.currentPanel != null){
+			else if(GameUI.instance.panels.currentPanel != null){
 				if (playSound)
 					SoundEffectsManager.play(MenuItemClick);
-				GameUI.instance.hideCurrentPanel(pressHelp);
+				GameUI.instance.panels.hideCurrentPanel(pressHelp);
 				return;
 			}
 			HxlGraphics.pushState(HelpState.instance);
@@ -122,9 +122,9 @@ class CqPotionGrid extends CqInventoryGrid {
 			if (playSound)
 				SoundEffectsManager.play(MenuItemClick);
 			
-			if (GameUI.currentPanel != null)
+			if (GameUI.instance.panels.currentPanel != null)
 			{
-				GameUI.instance.hideCurrentPanel(pressMenu);
+				GameUI.instance.panels.hideCurrentPanel(pressMenu);
 			}else {
 				GameUI.instance.setActive(false);
 				HxlGraphics.pushState(MainMenuState.instance);

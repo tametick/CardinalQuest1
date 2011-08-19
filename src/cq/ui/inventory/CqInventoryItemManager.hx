@@ -223,7 +223,7 @@ class CqInventoryItemManager
 	{
 		if ( HxlGraphics.mouse.dragSprite != null ) 
 			return;
-		if(GameUI.currentPanel == mainDialog)
+		if(GameUI.instance.panels.currentPanel == mainDialog)
 			checkKeys();
 		else
 			onPressedUiItem();

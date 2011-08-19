@@ -124,7 +124,7 @@ class GameState extends CqState {
 			if (isPlayerActing) {
 				if ( HxlGraphics.keys.F1 || HxlGraphics.keys.ESCAPE)
 					return;
-				if (GameUI.currentPanel == null || !GameUI.currentPanel.isBlockingInput) {
+				if (GameUI.instance.panels.currentPanel == null || !GameUI.instance.panels.currentPanel.isBlockingInput) {
 					act();
 				}
 			}
@@ -239,8 +239,8 @@ class GameState extends CqState {
 		var level = CqRegistery.level;
 		
 		level.updateFieldOfView(this);
-		if (Std.is(GameUI.currentPanel,CqMapDialog))
-			GameUI.currentPanel.updateDialog();
+		if (Std.is(GameUI.instance.panels.currentPanel,CqMapDialog))
+			GameUI.instance.panels.currentPanel.updateDialog();
 		
 		player.actionPoints = 0;
 
@@ -309,7 +309,7 @@ class GameState extends CqState {
 			gameUI.initChests();
 			gameUI.initHealthBars();
 			gameUI.initPopups();
-			world.addOnNewLevel(gameUI.panelMap.updateDialog);
+			world.addOnNewLevel(gameUI.panels.panelMap.updateDialog);
 			world.addOnNewLevel(gameUI.initPopups);
 			
 			var player:CqPlayer = CqRegistery.player;
@@ -377,9 +377,9 @@ class GameState extends CqState {
 				gameUI.setActive();
 				gameUI.dlgPotionGrid.pressHelp(false);
 			}else {
-				if (GameUI.currentPanel != null)
+				if (GameUI.instance.panels.currentPanel != null)
 				{
-					gameUI.hideCurrentPanel();
+					gameUI.panels.hideCurrentPanel();
 				}else{
 					gameUI.setActive();
 					gameUI.dlgPotionGrid.pressMenu(false);

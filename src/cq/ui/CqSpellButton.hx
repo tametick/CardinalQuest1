@@ -82,7 +82,7 @@ class CqSpellButton extends HxlDialog {
 	}
 	
 	function clickMouseDown(event:MouseEvent) {
-		if (!exists || !visible || !active || Std.is(GameUI.currentPanel,CqInventoryDialog) ) 
+		if (!exists || !visible || !active || Std.is(GameUI.instance.panels.currentPanel,CqInventoryDialog) ) 
 			return;
 		if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y))
 			useSpell(event);
@@ -118,7 +118,7 @@ class CqSpellButton extends HxlDialog {
 		}
 	}
 	function clickMouseUp(event:MouseEvent) {
-		if (!exists || !visible || !active || Std.is(GameUI.currentPanel,CqInventoryDialog) ) 
+		if (!exists || !visible || !active || Std.is(GameUI.instance.panels.currentPanel,CqInventoryDialog) ) 
 			return;
 		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
 			//if ( _callback != null ) _callback();

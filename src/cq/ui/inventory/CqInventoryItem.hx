@@ -158,7 +158,7 @@ class CqInventoryItem extends HxlSprite {
 		var m:HxlMouse = HxlGraphics.mouse;
 		if ( overlapsPoint(m.x, m.y) && visible)
 		{
-			GameUI.instance.panelInventory.dlgInfo.setItem(item);
+			GameUI.instance.panels.panelInventory.dlgInfo.setItem(item);
 		}
 	}
 	public function updateIcon() {
@@ -307,7 +307,7 @@ class CqInventoryItem extends HxlSprite {
 		}
 	}
 	private override function onDragMouseDown(event:MouseEvent) {
-		if ( !Std.is(GameUI.currentPanel,CqInventoryDialog) || !exists || !visible || !active || !dragEnabled || HxlGraphics.state != GameState.inst) 
+		if ( !Std.is(GameUI.instance.panels.currentPanel,CqInventoryDialog) || !exists || !visible || !active || !dragEnabled || HxlGraphics.state != GameState.inst) 
 			return;
 		super.onDragMouseDown(event);
 		if ( isDragging ) {
@@ -325,7 +325,7 @@ class CqInventoryItem extends HxlSprite {
 	}
 
 	private override function onDragMouseUp(event:MouseEvent) {
-		if ( !exists || !visible || !active || !dragEnabled || !Std.is(GameUI.currentPanel,CqInventoryDialog) || HxlGraphics.mouse.dragSprite != this ) 
+		if ( !exists || !visible || !active || !dragEnabled || !Std.is(GameUI.instance.panels.currentPanel,CqInventoryDialog) || HxlGraphics.mouse.dragSprite != this ) 
 			return;
 		super.onDragMouseUp(event);
 		if ( !isDragging ) {

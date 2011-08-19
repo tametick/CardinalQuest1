@@ -696,7 +696,7 @@ class CqActor extends CqObject, implements Actor {
 			}
 		case "reveal":
 			Registery.level.showAll(HxlGraphics.state);
-			GameUI.instance.panelMap.updateDialog();
+			GameUI.instance.panels.panelMap.updateDialog();
 		case "charm":
 			other.faction = faction;
 			other.isCharmed = true;

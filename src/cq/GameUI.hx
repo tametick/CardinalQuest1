@@ -9,6 +9,7 @@ import com.eclecticdesignstudio.motion.easing.Linear;
 import cq.states.GameState;
 import cq.states.HelpState;
 import cq.states.MainMenuState;
+import cq.ui.CqPanelContainer;
 import cq.ui.CqPopup;
 import cq.ui.CqPotionGrid;
 import cq.ui.inventory.CqInventoryDialog;
@@ -79,18 +80,13 @@ class GameUI extends HxlDialog {
 	public var dlgSpellGrid:CqSpellGrid;
 	public var dlgPotionGrid:CqPotionGrid;
 	public var invItemManager:CqInventoryItemManager;
-
+	public var panels:CqPanelContainer;
 	public var doodads:HxlDialog;//spell charges,popups
 	// Notification area
 	public static var notifications:CqTextNotification;
-	// View state panels
-	public var panelMap:CqMapDialog;
-	public var panelInventory:CqInventoryDialog;
-	var panelCharacter:CqCharacterDialog;
-	var panelLog:CqMessageDialog;
 
 	// Left side button panel
-	var btnMainView:HxlButton;
+	public var btnMainView:HxlButton;
 	var btnMapView:HxlButton;
 	var btnInventoryView:HxlButton;
 	var btnCharacterView:HxlButton;
@@ -110,7 +106,6 @@ class GameUI extends HxlDialog {
 	var targetText:HxlText;
 
 	// State & helper vars
-	public static var currentPanel:HxlSlidingDialog = null;
 	public static var isTargeting:Bool = false;
 	public static var isTargetingEmptyTile:Bool = false;
 	public static var targetString:String = "";
@@ -130,7 +125,6 @@ class GameUI extends HxlDialog {
 		showInvHelp = false;
 		targetString = "";
 		targetSpell = null;
-		currentPanel = null;
 		targetSprite = null;
 		targetText = null;
 		GameUI.instance = this;
@@ -161,7 +155,7 @@ class GameUI extends HxlDialog {
 		add(dlgSpellGrid);
 
 		var potiongrid_w:Int = 460;
-		dlgPotionGrid = new CqPotionGrid(Configuration.app_width/2-potiongrid_w/2, HxlGraphics.height - 84,potiongrid_w, 71);
+		dlgPotionGrid = new CqPotionGrid(Configuration.app_width/2-potiongrid_w/2, Configuration.app_height - 84,potiongrid_w, 71);
 		add(dlgPotionGrid);
 		
 		notifications = new CqTextNotification(300, 0);
@@ -170,31 +164,9 @@ class GameUI extends HxlDialog {
 		/**
 		 * View state panels
 		 **/
-		panelMap = new CqMapDialog(84, 0, 472, 480);
-		// no map bg color (alpha=0)
-		panelMap.setBackgroundColor(0x00000000);
-		panelMap.zIndex = 2;
-		add(panelMap);
-
-		var panelInv_w:Int = 481;
-		
-		panelInventory = new CqInventoryDialog(this, Configuration.app_width/2-panelInv_w/2-10, 0, panelInv_w, 403);
-		panelInventory.zIndex = 2;
-		panelInventory.dlgPotionGrid = dlgPotionGrid;
-		panelInventory.dlgSpellGrid = dlgSpellGrid;
-		add(panelInventory);
-
-		panelCharacter = new CqCharacterDialog(84, 0, 472, 480);
-		panelCharacter.zIndex = 2;
-		add(panelCharacter);
-
-		//deprecated?
-		panelLog = new CqMessageDialog(84, 0, 472, 480);
-		panelLog.setBackgroundColor(0xffBCB59A);
-		panelLog.zIndex = 2;
-		add(panelLog);		
-		
-		
+		panels = new CqPanelContainer();	
+		add(panels);
+		panels.zIndex = 2;
 		var mainBtn = SpritePortrait.getIcon(CqRegistery.player.playerClass,64 ,1.0);
 		var infoBtn = new HxlSprite();
 		infoBtn.loadGraphic(SpriteInfo, false, false, 64, 64, true, 1, 1);
@@ -284,10 +256,10 @@ class GameUI extends HxlDialog {
 		doodads.add(pop);
 		leftButtons.addButton(btnCharacterView);
 
-		panelInventory.dlgSpellGrid = dlgSpellGrid;
-		panelInventory.dlgPotionGrid = dlgPotionGrid;
+		panels.panelInventory.dlgSpellGrid = dlgSpellGrid;
+		panels.panelInventory.dlgPotionGrid = dlgPotionGrid;
 		
-		invItemManager = new CqInventoryItemManager(panelInventory);
+		invItemManager = new CqInventoryItemManager(panels.panelInventory);
 		
 		add(doodads);
 		
@@ -328,7 +300,7 @@ class GameUI extends HxlDialog {
 	{
 		if (!Std.is(HxlGraphics.getState(), GameState)) return;
 		SoundEffectsManager.play(MenuItemClick);
-		showPanel(panelMap, btnMapView);
+		panels.showPanel(panels.panelMap, btnMapView);
 	}
 	public function showInvDlg()
 	{
@@ -338,27 +310,27 @@ class GameUI extends HxlDialog {
 		{
 			hasShownInv = true;
 			showInvHelp = true;
-			showPanel(panelInventory, btnInventoryView, function() {
+			panels.showPanel(panels.panelInventory, btnInventoryView, function() {
 				instance.setActive();
 				HxlGraphics.pushState(HelpState.instance);
 			});
 		}else
 		{
-			showPanel(panelInventory, btnInventoryView);
+			panels.showPanel(panels.panelInventory, btnInventoryView);
 		}
 	}
 	public function showCharDlg()
 	{
 		if (!Std.is(HxlGraphics.getState(), GameState)) return;
 		SoundEffectsManager.play(MenuItemClick);
-		showPanel(panelCharacter, btnCharacterView);
+		panels.showPanel(panels.panelCharacter, btnCharacterView);
 	}
 	override public function overlapsPoint(X:Float, Y:Float, ?PerPixel:Bool = false):Bool {
 		return leftButtons.overlapsPoint(X, Y) ||
 		     dlgSpellGrid.overlapsPoint(X, Y) ||
 		     dlgPotionGrid.overlapsPoint(X, Y) ||
-			 panelInventory.overlapsPoint(X, Y) ||
-			 panelCharacter.overlapsPoint(X, Y);
+			 panels.panelInventory.overlapsPoint(X, Y) ||
+			 panels.panelCharacter.overlapsPoint(X, Y);
 	}
 	
 	function addInfoButtonBars() {
@@ -527,65 +499,6 @@ class GameUI extends HxlDialog {
 		G.lineTo(centerX, centerY);
 	}
 
-	public function hideCurrentPanel(?hideCallBack:Dynamic):Void
-	{
-		if (!active) return;
-		if ( currentPanel != null ) {
-			currentPanel.hide(function() { GameUI.currentPanel = null; if (hideCallBack) hideCallBack(); } );
-			btnMainView.setActive(false);
-			btnMapView.setActive(false);
-			btnInventoryView.setActive(false);
-			btnCharacterView.setActive(false);
-			btnInfoView.setActive(false);
-		}
-	}
-	function showPanel(Panel:HxlSlidingDialog, ?Button:HxlButton = null, ?showCallback:Dynamic) {
-		if (!active) return;
-		if ( HxlGraphics.mouse.dragSprite != null ) 
-			return;
-		// If user was in targeting mode, cancel it
-		if ( GameUI.isTargeting ) 
-			GameUI.setTargeting(false);
-
-		if ( Button != null ) {
-			btnMainView.setActive(false);
-			btnMapView.setActive(false);
-			btnInventoryView.setActive(false);
-			btnCharacterView.setActive(false);
-			btnInfoView.setActive(false);
-			Button.setActive(true);
-		}
-		if ( Panel == null ) {
-			if ( currentPanel != null ) {
-				currentPanel.hide(function() { GameUI.currentPanel = null; });
-			}
-		} else {
-			if ( currentPanel == null ) {
-				currentPanel = Panel;
-				Panel.show(showCallback);
-			} else {
-				if ( currentPanel!=Panel ) {
-					// A view state other than main is already active: 
-					// Hide that one first before showing the selected one
-					currentPanel.hide(function() {
-						GameUI.currentPanel = Panel;
-						GameUI.currentPanel.show(showCallback);
-					});
-				} else {
-					// User clicked on a view state button which is already active, switch back to main view state
-					if ( currentPanel != null ) {
-						currentPanel.hide(function() { GameUI.currentPanel = null; });
-						btnMainView.setActive(true);
-						btnMapView.setActive(false);
-						btnInventoryView.setActive(false);
-						btnCharacterView.setActive(false);
-						btnInfoView.setActive(false);
-					}
-				}
-			}
-		}
-	}
-
 	public function initGraphicsCache() {
 		var size = 54;
 		var cellBgKey:CqGraphicKey = CqGraphicKey.InventoryCellBG;
@@ -650,21 +563,28 @@ class GameUI extends HxlDialog {
 		var itemSheetKey:CqGraphicKey = CqGraphicKey.ItemIconSheet;
 		itemSprite = new HxlSprite(0, 0);
 		itemSprite.loadGraphic(SpriteItems, true, false, Configuration.tileSize, Configuration.tileSize, false, 3.0, 3.0);
-		panelInventory.dlgInfo.itemSheet = itemSheet;
-		panelInventory.dlgInfo.itemSprite = itemSprite;
+		panels.panelInventory.dlgInfo.itemSheet = itemSheet;
+		panels.panelInventory.dlgInfo.itemSprite = itemSprite;
 
 		spellSheet = SpriteSpells.instance;
 		var spellSheetKey:CqGraphicKey = CqGraphicKey.SpellIconSheet;
 		spellSprite = new HxlSprite(0, 0);
 		spellSprite.loadGraphic(SpriteSpells, true, false, Configuration.tileSize, Configuration.tileSize, false, 3.0, 3.0);
-		panelInventory.dlgInfo.spellSheet = spellSheet;
-		panelInventory.dlgInfo.spellSprite = spellSprite;
+		panels.panelInventory.dlgInfo.spellSheet = spellSheet;
+		panels.panelInventory.dlgInfo.spellSprite = spellSprite;
 		CqInventoryItem.spellSheet = spellSheet;
 		CqInventoryItem.spellSprite = spellSprite;
 		CqInventoryItem.itemSheet = itemSheet;
 		CqInventoryItem.itemSprite = itemSprite;
 	}
-
+	public function disableAllButtons():Void
+	{
+		btnMainView.setActive(false);
+		btnMapView.setActive(false);
+		btnInventoryView.setActive(false);
+		btnCharacterView.setActive(false);
+		btnInfoView.setActive(false);
+	}
 	public function checkTileItems(Player:CqPlayer) {
 		var curPos:HxlPoint = Player.getTilePos();
 		var curTile = cast(Registery.level.getTile(Std.int(curPos.x), Std.int(curPos.y)), Tile);
