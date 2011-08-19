@@ -30,8 +30,11 @@ class SplashState extends CqState {
 
 	public override function create() {
 		Lib.current.stage.scaleMode = StageScaleMode.SHOW_ALL;
+		if (Configuration.debug)
+			Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
+		
 		Lib.current.stage.align = StageAlign.TOP;
-		Lib.current.stage.fullScreenSourceRect = new Rectangle(0, 0, 640, 480);
+		Lib.current.stage.fullScreenSourceRect = new Rectangle(0, 0, Configuration.app_width, Configuration.app_height);
 		Mouse.hide();
 		
 		if (Configuration.standAlone) {

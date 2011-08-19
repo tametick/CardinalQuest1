@@ -69,7 +69,7 @@ class CreateCharState extends CqState {
 		//paper bg
 		var bg:HxlSprite = new HxlSprite(40, 250, SpriteCharPaper);
 		add(bg);
-		var titleText:HxlText = new HxlText(0, 0, 640, "Create Character");
+		var titleText:HxlText = new HxlText(0, 0, Configuration.app_width, "Create Character");
 		titleText.setFormat(null, 72, 0xffffff, "center");
 		add(titleText);
 		

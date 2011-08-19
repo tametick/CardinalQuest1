@@ -1,5 +1,6 @@
 package cq.states;
 
+import data.Configuration;
 import flash.geom.Rectangle;
 import haxel.HxlState;
 import haxel.HxlGraphics;
@@ -32,7 +33,7 @@ class CqState extends HxlState {
 		if (HxlGraphics.keys.justPressed("F2")) {
 			if(Lib.current.stage.displayState==StageDisplayState.NORMAL){
 				Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
-				Lib.current.stage.fullScreenSourceRect = new Rectangle(0, 0, 640, 480);
+				Lib.current.stage.fullScreenSourceRect = new Rectangle(0, 0, Configuration.app_width, Configuration.app_height);
 			} else{
 				Lib.current.stage.displayState = StageDisplayState.NORMAL;
 				Lib.current.stage.fullScreenSourceRect = null;

@@ -33,6 +33,7 @@ import cq.ui.inventory.CqInventoryItem;
 import cq.ui.inventory.CqInventoryItemManager;
 import flash.display.BitmapData;
 import flash.display.Shape;
+import flash.events.Event;
 import haxel.HxlGroup;
 import haxel.HxlSpriteSheet;
 import haxel.HxlState;
@@ -116,11 +117,12 @@ class GameUI extends HxlDialog {
 	public static var targetSpell:CqSpellButton = null;
 	public static var hasShownInv:Bool;
 	public static var showInvHelp:Bool;
-	var targetLastPos:HxlPoint;
 	public static var instance:GameUI = null;
+	var targetLastPos:HxlPoint;
 	
 	public override function new() {
 		super(0, 0, HxlGraphics.width, HxlGraphics.height);
+		//defaults
 		isTargeting = false;
 		isTargetingEmptyTile = false;
 		targetLastPos = new HxlPoint(0, 0);
@@ -134,6 +136,8 @@ class GameUI extends HxlDialog {
 		GameUI.instance = this;
 		var self = this;
 
+		
+		//container for spell charges and notifications
 		doodads = new HxlDialog();
 		doodads.zIndex = 50;
 		doodads.scrollFactor.x = 0;
@@ -142,7 +146,7 @@ class GameUI extends HxlDialog {
 		/**
 		 * Create and cache graphics for use by UI widgets
 		 **/
-		initUIGraphics();
+		initGraphicsCache();
 		
 		/**
 		 * Create and init main containers
@@ -156,48 +160,9 @@ class GameUI extends HxlDialog {
 		dlgSpellGrid.zIndex = 1;
 		add(dlgSpellGrid);
 
-		dlgPotionGrid = new CqPotionGrid(102, HxlGraphics.height - 84, 460, 84);
+		var potiongrid_w:Int = 460;
+		dlgPotionGrid = new CqPotionGrid(Configuration.app_width/2-potiongrid_w/2, HxlGraphics.height - 84,potiongrid_w, 71);
 		add(dlgPotionGrid);
-
-		//menu/help
-		var MenuSprite = new ButtonSprite();
-		var MenuSpriteH = new ButtonSprite();
-		var HelpSprite = new ButtonSprite();
-		var HelpSpriteH = new ButtonSprite();
-		_point.x = 0.44;
-		_point.y = 1;
-		
-		MenuSpriteH.setAlpha(0.6);
-		HelpSpriteH.setAlpha(0.6);
-		
-		MenuSprite.scale = MenuSpriteH.scale = _point.clone();
-		HelpSprite.scale = HelpSpriteH.scale = _point.clone();
-		
-		var btnSize:Int = 64;
-		var menuButton:HxlButton = new HxlButton(Std.int(dlgPotionGrid.x-8), Std.int(dlgPotionGrid.y+10), 25, btnSize,pressMenu);
-		var helpButton:HxlButton = new HxlButton(Std.int(dlgPotionGrid.x+dlgPotionGrid.width-78), Std.int(dlgPotionGrid.y+10), 25, btnSize,pressHelp);
-		helpButton.loadGraphic(HelpSprite,HelpSpriteH);
-		menuButton.loadGraphic(MenuSprite,MenuSpriteH);
-		helpButton.configEvent(5, true, true);
-		menuButton.configEvent(5, true, true);
-		
-		helpButton.loadText(new HxlText(15, 32, btnSize, "Help", true).setFormat(FontDungeon.instance.fontName, 23, 0xffffff, "center", 0x010101));
-		helpButton.getText().angle = 90;
-		
-		menuButton.loadText(new HxlText(-14, 32, btnSize, "Menu", true).setFormat(FontDungeon.instance.fontName, 23, 0xffffff, "center", 0x010101));
-		menuButton.getText().angle = -90;
-		
-		pop = new CqPopup(150,"[hotkey ESC]", doodads);
-		pop.zIndex = 15;
-		menuButton.setPopup(pop);
-		doodads.add(pop);
-		pop = new CqPopup(150,"[hotkey F1]", doodads);
-		pop.zIndex = 15;
-		helpButton.setPopup(pop);
-		doodads.add(pop);
-		
-		add(helpButton);
-		add(menuButton);
 		
 		notifications = new CqTextNotification(300, 0);
 		notifications.zIndex = 3;
@@ -211,7 +176,9 @@ class GameUI extends HxlDialog {
 		panelMap.zIndex = 2;
 		add(panelMap);
 
-		panelInventory = new CqInventoryDialog(this, 69, 0, 472, 400);
+		var panelInv_w:Int = 481;
+		
+		panelInventory = new CqInventoryDialog(this, Configuration.app_width/2-panelInv_w/2-10, 0, panelInv_w, 403);
 		panelInventory.zIndex = 2;
 		panelInventory.dlgPotionGrid = dlgPotionGrid;
 		panelInventory.dlgSpellGrid = dlgSpellGrid;
@@ -221,10 +188,12 @@ class GameUI extends HxlDialog {
 		panelCharacter.zIndex = 2;
 		add(panelCharacter);
 
+		//deprecated?
 		panelLog = new CqMessageDialog(84, 0, 472, 480);
 		panelLog.setBackgroundColor(0xffBCB59A);
 		panelLog.zIndex = 2;
 		add(panelLog);		
+		
 		
 		var mainBtn = SpritePortrait.getIcon(CqRegistery.player.playerClass,64 ,1.0);
 		var infoBtn = new HxlSprite();
@@ -326,43 +295,7 @@ class GameUI extends HxlDialog {
 		
 		super.update();
 		updateAll();
-	}
-
-	public function pressHelp(?playSound:Bool = true):Void 
-	{
-		showInvHelp = false;
-		if (Std.is(HxlGraphics.getState(), GameState))
-		{
-			instance.setActive();
-			if (currentPanel == panelInventory) {
-				if (playSound)
-					SoundEffectsManager.play(MenuItemClick);
-				showInvHelp = true;
-			}
-			else if(currentPanel != null){
-				if (playSound)
-					SoundEffectsManager.play(MenuItemClick);
-				hideCurrentPanel(pressHelp);
-				return;
-			}
-			HxlGraphics.pushState(HelpState.instance);
-		}
-	}
-	public function pressMenu(?playSound:Bool = false):Void
-	{
-		if (Std.is(HxlGraphics.getState(), GameState))
-		{
-			if (playSound)
-				SoundEffectsManager.play(MenuItemClick);
-			
-			if (currentPanel != null)
-			{
-				hideCurrentPanel(pressMenu);
-			}else {
-				instance.setActive(false);
-				HxlGraphics.pushState(MainMenuState.instance);
-			}
-		}
+		
 	}
 	override public function update() 
 	{
@@ -653,7 +586,7 @@ class GameUI extends HxlDialog {
 		}
 	}
 
-	public function initUIGraphics() {
+	public function initGraphicsCache() {
 		var size = 54;
 		var cellBgKey:CqGraphicKey = CqGraphicKey.InventoryCellBG;
 		if ( !GraphicCache.checkBitmapCache(cellBgKey) ) {

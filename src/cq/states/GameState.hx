@@ -357,7 +357,7 @@ class GameState extends CqState {
 			CqRegistery.world.goToNextLevel(this, Configuration.debugStartingLevel);
 		}
 		else
-			gameUI.pressHelp(false);
+			gameUI.dlgPotionGrid.pressHelp(false);
 	}
 	
 	public function initRegistry(){
@@ -375,14 +375,14 @@ class GameState extends CqState {
 			}
 			if (HxlGraphics.keys.justReleased("F1")){
 				gameUI.setActive();
-				gameUI.pressHelp(false);
+				gameUI.dlgPotionGrid.pressHelp(false);
 			}else {
 				if (GameUI.currentPanel != null)
 				{
 					gameUI.hideCurrentPanel();
 				}else{
 					gameUI.setActive();
-					gameUI.pressMenu(false);
+					gameUI.dlgPotionGrid.pressMenu(false);
 				}
 			}
 		}

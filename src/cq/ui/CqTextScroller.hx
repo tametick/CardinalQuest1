@@ -1,6 +1,7 @@
 package cq.ui;
 import com.eclecticdesignstudio.motion.easing.Cubic;
 import com.eclecticdesignstudio.motion.easing.Linear;
+import data.Configuration;
 import flash.display.Bitmap;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
@@ -52,7 +53,7 @@ class CqTextScroller extends HxlGroup {
 		}
 		if (Title.length > 0)
 		{
-			var titleTxt:HxlText = new HxlText(0, To_Y, 640, Title);
+			var titleTxt:HxlText = new HxlText(0, To_Y, Configuration.app_width, Title);
 			titleTxt.setFormat(null, 72, TitleColor, "center",ShadowColor);
 			to_y += Std.int(titleTxt.height+10);
 			add(titleTxt);

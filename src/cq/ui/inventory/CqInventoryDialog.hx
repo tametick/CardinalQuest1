@@ -45,7 +45,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	public var dlgEqGrid:CqEquipmentGrid;
 	public var dlgSpellGrid:CqSpellGrid;
 	public var dlgPotionGrid:CqPotionGrid;
-
+	//remove refs to any nonsliding dialogs from here
 	static inline var DLG_OUTER_BORDER:Int 		= 10; 
 	static inline var DLG_TOP_BORDER:Int 		= 0; 
 	static inline var DLG_GAP:Int 				= 15; 
@@ -53,7 +53,7 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	static inline var DLG_DIVISOR_V_PERCENT:Int = 55;
 	
 	public function new(_GameUI:GameUI, ?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0) {
-		// Size: 472 x 480
+		// Size: 481 x 480
 		super(X, Y, Width, Height, Direction);
 		
 		gameui = _GameUI;

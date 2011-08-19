@@ -71,7 +71,7 @@ class MainMenuState extends CqState {
 			//blur gamestate
 		}
 		
-		titleText = new LogoSprite((640 - 345) / 2, (480 - 50) / 2 - 55);
+		titleText = new LogoSprite((Configuration.app_width - 345) / 2, (480 - 50) / 2 - 55);
 		add(titleText);
 		
 		tglMusicIcon = new HxlSprite(45,0);
@@ -79,7 +79,7 @@ class MainMenuState extends CqState {
 		tglMusicIcon.setFrame(1);
 		
 		var musicWidth = 70;
-		btnToggleMusic = new HxlButton(640-musicWidth, 0,musicWidth, 20, toggleMusic, 0, 0);
+		btnToggleMusic = new HxlButton(Configuration.app_width-musicWidth, 0,musicWidth, 20, toggleMusic, 0, 0);
 		btnToggleMusic.add(tglMusicIcon);
 		musicText = new HxlText(0, 3, 100, "Music", true, FontAnonymousPro.instance.fontName, 14);
 		btnToggleMusic.loadText(musicText);
@@ -101,10 +101,10 @@ class MainMenuState extends CqState {
 			toggleSFX();
 		add(btnToggleSFX);
 		
-		var copyright = new HxlText(0, 459, 640, "Copyright 2011 Ido Yehieli.",true,FontAnonymousPro.instance.fontName,18);
+		var copyright = new HxlText(0, 459, Configuration.app_width, "Copyright 2011 Ido Yehieli.",true,FontAnonymousPro.instance.fontName,18);
 		add(copyright);
 		
-		menu = new HxlMenu(200, 640, 240, 200);
+		menu = new HxlMenu(200, Configuration.app_width, 240, 200);
 		add(menu);
 		var self = this;
 

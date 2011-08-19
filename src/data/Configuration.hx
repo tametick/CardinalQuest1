@@ -1,5 +1,6 @@
 package data;
 import cq.CqActor;
+import cq.states.MainMenuState;
 
 class Configuration {
 	public static var air = false;
@@ -16,8 +17,8 @@ class Configuration {
 	public static var debugStartingClass:CqClass = WIZARD;
 	static public var debugMoveThroughWalls:Bool = false;
 	
-	public static var app_width:Int = 640;
-	public static var app_height:Int = 480;
+	public static var app_width:Int = 0;
+	public static var app_height:Int = 0;
 	public static var tileSize:Int;
 	public static var zoom:Float;
 	public static function zoomedTileSize():Int { 

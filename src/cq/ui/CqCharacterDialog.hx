@@ -43,6 +43,8 @@ class CqCharacterDialog extends HxlSlidingDialog {
 		var textColor:Int = 0x6D564B;
 		var player_class:String = HxlUtil.capitalizeFirstCharacter(HxlUtil.enumToString(CqRegistery.player.playerClass, false).toLowerCase());
 		var txt_string:Array<String> = [player_class, "Health:", "0", "Attack:", "0", "Defense:", "0", "Speed:", "0", "Spirit:", "0", "Vitality:", "0"];
+		
+		
 		for (i in 0...textBoxes.length)
 		{
 			var box:HxlText = new HxlText(pos[i][0], pos[i][1], 430, txt_string[i]);

@@ -30,6 +30,8 @@ import playtomic.Playtomic;
 class Main {
 	static var currentGame:Game;
 	public static function main() {
+		Configuration.app_width = 640;//Lib.current.stage.stageWidth;
+		Configuration.app_height = 480;//Lib.current.stage.stageHeight;
 		#if flash9
 		haxe.Log.setColor(0xffffff);
 		new Main();
@@ -99,9 +101,9 @@ class Game extends HxlGame {
 		Playtomic.create();
 		
 		if (Configuration.debug)
-			super(640, 480, GameState, 1, FontDungeon.instance.fontName);
+			super(Configuration.app_width, Configuration.app_height, GameState, 1, FontDungeon.instance.fontName);
 		else
-			super(640, 480, SplashState, 1, FontDungeon.instance.fontName);		
+			super(Configuration.app_width,Configuration.app_height, SplashState, 1, FontDungeon.instance.fontName);		
 		
 		pause = new CqPause();
 		useDefaultHotKeys = false;
