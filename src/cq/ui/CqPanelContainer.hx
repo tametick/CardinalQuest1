@@ -49,6 +49,12 @@ class CqPanelContainer extends HxlGroup
 		panelLog.zIndex = 2;
 		add(panelLog);	
 	}
+	override public function kill():Void 
+	{
+		currentPanel = null;
+		panelInventory.kill();
+		super.kill();
+	}
 	public function hideCurrentPanel(?hideCallBack:Dynamic):Void
 	{
 		if (!active) return;

@@ -297,12 +297,12 @@ class GameUI extends HxlDialog {
 		}
 	}
 	override public function kill() {
-		GameUI.instance = null;
-		dlgPotionGrid.kill();
-		dlgSpellGrid.kill();
 		clearEventListeners();
 		super.destroy();
 		super.kill();
+		dlgPotionGrid.kill();
+		dlgSpellGrid.kill();
+		panels.kill();
 	}
 	public function showMapDlg()
 	{
@@ -819,6 +819,7 @@ class GameUI extends HxlDialog {
 			return;
 		if ( targetSpell == null ) {
 			GameUI.setTargeting(false);
+			return;
 		}
 		var tile:CqTile = null;
 		var targetX:Float;
@@ -833,38 +834,25 @@ class GameUI extends HxlDialog {
 		}
 			
 		
-		if (isTargetingEmptyTile) {
-			if ( tile == null || tile.actors.length > 0) {
-				GameUI.setTargeting(false);
-			} else {
-				if (HxlUtil.contains(SpriteTiles.instance.walkableAndSeeThroughTiles.iterator(), tile.dataNum)) {
-					cast(Registery.player, CqActor).useAt(targetSpell.getSpell(), tile);
-					SoundEffectsManager.play(SpellCast);
-					targetSpell.getSpell().spiritPoints = 0;
-					GameUI.instance.updateCharge(targetSpell);
-					GameState.inst.passTurn();
-					GameUI.setTargeting(false);
-				} else {
-					GameUI.setTargeting(false);
-				}
+		if (isTargetingEmptyTile && tile != null) {
+			if ( tile.actors.length <= 0 && HxlUtil.contains(SpriteTiles.instance.walkableAndSeeThroughTiles.iterator(), tile.dataNum) ) {
+				cast(Registery.player, CqActor).useAt(targetSpell.getSpell(), tile);
+				SoundEffectsManager.play(SpellCast);
+				targetSpell.getSpell().spiritPoints = 0;
+				GameUI.instance.updateCharge(targetSpell);
+				GameState.inst.passTurn();
 			}
 		} else {
-			if ( tile == null || tile.actors.length <= 0 ) {
-				GameUI.setTargeting(false);
-			} else {
-				if ( cast(tile.actors[0], CqActor).faction != 0 ) {
-					var player = CqRegistery.player;
-					player.use(targetSpell.getSpell(), cast(tile.actors[0], CqActor));
-					SoundEffectsManager.play(SpellCast);
-					targetSpell.getSpell().spiritPoints = 0;
-					GameUI.instance.updateCharge(targetSpell);
-					GameState.inst.passTurn();
-					GameUI.setTargeting(false);
-				} else {
-					GameUI.setTargeting(false);
-				}
+			if ( tile.actors.length > 0 && cast(tile.actors[0], CqActor).faction != 0) {
+				var player = CqRegistery.player;
+				player.use(targetSpell.getSpell(), cast(tile.actors[0], CqActor));
+				SoundEffectsManager.play(SpellCast);
+				targetSpell.getSpell().spiritPoints = 0;
+				GameUI.instance.updateCharge(targetSpell);
+				GameState.inst.passTurn();
 			}
 		}
+		GameUI.setTargeting(false);
 
 	}
 	public function shootXBall(actor:CqActor, other:CqActor, color:UInt,spell:CqItem):Void 
@@ -906,11 +894,11 @@ class GameUI extends HxlDialog {
 	public function initPopups():Void 
 	{
 		for ( actor in CqRegistery.level.mobs ) {
-				var cqMob:CqActor = cast(actor, CqActor);
-				var pop:CqPopup = new CqPopup(150, cqMob.name, popups);
-				pop.visible = false;
-				cqMob.setPopup(pop);
-				popups.add(pop);
+			var cqMob:CqActor = cast(actor, CqActor);
+			var pop:CqPopup = new CqPopup(150, cqMob.name, popups);
+			pop.visible = false;
+			cqMob.setPopup(pop);
+			popups.add(pop);
 		}
 
 	}

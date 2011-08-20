@@ -73,7 +73,6 @@ class CqSpellButton extends HxlDialog {
 		chargeSprite.x = x + 5;
 		chargeSprite.y = y + 5;	
 	}
-
 	public function getSpell():CqSpell {
 		if ( cell != null && cell.getCellObj()!= null )
 			return cast(cell.getCellObj().item, CqSpell);
