@@ -260,6 +260,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		dead = true;
 		popup = null;
 		HxlGraphics.state.remove(this);
+		clearEventListeners();
 	}
 
 	/**
