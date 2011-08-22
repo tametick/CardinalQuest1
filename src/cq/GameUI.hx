@@ -1066,8 +1066,7 @@ class GameUI extends HxlDialog {
 		}
 	}
 	
-	private function updateXBall(ball:HxlSprite,other:CqActor,actuator:GenericActuator):Void 
-	{
+	private function updateXBall(ball:HxlSprite,other:CqActor,actuator:GenericActuator) {
 		var prop:Dynamic = actuator.getProperties();
 		ball.angle += 20;
 		prop.x = other.x+Configuration.tileSize/2;
@@ -1075,9 +1074,10 @@ class GameUI extends HxlDialog {
 		cast(actuator, SimpleActuator).changeProperties();
 	}
 	
-	private function onXBallHit(ball:HxlSprite,actor:CqActor,other:CqActor,spell:CqItem):Void 
-	{
+	private function onXBallHit(ball:HxlSprite,actor:CqActor,other:CqActor,spell:CqItem) {
 		HxlGraphics.state.remove(ball);
+		ball.pixels = null;
+		ball = null;
 		CqActor.useOn(spell, actor, other);
 	}
 }
