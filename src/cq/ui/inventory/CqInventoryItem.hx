@@ -78,15 +78,18 @@ class CqInventoryItem extends HxlSprite {
 	
 	override public function destroy() {
 		super.destroy();
-		icon.dispose();
-		icon = null;
+		if(icon!=null) {
+			icon.dispose();
+			icon = null;
+		}
 		if(glowSprite!=null) {
 			glowSprite.dispose();
 			glowSprite = null;
 		}
-		
-		pixels.dispose();
-		pixels = null;
+		if(pixels!=null) {
+			pixels.dispose();
+			pixels = null;
+		}
 	}
 	
 	public static function createUIItem(Item:CqItem, dialog:CqInventoryDialog):CqInventoryItem {

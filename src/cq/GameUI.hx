@@ -387,6 +387,12 @@ class GameUI extends HxlDialog {
 		GameUI.instance = null;
 		dlgPotionGrid.kill();
 		dlgSpellGrid.kill();
+		if(chrageBmp!=null){
+			chrageBmp.bitmapData.dispose();
+			chrageBmp.bitmapData = null;
+			chrageBmp = null;
+		}
+		chrageShape = null;
 		clearEventListeners();
 		super.destroy();
 		super.kill();
