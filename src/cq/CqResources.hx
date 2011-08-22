@@ -104,7 +104,7 @@ class StartButtonSprite extends HxlSprite {
 class ButtonSprite extends HxlSprite {
 	public function new(?X:Float=0, ?Y:Float=0) {
 		super(X,Y);
-		loadGraphic(SpriteItemSlot1, false, false, 64, 64, true);
+		loadGraphic(SpriteItemSlot1, false, false, 64, 64);
 	}
 }
 class HeartSprite extends HxlSprite {

@@ -293,17 +293,14 @@ class GameState extends CqState {
 			
 		started = true;
 		initRegistry();
-		Playtomic.play();
 		var world = Registery.world;
 		var player = Registery.player;
-		
-		add(world.currentLevel);
-		world.currentLevel.updateFieldOfView(this, true);
+		Playtomic.play();
 
 		// create and init the game gui
 		// todo: do not recreate if already exists from previous games?
 		if (gameUI == null) {
-			gameUI = new GameUI();		
+			gameUI = new GameUI();	
 			gameUI.zIndex = 50;
 			add(gameUI);
 			gameUI.initChests();
@@ -317,6 +314,11 @@ class GameState extends CqState {
 			gameUI.doodads.add(pop);
 			player.setPopup(pop);
 		}
+		
+		add(world.currentLevel);
+		world.currentLevel.updateFieldOfView(this, true);
+
+		
 		player.addOnPickup(gameUI.itemPickup);
 		player.addOnInjure(gameUI.doPlayerInjureEffect);
 		player.addOnKill(gameUI.doPlayerInjureEffect);
