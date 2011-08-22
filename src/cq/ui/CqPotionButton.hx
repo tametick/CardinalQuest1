@@ -12,7 +12,6 @@ import cq.CqItem;
 import cq.CqResources;
 import cq.CqGraphicKey;
 
-import flash.display.BitmapData;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;

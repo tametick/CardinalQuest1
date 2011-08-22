@@ -2,8 +2,6 @@ package cq.ui;
 
 import cq.CqResources;
 
-import flash.display.BitmapData;
-
 import haxel.HxlGradient;
 import haxel.HxlGraphics;
 import haxel.HxlSlidingDialog;

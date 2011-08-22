@@ -18,7 +18,6 @@ import data.SoundEffectsManager;
 import haxel.GraphicCache;
 import world.Tile;
 
-import flash.display.BitmapData;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;

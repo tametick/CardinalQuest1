@@ -794,9 +794,12 @@ class HxlSprite extends HxlObject {
 	 */
 	public function setPixels(Pixels:BitmapData):BitmapData {
 		_pixels = Pixels;
-		width = frameWidth = _pixels.width;
-		height = frameHeight = _pixels.height;
-		resetHelpers();
+		if(Pixels!=null){
+			width = frameWidth = _pixels.width;
+			height = frameHeight = _pixels.height;
+			resetHelpers();
+		}
+
 		return Pixels;
 	}
 

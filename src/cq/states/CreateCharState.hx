@@ -133,6 +133,7 @@ class CreateCharState extends CqState {
 			bmp.draw(target);
 			selectBox.width = selectBox.height = 130;
 			selectBox.pixels = bmp;
+			bmp = null;
 		} else {
 			selectBox.loadCachedGraphic(CqGraphicKey.CharCreateSelector);
 		}

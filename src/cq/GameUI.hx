@@ -700,6 +700,8 @@ class GameUI extends HxlDialog {
 		var glow:GlowFilter = new GlowFilter(0x00ff00, 0.9, 15.0, 15.0, 1.6, 1, false, true);
 		tmp.applyFilter(tmp, new Rectangle(0, 0, 79, 79), new Point(0, 0), glow);
 		GraphicCache.addBitmapData(tmp, CqGraphicKey.CellGlow);
+		tmp.dispose();
+		tmp = null;
 		
 		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.buttonSprite) ) {
 			var btn:ButtonSprite = new ButtonSprite();
@@ -1013,11 +1015,9 @@ class GameUI extends HxlDialog {
 		ang = ang < 0? 360 - ang:ang;
 		ang += 90;
 		ball.angle = ang;*/
-		if (GraphicCache.checkBitmapCache(CqGraphicKey.xball(color)))
-		{
+		if (GraphicCache.checkBitmapCache(CqGraphicKey.xball(color))) {
 			ball.loadCachedGraphic(CqGraphicKey.xball(color));
-		}else
-		{
+		} else {
 			var tmp:BitmapData = new BitmapData(12, 17, true, 0x0);
 			var s:Shape = new Shape();
 			var g:Graphics = s.graphics;
@@ -1032,6 +1032,7 @@ class GameUI extends HxlDialog {
 			tmp.applyFilter(tmp, new Rectangle(0, 0, 12, 17), new Point(1, 1), glow);
 			GraphicCache.addBitmapData(tmp, CqGraphicKey.xball(color));
 			ball.setPixels(tmp);
+			tmp = null;
 		}
 		var fromPixel:HxlPoint = new HxlPoint(actor.x + Configuration.tileSize / 2, actor.y+Configuration.tileSize / 2);
 		ball.x = fromPixel.x;

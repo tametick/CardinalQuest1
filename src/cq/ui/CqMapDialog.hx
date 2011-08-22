@@ -27,8 +27,7 @@ class CqMapDialog extends HxlSlidingDialog {
 
 	var clearRect:Rectangle;
 	
-	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0)
-	{
+	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0) {
 		// Size: 472 x 480
 		// map size: 400x400
 		// map pos: 36, 40
@@ -67,6 +66,13 @@ class CqMapDialog extends HxlSlidingDialog {
 		updateDialog();
 	}
 
+	override public function destroy() {
+		super.destroy();
+		mapBitmap.bitmapData.dispose();
+		mapBitmap.bitmapData = null;
+		mapBitmap = null;
+	}
+	
 	public override function updateDialog() {
 		var tiles = Registery.level.getTiles();
 		var mapW:Int = Registery.level.widthInTiles;

@@ -211,7 +211,7 @@ class HxlGame extends Sprite {
 
 	function onKeyUp(event:KeyboardEvent) {
 		// todo: use HxlKeyboard constants instead of keycodes
-		if (((event.keyCode == 192) || (event.keyCode == 220)) && Configuration.debug) {
+		if (((event.keyCode == 192) || (event.keyCode == 220)) /*&& Configuration.debug*/) {
 			console.toggle();
 			return;
 		}
@@ -313,6 +313,7 @@ class HxlGame extends Sprite {
 		tmp.scaleX = tmp.scaleY = _zoom;
 		_screen.addChild(tmp);
 		HxlGraphics.buffer = tmp.bitmapData;
+		tmp = null;
 
 		// Initialize console
 		console = new HxlConsole(0, 0, _zoom, _defaultFont);
@@ -339,6 +340,7 @@ class HxlGame extends Sprite {
 		var text:TextField = new TextField();
 		text.width = tmp.width;
 		text.height = tmp.height;
+		tmp = null;
 		text.multiline = true;
 		text.wordWrap = true;
 		text.selectable = false;
@@ -356,8 +358,7 @@ class HxlGame extends Sprite {
 		var bx:Int = 10;
 		var by:Int = 14;
 		_soundTrayBars = new Array();
-		for(i in 0...10)
-		{
+		for(i in 0...10) {
 			tmp = new Bitmap(new BitmapData(4,i+1,false,0xffffff));
 			tmp.x = bx;
 			tmp.y = by;
@@ -365,6 +366,7 @@ class HxlGame extends Sprite {
 			_soundTrayBars.push(tmp);
 			bx += 6;
 			by--;
+			tmp = null;
 		}
 		addChild(_soundTray);
 

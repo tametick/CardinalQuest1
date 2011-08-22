@@ -11,6 +11,7 @@ import cq.CqResources;
 import cq.CqSpell;
 import cq.CqActor;
 import cq.CqGraphicKey;
+import haxel.HxlState;
 
 import flash.display.BitmapData;
 import flash.events.MouseEvent;
@@ -50,7 +51,13 @@ class CqSpellButton extends HxlDialog {
 		
 		chrageBmpData = new BitmapData(94, 94, true, 0x0);
 	}
-
+	
+	override public function destroy() {
+		super.destroy();
+		chrageBmpData.dispose();
+		chrageBmpData = null;
+	}
+	
 	public override function update() {
 		if (!_initialized) {
 			if (HxlGraphics.stage != null) {

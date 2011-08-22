@@ -75,6 +75,20 @@ class CqInventoryItem extends HxlSprite {
 		glowRect = new Rectangle(0, 0, 58, 58);
 		isGlowing = false;
 	}
+	
+	override public function destroy() {
+		super.destroy();
+		icon.dispose();
+		icon = null;
+		if(glowSprite!=null) {
+			glowSprite.dispose();
+			glowSprite = null;
+		}
+		
+		pixels.dispose();
+		pixels = null;
+	}
+	
 	public static function createUIItem(Item:CqItem, dialog:CqInventoryDialog):CqInventoryItem {
 		
 		//basic stuff
@@ -137,6 +151,7 @@ class CqInventoryItem extends HxlSprite {
 		tmp.applyFilter(tmp, glowRect, new Point(0, 0), glow);
 		glowSprite = tmp;
 		glow = null;
+		tmp = null;
 	}
 	
 	public function setGlow(Toggle:Bool) {
@@ -183,6 +198,8 @@ class CqInventoryItem extends HxlSprite {
 		pixels = temp;
 		if (isGlowing)
 			renderGlow();
+			
+		temp = null;
 	}
 
 	/**
