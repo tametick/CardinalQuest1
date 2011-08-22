@@ -481,6 +481,7 @@ class HxlGroup extends HxlObject {
 			if (o != null) {
 				o.destroy();
 			}
+			members[i] = null;
 		}
 		members = new Array();
 	}
