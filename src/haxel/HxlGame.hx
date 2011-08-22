@@ -540,5 +540,7 @@ class HxlGame extends Sprite {
 	
 	public function destroy() {
 		_clearEventListeners();
+		HxlGraphics.buffer.dispose();
+		HxlGraphics.buffer = null;
 	}
 }

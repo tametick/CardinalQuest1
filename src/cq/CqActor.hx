@@ -547,8 +547,7 @@ class CqActor extends CqObject, implements Actor {
 	}
 	
 	static var tmpSpellSprite;
-	public static function useOn(itemOrSpell:CqItem,actor:CqActor, other:CqActor)
-	{
+	public static function useOn(itemOrSpell:CqItem,actor:CqActor, other:CqActor) {
 		if (itemOrSpell.equipSlot == POTION)
 			SoundEffectsManager.play(SpellEquipped);
 			
