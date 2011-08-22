@@ -20,8 +20,7 @@ import playtomic.PtLevel;
 import data.Configuration;
 import cq.states.WinState;
 
-class Level extends HxlTilemap
-{
+class Level extends HxlTilemap {
 	public var mobs:Array<Mob>;
 	public var loots:Array<Loot>;
 	public var startingLocation:HxlPoint;

@@ -12,8 +12,7 @@ import flash.geom.Rectangle;
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.actuators.MethodActuator;
 
-class Tile extends HxlTile
-{
+class Tile extends HxlTile {
 	public var actors:Array<Actor>;
 	public var loots:Array<Loot>;
 	public var decorations:Array<Decoration>;
