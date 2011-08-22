@@ -3,8 +3,6 @@ import flash.display.BitmapData;
 import flash.display.Bitmap;
 import flash.geom.Matrix;
 /**
- * ...
- * @author joris
  * a container for graphics, moved out from HxlGraphics.
  */
 
@@ -13,7 +11,7 @@ class GraphicCache
 	/**
 	 * Internal storage system to prevent graphics from being used repeatedly in memory.
 	 */
-	static var cache:Dynamic = {};
+	static var cache:Hash<BitmapData> = new Hash<BitmapData>();
 	/**
 	 * Returns a BitmapData object for the cached graphic matching the supplied key.
 	 * If a matching bitmap is not found, returns a 20x20 pixel red square.
@@ -22,7 +20,7 @@ class GraphicCache
 		var keyStr:String = HxlUtil.enumToString( Key );
 		if ( Key == null || !checkBitmapCacheStr(keyStr) ) 
 			return createBitmap(20, 20, 0xff0000); 
-		return Reflect.field(cache, keyStr);
+		return cache.get(keyStr);
 	}
 	
 	/**
@@ -39,13 +37,13 @@ class GraphicCache
 		if ( Key == null ) {
 			key = Type.getClassName(Graphic);
 			if ( ScaleX != 1.0 || ScaleY != 1.0 ) key = key+"-"+ScaleX+"x"+ScaleY;
-			if(Unique && (Reflect.hasField(cache, key)) && (Reflect.field(cache, key) != null)) {
+			if(Unique && cache.exists(key) && cache.get(key) != null) {
 				//Generate a unique key
 				var inc:Int = 0;
 				var ukey:String;
 				do {
 					ukey = key + inc++;
-				} while((Reflect.hasField(cache, ukey)) && (Reflect.field(cache, ukey) != null));
+				} while(cache.exists(ukey) && cache.get(ukey) != null);
 				key = ukey;
 			}
 		} else {
@@ -62,11 +60,11 @@ class GraphicCache
 				newPixels.draw(bd, mtx);
 				bd = newPixels;
 			}
-			Reflect.setField(cache, key, bd);
+			cache.set(key, bd);
 			if (Reverse) needReverse = true;
 		}
 
-		var pixels:BitmapData = Reflect.field(cache, key);
+		var pixels:BitmapData = cache.get(key);
 
 		if (!needReverse && Reverse && (pixels.width == Type.createInstance(Graphic, []).bitmapData.width)) {
 			needReverse = true;
@@ -89,10 +87,13 @@ class GraphicCache
 	}
 
 	public static function clearBitmapData() {
-		var fieldNames:Array<String> = Reflect.fields(cache).copy();
+		var fieldNames:Array<String> = new Array();
+		for (k in cache.keys())
+			fieldNames.push(k);
+		
 		for (fieldName in fieldNames) {
-			cast(Reflect.field(cache, fieldName), BitmapData).dispose();
-			Reflect.deleteField(cache, fieldName);
+			cache.get(fieldName).dispose();
+			cache.remove(fieldName);
 		}
 		fieldNames = null;
 	}
@@ -103,11 +104,11 @@ class GraphicCache
 		var keystr:String;
 		if(Key == null) {
 			keystr = "data-"+Graphic.width+"x"+Graphic.height;
-			if ( Reflect.hasField(cache, keystr) && (Reflect.field(cache, keystr) != null)) {
+			if ( cache.exists(keystr) && cache.get(keystr) != null) {
 				//Generate a unique key
 				inc = 0;
 				do { ukey = keystr + inc++;
-				} while((Reflect.hasField(cache, ukey)) && (Reflect.field(cache, ukey) != null));
+				} while(cache.exists(ukey) && cache.get(ukey) != null);
 				keystr = ukey;
 			}
 		}else
@@ -117,18 +118,17 @@ class GraphicCache
 		if ( !checkBitmapCache(Key) || Force ) {
 			if (checkBitmapCache(Key)) {
 				// dispose old in case of forcing
-				cast(Reflect.field(cache, keystr), BitmapData).dispose();
+				cache.get(keystr).dispose();
 			}
 			
 			var bd:BitmapData = new BitmapData( Graphic.width, Graphic.height, true, 0x00000000 );
 			bd.draw(Graphic);
-			Reflect.setField(cache, keystr, bd);
+			cache.set(keystr, bd);
 		}
-		if ( Reflect.field(cache, keystr) == null )
-		{
+		if ( cache.get(keystr) == null ) {
 			throw "Cannot find in graphics cache: "+keystr;
 		}
-		return Reflect.field(cache, keystr);
+		return cache.get(keystr);
 	}
 	/**
 	 * Check the local bitmap cache to see if a bitmap with this key has been loaded already.
@@ -140,10 +140,10 @@ class GraphicCache
 	public static function checkBitmapCache(Key:Dynamic):Bool {
 		if (Key == null) return false;
 		var keyStr:String = HxlUtil.enumToString(Key);
-		return (Reflect.hasField(cache, keyStr)) && (Reflect.field(cache, keyStr) != null);
+		return cache.exists(keyStr) && cache.get(keyStr) != null;
 	}
 	private static function checkBitmapCacheStr(keyStr:String):Bool {
-		return (Reflect.hasField(cache, keyStr)) && (Reflect.field(cache, keyStr) != null);
+		return cache.exists(keyStr) && cache.get(keyStr) != null;
 	}
 	/**
 	 * Generates a new <code>BitmapData</code> object (a colored square) and caches it.
@@ -160,23 +160,22 @@ class GraphicCache
 		{
 			//todo, check if its the same string as cqgraphicCache.oneColor
 			keystr = "CqGraphicKeyOneColor" + Width + Height + Color;
-			if (Unique && (Reflect.hasField(cache, keystr)) && (Reflect.field(cache, keystr) != null)) {
+			if (Unique && cache.exists(keystr) && cache.get(keystr)!=null) {
 				//Generate a unique key
 				var inc:Int = 0;
 				var ukey:String;
 				do {
 					ukey = keystr + inc++;
-				} while((Reflect.hasField(cache, ukey)) && (Reflect.field(cache, ukey) != null));
+				} while(cache.exists(ukey) && cache.get(ukey) != null);
 				keystr = ukey;
 			}
 		}
 		if (!checkBitmapCacheStr(keystr)) {
-			Reflect.setField(cache, keystr, new BitmapData(Width, Height, true, Color));
+			cache.set(keystr, new BitmapData(Width, Height, true, Color));
 		}
-		if ( Reflect.field(cache, keystr) == null)
-		{
+		if ( cache.get(keystr) == null) {
 			throw "" + keystr + Width + Height + Key + Unique;
 		}
-		return Reflect.field(cache, keystr);
+		return cache.get(keystr);
 	}
 }
