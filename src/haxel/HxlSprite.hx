@@ -174,7 +174,8 @@ class HxlSprite extends HxlObject {
 	 */
 	public function createGraphic(Width:Int,Height:Int,?Color:Int=0xffffffff,?Unique:Bool=false,?Key:CqGraphicKey=null):HxlSprite {
 		_bakedRotation = 0;
-		_pixels = GraphicCache.createBitmap(Width, Height, Color, Unique, Key);
+		_pixels = GraphicCache.createBitmap(Width, Height, Color, Unique, Key,Key!=null);
+		
 		width = frameWidth = _pixels.width;
 		height = frameHeight = _pixels.height;
 		resetHelpers();
@@ -295,6 +296,7 @@ class HxlSprite extends HxlObject {
 		var key:CqGraphicKey = CqGraphicKey.FromClass(Type.getClassName(Graphic), Frame, width, height);
 		var skipGen:Bool = GraphicCache.checkBitmapCache(key);
 		_pixels = GraphicCache.createBitmap(Math.floor(width), Math.floor(height), 0, true, key);
+		
 		width = frameWidth = _pixels.width;
 		height = frameHeight = _pixels.height;
 		_bakedRotation = 360/Rotations;

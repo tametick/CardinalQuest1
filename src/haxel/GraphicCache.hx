@@ -2,6 +2,9 @@ package haxel;
 import flash.display.BitmapData;
 import flash.display.Bitmap;
 import flash.geom.Matrix;
+import flash.Lib;
+import flash.system.System;
+
 /**
  * a container for graphics, moved out from HxlGraphics.
  */
@@ -18,8 +21,9 @@ class GraphicCache
 	 **/
 	public static function getBitmap(Key:Dynamic):BitmapData {
 		var keyStr:String = HxlUtil.enumToString( Key );
-		if ( Key == null || !checkBitmapCacheStr(keyStr) ) 
+		if ( Key == null || !checkBitmapCacheStr(keyStr) ) {
 			return createBitmap(20, 20, 0xff0000); 
+		}
 		return cache.get(keyStr);
 	}
 	
@@ -61,6 +65,7 @@ class GraphicCache
 				bd = newPixels;
 			}
 			cache.set(key, bd);
+
 			if (Reverse) needReverse = true;
 		}
 
@@ -85,8 +90,11 @@ class GraphicCache
 		return pixels;
 
 	}
-
+	
 	public static function clearBitmapData() {
+/*		System.gc();
+		flash.Lib.trace(System.totalMemory/1024);*/
+		
 		var fieldNames:Array<String> = new Array();
 		for (k in cache.keys())
 			fieldNames.push(k);
@@ -96,6 +104,9 @@ class GraphicCache
 			cache.remove(fieldName);
 		}
 		fieldNames = null;
+		
+/*		System.gc();
+		flash.Lib.trace(System.totalMemory/1024);*/
 	}
 	
 	public static function addBitmapData(Graphic:BitmapData, ?Key:Dynamic=null, ?Force:Bool=false):BitmapData {
@@ -154,7 +165,7 @@ class GraphicCache
 	 * 
 	 * @return	The <code>BitmapData</code> we just created.
 	 */
-	public static function createBitmap(Width:Int, Height:Int, Color:Int, ?Unique:Bool=false, ?Key:Dynamic=null):BitmapData {
+	public static function createBitmap(Width:Int, Height:Int, Color:Int, ?Unique:Bool=false, ?Key:Dynamic=null, ?Cache:Bool=true):BitmapData {
 		var keystr:String = "";
 		if (Key == null)
 		{
@@ -170,12 +181,14 @@ class GraphicCache
 				keystr = ukey;
 			}
 		}
-		if (!checkBitmapCacheStr(keystr)) {
+
+		if (!checkBitmapCacheStr(keystr) && Cache) {
 			cache.set(keystr, new BitmapData(Width, Height, true, Color));
+			return cache.get(keystr);
+		} else {
+			return new BitmapData(Width, Height, true, Color);
 		}
-		if ( cache.get(keystr) == null) {
-			throw "" + keystr + Width + Height + Key + Unique;
-		}
-		return cache.get(keystr);
+
+		
 	}
 }
