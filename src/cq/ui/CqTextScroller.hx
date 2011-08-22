@@ -45,8 +45,8 @@ class CqTextScroller extends HxlGroup {
 		setSplash(bg);
 		setTitle(Title, TitleColor, ShadowColor);
 		
-		HxlGraphics.stage.addEventListener(MouseEvent.CLICK, onAction);
-		HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_UP, onAction);
+		addEventListener(MouseEvent.CLICK, onAction);
+		addEventListener(KeyboardEvent.KEY_UP, onAction);
 	}
 	
 	public function setSplash(bg:Class<Bitmap>):Void {
@@ -92,8 +92,8 @@ class CqTextScroller extends HxlGroup {
 		}else
 		{
 			//end this
-			HxlGraphics.stage.removeEventListener(MouseEvent.CLICK, onAction);
-			HxlGraphics.stage.removeEventListener(KeyboardEvent.KEY_UP, onAction);
+			removeEventListener(MouseEvent.CLICK, onAction);
+			removeEventListener(KeyboardEvent.KEY_UP, onAction);
 			if (OnComplete != null)
 				OnComplete();
 		}

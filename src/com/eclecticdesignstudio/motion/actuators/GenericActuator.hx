@@ -112,7 +112,6 @@ class GenericActuator {
 		var internal:Actuate.ActuateInternal = Actuate;
 		
 		internal.unload (this);
-		
 	}
 	
 	
