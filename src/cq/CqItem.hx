@@ -17,7 +17,7 @@ import haxel.HxlUtil;
 import world.Loot;
 import world.GameObject;
 
-import cq.CqConfiguration;
+import data.Configuration;
 import cq.CqResources;
 import cq.CqWorld;
 import cq.CqGraphicKey;
@@ -527,7 +527,7 @@ class CqChest extends CqItem {
 		var typeName:String = null;
 		
 		// chance of getting a potion
-		if (Math.random() < CqConfiguration.dropPotionChance){
+		if (Math.random() < Configuration.dropPotionChance){
 			typeName = HxlUtil.getRandomElement(SpriteItems.instance.potions).toUpperCase();
 		} else {
 			//set up equipment array. means filter out potions from the item enum.
@@ -539,7 +539,7 @@ class CqChest extends CqItem {
 				CqChest.equipment.shift();
 			}
 			
-			if (Math.random() < CqConfiguration.betterItemChance)
+			if (Math.random() < Configuration.betterItemChance)
 				level = level + 1;
 				
 			var itemsPerLevelVariety:Int = 6;
@@ -562,9 +562,9 @@ class CqChest extends CqItem {
 		
 		var item = CqLootFactory.newItem(x, y, Type.createEnum(CqItemType,  typeName));
 		
-		if (Math.random() < CqConfiguration.EnchantItemChance) {
+		if (Math.random() < Configuration.EnchantItemChance) {
 			// 10% chance of magical item
-			if (Math.random() < CqConfiguration.BetterEnchantItemChance){
+			if (Math.random() < Configuration.BetterEnchantItemChance){
 				// 1% chance of that item being out-of-depth
 				CqLootFactory.enchantItem(item, Registery.level.index + 1);
 			} else {

@@ -10,7 +10,7 @@ import cq.CqItem;
 import cq.CqResources;
 import cq.CqSpell;
 import cq.CqGraphicKey;
-import cq.CqRegistery;
+import data.Registery;
 import cq.ui.CqSpellGrid;
 import data.Resources;
 import data.Configuration;

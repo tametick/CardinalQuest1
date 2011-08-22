@@ -2,6 +2,8 @@ package cq.ui;
 
 import cq.CqActor;
 
+import data.Registery;
+
 import haxel.HxlUIBar;
 
 enum BarType {
@@ -66,7 +68,7 @@ class CqXpBar extends CqVitalBar {
 		setPercentToXp();
 	}
 	function setPercentToXp() {
-		var player:CqPlayer = CqRegistery.player;
+		var player:CqPlayer = Registery.player;
 		var percent:Float = (player.xp - player.currentLevel()) / (player.nextLevel() - player.currentLevel());
 		setPercent( percent );
 	}

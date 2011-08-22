@@ -1,7 +1,7 @@
 package haxel;
 
 import com.eclecticdesignstudio.motion.Actuate;
-import cq.CqRegistery;
+import data.Registery;
 import flash.display.BitmapData;
 import flash.net.URLRequest;
 import flash.Lib;
@@ -500,7 +500,7 @@ class HxlUtil {
 			pt.x = randomInt(width);
 			pt.y = randomInt(height);
 			dist = distance(distanceFrom, pt);
-		} while ( CqRegistery.level.isBlockingMovement(Math.floor(pt.x),Math.floor(pt.y))|| dist < minDistance);
+		} while ( Registery.level.isBlockingMovement(Math.floor(pt.x),Math.floor(pt.y))|| dist < minDistance);
 		
 		return pt;
 	}

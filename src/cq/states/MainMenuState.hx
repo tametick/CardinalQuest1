@@ -1,6 +1,6 @@
 package cq.states;
 
-import cq.CqRegistery;
+import data.Registery;
 import cq.CqResources;
 import cq.CqWorld;
 import cq.GameUI;
@@ -121,7 +121,7 @@ class MainMenuState extends CqState {
 			btnResumeGame.setHoverFormat(null, 35, textHighlight, "center");
 			menu.addItem(btnResumeGame);
 			btnResumeGame.setCallback(function() { 
-				CqLevel.playMusicByIndex(CqRegistery.level.index);
+				CqLevel.playMusicByIndex(Registery.level.index);
 				self.changeState(null);
 			});
 			buttonY += 50;
@@ -163,9 +163,6 @@ class MainMenuState extends CqState {
 			
 			if (Configuration.air) {
 				btnQuit.setCallback(function() { 
-				  #if jadeds	
-					Game.jadeDS.exit(true); 
-				  #end	
 					NativeApplication.nativeApplication.exit(); 
 				} );
 			} else {

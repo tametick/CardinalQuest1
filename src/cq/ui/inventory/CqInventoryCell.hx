@@ -1,10 +1,13 @@
 package cq.ui.inventory;
+
 import haxel.HxlDialog;
 import haxel.HxlSprite;
 import haxel.HxlText;
 import haxel.HxlGraphics;
 
 import cq.CqResources;
+
+import data.Registery;
 
 // tmp
 import cq.ui.inventory.CqInventoryDialog;
@@ -134,7 +137,7 @@ class CqInventoryCell extends HxlDialog {
 		var oldItem:CqInventoryItem = null;
 		if (cellObj != null) {
 			oldItem = cellObj;
-			CqRegistery.player.unequipItem(cellObj.item);
+			Registery.player.unequipItem(cellObj.item);
 			cellObj.removeFromDialog();
 			cellObj = null;
 		}

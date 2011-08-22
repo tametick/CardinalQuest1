@@ -199,7 +199,7 @@ class CqActor extends CqObject, implements Actor {
 	
 	public function attackObject(state:HxlState, other:GameObject) {
 		var chest = cast(other, CqChest);
-		chest.bust(state,CqRegistery.world.currentLevelIndex);
+		chest.bust(state,Registery.world.currentLevelIndex);
 	}
 	
 	public function doInjure(?dmgTotal:Int=0) {
@@ -207,7 +207,7 @@ class CqActor extends CqObject, implements Actor {
 	}
 
 	function injureActor(other:CqActor, dmgTotal:Int) {
-		if (this == CqRegistery.player) {
+		if (this == Registery.player) {
 			HxlLog.append("You hit");
 			PtPlayer.hits();
 		} else {
@@ -474,7 +474,7 @@ class CqActor extends CqObject, implements Actor {
 				buffs.set(buff, buffs.get(buff) + item.buffs.get(buff));
 				if (buff == "life") {
 					if (Std.is(this, CqPlayer)) {
-						var player = CqRegistery.player;
+						var player = Registery.player;
 						player.updatePlayerHealthBars();
 					}
 				}
@@ -496,7 +496,7 @@ class CqActor extends CqObject, implements Actor {
 					if (this.hp < 1)
 						this.hp = 1;
 					if (Std.is(this, CqPlayer)) {
-						var player = CqRegistery.player;
+						var player = Registery.player;
 						player.updatePlayerHealthBars();
 					}
 				}
@@ -515,7 +515,7 @@ class CqActor extends CqObject, implements Actor {
 			}
 		}
 		//special effect
-		var pos:HxlPoint = CqRegistery.level.getTilePos(tile.mapX, tile.mapY, true);
+		var pos:HxlPoint = Registery.level.getTilePos(tile.mapX, tile.mapY, true);
 		var eff:CqEffectSpell = new CqEffectSpell(pos.x, pos.y,Effectcolor);
 		eff.zIndex = 1000;
 		HxlGraphics.state.add(eff);
@@ -528,7 +528,7 @@ class CqActor extends CqObject, implements Actor {
 		{
 			if (Std.is(this, CqPlayer))
 			{
-				itemOrSpell.damage = CqSpellFactory.getfireBalldamageByLevel(CqRegistery.player.level);
+				itemOrSpell.damage = CqSpellFactory.getfireBalldamageByLevel(Registery.player.level);
 				GameUI.instance.shootXBall(this, other, 0xDA1F1F, itemOrSpell);
 			}
 			else
@@ -649,10 +649,10 @@ class CqActor extends CqObject, implements Actor {
 			moveToPixel(HxlGraphics.state, pixelLocation.x, pixelLocation.y);
 			Registery.level.updateFieldOfView(HxlGraphics.state, true);
 		case "magic_mirror":
-			var mob = CqRegistery.level.createAndAddMirror(new HxlPoint(tile.mapX,tile.mapY), CqRegistery.player.level, true,CqRegistery.player);
+			var mob = Registery.level.createAndAddMirror(new HxlPoint(tile.mapX,tile.mapY), Registery.player.level, true,Registery.player);
 			GameUI.showEffectText(mob, "Mirror", 0x2DB6D2);
 			//mob.speed = 0;
-			mob.faction = CqRegistery.player.faction;
+			mob.faction = Registery.player.faction;
 			effect.value = mob;
 			specialEffects.set(effect.name, effect);
 			Registery.level.updateFieldOfView(HxlGraphics.state, true);
@@ -674,7 +674,7 @@ class CqActor extends CqObject, implements Actor {
 						healthBar.updateValue();
 						
 					if (Std.is(this, CqPlayer)) {
-						var player = CqRegistery.player;
+						var player = Registery.player;
 						player.updatePlayerHealthBars();
 					}
 					GameUI.showEffectText(this, "Healed", 0x0080FF);
@@ -686,7 +686,7 @@ class CqActor extends CqObject, implements Actor {
 						other.healthBar.updateValue();
 						
 					if (Std.is(other, CqPlayer)) {
-						var player = CqRegistery.player;
+						var player = Registery.player;
 						player.updatePlayerHealthBars();
 					}
 					GameUI.showEffectText(other, "Healed", 0x0080FF);
@@ -709,7 +709,7 @@ class CqActor extends CqObject, implements Actor {
 			other.specialEffects.set(effect.name, effect);
 			GameUI.showEffectText(other, "Sleep", 0xFFFF00);
 		case "blink":
-			var tileLocation = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), Registery.level.mapData, SpriteTiles.instance.walkableAndSeeThroughTiles);
+			var tileLocation = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), Registery.level.mapData, SpriteTiles.instance.walkableAndSeeThroughTiles);
 			var pixelLocation = Registery.level.getPixelPositionOfTile(tileLocation.x,tileLocation.y);
 			setTilePos(Std.int(tileLocation.x), Std.int(tileLocation.y));
 			moveToPixel(HxlGraphics.state, pixelLocation.x, pixelLocation.y);
@@ -719,9 +719,9 @@ class CqActor extends CqObject, implements Actor {
 			GameUI.showEffectText(other, "Morph", 0xA81CE3);
 			var _se = other.specialEffects;
 			var _hp = other.hp;
-			var mob = CqRegistery.level.createAndaddMob(other.getTilePos(), Std.int(Math.random() * CqRegistery.player.level), true);
+			var mob = Registery.level.createAndaddMob(other.getTilePos(), Std.int(Math.random() * Registery.player.level), true);
 			Registery.level.removeMobFromLevel(HxlGraphics.state, cast(other, CqMob));
-			CqRegistery.level.updateFieldOfView(HxlGraphics.state);
+			Registery.level.updateFieldOfView(HxlGraphics.state);
 			GameUI.instance.addHealthBar(cast(mob, CqActor));
 			//health bar hacks
 			var casted:CqActor = cast(mob, CqActor);
@@ -800,11 +800,11 @@ class CqPlayer extends CqActor, implements Player {
 			vitality = 500;
 			attack = 500;
 			spirit = 100;
-			CqConfiguration.playerLives = 4;
+			Configuration.playerLives = 4;
 		}
 		super(X, Y);
 
-		lives = CqConfiguration.playerLives;
+		lives = Configuration.playerLives;
 		money = 0;
 		for (s in 0...5)
 			equippedSpells[s] = null;
@@ -1022,7 +1022,7 @@ class CqMob extends CqActor, implements Mob {
 		visible = false;
 		
 		if(player)
-			addAnimation("idle", [SpritePlayer.instance.getSpriteIndex(Type.enumConstructor(CqRegistery.player.playerClass).toLowerCase())], 0 );
+			addAnimation("idle", [SpritePlayer.instance.getSpriteIndex(Type.enumConstructor(Registery.player.playerClass).toLowerCase())], 0 );
 		else
 			addAnimation("idle", [sprites.getSpriteIndex(typeName)], 0 );
 		play("idle");
@@ -1155,7 +1155,7 @@ class CqMob extends CqActor, implements Mob {
 	public function act(state:HxlState):Bool {
 		updateAwarness();
 		
-		var invisible = CqRegistery.player.specialEffects.get("invisible");
+		var invisible = Registery.player.specialEffects.get("invisible");
 		
 		if (aware>0 && invisible==null)
 			return actAware(state);
@@ -1216,7 +1216,7 @@ class CqMobFactory {
 				typeName = HxlUtil.getRandomElement(SpriteMonsters.bandits);
 				shortName = "Bandit";
 			case 2:
-				if (Math.random() < CqConfiguration.strongerEnemyChance)
+				if (Math.random() < Configuration.strongerEnemyChance)
 				{
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.bandits);
 					shortName = "Bandit";
@@ -1225,7 +1225,7 @@ class CqMobFactory {
 					shortName = "Kobold";
 				}
 			case 3:
-				if(Math.random()<CqConfiguration.strongerEnemyChance){
+				if(Math.random()<Configuration.strongerEnemyChance){
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.kobolds);
 					shortName = "Kobold";
 				}else{
@@ -1233,7 +1233,7 @@ class CqMobFactory {
 					shortName = "Succubi";
 				}
 			case 4:
-				if(Math.random()<CqConfiguration.strongerEnemyChance){
+				if(Math.random()<Configuration.strongerEnemyChance){
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.succubi);
 					shortName = "Succubi";
 				}else{
@@ -1241,7 +1241,7 @@ class CqMobFactory {
 					shortName = "Spider";
 				}
 			case 5:
-				if (Math.random() < CqConfiguration.strongerEnemyChance){
+				if (Math.random() < Configuration.strongerEnemyChance){
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.spiders);
 					shortName = "Spider";
 				}else{
@@ -1249,7 +1249,7 @@ class CqMobFactory {
 					shortName = "Ape";
 				}
 			case 6:
-				if (Math.random() < CqConfiguration.strongerEnemyChance){
+				if (Math.random() < Configuration.strongerEnemyChance){
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.apes);
 					shortName = "Ape";
 				}else{
@@ -1257,7 +1257,7 @@ class CqMobFactory {
 					shortName = "Elemental";
 				}
 			case 7:
-				if(Math.random()<CqConfiguration.strongerEnemyChance){
+				if(Math.random()<Configuration.strongerEnemyChance){
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.elementeals);
 					shortName = "Elemental";
 				}else{
@@ -1265,7 +1265,7 @@ class CqMobFactory {
 					shortName = "Werewolf";
 				}
 			case 8,9:// for "out of depth" enemies in the 8th level 
-				if (Math.random() < CqConfiguration.strongerEnemyChance) {
+				if (Math.random() < Configuration.strongerEnemyChance) {
 					shortName = "Werewolf";
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.werewolves);
 				}else {

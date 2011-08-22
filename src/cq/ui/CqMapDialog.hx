@@ -85,7 +85,7 @@ class CqMapDialog extends HxlSlidingDialog {
 		var mobColor:Int = 0xFF3333;
 		var lootColor:Int = 0xFFCC00;
 
-		var player = CqRegistery.player;
+		var player = Registery.player;
 		var playerPos = player.getTilePos();
 
 		graph.clear();
@@ -139,7 +139,7 @@ class CqMapDialog extends HxlSlidingDialog {
 					
 					
 					// Render player position
-					var playerPos = CqRegistery.player.getTilePos();
+					var playerPos = Registery.player.getTilePos();
 					if ( playerPos.x == X && playerPos.y == Y ) {
 						var dx:Float = (X * cellSize.x) + (cellSize.x / 2);
 						var dy:Float = (Y * cellSize.y) + (cellSize.y / 2);

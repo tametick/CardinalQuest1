@@ -226,7 +226,7 @@ class GameUI extends HxlDialog {
 		panelLog.zIndex = 2;
 		add(panelLog);		
 		
-		var mainBtn = SpritePortrait.getIcon(CqRegistery.player.playerClass,64 ,1.0);
+		var mainBtn = SpritePortrait.getIcon(Registery.player.playerClass,64 ,1.0);
 		var infoBtn = new HxlSprite();
 		infoBtn.loadGraphic(SpriteInfo, false, false, 64, 64, true, 1, 1);
 		
@@ -434,8 +434,8 @@ class GameUI extends HxlDialog {
 		var xShift = (leftButtons.width - width) / 4;
 		var yShift = btnMainView.height-3;
 
-		infoViewHpBar = new CqHealthBar(CqRegistery.player, leftButtons.x+btnInfoView.x+xShift, leftButtons.y+btnMainView.y+yShift,width, height,BarType.INFO);
-		infoViewXpBar = new CqXpBar(CqRegistery.player, infoViewHpBar.x, infoViewHpBar.y+infoViewHpBar.height, width, height, BarType.INFO);
+		infoViewHpBar = new CqHealthBar(Registery.player, leftButtons.x+btnInfoView.x+xShift, leftButtons.y+btnMainView.y+yShift,width, height,BarType.INFO);
+		infoViewXpBar = new CqXpBar(Registery.player, infoViewHpBar.x, infoViewHpBar.y+infoViewHpBar.height, width, height, BarType.INFO);
 		infoViewHpBar.scrollFactor.x = infoViewHpBar.scrollFactor.y = 0;
 		infoViewXpBar.scrollFactor.x = infoViewXpBar.scrollFactor.y = 0;
 		add(infoViewHpBar);
@@ -446,11 +446,11 @@ class GameUI extends HxlDialog {
 		var width = 32;
 		var height = 4;
 		
-		var xShift = CqRegistery.player.getScreenXY().x+2;
-		var yShift = CqRegistery.player.getScreenXY().y + Configuration.zoomedTileSize()+2;
+		var xShift = Registery.player.getScreenXY().x+2;
+		var yShift = Registery.player.getScreenXY().y + Configuration.zoomedTileSize()+2;
 		
-		centralHealthBar = new CqHealthBar(CqRegistery.player, xShift, yShift,width, height, BarType.CENTRAL);
-		centralXpBar = new CqXpBar(CqRegistery.player, xShift, yShift+centralHealthBar.height, width, height, BarType.CENTRAL);
+		centralHealthBar = new CqHealthBar(Registery.player, xShift, yShift,width, height, BarType.CENTRAL);
+		centralXpBar = new CqXpBar(Registery.player, xShift, yShift+centralHealthBar.height, width, height, BarType.CENTRAL);
 		centralHealthBar.scrollFactor.x = centralHealthBar.scrollFactor.y = 0;
 		centralXpBar.scrollFactor.x = centralXpBar.scrollFactor.y = 0;
 		
@@ -462,8 +462,8 @@ class GameUI extends HxlDialog {
 	}
 	
 	public function updateCentralBarsPosition() {
-		centralHealthBar.targetX = CqRegistery.player.getScreenXY().x+2;
-		centralHealthBar.targetY = CqRegistery.player.getScreenXY().y + Configuration.zoomedTileSize()+2;
+		centralHealthBar.targetX = Registery.player.getScreenXY().x+2;
+		centralHealthBar.targetY = Registery.player.getScreenXY().y + Configuration.zoomedTileSize()+2;
 		
 		centralXpBar.targetX = centralHealthBar.targetX;
 		centralXpBar.targetY = centralHealthBar.targetY + centralHealthBar.height;
@@ -471,8 +471,8 @@ class GameUI extends HxlDialog {
 	
 	function addInfoButtonTexts() {
 		var fontSize = 12;
-		var player = CqRegistery.player;
-		var level  = CqRegistery.level;
+		var player = Registery.player;
+		var level  = Registery.level;
 		
 		//heart n coin info
 		infoViewHearts = new HxlGroup();
@@ -528,7 +528,7 @@ class GameUI extends HxlDialog {
 	}
 
 	public function updateCharges() {
-		var player = CqRegistery.player;
+		var player = Registery.player;
 		for ( btn in dlgSpellGrid.buttons ){
 			if (btn.getSpell() != null) {				
 				updateCharge(btn);
@@ -793,7 +793,7 @@ class GameUI extends HxlDialog {
 	}
 
 	public function doPlayerInjureEffect(?dmgTotal:Int) {
-		var player = CqRegistery.player;
+		var player = Registery.player;
 		if ( (player.hp / player.maxHp) <= 0.2 ) {
 			HxlGraphics.flash.start(0xffff0000, 0.2, null, true);
 		}
@@ -902,7 +902,7 @@ class GameUI extends HxlDialog {
 			targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
 			targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
 		} else {
-			var newPos:HxlPoint = CqRegistery.level.getTargetAccordingToKeyPress(targetLastPos);
+			var newPos:HxlPoint = Registery.level.getTargetAccordingToKeyPress(targetLastPos);
 			if (newPos != null)
 			{
 				if (newPos.x == 0 && newPos.y == 0) {
@@ -992,7 +992,7 @@ class GameUI extends HxlDialog {
 				GameUI.setTargeting(false);
 			} else {
 				if ( cast(tile.actors[0], CqActor).faction != 0 ) {
-					var player = CqRegistery.player;
+					var player = Registery.player;
 					player.use(targetSpell.getSpell(), cast(tile.actors[0], CqActor));
 					SoundEffectsManager.play(SpellCast);
 					targetSpell.getSpell().spiritPoints = 0;
@@ -1044,7 +1044,7 @@ class GameUI extends HxlDialog {
 	
 	public function initPopups():Void 
 	{
-		for ( actor in CqRegistery.level.mobs ) {
+		for ( actor in Registery.level.mobs ) {
 				var cqMob:CqActor = cast(actor, CqActor);
 				var pop:CqPopup = new CqPopup(150, cqMob.name, doodads);
 				pop.visible = false;

@@ -1,5 +1,7 @@
 package cq.ui;
 
+import data.Registery;
+
 import cq.states.GameState;
 import cq.ui.inventory.CqEquipmentCell;
 import cq.ui.inventory.CqInventoryCell;
@@ -65,13 +67,13 @@ class CqPotionButton extends HxlDialog {
 			var cellObj = cell.getCellObj();
 			var item:CqItem = cellObj.item;
 			HxlLog.append("Using potion");
-			CqRegistery.player.use(item);
+			Registery.player.use(item);
 			item.stackSize--;
 			if ( item.stackSize <= 0 ) {
 				_dlg.remove(cellObj);
 				cell.setCellObj(null);
 				cellObj.destroy();
-				CqRegistery.player.removeInventory(item);
+				Registery.player.removeInventory(item);
 			} else {
 				cell.getCellObj().updateIcon();
 			}

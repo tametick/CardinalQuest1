@@ -1,10 +1,12 @@
 package cq.states;
 
 import com.eclecticdesignstudio.motion.Actuate;
-import cq.CqConfiguration;
+
+import data.Configuration;
+import data.Registery;
+
 import cq.ui.CqPopup;
 import cq.ui.CqPotionButton;
-import cq.CqRegistery;
 import cq.ui.CqSpellButton;
 import cq.GameUI;
 import cq.ui.CqMapDialog;
@@ -72,7 +74,7 @@ class GameState extends CqState {
 		gameUI.kill();
 		remove(gameUI);
 		gameUI = null;
-		add(CqRegistery.world.currentLevel);
+		add(Registery.world.currentLevel);
 	}
 	
 	public override function render() {
@@ -108,7 +110,7 @@ class GameState extends CqState {
 		
 		checkInvKeys();
 		if ( GameUI.isTargeting) {
-			if (CqRegistery.level.getTargetAccordingToKeyPress()!=CqRegistery.player.tilePos && CqRegistery.level.getTargetAccordingToKeyPress()!=null)
+			if (Registery.level.getTargetAccordingToKeyPress()!=Registery.player.tilePos && Registery.level.getTargetAccordingToKeyPress()!=null)
 				lastMouse = false;
 			
 			if (!lastMouse) {
@@ -163,10 +165,10 @@ class GameState extends CqState {
 	}
 	
 	private function checkJumpKeys():Void {
-		if (HxlGraphics.keys.justReleased("COMMA") && CqRegistery.world.currentLevelIndex>0) {
-			CqRegistery.world.goToNextLevel(this, CqRegistery.world.currentLevelIndex-1);
-		} else if (HxlGraphics.keys.justReleased("PERIOD") && CqRegistery.world.currentLevelIndex<CqConfiguration.lastLevel) {
-			CqRegistery.world.goToNextLevel(this, CqRegistery.world.currentLevelIndex+1);
+		if (HxlGraphics.keys.justReleased("COMMA") && Registery.world.currentLevelIndex>0) {
+			Registery.world.goToNextLevel(this, Registery.world.currentLevelIndex-1);
+		} else if (HxlGraphics.keys.justReleased("PERIOD") && Registery.world.currentLevelIndex<Configuration.lastLevel) {
+			Registery.world.goToNextLevel(this, Registery.world.currentLevelIndex+1);
 		}
 	}
 	private function checkInvKeys():Void
@@ -233,8 +235,8 @@ class GameState extends CqState {
 		return false;
 	}
 	public function passTurn() {
-		var player = CqRegistery.player;
-		var level = CqRegistery.level;
+		var player = Registery.player;
+		var level = Registery.level;
 		
 		level.updateFieldOfView(this);
 		if (Std.is(GameUI.currentPanel,CqMapDialog))
@@ -251,8 +253,8 @@ class GameState extends CqState {
 	override function init() {
 		classEntry();
 		if(Configuration.debug){
-			//CqConfiguration.chestsPerLevel = 100;
-			CqConfiguration.spellsPerLevel = 5;
+			//Configuration.chestsPerLevel = 100;
+			Configuration.spellsPerLevel = 5;
 		}
 	}
 	
@@ -292,8 +294,8 @@ class GameState extends CqState {
 		started = true;
 		initRegistry();
 		Playtomic.play();
-		var world = CqRegistery.world;
-		var player = CqRegistery.player;
+		var world = Registery.world;
+		var player = Registery.player;
 		
 		add(world.currentLevel);
 		world.currentLevel.updateFieldOfView(this, true);
@@ -310,7 +312,7 @@ class GameState extends CqState {
 			world.addOnNewLevel(gameUI.panelMap.updateDialog);
 			world.addOnNewLevel(gameUI.initPopups);
 			
-			var player:CqPlayer = CqRegistery.player;
+			var player:CqPlayer = Registery.player;
 			var pop:CqPopup = new CqPopup(180, "", gameUI.doodads);
 			gameUI.doodads.add(pop);
 			player.setPopup(pop);
@@ -353,7 +355,7 @@ class GameState extends CqState {
 		if (Configuration.debug) {
 			player.give(CqSpellType.REVEAL_MAP);
 			if(Configuration.debugStartingLevel>0)
-				CqRegistery.world.goToNextLevel(this, Configuration.debugStartingLevel);
+				Registery.world.goToNextLevel(this, Configuration.debugStartingLevel);
 		}
 		else
 			gameUI.pressHelp(false);
@@ -421,7 +423,7 @@ class GameState extends CqState {
 	function onKeyJustPressed(event:KeyboardEvent) {
 		if (!started || endingAnim || Timer.stamp() < resumeActingTime) 
 			return;
-		if(CqRegistery.level != null && Timer.stamp() > resumeActingTime)
+		if(Registery.level != null && Timer.stamp() > resumeActingTime)
 			isPlayerActing = true;
 	}
 	var tmpPoint:HxlPoint;
@@ -432,7 +434,7 @@ class GameState extends CqState {
 			return;
 		}
 		var level = Registery.level;
-		var player = CqRegistery.player;
+		var player = Registery.player;
 		if (Registery.player.isMoving)
 			return;
 		//check game keys on your turn
@@ -495,7 +497,7 @@ class GameState extends CqState {
 				player.popup.setText("");
 				
 				#if demo
-				if (CqConfiguration.demoLastLevel == Registery.world.currentLevelIndex-1) {
+				if (Configuration.demoLastLevel == Registery.world.currentLevelIndex-1) {
 					MusicManager.stop();
 					SoundEffectsManager.play(Win);
 					HxlGraphics.pushState(new DemoOverState());
@@ -557,13 +559,13 @@ class GameState extends CqState {
 	
 	function openDoor(tile:CqTile) {
 		SoundEffectsManager.play(DoorOpen);
-		var col = CqRegistery.level.getColor();
+		var col = Registery.level.getColor();
 		Registery.level.updateTileGraphic(tile.mapX, tile.mapY, SpriteTiles.instance.getSpriteIndex(col + "_door_open"));
 	}
 	private function startMovingBoss():Void
 	{
 		Actuate.timer(1.8).onComplete(gotoWinState);
-		//CqRegistery.level.updateFieldOfView(HxlGraphics.state, boss);
+		//Registery.level.updateFieldOfView(HxlGraphics.state, boss);
 		HxlGraphics.follow(boss);		
 		//HxlGraphics.follow(boss);
 		startedMoving = true;
@@ -600,32 +602,32 @@ class GameState extends CqState {
 		bossgroup.zIndex = 1001;
 		add(bossgroup);
 		//create minotaur on location
-		var bosstilePos:HxlPoint = HxlUtil.getRandomWalkableTileWithDistance(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), Registery.level.mapData, CqRegistery.player.tilePos,20);
+		var bosstilePos:HxlPoint = HxlUtil.getRandomWalkableTileWithDistance(Configuration.getLevelWidth(), Configuration.getLevelHeight(), Registery.level.mapData, Registery.player.tilePos,20);
 		
 		var bosstilePosX:Int = Math.floor(bosstilePos.x);
 		var bosstilePosY:Int = Math.floor(bosstilePos.y);
-		var pixelTilePos:HxlPoint = CqRegistery.level.getTilePos(bosstilePosX, bosstilePosY, false);
+		var pixelTilePos:HxlPoint = Registery.level.getTilePos(bosstilePosX, bosstilePosY, false);
 		
 		bossgroup.x = pixelTilePos.x;
 		bossgroup.y = pixelTilePos.y;
 		boss = CqMobFactory.newMobFromLevel(0, 0, 99);
 		bossgroup.add(boss);
 		
-		CqRegistery.level.updateFieldOfViewByPoint(HxlGraphics.state, bosstilePos, 20, 1);
+		Registery.level.updateFieldOfViewByPoint(HxlGraphics.state, bosstilePos, 20, 1);
 		boss.visible = true;
 		
 		//find an empty tile for portal
 		BossTargetDir = new HxlPoint(0, 0);
-		if (!CqRegistery.level.isBlockingMovement(bosstilePosX, bosstilePosY - 1,false))
+		if (!Registery.level.isBlockingMovement(bosstilePosX, bosstilePosY - 1,false))
 		{// y -1 
 			BossTargetDir.y = -1;
-		}else if (!CqRegistery.level.isBlockingMovement(bosstilePosX, bosstilePosY + 1,false))
+		}else if (!Registery.level.isBlockingMovement(bosstilePosX, bosstilePosY + 1,false))
 		{// y +1 
 			BossTargetDir.y = 1;
-		}else if (!CqRegistery.level.isBlockingMovement(bosstilePosX-1, bosstilePosY,false))
+		}else if (!Registery.level.isBlockingMovement(bosstilePosX-1, bosstilePosY,false))
 		{// x -1 
 			BossTargetDir.x = -1;
-		}else if (!CqRegistery.level.isBlockingMovement(bosstilePosX+1, bosstilePosY,false))
+		}else if (!Registery.level.isBlockingMovement(bosstilePosX+1, bosstilePosY,false))
 		{// x +1 
 			BossTargetDir.x = 1;
 		}

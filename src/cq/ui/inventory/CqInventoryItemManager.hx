@@ -1,7 +1,7 @@
 package cq.ui.inventory;
 import cq.CqGraphicKey;
 import cq.CqItem;
-import cq.CqRegistery;
+import data.Registery;
 import cq.CqResources;
 import cq.GameUI;
 import cq.ui.CqItemInfoDialog;
@@ -77,7 +77,7 @@ class CqInventoryItemManager
 		for ( cell in dlgInvGrid.cells ) {
 			if ( cell.getCellObj() != null && cell.getCellObj().item.equalTo(Item) && Item.equipSlot != SPELL) {
 				GameUI.showTextNotification("I already have this.");
-				CqRegistery.player.giveMoney( Item.getMonetaryValue() );
+				Registery.player.giveMoney( Item.getMonetaryValue() );
 				return false;
 			}
 		}
@@ -176,7 +176,7 @@ class CqInventoryItemManager
 	}
 	function destroyAndGiveMoney(Item:CqItem)
 	{
-		CqRegistery.player.giveMoney( Item.getMonetaryValue() );
+		Registery.player.giveMoney( Item.getMonetaryValue() );
 		mainDialog.remove(Item.uiItem);
 		Item.uiItem.destroy();
 		Item.destroy();
@@ -197,7 +197,7 @@ class CqInventoryItemManager
 	private function equipItem(Cell:CqInventoryCell, Item:CqItem, UiItem:CqInventoryItem):CqInventoryItem {
 		var old:CqInventoryItem = Cell.clearCellObj();
 		UiItem.setEquipmentCell(Cell.cellIndex);
-		CqRegistery.player.equipItem(Item);
+		Registery.player.equipItem(Item);
 		return old;
 	}
 	
@@ -442,12 +442,12 @@ class CqInventoryItemManager
 					toCell = dlgEqGrid.getCellWithSlot(cellObj.item.equipSlot);
 					var replacedItem:CqInventoryItem = toCell.clearCellObj();
 					cellObj.setEquipmentCell(toCell.cellIndex);
-					CqRegistery.player.equipItem(cellObj.item);
+					Registery.player.equipItem(cellObj.item);
 					gridOrder[currentGrid].cells[cellId].setCellObj(null);
 					toCell.update();
 					if(replacedItem != null){
 						replacedItem.setInventoryCell(cellId);
-						//CqRegistery.player.unequipItem(replacedItem.item);
+						//Registery.player.unequipItem(replacedItem.item);
 					}
 			}
 		}

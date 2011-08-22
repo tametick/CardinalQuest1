@@ -77,15 +77,15 @@ class CqLevel extends Level {
 		var tmpFloor = tiles.getSpriteIndex("red_floor0");
 		var tmpDoor = tiles.getSpriteIndex("red_door_close");
 		
-		var newMapData = BSP.getBSPMap(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), tmpWall, tmpFloor, tmpDoor);
+		var newMapData = BSP.getBSPMap(Configuration.getLevelWidth(), Configuration.getLevelHeight(), tmpWall, tmpFloor, tmpDoor);
 
-		startingLocation = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
+		startingLocation = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
 		
 		var tmpDown = tiles.getSpriteIndex("red_down");
-		if (index < CqConfiguration.lastLevel) {
+		if (index < Configuration.lastLevel) {
 			var stairsDown:HxlPoint;
 			do {
-				stairsDown = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
+				stairsDown = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
 			} while (HxlUtil.distance(stairsDown, startingLocation) < 10);
 			
 			newMapData[Std.int(stairsDown.y)][Std.int(stairsDown.x)] = tmpDown;
@@ -118,9 +118,9 @@ class CqLevel extends Level {
 		// mark as visible in fov
 		markInvisible();
 
-		addChests(CqConfiguration.chestsPerLevel,startingLocation);
-		addSpells(CqConfiguration.spellsPerLevel);
-		addMobs(CqConfiguration.mobsPerLevel);
+		addChests(Configuration.chestsPerLevel,startingLocation);
+		addSpells(Configuration.spellsPerLevel);
+		addMobs(Configuration.mobsPerLevel);
 	}
 	function markInvisible() {
 		for ( Y in 0...heightInTiles ) {
@@ -135,7 +135,7 @@ class CqLevel extends Level {
 		for (s in 0...numberOfSpells){
 			var pos; 
 			do {
-				pos = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
+				pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
 			} while (cast(getTile(pos.x, pos.y), CqTile).loots.length > 0);
 			
 			createAndaddSpell(pos);
@@ -162,7 +162,7 @@ class CqLevel extends Level {
 			var minPlayerDistance = 10;
 			do {//find chest locations that are far apart, but we may run out of space!
 				iterations++;
-				pos = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
+				pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
 				//having trouble finding a good place, so find a position thats closer to other chests, but not on a chest or a player
 				//less iterations should equal to more groups of chests together
 				//they do tend to group around the player, so we need them far away!
@@ -183,7 +183,7 @@ class CqLevel extends Level {
 		for (c in 0...numberOfMobs){
 			var pos; 
 			do {
-				pos = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
+				pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
 			} while (!isValidMobPosition(pos));
 			
 			createAndaddMob(pos, index);
@@ -258,7 +258,7 @@ class CqLevel extends Level {
 	
 	public override function tick(state:HxlState) {
 		var creatures:Array<CqActor> = new Array<CqActor>();
-		creatures.push(CqRegistery.player);
+		creatures.push(Registery.player);
 		for (mob in mobs)
 			creatures.push(cast(mob, CqActor));
 			
@@ -393,7 +393,7 @@ class CqWorld extends World {
 		else
 			currentLevelIndex++;
 		goToLevel(currentLevelIndex);
-		CqRegistery.player.infoViewFloor.setText("Floor " +(currentLevelIndex + 1));
+		Registery.player.infoViewFloor.setText("Floor " +(currentLevelIndex + 1));
 
 		currentLevel.zIndex = -1;	
 		state.add(currentLevel);

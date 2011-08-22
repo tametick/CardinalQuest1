@@ -3,7 +3,7 @@ package world;
 import com.eclecticdesignstudio.motion.Actuate;
 import cq.CqActor;
 import cq.ui.CqDecoration;
-import cq.CqRegistery;
+import data.Registery;
 import cq.states.GameState;
 import data.Resources;
 import flash.display.Bitmap;
@@ -20,7 +20,7 @@ import data.Registery;
 
 import playtomic.PtLevel;
 
-import cq.CqConfiguration;
+import data.Configuration;
 import cq.states.WinState;
 
 class Level extends HxlTilemap
@@ -93,7 +93,7 @@ class Level extends HxlTilemap
 			state.remove(cast(mob, CqActor).healthBar);
 		
 		for (m in mobs) {
-			if (cast(m, CqActor).faction != CqRegistery.player.faction) 
+			if (cast(m, CqActor).faction != Registery.player.faction) 
 				return;
 			if (cast(m, CqActor).isCharmed)
 				return;
@@ -168,7 +168,7 @@ class Level extends HxlTilemap
 	//public function 
 	function levelComplete() {
 		ptLevel.finish();
-		if (index == CqConfiguration.lastLevel)
+		if (index == Configuration.lastLevel)
 			cast(HxlGraphics.state,GameState).startBossAnim();
 			//HxlGraphics.pushState(new WinState());
 	}
