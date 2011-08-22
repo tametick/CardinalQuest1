@@ -247,8 +247,9 @@ class CreateCharState extends CqState {
 		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
 			var newState = Type.createInstance(TargetState, []);
 			HxlGraphics.state = newState;
-			if ( TargetState == GameState ) 
+			if ( TargetState == GameState ) {
 				cast(newState, GameState).chosenClass = self.curClass;
+			}
 		}, true);
 	}
 }

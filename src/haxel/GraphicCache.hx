@@ -24,6 +24,7 @@ class GraphicCache
 			return createBitmap(20, 20, 0xff0000); 
 		return Reflect.field(cache, keyStr);
 	}
+	
 	/**
 	 * Loads a bitmap from a file, caches it, and generates a horizontally flipped version if necessary.
 	 * 
@@ -47,8 +48,7 @@ class GraphicCache
 				} while((Reflect.hasField(cache, ukey)) && (Reflect.field(cache, ukey) != null));
 				key = ukey;
 			}
-		}else
-		{
+		} else {
 			key = HxlUtil.enumToString( Key );
 		}
 
@@ -94,7 +94,9 @@ class GraphicCache
 			cast(Reflect.field(cache, fieldName), BitmapData).dispose();
 			Reflect.deleteField(cache, fieldName);
 		}
+		fieldNames = null;
 	}
+	
 	public static function addBitmapData(Graphic:BitmapData, ?Key:Dynamic=null, ?Force:Bool=false):BitmapData {
 		var inc:Int;
 		var ukey:String;

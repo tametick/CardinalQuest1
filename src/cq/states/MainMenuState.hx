@@ -23,6 +23,8 @@ import flash.Lib;
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;
 
+import haxel.GraphicCache;
+
 import flash.desktop.NativeApplication;
 
 class MainMenuState extends CqState {
@@ -135,7 +137,11 @@ class MainMenuState extends CqState {
 		btnNewGame.setNormalFormat(null, 35, textColor, "center");
 		btnNewGame.setHoverFormat(null, 35, textHighlight, "center");
 		menu.addItem(btnNewGame);
-		btnNewGame.setCallback(function() { if(GameUI.instance!=null)GameUI.instance.kill();self.changeState(CreateCharState);});
+		btnNewGame.setCallback(function() {
+			if (GameUI.instance != null)
+				GameUI.instance.kill();
+				self.changeState(CreateCharState);
+			});
 		buttonY += 50;
 
 		
