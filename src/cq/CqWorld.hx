@@ -4,9 +4,9 @@ import cq.CqResources;
 import cq.CqItem;
 import cq.CqSpell;
 import cq.CqActor;
-import haxel.HxlSprite;
-import world.Decoration;
 import cq.effects.CqEffectSpell;
+import cq.ui.CqDecoration;
+import cq.states.GameState;
 
 import generators.BSP;
 import world.World;
@@ -15,7 +15,9 @@ import world.Mob;
 import world.Loot;
 import world.Tile;
 import world.GameObject;
+import world.Decoration;
 
+import haxel.HxlSprite;
 import haxel.HxlPoint;
 import haxel.HxlState;
 import haxel.HxlUtil;
@@ -23,6 +25,7 @@ import haxel.HxlGraphics;
 import haxel.HxlLog;
 
 import data.Registery;
+import data.Resources;
 import data.Configuration;
 import data.MusicManager;
 
@@ -55,6 +58,60 @@ class CqLevel extends Level {
 			return "brown";
 		else
 			return "red";
+	}
+	
+	public function levelComplete() { 
+		ptLevel.finish();
+		if (index == Configuration.lastLevel)
+			cast(HxlGraphics.state,GameState).startBossAnim();
+
+	}
+	
+	
+	override public function removeMobFromLevel(state:HxlState, mob:Mob) {
+		var cqmob = cast(mob, CqMob);
+		
+		super.removeMobFromLevel(state, mob);
+		
+		if (cqmob.healthBar != null) 
+			state.remove(cqmob.healthBar);
+		
+		for (m in mobs) {
+			cqmob = cast(m, CqMob);
+			if (cqmob.faction != Registery.player.faction) 
+				return;
+			if (cqmob.isCharmed)
+				return;
+		}
+			
+		levelComplete();
+	}
+	
+	override public function addDecoration(t:Tile, state:HxlState) {
+		super.addDecoration(t, state);
+		
+		//return if is door.
+		if (Lambda.has( Resources.doors, t.dataNum))
+			return;
+			
+		//return if stair or ladder
+		if (Lambda.has( Resources.stairsDown, t.dataNum))
+			return;
+			
+		var floor:Bool = Lambda.has( Resources.walkableAndSeeThroughTiles, t.dataNum);
+		var frame:String = floor?CqDecoration.randomFloor():CqDecoration.randomWall();
+		var pos:HxlPoint = getPixelPositionOfTile(t.mapX, t.mapY);
+		var dec:CqDecoration = new CqDecoration(pos.x, pos.y,frame);
+		t.decorations.push( dec );
+		addObject(state, dec );
+		var minimumZ:Int = 0;
+		
+		for (loot in t.loots) {
+			var field:Dynamic = Reflect.field(loot, "zIndex");
+			Reflect.setField(loot, "zIndex", field+1);
+			if (field < minimumZ) 
+				dec.zIndex = minimumZ = field;
+		}
 	}
 	
 	public static function playMusicByIndex(index:Int):Void

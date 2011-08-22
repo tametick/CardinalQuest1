@@ -103,7 +103,11 @@ class CqActor extends CqObject, implements Actor {
 
 	public var justAttacked:Bool;
 	
-	public var healthBar:CqHealthBar;
+	public var healthBar:HxlUIBar;
+	public var cqhealthBar(getHealthBar, null):CqHealthBar;
+	function getHealthBar() { return cast(healthBar, CqHealthBar); }
+	
+	
 	
 	public var name:String;
 	//track last horizontal direction, for sprite flipping
@@ -671,7 +675,7 @@ class CqActor extends CqObject, implements Actor {
 					hp = maxHp;
 					
 					if(healthBar!=null)
-						healthBar.updateValue();
+						cqhealthBar.updateValue();
 						
 					if (Std.is(this, CqPlayer)) {
 						var player = Registery.player;
@@ -682,8 +686,8 @@ class CqActor extends CqObject, implements Actor {
 					if(healthBar!=null)healthBar.visible = true;
 					other.hp = other.maxHp;
 					
-					if (other.healthBar != null)
-						other.healthBar.updateValue();
+					if (other.cqhealthBar != null)
+						other.cqhealthBar.updateValue();
 						
 					if (Std.is(other, CqPlayer)) {
 						var player = Registery.player;
@@ -727,7 +731,7 @@ class CqActor extends CqObject, implements Actor {
 			var casted:CqActor = cast(mob, CqActor);
 			casted.specialEffects = _se;
 			casted.healthBar.setTween(false);
-			casted.healthBar.updateValue(_hp);
+			casted.cqhealthBar.updateValue(_hp);
 			casted.healthBar.setTween(true);
 			casted.healthBar.visible = true;
 		default:

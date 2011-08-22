@@ -2,6 +2,7 @@ package world;
 
 import haxel.HxlState;
 import haxel.HxlPoint;
+import haxel.HxlUIBar;
 
 interface Actor implements GameObject {
 	function attackObject(state:HxlState, other:GameObject):Void;
@@ -13,4 +14,5 @@ interface Actor implements GameObject {
 	var moveSpeed:Float;
 	var isMoving:Bool;
 	var actionPoints:Int;
+	public var healthBar:HxlUIBar;
 }
