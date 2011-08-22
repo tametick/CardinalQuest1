@@ -526,7 +526,6 @@ class CqActor extends CqObject, implements Actor {
 		eff.start(true, 1.0, 10);
 	}
 	
-	static var tmpSpellSprite  = new HxlSprite();
 	public function use(itemOrSpell:CqItem, ?other:CqActor = null) {
 		if (itemOrSpell.fullName == "Fireball" && other!=null)
 		{
@@ -546,13 +545,18 @@ class CqActor extends CqObject, implements Actor {
 			useOn(itemOrSpell, this, other);
 		}
 	}
+	
+	static var tmpSpellSprite;
 	public static function useOn(itemOrSpell:CqItem,actor:CqActor, other:CqActor)
 	{
 		if (itemOrSpell.equipSlot == POTION)
 			SoundEffectsManager.play(SpellEquipped);
 			
 		var source:BitmapData;
-		if(itemOrSpell.uiItem==null) {
+		if (itemOrSpell.uiItem == null) {
+			if (tmpSpellSprite == null )
+				tmpSpellSprite = new HxlSprite();
+				
 			// only happens when enemies try to use a spell
 			tmpSpellSprite.loadGraphic(SpriteSpells, true, false, Configuration.tileSize, Configuration.tileSize);
 			tmpSpellSprite.setFrame(SpriteSpells.instance.getSpriteIndex(itemOrSpell.spriteIndex));
@@ -560,7 +564,17 @@ class CqActor extends CqObject, implements Actor {
 		} else {
 			source = itemOrSpell.uiItem.pixels;
 		}
+		
 		var Effectcolor:UInt = HxlUtil.averageColour(source);
+		
+		if (itemOrSpell.uiItem == null) {
+			// only disposing of the enemies tmp spell sprite 
+			source.dispose();
+			tmpSpellSprite.destroy();
+			tmpSpellSprite = null;
+		}
+		source = null;
+		
 		// add buffs
 		if(itemOrSpell.buffs != null) {
 			for (buff in itemOrSpell.buffs.keys()) {
