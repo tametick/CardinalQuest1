@@ -135,8 +135,6 @@ class HxlState extends Sprite {
 	}
 
 	public function destroy() {
-		//HxlGraphics.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
-		//HxlGraphics.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		clearEventListeners();
 		defaultGroup.destroy();
 	}
@@ -194,17 +192,6 @@ class HxlState extends Sprite {
 		HxlGraphics.stage.addEventListener(Type, Listener, UseCapture, Priority, UseWeakReference);
 		eventListeners.push( {Type: Type, Listener: Listener, UseCapture: UseCapture} );
 	}
-/*
-	function _removeEventListener(Type:String, Listener:Dynamic) {
-		HxlGraphics.stage.removeEventListener(Type, Listener);
-		for ( i in 0...eventListeners.length ) {
-			var ev:Dynamic = eventListeners[i];
-			if ( ev.Type == Type && ev.Listener == Listener ) {
-				eventListeners.splice(i, 1);
-				break;
-			}
-		}
-	}*/
 
 	function clearEventListeners() {
 		while ( eventListeners.length > 0 ) {

@@ -31,7 +31,7 @@ class Main {
 	public function new() {	
 		currentGame = new Game();
 		Lib.current.addChild(currentGame);
-	}	
+	}
 }
 
 class Game extends HxlGame {	
