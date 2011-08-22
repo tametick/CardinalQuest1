@@ -352,7 +352,8 @@ class GameState extends CqState {
 		update();
 		if (Configuration.debug) {
 			player.give(CqSpellType.REVEAL_MAP);
-			CqRegistery.world.goToNextLevel(this, Configuration.debugStartingLevel);
+			if(Configuration.debugStartingLevel>0)
+				CqRegistery.world.goToNextLevel(this, Configuration.debugStartingLevel);
 		}
 		else
 			gameUI.pressHelp(false);

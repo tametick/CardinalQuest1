@@ -19,10 +19,10 @@
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="njadeds&#xA;ndemo" />
-    <option flashStrict="False" />
+    <option directives="ndemo" />
+    <option flashStrict="True" />
     <option mainClass="cq.Main" />
-    <option enabledebug="False" />
+    <option enabledebug="True" />
     <option additional="-swf-lib lib/playtomic.swf&#xA;-swf-version 10.1" />
   </build>
   <!-- haxelib libraries -->

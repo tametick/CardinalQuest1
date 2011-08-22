@@ -147,18 +147,6 @@ class AStar
 	}
 	
 	/**
-	 * 	For debug only, remove to gain performance	
-	 */
-	function visit(n:AStarNode)
-	{
-		var node:AStarNode;
-		for (node in visited) {
-			if (node == n) return;
-		}
-		visited.push(n);
-	}
-	
-	/**
 	 * 	Faster, more inaccurate heuristic method
 	 *	Change function name to "dist" to use, and remove the function below
 	 */

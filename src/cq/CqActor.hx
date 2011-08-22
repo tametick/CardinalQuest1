@@ -116,8 +116,6 @@ class CqActor extends CqObject, implements Actor {
 
 		actionPoints = 0;
 		moveSpeed = 0.2;
-		//if (Configuration.debug)
-			//moveSpeed = 0.05;
 		visionRadius = 8.2;
 		
 		maxHp = vitality;
