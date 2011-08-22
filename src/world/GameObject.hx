@@ -78,7 +78,8 @@ class GameObjectImpl extends HxlSprite, implements GameObject {
 	}
 
 	public override function destroy() {
-		for ( Callback in onDestroy ) Callback();
+		for ( Callback in onDestroy ) 
+			Callback();
 		super.destroy();
 	}
 
