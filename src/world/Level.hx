@@ -68,6 +68,10 @@ class Level extends HxlTilemap {
 		removeAllActors(state);
 		removeAllLoots(state);
 		removeAllDecorations(state);
+		
+		
+		
+		destroy();
 	}
 	
 	public function addMobToLevel(state:HxlState, mob:Mob) {
