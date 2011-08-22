@@ -542,5 +542,8 @@ class HxlGame extends Sprite {
 		_clearEventListeners();
 		HxlGraphics.buffer.dispose();
 		HxlGraphics.buffer = null;
+		removeChild(_soundTray);
+		removeChild(_screen);
+		removeChild(console);
 	}
 }
