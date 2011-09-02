@@ -58,8 +58,36 @@ class CreateCharState extends CqState {
 		var self = this;
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime, function() {
 			self.state = 1;
+			//self = null;
 		});
 	}
+	
+	override public function destroy(){
+		super.destroy();
+
+		btnFighter.destroy();
+		btnThief.destroy();
+		btnWizard.destroy();
+		txtFighter.destroy();
+		txtThief.destroy();
+		txtWizard.destroy();
+		txtDesc.destroy();
+		selectBox.destroy();
+		portrait.destroy();
+		playerSprites.bitmapData.dispose();
+		
+		btnFighter = null;
+		btnThief = null;
+		btnWizard = null;
+		txtFighter = null;
+		txtThief = null;
+		txtWizard = null;
+		txtDesc = null;
+		selectBox = null;
+		portrait = null;
+		playerSprites = null;
+	}
+	
 	function realInit() {
 		cursor.visible	= true;
 		if (scroller != null)
@@ -85,6 +113,7 @@ class CreateCharState extends CqState {
 		var self = this;
 		btnStart.setCallback(function() {
 			self.gotoState(GameState);
+			self = null;
 		});
 
 		playerSprites= SpritePlayer.instance;
@@ -133,7 +162,9 @@ class CreateCharState extends CqState {
 			bmp.draw(target);
 			selectBox.width = selectBox.height = 130;
 			selectBox.pixels = bmp;
+			
 			bmp = null;
+			target = null;
 		} else {
 			selectBox.loadCachedGraphic(CqGraphicKey.CharCreateSelector);
 		}
@@ -152,8 +183,17 @@ class CreateCharState extends CqState {
 		add(btnStartBg);
 		add(btnStart);
 		
-		
 		curClass = FIGHTER;
+		
+		
+		sprWizard = null;
+		sprThief = null;
+		sprFighter = null;
+		btnStartHigh = null;
+		btnStartBg = null;
+		btnStart = null;
+		titleText = null;
+		bg = null;
 	}
 	/*
 	function removeScrollerAndFade() {
@@ -175,6 +215,8 @@ class CreateCharState extends CqState {
 			//scroller.onComplete(removeScrollerAndFade);
 			scroller.onComplete(realInit);
 			shownIntro = true;
+			
+			introText = null;
 		}else {
 			realInit();
 		}
@@ -244,12 +286,14 @@ class CreateCharState extends CqState {
 			
 		SoundEffectsManager.play(MenuItemClick);
 		state = 0;
-		var self = this;
+		var cls = this.curClass;
 		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
 			var newState = Type.createInstance(TargetState, []);
 			HxlGraphics.state = newState;
 			if ( TargetState == GameState ) {
-				cast(newState, GameState).chosenClass = self.curClass;
+				cast(newState, GameState).chosenClass = cls;
+				cls = null;
+				newState = null;
 			}
 		}, true);
 	}
