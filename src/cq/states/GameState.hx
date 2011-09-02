@@ -172,6 +172,8 @@ class GameState extends CqState {
 				}
 			}
 		}
+		
+		target = null;
 	}
 	
 	private function checkJumpKeys():Void {
@@ -258,6 +260,9 @@ class GameState extends CqState {
 			level.tick(this);
 		}
 		gameUI.updateCharges();
+		
+		player = null;
+		level = null;
 	}
 
 	override function init() {
@@ -292,6 +297,9 @@ class GameState extends CqState {
 		add(scroller);
 		scroller.startScroll();
 		scroller.onComplete(realInit);
+		
+		classBG = null;
+		introText = null;
 	}
 	
 	function realInit() {
@@ -323,6 +331,9 @@ class GameState extends CqState {
 			var pop:CqPopup = new CqPopup(180, "", gameUI.doodads);
 			gameUI.doodads.add(pop);
 			player.setPopup(pop);
+			
+			player = null;
+			pop = null;
 		}
 		
 		add(world.currentLevel);
@@ -361,7 +372,9 @@ class GameState extends CqState {
 		
 		var self = this;
 		world.addOnNewLevel(function() {
+			// todo: gameUI is null after removing level?
 			self.gameUI.initHealthBars();
+			self = null;
 		});
 		update();
 		if (Configuration.debug) {
@@ -371,6 +384,10 @@ class GameState extends CqState {
 		}
 		else
 			gameUI.pressHelp(false);
+			
+			
+		world = null;
+		player = null;
 	}
 	
 	public function initRegistry(){
@@ -445,8 +462,6 @@ class GameState extends CqState {
 			isPlayerActing = false;
 			return;
 		}
-		var level = Registery.level;
-		var player = Registery.player;
 		if (Registery.player.isMoving)
 			return;
 		//check game keys on your turn
@@ -455,19 +470,30 @@ class GameState extends CqState {
 			passTurn();
 			return;
 		}
+		
+		var level = Registery.level;
+		var player = Registery.player;
 		var target:HxlPoint;
-		var dx;
-		var dy;
 		var tile:CqTile;
 		var ktg:HxlPoint = level.getTargetAccordingToKeyPress();
+		
+		var dx;
+		var dy;
 		if (ktg != null ) {
 			dx =  (player.x + Configuration.zoomedTileSize() / 2);
 			dy =  (player.y + Configuration.zoomedTileSize() / 2);
 			target = ktg;
 			lastMouse = false;//for targeting
-		}else {
+		} else {
 			if (!HxlGraphics.mouse.pressed()) {
 				isPlayerActing = false;
+				
+				level = null;
+				player = null;
+				target = null;
+				tile = null;
+				ktg = null;
+				
 				return;
 			}
 			dx = HxlGraphics.mouse.x - (player.x+Configuration.zoomedTileSize()/2);
@@ -479,9 +505,23 @@ class GameState extends CqState {
 		if (tile == null) {
 			if ( !HxlGraphics.keys.justPressed("ENTER") && !HxlGraphics.keys.justPressed("NONUMLOCK_5") && target.x == player.tilePos.x && target.y == player.tilePos.y) {
 				isPlayerActing = false;
+				
+				level = null;
+				player = null;
+				target = null;
+				tile = null;
+				ktg = null;
+				tile = null;
+				
 				return;
 			}
 			passTurn();
+			level = null;
+			player = null;
+			target = null;
+			tile = null;
+			ktg = null;
+			tile = null;
 			return;
 		}
 		//stairs popup
@@ -503,6 +543,7 @@ class GameState extends CqState {
 				 // pickup item
 				var item = cast(tile.loots[tile.loots.length - 1], CqItem);
 				player.pickup(this, item);
+				item = null;
 			} else if (HxlUtil.contains(SpriteTiles.instance.stairsDown.iterator(), tile.dataNum)) {
 				// descend
 				Registery.world.goToNextLevel(this);
@@ -548,13 +589,25 @@ class GameState extends CqState {
 				player.actInDirection(this,target);
 			} else if (HxlUtil.contains(SpriteTiles.instance.doors.iterator(), tile.dataNum)){
 				openDoor(tile);
-			}else
-			{
+			} else {
+				level = null;
+				player = null;
+				target = null;
+				tile = null;
+				ktg = null;
+				tile = null;
 				return;
 			}
 		}
 		
 		passTurn();
+		
+		level = null;
+		player = null;
+		target = null;
+		tile = null;
+		ktg = null;
+		tile = null;
 	}
 	
 	

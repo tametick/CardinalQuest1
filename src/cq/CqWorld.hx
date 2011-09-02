@@ -433,7 +433,8 @@ class CqWorld extends World {
 	}
 	
 	function doOnNewLevel() {
-		for ( Callback in onNewLevel ) Callback();
+		for ( Callback in onNewLevel ) 
+			Callback();
 	}
 
 	function goToLevel(level:Int) {
