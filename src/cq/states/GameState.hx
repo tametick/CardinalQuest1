@@ -627,16 +627,14 @@ class GameState extends CqState {
 		var col = Registery.level.getColor();
 		Registery.level.updateTileGraphic(tile.mapX, tile.mapY, SpriteTiles.instance.getSpriteIndex(col + "_door_open"));
 	}
-	private function startMovingBoss():Void
-	{
+	private function startMovingBoss():Void {
 		Actuate.timer(1.8).onComplete(gotoWinState);
 		//Registery.level.updateFieldOfView(HxlGraphics.state, boss);
 		HxlGraphics.follow(boss);		
 		//HxlGraphics.follow(boss);
 		startedMoving = true;
 	}
-	private function doEndingAnimation():Void
-	{
+	private function doEndingAnimation():Void {
 		portalSprite.angle -= 0.5;
 		if (!startedMoving)
 			return;
@@ -645,8 +643,7 @@ class GameState extends CqState {
 		boss.x = boss.x + BossTargetDir.x*0.4;
 		boss.y = boss.y + BossTargetDir.y*0.4;
 	}
-	private function RemoveGameUI():Void
-	{
+	private function RemoveGameUI():Void {
 		HxlGraphics.quake.start();
 		cursor.visible = false;
 		gameUI.hideAllPopups();
@@ -658,8 +655,7 @@ class GameState extends CqState {
 	private var portalSprite:HxlSprite;
 	private var acts:Bool;
 	private var bossgroup:HxlGroup;
-	public function startBossAnim()
-	{
+	public function startBossAnim()	{
 		//state vars
 		endingAnim = true;
 		startedMoving = false;
