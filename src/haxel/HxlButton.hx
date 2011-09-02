@@ -279,6 +279,7 @@ class HxlButton extends HxlGroup {
 	 * Called by the game state when state is changed (if this object belongs to the state)
 	 */
 	public override function destroy() {
+		super.destroy();
 		if (HxlGraphics.stage != null) {
 			removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 			removeEventListener(MouseEvent.MOUSE_UP, onMouseUp);

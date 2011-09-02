@@ -69,12 +69,22 @@ class GameState extends CqState {
 		resumeActingTime = msMoveStamp = Timer.stamp();
 	}
 	public override function destroy() {
+		super.destroy();
+		
 		inst = null;
 		HxlGraphics.keys.onJustPressed = null;
+		
 		gameUI.kill();
 		remove(gameUI);
 		gameUI = null;
-		add(Registery.world.currentLevel);
+		
+		Registery.world.destroy();
+		Registery.world = null;
+
+		Registery.player.kill();
+		Registery.player = null;
+		
+		//remove(Registery.world.currentLevel);
 	}
 	
 	public override function render() {

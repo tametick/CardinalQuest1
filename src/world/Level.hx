@@ -5,6 +5,7 @@ import data.Registery;
 import data.Resources;
 import flash.display.Bitmap;
 import com.baseoneonline.haxe.astar.PathMap;
+import flash.system.System;
 
 import haxel.HxlPoint;
 import haxel.HxlTilemap;
@@ -37,7 +38,6 @@ class Level extends HxlTilemap {
 		this.index = index;
 		mobs = new Array();
 		loots = new Array();
-		_pathMap = null;
 		startingIndex = 1;
 		ptLevel = new PtLevel(this);
 	}
@@ -57,6 +57,8 @@ class Level extends HxlTilemap {
 	}
 	
 	public override function onAdd(state:HxlState) {
+		super.onAdd(state);
+		
 		addAllActors(state);
 		addAllLoots(state);
 		ptLevel.start();
@@ -68,10 +70,19 @@ class Level extends HxlTilemap {
 		removeAllActors(state);
 		removeAllLoots(state);
 		removeAllDecorations(state);
+		ptLevel.destroy();
 		
+		ptLevel = null;
+		startingLocation = null;
 		
+		_pathMap.destroy();
+		_pathMap = null;
 		
+		super.onRemove(state);
 		destroy();
+		
+		System.gc();
+		System.gc();
 	}
 	
 	public function addMobToLevel(state:HxlState, mob:Mob) {
@@ -104,6 +115,9 @@ class Level extends HxlTilemap {
 		
 		for (mob in mobs)
 			addObject(state, mob);
+			
+		player = null;
+		state = null;
 	}
 	
 	public function addLootToLevel(state:HxlState, loot:Loot) {
@@ -132,11 +146,15 @@ class Level extends HxlTilemap {
 			state.remove(mob);
 			cast(mob, GameObject).destroy();
 		}
+		
+		mobs = null;
 	}
 	
 	public function removeAllLoots(state:HxlState) {			
 		for (loot in loots)
 			state.remove(loot);
+			
+		loots = null;
 	}
 	
 	public function removeLootFromLevel(state:HxlState, loot:Loot) {

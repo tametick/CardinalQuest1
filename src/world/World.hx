@@ -10,5 +10,10 @@ class World {
 		currentLevelIndex = 0;
 	}
 	
+	public function destroy() {
+		currentLevel.kill();
+		currentLevel = null;
+	}
+	
 	public function goToNextLevel(state:HxlState,?jumpToLevel:Int = -1){}
 }

@@ -753,10 +753,10 @@ class GameUI extends HxlDialog {
 		}
 	}
 	override public function onAdd(state:HxlState) {
-		//trace("gui added");	
+		super.onAdd(state);
 	}
 	override public function onRemove(state:HxlState) {
-		//trace("gui rmv");	
+		super.onRemove(state);
 	}
 	public function itemPickup(Item:CqItem) {
 		if(invItemManager.itemPickup(Item))

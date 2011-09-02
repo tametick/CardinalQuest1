@@ -336,6 +336,7 @@ class HxlSound extends HxlObject {
 	 * The basic class destructor, stops the music and removes any leftover events.
 	 */
 	public override function destroy() {
+		super.destroy();
 		if (active) stop();
 	}
 
