@@ -444,7 +444,7 @@ class CqWorld extends World {
 		doOnNewLevel();
 	}
 	
-	public override function goToNextLevel(state:HxlState,?jumpToLevel:Int = -1) {
+	public override function goToNextLevel(state:HxlState, ?jumpToLevel:Int = -1) {
 		state.remove(currentLevel);
 		if (jumpToLevel > -1)
 			currentLevelIndex = jumpToLevel;

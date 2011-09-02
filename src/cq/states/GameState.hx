@@ -370,11 +370,8 @@ class GameState extends CqState {
 
 		PtPlayer.ClassSelected(chosenClass);
 		
-		var self = this;
 		world.addOnNewLevel(function() {
-			// todo: gameUI is null after removing level?
-			self.gameUI.initHealthBars();
-			self = null;
+			GameUI.instance.initHealthBars();
 		});
 		update();
 		if (Configuration.debug) {
