@@ -8,6 +8,7 @@ import flash.geom.Rectangle;
 import haxel.HxlGraphics;
 import haxel.HxlObject;
 import haxel.HxlPoint;
+import haxel.HxlState;
 
 import haxel.HxlEmitter;
 import haxel.HxlGradient;
@@ -31,6 +32,7 @@ class CachingEmitter extends HxlEmitter {
 	var frameBitmap:HxlSprite;
 	var particleKey:CqGraphicKey;
 	var colorTint:Int;
+	
 	public function new(CacheNumber:UInt,ParticleKey:CqGraphicKey,?X:Float=0, ?Y:Float=0,?ColorTint:Int = -1) {
 		super(X, Y);
 		//get real cachenum
@@ -84,7 +86,7 @@ class CachingEmitter extends HxlEmitter {
 	/*
 	 * We can remove this and just use sprites when we have them..
 	 */
-	function makeSprites(?Quantity:Int=50, ?BakedRotations:Int=16, ?Multiple:Bool=true, ?Collide:Float=0):HxlEmitter {
+	function makeSprites(?Quantity:Int=50, ?BakedRotations:Int=16, ?Multiple:Bool=true, ?Collide:Float=0) {
 
 		members = new Array();
 		var r:Int;
@@ -133,7 +135,6 @@ class CachingEmitter extends HxlEmitter {
 			s.scrollFactor = scrollFactor;
 			add(s);
 		}
-		return this;
 	}
 	override function update()
 	{
@@ -191,10 +192,14 @@ class CachingEmitter extends HxlEmitter {
 	public override function kill() {
 		super.kill();
 		on = false;
-		if (1 == usingCache)
-		{
+		if (1 == usingCache) {
 			cacheStatus[cacheNum] = 2;
 		}
+	}
+	
+	override public function onRemove(state:HxlState) {
+		super.onRemove(state);
+		destroy();
 	}
 
 }
