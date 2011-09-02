@@ -16,6 +16,8 @@ class CqEffectSpell extends CachingEmitter {
 		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.SpellEffectParticle(color))) {
 			var bmp:BitmapData = HxlGradient.RectData(12, 12, [color, color+0x222222], [0.8, 0.55], Math.PI/2, 12.0);
 			GraphicCache.addBitmapData(bmp, CqGraphicKey.SpellEffectParticle(color));
+			bmp.dispose();
+			bmp = null;
 		}
 		setAlphaVelocity(-5, -2);
 		gravity = 0.0;
