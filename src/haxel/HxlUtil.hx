@@ -259,7 +259,8 @@ class HxlUtil {
 		var left = Std.int(Math.max(0, position.x - radius));
 		
 		var isBlocking = function(p:HxlPoint):Bool { 
-			if ( p.x < 0 || p.y < 0 || p.x >= map.widthInTiles || p.y >= map.heightInTiles ) return true;
+			if ( p.x < 0 || p.y < 0 || p.x >= map.widthInTiles || p.y >= map.heightInTiles ) 
+				return true;
 			return map.getTile(Math.round(p.x), Math.round(p.y)).isBlockingView();
 		}
 		var apply = firstSeen;
@@ -285,6 +286,10 @@ class HxlUtil {
 			tmpDest.y = dy;			
 			travrseLine(position, tmpDest, isBlocking, apply, radial?radius:-1);
 		}
+		
+		isBlocking = null;
+		apply = null;
+		firstSeen = null;
 	}
 	
 	public static function isInLineOfSight(src:HxlPoint, dest:HxlPoint, ?isBlocking:HxlPoint->Bool = null, ?maxDist:Float = -1) {
@@ -292,8 +297,9 @@ class HxlUtil {
 			return false;
 		
 		var line = getLine(src, dest, isBlocking);
-		
-		return line[line.length-1].intEquals(dest);
+		var ans = line[line.length - 1].intEquals(dest);
+		line = null;
+		return ans;
 	}
 		
 	public static function travrseLine(src:HxlPoint, dest:HxlPoint, ?isBlocking:HxlPoint->Bool=null, apply:HxlPoint->Void, ?maxDist:Float=-1) {
@@ -301,6 +307,8 @@ class HxlUtil {
 			if(maxDist<0 || distance(src,pos) <= maxDist)
 				apply(pos);
 		}
+		isBlocking = null;
+		apply = null;
 	}
 	
 	public static function getLine(src:HxlPoint, dest:HxlPoint, ?isBlocking:HxlPoint->Bool=null):Array<HxlPoint> {
@@ -315,7 +323,8 @@ class HxlUtil {
 				while (y < dest.y + 1) {
 					pos = new HxlPoint(x, y);
 					line.push(pos);
-					if (isBlocking(pos))
+					pos = null;
+					if (isBlocking(line[line.length - 1]))
 						break;
 					x += steepness;
 					y++;
@@ -324,7 +333,8 @@ class HxlUtil {
 				while (y > dest.y-1) {
 					pos = new HxlPoint(x, y);
 					line.push(pos);
-					if (isBlocking(pos))
+					pos = null;
+					if (isBlocking(line[line.length - 1]))
 						break;
 					x -= steepness;
 					y--;
@@ -336,7 +346,8 @@ class HxlUtil {
 				while (x < dest.x + 1) {
 					pos = new HxlPoint(x, y);
 					line.push(pos);
-					if (isBlocking(pos))
+					pos = null;
+					if (isBlocking(line[line.length - 1]))
 						break;
 					y += steepness;
 					x++;
@@ -345,13 +356,18 @@ class HxlUtil {
 				while (x > dest.x - 1) {
 					pos = new HxlPoint(x, y);
 					line.push(pos);
-					if (isBlocking(pos))
+					pos = null;
+					if (isBlocking(line[line.length - 1]))
 						break;
 					y -= steepness;
 					x--;
 				}
 			}
 		}
+		
+		pos = null;
+		isBlocking = null;
+		
 		return line;
 	}
 	
