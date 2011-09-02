@@ -25,6 +25,8 @@ class CreditsState extends CqState {
 		state = 0;
 		minimumTime = 1;
 		entryStamp = Timer.stamp();
+		
+		bg = null;
 	}
 	public override function update() {
 		super.update();
