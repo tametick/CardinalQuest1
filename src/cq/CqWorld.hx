@@ -29,22 +29,6 @@ import data.Resources;
 import data.Configuration;
 import data.MusicManager;
 
-import flash.geom.Rectangle;
-
-class CqObject extends GameObjectImpl {
-	public function new(X:Float, Y) {
-		super(X, Y);
-		_tilePos = new HxlPoint(X / Configuration.zoomedTileSize(), Y / Configuration.zoomedTileSize());
-	}	
-}
-
-class CqTile extends Tile {
-	public function new(?X:Int = 0, ?Y:Int = 0, ?Rect:Rectangle = null) {
-		super(X, Y, Rect);
-		visible = false;
-	}
-}
-
 class CqLevel extends Level {
 	static var tiles = SpriteTiles.instance;
 	static var itemSprites = SpriteItems.instance;
