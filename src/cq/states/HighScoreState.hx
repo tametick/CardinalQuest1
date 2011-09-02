@@ -31,12 +31,13 @@ class HighScoreState extends CqState {
 		state = 0;
 		minimumTime = 1;
 		entryStamp = Timer.stamp();
+		
+		bg = null;
 	}
 	public override function update() {
 		super.update();
 		setDiagonalCursor();
-		if (state == 1)
-		{
+		if (state == 1) {
 			state = 2;
 			nextScreen();
 		}

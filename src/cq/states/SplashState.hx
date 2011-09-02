@@ -58,7 +58,9 @@ class SplashState extends CqState {
 		add(splashText);
 
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
-		Actuate.tween(splashText, fadeTime, { y: (480-50)/2 - 55 }).ease(Cubic.easeOut);
+		Actuate.tween(splashText, fadeTime, { y: (480 - 50) / 2 - 55 } ).ease(Cubic.easeOut);
+		
+		splashText = null;
 	}
 
 	public override function update() {
