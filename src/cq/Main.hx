@@ -15,29 +15,15 @@ import flash.Lib;
 
 import playtomic.Playtomic;
 
-class Main {
-	static var currentGame:Game;
+class Main extends HxlGame {
+	
 	public static function main() {
-		#if flash9
-		haxe.Log.setColor(0xffffff);
-		new Main();
-		#elseif iphone
-		new Main();
-		#elseif cpp
-		Lib.create(function(){new Main();},Configuration.app_width,Configuration.app_height,60,0xffffff,(1*Lib.HARDWARE) | Lib.RESIZABLE);
-		#end
+		Lib.current.addChild(new Main());
 	}
 
-	public function new() {	
-		currentGame = new Game();
-		Lib.current.addChild(currentGame);
-	}
-}
-
-class Game extends HxlGame {	
 	public function new() {
 		var _mochiads_game_id:String = "f7594e4c18588dca";
-
+		
 		Configuration.tileSize = 16;
 		Configuration.zoom = 2.0;
 		HxlState.bgColor = 0xFF000000;
