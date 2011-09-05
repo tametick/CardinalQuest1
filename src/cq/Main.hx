@@ -16,15 +16,15 @@ import flash.Lib;
 import playtomic.Playtomic;
 
 class Main extends HxlGame {
-		Configuration.app_width = 640;//Lib.current.stage.stageWidth;
-		Configuration.app_height = 480;//Lib.current.stage.stageHeight;
-	
 	public static function main() {
 		Lib.current.addChild(new Main());
 	}
 
 	public function new() {
 		var _mochiads_game_id:String = "f7594e4c18588dca";
+		
+		Configuration.app_width = 640;//Lib.current.stage.stageWidth;
+		Configuration.app_height = 480;//Lib.current.stage.stageHeight;
 		
 		Configuration.tileSize = 16;
 		Configuration.zoom = 2.0;

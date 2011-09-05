@@ -298,99 +298,101 @@ class CqLevel extends Level {
 	}
 	
 	public override function tick(state:HxlState) {
-		var creatures:Array<CqActor> = new Array<CqActor>();
-		creatures.push(Registery.player);
-		for (mob in mobs)
-			creatures.push(cast(mob, CqActor));
-			
-		for (creature in creatures) {
-			var buffs = creature.buffs;
-			var specialEffects = creature.specialEffects;
-			var visibleEffects = creature.visibleEffects;
-			// remove timed out buffs & visibleEffects
-			var timers = creature.timers;
-			if (timers.length>0) {
-				var expired = [];
-				for (t in timers) {
-					t.ticks--;
-					if (t.ticks == 0) {
-						
-						if(t.buffName!= null) {
-							// remove buff effect
-							var newVal = buffs.get(t.buffName) - t.buffValue;
-							var text:String = Std.string(t.buffValue);
-							GameUI.showEffectText(creature, (-t.buffValue) + " " + t.buffName , 0xff0000);
-							buffs.set(t.buffName, newVal);
-						} 
-						
-						if(HxlUtil.contains(visibleEffects.iterator(), t.buffName)) {
-							// remove visibleEffect
-							creature.visibleEffects.remove(t.buffName);
-						}
-						
-						if (t.specialEffect != null && HxlUtil.contains(specialEffects.keys(), t.specialEffect.name)) {
-							var currentEffect = specialEffects.get(t.specialEffect.name);
 		
-							if(t.specialEffect.name == "magic_mirror")
-								GameUI.showEffectText(creature, "" + "magic mirror" + " expired", 0xff0000);
-							else
-								GameUI.showEffectText(creature, "" + t.specialEffect.name + " expired", 0xff0000);
-							creature.specialEffects.remove(t.specialEffect.name);
-							
-							switch(currentEffect.name){
-								case "charm":
-									creature.faction = CqMob.FACTION;
-									creature.isCharmed = false;
-								case "sleep":
-									creature.speed = currentEffect.value;
-								case "magic_mirror":
-									//spell particle effect
-									var mob:CqMob = cast(currentEffect.value, CqMob);
-									var eff:CqEffectSpell = new CqEffectSpell(mob.x+mob.width/2, mob.y+mob.height/2);
-									eff.zIndex = 1000;
-									HxlGraphics.state.add(eff);
-									eff.start(true, 1.0, 10);
-									removeMobFromLevel(HxlGraphics.state, mob);
-								default:
-									//
-							}
-						}
-						
-						expired.push(t);
+		for (mob in mobs)
+			updateActor(mob);
+			
+		updateActor(Registery.player);
+	}
+	
+	function updateActor(creature:CqActor)
+	{
+		var buffs = creature.buffs;
+		var specialEffects = creature.specialEffects;
+		var visibleEffects = creature.visibleEffects;
+		// remove timed out buffs & visibleEffects
+		var timers = creature.timers;
+		if (timers.length>0) {
+			var expired = [];
+			for (t in timers) {
+				t.ticks--;
+				if (t.ticks == 0) {
+					
+					if(t.buffName!= null) {
+						// remove buff effect
+						var newVal = buffs.get(t.buffName) - t.buffValue;
+						var text:String = Std.string(t.buffValue);
+						GameUI.showEffectText(creature, (-t.buffValue) + " " + t.buffName , 0xff0000);
+						buffs.set(t.buffName, newVal);
+					} 
+					
+					if(HxlUtil.contains(visibleEffects.iterator(), t.buffName)) {
+						// remove visibleEffect
+						creature.visibleEffects.remove(t.buffName);
 					}
-				}
-				
-				// remove expired timers
-				for (t in expired) {
-					timers.remove(t);
-					HxlLog.append("removed expired timer: " + t.buffName);
+					
+					if (t.specialEffect != null && HxlUtil.contains(specialEffects.keys(), t.specialEffect.name)) {
+						var currentEffect = specialEffects.get(t.specialEffect.name);
+	
+						if(t.specialEffect.name == "magic_mirror")
+							GameUI.showEffectText(creature, "" + "magic mirror" + " expired", 0xff0000);
+						else
+							GameUI.showEffectText(creature, "" + t.specialEffect.name + " expired", 0xff0000);
+						creature.specialEffects.remove(t.specialEffect.name);
+						
+						switch(currentEffect.name){
+							case "charm":
+								creature.faction = CqMob.FACTION;
+								creature.isCharmed = false;
+							case "sleep":
+								creature.speed = currentEffect.value;
+							case "magic_mirror":
+								//spell particle effect
+								var mob:CqMob = cast(currentEffect.value, CqMob);
+								var eff:CqEffectSpell = new CqEffectSpell(mob.x+mob.width/2, mob.y+mob.height/2);
+								eff.zIndex = 1000;
+								HxlGraphics.state.add(eff);
+								eff.start(true, 1.0, 10);
+								removeMobFromLevel(HxlGraphics.state, mob);
+							default:
+								//
+						}
+					}
+					
+					expired.push(t);
 				}
 			}
 			
-			var speed = creature.speed;
-			// Apply speed buffs
-			speed += creature.buffs.get("speed");
-			speed = Std.int(Math.max(speed, 0));
-			// apply spirit buffs
-			var spirit = creature.spirit;
-			var specialActive = creature.visibleEffects.length >0;
-			spirit += creature.buffs.get("spirit");
-			spirit = Std.int(Math.max(spirit, 1));
-			
-			// Charge action & spirit points
-			creature.actionPoints += speed;
-			if (!specialActive) {
-				for (s in creature.equippedSpells) {
-					if(s!=null)
-						s.spiritPoints = Std.int(Math.min( s.spiritPointsRequired, s.spiritPoints + spirit));
-				}
+			// remove expired timers
+			for (t in expired) {
+				timers.remove(t);
+				HxlLog.append("removed expired timer: " + t.buffName);
 			}
-			
-			// Move mob if charged
-			if ( !Std.is(creature,CqPlayer)  &&  creature.actionPoints>=60 ) {
-				if (cast(creature,Mob).act(state)) {
-					creature.actionPoints = 0;
-				}
+		}
+		
+		var speed = creature.speed;
+		// Apply speed buffs
+		speed += creature.buffs.get("speed");
+		speed = Std.int(Math.max(speed, 0));
+		// apply spirit buffs
+		var spirit = creature.spirit;
+		var specialActive = creature.visibleEffects.length >0;
+		spirit += creature.buffs.get("spirit");
+		spirit = Std.int(Math.max(spirit, 1));
+		
+		// Charge action & spirit points
+		creature.actionPoints += speed;
+		if (!specialActive) {
+			for (s in creature.equippedSpells) {
+				if(s!=null)
+					s.spiritPoints = Std.int(Math.min( s.spiritPointsRequired, s.spiritPoints + spirit));
+			}
+		}
+		
+		// Move mob if charged
+		if ( !Std.is(creature,CqPlayer)  &&  creature.actionPoints>=60 ) {
+			if (cast(creature,Mob).act(state)) {
+				creature.actionPoints = 0;
 			}
 		}
 	}
