@@ -300,12 +300,12 @@ class CqLevel extends Level {
 	public override function tick(state:HxlState) {
 		
 		for (mob in mobs)
-			updateActor(mob);
+			updateActor(cast(mob,CqActor),state);
 			
-		updateActor(Registery.player);
+		updateActor(Registery.player,state);
 	}
 	
-	function updateActor(creature:CqActor)
+	function updateActor(creature:CqActor,state:HxlState)
 	{
 		var buffs = creature.buffs;
 		var specialEffects = creature.specialEffects;
