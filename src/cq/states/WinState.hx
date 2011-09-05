@@ -1,8 +1,8 @@
 package cq.states;
 
 import cq.CqActor;
-import cq.CqConfiguration;
-import cq.CqRegistery;
+import data.Configuration;
+import data.Registery;
 import cq.CqResources;
 import cq.ui.CqTextScroller;
 import data.Registery;

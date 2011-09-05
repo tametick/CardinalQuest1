@@ -2,8 +2,8 @@
 set PAUSE_ERRORS=1
 
 copy ..\bin\cq.swf bin\cq.swf
-mkdir bin\jadeds
-copy JadeDS\Release\* bin\jadeds\
+rem mkdir bin\jadeds
+rem copy JadeDS\Release\* bin\jadeds\
 
 call bat\SetupSDK.bat
 call bat\SetupApplication.bat

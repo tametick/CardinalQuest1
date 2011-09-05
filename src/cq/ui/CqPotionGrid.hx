@@ -15,8 +15,6 @@ import cq.CqItem;
 import cq.CqResources;
 import cq.ui.CqPotionButton;
 
-// tmp
-import cq.ui.inventory.CqInventoryDialog;
 
 class CqPotionGrid extends CqInventoryGrid {
 	var belt:HxlSprite;

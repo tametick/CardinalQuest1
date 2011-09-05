@@ -3,7 +3,6 @@ The steps to convert from ActionScript 3 (and 2?) to haXe are numerous and invol
 Tools needed:
 * FlashDevelop
 * haXe
-* basic command-line understanding
 
 Steps:
 

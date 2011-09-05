@@ -19,8 +19,7 @@ interface GameObject implements HxlObjectI {
 	function destroy():Void;
 }
 
-class GameObjectImpl extends HxlSprite, implements GameObject
-{
+class GameObjectImpl extends HxlSprite, implements GameObject {
 	public var hp:Int;
 	public var maxHp:Int;
 	public var tilePos(getTilePos, null):HxlPoint;
@@ -79,7 +78,8 @@ class GameObjectImpl extends HxlSprite, implements GameObject
 	}
 
 	public override function destroy() {
-		for ( Callback in onDestroy ) Callback();
+		for ( Callback in onDestroy ) 
+			Callback();
 		super.destroy();
 	}
 

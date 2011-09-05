@@ -1,10 +1,7 @@
 package world;
 
 import com.eclecticdesignstudio.motion.Actuate;
-import cq.CqActor;
-import cq.ui.CqDecoration;
-import cq.CqRegistery;
-import cq.states.GameState;
+import data.Registery;
 import data.Resources;
 import flash.display.Bitmap;
 import com.baseoneonline.haxe.astar.PathMap;
@@ -20,11 +17,10 @@ import data.Registery;
 
 import playtomic.PtLevel;
 
-import cq.CqConfiguration;
+import data.Configuration;
 import cq.states.WinState;
 
-class Level extends HxlTilemap
-{
+class Level extends HxlTilemap {
 	public var mobs:Array<Mob>;
 	public var loots:Array<Loot>;
 	public var startingLocation:HxlPoint;
@@ -72,6 +68,10 @@ class Level extends HxlTilemap
 		removeAllActors(state);
 		removeAllLoots(state);
 		removeAllDecorations(state);
+		
+		
+		
+		destroy();
 	}
 	
 	public function addMobToLevel(state:HxlState, mob:Mob) {
@@ -89,17 +89,6 @@ class Level extends HxlTilemap
 		mobTile.actors.remove(mob);
 		
 		state.remove(mob);
-		if (cast(mob, CqActor).healthBar != null) 
-			state.remove(cast(mob, CqActor).healthBar);
-		
-		for (m in mobs) {
-			if (cast(m, CqActor).faction != CqRegistery.player.faction) 
-				return;
-			if (cast(m, CqActor).isCharmed)
-				return;
-		}
-			
-		levelComplete();
 	}
 	
 	function addObject(state:HxlState, obj:GameObject) {
@@ -111,12 +100,6 @@ class Level extends HxlTilemap
 		player.setTilePos(Std.int(startingLocation.x),Std.int(startingLocation.y));
 		player.x = getPixelPositionOfTile(player.tilePos.x, player.tilePos.y).x;
 		player.y = getPixelPositionOfTile(player.tilePos.x, player.tilePos.y).y;
-		if (player.tilePos.x != startingLocation.x || player.tilePos.y  != startingLocation.y)
-		{
-			trace(player.tilePos.x + " " + startingLocation.x);
-			trace(player.tilePos.y + " " + startingLocation.y);
-			trace("positions not equal! Is there a chest on player starting pos??");
-		}
 		state.add(player);
 		
 		for (mob in mobs)
@@ -165,13 +148,6 @@ class Level extends HxlTilemap
 		
 		state.remove(loot);
 	}
-	//public function 
-	function levelComplete() {
-		ptLevel.finish();
-		if (index == CqConfiguration.lastLevel)
-			cast(HxlGraphics.state,GameState).startBossAnim();
-			//HxlGraphics.pushState(new WinState());
-	}
 	
 	override public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {
 		var map = super.loadMap(MapData, TileGraphic, TileWidth, TileHeight, ScaleX, ScaleY);
@@ -202,36 +178,14 @@ class Level extends HxlTilemap
 		var hex = StringTools.hex(tween);
 		return Std.parseInt("0x"+hex+hex+hex);
 	}
-	public function addDecoration(t:Tile,state:HxlState)
-	{
-		//return if is door.
-		if (Lambda.has( Resources.doors, t.dataNum))
-			return;
-		//return if stair or ladder
-		if (Lambda.has( Resources.stairsDown, t.dataNum))
-			return;
-		var floor:Bool = Lambda.has( Resources.walkableAndSeeThroughTiles, t.dataNum);
-		var frame:String = floor?CqDecoration.randomFloor():CqDecoration.randomWall();
-		var pos:HxlPoint = getPixelPositionOfTile(t.mapX, t.mapY);
-		var dec:CqDecoration = new CqDecoration(pos.x, pos.y,frame);
-		t.decorations.push( dec );
-		addObject(state, dec );
-		var minimumZ:Int = 0;
-		for (loot in t.loots) {
-			var field:Dynamic = Reflect.field(loot, "zIndex");
-			Reflect.setField(loot, "zIndex", field+1);
-			if (field < minimumZ) 
-				dec.zIndex = minimumZ = field;
-		}
-		
-	}
-	public function removeAllDecorations(state:HxlState)
-	{
+	
+	public function addDecoration(t:Tile, state:HxlState) {	}
+	
+	public function removeAllDecorations(state:HxlState) {
 		for (y in 0...heightInTiles) {
 			for (x in 0...widthInTiles) {
 				var t:Tile = cast(_tiles[y][x], Tile);
-				for(dec in t.decorations)
-				{
+				for(dec in t.decorations) {
 					state.remove(dec);
 				}
 				t.decorations = null;
@@ -344,16 +298,16 @@ class Level extends HxlTilemap
 							cast(loot,HxlSprite).visible = true;
 						for (actor in Ttile.actors) {
 							cast(actor, HxlSprite).visible = true;
-							var actor:CqActor = cast(actor, CqActor);
 							var hpbar = actor.healthBar;
 							if (hpbar != null && actor.hp != actor.maxHp)
 								hpbar.visible = true;
 						}
 						Ttile.colorTo(normColor, actor.moveSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
-						for (decoration in Ttile.decorations)
+						for (decoration in Ttile.decorations){
 							//decoration.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
 							decoration.colorTo(normColor, actor.moveSpeed);
+						}
 					case Visibility.SEEN:
 						tile.visible = true;
 						
@@ -362,7 +316,7 @@ class Level extends HxlTilemap
 						for (actor in Ttile.actors) {
 							cast(actor, HxlSprite).visible = false;
 							var pop = cast(actor, HxlSprite).getPopup();
-							var hpbar = cast(actor, CqActor).healthBar;
+							var hpbar = actor.healthBar;
 							if (hpbar != null)
 								hpbar.visible = false;
 							if (pop != null)
@@ -378,7 +332,7 @@ class Level extends HxlTilemap
 					case Visibility.UNSEEN:
 						for (actor in Ttile.actors) {
 							var pop = cast(actor, HxlSprite).getPopup();
-							var hpbar = cast(actor, CqActor).healthBar;
+							var hpbar = actor.healthBar;
 							if (hpbar != null)
 								hpbar.visible = false;
 							if (pop != null)
@@ -446,9 +400,10 @@ class Level extends HxlTilemap
 							cast(actor,HxlSprite).visible = true;
 						Ttile.colorTo(normColor, tweenSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
-						for (decoration in Ttile.decorations)
+						for (decoration in Ttile.decorations){
 							//decoration.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
 							decoration.colorTo(normColor, tweenSpeed);
+						}
 					case Visibility.SEEN:
 						tile.visible = true;
 						
@@ -493,10 +448,11 @@ class Level extends HxlTilemap
 		
 		if (targetTile == null)
 			targetTile = new HxlPoint(0, 0);
-		else{
+		else {
 			targetTile.x = 0;
 			targetTile.y = 0;
 		}
+		
 		if ( HxlGraphics.keys.LEFT || HxlGraphics.keys.A) {
 			if ( pos.x > 0) {
 				targetTile.x = -1;
@@ -513,12 +469,13 @@ class Level extends HxlTilemap
 			if ( pos.y < heightInTiles ) {
 					targetTile.y = 1;
 			}
-		} else if ( HxlGraphics.keys.ENTER || HxlGraphics.keys.NONUMLOCK_5)
-		{
+		} else if ( HxlGraphics.keys.ENTER || HxlGraphics.keys.NONUMLOCK_5)	{
 			return targetTile;
 		}
+		
 		if (targetTile.x == 0 && targetTile.y == 0)
 			return null;
+			
 		return targetTile;
 	}
 	

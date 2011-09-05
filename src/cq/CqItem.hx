@@ -3,7 +3,6 @@ package cq;
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;
 import cq.ui.inventory.CqInventoryItem;
-import haxel.GraphicCache;
 
 import data.Configuration;
 import data.Resources;
@@ -17,7 +16,7 @@ import haxel.HxlUtil;
 import world.Loot;
 import world.GameObject;
 
-import cq.CqConfiguration;
+import data.Configuration;
 import cq.CqResources;
 import cq.CqWorld;
 import cq.CqGraphicKey;
@@ -393,20 +392,21 @@ class CqItem extends GameObjectImpl, implements Loot {
 		stackSizeMax = 1;
 
 		isGlowing = false;
-		glowSpriteKey = CqGraphicKey.ItemGlow(typeName);
+//		glowSpriteKey = CqGraphicKey.ItemGlow(typeName);
 		//TODO: move to game ui, to be with the rest of graphic cache creation
 		glowRect = new Rectangle(0, 0, 48, 48);
-		if ( GraphicCache.checkBitmapCache(glowSpriteKey) ) {
+/*		if ( GraphicCache.checkBitmapCache(glowSpriteKey) ) {
 			glowSprite = GraphicCache.getBitmap(glowSpriteKey);
-		} else {
+		} else {*/
 			var tmp:BitmapData = new BitmapData(48, 48, true, 0x0);
 			tmp.copyPixels(getFramePixels(), new Rectangle(0, 0, 32, 32), new Point(8, 8), null, null, true);
 			var glow:GlowFilter = new GlowFilter(0xffea00, 0.9, 16.0, 16.0, 1.6, 1, false, false);
 			tmp.applyFilter(tmp, glowRect, new Point(0, 0), glow);
-			GraphicCache.addBitmapData(tmp, glowSpriteKey);
+			//GraphicCache.addBitmapData(tmp, glowSpriteKey);
 			glowSprite = tmp;
 			glow = null;
-		}
+			tmp = null;
+		//}
 	}
 	public function customGlow(color:Int)
 	{
@@ -414,9 +414,10 @@ class CqItem extends GameObjectImpl, implements Loot {
 		tmp.copyPixels(getFramePixels(), new Rectangle(0, 0, 32, 32), new Point(8, 8), null, null, true);
 		var glow:GlowFilter = new GlowFilter(color, 0.9, 16.0, 16.0, 1.6, 1, false, false);
 		tmp.applyFilter(tmp, glowRect, new Point(0, 0), glow);
-		GraphicCache.addBitmapData(tmp, glowSpriteKey);
+		//GraphicCache.addBitmapData(tmp, glowSpriteKey);
 		glowSprite = tmp;
 		glow = null;
+		tmp = null;
 	}
 	public function setGlow(Toggle:Bool) {
 		isGlowing = Toggle;
@@ -436,6 +437,13 @@ class CqItem extends GameObjectImpl, implements Loot {
 		HxlGraphics.buffer.copyPixels(glowSprite, glowRect, _flashPoint, null, null, true);
 	}
 	
+	public override function destroy() {
+		super.destroy();
+		if(glowSprite!=null){
+			glowSprite.dispose();
+			glowSprite = null;
+		}
+	}
 
 	public function doPickupEffect() {
 		HxlGraphics.state.add(this);
@@ -527,7 +535,7 @@ class CqChest extends CqItem {
 		var typeName:String = null;
 		
 		// chance of getting a potion
-		if (Math.random() < CqConfiguration.dropPotionChance){
+		if (Math.random() < Configuration.dropPotionChance){
 			typeName = HxlUtil.getRandomElement(SpriteItems.instance.potions).toUpperCase();
 		} else {
 			//set up equipment array. means filter out potions from the item enum.
@@ -539,7 +547,7 @@ class CqChest extends CqItem {
 				CqChest.equipment.shift();
 			}
 			
-			if (Math.random() < CqConfiguration.betterItemChance)
+			if (Math.random() < Configuration.betterItemChance)
 				level = level + 1;
 				
 			var itemsPerLevelVariety:Int = 6;
@@ -562,9 +570,9 @@ class CqChest extends CqItem {
 		
 		var item = CqLootFactory.newItem(x, y, Type.createEnum(CqItemType,  typeName));
 		
-		if (Math.random() < CqConfiguration.EnchantItemChance) {
+		if (Math.random() < Configuration.EnchantItemChance) {
 			// 10% chance of magical item
-			if (Math.random() < CqConfiguration.BetterEnchantItemChance){
+			if (Math.random() < Configuration.BetterEnchantItemChance){
 				// 1% chance of that item being out-of-depth
 				CqLootFactory.enchantItem(item, Registery.level.index + 1);
 			} else {

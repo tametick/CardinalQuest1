@@ -249,6 +249,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	 */
 	public function onAdd(state:HxlState) {}
 	public function onRemove(state:HxlState) {
+		clearEventListeners();
 	}
 	
 	/**
@@ -259,6 +260,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		dead = true;
 		popup = null;
 		HxlGraphics.state.remove(this);
+		clearEventListeners();
 	}
 
 	/**

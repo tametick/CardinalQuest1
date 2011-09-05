@@ -1,7 +1,7 @@
 package haxel;
 
 import com.eclecticdesignstudio.motion.Actuate;
-import cq.CqRegistery;
+import data.Registery;
 import flash.display.BitmapData;
 import flash.net.URLRequest;
 import flash.Lib;
@@ -50,8 +50,7 @@ class HxlUtil {
 		rgb[2] = Color & 0xFF;
 		return rgb;
 	}
-	public static function averageColour( source:BitmapData,?ignoreAlpha:Bool = true):UInt
-	{
+	public static function averageColour( source:BitmapData,?ignoreAlpha:Bool = true):UInt {
 		var red:Float = 0;
 		var green:Float = 0;
 		var blue:Float = 0;
@@ -59,12 +58,9 @@ class HxlUtil {
 		var count:Int = 0;
 		var pixel:Float;
 
-		for ( x in 0...source.width)
-		{
-			for ( y in 0...source.height)
-			{
-				if (!ignoreAlpha || (source.getPixel32(x,y) >> 24 & 0xFF) == 255)
-				{
+		for ( x in 0...source.width) {
+			for ( y in 0...source.height) {
+				if (!ignoreAlpha || (source.getPixel32(x,y) >> 24 & 0xFF) == 255) {
 					pixel = source.getPixel(x, y);
 					red += Std.int(pixel) >> 16 & 0xFF;
 					green += Std.int(pixel) >> 8 & 0xFF;
@@ -500,7 +496,7 @@ class HxlUtil {
 			pt.x = randomInt(width);
 			pt.y = randomInt(height);
 			dist = distance(distanceFrom, pt);
-		} while ( CqRegistery.level.isBlockingMovement(Math.floor(pt.x),Math.floor(pt.y))|| dist < minDistance);
+		} while ( Registery.level.isBlockingMovement(Math.floor(pt.x),Math.floor(pt.y))|| dist < minDistance);
 		
 		return pt;
 	}

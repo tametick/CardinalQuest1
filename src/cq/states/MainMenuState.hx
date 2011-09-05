@@ -1,6 +1,6 @@
 package cq.states;
 
-import cq.CqRegistery;
+import data.Registery;
 import cq.CqResources;
 import cq.CqWorld;
 import cq.GameUI;
@@ -22,6 +22,8 @@ import flash.ui.MouseCursor;
 import flash.Lib;
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;
+
+import haxel.GraphicCache;
 
 import flash.desktop.NativeApplication;
 
@@ -121,7 +123,7 @@ class MainMenuState extends CqState {
 			btnResumeGame.setHoverFormat(null, 35, textHighlight, "center");
 			menu.addItem(btnResumeGame);
 			btnResumeGame.setCallback(function() { 
-				CqLevel.playMusicByIndex(CqRegistery.level.index);
+				CqLevel.playMusicByIndex(Registery.level.index);
 				self.changeState(null);
 			});
 			buttonY += 50;
@@ -135,7 +137,11 @@ class MainMenuState extends CqState {
 		btnNewGame.setNormalFormat(null, 35, textColor, "center");
 		btnNewGame.setHoverFormat(null, 35, textHighlight, "center");
 		menu.addItem(btnNewGame);
-		btnNewGame.setCallback(function() { if(GameUI.instance!=null)GameUI.instance.kill();self.changeState(CreateCharState);});
+		btnNewGame.setCallback(function() {
+			if (GameUI.instance != null)
+				GameUI.instance.kill();
+				self.changeState(CreateCharState);
+			});
 		buttonY += 50;
 
 		
@@ -155,7 +161,7 @@ class MainMenuState extends CqState {
 			btnHiscores.setCallback(function() { HxlGraphics.fade.start(true, 0xff000000, sFadeTime, function() { HxlGraphics.pushState(new HighScoreState()); } ); } );
 			buttonY += 50;
 		}
-		//if (Configuration.standAlone) {
+		if (Configuration.standAlone) {
 			var btnQuit:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Quit", true, null);
 			btnQuit.setNormalFormat(null, 35, textColor, "center");
 			btnQuit.setHoverFormat(null, 35, textHighlight, "center");
@@ -163,9 +169,6 @@ class MainMenuState extends CqState {
 			
 			if (Configuration.air) {
 				btnQuit.setCallback(function() { 
-				  #if jadeds	
-					Game.jadeDS.exit(true); 
-				  #end	
 					NativeApplication.nativeApplication.exit(); 
 				} );
 			} else {
@@ -173,7 +176,7 @@ class MainMenuState extends CqState {
 			}
 			
 			buttonY += 50;			
-		//}
+		}
 		
 		Actuate.tween(menu, 1, { targetY: 220 } ).ease(Cubic.easeOut);
 		

@@ -4,9 +4,9 @@ import cq.CqResources;
 import cq.CqItem;
 import cq.CqSpell;
 import cq.CqActor;
-import haxel.HxlSprite;
-import world.Decoration;
 import cq.effects.CqEffectSpell;
+import cq.ui.CqDecoration;
+import cq.states.GameState;
 
 import generators.BSP;
 import world.World;
@@ -15,7 +15,9 @@ import world.Mob;
 import world.Loot;
 import world.Tile;
 import world.GameObject;
+import world.Decoration;
 
+import haxel.HxlSprite;
 import haxel.HxlPoint;
 import haxel.HxlState;
 import haxel.HxlUtil;
@@ -23,6 +25,7 @@ import haxel.HxlGraphics;
 import haxel.HxlLog;
 
 import data.Registery;
+import data.Resources;
 import data.Configuration;
 import data.MusicManager;
 
@@ -57,6 +60,60 @@ class CqLevel extends Level {
 			return "red";
 	}
 	
+	public function levelComplete() { 
+		ptLevel.finish();
+		if (index == Configuration.lastLevel)
+			cast(HxlGraphics.state,GameState).startBossAnim();
+
+	}
+	
+	
+	override public function removeMobFromLevel(state:HxlState, mob:Mob) {
+		var cqmob = cast(mob, CqMob);
+		
+		super.removeMobFromLevel(state, mob);
+		
+		if (cqmob.healthBar != null) 
+			state.remove(cqmob.healthBar);
+		
+		for (m in mobs) {
+			cqmob = cast(m, CqMob);
+			if (cqmob.faction != Registery.player.faction) 
+				return;
+			if (cqmob.isCharmed)
+				return;
+		}
+			
+		levelComplete();
+	}
+	
+	override public function addDecoration(t:Tile, state:HxlState) {
+		super.addDecoration(t, state);
+		
+		//return if is door.
+		if (Lambda.has( Resources.doors, t.dataNum))
+			return;
+			
+		//return if stair or ladder
+		if (Lambda.has( Resources.stairsDown, t.dataNum))
+			return;
+			
+		var floor:Bool = Lambda.has( Resources.walkableAndSeeThroughTiles, t.dataNum);
+		var frame:String = floor?CqDecoration.randomFloor():CqDecoration.randomWall();
+		var pos:HxlPoint = getPixelPositionOfTile(t.mapX, t.mapY);
+		var dec:CqDecoration = new CqDecoration(pos.x, pos.y,frame);
+		t.decorations.push( dec );
+		addObject(state, dec );
+		var minimumZ:Int = 0;
+		
+		for (loot in t.loots) {
+			var field:Dynamic = Reflect.field(loot, "zIndex");
+			Reflect.setField(loot, "zIndex", field+1);
+			if (field < minimumZ) 
+				dec.zIndex = minimumZ = field;
+		}
+	}
+	
 	public static function playMusicByIndex(index:Int):Void
 	{
 		if(index==0)
@@ -77,15 +134,15 @@ class CqLevel extends Level {
 		var tmpFloor = tiles.getSpriteIndex("red_floor0");
 		var tmpDoor = tiles.getSpriteIndex("red_door_close");
 		
-		var newMapData = BSP.getBSPMap(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), tmpWall, tmpFloor, tmpDoor);
+		var newMapData = BSP.getBSPMap(Configuration.getLevelWidth(), Configuration.getLevelHeight(), tmpWall, tmpFloor, tmpDoor);
 
-		startingLocation = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
+		startingLocation = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
 		
 		var tmpDown = tiles.getSpriteIndex("red_down");
-		if (index < CqConfiguration.lastLevel) {
+		if (index < Configuration.lastLevel) {
 			var stairsDown:HxlPoint;
 			do {
-				stairsDown = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
+				stairsDown = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
 			} while (HxlUtil.distance(stairsDown, startingLocation) < 10);
 			
 			newMapData[Std.int(stairsDown.y)][Std.int(stairsDown.x)] = tmpDown;
@@ -118,9 +175,9 @@ class CqLevel extends Level {
 		// mark as visible in fov
 		markInvisible();
 
-		addChests(CqConfiguration.chestsPerLevel,startingLocation);
-		addSpells(CqConfiguration.spellsPerLevel);
-		addMobs(CqConfiguration.mobsPerLevel);
+		addChests(Configuration.chestsPerLevel,startingLocation);
+		addSpells(Configuration.spellsPerLevel);
+		addMobs(Configuration.mobsPerLevel);
 	}
 	function markInvisible() {
 		for ( Y in 0...heightInTiles ) {
@@ -135,7 +192,7 @@ class CqLevel extends Level {
 		for (s in 0...numberOfSpells){
 			var pos; 
 			do {
-				pos = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
+				pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
 			} while (cast(getTile(pos.x, pos.y), CqTile).loots.length > 0);
 			
 			createAndaddSpell(pos);
@@ -162,7 +219,7 @@ class CqLevel extends Level {
 			var minPlayerDistance = 10;
 			do {//find chest locations that are far apart, but we may run out of space!
 				iterations++;
-				pos = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
+				pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
 				//having trouble finding a good place, so find a position thats closer to other chests, but not on a chest or a player
 				//less iterations should equal to more groups of chests together
 				//they do tend to group around the player, so we need them far away!
@@ -183,7 +240,7 @@ class CqLevel extends Level {
 		for (c in 0...numberOfMobs){
 			var pos; 
 			do {
-				pos = HxlUtil.getRandomTile(CqConfiguration.getLevelWidth(), CqConfiguration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
+				pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
 			} while (!isValidMobPosition(pos));
 			
 			createAndaddMob(pos, index);
@@ -258,7 +315,7 @@ class CqLevel extends Level {
 	
 	public override function tick(state:HxlState) {
 		var creatures:Array<CqActor> = new Array<CqActor>();
-		creatures.push(CqRegistery.player);
+		creatures.push(Registery.player);
 		for (mob in mobs)
 			creatures.push(cast(mob, CqActor));
 			
@@ -393,7 +450,7 @@ class CqWorld extends World {
 		else
 			currentLevelIndex++;
 		goToLevel(currentLevelIndex);
-		CqRegistery.player.infoViewFloor.setText("Floor " +(currentLevelIndex + 1));
+		Registery.player.infoViewFloor.setText("Floor " +(currentLevelIndex + 1));
 
 		currentLevel.zIndex = -1;	
 		state.add(currentLevel);

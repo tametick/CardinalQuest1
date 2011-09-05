@@ -1,15 +1,16 @@
 package data;
 
-import world.World;
-import world.Level;
-import world.Player;
+import cq.CqWorld;
+import cq.CqActor;
 
 class Registery {
-	public static var world:World;
-	public static var player:Player;
-	public static var level(getLevel, null):Level;
+	public static var world:CqWorld;
+	public static var player:CqPlayer;
+	public static var level(getLevel, null):CqLevel;
 	
-	static function getLevel():Level {
-		return world.currentLevel;
+	static function getLevel():CqLevel {
+		if (world == null || world.currentLevel == null)
+			return null;
+		return cast(world.currentLevel,CqLevel);
 	}
 }

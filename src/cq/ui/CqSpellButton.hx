@@ -1,6 +1,6 @@
 package cq.ui;
 
-import cq.CqRegistery;
+import data.Registery;
 import cq.states.GameState;
 import cq.ui.inventory.CqEquipmentCell;
 import cq.ui.inventory.CqInventoryCell;
@@ -11,6 +11,7 @@ import cq.CqResources;
 import cq.CqSpell;
 import cq.CqActor;
 import cq.CqGraphicKey;
+import haxel.HxlState;
 
 import flash.display.BitmapData;
 import flash.events.MouseEvent;
@@ -50,7 +51,13 @@ class CqSpellButton extends HxlDialog {
 		
 		chrageBmpData = new BitmapData(94, 94, true, 0x0);
 	}
-
+	
+	override public function destroy() {
+		super.destroy();
+		chrageBmpData.dispose();
+		chrageBmpData = null;
+	}
+	
 	public override function update() {
 		if (!_initialized) {
 			if (HxlGraphics.stage != null) {
@@ -91,7 +98,7 @@ class CqSpellButton extends HxlDialog {
 		var spellObj = cell.getCellObj();
 		if ( spellObj != null ) {
 			var spell = cast(spellObj.item, CqSpell);
-			var player = CqRegistery.player;
+			var player = Registery.player;
 			if ( spell.spiritPoints < spell.spiritPointsRequired ) {
 				if(event!=null)event.stopPropagation();
 				return;
@@ -106,7 +113,7 @@ class CqSpellButton extends HxlDialog {
 			} else {
 				GameUI.setTargeting(false);
 				GameState.inst.passTurn();
-				CqRegistery.player.use(spellObj.item, null);
+				Registery.player.use(spellObj.item, null);
 				spell.spiritPoints = 0;
 				GameUI.instance.updateCharge(this);
 				SoundEffectsManager.play(SpellCast);

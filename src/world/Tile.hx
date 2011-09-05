@@ -12,8 +12,7 @@ import flash.geom.Rectangle;
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.actuators.MethodActuator;
 
-class Tile extends HxlTile
-{
+class Tile extends HxlTile {
 	public var actors:Array<Actor>;
 	public var loots:Array<Loot>;
 	public var decorations:Array<Decoration>;
@@ -37,22 +36,10 @@ class Tile extends HxlTile
 	
 	public function colorTo(ToColor:Int, Speed:Float) {
 		var self = this;
-//		altBitmap = null;
-		Actuate.update(self.colorTween, Speed, {Color: HxlUtil.colorRGB(_color)[0]}, {Color: ToColor})
-			.onComplete(self.captureAltBitmap);
+		Actuate.update(self.colorTween, Speed, {Color: HxlUtil.colorRGB(_color)[0]}, {Color: ToColor});
 	}
 
 	function colorTween(params:Dynamic) {
 		setColor( HxlUtil.colorInt(params.Color, params.Color, params.Color) );
-	}
-
-	function captureAltBitmap() {
-/*		var key:String = level.tileGraphicName+"-"+dataNum+"-"+_color+"-"+_alpha;
-		if ( HxlGraphics.checkBitmapCache(key) ) {
-			altBitmap = HxlGraphics.getBitmap(key);
-		} else {
-			HxlGraphics.addBitmapData(level.getTileBitmap(mapX, mapY), key);
-			altBitmap = HxlGraphics.getBitmap(key);
-		}*/
 	}
 }

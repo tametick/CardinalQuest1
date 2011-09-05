@@ -105,8 +105,7 @@ class HxlTilemap extends HxlObject {
 	/**
 	 * The tilemap constructor just initializes some basic variables.
 	 */
-	public function new(TileW:Int,tileH:Int)
-	{
+	public function new(TileW:Int,tileH:Int) {
 		super();
 		auto = OFF;
 		collideIndex = 1;
@@ -224,6 +223,21 @@ class HxlTilemap extends HxlObject {
 		return _tiles;
 	}
 
+	override public function destroy() 	{
+		super.destroy();
+		tmpBitmap.dispose();
+		tmpBitmap = null;
+		_pixels.dispose();
+		_pixels = null;
+		if(_bbPixels!=null) {
+			_bbPixels.dispose();
+			_bbPixels = null;
+		}
+		tmpRect = null;
+		
+		_tiles = null;
+	}
+	
 	/**
 	 * Generates a bounding box version of the tiles, flixel should call this automatically when necessary.
 	 */
@@ -314,8 +328,8 @@ class HxlTilemap extends HxlObject {
 	/**
 	 * Internal function that actually renders the tilemap.  Called by render().
 	 */
-	static var tmpBitmap:BitmapData;
-	static var tmpRect:Rectangle;
+	var tmpBitmap:BitmapData;
+	var tmpRect:Rectangle;
 	static var originPoint:Point = new Point(0, 0);
 	function renderTilemap() {
 		//Bounding box display options
@@ -367,6 +381,7 @@ class HxlTilemap extends HxlObject {
 			_flashPoint.y += _tileHeight;
 		}
 
+		tileBitmap = null;
 	}
 
 	/**

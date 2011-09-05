@@ -1,7 +1,6 @@
 package cq.ui;
 import com.eclecticdesignstudio.motion.easing.Cubic;
 import com.eclecticdesignstudio.motion.easing.Linear;
-import data.Configuration;
 import flash.display.Bitmap;
 import flash.events.Event;
 import flash.events.KeyboardEvent;
@@ -21,6 +20,8 @@ class CqTextScroller extends HxlGroup {
 	static var MinimumDuration:Float = 0.3;
 	
 	public var scrolling:Bool;
+	var splash:HxlSprite;
+	var titleText:HxlText; 
 	
 	var withTitle:Bool;
 	var cols:Array<HxlText>;
@@ -41,8 +42,19 @@ class CqTextScroller extends HxlGroup {
 		tweenStatus = new Array<Bool>();
 		to_y = To_Y;
 		minimumDuration = MinimumDuration;
+		setSplash(bg);
+		setTitle(Title, TitleColor, ShadowColor);
+		
+		HxlGraphics.stage.addEventListener(MouseEvent.CLICK, onAction);
+		HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_UP, onAction);
+	}
+	
+	public function setSplash(bg:Class<Bitmap>):Void {
+		if (splash != null)
+			remove(splash);
+		
 		if(bg != null){
-			var splash:HxlSprite = new HxlSprite(0, 0, bg);
+			splash = new HxlSprite(0, 0, bg);
 			add(splash);
 			//fullscreen stretch
 			var sx:Float = HxlGraphics.stage.stageWidth/splash.width;
@@ -51,16 +63,21 @@ class CqTextScroller extends HxlGroup {
 			splash.x = (splash.width*sx)-splash.width;
 			splash.scale = new HxlPoint(sx * 1.1, sy * 1.1);
 		}
-		if (Title.length > 0)
-		{
-			var titleTxt:HxlText = new HxlText(0, To_Y, Configuration.app_width, Title);
-			titleTxt.setFormat(null, 72, TitleColor, "center",ShadowColor);
-			to_y += Std.int(titleTxt.height+10);
-			add(titleTxt);
-		}
-		HxlGraphics.stage.addEventListener(MouseEvent.CLICK, onAction);
-		HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_UP, onAction);
 	}
+	
+	public function setTitle(?Title:String = "", ?TitleColor:Int = 0xFFFFFF, ?ShadowColor:Int = 0x010101):Void {
+		if (titleText != null)
+			remove(titleText);
+		
+		if (Title.length > 0)		{
+			titleText = new HxlText(0, To_Y, 640, Title);
+			titleText.setFormat(null, 72, TitleColor, "center",ShadowColor);
+			to_y += Std.int(titleText.height+10);
+			add(titleText);
+		}
+	}	
+	
+	
 	public function setMinimumTime(value:Float):Void
 	{
 		minimumDuration = value;
@@ -117,8 +134,7 @@ class CqTextScroller extends HxlGroup {
 		}
 	}
 	
-	private function oncolumnScrolled(column:HxlText):Void 
-	{
+	private function oncolumnScrolled(column:HxlText):Void 	{
 		var allFinished:Bool = true;
 		for (i in 0...cols.length)
 		{
@@ -127,7 +143,7 @@ class CqTextScroller extends HxlGroup {
 		}
 		if (allFinished) finishTweens();
 	}
-	
+		
 	public function onComplete(handler:Void->Void):Void {
 		scrolling = false;
 		OnComplete = handler;

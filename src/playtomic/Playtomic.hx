@@ -3,7 +3,6 @@ package playtomic;
 import data.Configuration;
 import flash.Lib;
 import playtomic.base.Log;
-import CqPreloader;
 
 class Playtomic {
 	static var swfid:Int = 2781;
@@ -18,8 +17,9 @@ class Playtomic {
 		
 		if (StringTools.startsWith(loadUrl, "file://"))
 			localhost = true;
-			
-		if (!Configuration.useProductionPlaytomic) { //probably a dev build
+		
+		//probably a dev build or flash demo
+		if (!Configuration.useProductionPlaytomic || !Configuration.standAlone || Configuration.debug) { 
 			swfid = 2781;
 			guid = "abad7983339e41ac";
 		} else {

@@ -67,6 +67,7 @@ class UiInventoryBox extends Bitmap { public function new() { super(); } }
 class SpriteMapPaper extends Bitmap { public function new() { super(); } }
 class SpriteCharPaper extends Bitmap { public function new() { super(); } }
 class IntroScreen extends Bitmap { public function new() { super(); } }
+class BlankScreen extends Bitmap { public function new() { super(); } }
 class DeathScreen extends Bitmap { public function new() { super(); } }
 class VortexScreen extends Bitmap { public function new() { super(); } }
 class VortexLightsScreen extends Bitmap { public function new() { super(); } }
@@ -103,7 +104,7 @@ class StartButtonSprite extends HxlSprite {
 class ButtonSprite extends HxlSprite {
 	public function new(?X:Float=0, ?Y:Float=0) {
 		super(X,Y);
-		loadGraphic(SpriteItemSlot1, false, false, 64, 64, true);
+		loadGraphic(SpriteItemSlot1, false, false, 64, 64);
 	}
 }
 class HeartSprite extends HxlSprite {

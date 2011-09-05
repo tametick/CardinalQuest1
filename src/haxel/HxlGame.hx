@@ -1,5 +1,6 @@
 package haxel;
 
+import data.Configuration;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Sprite;
@@ -99,6 +100,8 @@ class HxlGame extends Sprite {
 		paused = false;
 		_autoPause = true;
 		_created = false;
+		
+		// adding to this, not to stage
 		addEventListener(Event.ENTER_FRAME, create, false, 0, true);
 	}
 
@@ -208,7 +211,7 @@ class HxlGame extends Sprite {
 
 	function onKeyUp(event:KeyboardEvent) {
 		// todo: use HxlKeyboard constants instead of keycodes
-		if ((event.keyCode == 192) || (event.keyCode == 220)) {
+		if (((event.keyCode == 192) || (event.keyCode == 220)) /*&& Configuration.debug*/) {
 			console.toggle();
 			return;
 		}
@@ -310,6 +313,7 @@ class HxlGame extends Sprite {
 		tmp.scaleX = tmp.scaleY = _zoom;
 		_screen.addChild(tmp);
 		HxlGraphics.buffer = tmp.bitmapData;
+		tmp = null;
 
 		// Initialize console
 		console = new HxlConsole(0, 0, _zoom, _defaultFont);
@@ -317,13 +321,12 @@ class HxlGame extends Sprite {
 		addChild(console);
 
 		// Initialize input event listeners
-		stage.addEventListener(KeyboardEvent.KEY_DOWN, HxlGraphics.keys.handleKeyDown,false,0,true);
-		stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp,false,0,true);
-		stage.addEventListener(MouseEvent.MOUSE_DOWN, HxlGraphics.mouse.handleMouseDown,false,0,true);
-		//stage.addEventListener(MouseEvent.MOUSE_OUT, HxlGraphics.mouse.handleMouseDown,false,0,true);
-		stage.addEventListener(MouseEvent.MOUSE_UP, HxlGraphics.mouse.handleMouseUp,false,0,true);
-		stage.addEventListener(MouseEvent.MOUSE_OUT, HxlGraphics.mouse.handleMouseUp,false,0,true);
-		stage.addEventListener(MouseEvent.MOUSE_OVER, HxlGraphics.mouse.handleMouseOver,false,0,true);
+		_addEventListener(KeyboardEvent.KEY_DOWN, HxlGraphics.keys.handleKeyDown,false,0,true);
+		_addEventListener(KeyboardEvent.KEY_UP, onKeyUp,false,0,true);
+		_addEventListener(MouseEvent.MOUSE_DOWN, HxlGraphics.mouse.handleMouseDown,false,0,true);
+		_addEventListener(MouseEvent.MOUSE_UP, HxlGraphics.mouse.handleMouseUp,false,0,true);
+		_addEventListener(MouseEvent.MOUSE_OUT, HxlGraphics.mouse.handleMouseUp,false,0,true);
+		_addEventListener(MouseEvent.MOUSE_OVER, HxlGraphics.mouse.handleMouseOver,false,0,true);
 
 		//Sound Tray popup
 		_soundTray = new Sprite();
@@ -337,6 +340,7 @@ class HxlGame extends Sprite {
 		var text:TextField = new TextField();
 		text.width = tmp.width;
 		text.height = tmp.height;
+		tmp = null;
 		text.multiline = true;
 		text.wordWrap = true;
 		text.selectable = false;
@@ -354,8 +358,7 @@ class HxlGame extends Sprite {
 		var bx:Int = 10;
 		var by:Int = 14;
 		_soundTrayBars = new Array();
-		for(i in 0...10)
-		{
+		for(i in 0...10) {
 			tmp = new Bitmap(new BitmapData(4,i+1,false,0xffffff));
 			tmp.x = bx;
 			tmp.y = by;
@@ -363,12 +366,13 @@ class HxlGame extends Sprite {
 			_soundTrayBars.push(tmp);
 			bx += 6;
 			by--;
+			tmp = null;
 		}
 		addChild(_soundTray);
 
 		//Initialize the pause screen
-		stage.addEventListener(Event.DEACTIVATE, onFocusLost,false,0,true);
-		stage.addEventListener(Event.ACTIVATE, onFocus,false,0,true);
+		_addEventListener(Event.DEACTIVATE, onFocusLost,false,0,true);
+		_addEventListener(Event.ACTIVATE, onFocus,false,0,true);
 
 		//Check for saved sound preference data
 		soundPrefs = new HxlSave();
@@ -386,8 +390,13 @@ class HxlGame extends Sprite {
 		_created = true;
 		switchState(Type.createInstance(_iState, []));
 		HxlState.screen.unsafeBind(HxlGraphics.buffer);
+		
+		_addEventListener(Event.ENTER_FRAME, update, false, 0, true);
+		//_addEventListener(Event.CLOSING, destroy, false, 0, true);
+		
+		
+		// remove from this, all future event listeners should be on stage
 		removeEventListener(Event.ENTER_FRAME, create);
-		addEventListener(Event.ENTER_FRAME, update,false,0,true);
 	}
 
 	public function update(event:Event) : Void {
@@ -500,4 +509,41 @@ class HxlGame extends Sprite {
 		console.mtrRender.add(Lib.getTimer()-updateMark);
 	}
 
+	
+	var eventListeners:Array<Dynamic>;
+	
+	function _addEventListener(Type:String, Listener:Dynamic, UseCapture:Bool = false, Priority:Int = 0, UseWeakReference:Bool = true) { 
+		if (eventListeners == null)
+			eventListeners = new Array();
+		
+		stage.addEventListener(Type, Listener, UseCapture, Priority, UseWeakReference);
+		eventListeners.push( {Type: Type, Listener: Listener, UseCapture: UseCapture, Priority: Priority} );
+	}
+
+	function _removeEventListener(Type:String, Listener:Dynamic) {
+		stage.removeEventListener(Type, Listener);
+		for ( i in 0...eventListeners.length ) {
+			var ev:Dynamic = eventListeners[i];
+			if ( ev.Type == Type && ev.Listener == Listener ) {
+				eventListeners.splice(i, 1);
+				break;
+			}
+		}
+	}
+
+	function _clearEventListeners() {
+		while ( eventListeners.length > 0 ) {
+			var i:Dynamic = eventListeners.pop();
+			stage.removeEventListener(i.Type, i.Listener);
+		}
+	}
+	
+	public function destroy() {
+		_clearEventListeners();
+		HxlGraphics.buffer.dispose();
+		HxlGraphics.buffer = null;
+		removeChild(_soundTray);
+		removeChild(_screen);
+		removeChild(console);
+	}
 }

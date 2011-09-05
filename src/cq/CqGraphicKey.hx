@@ -1,9 +1,6 @@
 package cq;
 
-/**
- * ...
- * @author joris
- */
+
 enum CqGraphicKey{
 	InventoryCellBG; 
 	CellBGHighlight;
