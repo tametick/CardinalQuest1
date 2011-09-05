@@ -31,12 +31,8 @@ class CqPanelContainer extends HxlGroup
 		add(panelMap);
 
 		var panelInv_w:Int = 481;
-		
 		panelInventory = new CqInventoryDialog(GameUI.instance, Configuration.app_width/2-panelInv_w/2-10, 0, panelInv_w, 403);
 		panelInventory.zIndex = 2;
-		//add this!!
-		//panelInventory.dlgPotionGrid = dlgPotionGrid;
-		//panelInventory.dlgSpellGrid = dlgSpellGrid;
 		add(panelInventory);
 
 		panelCharacter = new CqCharacterDialog(84, 0, 472, 480);
@@ -55,6 +51,9 @@ class CqPanelContainer extends HxlGroup
 		panelInventory.kill();
 		super.kill();
 	}
+	public function updateItems() {
+		panelInventory.updateItemPositions();
+	}
 	public function hideCurrentPanel(?hideCallBack:Dynamic):Void
 	{
 		if (!active) return;
@@ -64,8 +63,9 @@ class CqPanelContainer extends HxlGroup
 		}
 	}
 	public function showPanel(Panel:HxlSlidingDialog, ?Button:HxlButton = null, ?showCallback:Dynamic) {
-		//trace("hello " + active);
 		if (!active) return;
+		if (Panel == panelInventory)
+			panelInventory.updateItemPositions();
 		if ( HxlGraphics.mouse.dragSprite != null ) 
 			return;
 		// If user was in targeting mode, cancel it

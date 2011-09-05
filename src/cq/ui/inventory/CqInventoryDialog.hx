@@ -85,8 +85,11 @@ class CqInventoryDialog extends HxlSlidingDialog {
 		CqInventoryItem.backgroundKey = CqGraphicKey.ItemBG;
 		CqInventoryItem.backgroundSelectedKey = CqGraphicKey.ItemSelectedBG;
 	}
-
-	public override function hide(?HideCallback:Dynamic=null) {
+	public function updateItemPositions() {
+		dlgInvGrid.updateItemPositions();
+		dlgEqGrid.updateItemPositions();
+	}
+	public override function hide(?HideCallback:Dynamic = null) {
 		super.hide(HideCallback);
 		if ( CqInventoryItem.selectedItem != null ) {
 			CqInventoryItem.selectedItem.setSelected(false);

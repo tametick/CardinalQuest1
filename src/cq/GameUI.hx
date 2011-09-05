@@ -433,13 +433,12 @@ class GameUI extends HxlDialog {
 		add(infoViewFloor);
 	}
 	
-	function getIcon(?Frame:Int=0):HxlSprite {
+	function getIcon(?Frame:Int=0):HxlSprite{
 		var icon = new HxlSprite();
 		icon.loadGraphic(SpriteIcons, true, false, 32, 32);
 		icon.setFrame(Frame);
 		return icon;
 	}
-
 	public function updateCharges() {
 		var player = CqRegistery.player;
 		for ( btn in dlgSpellGrid.buttons ){
@@ -448,7 +447,6 @@ class GameUI extends HxlDialog {
 			}
 		}
 	}
-	
 	var chrageBmp:Bitmap;
 	var chrageShape:Shape;
 	public function updateCharge(btn:CqSpellButton, ?forcedValue:Int=-1) {
@@ -778,7 +776,7 @@ class GameUI extends HxlDialog {
 			} else {
 				targetX = targetLastPos.x;
 				targetY = targetLastPos.y;
-				
+
 			}
 			
 		}

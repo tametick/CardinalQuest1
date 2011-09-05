@@ -66,36 +66,40 @@ class CqInventoryGrid extends HxlDialog {
 		return new HxlPoint(cells[Cell].x + 2, cells[Cell].y + 2);
 
 	}
-
 	public function setCellObj(Cell:Int, CellObj:CqInventoryItem) {
 		cells[Cell].setCellObj(CellObj);
 	}
-
 	public function getCellObj(Cell:Int):CqInventoryItem {
 		return cells[Cell].getCellObj();
 	}
-
 	public function highlightedCellItemPos():HxlPoint {
 		var Cell:CqInventoryCell = CqInventoryCell.highlightedCell;
 		return new HxlPoint(Cell.x + 2, Cell.y + 2);
 
 	}
-
 	public function highlightedCell():CqInventoryCell {
 		return CqInventoryCell.highlightedCell;
 	}
-	
 	public function setGlowForAll(value:Bool) {
 		for ( i in 0...cells.length ) {
 			cells[i].setGlow(value);
 		}
 	}
-	
 	public function getOpenOrFirstCell():CqInventoryCell 
 	{
 		for ( i in 0...cells.length ) {
 			if ( cells[i].getCellObj() == null ) return cells[i];
 		}
 		return cells[0];
+	}
+	public function updateItemPositions():Void 
+	{
+		for ( i in 0...cells.length ) {
+			if ( cells[i].getCellObj() != null )
+			{
+				var invItem:CqInventoryItem = cells[i].getCellObj();
+				invItem.setPos(getCellItemPos(i));
+			}
+		}
 	}
 }

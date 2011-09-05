@@ -52,6 +52,9 @@ class CqInventoryItemManager
 		barrierMode = true;
 		simpleMovement = false;
 		instaEquip = true;
+		dlgInvGrid.update();
+		dlgEqGrid.update();
+		mainDialog.update();
 	}
 	/**
 	 * True - added to inventory or equipped
