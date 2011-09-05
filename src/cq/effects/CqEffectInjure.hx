@@ -22,6 +22,8 @@ class CqEffectInjure extends CachingEmitter {
 		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.InjureEffectParticle) ) {
 			var bmp:BitmapData = HxlGradient.CircleData(4, [0xdd1111, 0x3E0101], [1.0, 0.65], Math.PI/2);
 			GraphicCache.addBitmapData(bmp, CqGraphicKey.InjureEffectParticle);
+			bmp.dispose();
+			bmp = null;
 		}
 		setAlphaVelocity(-5, -2);
 		gravity = 0.0;

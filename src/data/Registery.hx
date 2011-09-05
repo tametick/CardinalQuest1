@@ -1,5 +1,6 @@
 package data;
 
+import cq.CqLevel;
 import cq.CqWorld;
 import cq.CqActor;
 

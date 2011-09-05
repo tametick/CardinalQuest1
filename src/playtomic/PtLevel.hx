@@ -40,4 +40,9 @@ class PtLevel {
 		PtPlayer.finishLevel();
 		Log.ForceSend();
 	}
+	
+	public function destroy() {
+		level = null;
+		startTime = null;
+	}
 }

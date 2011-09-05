@@ -5,7 +5,7 @@ import cq.states.MainMenuState;
 class Configuration {
 	public static var debug = false;
 	public static var air = false;
-	public static var standAlone = true;
+	public static var standAlone = false;
 	public static var useProductionPlaytomic:Bool = false;
 
 	public static var debugStartingLevel:Int = 0;

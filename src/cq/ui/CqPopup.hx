@@ -17,7 +17,12 @@ class CqPopup extends HxlText{
 	}
 	
 	public override function onRemove(state:HxlState) {
-		parent.remove(this);
+		if(parent!=null){
+			parent.remove(this);
+			parent = null;
+		}
+		
+		super.onRemove(state);
 	}
 	
 	

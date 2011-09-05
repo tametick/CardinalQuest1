@@ -138,9 +138,10 @@ class MainMenuState extends CqState {
 		btnNewGame.setHoverFormat(null, 35, textHighlight, "center");
 		menu.addItem(btnNewGame);
 		btnNewGame.setCallback(function() {
-			if (GameUI.instance != null)
+			if (GameUI.instance != null){
 				GameUI.instance.kill();
-				self.changeState(CreateCharState);
+			}
+			self.changeState(CreateCharState);
 			});
 		buttonY += 50;
 

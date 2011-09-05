@@ -67,8 +67,7 @@ class WinState extends CqState {
 	function nextScreen() {
 		cursor.visible = true;
 		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
-			var newState = MainMenuState.instance;
-			HxlGraphics.setState(newState);
+			HxlGraphics.setState(MainMenuState.instance);
 		}, true);
 	}
 	

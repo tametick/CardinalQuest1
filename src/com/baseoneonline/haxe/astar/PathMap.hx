@@ -20,7 +20,14 @@ class PathMap implements IAStarSearchable
 		initialize();
 	}
 	
-	
+	public function destroy() {
+		for (x in 0...width) {
+			for (y in 0...height) {
+				map[x][y] = null;
+			}	
+		}
+		map = null;
+	}
 	
 	public function getWidth():Int {
 		return width;

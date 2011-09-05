@@ -298,7 +298,7 @@ class GameUI extends HxlDialog {
 	}
 	override public function kill() {
 		if(chrageBmp!=null){
-			chrageBmp.bitmapData.dispose();
+			//chrageBmp.bitmapData.dispose();
 			chrageBmp.bitmapData = null;
 			chrageBmp = null;
 		}
@@ -560,10 +560,14 @@ class GameUI extends HxlDialog {
 		GraphicCache.addBitmapData(tmp, CqGraphicKey.CellGlow);
 		tmp.dispose();
 		tmp = null;
+		glow = null;
+		
 		
 		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.buttonSprite) ) {
 			var btn:ButtonSprite = new ButtonSprite();
 			GraphicCache.addBitmapData(btn.pixels, CqGraphicKey.buttonSprite);
+			btn.pixels.dispose();
+			btn = null;
 		}
 	}
 	
@@ -608,10 +612,10 @@ class GameUI extends HxlDialog {
 		}
 	}
 	override public function onAdd(state:HxlState) {
-		//trace("gui added");	
+		super.onAdd(state);
 	}
 	override public function onRemove(state:HxlState) {
-		//trace("gui rmv");	
+		super.onRemove(state);
 	}
 	public function itemPickup(Item:CqItem) {
 		if(invItemManager.itemPickup(Item))

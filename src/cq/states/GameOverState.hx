@@ -53,9 +53,16 @@ class GameOverState extends CqState {
 
 	public function nextScreen() {
 		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
-			var newState = MainMenuState.instance;
-			HxlGraphics.state = newState;
+			HxlGraphics.state = MainMenuState.instance;
 		}, true);
 	}
 	
+	override public function destroy() {
+		super.destroy();
+		
+		scroller.destroy();
+		scroller = null;
+		
+		// todo: destroy game/level/gameui?
+	}
 }

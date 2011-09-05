@@ -225,6 +225,12 @@ class HxlTilemap extends HxlObject {
 
 	override public function destroy() 	{
 		super.destroy();
+		
+		if (tmpBitmap == null){
+			// alreasdy destroyed
+			return;
+		}
+		
 		tmpBitmap.dispose();
 		tmpBitmap = null;
 		_pixels.dispose();
@@ -235,7 +241,8 @@ class HxlTilemap extends HxlObject {
 		}
 		tmpRect = null;
 		
-		_tiles = null;
+		// Level still needs _tiles when being removed
+		//_tiles = null;
 	}
 	
 	/**

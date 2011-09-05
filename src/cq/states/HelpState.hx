@@ -24,6 +24,9 @@ class HelpState extends CqState {
 		btn.setEventPriority(-1);
 		btn.setEventStopPropagate(true);
 		add(btn);
+		
+		btn = null;
+		overlay  = null;
 	}
 	
 	public override function update() {

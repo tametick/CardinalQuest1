@@ -69,12 +69,22 @@ class GameState extends CqState {
 		resumeActingTime = msMoveStamp = Timer.stamp();
 	}
 	public override function destroy() {
+		super.destroy();
+		
 		inst = null;
 		HxlGraphics.keys.onJustPressed = null;
+		
 		gameUI.kill();
 		remove(gameUI);
 		gameUI = null;
-		add(Registery.world.currentLevel);
+		
+		Registery.world.destroy();
+		Registery.world = null;
+
+		Registery.player.kill();
+		Registery.player = null;
+		
+		//remove(Registery.world.currentLevel);
 	}
 	
 	public override function render() {
@@ -162,6 +172,8 @@ class GameState extends CqState {
 				}
 			}
 		}
+		
+		target = null;
 	}
 	
 	private function checkJumpKeys():Void {
@@ -248,6 +260,9 @@ class GameState extends CqState {
 			level.tick(this);
 		}
 		gameUI.updateCharges();
+		
+		player = null;
+		level = null;
 	}
 
 	override function init() {
@@ -282,6 +297,9 @@ class GameState extends CqState {
 		add(scroller);
 		scroller.startScroll();
 		scroller.onComplete(realInit);
+		
+		classBG = null;
+		introText = null;
 	}
 	
 	function realInit() {
@@ -313,6 +331,9 @@ class GameState extends CqState {
 			var pop:CqPopup = new CqPopup(180, "", gameUI.popups);
 			gameUI.popups.add(pop);
 			player.setPopup(pop);
+			
+			player = null;
+			pop = null;
 		}
 		
 		add(world.currentLevel);
@@ -349,9 +370,8 @@ class GameState extends CqState {
 
 		PtPlayer.ClassSelected(chosenClass);
 		
-		var self = this;
 		world.addOnNewLevel(function() {
-			self.gameUI.initHealthBars();
+			GameUI.instance.initHealthBars();
 		});
 		update();
 		if (Configuration.debug) {
@@ -361,6 +381,10 @@ class GameState extends CqState {
 		}
 		else
 			gameUI.dlgPotionGrid.pressHelp(false);
+			
+			
+		world = null;
+		player = null;
 	}
 	
 	public function initRegistry(){
@@ -435,8 +459,6 @@ class GameState extends CqState {
 			isPlayerActing = false;
 			return;
 		}
-		var level = Registery.level;
-		var player = Registery.player;
 		if (Registery.player.isMoving)
 			return;
 		//check game keys on your turn
@@ -445,19 +467,30 @@ class GameState extends CqState {
 			passTurn();
 			return;
 		}
+		
+		var level = Registery.level;
+		var player = Registery.player;
 		var target:HxlPoint;
-		var dx;
-		var dy;
 		var tile:CqTile;
 		var ktg:HxlPoint = level.getTargetAccordingToKeyPress();
+		
+		var dx;
+		var dy;
 		if (ktg != null ) {
 			dx =  (player.x + Configuration.zoomedTileSize() / 2);
 			dy =  (player.y + Configuration.zoomedTileSize() / 2);
 			target = ktg;
 			lastMouse = false;//for targeting
-		}else {
+		} else {
 			if (!HxlGraphics.mouse.pressed()) {
 				isPlayerActing = false;
+				
+				level = null;
+				player = null;
+				target = null;
+				tile = null;
+				ktg = null;
+				
 				return;
 			}
 			dx = HxlGraphics.mouse.x - (player.x+Configuration.zoomedTileSize()/2);
@@ -469,9 +502,23 @@ class GameState extends CqState {
 		if (tile == null) {
 			if ( !HxlGraphics.keys.justPressed("ENTER") && !HxlGraphics.keys.justPressed("NONUMLOCK_5") && target.x == player.tilePos.x && target.y == player.tilePos.y) {
 				isPlayerActing = false;
+				
+				level = null;
+				player = null;
+				target = null;
+				tile = null;
+				ktg = null;
+				tile = null;
+				
 				return;
 			}
 			passTurn();
+			level = null;
+			player = null;
+			target = null;
+			tile = null;
+			ktg = null;
+			tile = null;
 			return;
 		}
 		//stairs popup
@@ -493,6 +540,7 @@ class GameState extends CqState {
 				 // pickup item
 				var item = cast(tile.loots[tile.loots.length - 1], CqItem);
 				player.pickup(this, item);
+				item = null;
 			} else if (HxlUtil.contains(SpriteTiles.instance.stairsDown.iterator(), tile.dataNum)) {
 				// descend
 				Registery.world.goToNextLevel(this);
@@ -538,13 +586,25 @@ class GameState extends CqState {
 				player.actInDirection(this,target);
 			} else if (HxlUtil.contains(SpriteTiles.instance.doors.iterator(), tile.dataNum)){
 				openDoor(tile);
-			}else
-			{
+			} else {
+				level = null;
+				player = null;
+				target = null;
+				tile = null;
+				ktg = null;
+				tile = null;
 				return;
 			}
 		}
 		
 		passTurn();
+		
+		level = null;
+		player = null;
+		target = null;
+		tile = null;
+		ktg = null;
+		tile = null;
 	}
 	
 	
@@ -564,16 +624,14 @@ class GameState extends CqState {
 		var col = Registery.level.getColor();
 		Registery.level.updateTileGraphic(tile.mapX, tile.mapY, SpriteTiles.instance.getSpriteIndex(col + "_door_open"));
 	}
-	private function startMovingBoss():Void
-	{
+	private function startMovingBoss():Void {
 		Actuate.timer(1.8).onComplete(gotoWinState);
 		//Registery.level.updateFieldOfView(HxlGraphics.state, boss);
 		HxlGraphics.follow(boss);		
 		//HxlGraphics.follow(boss);
 		startedMoving = true;
 	}
-	private function doEndingAnimation():Void
-	{
+	private function doEndingAnimation():Void {
 		portalSprite.angle -= 0.5;
 		if (!startedMoving)
 			return;
@@ -582,8 +640,7 @@ class GameState extends CqState {
 		boss.x = boss.x + BossTargetDir.x*0.4;
 		boss.y = boss.y + BossTargetDir.y*0.4;
 	}
-	private function RemoveGameUI():Void
-	{
+	private function RemoveGameUI():Void {
 		HxlGraphics.quake.start();
 		cursor.visible = false;
 		gameUI.popups.setChildrenVisibility(false);
@@ -595,8 +652,7 @@ class GameState extends CqState {
 	private var portalSprite:HxlSprite;
 	private var acts:Bool;
 	private var bossgroup:HxlGroup;
-	public function startBossAnim()
-	{
+	public function startBossAnim()	{
 		//state vars
 		endingAnim = true;
 		startedMoving = false;
