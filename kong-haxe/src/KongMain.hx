@@ -9,13 +9,14 @@ import flash.system.LoaderContext;
 import flash.utils.ByteArray;
 import flash.Lib;
 
+class KongData extends ByteArray {}
+class GameData extends ByteArray {}
+
 class KongMain extends Sprite
 {
-	var kongContent : Class<Dynamic>;
 	var kongData : ByteArray;
 	var kongLoader : Loader;
 	var kongMovie : MovieClip;
-	var gameContent : Class<Dynamic>;
 	var gameData : ByteArray;
 	var gameLoader : Loader;
 	var isGameLoaded : Bool;
@@ -25,7 +26,7 @@ class KongMain extends Sprite
 		super();
 		isGameLoaded = false;
 		isKongFinished = false;
-		kongData = Type.createInstance(kongContent, []);
+		kongData = new KongData();
 		kongLoader = new Loader();
 		kongLoader.loadBytes(kongData, new LoaderContext(false, new ApplicationDomain()));
 		kongLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, playKongSplash);
@@ -39,7 +40,7 @@ class KongMain extends Sprite
 		kongLoader.height = 480;
 		kongLoader.width = 640;
 		addEventListener(Event.ENTER_FRAME, checkFrame);
-		gameData = Type.createInstance(gameContent,[]);
+		gameData = new GameData();
 		gameLoader = new Loader();
 		gameLoader.loadBytes(gameData, new LoaderContext(false, new ApplicationDomain()));
 		gameLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, finishedLoadingGame);
