@@ -81,5 +81,7 @@
 		<bitmap id="cq.SpriteMainmenuBg" import="mainmenuBg.png"/>
 		<bitmap id="cq.BlankScreen" import="BlankOverlay.png"/>
 		
+		<bitmap id="cq.KongLogo" import="kong.png"/>
+		
 	</library>
 </movie>

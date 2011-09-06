@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<swf width="640" height="480">
+<swf width="640" height="480" frameCount="2">
 	<FileAttributes/>
 	<SetBackgroundColor color="0x000000" />
 	
@@ -7,9 +7,9 @@
 	<ShowFrame/>
 	
 	<DefineBinaryData id="1" file="./lib/Kongregateintro.swf" />
-	<SymbolClass id="1" class="preloader.KongData" />
+	<SymbolClass id="1" class="preloader.KongData" base="flash.utils.ByteArray"/>
 	
 	<DefineBinaryData id="2" file="../bin/cq.swf" />
-	<SymbolClass id="2" class="preloader.GameData" />
+	<SymbolClass id="2" class="preloader.GameData" base="flash.utils.ByteArray"/>
 	<ShowFrame/>
 </swf>

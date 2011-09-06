@@ -11,8 +11,8 @@ import flash.system.LoaderContext;
 import flash.utils.ByteArray;
 import flash.Lib;
 
-class KongData extends ByteArray {}
-class GameData extends ByteArray {}
+extern class KongData extends ByteArray {}
+extern class GameData extends ByteArray {}
 
 class KongMain extends Sprite
 {

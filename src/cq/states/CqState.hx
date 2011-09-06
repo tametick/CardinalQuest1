@@ -1,7 +1,9 @@
 package cq.states;
 
 import data.Configuration;
+import flash.events.Event;
 import flash.geom.Rectangle;
+import flash.net.URLRequest;
 import haxel.HxlState;
 import haxel.HxlGraphics;
 import cq.CqResources;
@@ -49,4 +51,11 @@ class CqState extends HxlState {
 			}
 		}
 	}
+	/*
+	function clickOnKong(e : Event) {
+		var request : URLRequest = new URLRequest("http://kongregate.com/");
+		Lib.getURL(request);
+		request = null;
+	}*/
+
 }

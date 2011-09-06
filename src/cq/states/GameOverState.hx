@@ -13,11 +13,14 @@ class GameOverState extends CqState {
 
 	var fadeTime:Float;
 	var scroller:CqTextScroller;
+	
+	var addedKong:Bool;
 	static var complete;
 
 	public override function create() {
 		super.create();
 
+		addedKong = false;
 		complete = false;
 		fadeTime = 0.5;
 		
@@ -35,6 +38,21 @@ class GameOverState extends CqState {
 		setDiagonalCursor();
 		if ( HxlGraphics.keys.justReleased("ESCAPE") )
 			nextScreen();
+			/*
+		if (complete && !addedKong) {
+			addedKong = true;
+			
+			// todo: remove later
+			var sponsored= new HxlText(10, 10, 135, "Sponsored by",true,FontAnonymousPro.instance.fontName,18);
+			add(sponsored);
+			var kongLogo = new KongLogoSprite.instance;
+			kongLogo.x = 25;
+			kongLogo.y = sponsored.y + sponsored.height+5;
+			add(kongLogo);
+			
+			sponsored.zIndex = 1000;
+			kongLogo.zIndex = 1000;
+		}*/
 	}
 	
 	override private function onKeyUp(event:KeyboardEvent) {

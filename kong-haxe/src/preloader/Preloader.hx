@@ -48,12 +48,15 @@ class Preloader extends MovieClip
 	}
 	function checkFrame(e : Event) : Void
 	{
-		progressBar.scaleX = (root.loaderInfo.bytesLoaded / root.loaderInfo.bytesTotal);
-		if(progressBar.scaleX  == 1.0) 
+		progressBar.scaleX = root.loaderInfo.bytesLoaded / root.loaderInfo.bytesTotal;
+		
+		var timeLine = cast(this.parent,MovieClip);
+		if(timeLine.currentFrame  == timeLine.totalFrames)
 		{
-			stop();
+			cast(this.parent, MovieClip).stop();
 			loadingFinished();
 		}
+		timeLine = null;
 	}
 	function loadingFinished() : Void
 	{

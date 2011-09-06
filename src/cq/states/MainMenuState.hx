@@ -7,6 +7,7 @@ import cq.GameUI;
 import cq.Main;
 import data.SoundEffectsManager;
 import data.Configuration;
+import flash.events.MouseEvent;
 import haxel.HxlButton;
 import haxel.HxlGraphics;
 import haxel.HxlMenu;
@@ -103,9 +104,24 @@ class MainMenuState extends CqState {
 			toggleSFX();
 		add(btnToggleSFX);
 		
+		
 		var copyright = new HxlText(0, 459, Configuration.app_width, "Copyright 2011 Ido Yehieli.",true,FontAnonymousPro.instance.fontName,18);
 		add(copyright);
 		
+		// todo: remove later
+		var sponsored= new HxlText(10, 10, 135, "Sponsored by",true,FontAnonymousPro.instance.fontName,18);
+		add(sponsored);
+		var kongLogo = KongLogoSprite.instance;
+		kongLogo.x = 25;
+		kongLogo.y = sponsored.y + sponsored.height+5;
+		add(kongLogo);
+		// only add event listener once!
+		/*if(!kongLogo.isAdded){
+			kongLogo.addEventListener(MouseEvent.CLICK, clickOnKong);
+			kongLogo.isAdded = true;
+		}*/
+		
+
 		menu = new HxlMenu(200, Configuration.app_width, 240, 200);
 		add(menu);
 		var self = this;
