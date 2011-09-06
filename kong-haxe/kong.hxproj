@@ -4,7 +4,7 @@
   <output>
     <movie outputType="Application" />
     <movie input="" />
-    <movie path="bin\kong.swf" />
+    <movie path="bin\preloader.swf" />
     <movie fps="30" />
     <movie width="640" />
     <movie height="480" />
@@ -20,9 +20,9 @@
   <!-- Build options -->
   <build>
     <option directives="" />
-    <option flashStrict="False" />
-    <option mainClass="Preloader" />
-    <option enabledebug="False" />
+    <option flashStrict="True" />
+    <option mainClass="preloader.Preloader" />
+    <option enabledebug="True" />
     <option additional="" />
   </build>
   <!-- haxelib libraries -->
@@ -31,8 +31,7 @@
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="src\KongMain.hx" />
-    <compile path="src\Preloader.hx" />
+    <compile path="src\preloader\Preloader.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

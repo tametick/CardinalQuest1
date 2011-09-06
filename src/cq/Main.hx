@@ -16,10 +16,9 @@ import flash.Lib;
 import playtomic.Playtomic;
 
 class Main extends HxlGame {
+	public static function main() {
 		Configuration.app_width = 640;//Lib.current.stage.stageWidth;
 		Configuration.app_height = 480;//Lib.current.stage.stageHeight;
-	
-	public static function main() {
 		Lib.current.addChild(new Main());
 	}
 

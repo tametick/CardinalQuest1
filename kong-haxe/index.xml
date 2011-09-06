@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<swf width="640" height="480">
+	<FileAttributes/>
+	<SetBackgroundColor color="0x000000" />
+	
+	<DefineABC file="./bin/preloader.swf" isBoot="true" />
+	<ShowFrame/>
+	
+	<DefineBinaryData id="1" file="./lib/Kongregateintro.swf" />
+	<SymbolClass id="1" class="preloader.KongData" />
+	
+	<DefineBinaryData id="2" file="../bin/cq.swf" />
+	<SymbolClass id="2" class="preloader.GameData" />
+	<ShowFrame/>
+</swf>
