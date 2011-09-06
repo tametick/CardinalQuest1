@@ -16,12 +16,15 @@ import haxel.HxlState;
 import haxel.HxlText;
 import haxel.HxlTimer;
 import haxel.HxlUtil;
+import kongregate.CKongregate;
 
 class HighScoreState extends CqState {
 	var fadeTime:Float;
 	var minimumTime:Float;
 	var entryStamp:Float;
 	var state:Int;
+	var kongregate:kongregate.CKongregate;
+	
 	public override function create() {
 		super.create();
 		fadeTime = 0.5;
@@ -31,6 +34,14 @@ class HighScoreState extends CqState {
 		state = 0;
 		minimumTime = 1;
 		entryStamp = Timer.stamp();
+		
+		//Not sure whether we need this to fade in/out along
+		var highscoresText:HxlText = new HxlText(0, Configuration.app_height/7, Configuration.app_width,  "Highscores", true, null,42,0x0000000,"center");
+		add( highscoresText );
+		
+		
+		//Lets see whether we can connect to Kongregate..
+		kongregate = new CKongregate();
 		
 		bg = null;
 	}
