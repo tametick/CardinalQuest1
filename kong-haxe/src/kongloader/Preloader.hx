@@ -1,4 +1,4 @@
-package preloader;
+package kongloader;
 
 import flash.display.DisplayObject;
 import flash.display.StageScaleMode;
