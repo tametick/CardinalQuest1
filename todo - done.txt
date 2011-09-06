@@ -1,0 +1,16 @@
+ToDo
+----
+Look into scores screen with api to score sites ( should do the same for apple scoring actually on iOS )
+
+Look into smoothing monsters out
+
+Done
+----
+Added compiling.txt with all the steps I performed to compile cq
+Found unshaded version of the scores screen in shared dropbox ?
+
+
+Lessons
+-------
+
+Wine FlashDevelop did not work, gave up on it for now
