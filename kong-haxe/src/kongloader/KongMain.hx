@@ -29,6 +29,7 @@ class KongMain extends Sprite
 	var gameLoader : Loader;
 	var isGameLoaded : Bool;
 	var isKongFinished : Bool;
+	var kongSprite : Sprite;
 	public function new()
 	{
 		super();
@@ -86,17 +87,25 @@ class KongMain extends Sprite
 		Lib.getURL(request);
 		request = null;
 	}
+	
+	function checkOnLogo(e : Event) : Void
+	{
+		if (mouseX > kongSprite.x && mouseX < kongSprite.x+kongSprite.width && mouseY > kongSprite.y && mouseY < kongSprite.y+kongSprite.height)
+			Mouse.show();
+		else
+			Mouse.hide();
+	}
+	
 	function playgame(e : Event) : Void
 	{
-		
 		removeEventListener(Event.ENTER_FRAME, checkFrame);
+		
 		addChild(gameLoader);
 
-		var kongSprite = new Sprite();
-		kongSprite.x = 10;
+		kongSprite = new Sprite();
 		kongSprite.buttonMode = true;
+		kongSprite.mouseChildren = false;
 		kongSprite.addEventListener(MouseEvent.CLICK, clickOnKong, false, 0, true);
-		
 		
 		var label = new TextField();
 		var format = new TextFormat();
@@ -108,7 +117,8 @@ class KongMain extends Sprite
 		label.selectable = false;
 		
 		label.autoSize = TextFieldAutoSize.LEFT;
-		label.text = "Sponsored by";
+		label.text = "more games:";
+		
 		label.textColor = 0xFFFFFF;
 		
 		kongSprite.addChild(label);
@@ -119,12 +129,13 @@ class KongMain extends Sprite
 		kongSprite.addChild(logo);
 		
 		addChild(kongSprite);
+		addEventListener(Event.ENTER_FRAME, checkOnLogo, false, 0, true);
 		
-		kongSprite = null;
+		kongSprite.x = 0;
+		kongSprite.y = 480 - kongSprite.height -1;
+
 		label = null;
 		format = null;
 		logo = null;
-		
-		Mouse.show();
 	}
 }

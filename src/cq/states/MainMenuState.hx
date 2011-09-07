@@ -105,7 +105,7 @@ class MainMenuState extends CqState {
 		add(btnToggleSFX);
 		
 		
-		var copyright = new HxlText(0, 459, Configuration.app_width, "Copyright 2011 Ido Yehieli.",true,FontAnonymousPro.instance.fontName,18);
+		var copyright = new HxlText(370, 459, Configuration.app_width-370, "Copyright 2011 Ido Yehieli.", true, FontAnonymousPro.instance.fontName, 18);
 		add(copyright);
 		
 		/*
