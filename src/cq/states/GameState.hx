@@ -370,9 +370,7 @@ class GameState extends CqState {
 
 		PtPlayer.ClassSelected(chosenClass);
 		
-		world.addOnNewLevel(function() {
-			GameUI.instance.initHealthBars();
-		});
+		world.addOnNewLevel(onNewLevelCallBack);
 		update();
 		if (Configuration.debug) {
 			player.give(CqSpellType.REVEAL_MAP);
@@ -386,7 +384,10 @@ class GameState extends CqState {
 		world = null;
 		player = null;
 	}
-	
+	function onNewLevelCallBack()
+	{
+		GameUI.instance.initHealthBars();
+	}
 	public function initRegistry(){
 		// populating the registry
 		Registery.world = new CqWorld();

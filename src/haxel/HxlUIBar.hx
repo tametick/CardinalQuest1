@@ -50,12 +50,13 @@ class HxlUIBar extends HxlDialog {
 		if ( !tweenEnabled ) {
 			bar.scale.x = newVal;
 		} else {
-			var _bar = bar;
 			//Actuate.stop(bar, {}, true);
-			Actuate.update(function(params:Dynamic) {
-					_bar.scale.x = params.X;
-				}, tweenSpeed, {X: bar.scale.x}, {X: newVal}).ease(Cubic.easeOut);
+			Actuate.update(percentChangeTweenCallback, tweenSpeed, {X: bar.scale.x}, {X: newVal}).ease(Cubic.easeOut);
 		}
+	}
+	function percentChangeTweenCallback(params:Dynamic)
+	{
+		bar.scale.x = params.X;
 	}
 
 	public function setFrameColor(Color:Int, ?CornerRadius:Float=0.0) {

@@ -27,7 +27,12 @@ class GameOverState extends CqState {
 		add(scroller);
 		scroller.startScroll();
 		scroller.onComplete(nextScreen);
-		HxlGraphics.fade.start(false, 0xff000000, fadeTime, function() { complete = true; } );
+		HxlGraphics.fade.start(false, 0xff000000, fadeTime, fadeCallBack );
+	}
+	
+	private function fadeCallBack():Void 
+	{
+		complete = true;
 	}
 
 	public override function update() {
@@ -52,11 +57,12 @@ class GameOverState extends CqState {
 	}
 
 	public function nextScreen() {
-		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
-			HxlGraphics.state = MainMenuState.instance;
-		}, true);
+		HxlGraphics.fade.start(true, 0xff000000, fadeTime, nextScreenFadeCallback, true);
 	}
-	
+	function nextScreenFadeCallback()
+	{
+		HxlGraphics.state = MainMenuState.instance;
+	}
 	override public function destroy() {
 		super.destroy();
 		
