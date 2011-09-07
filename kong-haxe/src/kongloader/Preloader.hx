@@ -27,7 +27,7 @@ class Preloader extends MovieClip
 		Lib.current.stage.scaleMode = StageScaleMode.SHOW_ALL;
 		Lib.current.stage.align = StageAlign.TOP;
 
-		addEventListener(Event.ENTER_FRAME, checkFrame);
+		addEventListener(Event.ENTER_FRAME, checkFrame, false, 0, true);
 		progressBarBG = new Shape();
 		var g : Graphics = progressBarBG.graphics;
 		g.lineStyle(2.0, 0xFFFFFF);

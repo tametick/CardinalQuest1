@@ -86,6 +86,7 @@ class SpriteThiefEntry extends Bitmap { public function new() { super(); } }
 class SpriteHelpOverlay extends Bitmap { public function new() { super(); } }
 class SpriteInvHelpOverlay extends Bitmap { public function new() { super(); } }
 
+/*
 class KongLogo extends Bitmap { public function new() { super(); } }
 
 class KongLogoSprite extends HxlSprite {
@@ -98,7 +99,7 @@ class KongLogoSprite extends HxlSprite {
 		//isAdded = false;
 	}
 }
-
+*/
 class LogoSprite extends HxlSprite {
 	public function new(?X:Float = 0, ?Y:Float = 0) {
 		super(X,Y);

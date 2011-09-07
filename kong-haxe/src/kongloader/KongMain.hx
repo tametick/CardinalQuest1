@@ -1,5 +1,6 @@
 package kongloader;
 
+import flash.display.Bitmap;
 import flash.display.Loader;
 import flash.display.MovieClip;
 import flash.display.Sprite;
@@ -8,9 +9,14 @@ import flash.events.MouseEvent;
 import flash.net.URLRequest;
 import flash.system.ApplicationDomain;
 import flash.system.LoaderContext;
+import flash.text.TextField;
+import flash.text.TextFormat;
+import flash.text.TextFieldAutoSize;
+import flash.ui.Mouse;
 import flash.utils.ByteArray;
 import flash.Lib;
 
+extern class KongLogo extends Bitmap {}
 extern class KongData extends ByteArray {}
 extern class GameData extends ByteArray {}
 
@@ -31,24 +37,24 @@ class KongMain extends Sprite
 		kongData = new KongData();
 		kongLoader = new Loader();
 		kongLoader.loadBytes(kongData, new LoaderContext(false, new ApplicationDomain()));
-		kongLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, playKongSplash);
+		kongLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, playKongSplash, false, 0, true);
 	}
 	function playKongSplash(e : Event) : Void
 	{
 		kongLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, playKongSplash);
 		kongMovie = cast(cast(kongLoader.content,MovieClip).getChildAt(0), MovieClip);
-		kongMovie.addEventListener(MouseEvent.CLICK, clickOnKong);
+		kongMovie.addEventListener(MouseEvent.CLICK, clickOnKong, false, 0, true);
 		addChild(kongLoader);
 		kongLoader.x = -1*kongMovie.getBounds(kongLoader).x;
 		kongLoader.y = -1*kongMovie.getBounds(kongLoader).y;
 		kongLoader.width = 640;
 		kongLoader.height = 480;
 
-		addEventListener(Event.ENTER_FRAME, checkFrame);
+		addEventListener(Event.ENTER_FRAME, checkFrame, false, 0, true);
 		gameData = new GameData();
 		gameLoader = new Loader();
 		gameLoader.loadBytes(gameData, new LoaderContext(false, new ApplicationDomain()));
-		gameLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, finishedLoadingGame);
+		gameLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, finishedLoadingGame, false, 0, true);
 	}
 	function finishedLoadingGame(e : Event) : Void
 	{
@@ -82,7 +88,43 @@ class KongMain extends Sprite
 	}
 	function playgame(e : Event) : Void
 	{
+		
 		removeEventListener(Event.ENTER_FRAME, checkFrame);
 		addChild(gameLoader);
+
+		var kongSprite = new Sprite();
+		kongSprite.x = 10;
+		kongSprite.buttonMode = true;
+		kongSprite.addEventListener(MouseEvent.CLICK, clickOnKong, false, 0, true);
+		
+		
+		var label = new TextField();
+		var format = new TextFormat();
+		
+		format.font = "Georgia";
+		format.color = 0xFFFFFF;
+		format.size = 15;
+		label.defaultTextFormat = format;
+		label.selectable = false;
+		
+		label.autoSize = TextFieldAutoSize.LEFT;
+		label.text = "Sponsored by";
+		label.textColor = 0xFFFFFF;
+		
+		kongSprite.addChild(label);
+		
+		var logo = new KongLogo();
+		logo.x = label.x+2;
+		logo.y = label.y + label.height + 1;
+		kongSprite.addChild(logo);
+		
+		addChild(kongSprite);
+		
+		kongSprite = null;
+		label = null;
+		format = null;
+		logo = null;
+		
+		Mouse.show();
 	}
 }

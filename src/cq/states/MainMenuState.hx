@@ -108,7 +108,7 @@ class MainMenuState extends CqState {
 		var copyright = new HxlText(0, 459, Configuration.app_width, "Copyright 2011 Ido Yehieli.",true,FontAnonymousPro.instance.fontName,18);
 		add(copyright);
 		
-		// todo: remove later
+		/*
 		var sponsored= new HxlText(10, 10, 135, "Sponsored by",true,FontAnonymousPro.instance.fontName,18);
 		add(sponsored);
 		var kongLogo = KongLogoSprite.instance;
