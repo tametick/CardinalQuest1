@@ -21,7 +21,7 @@
   <build>
     <option directives="" />
     <option flashStrict="True" />
-    <option mainClass="com.Preloader" />
+    <option mainClass="kongloader.Preloader" />
     <option enabledebug="True" />
     <option additional="" />
   </build>
@@ -32,6 +32,7 @@
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
     <compile path="src\preloader\Preloader.hx" />
+    <compile path="src\kongloader\Preloader.hx" />
   </compileTargets>
   <!-- Assets to embed into the output SWF -->
   <library>

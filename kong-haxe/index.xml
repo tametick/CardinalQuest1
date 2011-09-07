@@ -1,15 +1,15 @@
 <?xml version="1.0" ?>
 <swf width="640" height="480" frameCount="2">
 	<FileAttributes/>
-	<SetBackgroundColor color="0xFFFFFF" />
+	<SetBackgroundColor color="0x000000" />
 	
 	<DefineBinaryData id="1" file="./lib/Kongregateintro.swf" />
-	<SymbolClass id="1" class="com.KongData" base="flash.utils.ByteArray"/>
+	<SymbolClass id="1" class="kongloader.KongData" base="flash.utils.ByteArray"/>
 	
 	<DefineABC file="./bin/preloader.swf" isBoot="true" />
 	<ShowFrame/>
 
 	<DefineBinaryData id="2" file="../bin/cq.swf" />
-	<SymbolClass id="2" class="com.GameData" base="flash.utils.ByteArray"/>
+	<SymbolClass id="2" class="kongloader.GameData" base="flash.utils.ByteArray"/>
 	<ShowFrame/>
 </swf>
