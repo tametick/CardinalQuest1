@@ -20,6 +20,7 @@ Quick List for compiling Cardinal Quest
 
 	http://swfmill.org/
 		
+- run generate_resources.bat to compile the assets into one swf file.
 - Fire up FlashDevelop 
 - Open cq.hxproj
 - Build Project F8
