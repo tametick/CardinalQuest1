@@ -21,7 +21,7 @@
   <build>
     <option directives="" />
     <option flashStrict="True" />
-    <option mainClass="kongloader.Preloader" />
+    <option mainClass="com.Preloader" />
     <option enabledebug="True" />
     <option additional="" />
   </build>

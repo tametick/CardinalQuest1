@@ -1,1 +1,1 @@
--cmd hxswfml xml2swf index.xml bin/cq.swf
+-main com.Preloader-cp src-swf9 ./bin/preloader.swf--next-cmd hxswfml xml2swf index.xml bin/cq.swf
