@@ -289,10 +289,14 @@ class Level extends HxlTilemap {
 					cast(getTile(xx, yy), Tile).visibility = Visibility.IN_SIGHT;
 				}
 			}
+			adjacent = null;
 		} else {
 			var map:Level = this;
-			
-			HxlUtil.markFieldOfView(actor.tilePos, actor.visionRadius, this, true, function(p:HxlPoint) { firstSeen(state, map, p); } );
+			HxlUtil.markFieldOfView(actor.tilePos, actor.visionRadius, this, true, 
+				function(p:HxlPoint) { 
+					firstSeen(state, map, p); 
+				} );
+			map = null;
 		}
 		for ( x in left...right+1 ) {
 			for ( y in top...bottom+1 ) {
@@ -319,6 +323,7 @@ class Level extends HxlTilemap {
 							var hpbar = actor.healthBar;
 							if (hpbar != null && actor.hp != actor.maxHp)
 								hpbar.visible = true;
+							hpbar = null;
 						}
 						Ttile.colorTo(normColor, actor.moveSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
@@ -339,6 +344,8 @@ class Level extends HxlTilemap {
 								hpbar.visible = false;
 							if (pop != null)
 								pop.visible = false;
+							pop = null;
+							hpbar = null;
 						}
 						
 						Ttile.colorTo(seenTween, actor.moveSpeed);
@@ -355,10 +362,18 @@ class Level extends HxlTilemap {
 								hpbar.visible = false;
 							if (pop != null)
 								pop.visible = false;
+							pop = null;
+							hpbar = null;
 						}
 				}
+				Ttile = null;
 			}
 		}
+		
+		
+		actor = null;
+		tile = null;
+		
 	}
 	public function updateFieldOfViewByPoint(state:HxlState, tilePos:HxlPoint,visionRadius:Int,tweenSpeed:Int, ?seenTween:Int = 64, ?inSightTween:Int=255):Void 
 	{
