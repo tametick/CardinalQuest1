@@ -1,5 +1,7 @@
 package kongregate;
 
+import data.Configuration;
+
 /**
  * http://www.cathelius.co.uk/forum_thread%26topic=257
  * @author TjD__
@@ -37,22 +39,20 @@ class CKongregate
         {
 			//Get it
             kongregate = e.target.content;
-			//Connect 
+			//Connect it
             kongregate.services.connect();
-			//For debugging purposes
-			var userName:String = kongregate.services.getUsername();
-			//Check for guest status and deal with it
-			if(kongregate.services.isGuest()){
-				kongregate.services.showRegistrationBox();
-			}
         }
         catch(msg: Dynamic)
         {
             kongregate = null;
-			trace( "Connection to Kongregate failed:" );
-			trace( Std.string(msg) );
+			if ( Configuration.debug ) {
+				trace( "Connection to Kongregate failed: " ); trace( Std.string(msg) );			
+			}
 			return;
         }
+		if ( Configuration.debug ) {
+			trace( "Connection to Kongregate succeeded." );
+		}		
     }
 
     public function SubmitScore(score: Float, mode: String)
@@ -62,14 +62,17 @@ class CKongregate
 			if(kongregate != null)
 			{
 				kongregate.scores.submit(score, mode);
+				if ( Configuration.debug ) {
+					trace("Submitted score " + score + " in '" + mode + "' mode.");
+				}				
 			}
 		}
         catch(msg: Dynamic)
         {
             kongregate = null;
-			trace( "Could not submit score to Kongregrate!" );
-			trace( Std.string(msg) );
-			return;
+			if ( Configuration.debug ) {
+				trace( "Could not submit score to Kongregrate!" ); trace( Std.string(msg) );
+			}	
         }		
     }
 
@@ -80,15 +83,18 @@ class CKongregate
 			if(kongregate != null)
 			{
 				kongregate.stats.submit(name, stat);
+				if ( Configuration.debug ) {
+					trace("Submitted stat '" + name + "' : " + stat);
+				}
+				
 			}
 		}
         catch(msg: Dynamic)
         {
             kongregate = null;
-			trace( "Could not submit stat to Kongregrate!" );
-			trace( Std.string(msg) );
-			return;
+			if ( Configuration.debug ) {
+				trace( "Could not submit stat to Kongregrate!" ); trace( Std.string(msg) );
+			}			
         }			
     }
-
 }

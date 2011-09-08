@@ -76,6 +76,7 @@ class DeathScreen extends Bitmap { public function new() { super(); } }
 class VortexScreen extends Bitmap { public function new() { super(); } }
 class VortexLightsScreen extends Bitmap { public function new() { super(); } }
 class VortexFigure extends Bitmap { public function new() { super(); } }
+class White extends Bitmap { public function new() { super(); } }
 
 class SpriteCredits extends Bitmap { public function new() { super(); } }
 class SpriteHighScoresBg extends Bitmap { public function new() { super(); } }

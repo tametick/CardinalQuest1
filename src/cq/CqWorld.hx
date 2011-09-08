@@ -59,6 +59,9 @@ class CqWorld extends World {
 		//currentLevel = levels[level];
 		currentLevel = new CqLevel(level);
 		doOnNewLevel();
+		//This is actually a good spot, giving the API to come back
+		//We dont care that dungeon level 1 is not submitted, but level 2 will be
+		Registery.getKong().SubmitStat( Registery.KONG_MAXLEVEL , level );
 	}
 	
 	public override function goToNextLevel(state:HxlState, ?jumpToLevel:Int = -1) {
