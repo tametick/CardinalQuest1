@@ -28,6 +28,10 @@ class Main extends HxlGame {
 		Configuration.tileSize = 16;
 		Configuration.zoom = 2.0;
 		HxlState.bgColor = 0xFF000000;
+		
+		//Initialize Kongregate score API
+		Registery.getKong()
+		
 		Playtomic.create();
 		
 		if (Configuration.debug)
