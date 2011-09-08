@@ -297,8 +297,13 @@ class CqLevel extends Level {
 		return mob;
 	}
 	
+	static var creatures:Array<CqActor>;
 	public override function tick(state:HxlState) {
-		var creatures:Array<CqActor> = new Array<CqActor>();
+		if(creatures ==null)
+			creatures = new Array<CqActor>();
+		else
+			creatures.splice(0, creatures.length);
+			
 		creatures.push(Registery.player);
 		for (mob in mobs)
 			creatures.push(cast(mob, CqActor));
@@ -318,7 +323,6 @@ class CqLevel extends Level {
 						if(t.buffName!= null) {
 							// remove buff effect
 							var newVal = buffs.get(t.buffName) - t.buffValue;
-							var text:String = Std.string(t.buffValue);
 							GameUI.showEffectText(creature, (-t.buffValue) + " " + t.buffName , 0xff0000);
 							buffs.set(t.buffName, newVal);
 						} 
@@ -351,9 +355,12 @@ class CqLevel extends Level {
 									HxlGraphics.state.add(eff);
 									eff.start(true, 1.0, 10);
 									removeMobFromLevel(HxlGraphics.state, mob);
+									mob = null;
+									eff = null;
 								default:
 									//
 							}
+							currentEffect = null;
 						}
 						
 						expired.push(t);
@@ -365,6 +372,8 @@ class CqLevel extends Level {
 					timers.remove(t);
 					HxlLog.append("removed expired timer: " + t.buffName);
 				}
+				
+				expired = null;
 			}
 			
 			var speed = creature.speed;
@@ -392,6 +401,11 @@ class CqLevel extends Level {
 					creature.actionPoints = 0;
 				}
 			}
+
+			buffs = null;
+			specialEffects = null;
+			visibleEffects = null;
+			timers = null;
 		}
 	}
 
