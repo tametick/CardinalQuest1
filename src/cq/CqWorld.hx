@@ -29,12 +29,14 @@ import data.Resources;
 import data.Configuration;
 import data.MusicManager;
 
+import flash.SharedObject;
 
 class CqWorld extends World {
 
 	static public var actorAdded:Dynamic = null;
 
 	var onNewLevel:List<Dynamic>;
+	var so:SharedObject;
 
 	public function new() {
 		super();
@@ -59,10 +61,42 @@ class CqWorld extends World {
 		//currentLevel = levels[level];
 		currentLevel = new CqLevel(level);
 		doOnNewLevel();
-		//This is actually a good spot, giving the API to come back
-		//We dont care that dungeon level 1 is not submitted, but level 2 will be
+		//Store it..
+		storeLevelLocally( )
+		//Let Kong know
 		Registery.getKong().SubmitStat( Registery.KONG_MAXLEVEL , level );
 	}
+	
+	/*
+		Constructed from the following sources:
+		http://haxe.org/api/flash/sharedobject
+		http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/net/SharedObject.html
+		This creates a singleton, so memory leaks should not be an easy
+		Error handling added
+	*/
+	function storeLevelLocally( )
+	{
+		/* For now only flash is supported */
+		if ( Configuration.flash ) 
+		{
+			try
+			{
+				if( so == null )
+				  so = SharedObject.getLocal("cq");
+				  
+				so.data.level = currentLevel;
+				so.data.depth = currentLevelIndex;
+				so.flush();
+			}
+			catch( msg:Dynamic )
+			{
+				if ( Configuration.debug )
+					trace( "Could not store level: " + Std.string(msg)); 
+			}
+		}	
+	}
+	
+	
 	
 	public override function goToNextLevel(state:HxlState, ?jumpToLevel:Int = -1) {
 		state.remove(currentLevel);
