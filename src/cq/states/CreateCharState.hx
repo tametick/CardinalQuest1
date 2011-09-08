@@ -4,6 +4,7 @@ import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;
 import cq.CqGraphicKey;
 import cq.ui.CqTextScroller;
+import flash.events.Event;
 import haxel.GraphicCache;
 import haxel.HxlSpriteSheet;
 
@@ -188,7 +189,14 @@ class CreateCharState extends CqState {
 		
 		curClass = FIGHTER;
 		
-		
+/*		// todo: remove later
+		var sponsored= new HxlText(10, 10, 135, "Sponsored by",true,FontAnonymousPro.instance.fontName,18);
+		add(sponsored);
+		var kongLogo = KongLogoSprite.instance;
+		kongLogo.x = 25;
+		kongLogo.y = sponsored.y + sponsored.height+5;
+		add(kongLogo);
+*/		
 		sprWizard = null;
 		sprThief = null;
 		sprFighter = null;

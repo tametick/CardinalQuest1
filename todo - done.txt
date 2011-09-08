@@ -1,0 +1,18 @@
+ToDo
+----
+Look into connecting to the Apple Scoring API..
+Look into smoothing monsters out over levels
+
+Done
+----
+Added compiling.txt with all the steps I performed to compile cq
+Found unshaded version of the scores screen in shared dropbox ?
+Added WhiteState class to the game
+Allowed WhiteState to be called via F5
+Tested as conclusively as I can that the API will work
+
+
+Lessons
+-------
+Wine FlashDevelop did not work, gave up on it for now
+Frickin' trace() writes in black, also, the dungeon is black ( hilarity ensues )

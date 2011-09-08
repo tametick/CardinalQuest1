@@ -311,8 +311,9 @@ class HxlUtil {
 		apply = null;
 	}
 	
+	static var line:Array<HxlPoint> = new Array(); 
 	public static function getLine(src:HxlPoint, dest:HxlPoint, ?isBlocking:HxlPoint->Bool=null):Array<HxlPoint> {
-		var line:Array<HxlPoint> = new Array();
+		line.splice(0, line.length);
 		var steepness = (dest.x - src.x) / (dest.y - src.y);
 		var x = src.x;
 		var y = src.y;

@@ -18,31 +18,25 @@ import haxel.HxlTimer;
 import haxel.HxlUtil;
 import kongregate.CKongregate;
 
-class HighScoreState extends CqState {
+class WhiteState extends CqState {
 	var fadeTime:Float;
 	var minimumTime:Float;
 	var entryStamp:Float;
 	var state:Int;
-	var kongregate:kongregate.CKongregate;
+	
+	public static var instance(getInstance, null):WhiteState;
+	
+	private static var _instance:WhiteState;
 	
 	public override function create() {
 		super.create();
 		fadeTime = 0.5;
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
-		var bg = new HxlSprite(0, 0, SpriteHighScoresBg);
+		var bg = new HxlSprite(0, 0, White);
 		add(bg);
 		state = 0;
 		minimumTime = 1;
 		entryStamp = Timer.stamp();
-		
-		//Not sure whether we need this to fade in/out along
-		var highscoresText:HxlText = new HxlText(0, Configuration.app_height/7, Configuration.app_width,  "Highscores", true, null,42,0x0000000,"center");
-		add( highscoresText );
-		
-		
-		//Lets see whether we can connect to Kongregate..
-		kongregate = new CKongregate();
-		
 		bg = null;
 	}
 	public override function update() {
@@ -65,10 +59,16 @@ class HighScoreState extends CqState {
 	}
 
 	function nextScreen() {
-		HxlGraphics.fade.start(true, 0xff000000, fadeTime, nextScreenCallBack, true);
+		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
+			HxlGraphics.popState();
+		}, true);
 	}
-	function nextScreenCallBack()
+	
+	private static function getInstance():WhiteState
 	{
-		HxlGraphics.popState();
-	}
+		if (_instance == null)
+		 _instance = new WhiteState();
+		return _instance;
+	}	
+	
 }

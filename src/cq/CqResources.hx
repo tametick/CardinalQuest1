@@ -1,6 +1,10 @@
 package cq;
 
 import flash.display.Bitmap;
+import flash.events.Event;
+import flash.events.MouseEvent;
+import flash.Lib;
+import flash.net.URLRequest;
 import flash.text.Font;
 import flash.media.Sound;
 import haxel.HxlSprite;
@@ -72,6 +76,7 @@ class DeathScreen extends Bitmap { public function new() { super(); } }
 class VortexScreen extends Bitmap { public function new() { super(); } }
 class VortexLightsScreen extends Bitmap { public function new() { super(); } }
 class VortexFigure extends Bitmap { public function new() { super(); } }
+class White extends Bitmap { public function new() { super(); } }
 
 class SpriteCredits extends Bitmap { public function new() { super(); } }
 class SpriteHighScoresBg extends Bitmap { public function new() { super(); } }
@@ -82,6 +87,20 @@ class SpriteThiefEntry extends Bitmap { public function new() { super(); } }
 class SpriteHelpOverlay extends Bitmap { public function new() { super(); } }
 class SpriteInvHelpOverlay extends Bitmap { public function new() { super(); } }
 
+/*
+class KongLogo extends Bitmap { public function new() { super(); } }
+
+class KongLogoSprite extends HxlSprite {
+	//public var isAdded:Bool;
+	
+	public static var instance:KongLogoSprite = new KongLogoSprite();
+	public function new(?X:Float = 0, ?Y:Float = 0) {
+		super(X,Y);
+		loadGraphic(KongLogo);
+		//isAdded = false;
+	}
+}
+*/
 class LogoSprite extends HxlSprite {
 	public function new(?X:Float = 0, ?Y:Float = 0) {
 		super(X,Y);

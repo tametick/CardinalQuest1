@@ -1,0 +1,27 @@
+Quick List for compiling Cardinal Quest
+
+- Get FlashDevelop
+	Requirements : 
+	- .NET 2.0			Google..
+	- Java 1.6 JRE		http://www.oracle.com/technetwork/java/javase/downloads/index.html
+	- Flash player		http://www.adobe.com/support/flashplayer/downloads.html
+	- Haxe				Make sure to get the packaged binary, as of this writing 2.0.7
+	MAKE SURE TO ENABLE 'enable multiple instance mode' under the advcanced options, this is unchecked as of this writing.
+
+- Clone cardinal quest in a convenient folder
+
+	hg clone https://TjD__@bitbucket.org/ido.yehieli/cardinal-quest-haxe
+	
+- Make sure you have the air2 haxelib :
+	
+	haxelib install air2
+   
+- Make sure you have swfmill either in the rsrc/cq folder or on the path
+
+	http://swfmill.org/
+		
+- run generate_resources.bat to compile the assets into one swf file.
+- Fire up FlashDevelop 
+- Open cq.hxproj
+- Build Project F8
+- Run Project F5

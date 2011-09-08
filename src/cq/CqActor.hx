@@ -242,6 +242,9 @@ class CqActor extends CqObject, implements Actor {
 			if (Std.is(other, CqPlayer)) {
 				var player = cast(other, CqPlayer);
 				HxlLog.append("kills you");
+				//It's ok to put it here, not perfect, but easier to test
+				//We will ping simply the kong server twice as often, which should be ok
+				Registery.getKong().SubmitScore( player.xp , "Normal" );
 				if (player.lives >= 1) {
 					SoundEffectsManager.play(Death);
 					player.lives--;
@@ -685,6 +688,9 @@ class CqActor extends CqObject, implements Actor {
 				if (other == null) {
 					if (healthBar != null)
 						healthBar.visible = true;
+					//As per Ido's suggestion :P
+					if ( hp == 1 )
+						Registery.getKong().SubmitStat( Registery.KONG_FULLHEALAT1 , 1 );
 					hp = maxHp;
 					
 					if(healthBar!=null)
@@ -798,6 +804,8 @@ class CqPlayer extends CqActor, implements Player {
 				spirit = 1;
 				vitality = 4;
 				damage = new Range(1, 1);
+				//Let Kongregate know, for now we only deal with "Normal" mode
+				Registery.getKong().SubmitStat( Registery.KONG_STARTFIGHTER , 1 );
 			case WIZARD:
 				attack = 2;
 				defense = 2;
@@ -805,6 +813,8 @@ class CqPlayer extends CqActor, implements Player {
 				spirit = 5;
 				vitality = 3;
 				damage = new Range(1, 1);
+				//Let Kongregate know, for now we only deal with "Normal" mode
+				Registery.getKong().SubmitStat( Registery.KONG_STARTWIZARD , 1 );				
 			case THIEF:
 				attack = 3;
 				defense = 3;
@@ -812,6 +822,8 @@ class CqPlayer extends CqActor, implements Player {
 				spirit = 3;
 				vitality = 2;
 				damage = new Range(1, 1);
+				//Let Kongregate know, for now we only deal with "Normal" mode
+				Registery.getKong().SubmitStat( Registery.KONG_STARTTHIEF , 1 );					
 		}
 		if (Configuration.debug) {
 /*			vitality = 500;
@@ -918,7 +930,9 @@ class CqPlayer extends CqActor, implements Player {
 	public function giveMoney(amount:Int) {
 		var plural:Bool = amount > 1;
 		GameUI.showEffectText(this, "+" + amount + (plural?" coins":" coin"), 0xC2881D);
-		infoViewMoney.setText(""+(Std.parseInt(infoViewMoney.text) + amount));
+		infoViewMoney.setText("" + (Std.parseInt(infoViewMoney.text) + amount));
+		//Let Kongregate know, for now we only deal with "Normal" mode
+		Registery.getKong().SubmitStat( Registery.KONG_MAXGOLD , Std.parseInt(infoViewMoney.text) );
 	}
 	
 	//pickup item from map
