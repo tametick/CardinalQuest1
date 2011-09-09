@@ -7,6 +7,7 @@ import cq.GameUI;
 import cq.Main;
 import data.SoundEffectsManager;
 import data.Configuration;
+import data.SaveLoad;
 import flash.events.MouseEvent;
 import haxel.HxlButton;
 import haxel.HxlGraphics;
@@ -154,6 +155,7 @@ class MainMenuState extends CqState {
 		btnNewGame.setHoverFormat(null, 35, textHighlight, "center");
 		menu.addItem(btnNewGame);
 		btnNewGame.setCallback(function() {
+			SaveLoad.deleteSaveGame();
 			if (GameUI.instance != null){
 				GameUI.instance.kill();
 			}
@@ -177,6 +179,23 @@ class MainMenuState extends CqState {
 			menu.addItem(btnHiscores);
 			btnHiscores.setCallback(function() { HxlGraphics.fade.start(true, 0xff000000, sFadeTime, function() { HxlGraphics.pushState(new HighScoreState()); } ); } );
 			buttonY += 50;
+			
+			//For now we only check for flash
+			//At a later point we should have a generic layer that abstracts the tech away
+			//Will do this for iOS..
+			if( SaveLoad.hasSaveGame() )
+			{
+				var btnLoadGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Load saved game", true, null);
+				btnLoadGame.setNormalFormat(null, 35, textColor, "center");
+				btnLoadGame.setHoverFormat(null, 35, textHighlight, "center");
+				menu.addItem(btnLoadGame);
+				btnLoadGame.setCallback(function() {
+					if (GameUI.instance != null)
+						GameUI.instance.kill();
+					self.changeState(GameState);
+				});
+				buttonY += 50;			
+			}
 		}
 		if (Configuration.standAlone) {
 			var btnQuit:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Quit", true, null);

@@ -10,6 +10,7 @@ import haxel.HxlGraphics;
 import haxel.HxlState;
 import haxel.HxlText;
 import data.Configuration;
+import data.Registery;
 
 import flash.Lib;
 
@@ -30,7 +31,7 @@ class Main extends HxlGame {
 		HxlState.bgColor = 0xFF000000;
 		
 		//Initialize Kongregate score API
-		Registery.getKong()
+		Registery.getKong();
 		
 		Playtomic.create();
 		

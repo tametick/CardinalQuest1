@@ -4,6 +4,7 @@ import com.eclecticdesignstudio.motion.Actuate;
 
 import data.Configuration;
 import data.Registery;
+import data.SaveLoad;
 
 import cq.ui.CqPopup;
 import cq.ui.CqPotionButton;
@@ -55,7 +56,8 @@ class GameState extends CqState {
 	public var started:Bool;
 	var lastMouse:Bool;
 	var endingAnim:Bool;
-	public override function create() {
+	public override function create()
+	{
 		inst = this;
 		super.create();
 		lastMouse = started = endingAnim = false;
@@ -266,6 +268,7 @@ class GameState extends CqState {
 	}
 
 	override function init() {
+		
 		classEntry();
 		if(Configuration.debug){
 			//Configuration.chestsPerLevel = 100;
@@ -280,6 +283,7 @@ class GameState extends CqState {
 		}
 		if(Configuration.debug)
 			chosenClass = Configuration.debugStartingClass;	
+			
 		var classBG:Class<Bitmap> = null;
 		switch(chosenClass){
 			case CqClass.FIGHTER:
@@ -389,8 +393,17 @@ class GameState extends CqState {
 	
 	public function initRegistry(){
 		// populating the registry
-		Registery.world = new CqWorld();
-		Registery.player = new CqPlayer(chosenClass);
+		if ( SaveLoad.hasSaveGame() )
+		{
+			//This does not work, darnation..
+			//Registery.world  = SaveLoad.loadWorld();
+			//Registery.player = SaveLoad.loadPlayer();
+		}
+		else
+		{
+			Registery.world = new CqWorld();
+			Registery.player = new CqPlayer(chosenClass);
+		}
 	}
 	
 	override function onKeyUp(event:KeyboardEvent) {	

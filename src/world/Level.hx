@@ -25,6 +25,8 @@ class Level extends HxlTilemap {
 	public var mobs:Array<Mob>;
 	public var loots:Array<Loot>;
 	public var startingLocation:HxlPoint;
+	//Require this for clean save/load
+	public var depth:Int; 
 	var _pathMap:PathMap;
 	public var index(default, null):Int;
 	

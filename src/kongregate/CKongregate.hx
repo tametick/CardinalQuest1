@@ -28,7 +28,19 @@ class CKongregate
         
         var loader = new flash.display.Loader();
         loader.contentLoaderInfo.addEventListener(flash.events.Event.COMPLETE, OnLoadComplete);
-        loader.load(request);
+		
+		//This is known to possibly fail to security concerns, specially when started from command line
+		try
+		{
+			loader.load(request);
+		}
+		catch( msg: Dynamic )
+		{
+			//Let people know in debug mode
+			if ( Configuration.debug ) {
+				trace( "Could not download Kongregrate API!!" ); trace( Std.string(msg) );
+			}				
+		}
 
         flash.Lib.current.addChild(loader);
     }

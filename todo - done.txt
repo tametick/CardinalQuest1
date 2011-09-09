@@ -16,3 +16,44 @@ Lessons
 -------
 Wine FlashDevelop did not work, gave up on it for now
 Frickin' trace() writes in black, also, the dungeon is black ( hilarity ensues )
+
+world classes : 
+
+GameObject ( stats : hp, x , y )
+|
+|-> Actor ( functions for moving/attacking , stats : vision , speed )
+|    |
+|    |-> Mob ( act() function, AI ? )
+|    |
+|    |-> Player ( empty class )
+|
+|-> Loot ( empty class )
+|
+|-> Decoration ( functions for color and tweening )
+
+HxlTilemap ( has _tiles and stuff
+|
+|-> Level ( generation is really done in cqLevel )
+    * has mobs
+    * has loot
+    * has decorations
+	
+Research for saving : 
+	Option 1:
+	* store Level in its entirety plus currentLevelIndex ( both retrieved from World.hx or rather CqWorld.hx which derives from that )
+	
+Startup : 
+	Main
+	|=>debug mode -> GameState with class fighter( per debug ) and 
+	|
+	|=>mainmenustate
+	   |=> "New Game" -> CreateCharState -> 
+	   |
+	   |=> "load Game"
+	  
+	
+	
+	
+	
+
+ 

@@ -107,6 +107,7 @@ class CqLevel extends Level {
 		else if (index == 7)
 			MusicManager.play(BossTheme);
 	}
+	
 	public function new(index:Int) {
 		super(index,Configuration.tileSize*2,Configuration.tileSize*2);
 		
