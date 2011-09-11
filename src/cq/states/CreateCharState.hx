@@ -231,8 +231,11 @@ class CreateCharState extends CqState {
 	}
 
 	function changeSelection(Target:CqClass) {
+		
+		//If this class was already selected, then we assume the player
+		//wants to just play
 		if ( Target == curClass ) 
-			return;
+			gotoState(GameState);
 		
 		SoundEffectsManager.play(MenuItemMouseOver);
 		
