@@ -339,11 +339,15 @@ class CqActor extends CqObject, implements Actor {
 		
 		var targetX = tilePos.x + targetTile.x;
 		var targetY = tilePos.y + targetTile.y;
-		var level = Registery.level;
 		
-		var tile = cast(level.getTile(targetX,  targetY),CqTile);
-		if (level.isBlockingMovement(Math.round(targetX),  Math.round(targetY)) && (!Configuration.debugMoveThroughWalls) || level.getTile(targetX,targetY) == null )
+		var level = Registery.level;
+		var tile = cast(level.getTile(targetX,  targetY), CqTile);
+		
+		if (level.isBlockingMovement(Math.round(targetX),  Math.round(targetY)) && (!Configuration.debugMoveThroughWalls) || level.getTile(targetX, targetY) == null ) {
+			level = null;
+			tile = null;
 			return false;
+		}
 		
 		if (tile.actors.length > 0) {
 			var other = cast(tile.actors[tile.actors.length - 1],CqActor);
@@ -363,8 +367,15 @@ class CqActor extends CqObject, implements Actor {
 				attackOther(state, other);
 				justAttacked = true;
 				// end turn
+				
+				other = null;
+				level = null;
+				tile = null;
 				return true;
 			} else {
+				other = null;
+				level = null;
+				tile = null;
 				return false;
 			}
 		} else if (tile.loots.length > 0 && Std.is(this,CqPlayer)) {
@@ -385,9 +396,12 @@ class CqActor extends CqObject, implements Actor {
 				attackObject(state, loot);
 				justAttacked = true;
 				SoundEffectsManager.play(ChestBusted);
+				
 				// end turn
+				loot = null;
 				return true;
 			}
+			loot = null;
 		}
 		
 		/** Move **/
@@ -397,6 +411,8 @@ class CqActor extends CqObject, implements Actor {
 			var step = "cq.Footstep" + HxlUtil.randomIntInRange(1, 6);
 			var sound = Type.resolveClass(step);
 			SoundEffectsManager.play(sound);
+			step = null;
+			sound = null;
 		}
 		
 		//flip sprite
@@ -417,9 +433,12 @@ class CqActor extends CqObject, implements Actor {
 			visible = true;
 		else
 			visible = false;
+			
+		tile = null;
 		
 		var positionOfTile:HxlPoint = level.getPixelPositionOfTile(Math.round(tilePos.x), Math.round(tilePos.y));
 		moveToPixel(state, positionOfTile.x, positionOfTile.y);
+		positionOfTile = null;
 		
 		return true;
 	}
@@ -1079,10 +1098,11 @@ class CqMob extends CqActor, implements Mob {
 			directions.push(CqMob.up);
 			
 		var direction = HxlUtil.getRandomElement(directions);
-
-		if(direction!=null)
-			return actInDirection(state, direction);
-		else {
+		if (direction != null) {
+			var acted:Bool = actInDirection(state, direction);
+			direction = null;
+			return acted;
+		} else {
 			// fixme - mobs is stuck
 			return true;
 		}
@@ -1178,8 +1198,7 @@ class CqMob extends CqActor, implements Mob {
 		
 		if ( HxlUtil.isInLineOfSight(tilePos, Registery.player.tilePos,isBlocking,Registery.player.visionRadius) )
 			aware = 5;
-		else
-			if (aware > 0)
+		else if (aware > 0)
 			aware--;
 	}
 	
@@ -1190,8 +1209,10 @@ class CqMob extends CqActor, implements Mob {
 		
 		if (aware>0 && invisible==null)
 			return actAware(state);
-		else
+		else {
+			invisible = null;
 			return actUnaware(state);
+		}
 	}
 
 	public function doDeathEffect() {
