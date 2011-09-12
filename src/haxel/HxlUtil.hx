@@ -252,23 +252,17 @@ class HxlUtil {
 	}
 	
 	static var tmpDest = new HxlPoint();
+	static var currMap:HxlTilemap;
 	public static function markFieldOfView(position:HxlPoint, radius:Float, map:HxlTilemap, ?radial:Bool=true, ?firstSeen:HxlPoint->Void) {
 		var bottom = Std.int(Math.min(map.heightInTiles - 1, position.y + radius));
 		var top = Std.int(Math.max(0, position.y - radius));
 		var right = Std.int(Math.min(map.widthInTiles - 1, position.x + radius));
 		var left = Std.int(Math.max(0, position.x - radius));
-		
-		var isBlocking = function(p:HxlPoint):Bool { 
-			if ( p.x < 0 || p.y < 0 || p.x >= map.widthInTiles || p.y >= map.heightInTiles ) 
-				return true;
-			return map.getTile(Math.round(p.x), Math.round(p.y)).isBlockingView();
-		}
+		currMap = map;
+		var isBlocking = checkIsBlocking;
 		var apply = firstSeen;
-		if (apply == null) {
-			apply = function(p:HxlPoint) { 
-				map.getTile(Math.round(p.x), Math.round(p.y)).visibility = Visibility.IN_SIGHT ; 
-			}
-		}
+		if (apply == null) 
+			apply = setTileToInSight;
 			
 		for (dx in left...right + 1) {
 			tmpDest.x = dx;
@@ -286,12 +280,19 @@ class HxlUtil {
 			tmpDest.y = dy;			
 			travrseLine(position, tmpDest, isBlocking, apply, radial?radius:-1);
 		}
-		
+		currMap = null;
 		isBlocking = null;
 		apply = null;
 		firstSeen = null;
 	}
-	
+	static function checkIsBlocking(p:HxlPoint):Bool { 
+		if ( p.x < 0 || p.y < 0 || p.x >= currMap.widthInTiles || p.y >= currMap.heightInTiles ) 
+			return true;
+		return currMap.getTile(Math.round(p.x), Math.round(p.y)).isBlockingView();
+	}
+	static function setTileToInSight(p:HxlPoint) { 
+		currMap.getTile(Math.round(p.x), Math.round(p.y)).visibility = Visibility.IN_SIGHT; 
+	}
 	public static function isInLineOfSight(src:HxlPoint, dest:HxlPoint, ?isBlocking:HxlPoint->Bool = null, ?maxDist:Float = -1) {
 		if (maxDist > -1 && HxlUtil.distance(src, dest) > maxDist)
 			return false;
