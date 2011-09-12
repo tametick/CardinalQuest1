@@ -1,19 +1,27 @@
 package kongloader;
 
 import flash.display.DisplayObject;
+import flash.display.Loader;
 import flash.display.StageScaleMode;
 import flash.display.StageAlign;
 import flash.display.Graphics;
 import flash.display.MovieClip;
 import flash.display.Shape;
 import flash.events.Event;
+import flash.events.MouseEvent;
 import flash.Lib;
+import flash.net.URLRequest;
+import flash.system.System;
 import flash.utils.ByteArray;
+import haxe.Timer;
 
 class Preloader extends MovieClip
 {
 	var progressBarBG : Shape;
 	var progressBar : Shape;
+	var kongAd:MovieClip ;
+	var kongAdLoader : Loader;
+	var adSeen:Bool;
 	
 	public static function main()
 	{
@@ -24,6 +32,8 @@ class Preloader extends MovieClip
 	{
 		super();
 
+		adSeen = false;
+		
 		Lib.current.stage.scaleMode = StageScaleMode.SHOW_ALL;
 		Lib.current.stage.align = StageAlign.TOP;
 
@@ -45,14 +55,46 @@ class Preloader extends MovieClip
 		progressBar.x = progressBarBG.x;
 		progressBar.y = progressBarBG.y;
 		progressBar.scaleX = 0;
+		
+		kongAdLoader = new Loader();
+		kongAdLoader.load(new URLRequest("http://www.kongnet.net/www/delivery/avw.php?zoneid=11&cb=98732479&n=aab5b069"));
+		kongAdLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, playKongAd, false, 0, true);		
 	}
+	
+	function playKongAd(e : Event) : Void
+	{
+		kongAdLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, playKongAd);
+		kongAdLoader.addEventListener(MouseEvent.CLICK, clickOnKongAd, false, 0, true);
+		addChild(kongAdLoader);
+		kongAdLoader.x = (640 - kongAdLoader.width) / 2;
+		kongAdLoader.y = (400 - kongAdLoader.height) / 2;
+		
+		Timer.delay(markAdAsSeen, 1000);
+	}
+
+	function clickOnKongAd(e : Event) : Void
+	{
+		var request : URLRequest = new URLRequest("http://www.kongnet.net/www/delivery/ck.php?n=aab5b069&cb=783912374");
+		Lib.getURL(request);
+		request = null;
+	}
+	
+	function markAdAsSeen() {
+		adSeen = true;
+	}
+	
 	function checkFrame(e : Event) : Void
 	{
 		progressBar.scaleX = root.loaderInfo.bytesLoaded / root.loaderInfo.bytesTotal;
 		
 		var timeLine = cast(this.parent,MovieClip);
-		if(timeLine.currentFrame  == timeLine.totalFrames)
+		if(adSeen && timeLine.currentFrame  == timeLine.totalFrames)
 		{
+			kongAdLoader.removeEventListener(MouseEvent.CLICK, clickOnKongAd);
+			removeChild(kongAdLoader);
+			kongAdLoader.unloadAndStop();
+			kongAdLoader = null;
+			
 			cast(this.parent, MovieClip).stop();
 			loadingFinished();
 		}
