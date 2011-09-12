@@ -42,7 +42,7 @@ class CqSpellFactory {
 	}
 	public static function resetRemainigSpells()
 	{
-		CqSpellFactory.remainingSpells = [];
+		CqSpellFactory.remainingSpells = new Array();
 		for(line in SpriteSpells.instance.spriteNames)
 			CqSpellFactory.remainingSpells = CqSpellFactory.remainingSpells.concat(line);
 		// no passwall for now

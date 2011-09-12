@@ -197,12 +197,12 @@ class CqActor extends CqObject, implements Actor {
 		else if ( X < x ) 
 			bobDir = 3;
 		bobCounter = 0.0;
-		Actuate.tween(this, moveSpeed, { x: X, y: Y } ).onComplete(moveStop,[state]);
+		Actuate.tween(this, moveSpeed, { x: X, y: Y } ).onComplete(moveStop,new Array());
 		for (Callback in onMove ) 
 			Callback(this);
 	}
 	
-	public function moveStop(state:HxlState) {
+	public function moveStop() {
 		isMoving = false;
 	}
 	
@@ -329,10 +329,10 @@ class CqActor extends CqObject, implements Actor {
 				SoundEffectsManager.play(PlayerMiss);
 				
 			if (this == cast(Registery.player,CqPlayer)) {
-				HxlLog.append("You miss");//<b style='color: rgb("+other.vars.color.join()+");'>"+other.vars.description[0]+"</b>.");
+				HxlLog.append("You miss");
 				PtPlayer.misses();
 			} else {
-				HxlLog.append("Misses you");//"<b style='color: rgb("+vars.color.join()+");'>"+vars.description[0]+"</b> misses you.");
+				HxlLog.append("Misses you");
 				PtPlayer.dodges();
 			}
 			for ( Callback in onAttackMiss ) Callback(this, other);
@@ -1033,8 +1033,8 @@ class CqPlayer extends CqActor, implements Player {
 		return super.actInDirection(state, targetTile);
 	}
 
-	public override function moveStop(state:HxlState) {
-		super.moveStop(state);
+	public override function moveStop() {
+		super.moveStop();
 		var currentTile = cast(Registery.level.getTile(Std.int(tilePos.x), Std.int(tilePos.y)), Tile);
 		var currentTileIndex = currentTile.dataNum;
 		if ( currentTile.loots.length > 0 ) {
@@ -1079,10 +1079,14 @@ class CqMob extends CqActor, implements Mob {
 		type = Type.createEnum(CqMobType,  typeName.toUpperCase());
 		visible = false;
 		
+		var anim = new Array();
 		if(player)
-			addAnimation("idle", [SpritePlayer.instance.getSpriteIndex(Type.enumConstructor(Registery.player.playerClass).toLowerCase())], 0 );
+			anim.push(SpritePlayer.instance.getSpriteIndex(Type.enumConstructor(Registery.player.playerClass).toLowerCase()));
 		else
-			addAnimation("idle", [sprites.getSpriteIndex(typeName)], 0 );
+			anim.push(sprites.getSpriteIndex(typeName));
+			
+		addAnimation("idle", anim, 0 );
+		anim = null;
 		play("idle");
 	}
 	
@@ -1090,7 +1094,7 @@ class CqMob extends CqActor, implements Mob {
 	static var down:HxlPoint = new HxlPoint(0,1);
 	static var left:HxlPoint = new HxlPoint(-1,0);
 	static var right:HxlPoint = new HxlPoint(1, 0);
-	static var directions = [];
+	static var directions = new Array();
 	
 	function actUnaware(state:HxlState):Bool {
 		while(directions.length>0)

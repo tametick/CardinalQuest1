@@ -316,7 +316,7 @@ class CqLevel extends Level {
 			// remove timed out buffs & visibleEffects
 			var timers = creature.timers;
 			if (timers.length>0) {
-				var expired = [];
+				var expired = new Array();
 				for (t in timers) {
 					t.ticks--;
 					if (t.ticks == 0) {

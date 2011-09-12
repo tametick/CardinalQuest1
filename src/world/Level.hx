@@ -257,6 +257,7 @@ class Level extends HxlTilemap {
 	}
 	
 	var dest:HxlPoint;
+	static var adjacent = [[ -1, -1], [0, -1], [1, -1], [ -1, 0], [1, 0], [ -1, 1], [0, 1], [1, 1]];
 	public function updateFieldOfView(state:HxlState,?otherActorHighlight:Actor,?skipTween:Bool = false, ?gradientColoring:Bool = true, ?seenTween:Int = 64, ?inSightTween:Int=255) {
 		var actor:Actor = null;
 		if (otherActorHighlight == null)
@@ -282,16 +283,13 @@ class Level extends HxlTilemap {
 
 		if ( isBlockingView(Std.int(actor.tilePos.x), Std.int(actor.tilePos.y)) ) {
 			// if actor is on a view blocking tile, only show adjacent tiles
-			var adjacent = new Array();
-			adjacent = [[ -1, -1], [0, -1], [1, -1], [ -1, 0], [1, 0], [ -1, 1], [0, 1], [1, 1]];
-			for ( i in adjacent ) {
+			for ( i in adjacent) {
 				var xx = Std.int(actor.tilePos.x + i[0]);
 				var yy = Std.int(actor.tilePos.y + i[1]);
 				if (yy < heightInTiles && xx < widthInTiles && yy >= 0 && xx >= 0) {
 					cast(getTile(xx, yy), Tile).visibility = Visibility.IN_SIGHT;
 				}
 			}
-			adjacent = null;
 		} else {
 			var map:Level = this;
 			HxlUtil.markFieldOfView(actor.tilePos, actor.visionRadius, this, true, 
@@ -397,8 +395,6 @@ class Level extends HxlTilemap {
 
 		if ( isBlockingView(Std.int(tilePos.x), Std.int(tilePos.y)) ) {
 			// if point is on a view blocking tile, only show adjacent tiles
-			var adjacent = new Array();
-			adjacent = [[ -1, -1], [0, -1], [1, -1], [ -1, 0], [1, 0], [ -1, 1], [0, 1], [1, 1]];
 			for ( i in adjacent ) {
 				var xx = Std.int(tilePos.x + i[0]);
 				var yy = Std.int(tilePos.y + i[1]);

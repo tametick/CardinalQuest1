@@ -142,7 +142,6 @@ class SpritePortrait extends HxlSpriteSheet {
 	public static var instance = new SpritePortrait();
 	public function new() {
 		spriteNames = [HxlUtil.enumToStringArray(
-		
 			[CqClass.THIEF, CqClass.FIGHTER, CqClass.WIZARD]
 		)];
 		super(0);
@@ -300,6 +299,25 @@ class SpriteTiles extends HxlSpriteSheet {
 		openDoors = [getSpriteIndex("red_door_open"), getSpriteIndex("blue_door_open"), getSpriteIndex("brown_door_open"), getSpriteIndex("green_door_open")];
 		
 		if (!inited) {
+			if(Resources.walkableTiles == null)
+				Resources.walkableTiles = new Array();
+				
+			if(Resources.seeThroughTiles == null)
+				Resources.seeThroughTiles = new Array();
+				
+			if(Resources.walkableAndSeeThroughTiles == null)
+				Resources.walkableAndSeeThroughTiles = new Array();
+				
+			if(Resources.solidAndBlockingTiles== null)
+				Resources.solidAndBlockingTiles = new Array();
+				
+			if(Resources.doors == null)
+				Resources.doors = new Array();
+				
+			if(Resources.stairsDown == null)
+				Resources.stairsDown = new Array();
+			
+			
 			Resources.walkableTiles = Resources.walkableTiles.concat(walkableAndSeeThroughTiles);
 			Resources.seeThroughTiles = Resources.seeThroughTiles.concat(walkableAndSeeThroughTiles);
 			Resources.walkableAndSeeThroughTiles = Resources.walkableAndSeeThroughTiles.concat(walkableAndSeeThroughTiles);

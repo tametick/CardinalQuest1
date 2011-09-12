@@ -56,7 +56,7 @@ class GraphicCache
 
 		//If there is no data for this key, generate the requested graphic
 		if (!checkBitmapCache(Key)) {
-			var bd:BitmapData = Type.createInstance(Graphic, []).bitmapData;
+			var bd:BitmapData = Type.createInstance(Graphic, new Array()).bitmapData;
 			if ( ScaleX != 1.0 || ScaleY != 1.0 ) {
 				var newPixels:BitmapData = new BitmapData(Std.int(bd.width * ScaleX), Std.int(bd.height * ScaleY), true, 0x00000000);
 				var mtx:Matrix = new Matrix();
@@ -71,7 +71,7 @@ class GraphicCache
 
 		var pixels:BitmapData = cache.get(key);
 
-		if (!needReverse && Reverse && (pixels.width == Type.createInstance(Graphic, []).bitmapData.width)) {
+		if (!needReverse && Reverse && (pixels.width == Type.createInstance(Graphic, new Array()).bitmapData.width)) {
 			needReverse = true;
 		}
 		if (needReverse) {

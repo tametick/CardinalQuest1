@@ -5,7 +5,7 @@ class Perlin
 {
 	public static function getNoiseMap(width:Int, height:Int, tileIndexes:Array<Int>, ?tileWeights:Array<Int> = null, ?jaggedness:Int = 4):Array<Array<Int>> {
 		if (tileWeights != null) {
-			var weightedTiles = [];
+			var weightedTiles = new Array();
 			var currentTile = 0;
 			for (weight in tileWeights) {
 				for(i in 0...weight)

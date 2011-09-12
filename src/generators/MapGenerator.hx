@@ -202,8 +202,8 @@ class MapGenerator
 		}
 		
 		var openCount = HxlUtil.countTiles(width, height, map, tilesToCount);
-		var openList = [];
-		var closedList = [];
+		var openList = new Array();
+		var closedList = new Array();
 		var pass = false;
 		
 		// pick a random, valid starting location

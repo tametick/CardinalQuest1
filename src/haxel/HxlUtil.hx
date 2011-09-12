@@ -471,7 +471,7 @@ class HxlUtil {
 			throw "cant parse null enum";
 			return null;
 		}
-		var rslt:Array<String> = [];
+		var rslt:Array<String> = new Array();
 		for (i in 0...arr.length) {
 			var enm:Dynamic = arr[i];
 			var name:String = (addEnumName? Type.getEnumName(Type.getEnum(enm)):"") + Type.enumConstructor(enm);

@@ -1,3 +1,5 @@
+//FIXME - a lot of unneeded objects ({}'s) are created here!
+
 package haxel;
 
 import haxel.HxlSprite;

@@ -267,7 +267,7 @@ class MainMenuState extends CqState {
 	function fadeStateCallBack():Void 
 	{
 		//flash.ui.Mouse.cursor = MouseCursor.AUTO;
-		var newState = Type.createInstance(TargetState, []);
+		var newState = Type.createInstance(TargetState, new Array());
 		if ( stackId == 0 ) {
 			HxlGraphics.state = newState;
 		} else {

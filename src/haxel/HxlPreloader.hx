@@ -109,7 +109,7 @@ class HxlPreloader extends MovieClip {
 			
 			var mainClass:Class<Dynamic> = Type.resolveClass(mainClassName);
 			if (mainClass != null) {
-				var app:Dynamic = Type.createInstance(mainClass, []);
+				var app:Dynamic = Type.createInstance(mainClass, new Array());
 				Lib.current.removeChild(progress);
 				Lib.current.addChild(cast( app, Sprite));
 			}

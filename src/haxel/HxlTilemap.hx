@@ -194,13 +194,18 @@ class HxlTilemap extends HxlObject {
 		var rx:Int;
 		var ry:Int;
 		_tiles = new Array();
+		
+		var tmpPos = new Array();
 		for ( y in 0...heightInTiles ) {
 			_tiles[y] = new Array();
 			for ( x in 0...widthInTiles ) {
-				_tiles[y][x] = Type.createInstance(tileClass, [x, y]);
+				tmpPos[0] = x;
+				tmpPos[1] = y;
+				_tiles[y][x] = Type.createInstance(tileClass, tmpPos);
 				updateTileGraphic(x, y, MapData[y][x]);
 			}
 		}
+		tmpPos = null;
 
 		//Pre-set some helper variables for later
 		_screenRows = Math.ceil(HxlGraphics.height/_tileHeight)+1;

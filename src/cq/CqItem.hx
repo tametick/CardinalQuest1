@@ -287,7 +287,12 @@ class CqLootFactory {
 		}
 		
 		if (Item.isMagical || Item.isWondrous) {
-			var buffs = ["defense", "attack", "life", "spirit", "speed"];
+			var buffs = new Array();
+			buffs.push("defense");
+			buffs.push("attack");
+			buffs.push("life");
+			buffs.push("spirit");
+			buffs.push("speed");
 			
 			switch(Item.equipSlot) {
 				case CqEquipSlot.ARMOR:
@@ -370,6 +375,8 @@ class CqItem extends GameObjectImpl, implements Loot {
 		isWondrous = false;
 		
 		//this is a terrible, terrible work-around, but it'll do for now
+		
+		// fixme - new arrays created every time
 		if (Std.is(this, CqSpell)) {
 			loadGraphic(SpriteSpells, false, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 			addAnimation("idle", [SpriteSpells.instance.getSpriteIndex(typeName)], 0 );

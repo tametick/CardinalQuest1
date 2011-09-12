@@ -87,7 +87,7 @@ class HxlDialog extends HxlGroup
 		if ( Tiled ) {
 			background.width = width;
 			background.height = height;
-			var source:BitmapData = Type.createInstance(Graphic, []).bitmapData;
+			var source:BitmapData = Type.createInstance(Graphic, new Array()).bitmapData;
 			var targetBmp:BitmapData = new BitmapData(Std.int(width), Std.int(height), true, 0x0);
 			var targetShape:Shape = new Shape();
 			targetShape.graphics.beginBitmapFill(source, null, true);

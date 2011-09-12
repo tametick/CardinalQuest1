@@ -896,8 +896,21 @@ class GameUI extends HxlDialog {
 		ball.y = fromPixel.y;
 		ball.zIndex = 5;
 		HxlGraphics.state.add(ball);
-		var tween:GenericActuator  = Actuate.tween(ball, 1, { x:other.x, y:other.y} );
-		tween.onComplete(onXBallHit, [ball,actor,other,spell]).onUpdate(updateXBall,[ball,other,tween]);
+		var tween:GenericActuator  = Actuate.tween(ball, 1, { x:other.x, y:other.y } );
+		
+		var args1 = new Array();
+		args1.push(ball);
+		args1.push(actor);
+		args1.push(other);
+		args1.push(spell);
+		var args2 = new Array<Dynamic>();
+		args2.push(ball);
+		args2.push(other);
+		args2.push(tween);
+		
+		tween.onComplete(onXBallHit, args1).onUpdate(updateXBall, args2);
+		args1 = null;
+		args2 = null;
 	}
 	
 	public function initPopups():Void 

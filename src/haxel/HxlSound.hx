@@ -93,7 +93,7 @@ class HxlSound extends HxlObject {
 	public function loadEmbedded(EmbeddedSound:Class<Dynamic>, ?Looped:Bool=false):HxlSound {
 		stop();
 		init();
-		_sound = Type.createInstance(EmbeddedSound, []);
+		_sound = Type.createInstance(EmbeddedSound, new Array());
 		//NOTE: can't pull ID3 info from embedded sound currently
 		_looped = Looped;
 		updateTransform();

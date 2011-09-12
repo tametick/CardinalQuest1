@@ -1,6 +1,7 @@
 package cq.states;
 
 import com.eclecticdesignstudio.motion.Actuate;
+import flash.system.System;
 
 import data.Configuration;
 import data.Registery;
@@ -98,6 +99,10 @@ class GameState extends CqState {
 	static var keyPressCounter = 0;
 	public override function update() {
 		super.update();
+		
+		System.gc();
+		System.gc();
+		
 		if (endingAnim)
 		{
 			gameUI.popups.setChildrenVisibility(false);
@@ -106,7 +111,9 @@ class GameState extends CqState {
 			return;
 		}
 			
-		if (!started) return;
+		if (!started) 
+			return;
+			
 		var up = SpriteCursor.instance.getSpriteIndex("up");
 		if ( initialized < 1 ) {
 			return;
@@ -136,8 +143,9 @@ class GameState extends CqState {
 			setDiagonalCursor();
 		} else {
 			if (isPlayerActing) {
-				if ( HxlGraphics.keys.F1 || HxlGraphics.keys.ESCAPE)
+				if ( HxlGraphics.keys.F1 || HxlGraphics.keys.ESCAPE){
 					return;
+				}
 				if (GameUI.instance.panels.currentPanel == null || !GameUI.instance.panels.currentPanel.isBlockingInput) {
 					act();
 				}

@@ -388,7 +388,7 @@ class HxlGame extends Sprite {
 
 		//All set!
 		_created = true;
-		switchState(Type.createInstance(_iState, []));
+		switchState(Type.createInstance(_iState, new Array()));
 		HxlState.screen.unsafeBind(HxlGraphics.buffer);
 		
 		_addEventListener(Event.ENTER_FRAME, update, false, 0, true);

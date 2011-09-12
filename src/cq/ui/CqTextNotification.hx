@@ -25,7 +25,7 @@ class CqTextNotification extends HxlGroup
 		Xpos = X;
 		Ypos = Y;
 		super();
-		notifications = [];
+		notifications = new Array();
 		scrollFactor = new HxlPoint(0,0);
 		CqTextNotification._instance = this;
 	}
