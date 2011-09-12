@@ -1146,15 +1146,18 @@ class CqMob extends CqActor, implements Mob {
 		}
 			
 		var line:Array<HxlPoint> = HxlUtil.getLine(tilePos, target.tilePos, isBlocking);
+		target = null;
 		var dest = line[1];
+		line = null;
 		
-		if (dest == null)
+		if (dest == null) {
 			return true;
+		}
 		
+		var spell:CqSpell = null;
 		if ( !specialEffects.exists("fear") && Std.is(this, CqMob) && equippedSpells.length > 0) {
 			// Try casting spell first
 			
-			var spell:CqSpell = null;
 			for (s in equippedSpells){
 				if (s.spiritPoints >=  s.spiritPointsRequired) {
 					spell = s;
@@ -1172,12 +1175,17 @@ class CqMob extends CqActor, implements Mob {
 				
 				spell.spiritPoints = 0;
 				// end turn
+				
+				spell = null;
+				dest = null;
 				return true;
 			}
 		}
+		spell = null;
 			
 		var dx = dest.x - tilePos.x;
 		var dy = dest.y - tilePos.y;
+		dest = null;
 		
 		// prevent diagonal movement
 		if (dx != 0 && dy != 0) {
