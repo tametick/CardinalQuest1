@@ -1,5 +1,9 @@
 ToDo
 ----
+- remove duplication of spriteNames arrays for every instance of HxlSpriteSheet's children classes.
+- remove creation of a lot of unneeded annonymous objects ({}s).
+- reuse arrays whenever possible .
+- make sure only 1 instance of level & world exists, and reuse it for new levels/games.
 Look into connecting to the Apple Scoring API..
 Look into smoothing monsters out over levels
 

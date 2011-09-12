@@ -173,18 +173,20 @@ class MainMenuState extends CqState {
 			btnCredits.setCallback(function() { HxlGraphics.fade.start(true, 0xff000000, sFadeTime, function() { HxlGraphics.pushState(new CreditsState()); } ); } );
 			buttonY += 50;
 			
-			var btnHiscores:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Highscores", true, null);
+/*			var btnHiscores:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Highscores", true, null);
 			btnHiscores.setNormalFormat(null, 35, textColor, "center");
 			btnHiscores.setHoverFormat(null, 35, textHighlight, "center");
 			menu.addItem(btnHiscores);
 			btnHiscores.setCallback(function() { HxlGraphics.fade.start(true, 0xff000000, sFadeTime, function() { HxlGraphics.pushState(new HighScoreState()); } ); } );
-			buttonY += 50;
+			buttonY += 50;*/
 			
 			//For now we only check for flash
 			//At a later point we should have a generic layer that abstracts the tech away
 			//Will do this for iOS..
+
 			if( SaveLoad.hasSaveGame() )
 			{
+				// fixme-  should use resume game from above instead
 				var btnLoadGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Load saved game", true, null);
 				btnLoadGame.setNormalFormat(null, 35, textColor, "center");
 				btnLoadGame.setHoverFormat(null, 35, textHighlight, "center");
