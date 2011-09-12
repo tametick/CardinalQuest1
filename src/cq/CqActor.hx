@@ -1220,12 +1220,15 @@ class CqMob extends CqActor, implements Mob {
 		var self = this;
 		angularVelocity = -200;
 		scaleVelocity.x = scaleVelocity.y = -1.2;
-		Actuate.update(function(params:Dynamic) {
-			self.alpha = params.Alpha;
-		}, 0.5, {Alpha: 1.0}, {Alpha: 0.0}).onComplete(function() {
-			HxlGraphics.state.remove(self);
-			self.destroy();
-		});
+		Actuate.update(deathEffectCallback, 0.5, { Alpha: 1.0 }, { Alpha: 0.0 }).onComplete(deactEffectOncompleteCallback);
+	}
+	function deathEffectCallback(params:Dynamic)
+	{
+		alpha = params.Alpha;
+	}
+	function deactEffectOncompleteCallback() {
+		HxlGraphics.state.remove(this);
+		destroy();
 	}
 }
 

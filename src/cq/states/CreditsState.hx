@@ -49,8 +49,10 @@ class CreditsState extends CqState {
 	}
 
 	function nextScreen() {
-		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
-			HxlGraphics.popState();
-		}, true);
+		HxlGraphics.fade.start(true, 0xff000000, fadeTime, nextScreenFadeCallback, true);
+	}
+	function nextScreenFadeCallback()
+	{
+		HxlGraphics.popState();
 	}
 }

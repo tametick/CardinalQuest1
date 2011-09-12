@@ -57,10 +57,13 @@ class CreateCharState extends CqState {
 		state = 0;
 		storyScreen = true;
 		var self = this;
-		HxlGraphics.fade.start(false, 0xff000000, fadeTime, function() {
-			self.state = 1;
-			//self = null;
-		});		
+		HxlGraphics.fade.start(false, 0xff000000, fadeTime, fadeCallBack);
+	}
+	
+	function fadeCallBack():Void 
+	{
+		state = 1;
+		//self = null;
 	}
 	
 	override public function destroy(){

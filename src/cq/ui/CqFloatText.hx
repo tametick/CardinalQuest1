@@ -30,22 +30,40 @@ class CqFloatText extends HxlText {
 		var self = this;
 		Actuate.tween(this, 0.8, {y: y - 20})
 			.ease(Cubic.easeOut)
-			.onComplete(function() {
-				Actuate.update(function(params:Dynamic) {
-					self.alpha = params.Alpha;
-				}, 1.0, {Alpha: 1.0}, {Alpha: 0.0}).onComplete(function() { self.destroy(); });
-			});
+			.onComplete(onCompleteCallBack);
 	}
+	
+	function onCompleteCallBack():Void 
+	{
+		Actuate.update(onCompleteUpdate, 1.0, {Alpha: 1.0}, {Alpha: 0.0}).onComplete(onCompleteSecondCallBack);
+	}
+	function onCompleteUpdate(params:Dynamic)
+	{
+		alpha = params.Alpha;
+	}
+	function onCompleteSecondCallBack()
+	{
+		destroy();
+	}
+	var onTweened:Void->Void;
 	public function InitSemiCustomTween(duration:Float,additionalParams:Dynamic,onTweened:Void->Void)
 	{
-		var self = this;
+		this.onTweened = onTweened;
 		Actuate.tween(this, duration, additionalParams)
 			.ease(Cubic.easeOut)
-			.onComplete(function() {
-				Actuate.update(function(params:Dynamic) {
-					self.alpha = params.Alpha;
-				}, 0.5, { Alpha: 1.0 }, { Alpha: 0.0 } ).onComplete(function() { self.destroy(); onTweened(); } );
-			});
+			.onComplete(onCompleteTweenCallBack);
+	}
+	function onCompleteTweenCallBack()
+	{
+		Actuate.update(onCompleteFadeOutCallBack, 0.5, { Alpha: 1.0 }, { Alpha: 0.0 } ).onComplete(onFadedOutCallBack );
+	}
+	function onCompleteFadeOutCallBack(params:Dynamic)
+	{
+		alpha = params.Alpha;
+	}
+	function onFadedOutCallBack() {
+		destroy();
+		onTweened();
 	}
 
 }

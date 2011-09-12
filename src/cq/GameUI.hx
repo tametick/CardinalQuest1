@@ -625,16 +625,17 @@ class GameUI extends HxlDialog {
 	public function initChests() {
 		for ( Item in Registery.level.loots ) {
 			if ( Std.is(Item, CqChest) ) {
-				cast(Item, CqChest).addOnBust(function(Target:CqChest) {
-					var eff:CqEffectChest = new CqEffectChest(Target.x + Target.origin.x, Target.y + Target.origin.y);
-					eff.zIndex = 6;
-					HxlGraphics.state.add(eff);
-					eff.start(true, 1.0, 10);
-				});
+				cast(Item, CqChest).addOnBust(onBustChestCallBack);
 			}
 		}
 	}
-	
+	function onBustChestCallBack(Target:CqChest)
+	{
+		var eff:CqEffectChest = new CqEffectChest(Target.x + Target.origin.x, Target.y + Target.origin.y);
+		eff.zIndex = 6;
+		HxlGraphics.state.add(eff);
+		eff.start(true, 1.0, 10);
+	}
 	public function initHealthBars() {
 		for ( actor in Registery.level.mobs ) {
 			addHealthBar(cast(actor, CqActor));
@@ -653,7 +654,6 @@ class GameUI extends HxlDialog {
 		});
 		Actor.addOnAttackMiss(doAttackMiss);
 	}
-	
 	public function doAttackMiss(?Attacker:CqActor, ?Defender:CqActor) {
 		var attPos:HxlPoint = Attacker.tilePos;
 		var defPos:HxlPoint = Defender.tilePos;

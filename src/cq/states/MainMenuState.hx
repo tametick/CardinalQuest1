@@ -250,29 +250,33 @@ class MainMenuState extends CqState {
 		tglSFXIcon.setFrame((sfxOn?1:0));
 		
 	}
+	var TargetState:Class<HxlState>;
 	function changeState(TargetState:Class<HxlState>) {
 		if (btnClicked)
 			return;
-		
+		this.TargetState = TargetState;
 		btnClicked = true;
 		var self = this;
 		if ( TargetState == null ) {
 			HxlGraphics.popState();
 			return;
 		}
-		HxlGraphics.fade.start(true, 0xff000000, fadeTime, function() {
-			//flash.ui.Mouse.cursor = MouseCursor.AUTO;
-			var newState = Type.createInstance(TargetState, []);
-			if ( self.stackId == 0 ) {
-				HxlGraphics.state = newState;
+		HxlGraphics.fade.start(true, 0xff000000, fadeTime, fadeStateCallBack, true);
+	}
+	
+	function fadeStateCallBack():Void 
+	{
+		//flash.ui.Mouse.cursor = MouseCursor.AUTO;
+		var newState = Type.createInstance(TargetState, []);
+		if ( stackId == 0 ) {
+			HxlGraphics.state = newState;
+		} else {
+			if ( TargetState == CreditsState ) {
+				HxlGraphics.pushState(new CreditsState());
 			} else {
-				if ( TargetState == CreditsState ) {
-					HxlGraphics.pushState(new CreditsState());
-				} else {
-					HxlGraphics.state = newState;
-				}
-			}	
-		}, true);
+				HxlGraphics.state = newState;
+			}
+		}	
 	}
 	private static function getInstance():MainMenuState
 	{
