@@ -188,13 +188,18 @@ class CqActor extends CqObject, implements Actor {
 
 	public function moveToPixel(state:HxlState, X:Float, Y:Float) {
 		isMoving = true;
-		if ( Y < y ) bobDir = 0;
-		else if ( X > x ) bobDir = 1;
-		else if ( Y > y ) bobDir = 2;
-		else if ( X < x ) bobDir = 3;
+		if ( Y < y ) 
+			bobDir = 0;
+		else if ( X > x ) 
+			bobDir = 1;
+		else if ( Y > y ) 
+			bobDir = 2;
+		else if ( X < x ) 
+			bobDir = 3;
 		bobCounter = 0.0;
 		Actuate.tween(this, moveSpeed, { x: X, y: Y } ).onComplete(moveStop,[state]);
-		for (Callback in onMove ) Callback(this);
+		for (Callback in onMove ) 
+			Callback(this);
 	}
 	
 	public function moveStop(state:HxlState) {
@@ -398,7 +403,9 @@ class CqActor extends CqObject, implements Actor {
 				SoundEffectsManager.play(ChestBusted);
 				
 				// end turn
+				level = null;
 				loot = null;
+				tile = null;
 				return true;
 			}
 			loot = null;
@@ -434,11 +441,12 @@ class CqActor extends CqObject, implements Actor {
 		else
 			visible = false;
 			
-		tile = null;
-		
 		var positionOfTile:HxlPoint = level.getPixelPositionOfTile(Math.round(tilePos.x), Math.round(tilePos.y));
 		moveToPixel(state, positionOfTile.x, positionOfTile.y);
+		
 		positionOfTile = null;
+		tile = null;
+		level = null;
 		
 		return true;
 	}
