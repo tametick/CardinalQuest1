@@ -386,7 +386,7 @@ class HxlSound extends HxlObject {
 	 * @param	event	An <code>Event</code> object.
 	 */
 	function gotID3(?event:Event=null)	{
-		HxlGraphics.log("got ID3 info!");
+		//HxlGraphics.log("got ID3 info!");
 		if (_sound.id3.songName.length > 0) {
 			name = _sound.id3.songName;
 		}

@@ -215,7 +215,7 @@ class HxlGame extends Sprite {
 			console.toggle();
 			return;
 		}
-		console.log(""+event.keyCode);
+		//console.log(""+event.keyCode);
 		if (useDefaultHotKeys) {
 			var c:Int = event.keyCode;
 			var code:String = String.fromCharCode(event.charCode);
@@ -317,7 +317,7 @@ class HxlGame extends Sprite {
 
 		// Initialize console
 		console = new HxlConsole(0, 0, _zoom, _defaultFont);
-		console.log("console created!");
+		//console.log("console created!");
 		addChild(console);
 
 		// Initialize input event listeners
