@@ -44,7 +44,7 @@ class CqLootFactory {
 		
 		if (itemArray == null)
 		{
-			itemArray = SpriteItems.instance.potions;
+			itemArray = SpriteItems.potions;
 		}
 		if(Resources.descriptions==null)
 			Resources.descriptions = new Hash<String>();
@@ -545,12 +545,12 @@ class CqChest extends CqItem {
 		
 		// chance of getting a potion
 		if (Math.random() < Configuration.dropPotionChance){
-			typeName = HxlUtil.getRandomElement(SpriteItems.instance.potions).toUpperCase();
+			typeName = HxlUtil.getRandomElement(SpriteItems.potions).toUpperCase();
 		} else {
 			//set up equipment array. means filter out potions from the item enum.
 			if (equipment == null) {
 				var li:Array<String> 			= Type.getEnumConstructs(CqItemType);
-				var upperCasePotions			= Lambda.map(SpriteItems.instance.potions, function (a:String):String { return a.toUpperCase(); });
+				var upperCasePotions			= Lambda.map(SpriteItems.potions, function (a:String):String { return a.toUpperCase(); });
 				var isNotPotion:String->Bool	= function (a:String):Bool { return (!Lambda.has(upperCasePotions, a)); }
 				CqChest.equipment				= Lambda.array(Lambda.filter(li, isNotPotion));
 				CqChest.equipment.shift();

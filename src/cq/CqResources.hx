@@ -215,10 +215,11 @@ class SpriteSoundToggle extends HxlSpriteSheet {
 class SpriteItems extends HxlSpriteSheet { 
 	public static var instance = new SpriteItems();
 	static var _spriteNames:Array<Array<String>>;
-	// fixme
-	public var potions:Array<String>;
+	public static var potions:Array<String>;
 	public function new() {
-		potions = ["purple_potion", "green_potion", "blue_potion", "yellow_potion", "red_potion"];
+		if(potions==null)
+			potions = ["purple_potion", "green_potion", "blue_potion", "yellow_potion", "red_potion"];
+			
 		//potions = HxlUtil.enumToStringArray([CqItemType.PURPLE_POTION, CqItemType.GREEN_POTION, CqItemType.BLUE_POTION, CqItemType.YELLOW_POTION, CqItemType.RED_POTION]);
 		if (_spriteNames ==null)
 			_spriteNames = [
