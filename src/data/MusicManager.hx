@@ -14,9 +14,11 @@ class MusicManager {
 		var name = Type.getClassName(track);
 		
 		if (currentlyPlaying != null) {
-			if (currentlyPlaying == tracks.get(name))
+			if (currentlyPlaying == tracks.get(name)){
 				// already playing chosen tune
+				name = null;
 				return;
+			}
 			currentlyPlaying.stop();
 		}
 		
@@ -24,14 +26,21 @@ class MusicManager {
 			var newTrack = new HxlSound();
 			newTrack.loadEmbedded(track, true);
 			tracks.set(name, newTrack);
+			newTrack = null;
 		}
 		
 		currentlyPlaying = tracks.get(name);
-		if (!paused)currentlyPlaying.play();
+		if (!paused)
+			currentlyPlaying.play();
+			
+			
+		name = null;
 	}
 	
 	public static function stop() {
-		if (paused) return;
+		if (paused) 
+			return;
+			
 		//stops and forgets last played track
 		if (currentlyPlaying != null) {
 			currentlyPlaying.stop();

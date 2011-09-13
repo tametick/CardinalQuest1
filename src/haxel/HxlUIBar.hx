@@ -50,7 +50,6 @@ class HxlUIBar extends HxlDialog {
 		if ( !tweenEnabled ) {
 			bar.scale.x = newVal;
 		} else {
-			//Actuate.stop(bar, {}, true);
 			Actuate.update(percentChangeTweenCallback, tweenSpeed, {X: bar.scale.x}, {X: newVal}).ease(Cubic.easeOut);
 		}
 	}
