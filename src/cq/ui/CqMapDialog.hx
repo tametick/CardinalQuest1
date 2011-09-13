@@ -114,7 +114,7 @@ class CqMapDialog extends HxlSlidingDialog {
 					graph.beginFill(Color,Alpha);
 					graph.drawRect( (X * cellSize.x), (Y * cellSize.y), cellSize.x, cellSize.y );
 					graph.endFill();
-					if ( HxlUtil.contains(SpriteTiles.instance.stairsDown.iterator(), tiles[Y][X].dataNum) ) {
+					if ( HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tiles[Y][X].dataNum) ) {
 						// Draw stairs
 						var dx:Float = X * cellSize.x + 2;
 						var dy:Float = Y * cellSize.y + 2;
@@ -124,9 +124,9 @@ class CqMapDialog extends HxlSlidingDialog {
 						graph.lineTo(dx + ((cellSize.x - 4) / 2), dy + (cellSize.y - 4));
 						graph.lineTo(dx, dy);
 						graph.endFill();
-					} else if ( HxlUtil.contains(SpriteTiles.instance.doors.iterator(), tiles[Y][X].dataNum) ) { 
+					} else if ( HxlUtil.contains(SpriteTiles.doors.iterator(), tiles[Y][X].dataNum) ) { 
 						// Draw doors
-						if ( !HxlUtil.contains(SpriteTiles.instance.openDoors.iterator(), tiles[Y][X].dataNum) ) {
+						if ( !HxlUtil.contains(SpriteTiles.openDoors.iterator(), tiles[Y][X].dataNum) ) {
 							// Dont draw open doors
 							if ( tiles[Y][X].visibility == Visibility.SEEN ) 
 								Color = DoorSeenColor;

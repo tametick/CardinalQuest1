@@ -802,7 +802,7 @@ class GameUI extends HxlDialog {
 				if ( tile == null || tile.actors.length > 0 || tile.visibility == Visibility.UNSEEN) {
 					targetSprite.color = 0xff0000;
 				} else {
-					if (HxlUtil.contains(SpriteTiles.instance.walkableAndSeeThroughTiles.iterator(), tile.dataNum)) {
+					if (HxlUtil.contains(SpriteTiles.walkableAndSeeThroughTiles.iterator(), tile.dataNum)) {
 						targetSprite.color = 0x00ff00;
 					} else {
 						targetSprite.color = 0xff0000;
@@ -845,7 +845,7 @@ class GameUI extends HxlDialog {
 			
 		
 		if (isTargetingEmptyTile && tile != null) {
-			if ( tile.actors.length <= 0 && HxlUtil.contains(SpriteTiles.instance.walkableAndSeeThroughTiles.iterator(), tile.dataNum) ) {
+			if ( tile.actors.length <= 0 && HxlUtil.contains(SpriteTiles.walkableAndSeeThroughTiles.iterator(), tile.dataNum) ) {
 				cast(Registery.player, CqActor).useAt(targetSpell.getSpell(), tile);
 				SoundEffectsManager.play(SpellCast);
 				targetSpell.getSpell().spiritPoints = 0;
