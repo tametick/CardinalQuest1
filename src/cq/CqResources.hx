@@ -128,10 +128,13 @@ class CoinSprite extends HxlSprite {
 }
 class SpritePortrait extends HxlSpriteSheet { 
 	public static var instance = new SpritePortrait();
+	static var _spriteNames:Array<Array<String>>;
 	public function new() {
-		spriteNames = [HxlUtil.enumToStringArray(
-			[CqClass.THIEF, CqClass.FIGHTER, CqClass.WIZARD]
-		)];
+		if (_spriteNames ==null)
+			_spriteNames = [HxlUtil.enumToStringArray(
+				[CqClass.THIEF, CqClass.FIGHTER, CqClass.WIZARD]
+			)];
+		spriteNames = _spriteNames;
 		super(0);
 	} 
 	
@@ -141,11 +144,14 @@ class SpritePortrait extends HxlSpriteSheet {
 }
 class SpritePortraitPaper extends HxlSpriteSheet { 
 	public static var instance = new SpritePortraitPaper();
+	static var _spriteNames:Array<Array<String>>;
 	public function new() {
-		spriteNames = [HxlUtil.enumToStringArray(
+		if (_spriteNames ==null)
+			_spriteNames = [HxlUtil.enumToStringArray(
+				[CqClass.THIEF, CqClass.FIGHTER, CqClass.WIZARD]
+			)];
 		
-			[CqClass.THIEF, CqClass.FIGHTER, CqClass.WIZARD]
-		)];
+		spriteNames = _spriteNames;
 		super(0);
 	} 
 	
@@ -155,11 +161,14 @@ class SpritePortraitPaper extends HxlSpriteSheet {
 }
 class SpriteEquipmentIcons extends HxlSpriteSheet { 
 	public static var instance = new SpriteEquipmentIcons();
+	static var _spriteNames:Array<Array<String>>;
 	public function new() {
-		spriteNames = [
+		if (_spriteNames ==null)
+			_spriteNames = [
 			["grey_destroy", "jewelry", "hat", "destroy"],
 			["shoes", "armor", "gloves", "weapon"],
 		];
+		spriteNames = _spriteNames;
 		super(0);
 	} 
 	
@@ -169,48 +178,62 @@ class SpriteEquipmentIcons extends HxlSpriteSheet {
 }
 class SpriteIcons extends HxlSpriteSheet { 
 	public static var instance = new SpriteIcons();
+	static var _spriteNames:Array<Array<String>>;
 	public function new() {
-		spriteNames = [
-			["inventory","map","character","blank_icon"]
-		];
+		if (_spriteNames ==null)
+			_spriteNames = [
+				["inventory","map","character","blank_icon"]
+			];
+		spriteNames = _spriteNames;
 		super(0);
 	} 
 }
 class SpriteEffects extends HxlSpriteSheet { 
 	public static var instance = new SpriteEffects();
+	static var _spriteNames:Array<Array<String>>;
 	public function new() {
-		spriteNames = [
-			["small_scratch","big_scratch"]
-		];
+		if (_spriteNames ==null)
+			_spriteNames = [
+				["small_scratch","big_scratch"]
+			];
+		spriteNames = _spriteNames;
 		super(0);
 	} 
 }
 class SpriteSoundToggle extends HxlSpriteSheet { 
 	public static var instance = new SpriteSoundToggle();
+	static var _spriteNames:Array<Array<String>>;
 	public function new() {
-		spriteNames = [
-			["on","off"]
-		];
+		if (_spriteNames ==null)
+			_spriteNames = [
+				["on","off"]
+			];
+		spriteNames = _spriteNames;
 		super(0);
 	} 
 }
 class SpriteItems extends HxlSpriteSheet { 
 	public static var instance = new SpriteItems();
-	
+	static var _spriteNames:Array<Array<String>>;
+	// fixme
 	public var potions:Array<String>;
 	public function new() {
 		potions = ["purple_potion", "green_potion", "blue_potion", "yellow_potion", "red_potion"];
 		//potions = HxlUtil.enumToStringArray([CqItemType.PURPLE_POTION, CqItemType.GREEN_POTION, CqItemType.BLUE_POTION, CqItemType.YELLOW_POTION, CqItemType.RED_POTION]);
-		spriteNames = [
-			["amulet","boots","leather_armor","brestplate","chest","glove","cap","ring","bracelet","winged_sandles"],
-			["staff", "dagger", "short_sword", "long_sword"].concat(potions).concat(["helm"]),
-			["axe", "battle_axe", "claymore", "golden_helm", "mace", "broad_sword", "full_helm", "full_plate_mail", "cloak", "gauntlet"],
-			["gemmed_amulet","gemmed_ring","tundra_boots"]
-		];
+		if (_spriteNames ==null)
+			_spriteNames = [
+				["amulet","boots","leather_armor","brestplate","chest","glove","cap","ring","bracelet","winged_sandles"],
+				["staff", "dagger", "short_sword", "long_sword"].concat(potions).concat(["helm"]),
+				["axe", "battle_axe", "claymore", "golden_helm", "mace", "broad_sword", "full_helm", "full_plate_mail", "cloak", "gauntlet"],
+				["gemmed_amulet","gemmed_ring","tundra_boots"]
+			];
+			
+		spriteNames = _spriteNames;
 		super(0);
 	} 	
 }
-class SpriteMonsters extends HxlSpriteSheet { 	
+class SpriteMonsters extends HxlSpriteSheet {
+	static var _spriteNames:Array<Array<String>>;
 	public static var instance = new SpriteMonsters();
 	public static var kobolds = ["kobold_spear", "kobold_knives", "kobold_mage",];
 	public static var werewolves = ["werewolf_gray", "werewolf_blue", "werewolf_purple"];
@@ -222,20 +245,24 @@ class SpriteMonsters extends HxlSpriteSheet {
 	public static var apes = ["ape_blue", "ape_black", "ape_red","ape_white"];
 	public static var elementeals= ["elemental_green", "elemental_white", "elemental_red", "elemental_blue"];
 	public function new() {
-		spriteNames = [
-			kobolds.concat(["kobold_blank"]),
-			werewolves.concat(["werewolf_blank"]),
-			bandits,
-			minotauers.concat(["minotauer_blank"]),
-			succubi,
-			spiders,
-			apes,
-			elementeals,
-		];
+		
+		if (_spriteNames ==null)
+			_spriteNames = [
+				kobolds.concat(["kobold_blank"]),
+				werewolves.concat(["werewolf_blank"]),
+				bandits,
+				minotauers.concat(["minotauer_blank"]),
+				succubi,
+				spiders,
+				apes,
+				elementeals,
+			];
+		spriteNames = _spriteNames;
 		super(0);
 	} 
 }
 class SpritePlayer extends HxlSpriteSheet { 
+	static var _spriteNames:Array<Array<String>>;
 	public static var instance = new SpritePlayer();
 	public static var spriteNames = [
 			["berserk_fighter", "fighter", "wizard", "thief", "cloaked_thief"],
@@ -252,6 +279,7 @@ class SpritePlayer extends HxlSpriteSheet {
 	} 
 }
 class SpriteTiles extends HxlSpriteSheet { 
+	static var _spriteNames:Array<Array<String>>;
 	public static var instance = new SpriteTiles();
 	static var inited = false;
 	public var walkableAndSeeThroughTiles:Array<Int>;
@@ -262,28 +290,36 @@ class SpriteTiles extends HxlSpriteSheet {
 	
 	public function new() { 
 		// important: one color-scheme per line (used implicitly in level generator)
-		spriteNames = [
-			["red_up","red_down","red_floor0","red_floor1","red_wall0","red_wall1","red_wall2","red_wall3","red_wall4","red_door_close","red_door_open"], 
-			["blue_up", "blue_down", "blue_floor0", "blue_floor1", "blue_wall0", "blue_wall1", "blue_wall2", "blue_wall3", "blue_wall4", "blue_door_close", "blue_door_open"], 
-			["brown_up", "brown_down", "brown_floor0", "brown_floor1", "brown_wall0", "brown_wall1", "brown_wall2", "brown_wall3", "brown_wall4", "brown_door_close", "brown_door_open"], 
-			["green_up","green_down","green_floor0","green_floor1","green_wall0","green_wall1","green_wall2","green_wall3","green_wall4","green_door_close","green_door_open"], 
-		];
+		if (_spriteNames ==null)
+			_spriteNames = [
+				["red_up","red_down","red_floor0","red_floor1","red_wall0","red_wall1","red_wall2","red_wall3","red_wall4","red_door_close","red_door_open"], 
+				["blue_up", "blue_down", "blue_floor0", "blue_floor1", "blue_wall0", "blue_wall1", "blue_wall2", "blue_wall3", "blue_wall4", "blue_door_close", "blue_door_open"], 
+				["brown_up", "brown_down", "brown_floor0", "brown_floor1", "brown_wall0", "brown_wall1", "brown_wall2", "brown_wall3", "brown_wall4", "brown_door_close", "brown_door_open"], 
+				["green_up","green_down","green_floor0","green_floor1","green_wall0","green_wall1","green_wall2","green_wall3","green_wall4","green_door_close","green_door_open"], 
+			];
+		
+		spriteNames = _spriteNames;
 		super(1);
 		
+		// fixme
 		solidAndBlockingTiles = [
 			getSpriteIndex("red_wall0"),getSpriteIndex("red_wall1"),getSpriteIndex("red_wall2"),getSpriteIndex("red_wall3"),getSpriteIndex("red_wall4"),getSpriteIndex("red_door_close"),
 			getSpriteIndex("blue_wall0"),getSpriteIndex("blue_wall1"),getSpriteIndex("blue_wall2"),getSpriteIndex("blue_wall3"),getSpriteIndex("blue_wall4"),getSpriteIndex("blue_door_close"),
 			getSpriteIndex("brown_wall0"), getSpriteIndex("brown_wall1"), getSpriteIndex("brown_wall2"), getSpriteIndex("brown_wall3"), getSpriteIndex("brown_wall4"), getSpriteIndex("brown_door_close"),
 			getSpriteIndex("green_wall0"),getSpriteIndex("green_wall1"),getSpriteIndex("green_wall2"),getSpriteIndex("green_wall3"),getSpriteIndex("green_wall4"),getSpriteIndex("green_door_close"),
 		];
+		// fixme
 		walkableAndSeeThroughTiles = [
 			getSpriteIndex("red_floor0"), getSpriteIndex("blue_floor0"), getSpriteIndex("brown_floor0"),getSpriteIndex("green_floor0"),
 			getSpriteIndex("red_floor1"), getSpriteIndex("blue_floor1"), getSpriteIndex("brown_floor1"),getSpriteIndex("green_floor1"),
 			getSpriteIndex("red_down"), getSpriteIndex("blue_down"), getSpriteIndex("brown_down"),getSpriteIndex("green_down"),
 			getSpriteIndex("red_door_open"), getSpriteIndex("blue_door_open"), getSpriteIndex("brown_door_open"),getSpriteIndex("green_door_open"),
 		];
+		// fixme
 		stairsDown = [getSpriteIndex("red_down"), getSpriteIndex("blue_down"), getSpriteIndex("brown_down"), getSpriteIndex("green_down")];
+		// fixme
 		doors = [getSpriteIndex("red_door_close"), getSpriteIndex("blue_door_close"), getSpriteIndex("brown_door_close"), getSpriteIndex("green_door_close")];
+		// fixme
 		openDoors = [getSpriteIndex("red_door_open"), getSpriteIndex("blue_door_open"), getSpriteIndex("brown_door_open"), getSpriteIndex("green_door_open")];
 		
 		if (!inited) {
@@ -317,26 +353,33 @@ class SpriteTiles extends HxlSpriteSheet {
 	}
 }
 class SpriteCorpses extends HxlSpriteSheet { 
+	static var _spriteNames:Array<Array<String>>;
 	public static var instance = new SpriteCorpses();
 	public function new() {
-		spriteNames = [
-			["big_skull","small_skull"]
-		];
+		if (_spriteNames ==null)
+			_spriteNames = [
+				["big_skull","small_skull"]
+			];
+		spriteNames = _spriteNames;
 		super(0);
 	} 
 }
 class SpriteSpells extends HxlSpriteSheet { 
+	static var _spriteNames:Array<Array<String>>;
 	public static var instance = new SpriteSpells();
 	public function new() {
-		spriteNames = [
-			["freeze", "fireball", "berserk", "enfeeble_monster", "bless_weapon", "haste", "shadow_walk"],
-			["charm_monster", "polymorph", "sleep", "fear", "magic_mirror", "stone_skin", "blink"],
-			["magic_armor", "pass_wall", "teleport", "reveal_map", "heal"]			
-		];
+		if (_spriteNames ==null)
+			_spriteNames = [
+				["freeze", "fireball", "berserk", "enfeeble_monster", "bless_weapon", "haste", "shadow_walk"],
+				["charm_monster", "polymorph", "sleep", "fear", "magic_mirror", "stone_skin", "blink"],
+				["magic_armor", "pass_wall", "teleport", "reveal_map", "heal"]			
+			];
+		spriteNames = _spriteNames;
 		super(0);
 	} 
 }
 class SpriteDecorations extends HxlSpriteSheet { 
+	static var _spriteNames:Array<Array<String>>;
 	public static var instance = new SpriteDecorations();
 	
 	public static var wall = ["pic0", "pic1", "wall_pile", "wall_skull", "wall_skeleton", "tapestry0", "tapestry1", "tapestry2", "tapestry3", "crack0", "crack1", "wall_blood0", "wall_blood1", "wall_green_blood0", "wall_green_blood1", "wall_green_blood2"];
@@ -346,10 +389,12 @@ class SpriteDecorations extends HxlSpriteSheet {
 	public static var carpet = ["carpet0", "carpet1", "carpet2", "carpet3"];
 	
 	public function new() {
-		spriteNames = [
-			wall.concat(["blank0", "blank1", "blank2", "blank3", "blank4"]),
-			floor.concat(carpet)
-		];
+		if (_spriteNames ==null)
+			_spriteNames = [
+				wall.concat(["blank0", "blank1", "blank2", "blank3", "blank4"]),
+				floor.concat(carpet)
+			];
+		spriteNames = _spriteNames;
 		super(0);
 	} 
 	public static function getIcon(IconName:String, Size:Int, Zoom:Float):HxlSprite {
@@ -357,20 +402,26 @@ class SpriteDecorations extends HxlSpriteSheet {
 	}
 }
 class UiBeltVertical extends HxlSpriteSheet {
+	static var _spriteNames:Array<Array<String>>;
 	public static var instance = new UiBeltVertical();
 	public function new() {
-		spriteNames = [
-			["belt_vert_metal","belt_vert_metal_leather"]
-		];
+		if (_spriteNames ==null)
+			_spriteNames = [
+				["belt_vert_metal","belt_vert_metal_leather"]
+			];
+		spriteNames = _spriteNames;
 		super(0);
 	}
 }
 class SpriteCursor extends HxlSpriteSheet { 
+	static var _spriteNames:Array<Array<String>>;
 	public static var instance = new SpriteCursor();
 	public function new() {
-		spriteNames = [
-			["up","diagonal"]
-		];
+		if (_spriteNames ==null)
+			_spriteNames = [
+				["up","diagonal"]
+			];
+		spriteNames = _spriteNames;
 		super(0);
 	}
 }
