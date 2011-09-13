@@ -124,14 +124,12 @@ class HxlTextContainer extends HxlDialog {
 			totalHeight -= lineSpacing;
 		}
 	}
-
+	var line:HxlText;
 	public function scrollText() {
 		if ( lines.length > 0 ) {
 			if ( fadeEffect && !isFading ) {
-				var line:HxlText = lines.first();
-				Actuate.update(function(params:Dynamic) {
-					line.alpha = params.Alpha;
-				}, scrollRate, {Alpha: 1.0}, {Alpha: 0.0});
+				line = lines.first();
+				Actuate.update(scrollTweenUpdate, scrollRate, {Alpha: 1.0}, {Alpha: 0.0});
 				isFading = true;
 			} else {
 				var line:HxlText = lines.pop();
@@ -141,7 +139,9 @@ class HxlTextContainer extends HxlDialog {
 			}
 		}
 	}
-
+	function scrollTweenUpdate(params:Dynamic) {
+		line.alpha = params.Alpha;
+	}
 	function updateLayout() {
 		if ( !reverseOrder  ) {
 			var Y:Float = y + _padding;

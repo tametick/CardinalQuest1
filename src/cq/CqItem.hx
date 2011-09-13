@@ -451,25 +451,27 @@ class CqItem extends GameObjectImpl, implements Loot {
 			glowSprite = null;
 		}
 	}
-
+	var oldX:Float;
+	var oldY:Float;
 	public function doPickupEffect() {
 		HxlGraphics.state.add(this);
 		setGlow(false);
 		var self = this;
-		var oldX = x;
-		var oldY = y;
-		Actuate.update(function(params:Dynamic) {
-			self.x = params.X;
-			self.y = params.Y;
-			self.alpha = params.Alpha;
-		}, 1.0, {X: x, Y: y, Alpha: 1.0}, {X: x, Y: y-48, Alpha: 0.0}).onComplete(function() {
-			self.x = oldX;
-			self.y = oldY;
-			HxlGraphics.state.remove(self);
-			self.destroy();
-		}).ease(Cubic.easeOut); 
+		oldX = x;
+		oldY = y;
+		Actuate.update(pickupTweenUpdate, 1.0, {X: x, Y: y, Alpha: 1.0}, {X: x, Y: y-48, Alpha: 0.0}).onComplete(pickupTweenOnComplete).ease(Cubic.easeOut); 
 	}
-	
+	function pickupTweenUpdate(params:Dynamic) {
+			x = params.X;
+			y = params.Y;
+			alpha = params.Alpha;
+	}
+	function pickupTweenOnComplete() {
+			x = oldX;
+			y = oldY;
+			HxlGraphics.state.remove(this);
+			destroy();
+	}
 	public function equalTo(other:CqItem):Bool {
 		if (isSuperb != other.isSuperb || isWondrous != other.isWondrous || isMagical != other.isMagical)
 			return false;

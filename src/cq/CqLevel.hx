@@ -298,18 +298,17 @@ class CqLevel extends Level {
 		return mob;
 	}
 	
-	static var creatures:Array<CqActor>;
 	public override function tick(state:HxlState) {
-		if(creatures ==null)
-			creatures = new Array<CqActor>();
-		else
-			creatures.splice(0, creatures.length);
-			
-		creatures.push(Registery.player);
-		for (mob in mobs)
-			creatures.push(cast(mob, CqActor));
-			
-		for (creature in creatures) {
+		var l:Float = mobs.length + 1;
+		var i:UInt = 0;
+		while(i < l)
+		{
+			var creature:CqActor;
+			if (i == 0)
+				creature = Registery.player;
+			else
+				creature = cast(mobs[i - 1],CqActor);
+				
 			var buffs = creature.buffs;
 			var specialEffects = creature.specialEffects;
 			var visibleEffects = creature.visibleEffects;
@@ -402,11 +401,11 @@ class CqLevel extends Level {
 					creature.actionPoints = 0;
 				}
 			}
-
 			buffs = null;
 			specialEffects = null;
 			visibleEffects = null;
 			timers = null;
+			i++;
 		}
 	}
 
