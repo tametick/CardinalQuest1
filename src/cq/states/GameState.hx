@@ -401,7 +401,7 @@ class GameState extends CqState {
 		GameUI.instance.initHealthBars();
 	}
 	public function initRegistry(){
-		// populating the registry
+/*		// populating the registry
 		if ( SaveLoad.hasSaveGame() )
 		{
 			//This does not work, darnation..
@@ -409,10 +409,10 @@ class GameState extends CqState {
 			//Registery.player = SaveLoad.loadPlayer();
 		}
 		else
-		{
+		{*/
 			Registery.world = new CqWorld();
 			Registery.player = new CqPlayer(chosenClass);
-		}
+		/*}*/
 	}
 	
 	override function onKeyUp(event:KeyboardEvent) {	
