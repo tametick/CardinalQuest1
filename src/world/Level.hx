@@ -1,6 +1,8 @@
 package world;
 
 import com.eclecticdesignstudio.motion.Actuate;
+import cq.CqActor;
+import cq.CqItem;
 import data.Registery;
 import data.Resources;
 import flash.display.Bitmap;
@@ -68,10 +70,10 @@ class Level extends HxlTilemap {
 		HxlGraphics.follow(Registery.player, 10);
 	}
 	
-	public override function onRemove(state:HxlState) {
-		removeAllActors(state);
-		removeAllLoots(state);
-		removeAllDecorations(state);
+	override public function destroy() {
+		removeAllActors(HxlGraphics.state);
+		removeAllLoots(HxlGraphics.state);
+		removeAllDecorations(HxlGraphics.state);
 		ptLevel.destroy();
 		
 		ptLevel = null;
@@ -80,11 +82,16 @@ class Level extends HxlTilemap {
 		_pathMap.destroy();
 		_pathMap = null;
 		
-		super.onRemove(state);
-		destroy();
+		targetTile = null;
+		dest = null;
 		
-		System.gc();
-		System.gc();
+		HxlGraphics.unfollow();
+		
+		super.destroy();
+	}
+	
+	public override function onRemove(state:HxlState) {
+		super.onRemove(state);
 	}
 	
 	public function addMobToLevel(state:HxlState, mob:Mob) {
@@ -102,6 +109,9 @@ class Level extends HxlTilemap {
 		mobTile.actors.remove(mob);
 		
 		state.remove(mob);
+		
+		mobPos = null;
+		mobTile = null;
 	}
 	
 	function addObject(state:HxlState, obj:GameObject) {
@@ -144,17 +154,19 @@ class Level extends HxlTilemap {
 	public function removeAllActors(state:HxlState) {
 		state.remove(Registery.player);
 			
-		for (mob in mobs) {
-			state.remove(mob);
-			cast(mob, GameObject).destroy();
+		for (mob in mobs.copy()) {
+			removeMobFromLevel(state, mob);
+			cast(mob, CqMob).destroy();
 		}
 		
 		mobs = null;
 	}
 	
 	public function removeAllLoots(state:HxlState) {			
-		for (loot in loots)
-			state.remove(loot);
+		for (loot in loots.copy()){
+			removeLootFromLevel(state, loot);
+			cast(loot, CqItem).destroy();
+		}
 			
 		loots = null;
 	}
@@ -167,6 +179,9 @@ class Level extends HxlTilemap {
 		lootTile.loots.remove(loot);
 		
 		state.remove(loot);
+		
+		lootPos = null;
+		lootTile  = null;
 	}
 	
 	override public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {

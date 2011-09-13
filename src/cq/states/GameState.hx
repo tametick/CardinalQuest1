@@ -400,7 +400,14 @@ class GameState extends CqState {
 	{
 		GameUI.instance.initHealthBars();
 	}
-	public function initRegistry(){
+	public function initRegistry() {
+		if (Registery.world != null)
+			Registery.world.destroy();
+		
+		if (Registery.player != null)
+			Registery.player.destroy();
+		
+		
 /*		// populating the registry
 		if ( SaveLoad.hasSaveGame() )
 		{

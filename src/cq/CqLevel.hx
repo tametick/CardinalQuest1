@@ -33,6 +33,10 @@ class CqLevel extends Level {
 	static var tiles = SpriteTiles.instance;
 	static var itemSprites = SpriteItems.instance;
 	
+	override public function destroy() {
+		super.destroy();
+	}
+	
 	public function getColor():String {
 		if (index < 2)
 			return "blue";
@@ -68,6 +72,7 @@ class CqLevel extends Level {
 				return;
 		}
 			
+		// only got here if no enemy mobs remain
 		levelComplete();
 	}
 	

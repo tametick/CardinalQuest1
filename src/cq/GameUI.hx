@@ -437,6 +437,13 @@ class GameUI extends HxlDialog {
 		infoViewFloor.setSize(fontSize);
 		infoViewFloor.scrollFactor.x = infoViewFloor.scrollFactor.y = 0;
 		add(infoViewFloor);
+		
+		heart = null;
+		lives = null;
+		coins = null;
+		coin = null;
+		player = null;
+		level  = null;
 	}
 	
 	function getIcon(?Frame:Int=0):HxlSprite{

@@ -80,7 +80,7 @@ class SaveLoad
 	
 	public static function saveGame( )
 	{
-
+/*
 		//Dont store the initial level or if the game is not yet fully initialized
 		if ( Registery.world == null )
 			return;
@@ -89,6 +89,7 @@ class SaveLoad
 		trace( "Level: " + Registery.world.currentLevelIndex );
 		
 		/* For now only flash is supported */
+	/*
 		if ( Configuration.flash ) 
 		{
 			try
@@ -106,6 +107,7 @@ class SaveLoad
 					trace( "Could not store level: " + Std.string(msg)); 
 			}
 		}	
+		*/
 	}
 		
 	public static function hasSaveGame():Bool 

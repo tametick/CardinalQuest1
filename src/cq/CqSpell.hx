@@ -42,6 +42,9 @@ class CqSpellFactory {
 	}
 	public static function resetRemainigSpells()
 	{
+		if (CqSpellFactory.remainingSpells != null)
+			return;
+		
 		CqSpellFactory.remainingSpells = new Array();
 		for(line in SpriteSpells.instance.spriteNames)
 			CqSpellFactory.remainingSpells = CqSpellFactory.remainingSpells.concat(line);

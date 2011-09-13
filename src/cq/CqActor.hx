@@ -695,6 +695,8 @@ class CqActor extends CqObject, implements Actor {
 			setTilePos(Std.int(tile.mapX), Std.int(tile.mapY));
 			moveToPixel(HxlGraphics.state, pixelLocation.x, pixelLocation.y);
 			Registery.level.updateFieldOfView(HxlGraphics.state, true);
+			
+			pixelLocation = null;
 		case "magic_mirror":
 			var mob = Registery.level.createAndAddMirror(new HxlPoint(tile.mapX,tile.mapY), Registery.player.level, true,Registery.player);
 			GameUI.showEffectText(mob, "Mirror", 0x2DB6D2);
@@ -703,6 +705,8 @@ class CqActor extends CqObject, implements Actor {
 			effect.value = mob;
 			specialEffects.set(effect.name, effect);
 			Registery.level.updateFieldOfView(HxlGraphics.state, true);
+			
+			mob = null;
 		}
 	}
 	
