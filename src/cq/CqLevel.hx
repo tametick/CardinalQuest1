@@ -7,6 +7,7 @@ import cq.CqActor;
 import cq.effects.CqEffectSpell;
 import cq.ui.CqDecoration;
 import cq.states.GameState;
+import world.Player;
 
 import generators.BSP;
 import world.World;
@@ -66,14 +67,15 @@ class CqLevel extends Level {
 		
 		for (m in mobs) {
 			cqmob = cast(m, CqMob);
-			if (cqmob.faction != Registery.player.faction) 
+			if (cqmob.faction != CqPlayer.faction) 
 				return;
 			if (cqmob.isCharmed)
 				return;
 		}
 			
-		// only got here if no enemy mobs remain
-		levelComplete();
+		// only got here if no enemy mobs remain & game state hasn't been destroyed
+		if(Registery.player!=null)
+			levelComplete();
 	}
 	
 	override public function addDecoration(t:Tile, state:HxlState) {

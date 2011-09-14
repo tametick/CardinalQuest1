@@ -799,6 +799,8 @@ class CqActor extends CqObject, implements Actor {
 
 
 class CqPlayer extends CqActor, implements Player {
+	public static var faction:Int = 0;
+	
 	static var sprites = SpritePlayer.instance;
 	
 	public var playerClass:CqClass;
@@ -886,7 +888,7 @@ class CqPlayer extends CqActor, implements Player {
 		onPickup = new List();
 
 		loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 2.0, 2.0);
-		faction = 0;
+		faction = CqPlayer.faction;
 		inventory = new Array<CqItem>();
 
 		play("idle");

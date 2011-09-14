@@ -152,20 +152,27 @@ class Level extends HxlTilemap {
 	}
 	
 	public function removeAllActors(state:HxlState) {
-		state.remove(Registery.player);
+		if(Registery.player!=null)
+			state.remove(Registery.player);
 			
-		for (mob in mobs.copy()) {
-			removeMobFromLevel(state, mob);
-			cast(mob, CqMob).destroy();
+		var m:CqMob;
+		while(mobs.length>0){
+			m = cast(mobs.pop(), CqMob);
+			removeMobFromLevel(state, m);
+			m.destroy();
+			m = null;
 		}
 		
 		mobs = null;
 	}
 	
 	public function removeAllLoots(state:HxlState) {			
-		for (loot in loots.copy()){
-			removeLootFromLevel(state, loot);
-			cast(loot, CqItem).destroy();
+		var l:CqItem;
+		while (loots.length > 0) {
+			l = cast(loots.pop(),CqItem);
+			removeLootFromLevel(state, l);
+			l.destroy();
+			l = null;
 		}
 			
 		loots = null;

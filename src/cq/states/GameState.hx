@@ -71,12 +71,7 @@ class GameState extends CqState {
 		//add(loadingBox);
 		resumeActingTime = msMoveStamp = Timer.stamp();
 	}
-	public override function destroy() {
-		super.destroy();
-		
-		inst = null;
-		HxlGraphics.keys.onJustPressed = null;
-		
+	public override function destroy() {		
 		gameUI.kill();
 		remove(gameUI);
 		gameUI = null;
@@ -87,6 +82,9 @@ class GameState extends CqState {
 		Registery.player.kill();
 		Registery.player = null;
 		
+		super.destroy();
+		inst = null;
+		HxlGraphics.keys.onJustPressed = null;
 		//remove(Registery.world.currentLevel);
 	}
 	

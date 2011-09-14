@@ -30,7 +30,7 @@ class HxlState extends Sprite {
 	var _followMax:Point;
 	var _scroll:Point;
 
-	var keyboard:HxlKeyboard;
+	//var keyboard:HxlKeyboard;
 	var initialized:Int;
 	//var loadingBox:LoadingBox;
 	
@@ -56,7 +56,7 @@ class HxlState extends Sprite {
 			screen.exists = false;
 			//screen.solid = false;
 			//screen.fixed = true;
-			keyboard = new HxlKeyboard();
+			//keyboard = new HxlKeyboard();
 		}
 	}
 
@@ -137,6 +137,7 @@ class HxlState extends Sprite {
 	public function destroy() {
 		clearEventListeners();
 		defaultGroup.destroy();
+		defaultGroup = null;
 	}
 	
 	function init() { }
@@ -198,6 +199,7 @@ class HxlState extends Sprite {
 			var i:Dynamic = eventListeners.pop();
 			HxlGraphics.stage.removeEventListener(i.Type, i.Listener);
 		}
+		eventListeners = null;
 	}
 
 	function pauseEventListeners() {
