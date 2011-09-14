@@ -186,6 +186,16 @@ class GameState extends CqState {
 		target = null;
 	}
 	
+	private function checkResetKeys():Void {
+		if (HxlGraphics.keys.justReleased("R")) {
+			SaveLoad.deleteSaveGame();
+			if (GameUI.instance != null){
+				GameUI.instance.kill();
+			}
+			HxlGraphics.state = new CreateCharState();
+		}
+	}
+	
 	private function checkJumpKeys():Void {
 		if (HxlGraphics.keys.justReleased("COMMA") && Registery.world.currentLevelIndex>0) {
 			Registery.world.goToNextLevel(this, Registery.world.currentLevelIndex-1);
@@ -447,8 +457,10 @@ class GameState extends CqState {
 			HxlGraphics.pushState(WhiteState.instance);
 		}
 		isPlayerActing = false;
-		if (Configuration.debug)
+		if (Configuration.debug){
 			checkJumpKeys();
+			checkResetKeys();
+		}
 	}
 	var msMoveStamp:Float;
 	override function onMouseMove(event:MouseEvent)
