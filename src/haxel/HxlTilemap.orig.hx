@@ -102,9 +102,6 @@ class HxlTilemap extends HxlObject {
 
 	public var tileClass:Class<HxlTile>;
 
-	
-	private var tileBMPs:Array<BitmapData>;
-	private var tilesByCT:Hash<BitmapData>;
 	/**
 	 * The tilemap constructor just initializes some basic variables.
 	 */
@@ -128,8 +125,6 @@ class HxlTilemap extends HxlObject {
 		//_callbacks = new Array();
 		//fixed = true;
 
-		_flashRect = new Rectangle();
-		
 		_alpha = 1;
 		_color = 0x00ffffff;
 		_mtx = new Matrix();
@@ -168,6 +163,14 @@ class HxlTilemap extends HxlObject {
 		//Pre-process the map data if it's auto-tiled
 		var i:Int;
 		totalTiles = widthInTiles*heightInTiles;
+		/*
+		if (auto > OFF) {
+			collideIndex = startingIndex = drawIndex = 1;
+			for (i in 0...totalTiles) {
+				autoTile(i);
+			}
+		}
+		*/
 
 		//Figure out the size of the tiles
 		_pixels = GraphicCache.addBitmap(TileGraphic, false, false, null, ScaleX, ScaleY);
@@ -191,14 +194,19 @@ class HxlTilemap extends HxlObject {
 		var rx:Int;
 		var ry:Int;
 		_tiles = new Array();
+		
+		var tmpPos = new Array();
 		for ( y in 0...heightInTiles ) {
 			_tiles[y] = new Array();
 			for ( x in 0...widthInTiles ) {
-				_tiles[y][x] = Type.createInstance(tileClass, [x, y]);
+				tmpPos[0] = x;
+				tmpPos[1] = y;
+				_tiles[y][x] = Type.createInstance(tileClass, tmpPos);
 				updateTileGraphic(x, y, MapData[y][x]);
 			}
 		}
-		
+		tmpPos = null;
+
 		//Pre-set some helper variables for later
 		_screenRows = Math.ceil(HxlGraphics.height/_tileHeight)+1;
 		if (_screenRows > heightInTiles) {
@@ -208,31 +216,10 @@ class HxlTilemap extends HxlObject {
 		if (_screenCols > widthInTiles) {
 			_screenCols = widthInTiles;
 		}
-		//create splitted tile bmp array
-		tileBMPs = new Array<BitmapData>();
-		_flashPoint.x = 0; 
-		_flashPoint.y = 0; 
-		_flashRect.width = _tileWidth;
-		_flashRect.height = _tileHeight;
 		
-		var ty:Int = 0;
-		var tx:Int = 0;
-
-		tilesByCT = new Hash<BitmapData>();
-		while(ty/_tileHeight < _screenRows)
-		{
-			_flashRect.x = tx;
-			_flashRect.y = ty;
-			var tileBMP:BitmapData = new BitmapData(_tileWidth, _tileHeight);
-			tileBMP.copyPixels(_pixels, _flashRect, _flashPoint);
-			tileBMPs.push(tileBMP);
-			tx+=_tileWidth;
-			if (tx >= _pixels.width) {
-				ty +=_tileHeight;
-				tx = 0;
-			}
-		}
 		_bbKey = Std.string(TileGraphic);
+		//generateBoundingTiles();
+		//refreshHulls();
 		
 		return this;
 	}
@@ -268,6 +255,86 @@ class HxlTilemap extends HxlObject {
 	 */
 	function generateBoundingTiles() {
 		return;
+		/*
+		if ((_bbKey == null) || (_bbKey.length <= 0)) {
+			return;
+		}
+		
+		//Check for an existing version of this bounding boxes tilemap
+		var bbc:Int = getBoundingColor();
+		var key:String = _bbKey + ":BBTILES" + bbc;
+		var skipGen:Bool = HxlGraphics.checkBitmapCache(key);
+		_bbPixels = HxlGraphics.createBitmap(_pixels.width, _pixels.height, 0, true, key);
+		if (!skipGen) {
+			//Generate a bounding boxes tilemap for this color
+			_flashRect = new Rectangle();
+			_flashRect.width = _pixels.width;
+			_flashRect.height = _pixels.height;
+			_flashPoint.x = 0;
+			_flashPoint.y = 0;
+			
+			_bbPixels.copyPixels(_pixels,_flashRect,_flashPoint);
+			_flashRect.width = _tileWidth;
+			_flashRect.height = _tileHeight;
+			
+			//Check for an existing non-collide bounding box stamp
+			var ov:Bool = false;//_solid;
+			//_solid = false;
+			bbc = getBoundingColor();
+			key = "BBTILESTAMP"+_tileWidth+"X"+_tileHeight+bbc;
+			skipGen = HxlGraphics.checkBitmapCache(key);
+			var stamp1:BitmapData = HxlGraphics.createBitmap(_tileWidth, _tileHeight, 0, true, key);
+			if (!skipGen) {
+				//Generate a bounding boxes stamp for this color
+				stamp1.fillRect(_flashRect,bbc);
+				_flashRect.x = _flashRect.y = 1;
+				_flashRect.width -= 2;
+				_flashRect.height -= 2;
+				stamp1.fillRect(_flashRect,0);
+				_flashRect.x = _flashRect.y = 0;
+				_flashRect.width = _tileWidth;
+				_flashRect.height = _tileHeight;
+			}
+			//_solid = ov;
+			
+			//Check for an existing collide bounding box
+			bbc = getBoundingColor();
+			key = "BBTILESTAMP"+_tileWidth+"X"+_tileHeight+bbc;
+			skipGen = HxlGraphics.checkBitmapCache(key);
+			var stamp2:BitmapData = HxlGraphics.createBitmap(_tileWidth, _tileHeight, 0, true, key);
+			if (!skipGen) {
+				//Generate a bounding boxes stamp for this color
+				stamp2.fillRect(_flashRect,bbc);
+				_flashRect.x = _flashRect.y = 1;
+				_flashRect.width -= 2;
+				_flashRect.height -= 2;
+				stamp2.fillRect(_flashRect,0);
+				_flashRect.x = _flashRect.y = 0;
+				_flashRect.width = _tileWidth;
+				_flashRect.height = _tileHeight;
+			}
+			
+			//Stamp the new tile bitmap with the bounding box border
+			var r:Int;
+			var c:Int;
+			var i:Int = 0;
+			r = 0;
+			while (r < _bbPixels.height) {
+				c = 0;
+				while (c < _bbPixels.width) {
+					_flashPoint.x = c;
+					_flashPoint.y = r;
+					if (i++ < collideIndex) {
+						_bbPixels.copyPixels(stamp1,_flashRect,_flashPoint,null,null,true);
+					} else {
+						_bbPixels.copyPixels(stamp2,_flashRect,_flashPoint,null,null,true);
+					}
+					c += _tileWidth;
+				}
+				r += _tileHeight;
+			}
+		}
+		*/
 	}
 
 	/**
@@ -277,7 +344,11 @@ class HxlTilemap extends HxlObject {
 	var tmpRect:Rectangle;
 	static var originPoint:Point = new Point(0, 0);
 	function renderTilemap() {
-		var tileBitmap:BitmapData = _pixels;
+		//Bounding box display options
+		var tileBitmap:BitmapData = _pixels;//no bounding,becouse its already commented out
+		
+		tmpBitmap.fillRect(tmpRect, 0x00ffffff);
+		
 
 		getScreenXY(_point);
 		_flashPoint.x = _point.x;
@@ -288,29 +359,32 @@ class HxlTilemap extends HxlObject {
 		if (tx > widthInTiles-_screenCols) tx = widthInTiles-_screenCols;
 		if (ty < 0) ty = 0;
 		if (ty > heightInTiles-_screenRows) ty = heightInTiles-_screenRows;
-		_flashPoint.x += tx * _tileWidth;
-		_flashPoint.y += ty * _tileHeight;
+		_flashPoint.x += tx*_tileWidth;
+		_flashPoint.y += ty*_tileHeight;
 		var opx:Int = Std.int(_flashPoint.x);
 		var c:Int;
 		var tile:HxlTile;
 		for (r in 0..._screenRows) {
 			for (c in 0..._screenCols) {
 				tile = _tiles[r+ty][c+tx];
-				if ( tile.visible ) {
-					#if flash9	
-					if (!tilesByCT.exists( ((tile.dataNum-startingIndex) +"_" + tile._ct) ))
-					{
-						tmpBitmap = tileBMPs[(tile.dataNum-startingIndex)].clone();
-						//test
-						if (tile._ct != null)
-							tmpBitmap.colorTransform( tmpRect,  tile._ct);
-						tilesByCT.set(  ((tile.dataNum-startingIndex) +"_"+ tile._ct), tmpBitmap.clone());
+				if ( tile.bitmapRect != null && tile.visible ) {
+					if ( tile._ct == null ) {
+						HxlGraphics.buffer.copyPixels(tileBitmap, tile.bitmapRect, _flashPoint, null, null, true);
+/*					} else if ( tile.altBitmap != null ) {
+						HxlGraphics.buffer.copyPixels(tile.altBitmap, tmpRect, _flashPoint, null, null, true);*/
+					} else {
+						#if flash9
+						//_mtx.identity();
+						//_mtx.translate(_flashPoint.x, _flashPoint.y);
+						//tmpBitmap.fillRect( tmpRect, 0xffFF0000);
+						tmpBitmap.copyPixels(tileBitmap, tile.bitmapRect, originPoint, null, null, false);
+						tmpBitmap.colorTransform( tmpRect,  tile._ct);
+						HxlGraphics.buffer.copyPixels(tmpBitmap, tmpRect, _flashPoint, null, null, false);
+						#else
+						// TODO: Get this working in CPP
+						HxlGraphics.buffer.copyPixels(tileBitmap, tile.bitmapRect, _flashPoint, null, null, true);
+						#end
 					}
-					HxlGraphics.buffer.copyPixels(tilesByCT.get(  ((tile.dataNum-startingIndex) +"_"+ tile._ct)), tmpRect, _flashPoint, null, null, false);
-					#else
-					// TODO: Get this working in CPP
-					HxlGraphics.buffer.copyPixels(tileBitmap, tile.bitmapRect, _flashPoint, null, null, true);
-					#end
 					HxlGraphics.numRenders++;
 				}
 				_flashPoint.x += _tileWidth;
@@ -332,7 +406,26 @@ class HxlTilemap extends HxlObject {
 	public function getTileBitmap(X:Int, Y:Int):BitmapData {
 		var tileBitmap:BitmapData = _pixels;
 		var tile:HxlTile = _tiles[Y][X];
-		return (tilesByCT.get(  ((tile.dataNum-startingIndex) +"_" + tile._ct)));
+		
+		if (tmpRect == null)
+			tmpRect = new Rectangle(0, 0, _tileWidth, _tileHeight);
+		
+		if (tmpBitmap == null)
+			tmpBitmap = new BitmapData(_tileWidth, _tileHeight, true, 0x00ffffff);
+		else
+			tmpBitmap.fillRect(tmpRect, 0x00ffffff);		
+		
+		if ( tile._ct != null ) {
+			#if flash9
+			tmpBitmap.copyPixels(tileBitmap, tile.bitmapRect, new Point(0, 0), null, null, true);
+			tmpBitmap.colorTransform(tmpRect, tile._ct);
+			#else
+			bmp.copyPixels(tileBitmap, tile.bitmapRect, new Point(0, 0), null, null, true);
+			#end
+		} else {
+			tmpBitmap.copyPixels(tileBitmap, tile.bitmapRect, new Point(0, 0), null, null, true);
+		}
+		return tmpBitmap;
 	}
 
 	/**
@@ -373,6 +466,73 @@ class HxlTilemap extends HxlObject {
 	}
 
 	/**
+	 * Change the data and graphic of a tile in the tilemap.
+	 * 
+	 * @param	X				The X coordinate of the tile (in tiles, not pixels).
+	 * @param	Y				The Y coordinate of the tile (in tiles, not pixels).
+	 * @param	Tile			The new integer data you wish to inject.
+	 * @param	UpdateGraphics	Whether the graphical representation of this tile should change.
+	 * 
+	 * @return	Whether or not the tile was actually changed.
+	 */ 
+	/*
+	public function setTile(X:Int,Y:Int,Tile:Int,?UpdateGraphics:Bool=true):Bool {
+		if ((X >= widthInTiles) || (Y >= heightInTiles)) {
+			return false;
+		}
+		return setTileByIndex(Y * widthInTiles + X,Tile,UpdateGraphics);
+	}
+	*/
+
+	/**
+	 * Change the data and graphic of a tile in the tilemap.
+	 * 
+	 * @param	Index			The slot in the data array (Y * widthInTiles + X) where this tile is stored.
+	 * @param	Tile			The new integer data you wish to inject.
+	 * @param	UpdateGraphics	Whether the graphical representation of this tile should change.
+	 * 
+	 * @return	Whether or not the tile was actually changed.
+	 */
+	/*
+	public function setTileByIndex(Index:Int,Tile:Int,?UpdateGraphics:Bool=true):Bool {
+		if (Index >= _data.length) {
+			return false;
+		}
+		
+		var ok:Bool = true;
+		_data[Index] = Tile;
+		
+		if (!UpdateGraphics) {
+			return ok;
+		}
+		
+		if (auto == OFF) {
+			updateTile(Index);
+			return ok;
+		}
+
+		//If this map is autotiled and it changes, locally update the arrangement
+		var i:Int;
+		var r:Int = Std.int(Index/widthInTiles) - 1;
+		var rl:Int = r+3;
+		var c:Int = Index%widthInTiles - 1;
+		var cl:Int = c+3;
+		while (r < rl) {
+			for (c in 3...cl) {
+				if ((r >= 0) && (r < heightInTiles) && (c >= 0) && (c < widthInTiles)) {
+					i = r*widthInTiles+c;
+					autoTile(i);
+					updateTile(i);
+				}
+			}
+			r++;
+		}
+		
+		return ok;
+	}
+	*/
+
+	/**
 	 * Call this function to lock the automatic camera to the map's edges.
 	 * 
 	 * @param	Border		Adjusts the camera follow boundary by whatever number of tiles you specify here.  Handy for blocking off deadends that are offscreen, etc.  Use a negative number to add padding instead of hiding the edges.
@@ -380,6 +540,96 @@ class HxlTilemap extends HxlObject {
 	public function follow(?Border:Int=0) {
 		HxlGraphics.followBounds(Std.int(x+Border*_tileWidth),Std.int(y+Border*_tileHeight),Std.int(width-Border*_tileWidth),Std.int(height-Border*_tileHeight));
 	}
+
+	/**
+	 * Shoots a ray from the start point to the end point.
+	 * If/when it passes through a tile, it stores and returns that point.
+	 * 
+	 * @param	StartX		The X component of the ray's start.
+	 * @param	StartY		The Y component of the ray's start.
+	 * @param	EndX		The X component of the ray's end.
+	 * @param	EndY		The Y component of the ray's end.
+	 * @param	Result		A <code>Point</code> object containing the first wall impact.
+	 * @param	Resolution	Defaults to 1, meaning check every tile or so.  Higher means more checks!
+	 * @return	Whether or not there was a collision between the ray and a colliding tile.
+	 */
+	public function ray(StartX:Float, StartY:Float, EndX:Float, EndY:Float, Result:HxlPoint, ?Resolution:Int=1):Bool {
+		// TODO: Replace this function! We should probably just have a bresenham function in HxlUtil
+		return false;
+		/*
+		var step:Float = _tileWidth;
+		if (_tileHeight < _tileWidth) {
+			step = _tileHeight;
+		}
+		step /= Resolution;
+		var dx:Float = EndX - StartX;
+		var dy:Float = EndY - StartY;
+		var distance:Float = Math.sqrt(dx*dx + dy*dy);
+		var steps:Int = Math.ceil(distance/step);
+		var stepX:Float = dx/steps;
+		var stepY:Float = dy/steps;
+		var curX:Float = StartX - stepX;
+		var curY:Float = StartY - stepY;
+		var tx:Int;
+		var ty:Int;
+		for (i in 0...steps) {
+			curX += stepX;
+			curY += stepY;
+			
+			if ((curX < 0) || (curX > width) || (curY < 0) || (curY > height)) {
+				continue;
+			}
+			
+			tx = Std.int(curX/_tileWidth);
+			ty = Std.int(curY/_tileHeight);
+			if ((cast( _data[ty*widthInTiles+tx], Int)) >= collideIndex) {
+				//Some basic helper stuff
+				tx *= _tileWidth;
+				ty *= _tileHeight;
+				var rx:Float = 0;
+				var ry:Float = 0;
+				var q:Float;
+				var lx:Float = curX-stepX;
+				var ly:Float = curY-stepY;
+				
+				//Figure out if it crosses the X boundary
+				q = tx;
+				if (dx < 0) {
+					q += _tileWidth;
+				}
+				rx = q;
+				ry = ly + stepY*((q-lx)/stepX);
+				if ((ry > ty) && (ry < ty + _tileHeight)) {
+					if (Result == null) {
+						Result = new HxlPoint();
+					}
+					Result.x = rx;
+					Result.y = ry;
+					return true;
+				}
+				
+				//Else, figure out if it crosses the Y boundary
+				q = ty;
+				if (dy < 0) {
+					q += _tileHeight;
+				}
+				rx = lx + stepX*((q-ly)/stepY);
+				ry = q;
+				if ((rx > tx) && (rx < tx + _tileWidth)) {
+					if (Result == null) {
+						Result = new HxlPoint();
+					}
+					Result.x = rx;
+					Result.y = ry;
+					return true;
+				}
+				return false;
+			}
+		}
+		return false;
+		*/
+	}
+
 	/**
 	 * Converts a one-dimensional array of tile data to a comma-separated string.
 	 * 
@@ -453,8 +703,24 @@ class HxlTilemap extends HxlObject {
 	public function updateTileGraphic(X:Int, Y:Int, Data:Int) {
 		var tile:HxlTile = getTile(X,Y);
 		if ( tile == null ) 
-			return;	
+			return;
+			
 		tile.dataNum = Data;
+//		tile.altBitmap = null;
+		
+		if ( Data == 0 ) {
+			tile.bitmapRect = null;
+			return;
+		}
+		
+		var rx:Int = (Data - startingIndex) * _tileWidth;
+		var ry:Int = 0;
+		
+		if (rx >= _pixels.width) {
+			ry = Std.int(rx/_pixels.width)*_tileHeight;
+			rx %= _pixels.width;
+		}
+		tile.bitmapRect = new Rectangle(rx, ry, _tileWidth, _tileHeight);
 	}
 
 	/**
