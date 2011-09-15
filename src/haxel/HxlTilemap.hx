@@ -196,7 +196,7 @@ class HxlTilemap extends HxlObject {
 	var tmpBitmap:BitmapData;
 	var tmpRect:Rectangle;
 	static var originPoint:Point = new Point(0, 0);
-	function renderTilemap() {
+	public override function render() {
 		var tileBitmap:BitmapData = _pixels;
 
 		getScreenXY(_point);
@@ -240,13 +240,6 @@ class HxlTilemap extends HxlObject {
 		}
 
 		tileBitmap = null;
-	}
-
-	/**
-	 * Draws the tilemap.
-	 */
-	public override function render() {
-		renderTilemap();
 	}
 
 	public function getTileBitmap(X:Int, Y:Int):BitmapData {
