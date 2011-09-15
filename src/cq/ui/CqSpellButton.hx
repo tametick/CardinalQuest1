@@ -33,7 +33,7 @@ class CqSpellButton extends HxlDialog {
 	var _initialized:Bool;
 	public var cell:CqSpellCell;
 	var chargeSprite:HxlSprite;
-	public var chrageBmpData:BitmapData;
+	public var chargeBmpData:BitmapData;
 
 	public function new(X:Int,Y:Int,?Width:Int=100,?Height:Int=20,?Idx:Int=0) {
 		super(X, Y, Width, Height);
@@ -49,13 +49,13 @@ class CqSpellButton extends HxlDialog {
 		chargeSprite.createGraphic(54, 54, 0x00010101);
 		GameUI.instance.popups.add(chargeSprite);
 		
-		chrageBmpData = new BitmapData(94, 94, true, 0x0);
+		chargeBmpData = new BitmapData(94, 94, true, 0x0);
 	}
 	
 	override public function destroy() {
 		super.destroy();
-		chrageBmpData.dispose();
-		chrageBmpData = null;
+		chargeBmpData.dispose();
+		chargeBmpData = null;
 	}
 	
 	public override function update() {

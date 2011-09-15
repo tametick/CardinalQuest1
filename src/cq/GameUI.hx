@@ -297,10 +297,10 @@ class GameUI extends HxlDialog {
 		}
 	}
 	override public function kill() {
-		if(chrageBmp!=null){
+		if(chargeBmp!=null){
 			//chrageBmp.bitmapData.dispose();
-			chrageBmp.bitmapData = null;
-			chrageBmp = null;
+			chargeBmp.bitmapData = null;
+			chargeBmp = null;
 		}
 		chargeShape = null;
 		clearEventListeners();
@@ -460,7 +460,7 @@ class GameUI extends HxlDialog {
 			}
 		}
 	}
-	var chrageBmp:Bitmap;
+	var chargeBmp:Bitmap;
 	var chargeShape:Shape;
 	public function updateCharge(btn:CqSpellButton, ?forcedValue:Int=-1) {
 		var spiritPoints = forcedValue;
@@ -483,17 +483,17 @@ class GameUI extends HxlDialog {
 		G.beginFill(0x55000000);
 		GameUI.drawChargeArc(G, 27, 27, -(Math.PI/2), end, 47, -1);
 		G.endFill();
-		if(chrageBmp == null)
-			chrageBmp = new Bitmap(GraphicCache.getBitmap(CqGraphicKey.EquipmentCellBG));
-		chargeShape.mask = chrageBmp;
+		if(chargeBmp == null)
+			chargeBmp = new Bitmap(GraphicCache.getBitmap(CqGraphicKey.EquipmentCellBG));
+		chargeShape.mask = chargeBmp;
 		
-		btn.chrageBmpData.fillRect(CqSpellButton.clearChargeRect, 0x0);
+		btn.chargeBmpData.fillRect(CqSpellButton.clearChargeRect, 0x0);
 		
 		
 		var ctrans:ColorTransform = new ColorTransform();
 		ctrans.alphaMultiplier = 0.5;
-		btn.chrageBmpData.draw(chargeShape, null, ctrans);
-		GraphicCache.addBitmapData(btn.chrageBmpData, CqGraphicKey.chargeRadial, true);
+		btn.chargeBmpData.draw(chargeShape, null, ctrans);
+		GraphicCache.addBitmapData(btn.chargeBmpData, CqGraphicKey.chargeRadial, true);
 
 		btn.updateChargeSprite(CqGraphicKey.chargeRadial);
 	}
