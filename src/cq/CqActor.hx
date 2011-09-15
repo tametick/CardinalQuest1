@@ -695,6 +695,8 @@ class CqActor extends CqObject, implements Actor {
 			setTilePos(Std.int(tile.mapX), Std.int(tile.mapY));
 			moveToPixel(HxlGraphics.state, pixelLocation.x, pixelLocation.y);
 			Registery.level.updateFieldOfView(HxlGraphics.state, true);
+			
+			pixelLocation = null;
 		case "magic_mirror":
 			var mob = Registery.level.createAndAddMirror(new HxlPoint(tile.mapX,tile.mapY), Registery.player.level, true,Registery.player);
 			GameUI.showEffectText(mob, "Mirror", 0x2DB6D2);
@@ -703,6 +705,8 @@ class CqActor extends CqObject, implements Actor {
 			effect.value = mob;
 			specialEffects.set(effect.name, effect);
 			Registery.level.updateFieldOfView(HxlGraphics.state, true);
+			
+			mob = null;
 		}
 	}
 	
@@ -759,7 +763,7 @@ class CqActor extends CqObject, implements Actor {
 			other.specialEffects.set(effect.name, effect);
 			GameUI.showEffectText(other, "Sleep", 0xFFFF00);
 		case "blink":
-			var tileLocation = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), Registery.level.mapData, SpriteTiles.instance.walkableAndSeeThroughTiles);
+			var tileLocation = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), Registery.level.mapData, SpriteTiles.walkableAndSeeThroughTiles);
 			var pixelLocation = Registery.level.getPixelPositionOfTile(tileLocation.x,tileLocation.y);
 			setTilePos(Std.int(tileLocation.x), Std.int(tileLocation.y));
 			moveToPixel(HxlGraphics.state, pixelLocation.x, pixelLocation.y);
@@ -795,6 +799,8 @@ class CqActor extends CqObject, implements Actor {
 
 
 class CqPlayer extends CqActor, implements Player {
+	public static var faction:Int = 0;
+	
 	static var sprites = SpritePlayer.instance;
 	
 	public var playerClass:CqClass;
@@ -882,7 +888,7 @@ class CqPlayer extends CqActor, implements Player {
 		onPickup = new List();
 
 		loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 2.0, 2.0);
-		faction = 0;
+		faction = CqPlayer.faction;
 		inventory = new Array<CqItem>();
 
 		play("idle");

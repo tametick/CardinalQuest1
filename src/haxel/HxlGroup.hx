@@ -498,8 +498,9 @@ class HxlGroup extends HxlObject {
 				o.destroy();
 			}
 			members[i] = null;
+			o = null;
 		}
-		members = new Array();
+		members.splice(0, members.length);
 	}
 	
 	/**

@@ -45,6 +45,16 @@ class CqWorld extends World {
 			
 		goToLevel(currentLevelIndex);
 	}
+	
+	override public function destroy() {
+		super.destroy();
+		
+		while (!onNewLevel.isEmpty())
+			onNewLevel.pop();
+		onNewLevel = null;
+		
+		actorAdded = null;
+	}
 
 	public function addOnNewLevel(Callback:Dynamic) {
 		onNewLevel.add(Callback);
@@ -60,10 +70,13 @@ class CqWorld extends World {
 		//currentLevel = levels[level];
 		currentLevel = new CqLevel(level);
 		doOnNewLevel();
+		
+		// todo - disabled for now, testing memory leaks
+		
 		//Store it
-		SaveLoad.saveGame();
+		//SaveLoad.saveGame();
 		//Let Kong know
-		Registery.getKong().SubmitStat( Registery.KONG_MAXLEVEL , level );
+		//Registery.getKong().SubmitStat( Registery.KONG_MAXLEVEL , level );
 	}
 		
 	public override function goToNextLevel(state:HxlState, ?jumpToLevel:Int = -1) {
@@ -82,6 +95,7 @@ class CqWorld extends World {
 	}
 
 	static public function onActorAdded(Actor:CqActor) {
-		if ( actorAdded != null ) actorAdded();
+		if ( actorAdded != null ) 
+			actorAdded();
 	}
 }

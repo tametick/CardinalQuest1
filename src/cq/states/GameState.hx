@@ -71,12 +71,7 @@ class GameState extends CqState {
 		//add(loadingBox);
 		resumeActingTime = msMoveStamp = Timer.stamp();
 	}
-	public override function destroy() {
-		super.destroy();
-		
-		inst = null;
-		HxlGraphics.keys.onJustPressed = null;
-		
+	public override function destroy() {		
 		gameUI.kill();
 		remove(gameUI);
 		gameUI = null;
@@ -87,6 +82,9 @@ class GameState extends CqState {
 		Registery.player.kill();
 		Registery.player = null;
 		
+		super.destroy();
+		inst = null;
+		HxlGraphics.keys.onJustPressed = null;
 		//remove(Registery.world.currentLevel);
 	}
 	
@@ -184,6 +182,16 @@ class GameState extends CqState {
 		}
 		
 		target = null;
+	}
+	
+	private function checkResetKeys():Void {
+		if (HxlGraphics.keys.justReleased("R")) {
+			SaveLoad.deleteSaveGame();
+			if (GameUI.instance != null){
+				GameUI.instance.kill();
+			}
+			HxlGraphics.state = new CreateCharState();
+		}
 	}
 	
 	private function checkJumpKeys():Void {
@@ -400,8 +408,15 @@ class GameState extends CqState {
 	{
 		GameUI.instance.initHealthBars();
 	}
-	public function initRegistry(){
-		// populating the registry
+	public function initRegistry() {
+		if (Registery.world != null)
+			Registery.world.destroy();
+		
+		if (Registery.player != null)
+			Registery.player.destroy();
+		
+		
+/*		// populating the registry
 		if ( SaveLoad.hasSaveGame() )
 		{
 			//This does not work, darnation..
@@ -409,10 +424,10 @@ class GameState extends CqState {
 			//Registery.player = SaveLoad.loadPlayer();
 		}
 		else
-		{
+		{*/
 			Registery.world = new CqWorld();
 			Registery.player = new CqPlayer(chosenClass);
-		}
+		/*}*/
 	}
 	
 	override function onKeyUp(event:KeyboardEvent) {	
@@ -440,8 +455,10 @@ class GameState extends CqState {
 			HxlGraphics.pushState(WhiteState.instance);
 		}
 		isPlayerActing = false;
-		if (Configuration.debug)
+		if (Configuration.debug){
 			checkJumpKeys();
+			checkResetKeys();
+		}
 	}
 	var msMoveStamp:Float;
 	override function onMouseMove(event:MouseEvent)
@@ -548,7 +565,7 @@ class GameState extends CqState {
 			return;
 		}
 		//stairs popup
-		if (HxlUtil.contains(SpriteTiles.instance.stairsDown.iterator(), tile.dataNum)) {
+		if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tile.dataNum)) {
 			player.popup.setText("Click go downstairs\n[hotkey enter]");
 		} else {
 			player.popup.setText("");
@@ -567,7 +584,7 @@ class GameState extends CqState {
 				var item = cast(tile.loots[tile.loots.length - 1], CqItem);
 				player.pickup(this, item);
 				item = null;
-			} else if (HxlUtil.contains(SpriteTiles.instance.stairsDown.iterator(), tile.dataNum)) {
+			} else if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tile.dataNum)) {
 				// descend
 				Registery.world.goToNextLevel(this);
 				player.popup.setText("");
@@ -592,7 +609,7 @@ class GameState extends CqState {
 				isPlayerActing = false;
 			}
 				
-		} else if(HxlUtil.contains(SpriteTiles.instance.doors.iterator(),tile.dataNum)){
+		} else if(HxlUtil.contains(SpriteTiles.doors.iterator(),tile.dataNum)){
 			// open door
 			openDoor(tile);
 		} else if(!(dx==0 && dy==0)){
@@ -610,7 +627,7 @@ class GameState extends CqState {
 			tile = getPlayerTile(target);
 			if ( !isBlockingMovement(target) ) {
 				player.actInDirection(this,target);
-			} else if (HxlUtil.contains(SpriteTiles.instance.doors.iterator(), tile.dataNum)){
+			} else if (HxlUtil.contains(SpriteTiles.doors.iterator(), tile.dataNum)){
 				openDoor(tile);
 			} else {
 				level = null;
