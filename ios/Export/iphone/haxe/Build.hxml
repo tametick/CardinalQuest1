@@ -1,0 +1,9 @@
+-main ApplicationMain 
+-D nme_install_tool
+-cp /Users/hellband/Desktop/Dropbox/cqx/ios
+-cp /Users/hellband/Desktop/Dropbox/cqx/src
+-lib nme
+-lib actuate
+-lib air2
+-D iphone
+--remap flash:nme

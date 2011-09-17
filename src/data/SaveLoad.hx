@@ -44,43 +44,76 @@ class SaveLoad
 	public static function loadWorld():CqWorld
 	{
 		/* For now only flash is supported */
-		if ( Configuration.flash )
+		#if flash
 		{
 		  getSO();
 		  if( so != null )
 			return so.data.world;
 		}
+		#end
 		return null;		
 	}
 
 	public static function loadPlayer():CqPlayer
 	{
 		/* For now only flash is supported */
-		if ( Configuration.flash )
+		#if flash
 		{
 		  getSO();
 		  if( so != null )
 			return so.data.player;
 		}
+		#end
 		return null;		
 	}	
 	
+	public static function loadDungeonLayout():Array<Array<Int>>
+	{
+		/* For now only flash is supported */
+		#if flash
+			getSO();
+			if( so != null )
+				return so.data.layout;
+		#end
+		return null;		
+	}
+		
 	public static function deleteSaveGame( )
 	{
 		/* For now only flash is supported */
-		if ( Configuration.flash ) 		
-		{
+		#if flash
 			getSO();
 			if( so != null )
 			{
 				so.clear();	
 			}
-		}
-	}	
+		#end
+	}
+	
+	public static function saveDungeonLayout( layout : Array<Array<Int>> , depth : Int )
+	{
+		/* For now only flash is supported */
+		#if flash
+			try
+			{
+				getSO();
+				
+				so.data.layout[3][3] = 3;
+				
+				so.data.layout  = layout;
+				so.data.depth   = depth;
+				so.flush();
+			}
+			catch( msg:Dynamic )
+			{
+				if ( Configuration.debug )
+					trace( "Could not store level: " + Std.string(msg)); 
+			}
+		#end	
+	}
 	
 	public static function saveGame( )
 	{
-/*
 		//Dont store the initial level or if the game is not yet fully initialized
 		if ( Registery.world == null )
 			return;
@@ -89,9 +122,7 @@ class SaveLoad
 		trace( "Level: " + Registery.world.currentLevelIndex );
 		
 		/* For now only flash is supported */
-	/*
-		if ( Configuration.flash ) 
-		{
+		#if flash
 			try
 			{
 				getSO();
@@ -106,15 +137,13 @@ class SaveLoad
 				if ( Configuration.debug )
 					trace( "Could not store level: " + Std.string(msg)); 
 			}
-		}	
-		*/
+		#end
 	}
 		
 	public static function hasSaveGame():Bool 
 	{
 		/* For now only flash is supported */
-		if ( Configuration.flash )
-		{
+		#if flash
 			getSO();
 			if( so != null )
 				if ( Reflect.hasField( so.data , "depth" )  )
@@ -123,7 +152,7 @@ class SaveLoad
 						trace( "Loaded Game at level:" + so.data.depth );
 					return true;	
 				}
-		}
+		#end
 		return false;
 	}
 			

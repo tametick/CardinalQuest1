@@ -91,6 +91,9 @@ class MainMenuState extends CqState {
 		if (!HxlState.musicOn)
 			toggleMusic();
 		add(btnToggleMusic);
+		  
+		if ( !Configuration.startWithMusic )
+			toggleMusic();
 		
 		tglSFXIcon = new HxlSprite(45,0);
 		tglSFXIcon.loadGraphic(SpriteSoundToggle, true, false, 48, 48,false,0.5,0.5);
@@ -104,7 +107,9 @@ class MainMenuState extends CqState {
 		if (!sfxOn)
 			toggleSFX();
 		add(btnToggleSFX);
-		
+
+		if ( !Configuration.startWithSound )
+			toggleSFX();
 		
 		var copyright = new HxlText(370, 459, Configuration.app_width-370, "Copyright 2011 Ido Yehieli.", true, FontAnonymousPro.instance.fontName, 18);
 		add(copyright);

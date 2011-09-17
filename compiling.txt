@@ -25,3 +25,4 @@ Quick List for compiling Cardinal Quest
 - Open cq.hxproj
 - Build Project F8
 - Run Project F5
+- UI for version control : 

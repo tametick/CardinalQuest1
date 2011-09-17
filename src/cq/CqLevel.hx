@@ -7,7 +7,6 @@ import cq.CqActor;
 import cq.effects.CqEffectSpell;
 import cq.ui.CqDecoration;
 import cq.states.GameState;
-import world.Player;
 
 import generators.BSP;
 import world.World;
@@ -29,14 +28,11 @@ import data.Registery;
 import data.Resources;
 import data.Configuration;
 import data.MusicManager;
+import data.SaveLoad;
 
 class CqLevel extends Level {
 	static var tiles = SpriteTiles.instance;
 	static var itemSprites = SpriteItems.instance;
-	
-	override public function destroy() {
-		super.destroy();
-	}
 	
 	public function getColor():String {
 		if (index < 2)
@@ -67,15 +63,13 @@ class CqLevel extends Level {
 		
 		for (m in mobs) {
 			cqmob = cast(m, CqMob);
-			if (cqmob.faction != CqPlayer.faction) 
+			if (cqmob.faction != Registery.player.faction) 
 				return;
 			if (cqmob.isCharmed)
 				return;
 		}
 			
-		// only got here if no enemy mobs remain & game state hasn't been destroyed
-		if(Registery.player!=null)
-			levelComplete();
+		levelComplete();
 	}
 	
 	override public function addDecoration(t:Tile, state:HxlState) {
@@ -126,16 +120,26 @@ class CqLevel extends Level {
 		var tmpFloor = tiles.getSpriteIndex("red_floor0");
 		var tmpDoor = tiles.getSpriteIndex("red_door_close");
 		
-		var newMapData = BSP.getBSPMap(Configuration.getLevelWidth(), Configuration.getLevelHeight(), tmpWall, tmpFloor, tmpDoor);
+		var newMapData:Array<Array<Int>>;
 
-		startingLocation = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), newMapData, SpriteTiles.walkableAndSeeThroughTiles);
+		newMapData = BSP.getBSPMap(Configuration.getLevelWidth(), Configuration.getLevelHeight(), tmpWall, tmpFloor, tmpDoor);
+		
+		/* Dont like to set newMapData twice.. */
+		if ( SaveLoad.hasSaveGame() )
+			newMapData = SaveLoad.loadDungeonLayout();
+		
+		trace( index );
+		trace( newMapData );
+		SaveLoad.saveDungeonLayout( newMapData , index );
+
+		startingLocation = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
 		
 		var tmpDown = tiles.getSpriteIndex("red_down");
 		if (index < Configuration.lastLevel) {
 			var stairsDown:HxlPoint;
 			do {
-				stairsDown = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), newMapData, SpriteTiles.walkableAndSeeThroughTiles);
-			} while (HxlUtil.distance(stairsDown, startingLocation) < 10);
+				stairsDown = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
+			} while (HxlUtil.distance(stairsDown, startingLocation) > 5); //<10 
 			
 			newMapData[Std.int(stairsDown.y)][Std.int(stairsDown.x)] = tmpDown;
 		}
@@ -184,7 +188,7 @@ class CqLevel extends Level {
 		for (s in 0...numberOfSpells){
 			var pos; 
 			do {
-				pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, SpriteTiles.walkableAndSeeThroughTiles);
+				pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
 			} while (cast(getTile(pos.x, pos.y), CqTile).loots.length > 0);
 			
 			createAndaddSpell(pos);
@@ -211,7 +215,7 @@ class CqLevel extends Level {
 			var minPlayerDistance = 10;
 			do {//find chest locations that are far apart, but we may run out of space!
 				iterations++;
-				pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, SpriteTiles.walkableAndSeeThroughTiles);
+				pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
 				//having trouble finding a good place, so find a position thats closer to other chests, but not on a chest or a player
 				//less iterations should equal to more groups of chests together
 				//they do tend to group around the player, so we need them far away!
@@ -232,7 +236,7 @@ class CqLevel extends Level {
 		for (c in 0...numberOfMobs){
 			var pos; 
 			do {
-				pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, SpriteTiles.walkableAndSeeThroughTiles);
+				pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
 			} while (!isValidMobPosition(pos));
 			
 			createAndaddMob(pos, index);
@@ -305,17 +309,18 @@ class CqLevel extends Level {
 		return mob;
 	}
 	
+	static var creatures:Array<CqActor>;
 	public override function tick(state:HxlState) {
-		var l:Float = mobs.length + 1;
-		var i:UInt = 0;
-		while(i < l)
-		{
-			var creature:CqActor;
-			if (i == 0)
-				creature = Registery.player;
-			else
-				creature = cast(mobs[i - 1],CqActor);
-				
+		if(creatures ==null)
+			creatures = new Array<CqActor>();
+		else
+			creatures.splice(0, creatures.length);
+			
+		creatures.push(Registery.player);
+		for (mob in mobs)
+			creatures.push(cast(mob, CqActor));
+			
+		for (creature in creatures) {
 			var buffs = creature.buffs;
 			var specialEffects = creature.specialEffects;
 			var visibleEffects = creature.visibleEffects;
@@ -408,11 +413,11 @@ class CqLevel extends Level {
 					creature.actionPoints = 0;
 				}
 			}
+
 			buffs = null;
 			specialEffects = null;
 			visibleEffects = null;
 			timers = null;
-			i++;
 		}
 	}
 

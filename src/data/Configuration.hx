@@ -2,12 +2,17 @@ package data;
 import cq.CqActor;
 import cq.states.MainMenuState;
 
+/*
+ *  Please put in comments what the value should be during in release time
+ *  A quick visual check should confirm that all is well
+ * 
+ * */
+
 class Configuration {
-	public static var debug = false;
+	public static var debug = false; //false
 	public static var air = false;
 	public static var standAlone = false;
 	public static var useProductionPlaytomic:Bool = false;
-	public static var flash = true;
 
 	public static var debugStartingLevel:Int = 0;
 	public static var debugStartingClass:CqClass = FIGHTER;
@@ -21,6 +26,11 @@ class Configuration {
 		return Std.int(tileSize * zoom); 
 	}
 	
+	//Sorry ido, but the music is havocking my ears ;]
+	//It should play at like 50% volume, not 100%!!
+	//In the future, the app should remember sound choice anyway ;] ;]
+	public static var startWithMusic:Bool = false; //true
+	public static var startWithSound:Bool = false; //true
 
 	public static var chestsPerLevel = 12;
 	public static var spellsPerLevel = 2;
