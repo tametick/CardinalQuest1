@@ -13,7 +13,11 @@ class Playtomic {
 	public static function create() {
 		enabled = true;
 		localhost = false;
-		var loadUrl = Lib.current.root.loaderInfo.loaderURL;
+		var loadUrl = "";
+        
+        #if flash
+            loadUrl = Lib.current.root.loaderInfo.loaderURL;
+        #end
 		
 		if (StringTools.startsWith(loadUrl, "file://"))
 			localhost = true;
@@ -27,7 +31,7 @@ class Playtomic {
 			guid = "759bd3b960a94124";
 		}
 
-		Log.View(swfid, guid, Lib.current.root.loaderInfo.loaderURL);
+		Log.View(swfid, guid, loadUrl);
 	}
 	
 	// pausing still collects the data, it only pauses sending

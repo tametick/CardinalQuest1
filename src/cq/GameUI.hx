@@ -872,7 +872,7 @@ class GameUI extends HxlDialog {
 		GameUI.setTargeting(false);
 
 	}
-	public function shootXBall(actor:CqActor, other:CqActor, color:UInt,spell:CqItem):Void 
+	public function shootXBall(actor:CqActor, other:CqActor, color:Int,spell:CqItem):Void 
 	{
 		var ball:HxlSprite = new HxlSprite();
 		/*var ang:Float = HxlUtil.angleBetween(fromTile, toObj.tilePos) * 360/ (Math.PI*2);
@@ -887,7 +887,7 @@ class GameUI extends HxlDialog {
 			var g:Graphics = s.graphics;
 			g.beginFill(color, 0.7);
 			g.drawEllipse(1, 1, 10, 15);
-			var lighter:UInt = color; //+ 0x151511;
+			var lighter:Int = color; //+ 0x151511;
 			//if (lighter > 0xFFFFFF) lighter = 0xFFFFFF;
 			g.beginFill(lighter, 1);
 			g.drawEllipse(3, 3, 6, 11);

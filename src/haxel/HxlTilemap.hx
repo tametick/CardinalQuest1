@@ -192,11 +192,12 @@ class HxlTilemap extends HxlObject {
 
 	/**
 	 * Internal function that actually renders the tilemap.  Called by render().
-	 */
+     */
 	var tmpBitmap:BitmapData;
 	var tmpRect:Rectangle;
 	static var originPoint:Point = new Point(0, 0);
-	public override function render() {
+
+    public override function render() {
 		var tileBitmap:BitmapData = _pixels;
 
 		getScreenXY(_point);
@@ -217,7 +218,10 @@ class HxlTilemap extends HxlObject {
 			for (c in 0..._screenCols) {
 				tile = _tiles[r+ty][c+tx];
 				if ( tile.visible ) {
-					#if flash9	
+
+                    //TjD changed this
+                    //We are counting on NME to handle the code below
+
 					if (!tilesByCT.exists( ((tile.dataNum-startingIndex) +"_" + tile._ct) ))
 					{
 						tmpBitmap = tileBMPs[(tile.dataNum-startingIndex)].clone();
@@ -227,10 +231,8 @@ class HxlTilemap extends HxlObject {
 						tilesByCT.set(  ((tile.dataNum-startingIndex) +"_"+ tile._ct), tmpBitmap.clone());
 					}
 					HxlGraphics.buffer.copyPixels(tilesByCT.get(  ((tile.dataNum-startingIndex) +"_"+ tile._ct)), tmpRect, _flashPoint, null, null, false);
-					#else
-					// TODO: Get this working in CPP
-					HxlGraphics.buffer.copyPixels(tileBitmap, tile.bitmapRect, _flashPoint, null, null, true);
-					#end
+
+
 					HxlGraphics.numRenders++;
 				}
 				_flashPoint.x += _tileWidth;
@@ -241,6 +243,43 @@ class HxlTilemap extends HxlObject {
 
 		tileBitmap = null;
 	}
+   
+
+    //Stolen from http://haxe.org/forum/thread/665
+    /*
+    override public function render():Void
+    {
+        //NOTE: While this will only draw the tiles that are actually on screen, it will ALWAYS draw one screen's worth of tiles
+        super.render();
+        getScreenXY(_point);
+        var tx:Int = Math.floor(-_point.x/_tileWidth);
+        var ty:Int = Math.floor(-_point.y/_tileHeight);
+        if(tx < 0) tx = 0;
+        if(tx > widthInTiles-_screenCols) tx = widthInTiles-_screenCols;
+        if(ty < 0) ty = 0;
+        if(ty > heightInTiles-_screenRows) ty = heightInTiles-_screenRows;
+        var ri:Int = ty*widthInTiles+tx;
+        _point.x += tx*_tileWidth;
+        _point.y += ty*_tileHeight;
+        var opx:Int = Std.int(_point.x);
+        var c:Int;
+        var cri:Int;
+        for(r in 0..._screenRows)
+        {
+            cri = ri;
+            for(c in 0..._screenCols)
+            {
+                if(_rects[cri] != null)
+                FlxG.buffer.copyPixels(_pixels,_rects[cri],_point,null,null,true);
+                cri++;
+                _point.x += _tileWidth;
+            }
+            ri += widthInTiles;
+            _point.x = opx;
+            _point.y += _tileHeight;
+        }
+    }    
+    */
 
 	public function getTileBitmap(X:Int, Y:Int):BitmapData {
 		var tileBitmap:BitmapData = _pixels;

@@ -78,14 +78,14 @@ class HxlButton extends HxlGroup {
 		height = Height;
 		scrollFactor.x = scrollFactor.y = ScrollFactor;
 		//cal background color
-		var argb:UInt = 0;
+		var argb:Int = 0;
 		argb += (Std.int(backgroundTransparency * 255) << 24);
 		argb += 0x7f7f7f;
 		_off = new HxlSprite().createGraphic(Math.floor(width), Math.floor(height), argb);
 		//_off.solid = false;
 		add(_off, true);
 		
-		var argb:UInt = 0;
+		var argb:Int = 0;
 		argb += (Std.int(backgroundTransparency * 255) << 24);
 		argb += 0xffffff;
 		_on = new HxlSprite().createGraphic(Math.floor(width), Math.floor(height), argb);

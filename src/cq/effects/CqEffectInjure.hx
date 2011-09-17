@@ -17,7 +17,7 @@ import haxel.HxlUtil;
 import cq.CqGraphicKey;
 
 class CqEffectInjure extends CachingEmitter {
-	static var UNIQUE_EFFECT_ID:UInt = 5;
+	static var UNIQUE_EFFECT_ID:Int = 5;
 	public function new(?X:Float=0, ?Y:Float=0) {
 		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.InjureEffectParticle) ) {
 			//fixme - don't create new color arrays every time!

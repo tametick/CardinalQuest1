@@ -132,13 +132,13 @@ class CqLevel extends Level {
 		trace( newMapData );
 		SaveLoad.saveDungeonLayout( newMapData , index );
 
-		startingLocation = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
+		startingLocation = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), newMapData, Resources.walkableAndSeeThroughTiles);
 		
 		var tmpDown = tiles.getSpriteIndex("red_down");
 		if (index < Configuration.lastLevel) {
 			var stairsDown:HxlPoint;
 			do {
-				stairsDown = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), newMapData, tiles.walkableAndSeeThroughTiles);
+				stairsDown = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), newMapData, Resources.walkableAndSeeThroughTiles);
 			} while (HxlUtil.distance(stairsDown, startingLocation) > 5); //<10 
 			
 			newMapData[Std.int(stairsDown.y)][Std.int(stairsDown.x)] = tmpDown;
@@ -188,7 +188,7 @@ class CqLevel extends Level {
 		for (s in 0...numberOfSpells){
 			var pos; 
 			do {
-				pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
+				pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, Resources.walkableAndSeeThroughTiles);
 			} while (cast(getTile(pos.x, pos.y), CqTile).loots.length > 0);
 			
 			createAndaddSpell(pos);
@@ -215,7 +215,7 @@ class CqLevel extends Level {
 			var minPlayerDistance = 10;
 			do {//find chest locations that are far apart, but we may run out of space!
 				iterations++;
-				pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
+				pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, Resources.walkableAndSeeThroughTiles);
 				//having trouble finding a good place, so find a position thats closer to other chests, but not on a chest or a player
 				//less iterations should equal to more groups of chests together
 				//they do tend to group around the player, so we need them far away!

@@ -14,35 +14,38 @@ class CKongregate
     public function new()
     {
         kongregate = null;
+
+        #if flash
             
-        var parameters = flash.Lib.current.loaderInfo.parameters;
+            var parameters = flash.Lib.current.loaderInfo.parameters;
 
-        var url: String;
+            var url: String;
         
-        url = parameters.api_path;
+            url = parameters.api_path;
         
-        if(url == null)
-            url = "http://www.kongregate.com/flash/API_AS3_Local.swf";
+            if(url == null)
+                url = "http://www.kongregate.com/flash/API_AS3_Local.swf";
         
-        var request = new flash.net.URLRequest(url);             
+            var request = new flash.net.URLRequest(url);             
         
-        var loader = new flash.display.Loader();
-        loader.contentLoaderInfo.addEventListener(flash.events.Event.COMPLETE, OnLoadComplete);
+            var loader = new flash.display.Loader();
+            loader.contentLoaderInfo.addEventListener(flash.events.Event.COMPLETE, OnLoadComplete);
 		
-		//This is known to possibly fail to security concerns, specially when started from command line
-		try
-		{
-			loader.load(request);
-		}
-		catch( msg: Dynamic )
-		{
-			//Let people know in debug mode
-			if ( Configuration.debug ) {
-				trace( "Could not download Kongregrate API!!" ); trace( Std.string(msg) );
-			}				
-		}
+            //This is known to possibly fail to security concerns, specially when started from command line
+            try
+            {
+                loader.load(request);
+            }
+            catch( msg: Dynamic )
+            {
+                //Let people know in debug mode
+                if ( Configuration.debug ) {
+                    trace( "Could not download Kongregrate API!!" ); trace( Std.string(msg) );
+                }				
+            }
 
-        flash.Lib.current.addChild(loader);
+            flash.Lib.current.addChild(loader);
+        #end
     }
 
     function OnLoadComplete(e: flash.events.Event)

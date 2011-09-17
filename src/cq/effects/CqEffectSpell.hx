@@ -10,9 +10,11 @@ import haxel.HxlUtil;
 
 import cq.CqGraphicKey;
 
+//TjD NME converted all Int to Int
+
 class CqEffectSpell extends CachingEmitter {
-	static var UNIQUE_EFFECT_ID:UInt = 10;
-	public function new(?X:Float=0, ?Y:Float=0,?color:UInt = 0xD8D049) {
+	static var UNIQUE_EFFECT_ID:Int = 10;
+	public function new(?X:Float=0, ?Y:Float=0,?color:Int = 0xD8D049) {
 		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.SpellEffectParticle(color))) {
 			
 			//fixme - don't create new color arrays every time!

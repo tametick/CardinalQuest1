@@ -142,15 +142,21 @@ class HxlState extends Sprite {
 	
 	function init() { }
 	function onKeyUp(event:KeyboardEvent) { }
-	function onKeyDown(event:KeyboardEvent) { 
-		if (event.charCode == 27) {
-			event.preventDefault();
-		}
+	function onKeyDown(event:KeyboardEvent) {
+        //No escape key on mobile
+        #if flash
+            if (event.charCode == 27) {
+                event.preventDefault();
+            }
+        #end
 	}
 	function onMouseDown(event:MouseEvent) { }
 	function onRightMouseDown(event:MouseEvent) { 
-		event.preventDefault();
-		Mouse.hide();
+        //No right clicking on mobile
+        #if flash
+            event.preventDefault();
+            Mouse.hide();
+        #end
 	}
 	function onMouseUp(event:MouseEvent) { }
 	function onMouseOver(event:MouseEvent) { }

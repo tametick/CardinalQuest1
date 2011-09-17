@@ -18,22 +18,24 @@ import haxel.HxlUtil;
 
 import cq.CqGraphicKey;
 
+//TjD NME converted all UInt to Int
+
 class CachingEmitter extends HxlEmitter {
 
 	static var effectCache:Array<Array<BitmapData>> = new Array<Array<BitmapData>>();
-	static var cacheStatus:Array<UInt> = new Array<UInt>();//0-nobody filling it up, 1-somebody filling it up, 2-filled up
+	static var cacheStatus:Array<Int> = new Array<Int>();//0-nobody filling it up, 1-somebody filling it up, 2-filled up
 	static var hs:Int = 100;//half size of frame bitmap
 	static var cacheIds:Hash<Int> = new Hash<Int>();
-	static var lastID:UInt = 0;
-	var cacheNum:UInt;//each different effects, must use a different cache num.
-	var usingCache:UInt;//0-isnt using, normal op. 1-this is filling it up. 2-using filled up cache
+	static var lastID:Int = 0;
+	var cacheNum:Int;//each different effects, must use a different cache num.
+	var usingCache:Int;//0-isnt using, normal op. 1-this is filling it up. 2-using filled up cache
 	
 	var currentFrame:Int;
 	var frameBitmap:HxlSprite;
 	var particleKey:CqGraphicKey;
 	var colorTint:Int;
 	
-	public function new(CacheNumber:UInt,ParticleKey:CqGraphicKey,?X:Float=0, ?Y:Float=0,?ColorTint:Int = -1) {
+	public function new(CacheNumber:Int,ParticleKey:CqGraphicKey,?X:Float=0, ?Y:Float=0,?ColorTint:Int = -1) {
 		super(X, Y);
 		//get real cachenum
 		if (cacheIds.exists(CacheNumber+""))
@@ -176,7 +178,7 @@ class CachingEmitter extends HxlEmitter {
 					dest.y = y - o.y+hs;
 					rect.width = o.width+2;
 					rect.height = o.height + 2;
-					var argb:UInt = 0;
+					var argb:Int = 0;
 					o.alpha += Math.random() * 0.06;
 					//o.alpha -= Math.random() * 0.0;
 					argb += (Std.int(o.alpha * 255) << 24);

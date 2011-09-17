@@ -538,7 +538,7 @@ class GameState extends CqState {
 			return;
 		}
 		//stairs popup
-		if (HxlUtil.contains(SpriteTiles.instance.stairsDown.iterator(), tile.dataNum)) {
+		if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tile.dataNum)) {
 			player.popup.setText("Click go downstairs\n[hotkey enter]");
 		} else {
 			player.popup.setText("");
@@ -557,7 +557,7 @@ class GameState extends CqState {
 				var item = cast(tile.loots[tile.loots.length - 1], CqItem);
 				player.pickup(this, item);
 				item = null;
-			} else if (HxlUtil.contains(SpriteTiles.instance.stairsDown.iterator(), tile.dataNum)) {
+			} else if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tile.dataNum)) {
 				// descend
 				Registery.world.goToNextLevel(this);
 				player.popup.setText("");
@@ -582,7 +582,7 @@ class GameState extends CqState {
 				isPlayerActing = false;
 			}
 				
-		} else if(HxlUtil.contains(SpriteTiles.instance.doors.iterator(),tile.dataNum)){
+		} else if(HxlUtil.contains(SpriteTiles.doors.iterator(),tile.dataNum)){
 			// open door
 			openDoor(tile);
 		} else if(!(dx==0 && dy==0)){
@@ -600,7 +600,7 @@ class GameState extends CqState {
 			tile = getPlayerTile(target);
 			if ( !isBlockingMovement(target) ) {
 				player.actInDirection(this,target);
-			} else if (HxlUtil.contains(SpriteTiles.instance.doors.iterator(), tile.dataNum)){
+			} else if (HxlUtil.contains(SpriteTiles.doors.iterator(), tile.dataNum)){
 				openDoor(tile);
 			} else {
 				level = null;

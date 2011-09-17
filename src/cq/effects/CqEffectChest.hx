@@ -11,7 +11,7 @@ import haxel.HxlUtil;
 import cq.CqGraphicKey;
 
 class CqEffectChest extends CachingEmitter {
-	static var UNIQUE_EFFECT_ID:UInt = 0;
+	static var UNIQUE_EFFECT_ID:Int = 0;
 	public function new(?X:Float = 0, ?Y:Float = 0) {
 		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.ChestEffectParticle)) {
 			//fixme - don't create new color arrays every time!

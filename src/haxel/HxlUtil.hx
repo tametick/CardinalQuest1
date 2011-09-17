@@ -50,7 +50,8 @@ class HxlUtil {
 		rgb[2] = Color & 0xFF;
 		return rgb;
 	}
-	public static function averageColour( source:BitmapData,?ignoreAlpha:Bool = true):UInt {
+    //TjD NME, UInt -> Int
+	public static function averageColour( source:BitmapData,?ignoreAlpha:Bool = true):Int {
 		var red:Float = 0;
 		var green:Float = 0;
 		var blue:Float = 0;

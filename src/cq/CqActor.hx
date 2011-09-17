@@ -539,7 +539,7 @@ class CqActor extends CqObject, implements Actor {
 	}
 	
 	public function useAt(itemOrSpell:CqItem, tile:CqTile) {
-		var Effectcolor:UInt = HxlUtil.averageColour(itemOrSpell.pixels);
+		var Effectcolor:Int = HxlUtil.averageColour(itemOrSpell.pixels);
 		if(itemOrSpell.specialEffects != null){
 			for ( effect in itemOrSpell.specialEffects) {
 				applyEffectAt(effect, tile);
@@ -567,7 +567,7 @@ class CqActor extends CqObject, implements Actor {
 			else
 			{
 				itemOrSpell.damage = CqSpellFactory.getfireBalldamageByLevel(5);
-				var c:UInt = HxlUtil.averageColour(this._framePixels);
+				var c:Int = HxlUtil.averageColour(this._framePixels);
 				GameUI.instance.shootXBall(this, other, c,itemOrSpell);
 			}
 		}else
@@ -594,7 +594,7 @@ class CqActor extends CqObject, implements Actor {
 			source = itemOrSpell.uiItem.pixels;
 		}
 		
-		var Effectcolor:UInt = HxlUtil.averageColour(source);
+		var Effectcolor:Int = HxlUtil.averageColour(source);
 		
 		if (itemOrSpell.uiItem == null) {
 			// only disposing of the enemies tmp spell sprite 

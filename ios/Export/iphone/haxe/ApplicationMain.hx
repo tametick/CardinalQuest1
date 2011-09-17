@@ -8,7 +8,7 @@ class ApplicationMain
       
       nme.Lib.create(
            function(){ cq.Main.main(); },
-           0, 0,
+           1024, 768,
            30,
            0xffffff,
              ( true   ? nme.Lib.HARDWARE  : 0) |

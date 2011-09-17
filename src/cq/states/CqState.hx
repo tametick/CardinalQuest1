@@ -42,6 +42,7 @@ class CqState extends HxlState {
 			}
 		}
 		
+        #if flash
 		if (HxlGraphics.keys.justPressed("F3")) {
 			if(Reflect.hasField(Lib.current.stage,"showDefaultContextMenu")) {
 				if(Lib.current.stage.showDefaultContextMenu)
@@ -50,6 +51,7 @@ class CqState extends HxlState {
 					Lib.current.stage.showDefaultContextMenu = true;
 			}
 		}
+        #end
 	}
 	/*
 	function clickOnKong(e : Event) {
