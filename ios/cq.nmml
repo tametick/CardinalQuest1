@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 
-  <app title="Cardinal Quest HD" main="cq.Main" package="cq" version="0.0.1" icon="assets/icon.png" company="Tom J Demuyt" />
+  <app title="Cardinal Quest HD" main="cq.Main" package="cq" version="0.0.1" icon="assets/icon.png" company="Ido Jehieli" />
   <window width="0" height="0" fps="30" orientation="portrait" resizable="false" unless="target_flash" />
  
   <set name="BUILD_DIR" value="Export" />
