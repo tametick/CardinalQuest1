@@ -236,7 +236,7 @@ class CqLevel extends Level {
 		for (c in 0...numberOfMobs){
 			var pos; 
 			do {
-				pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, tiles.walkableAndSeeThroughTiles);
+				pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, SpriteTiles.walkableAndSeeThroughTiles);
 			} while (!isValidMobPosition(pos));
 			
 			createAndaddMob(pos, index);
