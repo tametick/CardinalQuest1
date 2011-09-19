@@ -212,13 +212,7 @@ class Level extends HxlTilemap {
 	public function getPixelPositionOfTile(X:Dynamic, Y:Dynamic, ?Center:Bool = false):HxlPoint {
 		return super.getTilePos(X, Y, Center);
 	}
-	
-	
-	function tweenToColor(tween:Int):Int {
-		var hex = StringTools.hex(tween);
-		return Std.parseInt("0x"+hex+hex+hex);
-	}
-	
+		
 	public function addDecoration(t:Tile, state:HxlState) {	}
 	
 	public function removeAllDecorations(state:HxlState) {
