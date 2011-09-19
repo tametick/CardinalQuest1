@@ -42,11 +42,11 @@ class CqSpellFactory {
 	}
 	public static function resetRemainigSpells()
 	{
-		//if (CqSpellFactory.remainingSpells != null)
-			//return;
+		if (CqSpellFactory.remainingSpells != null)
+			CqSpellFactory.remainingSpells.splice(0, CqSpellFactory.remainingSpells.length);
+		else 
+			CqSpellFactory.remainingSpells = new Array();
 			
-		
-		CqSpellFactory.remainingSpells = new Array();
 		for(line in SpriteSpells.instance.spriteNames)
 			CqSpellFactory.remainingSpells = CqSpellFactory.remainingSpells.concat(line);
 		// no passwall for now
