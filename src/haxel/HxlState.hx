@@ -87,7 +87,10 @@ class HxlState extends Sprite {
 	
 	public function remove(obj:HxlObjectI):HxlObjectI {
 		obj.onRemove(this);
-		return defaultGroup.remove(obj);
+		if (defaultGroup == null)
+			return null;
+		else
+			return defaultGroup.remove(obj);
 	}
 	
 	public function preProcess() {

@@ -264,6 +264,7 @@ class MainMenuState extends CqState {
 		tglSFXIcon.setFrame((sfxOn?1:0));
 
 	}
+	
 	var TargetState:Class<HxlState>;
 	function changeState(TargetState:Class<HxlState>) {
 		if (btnClicked)

@@ -188,9 +188,9 @@ class GameState extends CqState {
 	private function checkResetKeys():Void {
 		if (HxlGraphics.keys.justReleased("R")) {
 			SaveLoad.deleteSaveGame();
-			if (GameUI.instance != null){
+/*			if (GameUI.instance != null){
 				GameUI.instance.kill();
-			}
+			}*/
 			HxlGraphics.state = new CreateCharState();
 		}
 	}
