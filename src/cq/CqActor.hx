@@ -208,7 +208,8 @@ class CqActor extends CqObject, implements Actor {
 	
 	public function attackObject(state:HxlState, other:GameObject) {
 		var chest = cast(other, CqChest);
-		chest.bust(state,Registery.world.currentLevelIndex);
+		chest.bust(state, Registery.world.currentLevelIndex);
+		chest = null;
 	}
 	
 	public function doInjure(?dmgTotal:Int=0) {

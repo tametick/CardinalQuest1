@@ -34,6 +34,7 @@ class CqLevel extends Level {
 	static var tiles = SpriteTiles.instance;
 	static var itemSprites = SpriteItems.instance;
 	
+	//With index being the level, walls change on different levels
 	public function getColor():String {
 		if (index < 2)
 			return "blue";
@@ -121,6 +122,8 @@ class CqLevel extends Level {
 		var tmpDoor = tiles.getSpriteIndex("red_door_close");
 		
 		var newMapData:Array<Array<Int>>;
+		var suffix = "";
+		var prefix = "";
 
 		newMapData = BSP.getBSPMap(Configuration.getLevelWidth(), Configuration.getLevelHeight(), tmpWall, tmpFloor, tmpDoor);
 		
@@ -128,8 +131,6 @@ class CqLevel extends Level {
 		if ( SaveLoad.hasSaveGame() )
 			newMapData = SaveLoad.loadDungeonLayout();
 		
-		trace( index );
-		trace( newMapData );
 		SaveLoad.saveDungeonLayout( newMapData , index );
 
 		startingLocation = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), newMapData, Resources.walkableAndSeeThroughTiles);
@@ -139,7 +140,7 @@ class CqLevel extends Level {
 			var stairsDown:HxlPoint;
 			do {
 				stairsDown = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), newMapData, Resources.walkableAndSeeThroughTiles);
-			} while (HxlUtil.distance(stairsDown, startingLocation) > 5); //<10 
+			} while (HxlUtil.distance(stairsDown, startingLocation) > 5); //>10 for release
 			
 			newMapData[Std.int(stairsDown.y)][Std.int(stairsDown.x)] = tmpDown;
 		}
@@ -147,7 +148,6 @@ class CqLevel extends Level {
 
 		for (y in 0...newMapData.length) {
 			for (x in 0...newMapData[0].length) {
-				var suffix = "";
 				switch(newMapData[y][x]) {
 					case tmpWall:
 						suffix = "wall"+(1+HxlUtil.randomInt(3));
@@ -158,9 +158,10 @@ class CqLevel extends Level {
 					case tmpDown:
 						suffix = "down";
 					default:
+						suffix = "";
 				}
 				
-				var prefix = getColor()+"_";
+				prefix = getColor()+"_";
 				
 				newMapData[y][x] =  tiles.getSpriteIndex(prefix+suffix);
 			}
@@ -175,6 +176,7 @@ class CqLevel extends Level {
 		addSpells(Configuration.spellsPerLevel);
 		addMobs(Configuration.mobsPerLevel);
 	}
+	
 	function markInvisible() {
 		for ( Y in 0...heightInTiles ) {
 			for ( X in 0...widthInTiles ) {
@@ -206,13 +208,19 @@ class CqLevel extends Level {
 		return chests;
 	}
 	
-	function addChests(numberOfChests:Int,playerPos:HxlPoint) {
+	function addChests(numberOfChests:Int, playerPos:HxlPoint) 
+	{
+		//Instantiate
+		var pos; 
+		var distFromPlayer;
+		var iterations:Int;
+		var minChestDistance = 5;
+		var minPlayerDistance = 10;
+		//Try for each chest to put it on the level
 		for (c in 0...numberOfChests){
-			var pos; 
-			var distFromPlayer;
-			var iterations:Int = 0;
-			var minChestDistance = 5;
-			var minPlayerDistance = 10;
+			iterations = 0;
+			minChestDistance = 5;
+			minPlayerDistance = 10;
 			do {//find chest locations that are far apart, but we may run out of space!
 				iterations++;
 				pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, Resources.walkableAndSeeThroughTiles);
