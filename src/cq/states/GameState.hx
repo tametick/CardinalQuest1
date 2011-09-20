@@ -48,7 +48,6 @@ import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 
 class GameState extends CqState {	
-	static public var inst:GameState;
 	static private var msHideDelay:Float = 3;
 	var gameUI:GameUI;
 	public var chosenClass:CqClass;
@@ -59,7 +58,6 @@ class GameState extends CqState {
 	var endingAnim:Bool;
 	public override function create()
 	{
-		inst = this;
 		super.create();
 		lastMouse = started = endingAnim = false;
 		chosenClass = FIGHTER;
@@ -84,7 +82,6 @@ class GameState extends CqState {
 		Registery.player = null;
 
 		super.destroy();
-		inst = null;
 		HxlGraphics.keys.onJustPressed = null;
 		//remove(Registery.world.currentLevel);
 	}

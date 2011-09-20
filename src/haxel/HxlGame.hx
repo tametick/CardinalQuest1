@@ -170,8 +170,8 @@ class HxlGame extends Sprite {
 						if ( i != null ) {
 							i.destroy();
 							_screen.removeChild(i);
-							i  = null;
 						}
+						i  = null;
 					}
 				}
 				
@@ -180,8 +180,8 @@ class HxlGame extends Sprite {
 				
 				if(!oldState.destroyed){
 					// destroy old state that wasn't in the state stack
-					_screen.removeChild(oldState);
 					oldState.destroy();
+					_screen.removeChild(oldState);
 				}
 				
 				

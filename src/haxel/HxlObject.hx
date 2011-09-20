@@ -258,7 +258,11 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	public function kill() {
 		exists = false;
 		dead = true;
+		
+		if (popup != null)
+			popup.onRemove(HxlGraphics.state);
 		popup = null;
+		
 		HxlGraphics.state.remove(this);
 		clearEventListeners();
 	}

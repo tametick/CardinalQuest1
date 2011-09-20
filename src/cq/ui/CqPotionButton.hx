@@ -53,7 +53,7 @@ class CqPotionButton extends HxlDialog {
 	}
 
 	function clickMouseDown(event:MouseEvent) {
-		if (!exists || !visible || !active || Std.is(GameUI.instance.panels.currentPanel,CqInventoryDialog) || HxlGraphics.state != GameState.inst ) 
+		if (!exists || !visible || !active || Std.is(GameUI.instance.panels.currentPanel,CqInventoryDialog) || !Std.is(HxlGraphics.state,GameState) ) 
 			return;
 		if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
 			event.stopPropagation();
