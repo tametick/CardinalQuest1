@@ -9,7 +9,7 @@ import cq.states.MainMenuState;
  * */
 
 class Configuration {
-	public static var debug = false; //false
+	public static var debug = true;
 	public static var air = false;
 	public static var standAlone = false;
 	public static var useProductionPlaytomic = false;
@@ -26,9 +26,6 @@ class Configuration {
 		return Std.int(tileSize * zoom); 
 	}
 	
-	//Sorry ido, but the music is havocking my ears ;]
-	//It should play at like 50% volume, not 100%!!
-	//In the future, the app should remember sound choice anyway ;] ;]
 	public static var startWithMusic:Bool = false; //true
 	public static var startWithSound:Bool = false; //true
 
