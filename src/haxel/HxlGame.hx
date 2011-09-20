@@ -11,6 +11,7 @@ import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.filters.BlurFilter;
 import flash.geom.Point;
+import flash.system.System;
 import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
@@ -133,14 +134,23 @@ class HxlGame extends Sprite {
 	 * 
 	 * @param	State		The class name of the state you want (e.g. PlayState)
 	 */
-	public function switchState(State:HxlState, ?Push:Bool=false) { 
+	public function switchState(State:HxlState, ?Push:Bool = false) { 
+		var oldState = state;
+		
 		// Swap the new state for the old one and dispose of it
 		_screen.addChild(State);
 		state = State;
-		if (state != null) {
+		if (oldState != null) {
 			if ( Push ) {
+				// destroy old unstacked state	
+				if (!HxlUtil.contains(stateStack.iterator(),oldState)) {
+					oldState.destroy();
+					_screen.removeChild(oldState);
+				}
+				
 				State.stackId = stateStack.length;
-				stateStack[stateStack.length-1].isStacked = true;
+				if(stateStack.length>0)
+					stateStack[stateStack.length-1].isStacked = true;
 				stateStack.push(State);
 				HxlGraphics.unfollow();
 				HxlGraphics.resetInput();
@@ -152,13 +162,29 @@ class HxlGame extends Sprite {
 				_screen.y = 0;
 			} else {
 				// If we aren't pushing a state to the stack, we should clear out any previously stacked states
-				while ( stateStack.length > 0 ) {
-					var i:HxlState = stateStack.pop();
-					if ( i != null ) {
-						i.destroy();
-						_screen.removeChild(i);
+				
+				if (stateStack.length > 0) {
+					var i:HxlState;	
+					while ( stateStack.length > 0 ) {
+						i = stateStack.pop();
+						if ( i != null ) {
+							i.destroy();
+							_screen.removeChild(i);
+							i  = null;
+						}
 					}
 				}
+				
+				System.gc();
+				System.gc();
+				
+				if(!oldState.destroyed){
+					// destroy old state that wasn't in the state stack
+					_screen.removeChild(oldState);
+					oldState.destroy();
+				}
+				
+				
 				HxlGraphics.unfollow();
 				HxlGraphics.resetInput();
 				HxlGraphics.destroySounds();
@@ -187,6 +213,8 @@ class HxlGame extends Sprite {
 		// Finally, create the new state
 		state.create();
 		state.isStacked = false;
+		
+		oldState = null;
 	}
 
 	public function popState() {

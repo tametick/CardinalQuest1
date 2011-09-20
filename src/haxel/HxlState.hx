@@ -29,6 +29,8 @@ class HxlState extends Sprite {
 	var _followMin:Point;
 	var _followMax:Point;
 	var _scroll:Point;
+	
+	public var destroyed:Bool;
 
 	//var keyboard:HxlKeyboard;
 	var initialized:Int;
@@ -49,6 +51,7 @@ class HxlState extends Sprite {
 	}
 
 	public function create() {
+		destroyed = false;
 		if(defaultGroup ==null)
 			defaultGroup = new HxlGroup();
 		else
@@ -148,6 +151,7 @@ class HxlState extends Sprite {
 	}
 
 	public function destroy() {
+		destroyed = true;
 		clearEventListeners();
 		defaultGroup.destroy();
 		defaultGroup = null;
@@ -214,9 +218,11 @@ class HxlState extends Sprite {
 	}
 
 	function clearEventListeners() {
+		var i:Dynamic;
 		while ( eventListeners.length > 0 ) {
-			var i:Dynamic = eventListeners.pop();
+			i  = eventListeners.pop();
 			HxlGraphics.stage.removeEventListener(i.Type, i.Listener);
+			i = null;
 		}
 		eventListeners = null;
 	}
