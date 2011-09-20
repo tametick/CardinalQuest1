@@ -292,6 +292,7 @@ class MainMenuState extends CqState {
 				HxlGraphics.state = newState;
 			}
 		}
+		newState = null;
 	}
 	private static function getInstance():MainMenuState
 	{

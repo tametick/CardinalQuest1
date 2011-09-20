@@ -218,12 +218,13 @@ class HxlGame extends Sprite {
 	}
 
 	public function popState() {
-		if ( stateStack.length <= 1 ) 
+		if ( stateStack.length < 1 )
 			return;
 			
 		var State:HxlState = stateStack.pop();
 		State.destroy();
 		_screen.removeChild(State);
+		
 		State = stateStack[stateStack.length-1];
 		HxlGraphics.unfollow();
 		HxlGraphics.resetInput();
@@ -235,6 +236,10 @@ class HxlGame extends Sprite {
 		_screen.y = 0;
 		state = State;
 		state.isStacked = false;
+		
+		State = null;
+		System.gc();
+		System.gc();
 	}
 
 	function onKeyUp(event:KeyboardEvent) {

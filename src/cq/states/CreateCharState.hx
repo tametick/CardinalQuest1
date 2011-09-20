@@ -306,9 +306,9 @@ class CreateCharState extends CqState {
 			HxlGraphics.state = newState;
 			if ( TargetState == GameState ) {
 				cast(newState, GameState).chosenClass = cls;
-				cls = null;
-				newState = null;
 			}
+			cls = null;
+			newState = null;
 		}, true);
 	}
 }
