@@ -42,12 +42,23 @@ class HxlState extends Sprite {
 	
 	public function new() {
 		super();
-		defaultGroup = new HxlGroup();
 		stackId = 0;
 		stackRender = true;
 		stackBlockRender = false;
 		isStacked = false;
-		eventListeners = new Array();
+	}
+
+	public function create() {
+		if(defaultGroup ==null)
+			defaultGroup = new HxlGroup();
+		else
+			throw "defaultGroup should be null!";
+			
+		if(eventListeners == null)
+			eventListeners = new Array();
+		else
+			throw "eventListeners should be null!";
+			
 		if ( screen == null ) {
 			screen = new HxlSprite();
 			screen.createGraphic(HxlGraphics.width, HxlGraphics.height, 0, true);
@@ -56,18 +67,16 @@ class HxlState extends Sprite {
 			screen.exists = false;
 			//screen.solid = false;
 			//screen.fixed = true;
-			//keyboard = new HxlKeyboard();
 		}
-	}
-
-	public function create() {
-		initialized = -1;
+		
 		
 		if(cursor!=null){
 			Mouse.hide();
 			cursor.zIndex = 100;
 			add(cursor);
 		}
+		
+		initialized = -1;
 	}
 	
 	public function add(obj:HxlObjectI):HxlObjectI {
@@ -101,7 +110,8 @@ class HxlState extends Sprite {
 	}
 
 	public function update() {
-		defaultGroup.update();
+		if(defaultGroup!=null)
+			defaultGroup.update();
 		
 		if(cursor!=null) {
 			cursor.x = HxlGraphics.mouse.screenX;

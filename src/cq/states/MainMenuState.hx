@@ -59,6 +59,11 @@ class MainMenuState extends CqState {
 		HxlState.musicOn = true;
 		sfxOn = true;
 	}
+	
+	override public function destroy(){
+		super.destroy();
+	}
+	
 	public override function create() {
 		btnClicked = false;
 		super.create();
