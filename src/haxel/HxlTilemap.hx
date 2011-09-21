@@ -218,7 +218,8 @@ class HxlTilemap extends HxlObject {
 			for (c in 0..._screenCols) {
 				tile = _tiles[r+ty][c+tx];
 				if ( tile.visible ) {
-					if (!tilesByCT.exists( ((tile.dataNum-startingIndex) +"_" + tile._ct) )) {
+					var name = (tile.dataNum - startingIndex) +"_" + tile._ct;
+					if (!tilesByCT.exists( name )) {
 						tmpBitmap = tileBMPs[(tile.dataNum-startingIndex)].clone();
 
 						if (tile._ct != null)
@@ -226,9 +227,11 @@ class HxlTilemap extends HxlObject {
 							
 						tilesByCT.set(  ((tile.dataNum-startingIndex) +"_"+ tile._ct), tmpBitmap.clone());
 					}
-					HxlGraphics.buffer.copyPixels(tilesByCT.get(  ((tile.dataNum-startingIndex) +"_"+ tile._ct)), tmpRect, _flashPoint, null, null, false);
-
+					
+					HxlGraphics.buffer.copyPixels(tilesByCT.get(name), tmpRect, _flashPoint, null, null, false);
 					HxlGraphics.numRenders++;
+					trace(name);
+					name = null;
 				}
 				_flashPoint.x += _tileWidth;
 			}
