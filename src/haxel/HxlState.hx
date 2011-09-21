@@ -155,6 +155,12 @@ class HxlState extends Sprite {
 		clearEventListeners();
 		defaultGroup.destroy();
 		defaultGroup = null;
+		
+		// defualt values
+		stackId = 0;
+		stackRender = true;
+		stackBlockRender = false;
+		isStacked = false;
 	}
 	
 	function init() { }
@@ -185,6 +191,10 @@ class HxlState extends Sprite {
 
 	public function setIsStacked(Toggle:Bool):Bool {
 		_isStacked = Toggle;
+		
+		if (eventListeners == null || defaultGroup == null)
+			return _isStacked;
+				
 		if ( initialized > 0 ) {
 			if ( _isStacked ) {
 				pauseEventListeners();
@@ -234,7 +244,8 @@ class HxlState extends Sprite {
 	}
 
 	function resumeEventListeners() {
-		if ( HxlGraphics.stage == null ) return;
+		if ( HxlGraphics.stage == null ) 
+			return;
 		for ( i in eventListeners ) {
 			HxlGraphics.stage.addEventListener(i.Type, i.Listener, i.UseCapture,0,true);
 		}

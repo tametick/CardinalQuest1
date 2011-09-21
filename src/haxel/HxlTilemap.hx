@@ -218,20 +218,15 @@ class HxlTilemap extends HxlObject {
 			for (c in 0..._screenCols) {
 				tile = _tiles[r+ty][c+tx];
 				if ( tile.visible ) {
-
-                    //TjD changed this
-                    //We are counting on NME to handle the code below
-
-					if (!tilesByCT.exists( ((tile.dataNum-startingIndex) +"_" + tile._ct) ))
-					{
+					if (!tilesByCT.exists( ((tile.dataNum-startingIndex) +"_" + tile._ct) )) {
 						tmpBitmap = tileBMPs[(tile.dataNum-startingIndex)].clone();
-						//test
+
 						if (tile._ct != null)
 							tmpBitmap.colorTransform( tmpRect,  tile._ct);
+							
 						tilesByCT.set(  ((tile.dataNum-startingIndex) +"_"+ tile._ct), tmpBitmap.clone());
 					}
 					HxlGraphics.buffer.copyPixels(tilesByCT.get(  ((tile.dataNum-startingIndex) +"_"+ tile._ct)), tmpRect, _flashPoint, null, null, false);
-
 
 					HxlGraphics.numRenders++;
 				}
@@ -241,6 +236,7 @@ class HxlTilemap extends HxlObject {
 			_flashPoint.y += _tileHeight;
 		}
 
+		tile = null;
 		tileBitmap = null;
 	}
    

@@ -421,7 +421,15 @@ class HxlGame extends Sprite {
 
 		//All set!
 		_created = true;
-		switchState(Type.createInstance(_iState, new Array()));
+		
+		var args = new Array();
+		var newState = Type.createInstance(_iState, args);
+		
+		switchState(newState);
+		
+		args = null;
+		newState = null;
+		
 		HxlState.screen.unsafeBind(HxlGraphics.buffer);
 		
 		_addEventListener(Event.ENTER_FRAME, update, false, 0, true);
@@ -514,8 +522,9 @@ class HxlGame extends Sprite {
 		// rough state stack rendering code, not currently working..
 		if ( stateStack.length > 1 ) {
 			var startState:Int = 0;
-			for ( i in 0...stateStack.length ) {
-				if ( stateStack[i].stackBlockRender ) startState = i;
+			for ( i in 0...stateStack.length ) {					
+				if ( stateStack[i].stackBlockRender ) 
+					startState = i;
 			}
 			if ( startState != state.stackId ) {
 				for ( i in startState...stateStack.length-1 ) {
@@ -523,7 +532,6 @@ class HxlGame extends Sprite {
 				}
 			}
 		}
-		
 
 		state.render();
 		
