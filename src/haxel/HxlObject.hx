@@ -236,6 +236,9 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	 */
 	public function onScreen():Bool
 	{
+		if (_point == null)
+			return false;
+		
 		getScreenXY(_point);
 		if ((_point.x + width < 0) || (_point.x > HxlGraphics.width) || (_point.y + height < 0) || (_point.y > HxlGraphics.height)) {
 			return false;
@@ -285,9 +288,23 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	 * Called by <code>FlxGroup</code>, commonly when game states are changed.
 	 */
 	public function destroy() {
-		if (popup != null)
+		if (popup != null){
 			popup.onRemove(HxlGraphics.state);
+			popup.destroy();
+			popup = null;
+		}
 		clearEventListeners();
+
+		scrollFactor = null;
+		acceleration = null;
+		drag = null;
+		maxVelocity = null;
+		origin = null;
+		velocity = null;
+		velocity = null;
+		_point = null;
+		_point = null;
+		mountObject = null;
 	}
 
 	/**

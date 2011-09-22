@@ -509,6 +509,28 @@ class HxlSprite extends HxlObject {
 		dragStartPoint = null;
 		dragStopPoint = null;
 		super.destroy();
+		
+		offset = null;
+		scale = null;
+		scaleVelocity = null;
+		while (_animations != null && _animations.length > 0)
+			_animations.pop();
+		_animations = null;
+		
+		_callback = null;
+		_ct = null;
+		_curAnim = null;
+		_flashPointZero = null;
+		_flashRect = null;
+		_flashRect2 = null;
+		_mtx = null;
+		
+		//?
+		_pixels = null;
+		_bbb = null;
+		_framePixels = null;
+		
+		
 	}
 
 	public override function kill() {
