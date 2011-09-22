@@ -230,7 +230,6 @@ class HxlTilemap extends HxlObject {
 					
 					HxlGraphics.buffer.copyPixels(tilesByCT.get(name), tmpRect, _flashPoint, null, null, false);
 					HxlGraphics.numRenders++;
-					trace(name);
 					name = null;
 				}
 				_flashPoint.x += _tileWidth;
