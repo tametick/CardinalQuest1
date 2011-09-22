@@ -101,6 +101,12 @@ class CursorSprite extends HxlSprite {
 		loadGraphic(SpriteCursor, true, false, 32, 32);
 		setFrame(SpriteCursor.instance.getSpriteIndex(CursorName));
 	}
+	
+	override public function destroy() 
+	{
+		//there is only 1 cursor sprite, don't want to destroy it with the rest of the state
+		//super.destroy();
+	}
 }
 class StartButtonSprite extends HxlSprite {
 	public function new(?X:Float=0, ?Y:Float=0) {
