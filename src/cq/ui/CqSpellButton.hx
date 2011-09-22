@@ -54,8 +54,15 @@ class CqSpellButton extends HxlDialog {
 	
 	override public function destroy() {
 		super.destroy();
+
 		chargeBmpData.dispose();
 		chargeBmpData = null;
+		
+		cell.destroy();
+		cell = null;
+		
+		chargeSprite.destroy();
+		chargeSprite = null;
 	}
 	
 	public override function update() {

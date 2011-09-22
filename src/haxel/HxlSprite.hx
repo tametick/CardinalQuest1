@@ -419,6 +419,7 @@ class HxlSprite extends HxlObject {
 	public override function update() {
 		updateMotion();
 		updateAnimation();
+		
 		if ( mountObject != null ) {
 			x = mountObject.x + mountOffsetX;
 			y = mountObject.y + mountOffsetY;
@@ -525,7 +526,12 @@ class HxlSprite extends HxlObject {
 		_flashRect2 = null;
 		_mtx = null;
 		
-		//?
+		//probably reused, so shouldn't dispose of it
+		//_pixels.dispose();
+		if(_bbb!=null)
+			_bbb.dispose();
+		if(_framePixels!=null)
+			_framePixels.dispose();
 		_pixels = null;
 		_bbb = null;
 		_framePixels = null;

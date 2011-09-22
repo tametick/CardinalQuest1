@@ -301,8 +301,6 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		maxVelocity = null;
 		origin = null;
 		velocity = null;
-		velocity = null;
-		_point = null;
 		_point = null;
 		mountObject = null;
 	}
