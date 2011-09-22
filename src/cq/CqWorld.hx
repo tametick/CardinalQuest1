@@ -66,8 +66,12 @@ class CqWorld extends World {
 	}
 
 	function goToLevel(level:Int) {
-		//levels.push(new CqLevel(level));
-		//currentLevel = levels[level];
+		// destroy existing previosu level
+		if (currentLevel != null) {
+			HxlGraphics.state.remove(currentLevel);
+			currentLevel.destroy();
+		}
+		
 		currentLevel = new CqLevel(level);
 		doOnNewLevel();
 		
@@ -79,8 +83,7 @@ class CqWorld extends World {
 		//Registery.getKong().SubmitStat( Registery.KONG_MAXLEVEL , level );
 	}
 		
-	public override function goToNextLevel(state:HxlState, ?jumpToLevel:Int = -1) {
-		state.remove(currentLevel);
+	public override function goToNextLevel(?jumpToLevel:Int = -1) {
 		if (jumpToLevel > -1)
 			currentLevelIndex = jumpToLevel;
 		else
@@ -89,8 +92,8 @@ class CqWorld extends World {
 		Registery.player.infoViewFloor.setText("Floor " +(currentLevelIndex + 1));
 
 		currentLevel.zIndex = -1;	
-		state.add(currentLevel);
-		currentLevel.updateFieldOfView(state,true);
+		HxlGraphics.state.add(currentLevel);
+		currentLevel.updateFieldOfView(HxlGraphics.state,true);
 		doOnNewLevel();
 	}
 

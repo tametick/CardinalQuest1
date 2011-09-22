@@ -15,5 +15,5 @@ class World {
 		currentLevel = null;
 	}
 	
-	public function goToNextLevel(state:HxlState,?jumpToLevel:Int = -1){}
+	public function goToNextLevel(?jumpToLevel:Int = -1){}
 }

@@ -2,6 +2,7 @@ package cq.states;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import flash.system.System;
+import haxel.HxlGame;
 
 import data.Configuration;
 import data.Registery;
@@ -56,6 +57,11 @@ class GameState extends CqState {
 	public var started:Bool;
 	var lastMouse:Bool;
 	var endingAnim:Bool;
+	
+	public function new() {
+		super();
+	}
+	
 	public override function create()
 	{
 		super.create();
@@ -85,7 +91,7 @@ class GameState extends CqState {
 		HxlGraphics.keys.onJustPressed = null;
 		//remove(Registery.world.currentLevel);
 	}
-	
+		
 	public override function render() {
 		if (gameUI != null)
 			gameUI.updateCentralBarsPosition();
@@ -194,9 +200,9 @@ class GameState extends CqState {
 	
 	private function checkJumpKeys():Void {
 		if (HxlGraphics.keys.justReleased("COMMA") && Registery.world.currentLevelIndex>0) {
-			Registery.world.goToNextLevel(this, Registery.world.currentLevelIndex-1);
+			Registery.world.goToNextLevel(Registery.world.currentLevelIndex-1);
 		} else if (HxlGraphics.keys.justReleased("PERIOD") && Registery.world.currentLevelIndex<Configuration.lastLevel) {
-			Registery.world.goToNextLevel(this, Registery.world.currentLevelIndex+1);
+			Registery.world.goToNextLevel(Registery.world.currentLevelIndex+1);
 		}
 	}
 	private function checkInvKeys():Void
@@ -393,7 +399,7 @@ class GameState extends CqState {
 		if (Configuration.debug) {
 			player.give(CqSpellType.REVEAL_MAP);
 			if(Configuration.debugStartingLevel>0)
-				Registery.world.goToNextLevel(this, Configuration.debugStartingLevel);
+				Registery.world.goToNextLevel(Configuration.debugStartingLevel);
 		}
 		else
 			gameUI.dlgPotionGrid.pressHelp(false);
@@ -583,7 +589,7 @@ class GameState extends CqState {
 				item = null;
 			} else if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tile.dataNum)) {
 				// descend
-				Registery.world.goToNextLevel(this);
+				Registery.world.goToNextLevel();
 				player.popup.setText("");
 				
 				#if demo
