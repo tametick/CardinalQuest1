@@ -38,7 +38,7 @@ class CqEquipmentCell extends CqInventoryCell {
 	
 	override public function destroy() {
 		highlightedCell = null;
-		equipSlot = null;
+		//equipSlot = null;
 		icon = null;
 		
 		super.destroy();

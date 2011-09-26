@@ -50,23 +50,32 @@ class CqEquipmentGrid extends CqInventoryGrid {
 			icon.setAlpha(0.3);
 			add(cell);
 			cells.push(cell);
+			
+			icon = null;
+			btn = null;
+			cell = null;
 		}
 	}
+	
 	public function setGlowForSlot(slot:CqEquipSlot,value:Bool) {
+		var Cell:CqEquipmentCell = null;
 		for( i in 0...cells.length ) {
-			var Cell:CqEquipmentCell = cast(cells[i], CqEquipmentCell);
+			Cell  = cast(cells[i], CqEquipmentCell);
 			if ( slot == Cell.equipSlot ) {
 				Cell.setGlow(value);
 			}
+			Cell = null;
 		}
 	}
-	public function getCellWithSlot(slot:CqEquipSlot):CqEquipmentCell
-	{
+	
+	public function getCellWithSlot(slot:CqEquipSlot):CqEquipmentCell {
+		var Cell:CqEquipmentCell = null;
 		for( i in 0...cells.length ) {
-			var Cell:CqEquipmentCell = cast(cells[i], CqEquipmentCell);
+			Cell = cast(cells[i], CqEquipmentCell);
 			if ( slot == Cell.equipSlot ) {
 				return Cell;
 			}
+			Cell = null;
 		}
 		return null;
 	}
