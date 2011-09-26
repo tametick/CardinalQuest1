@@ -602,7 +602,7 @@ class HxlSprite extends HxlObject {
 	 * 
 	 * @param	Color		The color with which to fill the graphic, format 0xAARRGGBB.
 	 */
-	public function fill(Color:Int) {
+	public function fill(Color:Int) {		
 		_pixels.fillRect(_flashRect2,Color);
 		if (_pixels != _framePixels) {
 			calcFrame();
@@ -610,6 +610,12 @@ class HxlSprite extends HxlObject {
 	}
 
 	function calcFrame() {
+		// fixme: probably shouldn't be called
+		if (_pixels == null) {
+			// remove enter frame listener?
+			return;
+		}
+		
 		var rx:Int = _caf*frameWidth;
 		var ry:Int = 0;
 
