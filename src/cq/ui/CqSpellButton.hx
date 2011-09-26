@@ -99,7 +99,6 @@ class CqSpellButton extends HxlDialog {
 			return;
 			
 		// fixme: why is this still being called after starting a new game?
-			
 		if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y))
 			useSpell(event);
 	}
@@ -148,11 +147,19 @@ class CqSpellButton extends HxlDialog {
 
 class CqSpellCell extends CqEquipmentCell {
 	public static var highlightedCell:CqInventoryCell = null;
+	// pointer to the parent
 	public var btn:CqSpellButton;
 	
 	public function new(Btn:CqSpellButton, X:Int,Y:Int,?Width:Int=100,?Height:Int=20, ?Idx:Int=0) {
 		super(SPELL, X, Y, Width, Height, Idx);
 		btn = Btn;
+	}
+	
+	override public function destroy()	{
+		highlightedCell = null;
+		btn = null;
+		
+		super.destroy();
 	}
 
 }

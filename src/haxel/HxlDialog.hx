@@ -7,8 +7,7 @@ import flash.display.Shape;
 
 import haxel.HxlObject;
 
-class HxlDialog extends HxlGroup
-{
+class HxlDialog extends HxlGroup {
 
 	var background:HxlSprite;
 
@@ -19,6 +18,15 @@ class HxlDialog extends HxlGroup
 	public var targetX:Float;
 	public var targetY:Float;
 
+	override public function destroy() {
+		if(background !=null){
+			background.destroy();
+			background = null;
+		}
+		
+		super.destroy();
+	}
+	
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100) {
 		super();
 		x = X;

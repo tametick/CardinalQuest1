@@ -36,6 +36,27 @@ class CqInventoryCell extends HxlDialog {
 		cellIndex = CellIndex;
 		dropCell = false;
 	}
+	
+	override public function destroy() {
+		highlightedCell = null;
+
+		if(bgGlow !=null) {
+			bgGlow.destroy();
+			bgGlow = null;
+		}
+			
+		if(bgHighlight!=null){
+			bgHighlight.destroy();
+			bgHighlight = null;
+		}
+
+		if(cellObj!=null){
+			cellObj.destroy();
+			cellObj = null;
+		}
+		
+		super.destroy();
+	}
 
 	public function setGraphicKeys(Normal:CqGraphicKey, ?Highlight:CqGraphicKey = null, ?Glow:CqGraphicKey = null) {
 		if ( bgHighlight == null ) {

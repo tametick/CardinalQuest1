@@ -510,6 +510,8 @@ class HxlGroup extends HxlObject {
 	public override function destroy() {
 		destroyMembers();
 		super.destroy();
+		
+		_last = null;
 	}
 
 	/**
