@@ -450,6 +450,16 @@ class CqItem extends GameObjectImpl, implements Loot {
 			glowSprite.dispose();
 			glowSprite = null;
 		}
+		
+		buffs = null;
+		damage = null;
+		equipSlot = null;
+		
+		specialEffects.clear();
+		specialEffects = null;
+		
+		uiItem = null;
+		glowRect = null;
 	}
 	var oldX:Float;
 	var oldY:Float;
