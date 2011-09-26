@@ -415,8 +415,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 			tmp = null;
 		//}
 	}
-	public function customGlow(color:Int)
-	{
+	public function customGlow(color:Int) {
 		var tmp:BitmapData = new BitmapData(48, 48, true, 0x0);
 		tmp.copyPixels(getFramePixels(), new Rectangle(0, 0, 32, 32), new Point(8, 8), null, null, true);
 		var glow:GlowFilter = new GlowFilter(color, 0.9, 16.0, 16.0, 1.6, 1, false, false);

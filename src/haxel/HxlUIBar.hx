@@ -16,13 +16,16 @@ class HxlUIBar extends HxlDialog {
 	var tweenSpeed:Float;
 
 	override public function destroy()	{
-		frame.destroy();
+		if(frame !=null)
+			frame.destroy();
 		frame = null;
 		
-		interior.destroy();
+		if(interior!=null)
+			interior.destroy();
 		interior = null;
 		
-		bar.destroy();
+		if(bar!=null)
+			bar.destroy();
 		bar = null;
 		
 		super.destroy();

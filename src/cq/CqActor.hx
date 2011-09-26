@@ -4,6 +4,7 @@ import com.eclecticdesignstudio.motion.Actuate;
 import cq.states.GameOverState;
 import cq.ui.CqPopup;
 import flash.display.BitmapData;
+import haxe.Timer;
 import haxel.HxlSprite;
 import haxel.HxlText;
 
@@ -107,11 +108,64 @@ class CqActor extends CqObject, implements Actor {
 	public var cqhealthBar(getHealthBar, null):CqHealthBar;
 	function getHealthBar() { return cast(healthBar, CqHealthBar); }
 	
-	
-	
 	public var name:String;
 	//track last horizontal direction, for sprite flipping
 	var lastDirX:Int;
+	
+	override function destroy() {
+		buffs = null;
+
+		if(healthBar!=null &&  !healthBar.dead)
+			healthBar.destroy();
+		healthBar = null;
+		
+		damage = null;
+		
+		var es:CqSpell = null;
+		while (equippedSpells.length > 0){
+			es = equippedSpells.pop();
+			if(es!=null)
+				es.destroy();
+			es = null;
+		}
+		
+		specialEffects = null;
+		
+		if(timers!=null)
+			timers.slice(0, timers.length);
+		timers = null;
+		
+		visibleEffects = null;
+		
+		if (equippedWeapon != null) {
+			equippedWeapon.destroy();
+			equippedWeapon = null;
+		}
+		
+		if(onAttackMiss!=null)
+			onAttackMiss.clear();
+		if (onEquip != null)
+			onEquip.clear();
+		if (onInjure!= null)
+			onInjure.clear();
+		if (onKill!= null)
+			onKill.clear();
+		if (onMove!= null)
+			onMove.clear();
+		if (onUnequip!= null)
+			onUnequip.clear();
+		
+
+		onAttackMiss = null;
+		onEquip = null;
+		onInjure = null;
+		onKill = null;
+		onMove = null;
+		onUnequip = null;
+
+		
+		super.destroy();
+	}
 	
 	public function new(X:Float, Y:Float) {
 		super(X, Y);
@@ -213,7 +267,8 @@ class CqActor extends CqObject, implements Actor {
 	}
 	
 	public function doInjure(?dmgTotal:Int=0) {
-		for ( Callback in onInjure ) Callback(dmgTotal);
+		for ( Callback in onInjure ) 
+			Callback(dmgTotal);
 	}
 
 	function injureActor(other:CqActor, dmgTotal:Int) {
@@ -227,9 +282,10 @@ class CqActor extends CqObject, implements Actor {
 		other.doInjure(dmgTotal);
 	}
 	
-	public function doKill(?dmgTotal:Int=0) {
+	function doKill(?dmgTotal:Int=0) {
 		doInjure(dmgTotal);
-		for ( Callback in onKill ) Callback();
+		for ( Callback in onKill )
+			Callback();
 	}
 
 	function killActor(state:HxlState, other:CqActor, dmgTotal:Int) {
@@ -828,6 +884,38 @@ class CqPlayer extends CqActor, implements Player {
 
 	var lastTile:HxlPoint;
 
+	override function destroy() {
+		if(!centralHealthBar.dead)
+			centralHealthBar.destroy();
+		centralHealthBar = null;
+		
+		if(!centralXpBar.dead)
+			centralXpBar.destroy();
+		centralXpBar = null;
+		
+		if(!infoViewHealthBar.dead)
+			infoViewHealthBar.destroy();
+		infoViewHealthBar = null;
+		
+		if(!infoViewXpBar.dead)
+			infoViewXpBar.destroy();
+		infoViewXpBar = null;
+		
+		var i:CqItem = null;
+		while (inventory.length > 0) {
+			i = inventory.pop();
+			i.destroy();
+			i = null;
+		}
+		
+		lastTile = null;
+		
+		onGainXP.clear();
+		onPickup.clear();
+		
+		super.destroy();
+	}
+	
 	public function new(PlayerClass:CqClass, ?X:Float = -1, ?Y:Float = -1) {
 		playerClass = PlayerClass;
 		switch(playerClass) {
@@ -1071,7 +1159,7 @@ class CqMob extends CqActor, implements Mob {
 	public var xpValue:Int;
 	
 	var aware:Int;
-		
+	
 	public function new(X:Float, Y:Float, typeName:String,?player:Bool = false) {
 		super(X, Y);
 		xpValue = 1;
@@ -1244,7 +1332,6 @@ class CqMob extends CqActor, implements Mob {
 
 	public function doDeathEffect() {
 		HxlGraphics.state.add(this);
-		var self = this;
 		angularVelocity = -200;
 		scaleVelocity.x = scaleVelocity.y = -1.2;
 		Actuate.update(deathEffectCallback, 0.5, { Alpha: 1.0 }, { Alpha: 0.0 }).onComplete(deactEffectOncompleteCallback);
