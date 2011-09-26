@@ -459,9 +459,10 @@ class GameState extends CqState {
 			HxlGraphics.pushState(WhiteState.instance);
 		}
 		isPlayerActing = false;
-		if (Configuration.debug)
+		if (Configuration.debug){
 			checkJumpKeys();
 			checkResetKeys();
+		}
 	}
 	var msMoveStamp:Float;
 	override function onMouseMove(event:MouseEvent)
