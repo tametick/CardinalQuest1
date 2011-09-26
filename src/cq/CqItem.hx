@@ -454,9 +454,11 @@ class CqItem extends GameObjectImpl, implements Loot {
 		buffs = null;
 		damage = null;
 		equipSlot = null;
-		
-		specialEffects.clear();
-		specialEffects = null;
+			
+		if(specialEffects !=null){
+			specialEffects.clear();
+			specialEffects = null;
+		}
 		
 		uiItem = null;
 		glowRect = null;

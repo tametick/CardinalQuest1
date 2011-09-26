@@ -15,6 +15,19 @@ class HxlUIBar extends HxlDialog {
 	var tweenEnabled:Bool;
 	var tweenSpeed:Float;
 
+	override public function destroy()	{
+		frame.destroy();
+		frame = null;
+		
+		interior.destroy();
+		interior = null;
+		
+		bar.destroy();
+		bar = null;
+		
+		super.destroy();
+	}
+	
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=0, ?Height:Float=0) {
 		super(X, Y, Width, Height);
 
@@ -98,6 +111,9 @@ class HxlUIBar extends HxlDialog {
 			bmp.draw(target);
 			target = null;
 			TargetSprite.pixels = bmp;
+			
+			target = null;
+			bmp = null;
 		}
 	}
 }

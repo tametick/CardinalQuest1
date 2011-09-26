@@ -37,6 +37,11 @@ class CqVitalBar extends HxlUIBar {
 	public function updateValue(?dmgTotal:Int = 0) { 
 		
 	}
+	
+	override public function destroy() 	{
+		super.destroy();
+		actor = null;
+	}
 }
 
 class CqXpBar extends CqVitalBar {
@@ -52,6 +57,7 @@ class CqXpBar extends CqVitalBar {
 				player.infoViewXpBar = this;
 			else
 				player.centralXpBar = this;
+			player = null;
 		}
 		
 		setFrameColor(0xff444444);
@@ -71,6 +77,8 @@ class CqXpBar extends CqVitalBar {
 		var player:CqPlayer = Registery.player;
 		var percent:Float = (player.xp - player.currentLevel()) / (player.nextLevel() - player.currentLevel());
 		setPercent( percent );
+		
+		player = null;
 	}
 }
 
