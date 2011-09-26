@@ -97,6 +97,9 @@ class CqSpellButton extends HxlDialog {
 	function clickMouseDown(event:MouseEvent) {
 		if (!exists || !visible || !active || Std.is(GameUI.instance.panels.currentPanel,CqInventoryDialog) ) 
 			return;
+			
+		// fixme: why is this still being called after starting a new game?
+			
 		if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y))
 			useSpell(event);
 	}

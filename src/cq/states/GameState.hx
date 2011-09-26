@@ -454,14 +454,14 @@ class GameState extends CqState {
 				}
 			}
 		}
-		//Check for white state
-		if (HxlGraphics.keys.justReleased("F5")) {
-			HxlGraphics.pushState(WhiteState.instance);
-		}
+
 		isPlayerActing = false;
 		if (Configuration.debug){
 			checkJumpKeys();
 			checkResetKeys();
+			if (HxlGraphics.keys.justReleased("F5")) {
+				HxlGraphics.pushState(WhiteState.instance);
+			}
 		}
 	}
 	var msMoveStamp:Float;
