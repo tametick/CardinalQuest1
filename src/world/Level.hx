@@ -419,7 +419,11 @@ class Level extends HxlTilemap {
 		} else {
 			var map:Level = this;
 			
-			HxlUtil.markFieldOfView(tilePos, visionRadius, this, true, function(p:HxlPoint) { firstSeen(state, map, p); } );
+			HxlUtil.markFieldOfView(tilePos, visionRadius, this, true, 
+				function(p:HxlPoint) { 
+					firstSeen(state, map, p); 
+					map = null;
+				} );
 		}
 		for ( x in left...right+1 ) {
 			for ( y in top...bottom+1 ) {
@@ -465,8 +469,10 @@ class Level extends HxlTilemap {
 							
 					case Visibility.UNSEEN:
 				}
+				Ttile = null;
 			}
 		}
+		tile = null;
 	}
 	function colorTo(target:Dynamic,Speed:Float,ToColor:Float,onComplete:Dynamic) {
 		Actuate.update(target, Speed, {Color: HxlUtil.colorRGB(_color)[0]}, {Color: ToColor})

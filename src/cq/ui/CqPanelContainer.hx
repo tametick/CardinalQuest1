@@ -56,9 +56,14 @@ class CqPanelContainer extends HxlGroup
 	}
 	public function hideCurrentPanel(?hideCallBack:Dynamic):Void
 	{
-		if (!active) return;
+		if (!active) 
+			return;
 		if ( currentPanel != null ) {
-			currentPanel.hide(function() { instance.currentPanel = null; if (hideCallBack) hideCallBack(); } );
+			currentPanel.hide(function() { 
+				instance.currentPanel = null; 
+				if (hideCallBack) 
+					hideCallBack(); 
+			});
 			GameUI.instance.disableAllButtons();
 		}
 	}

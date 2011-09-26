@@ -51,6 +51,25 @@ class CqInventoryDialog extends HxlSlidingDialog {
 	static inline var DLG_DIVISOR_H_PERCENT:Int = 75;
 	static inline var DLG_DIVISOR_V_PERCENT:Int = 55;
 	
+	override public function destroy() {
+		dlgCharacter.destroy();
+		dlgInfo.destroy();
+		dlgInvGrid.destroy();
+		dlgEqGrid.destroy();
+		dlgSpellGrid.destroy();
+		dlgPotionGrid.destroy();
+
+		gameui = null;
+		dlgCharacter = null;
+		dlgInfo = null;
+		dlgInvGrid = null;
+		dlgEqGrid = null;
+		dlgSpellGrid = null;
+		dlgPotionGrid = null;
+		
+		super.destroy();
+	}
+	
 	public function new(_GameUI:GameUI, ?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0) {
 		// Size: 481 x 480
 		super(X, Y, Width, Height, Direction);

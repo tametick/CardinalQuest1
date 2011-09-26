@@ -760,8 +760,7 @@ class GameState extends CqState {
 	private function gotoWinState():Void
 	{
 		HxlGraphics.fade.start(true, 0xff000000, 1, function() {
-			var newState = new WinState();
-			HxlGraphics.state = newState;
+			HxlGraphics.state = new WinState();
 		}, true);
 	}
 }

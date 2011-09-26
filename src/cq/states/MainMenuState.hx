@@ -154,6 +154,7 @@ class MainMenuState extends CqState {
 			btnResumeGame.setCallback(function() {
 				CqLevel.playMusicByIndex(Registery.level.index);
 				self.changeState(null);
+				self = null;
 			});
 			buttonY += 50;
 		}

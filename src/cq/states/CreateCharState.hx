@@ -117,7 +117,7 @@ class CreateCharState extends CqState {
 		var self = this;
 		btnStart.setCallback(function() {
 			self.gotoState(GameState);
-			self = null;
+			//self = null;
 		});
 
 		playerSprites= SpritePlayer.instance;
@@ -128,7 +128,10 @@ class CreateCharState extends CqState {
 		btnFighter = new HxlButton(138, class_buttons_y);
 		btnFighter.loadGraphic(sprFighter);
 		add(btnFighter);
-		btnFighter.setCallback(function() { self.changeSelection(FIGHTER); });
+		btnFighter.setCallback(function() { 
+			self.changeSelection(FIGHTER); 
+			//self = null;
+		});
 		txtFighter = new HxlText(95, class_buttons_y+sprFighter.height, 150, "Fighter");
 		txtFighter.setFormat(null, 32, 0xffffff, "center", 0x010101);
 		add(txtFighter);
@@ -139,7 +142,10 @@ class CreateCharState extends CqState {
 		btnThief = new HxlButton(288, class_buttons_y);
 		btnThief.loadGraphic(sprThief);
 		add(btnThief);
-		btnThief.setCallback(function() { self.changeSelection(THIEF); });
+		btnThief.setCallback(function() { 
+			self.changeSelection(THIEF); 
+			//self = null;
+		});
 		txtThief = new HxlText(245, class_buttons_y+sprThief.height, 150, "Thief");
 		txtThief.setFormat(null, 32, 0xffffff, "center", 0x010101);
 		add(txtThief);
@@ -150,7 +156,10 @@ class CreateCharState extends CqState {
 		btnWizard = new HxlButton(438, class_buttons_y);
 		btnWizard.loadGraphic(sprWizard);
 		add(btnWizard);
-		btnWizard.setCallback(function() { self.changeSelection(WIZARD); });
+		btnWizard.setCallback(function() { 
+			self.changeSelection(WIZARD); 
+			//self = null;
+		});
 		txtWizard = new HxlText(395, class_buttons_y+sprWizard.height, 150, "Wizard");
 		txtWizard.setFormat(null, 32, 0xffffff, "center", 0x010101);
 		add(txtWizard);

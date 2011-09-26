@@ -310,31 +310,30 @@ class GameUI extends HxlDialog {
 		dlgSpellGrid.kill();
 		panels.kill();
 	}
-	public function showMapDlg()
-	{
+	public function showMapDlg() {
 		if (!Std.is(HxlGraphics.getState(), GameState)) return;
 		SoundEffectsManager.play(MenuItemClick);
 		panels.showPanel(panels.panelMap, btnMapView);
 	}
 	public function showInvDlg()
 	{
-		if (!Std.is(HxlGraphics.getState(), GameState)) return;
+		if (!Std.is(HxlGraphics.getState(), GameState)) 
+			return;
+			
 		SoundEffectsManager.play(MenuItemClick);
-		if (!hasShownInv)
-		{
+		
+		if (!hasShownInv) {
 			hasShownInv = true;
 			showInvHelp = true;
 			panels.showPanel(panels.panelInventory, btnInventoryView, function() {
 				instance.setActive();
 				HxlGraphics.pushState(HelpState.instance);
 			});
-		}else
-		{
+		} else {
 			panels.showPanel(panels.panelInventory, btnInventoryView);
 		}
 	}
-	public function showCharDlg()
-	{
+	public function showCharDlg() {
 		if (!Std.is(HxlGraphics.getState(), GameState)) return;
 		SoundEffectsManager.play(MenuItemClick);
 		panels.showPanel(panels.panelCharacter, btnCharacterView);
@@ -652,13 +651,18 @@ class GameUI extends HxlDialog {
 	public function addHealthBar(Actor:CqActor) {
 		if (Std.is(Actor, CqPlayer))
 			return;
+		
 		var bar:CqHealthBar = new CqHealthBar(Actor, Actor.x, Actor.y + Actor.height + 2, 32, 4);
 		HxlGraphics.state.add(bar);
+		bar = null;
+		
 		var self = this;
 		Actor.addOnInjure(function(?dmgTotal:Int=0) { 
 			self.showDamageText(Actor, dmgTotal);
 			self.doInjureEffect(Actor);
+			self = null;
 		});
+		
 		Actor.addOnAttackMiss(doAttackMiss);
 	}
 	public function doAttackMiss(?Attacker:CqActor, ?Defender:CqActor) {
