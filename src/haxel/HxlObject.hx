@@ -496,6 +496,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		while ( eventListeners.length > 0 ) {
 			var i:Dynamic = eventListeners.pop();
 			HxlGraphics.stage.removeEventListener(i.Type, i.Listener);
+			i = null;
 		}
 	}
 

@@ -508,6 +508,7 @@ class HxlGroup extends HxlObject {
 	 * such as removing traditional Flash children like Sprite objects.
 	 */
 	public override function destroy() {
+		clearEventListeners();
 		destroyMembers();
 		super.destroy();
 		

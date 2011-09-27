@@ -613,6 +613,7 @@ class HxlSprite extends HxlObject {
 		// fixme: probably shouldn't be called
 		if (_pixels == null) {
 			// remove enter frame listener?
+			//HxlGraphics.stage.removeEventListener(i.Type, i.Listener);
 			return;
 		}
 		
