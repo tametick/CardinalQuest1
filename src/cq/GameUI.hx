@@ -748,14 +748,14 @@ class GameUI extends HxlDialog {
 		}
 	}
 
-	public function doInjureEffect(Target:CqActor) {
+	public static function doInjureEffect(Target:CqActor) {
 		var eff:CqEffectInjure = new CqEffectInjure(Target.x + Target.origin.x, Target.y + Target.origin.y);
 		eff.zIndex = 6;
 		HxlGraphics.state.add(eff);
 		eff.start(true, 1.0, 10);
 	}
 
-	public function showDamageText(Actor:CqActor, Damage:Int) {
+	public static function showDamageText(Actor:CqActor, Damage:Int) {
 		showEffectText(Actor, ""+Damage, 0xff2222);
 	}
 	

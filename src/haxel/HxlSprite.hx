@@ -613,7 +613,7 @@ class HxlSprite extends HxlObject {
 
 	function calcFrame() {
 		// fixme: probably shouldn't be called
-		if (_pixels == null) {
+		if (_pixels == null || _flashRect == null ) {
 			// remove enter frame listener?
 			//HxlGraphics.stage.removeEventListener(i.Type, i.Listener);
 			return;
@@ -688,9 +688,12 @@ class HxlSprite extends HxlObject {
 		if (Alpha < 0) Alpha = 0;
 		if (Alpha == _alpha) return Alpha;
 		_alpha = Alpha;
-		if ((_alpha != 1) || (_color != 0x00ffffff)) _ct = new ColorTransform((_color>>16)/255.0,(_color>>8&0xff)/255.0,(_color&0xff)/255.0,_alpha);
-		else _ct = null;
-		calcFrame();
+		if ( (_alpha != 1) || (_color != 0x00ffffff) ) {
+			_ct = new ColorTransform((_color >> 16) / 255.0, (_color >> 8 & 0xff) / 255.0, (_color & 0xff) / 255.0, _alpha);
+			calcFrame();
+		} else {
+			_ct = null;
+		}
 		return Alpha;
 	}
 
@@ -711,9 +714,12 @@ class HxlSprite extends HxlObject {
 		Color &= 0x00ffffff;
 		if (_color == Color) return Color;
 		_color = Color;
-		if ((_alpha != 1) || (_color != 0x00ffffff)) _ct = new ColorTransform((_color>>16)/255.0,(_color>>8&0xff)/255.0,(_color&0xff)/255.0,_alpha);
-		else _ct = null;
-		calcFrame();
+		if ( (_alpha != 1) || (_color != 0x00ffffff) ) {
+			_ct = new ColorTransform((_color >> 16) / 255.0, (_color >> 8 & 0xff) / 255.0, (_color & 0xff) / 255.0, _alpha);
+			calcFrame();
+		}else{
+			_ct = null;
+		}
 		return Color;
 	}
 	
