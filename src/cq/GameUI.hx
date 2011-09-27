@@ -315,7 +315,7 @@ class GameUI extends HxlDialog {
 		super.kill();
 	}
 	
-	override public function destroy() 	{
+	override public function destroy() 	{		
 		btnMainView.destroy();
 		dlgPotionGrid.destroy();
 		dlgSpellGrid.destroy();
@@ -725,11 +725,9 @@ class GameUI extends HxlDialog {
 		HxlGraphics.state.add(bar);
 		bar = null;
 		
-		var self = this;
 		Actor.addOnInjure(function(?dmgTotal:Int=0) { 
-			self.showDamageText(Actor, dmgTotal);
-			self.doInjureEffect(Actor);
-			self = null;
+			showDamageText(Actor, dmgTotal);
+			doInjureEffect(Actor);
 		});
 		
 		Actor.addOnAttackMiss(doAttackMiss);

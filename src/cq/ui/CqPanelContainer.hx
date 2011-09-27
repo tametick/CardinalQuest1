@@ -47,6 +47,7 @@ class CqPanelContainer extends HxlGroup
 	}
 	override public function kill():Void 
 	{
+		instance = null;
 		currentPanel = null;
 		panelInventory.kill();
 		super.kill();

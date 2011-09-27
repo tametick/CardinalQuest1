@@ -169,9 +169,9 @@ class MainMenuState extends CqState {
 		menu.addItem(btnNewGame);
 		btnNewGame.setCallback(function() {
 			SaveLoad.deleteSaveGame();
-			if (GameUI.instance != null){
+			/*if (GameUI.instance != null){
 				GameUI.instance.kill();
-			}
+			}*/
 			self.changeState(CreateCharState);
 			});
 		buttonY += 50;

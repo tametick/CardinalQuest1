@@ -528,11 +528,13 @@ class HxlSprite extends HxlObject {
 		
 		//probably reused, so shouldn't dispose of it
 		//_pixels.dispose();
+		//_pixels = null;
+		
 		if(_bbb!=null)
 			_bbb.dispose();
 		if(_framePixels!=null)
 			_framePixels.dispose();
-		_pixels = null;
+		
 		_bbb = null;
 		_framePixels = null;
 		

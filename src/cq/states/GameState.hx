@@ -58,6 +58,10 @@ class GameState extends CqState {
 	var lastMouse:Bool;
 	var endingAnim:Bool;
 	
+	public function clearGameUi() {
+		gameUI = null;
+	}
+	
 	public function new() {
 		super();
 	}
@@ -76,10 +80,12 @@ class GameState extends CqState {
 		resumeActingTime = msMoveStamp = Timer.stamp();
 	}
 	public override function destroy() {
-		
-		gameUI.kill();
-		remove(gameUI);
+		var oldGameUI = gameUI;
 		gameUI = null;
+		oldGameUI.kill();
+		remove(oldGameUI);
+		oldGameUI = null;
+		
 		
 		Registery.world.destroy();
 		Registery.world = null;
