@@ -68,6 +68,7 @@ class CqWorld extends World {
 	function goToLevel(level:Int) {
 		// destroy existing previosu level
 		if (currentLevel != null) {
+			GameUI.instance.removePopups(currentLevel.mobs);
 			HxlGraphics.state.remove(currentLevel);
 			currentLevel.destroy();
 		}

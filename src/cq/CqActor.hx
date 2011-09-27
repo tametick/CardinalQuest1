@@ -2,7 +2,6 @@ package cq;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import cq.states.GameOverState;
-import cq.ui.CqPopup;
 import flash.display.BitmapData;
 import haxe.Timer;
 import haxel.HxlSprite;

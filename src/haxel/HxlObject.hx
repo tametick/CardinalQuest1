@@ -424,6 +424,10 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		}
 	}
 	
+	public function clearPopup() {
+		popup = null;
+	}
+	
 	public function setPopup(Popup:HxlText)	{
 		popup = Popup;
 		popup.visible = false;

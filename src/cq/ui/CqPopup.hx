@@ -16,14 +16,19 @@ class CqPopup extends HxlText{
 		setFormat("FontAnonymousPro", 15, 0xC2AC30, "center", 1);
 	}
 	
-	public override function onRemove(state:HxlState) {
-		if(parent!=null){
-			parent.remove(this);
-			parent = null;
-		}
-		
+	public override function onRemove(state:HxlState) {		
 		super.onRemove(state);
 	}
 	
+	override public function destroy() 	{
+		onRemove(null);
+		if (parent != null) {
+			parent.remove(this);
+			HxlGraphics.state.remove(this);
+			parent.clearPopup();
+			parent = null;
+		}
+		super.destroy();
+	}
 	
 }

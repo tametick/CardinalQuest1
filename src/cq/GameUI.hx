@@ -35,7 +35,9 @@ import cq.ui.inventory.CqInventoryItemManager;
 import flash.display.BitmapData;
 import flash.display.Shape;
 import flash.events.Event;
+import flash.system.System;
 import haxel.HxlGroup;
+import haxel.HxlObject;
 import haxel.HxlSpriteSheet;
 import haxel.HxlState;
 import haxel.HxlUtil;
@@ -304,12 +306,79 @@ class GameUI extends HxlDialog {
 		}
 		chargeShape = null;
 		clearEventListeners();
-		super.destroy();
-		super.kill();
+
 		dlgPotionGrid.kill();
 		dlgSpellGrid.kill();
 		panels.kill();
+		
+		destroy();
+		super.kill();
 	}
+	
+	override public function destroy() 	{
+		btnMainView.destroy();
+		dlgPotionGrid.destroy();
+		dlgSpellGrid.destroy();
+		doodads.destroy();
+		//invItemManager
+		notifications.destroy();
+		panels.destroy();
+		popups.destroy();
+		if(targetSpell!=null)
+			targetSpell.destroy();
+		btnCharacterView.destroy();
+		btnInfoView.destroy();
+		btnInventoryView.destroy();
+		btnMapView.destroy();
+		centralHealthBar.destroy();
+		centralXpBar.destroy();
+		var e:CqFloatText = null;
+		while (effectQueue.length > 0) {
+			e = effectQueue.pop();
+			e.destroy();
+			e = null;
+		}
+		infoViewFloor.destroy();
+		infoViewHearts.destroy();
+		infoViewHpBar.destroy();
+		infoViewLevel.destroy();
+		infoViewXpBar.destroy();
+		leftButtons.destroy();		
+		if(targetSprite!=null)
+			targetSprite.destroy();
+		if(targetText!=null)
+			targetText.destroy();
+		
+		
+		btnMainView=null;
+		dlgPotionGrid=null;
+		dlgSpellGrid=null;
+		doodads=null;
+		invItemManager = null;
+		notifications=null;
+		panels=null;
+		popups=null;
+		targetSpell=null;
+		btnCharacterView=null;
+		btnInfoView=null;
+		btnInventoryView=null;
+		btnMapView=null;
+		centralHealthBar=null;
+		centralXpBar=null;
+		infoViewFloor=null;
+		infoViewHearts=null;
+		infoViewHpBar=null;
+		infoViewLevel=null;
+		infoViewXpBar=null;
+		leftButtons=null;		
+		targetSprite=null;
+		targetText=null;
+		menuBelt = null;
+		
+		super.destroy();
+		instance = null;
+	}
+	
 	public function showMapDlg() {
 		if (!Std.is(HxlGraphics.getState(), GameState)) return;
 		SoundEffectsManager.play(MenuItemClick);
@@ -924,8 +993,21 @@ class GameUI extends HxlDialog {
 		args2 = null;
 	}
 	
-	public function initPopups():Void 
-	{
+	public function removePopups(parents:Array<Dynamic>) {
+		var popup:HxlText = null;
+		for (p in parents) {
+			popup = cast(p, HxlObject).popup;
+			popups.remove(popup);
+			popup.destroy();
+			p.clearPopup();
+			popup = null;
+		}
+		
+		System.gc();
+		System.gc();
+	}
+	
+	public function initPopups() {
 		for ( actor in Registery.level.mobs ) {
 			var cqMob:CqActor = cast(actor, CqActor);
 			var pop:CqPopup = new CqPopup(150, cqMob.name, popups);

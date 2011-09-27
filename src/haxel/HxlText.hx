@@ -35,6 +35,12 @@ class HxlText extends HxlSprite {
   var boldEnd:Int;
   var boldFont:String;
 
+  
+  override public function destroy() {
+	  super.destroy();
+	  _tf = null;
+  }
+  
   /**
    * Creates a new <code>HxlText</code> object at the specified position.
    *
