@@ -299,12 +299,6 @@ class GameUI extends HxlDialog {
 		}
 	}
 	override public function kill() {
-		if(chargeBmp!=null){
-			//chrageBmp.bitmapData.dispose();
-			chargeBmp.bitmapData = null;
-			chargeBmp = null;
-		}
-		chargeShape = null;
 		clearEventListeners();
 
 		dlgPotionGrid.kill();
@@ -374,6 +368,7 @@ class GameUI extends HxlDialog {
 		targetSprite=null;
 		targetText=null;
 		menuBelt = null;
+		ctrans = null;
 		
 		super.destroy();
 		instance = null;
@@ -528,9 +523,12 @@ class GameUI extends HxlDialog {
 			}
 		}
 	}
-	var chargeBmp:Bitmap;
-	var chargeShape:Shape;
-	public function updateCharge(btn:CqSpellButton, ?forcedValue:Int=-1) {
+	
+	static var ctrans:ColorTransform;
+	public function updateCharge(btn:CqSpellButton, ?forcedValue:Int = -1) {
+		var chargeBmp:Bitmap = new Bitmap(GraphicCache.getBitmap(CqGraphicKey.EquipmentCellBG));
+		var chargeShape:Shape = new Shape();
+		
 		var spiritPoints = forcedValue;
 		var spiritPointsRequired = 360;
 		if (btn.getSpell() != null){
@@ -538,32 +536,32 @@ class GameUI extends HxlDialog {
 			spiritPointsRequired = btn.getSpell().spiritPointsRequired;
 		}
 
-		var end:Float = (((Math.PI / 2) * 3) - (-(Math.PI/2))) * (spiritPoints / spiritPointsRequired);
-		end = ((Math.PI / 2) * 3) - end;
-		
-		if(chargeShape==null)
-			chargeShape = new Shape();
+		var start = -Math.PI / 2;
+		var end = 2*Math.PI * (3/4 - spiritPoints/spiritPointsRequired);
 			
 		var G = chargeShape.graphics;
-		
 		G.clear();
-		
 		G.beginFill(0x55000000);
-		GameUI.drawChargeArc(G, 27, 27, -(Math.PI/2), end, 47, -1);
+		drawChargeArc(G, 27, 27, start, end, 47, -1);
 		G.endFill();
-		if(chargeBmp == null)
-			chargeBmp = new Bitmap(GraphicCache.getBitmap(CqGraphicKey.EquipmentCellBG));
+		G = null;
+
 		chargeShape.mask = chargeBmp;
 		
 		btn.chargeBmpData.fillRect(CqSpellButton.clearChargeRect, 0x0);
-		
-		
-		var ctrans:ColorTransform = new ColorTransform();
-		ctrans.alphaMultiplier = 0.5;
+
+		if (ctrans == null) {
+			ctrans = new ColorTransform();
+			ctrans.alphaMultiplier = 0.5;
+		}
+			
 		btn.chargeBmpData.draw(chargeShape, null, ctrans);
 		GraphicCache.addBitmapData(btn.chargeBmpData, CqGraphicKey.chargeRadial, true);
 
 		btn.updateChargeSprite(CqGraphicKey.chargeRadial);
+		
+		chargeBmp = null;
+		chargeShape = null;
 	}
 
 	public static function drawChargeArc(G:Graphics, centerX:Float, centerY:Float, startAngle:Float, endAngle:Float, radius:Float, direction:Int) {

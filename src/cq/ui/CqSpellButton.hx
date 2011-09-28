@@ -95,13 +95,29 @@ class CqSpellButton extends HxlDialog {
 	}
 	
 	function clickMouseDown(event:MouseEvent) {
-		if (!exists || !visible || !active || Std.is(GameUI.instance.panels.currentPanel,CqInventoryDialog) ) 
+		if (!exists || !visible || !active || Std.is(GameUI.instance.panels.currentPanel, CqInventoryDialog) ) 
+			if (!exists)
+				clearEventListeners();
 			return;
 			
-		// fixme: why is this still being called after starting a new game?
 		if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y))
 			useSpell(event);
 	}
+	
+	function clickMouseUp(event:MouseEvent) {
+		if (!exists || !visible || !active || Std.is(GameUI.instance.panels.currentPanel, CqInventoryDialog) ) {
+			if (!exists)
+				clearEventListeners();			
+			return;
+		}
+		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
+			//if ( _callback != null ) _callback();
+			//if ( clickSound != null ) clickSound.play();
+			//if ( eventStopPropagate ) event.stopPropagation();
+			event.stopPropagation();
+		}
+	}
+	
 	public function useSpell(?event:MouseEvent = null)
 	{
 		var spellObj = cell.getCellObj();
@@ -130,16 +146,6 @@ class CqSpellButton extends HxlDialog {
 			//event == null means it was called by keypress. which in turn means we want to start targeting from players pos.
 			if (event == null) GameUI.setTargetingPos(player.tilePos);
 			if (event != null) event.stopPropagation();
-		}
-	}
-	function clickMouseUp(event:MouseEvent) {
-		if (!exists || !visible || !active || Std.is(GameUI.instance.panels.currentPanel,CqInventoryDialog) ) 
-			return;
-		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
-			//if ( _callback != null ) _callback();
-			//if ( clickSound != null ) clickSound.play();
-			//if ( eventStopPropagate ) event.stopPropagation();
-			event.stopPropagation();
 		}
 	}
 
