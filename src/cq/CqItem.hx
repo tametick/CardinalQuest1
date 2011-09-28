@@ -481,7 +481,8 @@ class CqItem extends GameObjectImpl, implements Loot {
 			x = oldX;
 			y = oldY;
 			HxlGraphics.state.remove(this);
-			destroy();
+			// need to destory when removing from level and into inv?
+			//destroy();
 	}
 	public function equalTo(other:CqItem):Bool {
 		if (isSuperb != other.isSuperb || isWondrous != other.isWondrous || isMagical != other.isMagical)
