@@ -28,7 +28,6 @@ import data.Registery;
 import data.Resources;
 import data.Configuration;
 import data.MusicManager;
-import data.SaveLoad;
 
 class CqLevel extends Level {
 	static var tiles = SpriteTiles.instance;
@@ -134,10 +133,10 @@ class CqLevel extends Level {
 		newMapData = BSP.getBSPMap(Configuration.getLevelWidth(), Configuration.getLevelHeight(), tmpWall, tmpFloor, tmpDoor);
 		
 		/* Dont like to set newMapData twice.. */
-		if ( SaveLoad.hasSaveGame() )
+/*		if ( SaveLoad.hasSaveGame() )
 			newMapData = SaveLoad.loadDungeonLayout();
 		
-		SaveLoad.saveDungeonLayout( newMapData , index );
+		SaveLoad.saveDungeonLayout( newMapData , index );*/
 
 		startingLocation = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), newMapData, Resources.walkableAndSeeThroughTiles);
 		

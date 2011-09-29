@@ -6,7 +6,6 @@ import haxel.HxlGame;
 
 import data.Configuration;
 import data.Registery;
-import data.SaveLoad;
 
 import cq.ui.CqPopup;
 import cq.ui.CqPotionButton;
@@ -208,10 +207,7 @@ class GameState extends CqState {
 	
 	private function checkResetKeys():Void {
 		if (HxlGraphics.keys.justReleased("R")) {
-			SaveLoad.deleteSaveGame();
-/*			if (GameUI.instance != null){
-				GameUI.instance.kill();
-			}*/
+			//SaveLoad.deleteSaveGame();
 			HxlGraphics.state = new CreateCharState();
 		}
 	}

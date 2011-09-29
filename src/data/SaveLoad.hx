@@ -23,7 +23,7 @@ import Reflect;
 import data.Registery;
 import cq.CqActor;
 
-class SaveLoad 
+class SaveLoad
 {
 	private static var so:SharedObject;
 

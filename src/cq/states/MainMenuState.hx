@@ -7,7 +7,6 @@ import cq.GameUI;
 import cq.Main;
 import data.SoundEffectsManager;
 import data.Configuration;
-import data.SaveLoad;
 import flash.events.MouseEvent;
 import haxel.HxlButton;
 import haxel.HxlGraphics;
@@ -168,10 +167,7 @@ class MainMenuState extends CqState {
 		btnNewGame.setHoverFormat(null, 35, textHighlight, "center");
 		menu.addItem(btnNewGame);
 		btnNewGame.setCallback(function() {
-			SaveLoad.deleteSaveGame();
-			/*if (GameUI.instance != null){
-				GameUI.instance.kill();
-			}*/
+			//SaveLoad.deleteSaveGame();
 			self.changeState(CreateCharState);
 			});
 		buttonY += 50;
@@ -197,7 +193,7 @@ class MainMenuState extends CqState {
 			//At a later point we should have a generic layer that abstracts the tech away
 			//Will do this for iOS..
 
-			if( SaveLoad.hasSaveGame() )
+/*			if( SaveLoad.hasSaveGame() )
 			{
 				// fixme-	should use resume game from above instead
 				var btnLoadGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Load saved game", true, null);
@@ -210,7 +206,7 @@ class MainMenuState extends CqState {
 					self.changeState(GameState);
 				});
 				buttonY += 50;
-			}
+			} */
 		}
 		if (Configuration.standAlone) {
 			var btnQuit:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Quit", true, null);

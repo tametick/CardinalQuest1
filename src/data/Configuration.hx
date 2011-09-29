@@ -9,7 +9,7 @@ import cq.states.MainMenuState;
  * */
 
 class Configuration {
-	public static inline var debug = true;
+	public static inline var debug = false;
 	public static inline var air = false;
 	public static inline var standAlone = false;
 	public static inline var useProductionPlaytomic = false;
@@ -30,8 +30,8 @@ class Configuration {
 	public static var playerLives = 1;
 	public static var spellsPerLevel = 2;
 	
-	public static inline var startWithMusic:Bool = false; //true
-	public static inline var startWithSound:Bool = false; //true
+	public static inline var startWithMusic:Bool = true;
+	public static inline var startWithSound:Bool = true;
 
 	public static inline var chestsPerLevel = 12;
 
