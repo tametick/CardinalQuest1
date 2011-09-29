@@ -56,7 +56,6 @@ import world.World;
 import flash.display.Bitmap;
 import flash.display.Graphics;
 import flash.filters.GlowFilter;
-import flash.geom.ColorTransform;
 import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
@@ -368,10 +367,9 @@ class GameUI extends HxlDialog {
 		targetSprite=null;
 		targetText=null;
 		menuBelt = null;
-		ctrans = null;
 		
-		super.destroy();
 		instance = null;
+		super.destroy();
 	}
 	
 	public function showMapDlg() {
@@ -518,20 +516,19 @@ class GameUI extends HxlDialog {
 	public function updateCharges() {
 		var player = Registery.player;
 		for ( btn in dlgSpellGrid.buttons ){
-			if (btn.getSpell() != null) {				
+			if (btn.getSpell() != null) {		
 				updateCharge(btn);
 			}
 		}
 	}
-	
-	static var ctrans:ColorTransform;
-	public function updateCharge(btn:CqSpellButton, ?forcedValue:Int = -1) {
+
+	public function updateCharge(btn:CqSpellButton) {		
 		var chargeBmp:Bitmap = new Bitmap(GraphicCache.getBitmap(CqGraphicKey.EquipmentCellBG));
 		var chargeShape:Shape = new Shape();
-		
-		var spiritPoints = forcedValue;
-		var spiritPointsRequired = 360;
-		if (btn.getSpell() != null){
+
+		var spiritPoints = 0;
+		var spiritPointsRequired = 1;
+		if(btn.getSpell()!=null){		
 			spiritPoints = btn.getSpell().spiritPoints;
 			spiritPointsRequired = btn.getSpell().spiritPointsRequired;
 		}
@@ -548,17 +545,7 @@ class GameUI extends HxlDialog {
 
 		chargeShape.mask = chargeBmp;
 		
-		btn.chargeBmpData.fillRect(CqSpellButton.clearChargeRect, 0x0);
-
-		if (ctrans == null) {
-			ctrans = new ColorTransform();
-			ctrans.alphaMultiplier = 0.5;
-		}
-			
-		btn.chargeBmpData.draw(chargeShape, null, ctrans);
-		GraphicCache.addBitmapData(btn.chargeBmpData, CqGraphicKey.chargeRadial, true);
-
-		btn.updateChargeSprite(CqGraphicKey.chargeRadial);
+		btn.updateChargeSprite(chargeShape);
 		
 		chargeBmp = null;
 		chargeShape = null;
@@ -580,6 +567,8 @@ class GameUI extends HxlDialog {
 			controlPoint = new Point(centerX+Math.cos(endAngle)*controlRadius, centerY+Math.sin(endAngle)*controlRadius);
 			anchorPoint = new Point(centerX+Math.cos(startAngle)*radius, centerY+Math.sin(startAngle)*radius);
 			G.curveTo( controlPoint.x, controlPoint.y, anchorPoint.x, anchorPoint.y );
+			controlPoint = null;
+			anchorPoint = null;
 		}
 		G.lineTo(centerX, centerY);
 	}
@@ -925,7 +914,7 @@ class GameUI extends HxlDialog {
 				cast(Registery.player, CqActor).useAt(targetSpell.getSpell(), tile);
 				SoundEffectsManager.play(SpellCast);
 				targetSpell.getSpell().spiritPoints = 0;
-				GameUI.instance.updateCharge(targetSpell);
+				updateCharge(targetSpell);
 				cast(HxlGraphics.state, GameState).passTurn();
 			}
 		} else {
@@ -934,7 +923,7 @@ class GameUI extends HxlDialog {
 				player.use(targetSpell.getSpell(), cast(tile.actors[0], CqActor));
 				SoundEffectsManager.play(SpellCast);
 				targetSpell.getSpell().spiritPoints = 0;
-				GameUI.instance.updateCharge(targetSpell);
+				updateCharge(targetSpell);
 				cast(HxlGraphics.state, GameState).passTurn();
 			}
 		}

@@ -13,14 +13,9 @@ class CqSpellGrid extends CqInventoryGrid {
 	public var buttons:Array<CqSpellButton>;	
 	var belt:HxlSprite;
 
-	public function forceClearCharge(Cell:Int) {
+	public function clearCharge(Cell:Int) {
 		if(buttons[Cell].getSpell()!=null)
 			buttons[Cell].getSpell().spiritPoints = 0;
-		
-		GameUI.instance.updateCharge(buttons[Cell],0);
-	}
-	public function clearCharge(Cell:Int) {
-		buttons[Cell].getSpell().spiritPoints = 0;
 		GameUI.instance.updateCharge(buttons[Cell]);
 	}
 	

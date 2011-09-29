@@ -231,7 +231,15 @@ class HxlSprite extends HxlObject {
 	 **/
 	public function loadCachedGraphic(Key:CqGraphicKey, ?Animated:Bool = false, ?Width:Int = 0, ?Height:Int = 0):HxlSprite {
 		_pixels = GraphicCache.getBitmap(Key);
-
+		return recalculateAttributesAccordingToBitmapData(Animated, Width, Height);
+	}
+	
+	public function loadSuppliedGraphic(BmpData:BitmapData, ?Animated:Bool = false, ?Width:Int = 0, ?Height:Int = 0):HxlSprite {
+		_pixels = BmpData;
+		return recalculateAttributesAccordingToBitmapData(Animated, Width, Height);
+	}
+	
+	function recalculateAttributesAccordingToBitmapData(?Animated:Bool = false, ?Width:Int = 0, ?Height:Int = 0) {
 		if (Animated) {
 			Width = _pixels.height;
 		} else {

@@ -211,7 +211,7 @@ class CqInventoryItem extends HxlSprite {
 	public function setInventoryCell(Cell:Int) {		
 		if (isInCell == POTION) {
 			Registery.player.equippedSpells[cellIndex] = null;
-			_dlg.dlgSpellGrid.forceClearCharge(cellIndex);
+			_dlg.dlgSpellGrid.clearCharge(cellIndex);
 		}
 		popup.setText(item.fullName);
 		zIndex = idleZIndex;
@@ -510,7 +510,7 @@ class CqInventoryItem extends HxlSprite {
 				var spellCell = _dlg.dlgSpellGrid.getSpellCell(dragStopCell.cellIndex); 
 				var spellBtn = spellCell.btn;
 				GameUI.instance.updateCharge(spellBtn);
-				if (clearCharge)_dlg.dlgSpellGrid.forceClearCharge(dragStopCell.cellIndex);
+				if (clearCharge)_dlg.dlgSpellGrid.clearCharge(dragStopCell.cellIndex);
 			case CqPotionCell:
 				// Moving this item into a potion cell
 				setPotionCell(dragStopCell.cellIndex);

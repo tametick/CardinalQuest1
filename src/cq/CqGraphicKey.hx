@@ -17,7 +17,6 @@ enum CqGraphicKey{
   SpellEffectParticle( Color:Int );
   InjureEffectParticle;
   CharCreateSelector;
-  chargeRadial;
   targetSprite;
   buttonSprite;
   xball(color:Float);

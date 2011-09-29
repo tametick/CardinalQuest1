@@ -11,6 +11,8 @@ import cq.CqResources;
 import cq.CqSpell;
 import cq.CqActor;
 import cq.CqGraphicKey;
+import flash.display.Shape;
+import flash.geom.ColorTransform;
 import haxel.HxlState;
 
 import flash.display.BitmapData;
@@ -33,7 +35,7 @@ class CqSpellButton extends HxlDialog {
 	var _initialized:Bool;
 	public var cell:CqSpellCell;
 	var chargeSprite:HxlSprite;
-	public var chargeBmpData:BitmapData;
+	var chargeBmpData:BitmapData;
 
 	public function new(X:Int,Y:Int,?Width:Int=100,?Height:Int=20,?Idx:Int=0) {
 		super(X, Y, Width, Height);
@@ -47,7 +49,7 @@ class CqSpellButton extends HxlDialog {
 
 		chargeSprite = new HxlSprite(x + 5, y + 5);
 		chargeSprite.createGraphic(54, 54, 0x00010101);
-		GameUI.instance.popups.add(chargeSprite);
+		GameUI.instance.doodads.add(chargeSprite);
 		
 		chargeBmpData = new BitmapData(94, 94, true, 0x0);
 	}
@@ -63,6 +65,8 @@ class CqSpellButton extends HxlDialog {
 		
 		chargeSprite.destroy();
 		chargeSprite = null;
+		
+		ctrans = null;
 	}
 	
 	public override function update() {
@@ -76,13 +80,23 @@ class CqSpellButton extends HxlDialog {
 		
 		super.update();
 	}
-
-	public function updateChargeSprite(Key:CqGraphicKey) {
+	
+	static var ctrans:ColorTransform;
+	public function updateChargeSprite(chargeShape:Shape) {
+		chargeBmpData.fillRect(clearChargeRect, 0x0);
+		chargeBmpData.draw(chargeShape, null, ctrans);
+		
+		if (ctrans == null) {
+			ctrans = new ColorTransform();
+			ctrans.alphaMultiplier = 0.5;
+		}
+		
 		if ( cell.getCellObj() == null ) {
 			chargeSprite.visible = false;
 			return;
 		}
-		chargeSprite.loadCachedGraphic(Key);
+		
+		chargeSprite.loadSuppliedGraphic(chargeBmpData);
 		chargeSprite.visible = true;
 		chargeSprite.x = x + 5;
 		chargeSprite.y = y + 5;	
