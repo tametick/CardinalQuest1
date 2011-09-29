@@ -309,7 +309,7 @@ class HxlTilemap extends HxlObject {
 	 * @param	Center	If true, returns point centered on tile.
 	 * @return HxlPoint object
 	 */
-	var pos:HxlPoint;
+	static var pos:HxlPoint;
 	public function getTilePos(X:Float, Y:Float, ?Center:Bool=false):HxlPoint {
 		if (pos == null)
 			pos = new HxlPoint();
@@ -339,8 +339,7 @@ class HxlTilemap extends HxlObject {
 	 * 
 	 * @return	A comma-separated string containing the level data in a <code>FlxTilemap</code>-friendly format.
 	 */
-	public static function arrayToCSV(Data:Array<Int>,Width:Int):String
-	{
+	public static function arrayToCSV(Data:Array<Int>,Width:Int):String {
 		var r:Int;
 		var c:Int;
 		var csv:String = "";

@@ -295,7 +295,9 @@ class HxlText extends HxlSprite {
       _flashRect.height = height;
       _regen = false;
     } else {	//Else just clear the old buffer before redrawing the text
-      _pixels.fillRect(_flashRect,0);
+		if (_pixels == null)
+			return;
+		_pixels.fillRect(_flashRect,0);
     }
 
     if ((_tf != null) && (_tf.text != null) && (_tf.text.length > 0)) {
