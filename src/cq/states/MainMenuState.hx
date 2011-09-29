@@ -54,6 +54,7 @@ class MainMenuState extends CqState {
 	var tglSFXIcon:HxlSprite;
 	
 	var copyrightLink:HxlText;
+	var gamePageLink:HxlText;
 
 	public function new()
 	{
@@ -125,20 +126,13 @@ class MainMenuState extends CqState {
 		copyrightLink.setUnderlined();
 		add(copyright);
 		add(copyrightLink);
-
-		/*
-		var sponsored= new HxlText(10, 10, 135, "Sponsored by",true,FontAnonymousPro.instance.fontName,18);
-		add(sponsored);
-		var kongLogo = KongLogoSprite.instance;
-		kongLogo.x = 25;
-		kongLogo.y = sponsored.y + sponsored.height+5;
-		add(kongLogo);
-		// only add event listener once!
-		/*if(!kongLogo.isAdded){
-			kongLogo.addEventListener(MouseEvent.CLICK, clickOnKong);
-			kongLogo.isAdded = true;
-		}*/
-
+		
+		// todo - gamepage link at top left
+		var findOut = new HxlText(0, 0, 260 , "Get stand-alone version at ", true, FontAnonymousPro.instance.fontName, 18);
+		add(findOut);
+		gamePageLink = new HxlText(findOut.x + findOut.width, 0, 172, "CardinalQuest.com", true, FontAnonymousPro.instance.fontName, 18, 0x77D2FF);
+		gamePageLink.setUnderlined();
+		add(gamePageLink);
 
 		menu = new HxlMenu(200, Configuration.app_width, 240, 200);
 		add(menu);
@@ -246,11 +240,16 @@ class MainMenuState extends CqState {
 		setDiagonalCursor();
 	}
 	
-	static var homepageRequest:URLRequest = new URLRequest("http://www.tametick.com/");
+	static var homePageRequest:URLRequest = new URLRequest("http://www.tametick.com/");
+	static var gamePageRequest:URLRequest = new URLRequest("http://www.cardinalquest.com/");
 	override private function onMouseDown(event:MouseEvent) {
 		super.onMouseDown(event);
 		if (copyrightLink.overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
-			Lib.getURL(homepageRequest);
+			Lib.getURL(homePageRequest);
+		}
+		
+		if (gamePageLink.overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
+			Lib.getURL(gamePageRequest);
 		}
 	}
 	
@@ -259,12 +258,10 @@ class MainMenuState extends CqState {
 		btnToggleMusic.setOn(!btnToggleMusic.getOn());
 		var on:Bool = btnToggleMusic.getOn();
 		HxlState.musicOn = on;
-		if (on)
-		{
+		if (on)	{
 			MusicManager.resume();
 			tglMusicIcon.setFrame(1);
-		}else
-		{
+		} else {
 			MusicManager.pause();
 			tglMusicIcon.setFrame(0);
 		}
