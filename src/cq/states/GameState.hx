@@ -106,7 +106,7 @@ class GameState extends CqState {
 			//stairs popup
 			if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), currentTile.dataNum)) {
 				Registery.player.popup.mouseBound = false;
-				Registery.player.popup.setText("Click go downstairs\n[hotkey enter]");
+				Registery.player.popup.setText("Click to go downstairs\n[hotkey enter]");
 			} else {
 				Registery.player.popup.setText("");
 			}
@@ -143,7 +143,7 @@ class GameState extends CqState {
 		}
 		//hide mouse after idle some time	
 		if (Timer.stamp() - msMoveStamp > msHideDelay || endingAnim) {
-			gameUI.popups.setChildrenVisibility(false);
+			//gameUI.popups.setChildrenVisibility(false);
 			cursor.visible = false;
 		}
 		
