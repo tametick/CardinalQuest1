@@ -53,7 +53,7 @@ class HxlTilemap extends HxlObject {
 
 	
 	private var tileBMPs:Array<BitmapData>;
-	private var tilesByCT:Hash<BitmapData>;
+	//private var tilesByCT:Hash<BitmapData>;
 	/**
 	 * The tilemap constructor just initializes some basic variables.
 	 */
@@ -153,7 +153,7 @@ class HxlTilemap extends HxlObject {
 		var ty:Int = 0;
 		var tx:Int = 0;
 
-		tilesByCT = new Hash<BitmapData>();
+		//tilesByCT = new Hash<BitmapData>();
 		while(ty/_tileHeight < _screenRows)
 		{
 			_flashRect.x = tx;
@@ -193,12 +193,11 @@ class HxlTilemap extends HxlObject {
 	/**
 	 * Internal function that actually renders the tilemap.  Called by render().
      */
-	var tmpBitmap:BitmapData;
-	var tmpRect:Rectangle;
+	static var tmpBitmap:BitmapData;
+	static var tmpRect:Rectangle;
 	static var originPoint:Point = new Point(0, 0);
 
     public override function render() {
-		var tileBitmap:BitmapData = _pixels;
 
 		getScreenXY(_point);
 		_flashPoint.x = _point.x;
@@ -219,16 +218,18 @@ class HxlTilemap extends HxlObject {
 				tile = _tiles[r+ty][c+tx];
 				if ( tile.visible ) {
 					var name = (tile.dataNum - startingIndex) +"_" + tile._ct;
-					if (!tilesByCT.exists( name )) {
+					//if (!tilesByCT.exists( name )) {
 						tmpBitmap = tileBMPs[(tile.dataNum-startingIndex)].clone();
 
 						if (tile._ct != null)
 							tmpBitmap.colorTransform( tmpRect,  tile._ct);
 							
-						tilesByCT.set(  ((tile.dataNum-startingIndex) +"_"+ tile._ct), tmpBitmap.clone());
-					}
+						//tilesByCT.set(  ((tile.dataNum-startingIndex) +"_"+ tile._ct), tmpBitmap.clone());
+					//}
 					
-					HxlGraphics.buffer.copyPixels(tilesByCT.get(name), tmpRect, _flashPoint, null, null, false);
+					HxlGraphics.buffer.copyPixels(tmpBitmap, tmpRect, _flashPoint, null, null, false);
+					tmpBitmap.dispose();
+					tmpBitmap = null;
 					HxlGraphics.numRenders++;
 					name = null;
 				}
@@ -239,7 +240,6 @@ class HxlTilemap extends HxlObject {
 		}
 
 		tile = null;
-		tileBitmap = null;
 	}
    
 
@@ -278,12 +278,12 @@ class HxlTilemap extends HxlObject {
         }
     }    
     */
-
+/*
 	public function getTileBitmap(X:Int, Y:Int):BitmapData {
 		var tileBitmap:BitmapData = _pixels;
 		var tile:HxlTile = _tiles[Y][X];
 		return (tilesByCT.get(  ((tile.dataNum-startingIndex) +"_" + tile._ct)));
-	}
+	}*/
 
 	/**
 	 * Returns the tile which exists at the specified coordinate.
