@@ -109,10 +109,11 @@ class CqSpellButton extends HxlDialog {
 	}
 	
 	function clickMouseDown(event:MouseEvent) {
-		if (!exists || !visible || !active || Std.is(GameUI.instance.panels.currentPanel, CqInventoryDialog) ) 
+		if (!exists || !visible || !active || Std.is(GameUI.instance.panels.currentPanel, CqInventoryDialog) ) {
 			if (!exists)
 				clearEventListeners();
 			return;
+		}
 			
 		if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y))
 			useSpell(event);
