@@ -127,6 +127,15 @@ class HxlText extends HxlSprite {
     return _tf.text;
   }
 
+  public function setUnderlined() {
+	  var tf:TextFormat = dtfCopy();
+	  tf.underline = true;
+	  _tf.defaultTextFormat = tf;
+      _tf.setTextFormat(tf);
+	  _regen = true;
+	  calcFrame();
+  }
+  
   /**
    * @private
    */

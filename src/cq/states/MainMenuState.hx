@@ -8,6 +8,7 @@ import cq.Main;
 import data.SoundEffectsManager;
 import data.Configuration;
 import flash.events.MouseEvent;
+import flash.net.URLRequest;
 import haxel.HxlButton;
 import haxel.HxlGraphics;
 import haxel.HxlMenu;
@@ -51,6 +52,8 @@ class MainMenuState extends CqState {
 	var sfxText:HxlText;
 	var tglMusicIcon:HxlSprite;
 	var tglSFXIcon:HxlSprite;
+	
+	var copyrightLink:HxlText;
 
 	public function new()
 	{
@@ -117,8 +120,11 @@ class MainMenuState extends CqState {
 		if ( !Configuration.startWithSound )
 			toggleSFX();
 
-		var copyright = new HxlText(370, 459, Configuration.app_width-370, "Copyright 2011 Ido Yehieli.", true, FontAnonymousPro.instance.fontName, 18);
+		var copyright = new HxlText(375, 459, Configuration.app_width - 375 - 123, "Copyright 2011", true, FontAnonymousPro.instance.fontName, 18);
+		copyrightLink = new HxlText(copyright.x+copyright.width, 459, 123, "Ido Yehieli", true, FontAnonymousPro.instance.fontName, 18,0x77D2FF);
+		copyrightLink.setUnderlined();
 		add(copyright);
+		add(copyrightLink);
 
 		/*
 		var sponsored= new HxlText(10, 10, 135, "Sponsored by",true,FontAnonymousPro.instance.fontName,18);
@@ -239,6 +245,15 @@ class MainMenuState extends CqState {
 		super.update();
 		setDiagonalCursor();
 	}
+	
+	static var homepageRequest:URLRequest = new URLRequest("http://www.tametick.com/");
+	override private function onMouseDown(event:MouseEvent) {
+		super.onMouseDown(event);
+		if (copyrightLink.overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
+			Lib.getURL(homepageRequest);
+		}
+	}
+	
 	private function toggleMusic():Void
 	{
 		btnToggleMusic.setOn(!btnToggleMusic.getOn());
