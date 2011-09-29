@@ -759,7 +759,7 @@ class GameUI extends HxlDialog {
 		HxlGraphics.state.add(txt);
 	}
 	public static function showEffectText(actor:CqActor, text:String, color:Int) {
-		if (Std.is(HxlGraphics.state ,GameState))
+		if (!Std.is(HxlGraphics.state ,GameState))
 			return;
 		var fltxt:CqFloatText = new CqFloatText(actor.x + (actor.width / 2), actor.y - 16, text, color, 24, false);
 		effectQueue.push(fltxt);
@@ -767,7 +767,7 @@ class GameUI extends HxlDialog {
 			startEffectText(fltxt);
 	}
 	public static function showTextNotification(message:String, ?color:Int = 0xDE913A) {
-		if (Std.is(HxlGraphics.state ,GameState))
+		if (!Std.is(HxlGraphics.state ,GameState))
 			return;
 		notifications.notify(message, color);
 	}
