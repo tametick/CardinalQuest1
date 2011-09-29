@@ -99,8 +99,20 @@ class GameState extends CqState {
 	}
 		
 	public override function render() {
-		if (gameUI != null)
+		if (gameUI != null){
 			gameUI.updateCentralBarsPosition();
+			
+			var currentTile = cast(Registery.level.getTile(Std.int(Registery.player.tilePos.x), Std.int(Registery.player.tilePos.y)), CqTile);
+			//stairs popup
+			if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), currentTile.dataNum)) {
+				Registery.player.popup.mouseBound = false;
+				Registery.player.popup.setText("Click go downstairs\n[hotkey enter]");
+			} else {
+				Registery.player.popup.setText("");
+			}
+			currentTile = null;
+		}
+			
 		super.render();
 	}
 
@@ -574,12 +586,6 @@ class GameState extends CqState {
 			tile = null;
 			return;
 		}
-		//stairs popup
-		if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tile.dataNum)) {
-			player.popup.setText("Click go downstairs\n[hotkey enter]");
-		} else {
-			player.popup.setText("");
-		}
 		
 		if (Math.abs(dx) < Configuration.zoomedTileSize() && Math.abs(dy) < Configuration.zoomedTileSize() || HxlGraphics.keys.justPressed("ENTER") || HxlGraphics.keys.justPressed("NONUMLOCK_5") ) {
 			if (tmpPoint == null)
@@ -667,7 +673,8 @@ class GameState extends CqState {
 	
 	
 	function getPlayerTile(target:HxlPoint):CqTile {
-		if (target == null ||Registery.level.getTile(Std.int(Registery.player.tilePos.x + target.x), Std.int(Registery.player.tilePos.y + target.y) ) == null) return null;
+		if (target == null || Registery.level.getTile(Std.int(Registery.player.tilePos.x + target.x), Std.int(Registery.player.tilePos.y + target.y) ) == null) 
+			return null;
 		return cast(Registery.level.getTile(Std.int(Registery.player.tilePos.x + target.x), Std.int(Registery.player.tilePos.y + target.y)), CqTile);
 	}
 	

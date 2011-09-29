@@ -10,10 +10,12 @@ import haxel.HxlText;
 
 class CqPopup extends HxlText{
 	var parent:Dynamic;
+	public var mouseBound:Bool;
 	public function new(Width:Int,Text:String,Parent:Dynamic) {
 		parent = Parent;
 		super(0, 0, Width, Text);
 		setFormat("FontAnonymousPro", 15, 0xC2AC30, "center", 1);
+		mouseBound = true;
 	}
 	
 	public override function onRemove(state:HxlState) {		

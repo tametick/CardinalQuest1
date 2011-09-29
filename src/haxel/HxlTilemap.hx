@@ -296,7 +296,8 @@ class HxlTilemap extends HxlObject {
 	public function getTile(X:Dynamic, Y:Dynamic):Dynamic {
 		X = Math.round(X);
 		Y = Math.round(Y);
-		if ( Y >= _tiles.length || Y < 0 || X >= _tiles[0].length || X < 0 ) return null;
+		if ( Y >= _tiles.length || Y < 0 || X >= _tiles[0].length || X < 0 ) 
+			return null;
 		return _tiles[Y][X];
 	}
 

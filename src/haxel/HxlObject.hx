@@ -1,5 +1,6 @@
 package haxel;
 
+import cq.ui.CqPopup;
 import flash.geom.Point;
 
 
@@ -30,7 +31,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	 */
 	public var scrollFactor:HxlPoint;
 	
-	public var popup:HxlText;
+	public var popup:CqPopup;
 	/**
 	 * WARNING: The origin of the sprite will default to its center.
 	 * If you change this, the visuals and the collisions will likely be
@@ -403,12 +404,17 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		if ( popup != null)
 		{
 			var m:HxlMouse = HxlGraphics.mouse;
-			if ( overlapsPoint(m.x, m.y) && visible)
-			{
+			if ( (overlapsPoint(m.x, m.y) || !popup.mouseBound) && visible)	{
 				popup.visible = true;
-				_mp.x = m.screenX; _mp.y = m.screenY;
-				popup.x = _mp.x-20;
-				popup.y = _mp.y + 20;
+				if(popup.mouseBound){
+					_mp.x = m.screenX; 
+					_mp.y = m.screenY;
+					popup.x = _mp.x-20;
+					popup.y = _mp.y + 20;
+				} else {
+					popup.x = (HxlGraphics.stage.stageWidth - popup.width)/2;
+					popup.y = (HxlGraphics.stage.stageHeight - popup.height)/2;
+				}
 				if ( popup.x + popup.width > HxlGraphics.stage.stageWidth)	{
 					popup.x = HxlGraphics.stage.stageWidth - popup.width;
 				} else if (popup.x < 5)
@@ -417,8 +423,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 					popup.y = HxlGraphics.stage.stageHeight - popup.height;
 				} else if (popup.y < 5)
 					popup.y = 5;
-			}else
-			{
+			}else {
 				popup.visible = false;
 			}
 		}
@@ -428,7 +433,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		popup = null;
 	}
 	
-	public function setPopup(Popup:HxlText)	{
+	public function setPopup(Popup:CqPopup)	{
 		popup = Popup;
 		popup.visible = false;
 	}
