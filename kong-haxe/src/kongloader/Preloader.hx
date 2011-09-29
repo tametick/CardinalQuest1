@@ -57,7 +57,16 @@ class Preloader extends MovieClip
 		progressBar.scaleX = 0;
 		
 		kongAdLoader = new Loader();
-		kongAdLoader.load(new URLRequest("http://www.kongnet.net/www/delivery/avw.php?zoneid=11&cb=98732479&n=aab5b069"));
+		try{
+			kongAdLoader.load(new URLRequest("http://www.kongnet.net/www/delivery/avw.php?zoneid=11&cb=98732479&n=aab5b069"));
+		} catch( msg : String ) {
+			trace("1 Error message : " + msg );
+		} catch( errorCode : Int ) {
+			trace("1 Error #"+errorCode);
+		} catch( unknown : Dynamic ) {
+			trace("1 Unknown exception : " + Std.string(unknown));
+		}
+		
 		kongAdLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, playKongAd, false, 0, true);		
 	}
 	
@@ -74,8 +83,18 @@ class Preloader extends MovieClip
 
 	function clickOnKongAd(e : Event) : Void
 	{
-		var request : URLRequest = new URLRequest("http://www.kongnet.net/www/delivery/ck.php?n=aab5b069&cb=783912374");
-		Lib.getURL(request);
+		var request : URLRequest;
+		try {
+			request = new URLRequest("http://www.kongnet.net/www/delivery/ck.php?n=aab5b069&cb=783912374");
+			Lib.getURL(request);
+		} catch( msg : String ) {
+			trace("2 Error message : " + msg );
+		} catch( errorCode : Int ) {
+			trace("2 Error #"+errorCode);
+		} catch( unknown : Dynamic ) {
+			trace("2 Unknown exception : " + Std.string(unknown));
+		}
+		
 		request = null;
 	}
 	
@@ -109,7 +128,7 @@ class Preloader extends MovieClip
 	}
 	function startup() : Void
 	{
-		//var mainClass : Class<Dynamic> = cast( Type.resolveClass("KongMain") , Class<Dynamic>);
+		//var mainClass : Class<Dynamic> = cast( Type.resolveClass("kongloader.KongMain") , Class<Dynamic>);
 		//addChild(cast(Type.createInstance(mainClass,[]), DisplayObject));
 		//mainClass = null;
 		addChild(new KongMain());

@@ -613,21 +613,20 @@ class CqActor extends CqObject, implements Actor {
 	}
 	
 	public function use(itemOrSpell:CqItem, ?other:CqActor = null) {
-		if (itemOrSpell.fullName == "Fireball" && other!=null)
-		{
-			if (Std.is(this, CqPlayer))
-			{
-				itemOrSpell.damage = CqSpellFactory.getfireBalldamageByLevel(Registery.player.level);
-				GameUI.instance.shootXBall(this, other, 0xDA1F1F, itemOrSpell);
+		if (Std.is(itemOrSpell, CqSpell) && cast(itemOrSpell, CqSpell).targetsOther && other != null) {
+			var c:Int;
+			if (Std.is(this, CqPlayer)) {
+				if (itemOrSpell.fullName == "Fireball")
+					itemOrSpell.damage = CqSpellFactory.getfireBalldamageByLevel(Registery.player.level);
+				c = HxlUtil.averageColour(itemOrSpell.uiItem.pixels);
 			}
-			else
-			{
-				itemOrSpell.damage = CqSpellFactory.getfireBalldamageByLevel(5);
-				var c:Int = HxlUtil.averageColour(this._framePixels);
-				GameUI.instance.shootXBall(this, other, c,itemOrSpell);
+			else {
+				if (itemOrSpell.fullName == "Fireball")
+					itemOrSpell.damage = CqSpellFactory.getfireBalldamageByLevel(5);
+				c = HxlUtil.averageColour(this._framePixels);
 			}
-		}else
-		{
+			GameUI.instance.shootXBall(this, other, c,itemOrSpell);
+		}else {
 			useOn(itemOrSpell, this, other);
 		}
 	}
@@ -948,8 +947,8 @@ class CqPlayer extends CqActor, implements Player {
 		}
 		if (Configuration.debug) {
 /*			vitality = 500;
-			attack = 500;*/
-			spirit = 100;
+			attack = 500;
+			spirit = 100;*/
 			Configuration.playerLives = 4;
 		}
 		super(X, Y);

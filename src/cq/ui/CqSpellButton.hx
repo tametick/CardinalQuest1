@@ -140,7 +140,8 @@ class CqSpellButton extends HxlDialog {
 			var spell = cast(spellObj.item, CqSpell);
 			var player = Registery.player;
 			if ( spell.spiritPoints < spell.spiritPointsRequired ) {
-				if(event!=null)event.stopPropagation();
+				if (event != null)
+					event.stopPropagation();
 				return;
 			}
 			
