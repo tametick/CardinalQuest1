@@ -53,7 +53,7 @@ function doIntro()
     intro:build();
 end
 
-for k,v in pairs(native.getFontNames()) do print(k,v) end
+
 
 --Now show the mainmenu
 doMainMenu();

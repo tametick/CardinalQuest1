@@ -15,7 +15,7 @@ settings=
             UIAppFonts=
             {
                 "AnonymousPro-Regular.ttf",
-                "Anonymous-Pro-B.ttf"
+                "Anonymous-Pro-B.ttf",
                 "Dungeon.ttf",
             }
         }
