@@ -1,1 +1,1 @@
-haxelib run nme update cq.nmml ios
+haxelib run nme -v update cq.nmml ios
