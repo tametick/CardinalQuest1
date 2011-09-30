@@ -115,6 +115,16 @@ class GameState extends CqState {
 		super.render();
 	}
 
+	
+	static var keys = ["LEFT", "A", "RIGHT", "D", "UP" ,"W" ,"DOWN" ,"S", "ENTER"];
+	function justPressedTargetingKey() {
+		for (k in keys) {
+			if (HxlGraphics.keys.justPressed(k))
+				return true;
+		}
+		return false;
+	}
+	
 	static var keyPressCounter = 0;
 	public override function update() {
 		super.update();
@@ -153,7 +163,7 @@ class GameState extends CqState {
 			
 			if (!lastMouse) {
 				keyPressCounter++;
-				if(keyPressCounter>=5){
+				if(keyPressCounter>=3 || justPressedTargetingKey()){
 					gameUI.updateTargeting(false);
 					keyPressCounter = 0;
 				}
