@@ -333,6 +333,9 @@ class CqLevel extends Level {
 			else
 				creature = cast(mobs[i - 1],CqActor);
 		
+			if (creature == null)
+				continue;
+				
 			var buffs = creature.buffs;
 			var specialEffects = creature.specialEffects;
 			var visibleEffects = creature.visibleEffects;
