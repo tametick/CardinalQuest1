@@ -244,11 +244,10 @@ class HxlGame extends Sprite {
 
 	function onKeyUp(event:KeyboardEvent) {
 		// todo: use HxlKeyboard constants instead of keycodes
-		if (((event.keyCode == 192) || (event.keyCode == 220)) /*&& Configuration.debug*/) {
+		if (((event.keyCode == 192) || (event.keyCode == 220)) && Configuration.debug) {
 			console.toggle();
 			return;
 		}
-		//console.log(""+event.keyCode);
 		if (useDefaultHotKeys) {
 			var c:Int = event.keyCode;
 			var code:String = String.fromCharCode(event.charCode);
