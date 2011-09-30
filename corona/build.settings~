@@ -1,0 +1,22 @@
+settings=
+{
+    orientation=
+    {
+        default="landscapeLeft",
+        supported=
+        {
+            "landscapeLeft"
+        }
+    },
+    iphone=
+    {
+        plist=
+        {
+            UIAppFonts=
+            {
+                "AnonymousPro-Regular.ttf",
+                "Anonymous-Pro-B.ttf"
+            }
+        }
+    }
+}

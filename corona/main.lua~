@@ -1,0 +1,88 @@
+--
+-- Abstract: Hello World sample app
+--
+-- Version: 1.0
+--
+-- Copyright (C) 2009 ANSCA Inc. All Rights Reserved.
+--
+-- Permission is hereby granted, free of charge, to any person obtaining a copy of
+-- this software and associated documentation files (the "Software"), to deal in the
+-- Software without restriction, including without limitation the rights to use, copy,
+-- modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+-- and to permit persons to whom the Software is furnished to do so, subject to the
+-- following conditions:
+--
+-- The above copyright notice and this permission notice shall be included in all copies
+-- or substantial portions of the Software.
+--
+-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+-- INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+-- PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+-- FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+-- OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+-- DEALINGS IN THE SOFTWARE.
+
+-- local variables for global use
+
+local centerX = display.contentWidth / 2;
+local centerY = display.contentHeight / 2;
+
+local rightX   = display.contentWidth;
+local bottomY  = display.contentHeight;
+
+local scaleX = 8/5;
+local scaleY = 4/3;
+
+
+--This should be in a lua file called music.lua
+
+local currentBackgroundMusic = "menu.mp3";
+local onMusicFinished;
+onMusicFinished = function(event)
+  print( "sound play ended" )
+  media.playSound( "menu.mp3", onMusicFinished )
+end
+
+--media.playSound( "menu.mp3", onMusicFinished )
+media.playEventSound( "fortressGate.mp3" )
+
+local bg = display.newImage( "mainmenuBg.png" )
+bg.x = centerX;
+bg.y = centerY;
+bg:scale( scaleX , scaleY );
+
+local logo = display.newImage( "logo.png" )
+logo:scale( scaleX , scaleY );
+logo.x = centerX
+logo.y = 0;
+
+transition.to( logo, { time=1000, y=display.contentHeight / 5 * 2  } )
+
+
+local names = native.getFontNames();
+for i,v in ipairs(names) do print(i,v) end
+
+local text = display.newText( "New Game!", centerX, centerY, "AnonymousPro", 50 )
+text:setReferencePoint( display.CenterReferencePoint )
+text.x = centerX;
+text.y = bottomY;
+transition.to( text, { time=1000, y = centerY  } )
+
+
+--640/480
+--1024/768
+
+--bg:scale( 4/3 , 8/5 );
+
+
+--function button:tap( event )
+-- local r = math.random( 0, 255 )
+--  local g = math.random( 0, 255 )
+--  local b = math.random( 0, 255 )
+--  textObject:setTextColor( r, g, b )
+--  audio.play( beepSound )
+--end
+
+--button:addEventListener( "tap", button )
+
+
