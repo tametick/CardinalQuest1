@@ -423,8 +423,10 @@ class HxlTile {
 		if (Alpha < 0) Alpha = 0;
 		if (Alpha == _alpha) return Alpha;
 		_alpha = Alpha;
-		if ((_alpha != 1) || (_color != 0x00ffffff)) _ct = new ColorTransform((_color>>16)/255.0,(_color>>8&0xff)/255.0,(_color&0xff)/255.0,_alpha);
-		else _ct = null;
+		if ((_alpha != 1) || (_color != 0x00ffffff)) 
+			_ct = new ColorTransform((_color>>16)/255.0,(_color>>8&0xff)/255.0,(_color&0xff)/255.0,_alpha);
+		else 
+			_ct = null;
 		return Alpha;
 	}
 
@@ -442,8 +444,10 @@ class HxlTile {
 		Color &= 0x00ffffff;
 		if (_color == Color) return Color;
 		_color = Color;
-		if ((_alpha != 1) || (_color != 0x00ffffff)) _ct = new ColorTransform((_color>>16)/255.0,(_color>>8&0xff)/255.0,(_color&0xff)/255.0,_alpha);
-		else _ct = null;
+		if ((_alpha != 1) || (_color != 0x00ffffff)) 
+			_ct = new ColorTransform((_color>>16)/255.0,(_color>>8&0xff)/255.0,(_color&0xff)/255.0,_alpha);
+		else 
+			_ct = null;
 		return Color;
 	}
 
