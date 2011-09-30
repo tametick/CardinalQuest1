@@ -126,9 +126,12 @@ class CqHealthBar extends CqVitalBar {
 	}
 	
 	public function setPercentToHp() {
-		if (actor.hp + actor.buffs.get("life") == 0)
+		if (actor.hp + actor.buffs.get("life") <= 0){
 			// fixme - should not happen
 			visible = false;
+		} else {
+			visible = true;
+		}
 		
 		setPercent((actor.hp + actor.buffs.get("life")) / 
 				   (actor.maxHp + actor.buffs.get("life")));

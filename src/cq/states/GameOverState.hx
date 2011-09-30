@@ -85,17 +85,16 @@ class GameOverState extends CqState {
 		btnMenu.setCallback(function() {
 			nextScreen("menu");
 		});
+		buttonY += 50;
 		
 		menu.setScrollSound(MenuItemMouseOver);
 		menu.setSelectSound(MenuItemClick);
-		Actuate.tween(menu, 1, { targetY: 360 } ).ease(Cubic.easeOut);
+		Actuate.tween(menu, 1, { targetY: 325 } ).ease(Cubic.easeOut);
 		
 		update();
 		
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime, fadeCallBack );
 	}
-	
-	
 	
 	function playKongAd(e : Event) {
 		kongAdLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, playKongAd);
@@ -156,7 +155,7 @@ class GameOverState extends CqState {
 	public function nextScreen(state:String) {
 		switch(state) {
 			case "menu":
-				goToMenu();
+				HxlGraphics.fade.start(true, 0xff000000, fadeTime, menuFadeCallback, true);
 			case "game":
 				HxlGraphics.fade.start(true, 0xff000000, fadeTime, gameFadeCallback, true);	
 		}
@@ -167,11 +166,10 @@ class GameOverState extends CqState {
 	}
 	
 	function menuFadeCallback()	{
-		HxlGraphics.state = MainMenuState.instance;
+		HxlGraphics.state = new MainMenuState();
 	}
 	
-	function gameFadeCallback()
-	{
+	function gameFadeCallback() {
 		HxlGraphics.state = new CreateCharState();
 	}
 	override public function destroy() {
