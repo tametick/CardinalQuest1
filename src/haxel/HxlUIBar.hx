@@ -71,7 +71,8 @@ class HxlUIBar extends HxlDialog {
 	}
 	function percentChangeTweenCallback(params:Dynamic)
 	{
-		bar.scale.x = params.X;
+		if (bar != null)
+			bar.scale.x = params.X;
 	}
 
 	public function setFrameColor(Color:Int, ?CornerRadius:Float=0.0) {
