@@ -1,5 +1,6 @@
 package cq;
 
+import cq.states.GameOverState;
 import cq.states.GameState;
 import cq.states.MainMenuState;
 import cq.states.SplashState;
@@ -47,6 +48,7 @@ class Main extends HxlGame {
 		
 		if (Configuration.debug)
 			super(Configuration.app_width, Configuration.app_height, GameState, 1, FontDungeon.instance.fontName);
+			//super(Configuration.app_width, Configuration.app_height, GameOverState, 1, FontDungeon.instance.fontName);
 		else
 			super(Configuration.app_width,Configuration.app_height, SplashState, 1, FontDungeon.instance.fontName);		
 		

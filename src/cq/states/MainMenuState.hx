@@ -63,8 +63,11 @@ class MainMenuState extends CqState {
 		sfxOn = true;
 	}
 	
-	override public function destroy(){
+	override public function destroy() {		
 		super.destroy();
+		
+		//instance = null;
+		// todo
 	}
 	
 	public override function create() {
@@ -127,7 +130,6 @@ class MainMenuState extends CqState {
 		add(copyright);
 		add(copyrightLink);
 		
-		// todo - gamepage link at top left
 		var findOut = new HxlText(0, 0, 260 , "Get stand-alone version at ", true, FontAnonymousPro.instance.fontName, 18);
 		add(findOut);
 		gamePageLink = new HxlText(findOut.x + findOut.width, 0, 172, "CardinalQuest.com", true, FontAnonymousPro.instance.fontName, 18, 0x77D2FF);
@@ -280,7 +282,6 @@ class MainMenuState extends CqState {
 			return;
 		this.TargetState = TargetState;
 		btnClicked = true;
-		var self = this;
 		if ( TargetState == null ) {
 			HxlGraphics.popState();
 			return;

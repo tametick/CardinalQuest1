@@ -1,7 +1,11 @@
 package cq.states;
 
+import com.eclecticdesignstudio.motion.Actuate;
+import com.eclecticdesignstudio.motion.easing.Cubic;
 import cq.CqResources;
 import cq.ui.CqTextScroller;
+import data.Configuration;
+import data.SoundEffectsManager;
 import flash.display.Loader;
 import flash.events.Event;
 import flash.events.MouseEvent;
@@ -10,6 +14,8 @@ import flash.Lib;
 import flash.net.URLRequest;
 import haxe.Timer;
 import haxel.HxlGraphics;
+import haxel.HxlMenu;
+import haxel.HxlMenuItem;
 import haxel.HxlState;
 import haxel.HxlText;
 import haxel.HxlTimer;
@@ -18,6 +24,9 @@ class GameOverState extends CqState {
 
 	var fadeTime:Float;
 	var scroller:CqTextScroller;
+	
+	var menu:HxlMenu;
+	var btnClicked:Bool;
 	
 	var kongAdLoader : Loader;
 	
@@ -36,8 +45,8 @@ class GameOverState extends CqState {
 		scroller = new CqTextScroller(DeathScreen, 1, "Game over",0x657873,0x010101);
 		add(scroller);
 		scroller.startScroll();
-		scroller.onComplete(nextScreen);
-		
+		scroller.onComplete(goToMenu);
+		scroller.zIndex--;
 		
 		kongAdLoader = new Loader();
 		try{
@@ -52,9 +61,40 @@ class GameOverState extends CqState {
 		
 		kongAdLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, playKongAd, false, 0, true);	
 		
+		menu = new HxlMenu(200, Configuration.app_width, 240, 200);
+		add(menu);
+		
+		var buttonY:Int = 0;
+
+		var textColor = 0x657873;
+		var textHighlight = 0x670000;
+		
+		var btnNewGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "New Game", true, null);
+		btnNewGame.setNormalFormat(null, 35, textColor, "center");
+		btnNewGame.setHoverFormat(null, 35, textHighlight, "center");
+		menu.addItem(btnNewGame);
+		btnNewGame.setCallback(function() {
+			nextScreen("game");
+		});
+		buttonY += 50;
+
+		var btnMenu:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Main Menu", true, null);
+		btnMenu.setNormalFormat(null, 35, textColor, "center");
+		btnMenu.setHoverFormat(null, 35, textHighlight, "center");
+		menu.addItem(btnMenu);
+		btnMenu.setCallback(function() {
+			nextScreen("menu");
+		});
+		
+		menu.setScrollSound(MenuItemMouseOver);
+		menu.setSelectSound(MenuItemClick);
+		Actuate.tween(menu, 1, { targetY: 360 } ).ease(Cubic.easeOut);
+		
+		update();
 		
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime, fadeCallBack );
 	}
+	
 	
 	
 	function playKongAd(e : Event) {
@@ -66,7 +106,7 @@ class GameOverState extends CqState {
 	
 	function showAd() {
 		addChild(kongAdLoader);
-		kongAdLoader.width *= 1.2;
+		kongAdLoader.width *= 1.1;
 		kongAdLoader.x = (640 - kongAdLoader.width) / 2;
 		kongAdLoader.y = (410 - kongAdLoader.height) / 2;
 	}
@@ -96,30 +136,43 @@ class GameOverState extends CqState {
 		super.update();	
 		setDiagonalCursor();
 		if ( HxlGraphics.keys.justReleased("ESCAPE") )
-			nextScreen();
+			nextScreen("menu");
 	}
-	
+	/*
 	override private function onKeyUp(event:KeyboardEvent) {
 		super.onKeyUp(event);
 		
 		if (complete)
-			nextScreen();
+			nextScreen("menu");
 	}
 	
 	override private function onMouseUp(event:MouseEvent) {
 		super.onMouseUp(event);
 		
 		if (complete)
-			nextScreen();		
-	}
-
-	public function nextScreen() {
-		HxlGraphics.fade.start(true, 0xff000000, fadeTime, nextScreenFadeCallback, true);
+			nextScreen("menu");		
+	}*/
+	
+	public function nextScreen(state:String) {
+		switch(state) {
+			case "menu":
+				goToMenu();
+			case "game":
+				HxlGraphics.fade.start(true, 0xff000000, fadeTime, gameFadeCallback, true);	
+		}
 	}
 	
-	function nextScreenFadeCallback()
-	{
+	function goToMenu() {
+		HxlGraphics.fade.start(true, 0xff000000, fadeTime, menuFadeCallback, true);
+	}
+	
+	function menuFadeCallback()	{
 		HxlGraphics.state = MainMenuState.instance;
+	}
+	
+	function gameFadeCallback()
+	{
+		HxlGraphics.state = new CreateCharState();
 	}
 	override public function destroy() {
 		super.destroy();
