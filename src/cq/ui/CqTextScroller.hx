@@ -32,7 +32,7 @@ class CqTextScroller extends HxlGroup {
 	var minimumDuration:Float;
 	var to_y:Int;
 	var respondInput:Bool;//so you wouldnt accidentally close the window
-	public function new(bg:Class<Bitmap>, scrollDuration:Float, ?Title:String = "", ?TitleColor:Int = 0xFFFFFF, ?ShadowColor:Int = 0x010101) {
+	public function new(bg:Class<Bitmap>, scrollDuration:Float, ?Title:String = "", ?TitleColor:Int = 0xFFFFFF, ?ShadowColor:Int = 0x010101, ?scale:Float=1.0) {
 		super();
 		clicks = 0;
 		scrolling = false;
@@ -42,14 +42,14 @@ class CqTextScroller extends HxlGroup {
 		tweenStatus = new Array<Bool>();
 		to_y = To_Y;
 		minimumDuration = MinimumDuration;
-		setSplash(bg);
+		setSplash(bg,scale);
 		setTitle(Title, TitleColor, ShadowColor);
 		
 		HxlGraphics.stage.addEventListener(MouseEvent.CLICK, onAction);
 		HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_UP, onAction);
 	}
 	
-	public function setSplash(bg:Class<Bitmap>):Void {
+	public function setSplash(bg:Class<Bitmap>, ?scale:Float=1.0):Void {
 		if (splash != null)
 			remove(splash);
 		
@@ -57,10 +57,10 @@ class CqTextScroller extends HxlGroup {
 			splash = new HxlSprite(0, 0, bg);
 			add(splash);
 			//fullscreen stretch
-			var sx:Float = HxlGraphics.stage.stageWidth/splash.width;
-			var sy:Float = HxlGraphics.stage.stageHeight/splash.height;
+			var sx:Float = scale * HxlGraphics.stage.stageWidth/splash.width;
+			var sy:Float = scale * HxlGraphics.stage.stageHeight/splash.height;
 			//( sx > sy ) ? sy = sx : sy = sx; //proportional scaling
-			splash.x = (splash.width*sx)-splash.width;
+			splash.x = scale*((splash.width*sx)-splash.width);
 			splash.scale = new HxlPoint(sx * 1.1, sy * 1.1);
 		}
 	}
