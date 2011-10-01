@@ -48,18 +48,20 @@ class GameOverState extends CqState {
 		scroller.onComplete(goToMenu);
 		scroller.zIndex--;
 		
-		kongAdLoader = new Loader();
-		try{
-			kongAdLoader.load(new URLRequest("http://www.kongnet.net/www/delivery/avw.php?zoneid=11&cb=98732479&n=aab5b069"));
-		} catch( msg : String ) {
-			trace("1 Error message: " + msg );
-		} catch( errorCode : Int ) {
-			trace("1 Error #"+errorCode);
-		} catch( unknown : Dynamic ) {
-			trace("1 Unknown exception: " + Std.string(unknown));
+		if(!Configuration.standAlone){
+			kongAdLoader = new Loader();
+			try{
+				kongAdLoader.load(new URLRequest("http://www.kongnet.net/www/delivery/avw.php?zoneid=11&cb=98732479&n=aab5b069"));
+			} catch( msg : String ) {
+				trace("1 Error message: " + msg );
+			} catch( errorCode : Int ) {
+				trace("1 Error #"+errorCode);
+			} catch( unknown : Dynamic ) {
+				trace("1 Unknown exception: " + Std.string(unknown));
+			}
+			
+			kongAdLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, playKongAd, false, 0, true);	
 		}
-		
-		kongAdLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, playKongAd, false, 0, true);	
 		
 		menu = new HxlMenu(200, Configuration.app_width, 240, 200);
 		add(menu);
