@@ -1106,6 +1106,7 @@ class CqPlayer extends CqActor, implements Player {
 		infoViewLevel.setText("Level " + level);
 		HxlLog.append("Level " + level);
 		GameUI.showEffectText(this, "Level " + level, 0xFFFF66);
+		SoundEffectsManager.play(LevelUp);
 		maxHp += vitality;
 		hp = maxHp;
 		updatePlayerHealthBars();

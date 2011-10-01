@@ -59,7 +59,7 @@ class HxlUIBar extends HxlDialog {
 		tweenEnabled = Enabled;
 	}
 
-	public function setPercent(Value:Float) {
+	function setPercent(Value:Float) {
 		var newVal:Float = (width-2) * Value;
 		if ( newVal < 0 ) newVal = 0;
 		if ( newVal > width-2 ) newVal = width-2;
@@ -69,8 +69,7 @@ class HxlUIBar extends HxlDialog {
 			Actuate.update(percentChangeTweenCallback, tweenSpeed, {X: bar.scale.x}, {X: newVal}).ease(Cubic.easeOut);
 		}
 	}
-	function percentChangeTweenCallback(params:Dynamic)
-	{
+	function percentChangeTweenCallback(params:Dynamic)	{
 		if (bar != null)
 			bar.scale.x = params.X;
 	}

@@ -1,6 +1,7 @@
 package cq.ui;
 
 import cq.CqActor;
+import world.Player;
 
 import data.Registery;
 
@@ -113,7 +114,7 @@ class CqHealthBar extends CqVitalBar {
 		setPercentToHp();
 	}
 
-	public override function updateValue(?dmgTotal:Int=0) {
+	override function updateValue(?dmgTotal:Int=0) {
 		setPercentToHp();
 		if ( !Std.is(actor, CqPlayer) ) {
 			// only show hp bar if mob is hurt
@@ -122,15 +123,21 @@ class CqHealthBar extends CqVitalBar {
 			} else {
 				visible = true;
 			}
+			
+			// if dead
+			if (actor.hp + actor.buffs.get("life") <= 0) {
+				// fixme - should not happen
+				visible = false;
+			}
 		}
 	}
 	
 	public function setPercentToHp() {
-		if (actor.hp + actor.buffs.get("life") <= 0){
-			// fixme - should not happen
-			visible = false;
-		} else {
-			visible = true;
+		if(!Std.is(actor,Player)){
+			if (actor.hp + actor.buffs.get("life") <= 0) {
+				// fixme - should not happen
+				visible = false;
+			}
 		}
 		
 		setPercent((actor.hp + actor.buffs.get("life")) / 
