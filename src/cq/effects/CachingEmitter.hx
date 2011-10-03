@@ -199,6 +199,14 @@ class CachingEmitter extends HxlEmitter {
 		}
 	}
 	
+	override public function destroy() {
+		super.destroy();
+		
+		if (frameBitmap!=null)
+			frameBitmap.destroy();
+		frameBitmap = null;
+	}
+	
 	override public function onRemove(state:HxlState) {
 		super.onRemove(state);
 		destroy();
