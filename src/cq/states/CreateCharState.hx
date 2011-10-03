@@ -56,14 +56,11 @@ class CreateCharState extends CqState {
 		fadeTime = 0.5;
 		state = 0;
 		storyScreen = true;
-		var self = this;
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime, fadeCallBack);
 	}
 	
-	function fadeCallBack():Void 
-	{
+	function fadeCallBack():Void {
 		state = 1;
-		//self = null;
 	}
 	
 	override public function destroy(){
@@ -114,9 +111,8 @@ class CreateCharState extends CqState {
 		btnStart.loadGraphic(new StartButtonSprite(),btnStartHigh);
 		btnStart.loadText(new HxlText(0, -7, 90, "Start", true, null).setFormat(null, 32, 0xffffff, "center", 0x010101));
 
-		var self = this;
 		btnStart.setCallback(function() {
-			self.gotoState(GameState);
+			gotoState(GameState);
 			//self = null;
 		});
 
@@ -129,7 +125,7 @@ class CreateCharState extends CqState {
 		btnFighter.loadGraphic(sprFighter);
 		add(btnFighter);
 		btnFighter.setCallback(function() { 
-			self.changeSelection(FIGHTER); 
+			changeSelection(FIGHTER); 
 			//self = null;
 		});
 		txtFighter = new HxlText(95, class_buttons_y+sprFighter.height, 150, "Fighter");
@@ -143,7 +139,7 @@ class CreateCharState extends CqState {
 		btnThief.loadGraphic(sprThief);
 		add(btnThief);
 		btnThief.setCallback(function() { 
-			self.changeSelection(THIEF); 
+			changeSelection(THIEF); 
 			//self = null;
 		});
 		txtThief = new HxlText(245, class_buttons_y+sprThief.height, 150, "Thief");
@@ -157,7 +153,7 @@ class CreateCharState extends CqState {
 		btnWizard.loadGraphic(sprWizard);
 		add(btnWizard);
 		btnWizard.setCallback(function() { 
-			self.changeSelection(WIZARD); 
+			changeSelection(WIZARD); 
 			//self = null;
 		});
 		txtWizard = new HxlText(395, class_buttons_y+sprWizard.height, 150, "Wizard");

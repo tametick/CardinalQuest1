@@ -38,8 +38,7 @@ class CachingEmitter extends HxlEmitter {
 	public function new(CacheNumber:Int,ParticleKey:CqGraphicKey,?X:Float=0, ?Y:Float=0,?ColorTint:Int = -1) {
 		super(X, Y);
 		//get real cachenum
-		if (cacheIds.exists(CacheNumber+""))
-		{
+		if (cacheIds.exists(CacheNumber+"")) {
 			cacheNum  = cacheIds.get(CacheNumber + "");
 		}else {
 			lastID = lastID + 1;
@@ -49,12 +48,9 @@ class CachingEmitter extends HxlEmitter {
 		particleKey = ParticleKey;
 		colorTint   = ColorTint;
 		
-		if (cacheStatus.length <= Std.int(cacheNum))
-		{
-			for (i in cacheStatus.length...(cacheNum+1))
-			{
-				if (effectCache[cacheNum] == null)
-				{
+		if (cacheStatus.length <= Std.int(cacheNum)) {
+			for (i in cacheStatus.length...(cacheNum+1)) {
+				if (effectCache[cacheNum] == null) {
 					cacheStatus.push(0);
 					effectCache.push(new Array<BitmapData>());
 				}
