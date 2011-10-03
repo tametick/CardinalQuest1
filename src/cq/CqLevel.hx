@@ -429,7 +429,10 @@ class CqLevel extends Level {
 			if ( !Std.is(creature,CqPlayer)  &&  creature.actionPoints>=60 ) {
 				if (cast(creature,Mob).act(state)) {
 					creature.actionPoints = 0;
+					// update l in case creature killed another creature
+					l = mobs.length + 1;
 				}
+				
 			}
 
 			buffs = null;
