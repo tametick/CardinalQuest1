@@ -83,7 +83,7 @@ class KongMain extends Sprite
 	}
 	function clickOnKong(e : Event) : Void
 	{
-		var request : URLRequest = new URLRequest("http://kongregate.com/");
+		var request : URLRequest = new URLRequest("http://kongregate.com/?gamereferral=cardinal-quest");
 		Lib.getURL(request);
 		request = null;
 	}
