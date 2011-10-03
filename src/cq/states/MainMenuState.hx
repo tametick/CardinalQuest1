@@ -130,11 +130,13 @@ class MainMenuState extends CqState {
 		add(copyright);
 		add(copyrightLink);
 		
-		var findOut = new HxlText(0, 0, 260 , "Get stand-alone version at ", true, FontAnonymousPro.instance.fontName, 18);
-		add(findOut);
-		gamePageLink = new HxlText(findOut.x + findOut.width, 0, 172, "CardinalQuest.com", true, FontAnonymousPro.instance.fontName, 18, 0x77D2FF);
-		gamePageLink.setUnderlined();
-		add(gamePageLink);
+		if(!Configuration.standAlone){
+			var findOut = new HxlText(0, 0, 260 , "Get stand-alone version at ", true, FontAnonymousPro.instance.fontName, 18);
+			add(findOut);
+			gamePageLink = new HxlText(findOut.x + findOut.width, 0, 172, "CardinalQuest.com", true, FontAnonymousPro.instance.fontName, 18, 0x77D2FF);
+			gamePageLink.setUnderlined();
+			add(gamePageLink);
+		}
 
 		menu = new HxlMenu(200, Configuration.app_width, 240, 200);
 		add(menu);
@@ -250,7 +252,7 @@ class MainMenuState extends CqState {
 			Lib.getURL(homePageRequest);
 		}
 		
-		if (gamePageLink.overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
+		if (gamePageLink != null && gamePageLink.overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
 			Lib.getURL(gamePageRequest);
 		}
 	}
