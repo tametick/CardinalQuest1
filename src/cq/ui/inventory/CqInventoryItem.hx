@@ -528,6 +528,7 @@ class CqInventoryItem extends HxlSprite {
 					kill();
 					Registery.player.removeInventory(this.item);
 					_dlg.dlgInfo.clearInfo();
+					CqInventoryItem.selectedItem = null;
 					return;
 				} else {
 					setInventoryCell(dragStopCell.cellIndex);
