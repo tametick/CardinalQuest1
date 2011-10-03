@@ -9,13 +9,15 @@ import cq.states.MainMenuState;
  * */
 
 class Configuration {
+	public static inline var version = "1.1b";
+	
 	public static inline var debug = false;
 	public static inline var air = false;
 	public static inline var standAlone = false;
-	public static inline var useProductionPlaytomic = false;
+	public static inline var useProductionPlaytomic = true;
 	
 	public static inline var debugStartingLevel:Int = 0;
-	public static inline var debugStartingClass:CqClass = FIGHTER;
+	public static inline var debugStartingClass:CqClass = WIZARD;
 	static public inline var debugMoveThroughWalls:Bool = false;
 	
 	public static var app_width:Int = 0;

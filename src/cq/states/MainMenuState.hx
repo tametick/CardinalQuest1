@@ -124,11 +124,15 @@ class MainMenuState extends CqState {
 		if ( !Configuration.startWithSound )
 			toggleSFX();
 
+			
 		var copyright = new HxlText(375, 459, Configuration.app_width - 375 - 123, "Copyright 2011", true, FontAnonymousPro.instance.fontName, 18);
 		copyrightLink = new HxlText(copyright.x+copyright.width, 459, 123, "Ido Yehieli", true, FontAnonymousPro.instance.fontName, 18,0x77D2FF);
 		copyrightLink.setUnderlined();
 		add(copyright);
 		add(copyrightLink);
+		
+		var version = new HxlText(Configuration.app_width-130-2, copyright.y-copyright.height, 130, "Version " + Configuration.version, true, FontAnonymousPro.instance.fontName, 18);
+		add(version);
 		
 		if(!Configuration.standAlone){
 			var findOut = new HxlText(0, 0, 260 , "Get stand-alone version at ", true, FontAnonymousPro.instance.fontName, 18);
