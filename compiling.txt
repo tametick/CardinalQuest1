@@ -10,7 +10,7 @@ Quick List for compiling Cardinal Quest
 
 - Clone cardinal quest in a convenient folder
 
-	hg clone https://TjD__@bitbucket.org/ido.yehieli/cardinal-quest-haxe
+	hg clone https://<your user-name>@bitbucket.org/ido.yehieli/cardinal-quest-haxe
 	
 - Make sure you have the air2 haxelib :
 	
