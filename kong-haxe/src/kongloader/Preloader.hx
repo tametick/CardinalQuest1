@@ -2,6 +2,7 @@ package kongloader;
 
 import flash.display.DisplayObject;
 import flash.display.Loader;
+import flash.display.Sprite;
 import flash.display.StageScaleMode;
 import flash.display.StageAlign;
 import flash.display.Graphics;
@@ -15,11 +16,11 @@ import flash.system.System;
 import flash.utils.ByteArray;
 import haxe.Timer;
 
-class Preloader extends MovieClip
-{
+class Preloader extends MovieClip {
 	var progressBarBG : Shape;
 	var progressBar : Shape;
-	var kongAd:MovieClip ;
+	
+	public var kongAd : Sprite;
 	var kongAdLoader : Loader;
 	var adSeen:Bool;
 	
@@ -56,6 +57,7 @@ class Preloader extends MovieClip
 		progressBar.y = progressBarBG.y;
 		progressBar.scaleX = 0;
 		
+		kongAd = new Sprite();
 		kongAdLoader = new Loader();
 		try{
 			kongAdLoader.load(new URLRequest("http://www.kongnet.net/www/delivery/avw.php?zoneid=11&cb=98732479&n=aab5b069"));
@@ -74,9 +76,15 @@ class Preloader extends MovieClip
 	{
 		kongAdLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, playKongAd);
 		kongAdLoader.addEventListener(MouseEvent.CLICK, clickOnKongAd, false, 0, true);
-		addChild(kongAdLoader);
-		kongAdLoader.x = (640 - kongAdLoader.width) / 2;
-		kongAdLoader.y = (400 - kongAdLoader.height) / 2;
+		
+		
+		addChild(kongAd);
+		kongAd.addChild(kongAdLoader);
+		kongAd.buttonMode = true;
+		kongAd.mouseChildren = false;
+		kongAd.width = kongAdLoader.width;
+		kongAd.x = (640 - kongAdLoader.width) / 2;
+		kongAd.y = (400 - kongAdLoader.height) / 2;
 		
 		Timer.delay(markAdAsSeen, 1000);
 	}
