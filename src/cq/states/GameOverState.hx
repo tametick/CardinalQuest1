@@ -22,7 +22,7 @@ import haxel.HxlTimer;
 
 class GameOverState extends CqState {
 
-	var fadeTime:Float;
+	static var fadeTime:Float;
 	var scroller:CqTextScroller;
 	
 	var menu:HxlMenu;
@@ -154,7 +154,7 @@ class GameOverState extends CqState {
 			nextScreen("menu");		
 	}*/
 	
-	public function nextScreen(state:String) {
+	public static function nextScreen(state:String) {
 		switch(state) {
 			case "menu":
 				HxlGraphics.fade.start(true, 0xff000000, fadeTime, menuFadeCallback, true);
@@ -167,11 +167,11 @@ class GameOverState extends CqState {
 		HxlGraphics.fade.start(true, 0xff000000, fadeTime, menuFadeCallback, true);
 	}
 	
-	function menuFadeCallback()	{
+	static function menuFadeCallback()	{
 		HxlGraphics.state = new MainMenuState();
 	}
 	
-	function gameFadeCallback() {
+	static function gameFadeCallback() {
 		HxlGraphics.state = new CreateCharState();
 	}
 	override public function destroy() {
