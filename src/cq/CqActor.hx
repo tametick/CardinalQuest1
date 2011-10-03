@@ -1366,7 +1366,7 @@ class CqMobFactory {
 			
 		Resources.descriptions.set("Fighter", " A mighty warrior, possessing unparalleled strength and vigor.\n\n Straightforward melee character - recommended for beginners.");
 		Resources.descriptions.set("Wizard", " A wise mage who mastered the arcane secrets of magic.\n\n Can cast spells rapidly - use his mystic powers as often as possible.");
-		Resources.descriptions.set("Thief", " A cunning and agile rogue, his speed allows for a swift escape.\n\n The most challanging character - use his speed and skills to avoid taking damage." );
+		Resources.descriptions.set("Thief", " A cunning and agile rogue, his speed allows for a swift escape.\n\n The most challenging character - use his speed and skills to avoid taking damage." );
 		
 		inited = true;
 	}

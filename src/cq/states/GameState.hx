@@ -340,7 +340,7 @@ class GameState extends CqState {
 		
 		cursor.visible = false;
 		scroller = new CqTextScroller(classBG, 1);
-		var introText:String = " You enter the dark domicile of the evil minotaur.\n\n In the distance, you can hear the chatter of the vile creatures that inhabit the depths.\n\n Your adventure begins...";
+		var introText:String = "You enter the dark domicile of the evil minotaur.\n\nIn the distance, you can hear the chatter of the vile creatures that inhabit the depths.\n\nYour adventure begins...";
 		scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,30);
 		add(scroller);
 		scroller.startScroll();
