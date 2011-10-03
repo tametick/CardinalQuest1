@@ -339,6 +339,7 @@ class CqLevel extends Level {
 			var buffs = creature.buffs;
 			var specialEffects = creature.specialEffects;
 			var visibleEffects = creature.visibleEffects;
+			
 			// remove timed out buffs & visibleEffects
 			var timers = creature.timers;
 			if (timers.length>0) {
@@ -384,6 +385,7 @@ class CqLevel extends Level {
 									removeMobFromLevel(HxlGraphics.state, mob);
 									mob = null;
 									eff = null;
+									l--;
 								default:
 									//
 							}
@@ -402,6 +404,7 @@ class CqLevel extends Level {
 				
 				expired = null;
 			}
+			
 			
 			var speed = creature.speed;
 			// Apply speed buffs
