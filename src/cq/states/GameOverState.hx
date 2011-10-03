@@ -7,6 +7,7 @@ import cq.ui.CqTextScroller;
 import data.Configuration;
 import data.SoundEffectsManager;
 import flash.display.Loader;
+import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
@@ -28,6 +29,7 @@ class GameOverState extends CqState {
 	var menu:HxlMenu;
 	var btnClicked:Bool;
 	
+	public var kongAd : Sprite;
 	var kongAdLoader : Loader;
 	
 	var addedKong:Bool;
@@ -48,7 +50,8 @@ class GameOverState extends CqState {
 		scroller.onComplete(goToMenu);
 		scroller.zIndex--;
 		
-		if(!Configuration.standAlone){
+		if (!Configuration.standAlone) {
+			kongAd = new Sprite();
 			kongAdLoader = new Loader();
 			try{
 				kongAdLoader.load(new URLRequest("http://www.kongnet.net/www/delivery/avw.php?zoneid=11&cb=98732479&n=aab5b069"));
@@ -106,10 +109,14 @@ class GameOverState extends CqState {
 	}
 	
 	function showAd() {
-		addChild(kongAdLoader);
+		addChild(kongAd);
+		kongAd.addChild(kongAdLoader);
+		kongAd.buttonMode = true;
+		kongAd.mouseChildren = false;
 		kongAdLoader.width *= 1.1;
-		kongAdLoader.x = (640 - kongAdLoader.width) / 2;
-		kongAdLoader.y = (410 - kongAdLoader.height) / 2;
+		kongAd.width = kongAdLoader.width;
+		kongAd.x = (640 - kongAdLoader.width) / 2;
+		kongAd.y = (410 - kongAdLoader.height) / 2;
 	}
 	
 	function clickOnKongAd(e : Event) {

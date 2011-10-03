@@ -88,14 +88,6 @@ class KongMain extends Sprite
 		request = null;
 	}
 	
-	function checkOnLogo(e : Event) : Void
-	{
-		if (mouseX > kongSprite.x && mouseX < kongSprite.x+kongSprite.width && mouseY > kongSprite.y && mouseY < kongSprite.y+kongSprite.height)
-			Mouse.show();
-		else
-			Mouse.hide();
-	}
-	
 	function playgame(e : Event) : Void
 	{
 		removeEventListener(Event.ENTER_FRAME, checkFrame);
@@ -129,7 +121,6 @@ class KongMain extends Sprite
 		kongSprite.addChild(logo);
 		
 		addChild(kongSprite);
-		addEventListener(Event.ENTER_FRAME, checkOnLogo, false, 0, true);
 		
 		kongSprite.x = 0;
 		kongSprite.y = 480 - kongSprite.height -1;
