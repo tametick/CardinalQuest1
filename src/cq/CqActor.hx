@@ -492,10 +492,19 @@ class CqActor extends CqObject, implements Actor {
 		
 		// set invisible if moved out of sight range
 		var tile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)),HxlTile);
-		if (tile.visibility == Visibility.IN_SIGHT)
+		if (tile.visibility == Visibility.IN_SIGHT) {
 			visible = true;
-		else
+			// only show hp bar if mob is hurt
+			if ( hp < maxHp && healthBar!= null) {
+				healthBar.visible= true;
+			}
+			
+		} else {
 			visible = false;
+			if (healthBar!= null) {
+				healthBar.visible = false;
+			}
+		}
 			
 		var positionOfTile:HxlPoint = level.getPixelPositionOfTile(Math.round(tilePos.x), Math.round(tilePos.y));
 		moveToPixel(state, positionOfTile.x, positionOfTile.y);
@@ -947,8 +956,8 @@ class CqPlayer extends CqActor, implements Player {
 		}
 		if (Configuration.debug) {
 /*			vitality = 500;
-			attack = 500;
-			spirit = 100;*/
+			attack = 500;*/
+			spirit = 30;
 			Configuration.playerLives = 4;
 		}
 		super(X, Y);
