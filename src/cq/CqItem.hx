@@ -467,7 +467,6 @@ class CqItem extends GameObjectImpl, implements Loot {
 	public function doPickupEffect() {
 		HxlGraphics.state.add(this);
 		setGlow(false);
-		var self = this;
 		oldX = x;
 		oldY = y;
 		Actuate.update(pickupTweenUpdate, 1.0, {X: x, Y: y, Alpha: 1.0}, {X: x, Y: y-48, Alpha: 0.0}).onComplete(pickupTweenOnComplete).ease(Cubic.easeOut); 

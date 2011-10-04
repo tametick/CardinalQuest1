@@ -74,14 +74,13 @@ class HxlFade extends HxlSprite {
 				var self = this;
 				if ( !_fadeOut ) {
 					Actuate.update(function(params:Dynamic) {
-						params.obj = obj; self.fadeText(params);
-						self = null;
+						params.obj = obj; 
+						fadeText(params);
 					}, Duration, {R: newColor[0], G: newColor[1], B: newColor[2]}, {R: oldColor[0], G: oldColor[1], B: oldColor[2]});
 				} else {
 					Actuate.update(function(params:Dynamic) {
 						params.obj = obj; 
-						self.fadeText(params);
-						self = null;
+						fadeText(params);
 					}, Duration, {R: oldColor[0], G: oldColor[1], B: oldColor[2]}, {R: newColor[0], G: newColor[1], B: newColor[2]});
 				}
 				

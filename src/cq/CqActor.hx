@@ -1138,7 +1138,9 @@ class CqPlayer extends CqActor, implements Player {
 
 	public override function moveStop() {
 		super.moveStop();
-		var currentTile = cast(Registery.level.getTile(Std.int(tilePos.x), Std.int(tilePos.y)), Tile);
+		var xx = Std.int(tilePos.x);
+		var yy = Std.int(tilePos.y);
+		var currentTile = cast(Registery.level.getTile(xx, yy), Tile);
 		var currentTileIndex = currentTile.dataNum;
 		if ( currentTile.loots.length > 0 ) {
 			var item = cast(currentTile.loots[currentTile.loots.length - 1], CqItem);
