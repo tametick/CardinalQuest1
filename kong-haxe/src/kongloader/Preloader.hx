@@ -75,7 +75,7 @@ class Preloader extends MovieClip {
 	function playKongAd(e : Event) : Void
 	{
 		kongAdLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, playKongAd);
-		kongAdLoader.addEventListener(MouseEvent.CLICK, clickOnKongAd, false, 0, true);
+		kongAd.addEventListener(MouseEvent.CLICK, clickOnKongAd, false, 0, true);
 		
 		
 		addChild(kongAd);
@@ -118,9 +118,11 @@ class Preloader extends MovieClip {
 		if(adSeen && timeLine.currentFrame  == timeLine.totalFrames)
 		{
 			kongAdLoader.removeEventListener(MouseEvent.CLICK, clickOnKongAd);
-			removeChild(kongAdLoader);
+			removeChild(kongAd);
+			kongAd.removeChild(kongAdLoader);
 			kongAdLoader.unloadAndStop();
 			kongAdLoader = null;
+			kongAd = null;
 			
 			cast(this.parent, MovieClip).stop();
 			loadingFinished();

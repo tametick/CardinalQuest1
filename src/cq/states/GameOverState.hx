@@ -103,7 +103,7 @@ class GameOverState extends CqState {
 	
 	function playKongAd(e : Event) {
 		kongAdLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, playKongAd);
-		kongAdLoader.addEventListener(MouseEvent.CLICK, clickOnKongAd, false, 0, true);
+		kongAd.addEventListener(MouseEvent.CLICK, clickOnKongAd, false, 0, true);
 		
 		Timer.delay(showAd, 500);
 	}
