@@ -13,14 +13,13 @@ class PropertyDetails {
 	public var propertyName:String;
 	public var start:Float;
 	public var change:Float;
-	//public var current:Float;	
 	
-	public function new (target:Dynamic, propertyName:String, start:Float, change:Float) {
+	
+	public function new (target:Dynamic, propertyName:String, start:Float, change:Float):Void {
 		
 		this.target = target;
 		this.propertyName = propertyName;
 		this.start = start;
-		//this.current = start;
 		this.change = change;
 		
 	}

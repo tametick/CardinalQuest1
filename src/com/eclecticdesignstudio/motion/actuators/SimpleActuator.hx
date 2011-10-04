@@ -1,6 +1,8 @@
 ﻿package com.eclecticdesignstudio.motion.actuators;
 
 
+import com.eclecticdesignstudio.motion.actuators.GenericActuator;
+//import com.joshuagranick.basic.Basic;
 import flash.display.DisplayObject;
 import flash.display.Shape;
 import flash.display.Sprite;
@@ -50,8 +52,10 @@ class SimpleActuator extends GenericActuator {
 		super (target, duration, properties);
 		
 		if (shape == null) {
+			
 			shape = new Shape ();
 			Lib.current.stage.addEventListener (Event.ENTER_FRAME, shape_onEnterFrame,false,0,true);
+			
 		}
 		
 	}
@@ -60,7 +64,13 @@ class SimpleActuator extends GenericActuator {
 	/**
 	 * @inheritDoc
 	 */
-	public override function autoVisible (value:Bool = true):GenericActuator {
+	public override function autoVisible (?value:Null<Bool>):IGenericActuator {
+		
+		if (value == null) {
+			
+			value = true;
+			
+		}
 		
 		_autoVisible = value;
 		
@@ -84,7 +94,7 @@ class SimpleActuator extends GenericActuator {
 	/**
 	 * @inheritDoc
 	 */
-	public override function delay (duration:Float):GenericActuator {
+	public override function delay (duration:Float):IGenericActuator {
 		
 		_delay = duration;
 		timeOffset = startTime + duration;
@@ -94,10 +104,11 @@ class SimpleActuator extends GenericActuator {
 	}
 	
 	
-	private function initialize () {
+	private function initialize ():Void {
 		
 		var details:PropertyDetails;
 		var start:Float;
+		
 		for (i in Reflect.fields (properties)) {
 			
 			start = Reflect.field (target, i);
@@ -110,21 +121,9 @@ class SimpleActuator extends GenericActuator {
 		initialized = true;
 		
 	}
-	public function changeProperties()
-	{
-		var details:PropertyDetails;
-		var start:Float;
-		for (i in Reflect.fields (properties)) {
-			
-			start = Reflect.field (target, i);
-			details = new PropertyDetails (target, i, start, Reflect.field (properties, i) - start);
-			propertyDetails.push (details);
-			
-		}
-		detailsLength = propertyDetails.length;
-	}
 	
-	private override function move () {
+	
+	public override function move ():Void {
 		
 		toggleVisible = (Reflect.hasField (properties, "alpha") && Std.is (target, DisplayObject));
 		
@@ -146,7 +145,7 @@ class SimpleActuator extends GenericActuator {
 	/**
 	 * @inheritDoc
 	 */
-	public override function onUpdate (handler:Dynamic, parameters:Array <Dynamic> = null):GenericActuator {
+	public override function onUpdate (handler:Dynamic, parameters:Array <Dynamic> = null):IGenericActuator {
 		
 		_onUpdate = handler;
 		_onUpdateParams = parameters;
@@ -157,7 +156,7 @@ class SimpleActuator extends GenericActuator {
 	}
 	
 	
-	private override function pause () {
+	public override function pause ():Void {
 		
 		paused = true;
 		pauseTime = Lib.getTimer ();
@@ -165,7 +164,7 @@ class SimpleActuator extends GenericActuator {
 	}
 	
 	
-	private override function resume () {
+	public override function resume ():Void {
 		
 		if (paused) {
 			
@@ -177,7 +176,7 @@ class SimpleActuator extends GenericActuator {
 	}
 	
 	
-	private override function stop (properties:Dynamic, complete:Bool, sendEvent:Bool) {
+	public override function stop (properties:Dynamic, complete:Bool, sendEvent:Bool):Void {
 		
 		if (active) {
 			
@@ -200,7 +199,7 @@ class SimpleActuator extends GenericActuator {
 				
 			}
 			
-			if (!properties) {
+			if (properties == null) {
 				
 				active = false;
 				
@@ -220,7 +219,7 @@ class SimpleActuator extends GenericActuator {
 	}
 	
 	
-	private function update (currentTime:Float) {
+	private function update (currentTime:Float):Void {
 		
 		if (!paused) {
 			
@@ -249,6 +248,7 @@ class SimpleActuator extends GenericActuator {
 				for (i in 0...detailsLength) {
 					
 					details = propertyDetails[i];
+					
 					Reflect.setField (details.target, details.propertyName, details.start + (details.change * easing));
 					
 				}
@@ -337,34 +337,61 @@ class SimpleActuator extends GenericActuator {
 						
 						_repeat --;
 						
-					}	
+					}
+					
 				}
+				
 			}
 			
 			if (sendChange) {
-				change ();	
-			}	
-		}		
+				
+				change ();
+				
+			}
+			
+		}
+		
 	}
-
+	
+	
+	
+	
 	// Event Handlers
-	private static function shape_onEnterFrame (event:Event) {
+	
+	
+	
+	
+	private static function shape_onEnterFrame (event:Event):Void {
+		
 		var currentTime:Float = Lib.getTimer () / 1000;
+		
 		var actuator:SimpleActuator;
+		
 		var j:Int = 0;
 		
 		for (i in 0...actuatorsLength) {
+			
 			actuator = actuators[j];
+			
 			if (actuator.active) {
+				
 				if (currentTime > actuator.timeOffset) {
+					
 					actuator.update (currentTime);
+					
 				}
+				
 				j++;
+				
 			} else {
+				
 				actuators.splice (j, 1);
 				--actuatorsLength;
+				
 			}
+			
 		}
+		
 	}
 	
 	
