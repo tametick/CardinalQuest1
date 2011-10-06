@@ -129,7 +129,7 @@ class HxlTextContainer extends HxlDialog {
 		if ( lines.length > 0 ) {
 			if ( fadeEffect && !isFading ) {
 				line = lines.first();
-				Actuate.update(scrollTweenUpdate, scrollRate, {Alpha: 1.0}, {Alpha: 0.0});
+				Actuate.update(scrollTweenUpdate, scrollRate, [1.0], [0.0]);
 				isFading = true;
 			} else {
 				var line:HxlText = lines.pop();
@@ -140,7 +140,7 @@ class HxlTextContainer extends HxlDialog {
 		}
 	}
 	function scrollTweenUpdate(params:Dynamic) {
-		line.alpha = params.Alpha;
+		line.alpha = cast(params,Float);
 	}
 	function updateLayout() {
 		if ( !reverseOrder  ) {
