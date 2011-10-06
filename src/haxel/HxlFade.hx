@@ -72,15 +72,14 @@ class HxlFade extends HxlSprite {
 				var oldColor = HxlUtil.colorRGB(obj.textColor);
 				var newColor = HxlUtil.colorRGB(Color);
 				
-				function fade(params:Dynamic) {
-					params.obj = obj; 
-					fadeText(params);
+				function fade(r:Dynamic, g:Dynamic, b:Dynamic) {
+					fadeText(r,g,b,obj);
 				}
 				
 				if ( !_fadeOut ) {
-					Actuate.update(fade, Duration, {R: newColor[0], G: newColor[1], B: newColor[2]}, {R: oldColor[0], G: oldColor[1], B: oldColor[2]});
+					Actuate.update(fade, Duration, [newColor[0], newColor[1], newColor[2]], [oldColor[0], oldColor[1], oldColor[2]]);
 				} else {
-					Actuate.update(fade, Duration, {R: oldColor[0], G: oldColor[1], B: oldColor[2]}, {R: newColor[0], G: newColor[1], B: newColor[2]});
+					Actuate.update(fade, Duration, [oldColor[0], oldColor[1], oldColor[2]], [newColor[0], newColor[1], newColor[2]]);
 				}
 				
 				obj = null;
@@ -89,9 +88,9 @@ class HxlFade extends HxlSprite {
 	
 	}
 	
-	public function fadeText(params:Dynamic) {
-		params.obj.textColor = HxlUtil.colorInt(params.R, params.G, params.B);
-		params.obj.alpha = 1.0;
+	public function fadeText(r:Dynamic, g:Dynamic, b:Dynamic,obj) {
+		obj.textColor = HxlUtil.colorInt(Math.round(cast(r,Float)), Math.round(cast(g,Float)), Math.round(cast(b,Float)));
+		obj.alpha = 1.0;
 	}
 
 	/**
