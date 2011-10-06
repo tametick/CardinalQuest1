@@ -39,6 +39,9 @@ class Tile extends HxlTile {
 	}
 
 	function colorTween(params:Dynamic) {
+		if (params == null)
+			return;
+		
 		var col = Math.round(cast(params, Float));
 		setColor( HxlUtil.colorInt(col, col, col) );
 	}

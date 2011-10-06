@@ -30,6 +30,9 @@ class CqDecoration extends GameObjectImpl, implements Decoration{
 		Actuate.update(colorTween, Speed, [HxlUtil.colorRGB(_color)[0]], [ToColor]);
 	}
 	public function colorTween(params:Dynamic) {
+		if (params == null)
+			return;
+		
 		var col = Math.round(cast(params, Float));
 		setColor( HxlUtil.colorInt(col, col, col) );
 		// fixme - this doesn't actually change the color of the decoration drawn

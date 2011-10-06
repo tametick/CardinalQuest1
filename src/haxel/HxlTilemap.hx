@@ -178,15 +178,26 @@ class HxlTilemap extends HxlObject {
 	override public function destroy() 	{
 		super.destroy();
 		
-		if (tmpBitmap == null){
-			// alreasdy destroyed
-			return;
+		for ( y in 0...heightInTiles ) {
+			for ( x in 0...widthInTiles ) {
+				_tiles[y][x].destroy();
+				_tiles[y][x] = null;
+			}
+		}
+		_tiles = null;
+		
+		tileBMPs = null;
+		
+		if (tmpBitmap != null){
+			tmpBitmap.dispose();
+			tmpBitmap = null;				
 		}
 		
-		tmpBitmap.dispose();
-		tmpBitmap = null;
-		_pixels.dispose();
-		_pixels = null;
+		if(_pixels!=null) {
+			_pixels.dispose();
+			_pixels = null;		
+		}
+		
 		tmpRect = null;
 	}
 
@@ -218,14 +229,11 @@ class HxlTilemap extends HxlObject {
 				tile = _tiles[r+ty][c+tx];
 				if ( tile.visible ) {
 					var name = (tile.dataNum - startingIndex) +"_" + tile._ct;
-					//if (!tilesByCT.exists( name )) {
-						tmpBitmap = tileBMPs[(tile.dataNum-startingIndex)].clone();
+					tmpBitmap = tileBMPs[(tile.dataNum-startingIndex)].clone();
 
-						if (tile._ct != null)
-							tmpBitmap.colorTransform( tmpRect,  tile._ct);
-							
-						//tilesByCT.set(  ((tile.dataNum-startingIndex) +"_"+ tile._ct), tmpBitmap.clone());
-					//}
+					if (tile._ct != null){
+						tmpBitmap.colorTransform( tmpRect,  tile._ct);
+					}
 					
 					HxlGraphics.buffer.copyPixels(tmpBitmap, tmpRect, _flashPoint, null, null, false);
 					tmpBitmap.dispose();
@@ -410,6 +418,10 @@ class HxlTile {
 		visible = true;
 	}
 
+	public function destroy() {
+		_ct = null;
+	}
+	
 	/**
 	 * Set <code>alpha</code> to a number between 0 and 1 to change the opacity of this tile.
 	 */
