@@ -87,7 +87,7 @@ class HxlSlidingDialog extends HxlDialog
 		}
 		if ( ShowCallback ) showCallback = ShowCallback;
 		Actuate.stop(this, {}, false);
-		Actuate.update(posTween, duration, { X: x, Y: y }, { X: targetX, Y: targetY } )
+		Actuate.update(posTween, duration, [x, y], [targetX, targetY] )
 			.onComplete(shown)
 			.ease(Quad.easeOut);
 		if ( showSound != null ) showSound.play();
@@ -131,16 +131,16 @@ class HxlSlidingDialog extends HxlDialog
 		}
 		if ( HideCallback ) hideCallback = HideCallback;
 		Actuate.stop(this, {}, false);
-		Actuate.update(posTween, duration, { X: x, Y: y }, { X: targetX, Y: targetY } ).onComplete(hidden);
+		Actuate.update(posTween, duration, [x, y], [targetX, targetY] ).onComplete(hidden);
 		if ( hideSound != null ) hideSound.play();
 	}
 
-	private function posTween(params:Dynamic) {
-		targetX = params.X;
-		targetY = params.Y;
+	function posTween(arg0:Dynamic,arg1:Dynamic) {
+		targetX = Math.round(cast(arg0, Float));
+		targetY = Math.round(cast(arg1, Float));
 	}
 	
-	private function shown() {
+	function shown() {
 		isDropping = false;
 		isDropped = true;
 		update();
