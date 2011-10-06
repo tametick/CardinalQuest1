@@ -84,6 +84,8 @@ class Level extends HxlTilemap {
 		
 		HxlGraphics.unfollow();
 		
+		Actuate.reset();
+		
 		super.destroy();
 	}
 	

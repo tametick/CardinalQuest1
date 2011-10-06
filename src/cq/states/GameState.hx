@@ -94,6 +94,8 @@ class GameState extends CqState {
 		super.destroy();
 		HxlGraphics.keys.onJustPressed = null;
 		//remove(Registery.world.currentLevel);
+		
+		Actuate.reset();
 	}
 		
 	public override function render() {
