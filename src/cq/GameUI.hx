@@ -961,7 +961,7 @@ class GameUI extends HxlDialog {
 		ball.y = fromPixel.y;
 		ball.zIndex = 5;
 		HxlGraphics.state.add(ball);
-		var tween:GenericActuator  = Actuate.tween(ball, 1, { x:other.x, y:other.y } );
+		var tween= Actuate.tween(ball, 1, { x:other.x, y:other.y } );
 		
 		var args1 = new Array();
 		args1.push(ball);
@@ -1004,11 +1004,12 @@ class GameUI extends HxlDialog {
 	}
 	
 	private function updateXBall(ball:HxlSprite,other:CqActor,actuator:GenericActuator) {
-		var prop:Dynamic = actuator.getProperties();
+		var prop:Dynamic = actuator.properties;
 		ball.angle += 20;
 		prop.x = other.x+Configuration.tileSize/2;
 		prop.y = other.y+Configuration.tileSize/2;
-		cast(actuator, SimpleActuator).changeProperties();
+		//cast(actuator, SimpleActuator).changeProperties();
+		prop = null;
 	}
 	
 	private function onXBallHit(ball:HxlSprite,actor:CqActor,other:CqActor,spell:CqItem) {
