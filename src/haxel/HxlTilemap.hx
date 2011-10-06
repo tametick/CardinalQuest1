@@ -178,15 +178,20 @@ class HxlTilemap extends HxlObject {
 	override public function destroy() 	{
 		super.destroy();
 		
+	    for( i in 0...tileBMPs.length ) {
+			tileBMPs[i].dispose();
+			tileBMPs[i] = null;
+		}
+		tileBMPs = null;
+		
 		for ( y in 0...heightInTiles ) {
 			for ( x in 0...widthInTiles ) {
 				_tiles[y][x].destroy();
 				_tiles[y][x] = null;
+				
 			}
 		}
 		_tiles = null;
-		
-		tileBMPs = null;
 		
 		if (tmpBitmap != null){
 			tmpBitmap.dispose();
