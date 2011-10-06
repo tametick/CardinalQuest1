@@ -300,15 +300,44 @@ class GameUI extends HxlDialog {
 	override public function kill() {
 		clearEventListeners();
 
+		btnMainView.kill();
 		dlgPotionGrid.kill();
 		dlgSpellGrid.kill();
+		doodads.kill();
+		//invItemManager
+		notifications.kill();
 		panels.kill();
+		popups.kill();
+		if(targetSpell!=null)
+			targetSpell.kill();
+		btnCharacterView.kill();
+		btnInfoView.kill();
+		btnInventoryView.kill();
+		btnMapView.kill();
+		centralHealthBar.kill();
+		centralXpBar.kill();
+		var e:CqFloatText = null;
+		while (effectQueue.length > 0) {
+			e = effectQueue.pop();
+			e.kill();
+			e = null;
+		}
+		infoViewFloor.kill();
+		infoViewHearts.kill();
+		infoViewHpBar.kill();
+		infoViewLevel.kill();
+		infoViewXpBar.kill();
+		leftButtons.kill();		
+		if(targetSprite!=null)
+			targetSprite.kill();
+		if(targetText!=null)
+			targetText.kill();
 		
 		destroy();
 		super.kill();
 	}
 	
-	override public function destroy() 	{		
+	override public function destroy() {
 		btnMainView.destroy();
 		dlgPotionGrid.destroy();
 		dlgSpellGrid.destroy();
