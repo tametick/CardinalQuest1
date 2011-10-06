@@ -27,14 +27,12 @@ class CqDecoration extends GameObjectImpl, implements Decoration{
 		return (SpriteDecorations.wall[Std.int(Math.random() * (SpriteDecorations.wall.length - 1))]);
 	}
 	public function colorTo(ToColor:Int, Speed:Float) {
-		Actuate.update(colorTween, Speed, {Color: HxlUtil.colorRGB(_color)[0]}, {Color: ToColor})
-			.onComplete(captureAltBitmap);
+		Actuate.update(colorTween, Speed, [HxlUtil.colorRGB(_color)[0]], [ToColor]);
 	}
 	public function colorTween(params:Dynamic) {
-		setColor( HxlUtil.colorInt(params.Color, params.Color, params.Color) );
+		var col = Math.round(cast(params, Float));
+		setColor( HxlUtil.colorInt(col, col, col) );
+		// fixme - this doesn't actually change the color of the decoration drawn
 	}
-	public function captureAltBitmap()
-	{
-		//on color tween
-	}
+
 }
