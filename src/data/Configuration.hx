@@ -14,7 +14,7 @@ class Configuration {
 	public static inline var debug = false;
 	public static inline var air = false;
 	public static inline var standAlone = false;
-	public static inline var useProductionPlaytomic = true;
+	public static inline var useProductionPlaytomic = false;
 	
 	public static inline var debugStartingLevel:Int = 0;
 	public static inline var debugStartingClass:CqClass = WIZARD;
