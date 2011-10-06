@@ -26,7 +26,7 @@ class CqTextScroller extends HxlGroup {
 	var withTitle:Bool;
 	var cols:Array<HxlText>;
 	var clicks:Int;
-	var tweens:Array<GenericActuator>;
+	var tweens:Array<IGenericActuator>;
 	var tweenStatus:Array<Bool>;
 	var OnComplete:Void->Void;
 	var minimumDuration:Float;
@@ -38,7 +38,7 @@ class CqTextScroller extends HxlGroup {
 		scrolling = false;
 		respondInput = false;
 		cols = new Array<HxlText>();
-		tweens = new Array<GenericActuator>();
+		tweens = new Array<IGenericActuator>();
 		tweenStatus = new Array<Bool>();
 		to_y = To_Y;
 		minimumDuration = MinimumDuration;
