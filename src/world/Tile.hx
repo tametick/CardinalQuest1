@@ -35,10 +35,11 @@ class Tile extends HxlTile {
 	}
 	
 	public function colorTo(ToColor:Int, Speed:Float) {
-		Actuate.update(colorTween, Speed, {Color: HxlUtil.colorRGB(_color)[0]}, {Color: ToColor});
+		Actuate.update(colorTween, Speed, [HxlUtil.colorRGB(_color)[0]], [ToColor]);
 	}
 
 	function colorTween(params:Dynamic) {
-		setColor( HxlUtil.colorInt(params.Color, params.Color, params.Color) );
+		var col = Math.round(cast(params, Float));
+		setColor( HxlUtil.colorInt(col, col, col) );
 	}
 }
