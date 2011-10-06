@@ -37,8 +37,13 @@ class HxlText extends HxlSprite {
 
   
   override public function destroy() {
-	  super.destroy();
-	  _tf = null;
+		_framePixels.dispose();
+		_pixels.dispose();
+		_bbb.dispose();
+
+	  
+		super.destroy();
+		_tf = null;
   }
   
   /**
@@ -368,10 +373,7 @@ class HxlText extends HxlSprite {
     return new TextFormat(dtf.font,dtf.size,dtf.color,dtf.bold,dtf.italic,dtf.underline,dtf.url,dtf.target,dtf.align);
   }
   override public function kill() {
-    _framePixels.dispose();
-    _pixels.dispose();
-    _bbb.dispose();
-
     super.kill();
+	destroy();
   }
 }
