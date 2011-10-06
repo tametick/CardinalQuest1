@@ -89,11 +89,16 @@ class CqTextScroller extends HxlGroup {
 		if (clicks == 0)
 		{
 			finishTweens();
-		}else
-		{
+		} else {
 			//end this
 			HxlGraphics.stage.removeEventListener(MouseEvent.CLICK, onAction);
 			HxlGraphics.stage.removeEventListener(KeyboardEvent.KEY_UP, onAction);
+			
+			if (splash != null) {
+				remove(splash);
+				splash = null;
+			}
+			
 			if (OnComplete != null)
 				OnComplete();
 		}

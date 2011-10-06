@@ -72,8 +72,7 @@ class GameState extends CqState {
 		chosenClass = FIGHTER;
 		HxlGraphics.keys.onJustPressed = onKeyJustPressed;
 		HxlGraphics.fade.start(false, 0x00000000, 0.25);
-		cursor.setFrame(SpriteCursor.instance.getSpriteIndex("diagonal"));
-		cursor.scrollFactor.y = cursor.scrollFactor.x = 0;
+		
 		//loadingBox = new HxlLoadingBox();
 		//add(loadingBox);
 		resumeActingTime = msMoveStamp = Timer.stamp();
@@ -116,6 +115,7 @@ class GameState extends CqState {
 	}
 
 	
+	// This is very odd reduplication -- compare this with my compasses
 	static var keys = ["LEFT", "A", "RIGHT", "D", "UP" ,"W" ,"DOWN" ,"S", "ENTER"];
 	function justPressedTargetingKey() {
 		for (k in keys) {
@@ -132,30 +132,30 @@ class GameState extends CqState {
 		System.gc();
 		System.gc();
 		
-		if (endingAnim)
-		{
+		if (endingAnim) {
 			gameUI.popups.setChildrenVisibility(false);
 			cursor.visible = false;
 			doEndingAnimation();
 			return;
 		}
-			
-		if (!started) 
-			return;
-			
-		var up = SpriteCursor.instance.getSpriteIndex("up");
+		
+		// make sure the game has started
+		if (!started) return;
+		
+		// make sure initialization is complete
 		if ( initialized < 1 ) {
 			return;
 		} else if ( initialized == 1 ) {
 			initialized = 2;
 			gameUI.updateCharges();
 		}
+		
 		//hide mouse after idle some time	
-		if (Timer.stamp() - msMoveStamp > msHideDelay || endingAnim) {
-			//gameUI.popups.setChildrenVisibility(false);
+		if (endingAnim || Timer.stamp() - msMoveStamp > msHideDelay) {
 			cursor.visible = false;
 		}
 		
+		// this is not clear to me yet:
 		checkInvKeys();
 		if ( GameUI.isTargeting) {
 			if (Registery.level.getTargetAccordingToKeyPress()!=Registery.player.tilePos && Registery.level.getTargetAccordingToKeyPress()!=null)
@@ -180,35 +180,18 @@ class GameState extends CqState {
 				}
 			}
 		}
-		//set cursor direction
-		var dx = HxlGraphics.mouse.x - (Registery.player.x+Configuration.zoomedTileSize()/2);
-		var dy = HxlGraphics.mouse.y - (Registery.player.y+Configuration.zoomedTileSize()/2);
-		var target:HxlPoint = Registery.level.getTargetAccordingToMousePosition(dx, dy);
 		
-		if ( gameUI.overlapsPoint( HxlGraphics.mouse.x, HxlGraphics.mouse.y)||
-		     Math.abs(dx) < Configuration.zoomedTileSize() && Math.abs(dy) < Configuration.zoomedTileSize()/2 
-		   ) {
+		
+		//set the actual graphical indicator of the cursor direction
+		var target:HxlPoint = Registery.level.getTargetAccordingToMousePosition();
+		
+		if (gameUI.overlapsPoint( HxlGraphics.mouse.x, HxlGraphics.mouse.y) || target == null || (target.x == 0 && target.y == 0)) {
 			setDiagonalCursor();
 		} else {
 			if (GameUI.isTargeting) {
 				setDiagonalCursor();
 			} else {
-				if(cursor.getFrame()!=up)
-					cursor.setFrame(up);
-				
-				if(target.x==0 && target.y==1){
-					if (cursor.angle != 180)
-						cursor.angle = 180;
-				} else if(target.x==0 && target.y==-1){
-					if (cursor.angle != 0)
-						cursor.angle = 0;
-				} else if(target.x==1 && target.y==0){
-					if (cursor.angle != 90)
-						cursor.angle = 90;
-				} else if(target.x==-1 && target.y==0){
-					if (cursor.angle != 270)
-						cursor.angle = 270;
-				}
+				setDiagonalCursor(target);
 			}
 		}
 		
@@ -231,19 +214,17 @@ class GameState extends CqState {
 	}
 	private function checkInvKeys():Void
 	{
-		//open ui
-		if (HxlGraphics.keys.justPressed("M"))
-		{
+		if (HxlGraphics.keys.justPressed("M")) {
 			gameUI.showMapDlg();
-		}else if (HxlGraphics.keys.justPressed("I"))
-		{
+		} else if (HxlGraphics.keys.justPressed("I")) {
 			gameUI.showInvDlg();
-		}else if (HxlGraphics.keys.justPressed("C"))
-		{
+		} else if (HxlGraphics.keys.justPressed("C")) {
 			gameUI.showCharDlg();
 		}
 	}
 	private function checkGamePassTurnKeys():Bool {
+		// this is the cause of several bugs
+		
 		var item = null;
 		//potions
 		if (HxlGraphics.keys.justPressed("SIX"))
@@ -328,26 +309,29 @@ class GameState extends CqState {
 		if(Configuration.debug)
 			chosenClass = Configuration.debugStartingClass;	
 			
-		var classBG:Class<Bitmap> = null;
+		var classBG:Class<Bitmap>;
+		var introText:String;
 		switch(chosenClass){
 			case CqClass.FIGHTER:
 				classBG = SpriteKnightEntry;
+				//"You enter the dark domicile of the evil minotaur.\n\nIn the distance, you can hear the chatter of the vile creatures that inhabit the depths.\n\nYour adventure begins...";
+				introText = "You descend with shining sword into the dismal dwelling of the maleficent minotaur.  The haughty chatter of his servants, twisted and evil, fills the air.\n\nYou smile, for you will shed much blood today.";
 			case CqClass.THIEF:
+				introText = "You slink silently down unlit stairs, to the fetid, labyrinthine halls of the minotaur's demesne.  His wicked servants suspect nothing.\n\nYou cannot help but grin at the thought of the bounteous treasure you will help them relinquish.";
 				classBG = SpriteThiefEntry;
 			case CqClass.WIZARD:
 				classBG = SpriteWizardEntry;
+				introText = "The unsettled souls of the anguished dead whisper of the minotaur's misdeeds.  On bended knee you swear to them that they will be avenged.\n\nArcane flames dance between your hands.  The minotaur's wretched minions will be the most delightful playthings.";
+			default:
+				return;
 		}
 		
 		cursor.visible = false;
 		scroller = new CqTextScroller(classBG, 1);
-		var introText:String = "You enter the dark domicile of the evil minotaur.\n\nIn the distance, you can hear the chatter of the vile creatures that inhabit the depths.\n\nYour adventure begins...";
 		scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,30);
 		add(scroller);
 		scroller.startScroll();
 		scroller.onComplete(realInit);
-		
-		classBG = null;
-		introText = null;
 	}
 	
 	function realInit() {
@@ -452,7 +436,7 @@ class GameState extends CqState {
 			//Registery.player = SaveLoad.loadPlayer();
 		}
 		else
-		{*/		
+		{*/
 			Registery.world = new CqWorld();
 			Registery.player = new CqPlayer(chosenClass);
 		/*}*/
@@ -460,6 +444,8 @@ class GameState extends CqState {
 	
 	override function onKeyUp(event:KeyboardEvent) {	
 		if (!started || endingAnim) return;
+		
+		// another direct query of keys -- we'll want to offload most of these checks
 		if ( HxlGraphics.keys.justReleased("F1") || HxlGraphics.keys.justReleased("ESCAPE")) {
 			// If user was in targeting mode, cancel it
 			if ( GameUI.isTargeting ) {
@@ -523,91 +509,184 @@ class GameState extends CqState {
 		if(Registery.level != null && Timer.stamp() > resumeActingTime)
 			isPlayerActing = true;
 	}
-	var tmpPoint:HxlPoint;
+	
 	private var scroller:CqTextScroller;
+	
+	private function tryToActInDirection(facing:HxlPoint):Bool {
+		var player = Registery.player;
+		var tile = getPlayerTile(facing);
+		
+		if (tile == null) {
+			return false;
+		} else if ( !isBlockingMovement(facing) || (Configuration.debugMoveThroughWalls && Configuration.debug)) {
+			// move or attack in chosen tile
+			player.actInDirection(this, facing);
+			
+			// if player just attacked don't continue moving
+			if (player.justAttacked) {
+				resumeActingTime = Timer.stamp() + player.moveSpeed;
+				isPlayerActing = false;
+			}
+			return true;
+		} else if (HxlUtil.contains(SpriteTiles.doors.iterator(), tile.dataNum)) {
+			// would be great to tell player to open the door, wouldn't it just?
+			openDoor(tile);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private function pickBestSlide(facing:HxlPoint):HxlPoint {
+		// treating 'facing' as forward, we hold a little competition between 'left' and 'right'
+		// -- we want to find which of those two directions gets us in place to move forward soonest.
+		// -- and if they tie on that test, we want to pick the one that lets us move forward furthest.
+		
+		// on your marks
+		var player = Registery.player;
+		
+		var left_ok:Bool = true, right_ok:Bool = true;
+		var left_wins:Bool = false, right_wins:Bool = false;
+		
+		var left = new HxlPoint(-facing.y, -facing.x);
+		var right = new HxlPoint(facing.y, facing.x);
+		
+		
+		// get set
+		var left_total:HxlPoint = new HxlPoint(0, 0);
+		var right_total:HxlPoint = new HxlPoint(0, 0);
+		var left_ahead:HxlPoint = new HxlPoint(0, 0);
+		var right_ahead:HxlPoint = new HxlPoint(0, 0);
+		
+		// go!
+		while ((left_ok || right_ok) && !(left_wins || right_wins)) {
+			if (left_ok) {
+				left_total.x = left_total.x + left.x;
+				left_total.y = left_total.y + left.y;
+				
+				var tile = getPlayerTile(left_total);
+				if (tile == null || tile.isBlockingMovement()) {
+					left_ok = false;
+				} else {
+					// and can we get somewhere from here?
+					left_ahead.x = left_total.x + facing.x;
+					left_ahead.y = left_total.y + facing.y;
+					
+					tile = getPlayerTile(left_ahead);
+					
+					if (tile != null && (!tile.isBlockingMovement() || (HxlUtil.contains(SpriteTiles.doors.iterator(), tile.dataNum)))) {
+						left_wins = true;
+					}
+				}
+			}
+			
+			if (right_ok) {
+				right_total.x = right_total.x + right.x;
+				right_total.y = right_total.y + right.y;
+				
+				var tile = getPlayerTile(right_total);
+				if (tile == null || tile.isBlockingMovement()) {
+					right_ok = false;
+				} else {
+					// and can we get somewhere from here?
+					right_ahead.x = right_total.x + facing.x;
+					right_ahead.y = right_total.y + facing.y;
+					
+					tile = getPlayerTile(right_ahead);
+					
+					if (tile != null && (!tile.isBlockingMovement() || (HxlUtil.contains(SpriteTiles.doors.iterator(), tile.dataNum)))) {
+						right_wins = true;
+					}
+				}
+			}
+		}
+		
+		if (left_wins && right_wins) {
+			// they both turn a corner at the same time, so we'll run them both ahead to see which one hits a wall first
+			while (left_ok && right_ok) {
+				left_ahead.x = left_ahead.x + facing.x;
+				left_ahead.y = left_ahead.y + facing.y;
+				
+				right_ahead.x = right_ahead.x + facing.x;
+				right_ahead.y = right_ahead.y + facing.y;
+									
+				var tile = getPlayerTile(left_ahead);
+				
+				if (tile == null || (tile.isBlockingMovement() && !(HxlUtil.contains(SpriteTiles.doors.iterator(), tile.dataNum)))) {
+					left_ok = false;
+				}
+				
+				tile = getPlayerTile(right_ahead);
+				
+				if (tile == null || (tile.isBlockingMovement() && !(HxlUtil.contains(SpriteTiles.doors.iterator(), tile.dataNum)))) {
+					right_ok = false;
+				}
+			}
+			
+			if (right_ok || left_ok) {
+				left_wins = left_wins && left_ok;
+				right_wins = right_wins && right_ok;
+			}
+		}
+		
+		if (left_wins) return left;
+		if (right_wins) return right;
+		return null;
+	}
+	
 	private function act() {
+		var level = Registery.level, player = Registery.player;
+		
 		if ( GameUI.isTargeting || !started || endingAnim) {
 			isPlayerActing = false;
 			return;
 		}
-		if (Registery.player.isMoving)
-			return;
-		//check game keys on your turn
-		if (checkGamePassTurnKeys())
-		{
-			passTurn();
+		
+		if (player.isMoving) {
+			// if the player is being animated presently, we can't take key commands
 			return;
 		}
 		
-		var level = Registery.level;
-		var player = Registery.player;
-		var target:HxlPoint;
-		var tile:CqTile;
-		var ktg:HxlPoint = level.getTargetAccordingToKeyPress();
+		if (checkGamePassTurnKeys())
+		{
+			// we check game keys on your turn -- 
+			// is this why so many keys waste extra turns?
+			// passTurn();
+			return;
+		}
 		
-		var dx;
-		var dy;
-		if (ktg != null ) {
-			dx =  (player.x + Configuration.zoomedTileSize() / 2);
-			dy =  (player.y + Configuration.zoomedTileSize() / 2);
-			target = ktg;
-			lastMouse = false;//for targeting
+		var facing:HxlPoint, tile:CqTile;
+		var keyFacing:HxlPoint = level.getTargetAccordingToKeyPress();
+		
+		if (keyFacing != null ) {
+			facing = keyFacing;
+			lastMouse = false; //for targeting
 		} else {
 			if (!HxlGraphics.mouse.pressed()) {
 				isPlayerActing = false;
-				
-				level = null;
-				player = null;
-				target = null;
-				tile = null;
-				ktg = null;
-				
 				return;
 			}
-			dx = HxlGraphics.mouse.x - (player.x+Configuration.zoomedTileSize()/2);
-			dy = HxlGraphics.mouse.y - (player.y + Configuration.zoomedTileSize() / 2);
-			target = level.getTargetAccordingToMousePosition(dx, dy);
+			
+			facing = level.getTargetAccordingToMousePosition();
 		}
 		
-		var tile = getPlayerTile(target);
-		if (tile == null) {
-			if ( !HxlGraphics.keys.justPressed("ENTER") && !HxlGraphics.keys.justPressed("NONUMLOCK_5") && target.x == player.tilePos.x && target.y == player.tilePos.y) {
-				isPlayerActing = false;
-				
-				level = null;
-				player = null;
-				target = null;
-				tile = null;
-				ktg = null;
-				tile = null;
-				
-				return;
-			}
-			passTurn();
-			level = null;
-			player = null;
-			target = null;
-			tile = null;
-			ktg = null;
-			tile = null;
+		if (facing == null) {
+			// a facing of null means that neither the mouse nor the keyboard supplied a valid motion
 			return;
 		}
 		
-		if (Math.abs(dx) < Configuration.zoomedTileSize() && Math.abs(dy) < Configuration.zoomedTileSize() || HxlGraphics.keys.justPressed("ENTER") || HxlGraphics.keys.justPressed("NONUMLOCK_5") ) {
-			if (tmpPoint == null)
-				tmpPoint = new HxlPoint(0, 0);
-			else {
-				tmpPoint.x = 0;
-				tmpPoint.y = 0;
-			}
-			tile = getPlayerTile(tmpPoint);
-			 if (tile.loots.length > 0) {
-				 // pickup item
+		if (facing.x == 0 && facing.y == 0) {
+			// perform actions that happen when the PLAYER SELECTS HIMSELF
+			// (this could easily be factored out)
+			tile = getPlayerTile(new HxlPoint(0, 0));
+			
+			if (tile.loots.length > 0) {
+				// there is an item here, so let's pick it up
 				var item = cast(tile.loots[tile.loots.length - 1], CqItem);
 				player.pickup(this, item);
 				item = null;
 			} else if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tile.dataNum)) {
-				// descend
+				// these are stairs!  time to descend.
 				Registery.world.goToNextLevel();
 				player.popup.setText("");
 				
@@ -619,57 +698,26 @@ class GameState extends CqState {
 				} 
 				#end				
 			}
-			//clicking on ones-self should only do one turn
+			
+			// pass a turn
 			isPlayerActing = false;
-			// wait
-		} else if ( !isBlockingMovement(target) || (Configuration.debugMoveThroughWalls && Configuration.debug)) {
-			// move or attack in chosen tile
-			player.actInDirection(this, target);
-			// if player just attacked don't continue moving
-			if (player.justAttacked) {
-				resumeActingTime = Timer.stamp() + player.moveSpeed;
-				isPlayerActing = false;
-			}
-				
-		} else if(HxlUtil.contains(SpriteTiles.doors.iterator(),tile.dataNum)){
-			// open door
-			openDoor(tile);
-		} else if(!(dx==0 && dy==0)){
-			// slide
-			if (Math.abs(dx) > Math.abs(dy))
-				dx = 0;
-			else
-				dy = 0;
-			//we already have target, but this smoothes out movement
-			if(level.getTargetAccordingToKeyPress()!=null&&level.getTargetAccordingToKeyPress()!=player.tilePos)
-				target = level.getTargetAccordingToKeyPress();
-			else
-				target = level.getTargetAccordingToMousePosition(dx, dy);
-				
-			tile = getPlayerTile(target);
-			if ( !isBlockingMovement(target) ) {
-				player.actInDirection(this,target);
-			} else if (HxlUtil.contains(SpriteTiles.doors.iterator(), tile.dataNum)){
-				openDoor(tile);
+			passTurn();
+			return;
+		} else {
+			// motion has been requested.  try first, second, and possibly third choices for movement
+			// (this is very sucky sliding -- not nerely as good as the original -- but I will improve it)
+			var moved:Bool = false;
+			if (facing.x == 0 || facing.y == 0) {
+				moved = tryToActInDirection(facing) || tryToActInDirection(pickBestSlide(facing));
 			} else {
-				level = null;
-				player = null;
-				target = null;
-				tile = null;
-				ktg = null;
-				tile = null;
-				return;
+				moved = tryToActInDirection(new HxlPoint(facing.x, 0)) || tryToActInDirection(new HxlPoint(0, facing.y));
+			}
+						
+			isPlayerActing = moved;
+			if (moved) {
+				passTurn();
 			}
 		}
-		
-		passTurn();
-		
-		level = null;
-		player = null;
-		target = null;
-		tile = null;
-		ktg = null;
-		tile = null;
 	}
 	
 	

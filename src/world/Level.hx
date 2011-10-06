@@ -80,7 +80,6 @@ class Level extends HxlTilemap {
 		_pathMap.destroy();
 		_pathMap = null;
 		
-		targetTile = null;
 		dest = null;
 		
 		HxlGraphics.unfollow();
@@ -481,77 +480,66 @@ class Level extends HxlTilemap {
 		return Math.round(color);
 	}
 	
-	var targetTile:HxlPoint;
+	
+	private static var compasses = [["W", "A", "S", "D"], ["K", "H", "J", "L"], ["UP", "LEFT", "DOWN", "RIGHT"]];
+	
 	/**
 	 * checks the directional and wasd keys, returns custompoint+direction of keys pressed
 	 * @param	?fromCustomPoint if not null uses this as starting point, otherwise uses players tilePos.
 	 * @return starting position + direction, or just starting position if enter is pressed, or null if nothing is pressed
 	 */
 	public function getTargetAccordingToKeyPress(?fromCustomPoint:HxlPoint = null):HxlPoint {
-		var pos:HxlPoint;
-		if(fromCustomPoint == null)
-			pos = Registery.player.tilePos;
-		else
-			pos = fromCustomPoint;
+		var pos:HxlPoint = fromCustomPoint;
+		if (pos == null) pos = Registery.player.tilePos;
 		
-		if (targetTile == null)
-			targetTile = new HxlPoint(0, 0);
-		else {
-			targetTile.x = 0;
-			targetTile.y = 0;
+		var facing:HxlPoint = new HxlPoint(0, 0);
+		
+		for (compass in compasses) {
+			if (HxlGraphics.keys.pressed(compass[0])) facing.y = -1;
+			if (HxlGraphics.keys.pressed(compass[1])) facing.x = -1;
+			if (HxlGraphics.keys.pressed(compass[2])) facing.y = 1;
+			if (HxlGraphics.keys.pressed(compass[3])) facing.x = 1;
 		}
 		
-		if ( HxlGraphics.keys.LEFT || HxlGraphics.keys.A) {
-			if ( pos.x > 0) {
-				targetTile.x = -1;
-			}
-		} else if ( HxlGraphics.keys.RIGHT || HxlGraphics.keys.D) {
-			if ( pos.x < widthInTiles) {
-				targetTile.x = 1;
-			}
-		} else if ( HxlGraphics.keys.UP || HxlGraphics.keys.W) {
-			if ( pos.y > 0 ) {
-					targetTile.y = -1;
-			}
-		} else if ( HxlGraphics.keys.DOWN || HxlGraphics.keys.S) {
-			if ( pos.y < heightInTiles ) {
-					targetTile.y = 1;
-			}
-		} else if ( HxlGraphics.keys.ENTER || HxlGraphics.keys.NONUMLOCK_5)	{
-			return targetTile;
+		// now clip the request to the edge of the map (mostly for when this is used in targeting)
+		if (facing.y < 0 && pos.y <= 0) facing.y = 0;
+		if (facing.y > 0 && pos.y >= heightInTiles) facing.y = 0;
+		if (facing.x < 0 && pos.x <= 0) facing.x = 0;
+		if (facing.x > 0 && pos.x >= widthInTiles) facing.x = 0;
+		
+		if ( HxlGraphics.keys.ENTER || HxlGraphics.keys.NONUMLOCK_5) {
+			// we're returning [0, 0]
+			return facing;
 		}
 		
-		if (targetTile.x == 0 && targetTile.y == 0)
-			return null;
+		if (facing.x == 0 && facing.y == 0) return null;
 			
-		return targetTile;
+		return facing;
 	}
 	
-	public function getTargetAccordingToMousePosition(dx:Float, dy:Float):HxlPoint {
-		if (targetTile == null)
-			targetTile = new HxlPoint(0, 0);
-		else{
-			targetTile.x = 0;
-			targetTile.y = 0;
-		}
+	
+	private inline static function sgn(x:Float):Int {
+		return if (x < 0) -1 else if (x > 0) 1 else 0;
+	}
+	
+	public function getTargetAccordingToMousePosition():HxlPoint {
+		// if you don't like grabbing the player from the registry here, change it to an argument
+		var player = Registery.player;
+		var dx:Float = -.5 + (HxlGraphics.mouse.x - player.x) / Configuration.zoomedTileSize();
+		var dy:Float = -.5 + (HxlGraphics.mouse.y - player.y) / Configuration.zoomedTileSize();
 		
-		if (Math.abs(dx) > Math.abs(dy)){
-			if (dx < 0) {
-				targetTile.x = -1;
-			} else {
-				targetTile.x = 1;
-			}
+		var absdx:Float = Math.abs(dx);
+		var absdy:Float = Math.abs(dy);
+		
+		var give:Float = 0.65; // exactly .5 means that you have to point at yourself precisely to wait; higher values make it fuzzier
+		if (absdx < give && absdy < give) return new HxlPoint(0, 0);
+		
+		// here it would be nice to track more info about angle than this
+		if (absdx > absdy) {
+			return new HxlPoint(sgn(dx), 0);
 		} else {
-			if (dy < 0) {
-				targetTile.y = -1;
-			} else {
-				targetTile.y = 1;
-			}
+			return new HxlPoint(0, sgn(dy));
 		}
-		
-		if (targetTile.x == 0 && targetTile.y == 0)
-			return null;
-		return targetTile;
 	}
 	
 	public function tick(state:HxlState) { }
