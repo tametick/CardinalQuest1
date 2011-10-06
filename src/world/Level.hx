@@ -474,10 +474,7 @@ class Level extends HxlTilemap {
 		}
 		tile = null;
 	}
-	function colorTo(target:Dynamic,Speed:Float,ToColor:Float,onComplete:Dynamic) {
-		Actuate.update(target, Speed, {Color: HxlUtil.colorRGB(_color)[0]}, {Color: ToColor})
-				.onComplete(onComplete);
-	}
+
 	function normalizeColor(dist:Float, maxDist:Float, minColor:Int, maxColor:Int):Int {
 		var dimness = (maxDist-dist) / maxDist;
 		var color = minColor + (maxColor - minColor)*dimness;
