@@ -22,27 +22,22 @@ class CqFloatText extends HxlText {
 		calcFrame();
 		x -= _pixels.width / 2;
 		y -= _pixels.height / 2;
-		if (initDefaultTween)
+		if (initDefaultTween){
 			InitDefaultTween();
+		}
 	}
-	public function InitDefaultTween()
-	{
-		var self = this;
-		Actuate.tween(this, 0.8, {y: y - 20})
-			.ease(Cubic.easeOut)
-			.onComplete(onCompleteCallBack);
+	public function InitDefaultTween() {
+		Actuate.tween(this, 0.8, {y: y - 20}).ease(Cubic.easeOut).onComplete(onCompleteCallBack);
 	}
 	
 	function onCompleteCallBack():Void 
 	{
-		Actuate.update(onCompleteUpdate, 1.0, {Alpha: 1.0}, {Alpha: 0.0}).onComplete(onCompleteSecondCallBack);
+		Actuate.update(onCompleteUpdate, 1.0, [1.0], [0.0]).onComplete(onCompleteSecondCallBack);
 	}
-	function onCompleteUpdate(params:Dynamic)
-	{
-		alpha = params.Alpha;
+	function onCompleteUpdate(arg:Dynamic) {
+		alpha = cast(arg,Float);
 	}
-	function onCompleteSecondCallBack()
-	{
+	function onCompleteSecondCallBack()	{
 		destroy();
 	}
 	var onTweened:Void->Void;
@@ -55,11 +50,10 @@ class CqFloatText extends HxlText {
 	}
 	function onCompleteTweenCallBack()
 	{
-		Actuate.update(onCompleteFadeOutCallBack, 0.5, { Alpha: 1.0 }, { Alpha: 0.0 } ).onComplete(onFadedOutCallBack );
+		Actuate.update(onCompleteFadeOutCallBack, 0.5, [1.0], [0.0] ).onComplete(onFadedOutCallBack );
 	}
-	function onCompleteFadeOutCallBack(params:Dynamic)
-	{
-		alpha = params.Alpha;
+	function onCompleteFadeOutCallBack(params:Dynamic) {
+		alpha = cast(params,Float);
 	}
 	function onFadedOutCallBack() {
 		destroy();
