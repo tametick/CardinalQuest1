@@ -14,6 +14,7 @@ import com.eclecticdesignstudio.motion.actuators.SimpleActuator;
 import com.eclecticdesignstudio.motion.actuators.TransformActuator;
 import com.eclecticdesignstudio.motion.easing.Expo;
 import com.eclecticdesignstudio.motion.easing.IEasing;
+import com.eclecticdesignstudio.motion.easing.Linear;
 import flash.display.DisplayObject;
 import flash.events.Event;
 
@@ -22,7 +23,8 @@ class Actuate {
 	
 	
 	public static var defaultActuator:Class <GenericActuator> = SimpleActuator;
-	public static var defaultEase:IEasing = Expo.easeOut;
+	//public static var defaultEase:IEasing = Expo.easeOut;
+	public static var defaultEase:IEasing = Linear.easeNone;
 	private static var targetLibraries:ObjectHash <Array <GenericActuator>> = new ObjectHash <Array <GenericActuator>> ();
 	
 	
