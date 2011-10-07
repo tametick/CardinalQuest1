@@ -356,7 +356,6 @@ class CqLevel extends Level {
 				
 				GameUI.instance.addHealthBar(cast(mob, CqActor));
 				
-				mob.healthBar.setTween(false);
 				mob.healthBar.setTween(true);
 				mob.healthBar.visible = true;
 			}
