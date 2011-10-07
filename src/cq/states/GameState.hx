@@ -754,9 +754,7 @@ class GameState extends CqState {
 	}
 	private function startMovingBoss():Void {
 		Actuate.timer(1.8).onComplete(gotoWinState);
-		//Registery.level.updateFieldOfView(HxlGraphics.state, boss);
 		HxlGraphics.follow(boss);		
-		//HxlGraphics.follow(boss);
 		startedMoving = true;
 	}
 	private function doEndingAnimation():Void {
