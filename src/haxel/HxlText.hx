@@ -37,13 +37,17 @@ class HxlText extends HxlSprite {
 
   
   override public function destroy() {
+	if(_framePixels!=null)
 		_framePixels.dispose();
+	if(_pixels!=null)
 		_pixels.dispose();
+	
+	if(_bbb!=null)
 		_bbb.dispose();
 
-	  
-		super.destroy();
-		_tf = null;
+
+	super.destroy();
+	_tf = null;
   }
   
   /**
