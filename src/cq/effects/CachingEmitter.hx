@@ -19,10 +19,10 @@ import haxel.HxlUtil;
 import cq.CqGraphicKey;
 
 //TjD NME converted all UInt to Int
-
+class CachingEmitterBMPData extends BitmapData {}
 class CachingEmitter extends HxlEmitter {
 
-	static var effectCache:Array<Array<BitmapData>> = new Array<Array<BitmapData>>();
+	static var effectCache:Array<Array<CachingEmitterBMPData>> = new Array<Array<CachingEmitterBMPData>>();
 	static var cacheStatus:Array<Int> = new Array<Int>();//0-nobody filling it up, 1-somebody filling it up, 2-filled up
 	static var hs:Int = 100;//half size of frame bitmap
 	static var cacheIds:Hash<Int> = new Hash<Int>();
@@ -52,7 +52,7 @@ class CachingEmitter extends HxlEmitter {
 			for (i in cacheStatus.length...(cacheNum+1)) {
 				if (effectCache[cacheNum] == null) {
 					cacheStatus.push(0);
-					effectCache.push(new Array<BitmapData>());
+					effectCache.push(new Array<CachingEmitterBMPData>());
 				}
 			}
 		}
@@ -148,7 +148,7 @@ class CachingEmitter extends HxlEmitter {
 	}
 	
 	static var rect:Rectangle = new Rectangle();
-	static var alphaBitmapData:BitmapData = new BitmapData(30,30,true,0);
+	static var alphaBitmapData:CachingEmitterBMPData = new CachingEmitterBMPData(30,30,true,0);
 	static var dest:Point = new Point();
 	static var pt:Point = new Point();
 	override function updateMembers() {
@@ -163,7 +163,7 @@ class CachingEmitter extends HxlEmitter {
 		}else if (1 == usingCache) {
 			super.updateEmitter();
 			//draw particles to cache
-			var frame:BitmapData = new BitmapData(hs<<1,hs<<1,true,0);
+			var frame:CachingEmitterBMPData = new CachingEmitterBMPData(hs<<1,hs<<1,true,0);
 			var o:HxlSprite;
 			var l:Int = members.length;
 			for (i in 0...l) {

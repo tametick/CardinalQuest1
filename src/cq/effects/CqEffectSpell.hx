@@ -1,6 +1,5 @@
 package cq.effects;
 
-import flash.display.BitmapData;
 
 import haxel.HxlEmitter;
 import haxel.HxlGradient;
@@ -19,7 +18,7 @@ class CqEffectSpell extends CachingEmitter {
 			
 			//fixme - don't create new color arrays every time!
 			
-			var bmp:BitmapData = HxlGradient.RectData(12, 12, [color, color+0x222222], [0.8, 0.55], Math.PI/2, 12.0);
+			var bmp = HxlGradient.RectData(12, 12, [color, color+0x222222], [0.8, 0.55], Math.PI/2, 12.0);
 			GraphicCache.addBitmapData(bmp, CqGraphicKey.SpellEffectParticle(color));
 			bmp.dispose();
 			bmp = null;

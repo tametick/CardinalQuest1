@@ -1,5 +1,5 @@
 package cq.ui;
-import flash.display.BitmapData;
+
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 import haxel.HxlGraphics;

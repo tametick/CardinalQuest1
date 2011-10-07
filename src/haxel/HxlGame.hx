@@ -20,6 +20,7 @@ import flash.Lib;
 
 import haxel.HxlConsole;
 import haxel.HxlPause;
+import haxel.HxlGraphics;
 
 import com.eclecticdesignstudio.motion.Actuate;
 
@@ -29,7 +30,11 @@ import flash.text.GridFitType;
 import flash.ui.Mouse;
 import flash.utils.Timer;
 #end
-
+class HxlGameBMPData extends HxlGraphicsBMPData {
+	public function new(width : Int, height : Int, transparent : Bool = true, fillColor : UInt = 0xFFFFFFFF) {
+		super(width, height, transparent, fillColor);
+	}
+}
 class HxlGame extends Sprite {
 	/**
 	 * Sets 0, -, and + to control the global volume and P to pause.
@@ -339,12 +344,12 @@ class HxlGame extends Sprite {
 
 		_screen = new Sprite();
 		addChild(_screen);
-		var tmp:Bitmap = new Bitmap(new BitmapData(HxlGraphics.width, HxlGraphics.height, true, HxlState.bgColor));
+		var tmp = new Bitmap(new HxlGameBMPData(HxlGraphics.width, HxlGraphics.height, true, HxlState.bgColor));
 		tmp.x = 0;
 		tmp.y = 0;
 		tmp.scaleX = tmp.scaleY = _zoom;
 		_screen.addChild(tmp);
-		HxlGraphics.buffer = tmp.bitmapData;
+		HxlGraphics.buffer = cast(tmp.bitmapData,HxlGameBMPData);
 		tmp = null;
 
 		// Initialize console
@@ -365,7 +370,7 @@ class HxlGame extends Sprite {
 		_soundTray.visible = false;
 		_soundTray.scaleX = 2;
 		_soundTray.scaleY = 2;
-		tmp = new Bitmap(new BitmapData(80, 30, true, 0x7F000000));
+		tmp = new Bitmap(new HxlGameBMPData(80, 30, true, 0x7F000000));
 		_soundTray.x = (_gameXOffset+HxlGraphics.width/2)*_zoom-(tmp.width/2)*_soundTray.scaleX;
 		_soundTray.addChild(tmp);
 
@@ -391,7 +396,7 @@ class HxlGame extends Sprite {
 		var by:Int = 14;
 		_soundTrayBars = new Array();
 		for(i in 0...10) {
-			tmp = new Bitmap(new BitmapData(4,i+1,false,0xffffff));
+			tmp = new Bitmap(new HxlGameBMPData(4,i+1,false,0xffffff));
 			tmp.x = bx;
 			tmp.y = by;
 			_soundTray.addChild(tmp);

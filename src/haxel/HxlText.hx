@@ -5,11 +5,17 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 
+import haxel.HxlSprite;
+
 #if flash9
 import flash.text.AntiAliasType;
 import flash.text.GridFitType;
 #end
-
+class HxlTextBMPData extends HxlSpriteBMPData {
+	public function new(width : Int, height : Int, transparent : Bool = true, fillColor : UInt = 0xFFFFFFFF) {
+		super(width, height, transparent, fillColor);
+	}
+}
 /**
  * Extends <code>HxlSprite</code> to support rendering text.
  * Can tint, fade, rotate and scale just like a sprite.
@@ -295,7 +301,7 @@ class HxlText extends HxlSprite {
       #end
       height += 4; //account for 2px gutter on top and bottom
       _pixels = new BitmapData(Math.floor(width),Math.floor(height),true,0);
-      _bbb = new BitmapData(Math.floor(width),Math.floor(height),true,0);
+      _bbb = new HxlTextBMPData(Math.floor(width),Math.floor(height),true,0);
       frameHeight = Math.floor(height);
       _tf.height = height*1.2;
       _flashRect.x = 0;

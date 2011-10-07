@@ -12,7 +12,7 @@ import flash.system.System;
 import flash.text.AntiAliasType;
 import flash.text.GridFitType;
 #end
-
+class HxlConsoleBMPData extends BitmapData {}
 class HxlConsole extends Sprite {
 
 	public var mtrUpdate:HxlMonitor;
@@ -55,7 +55,7 @@ class HxlConsole extends Sprite {
 		_byt = _by - HxlGraphics.height*Zoom;
 		_YT = _Y = y = _byt;
 
-		var tmp:Bitmap = new Bitmap(new BitmapData(HxlGraphics.width*Zoom, HxlGraphics.height*Zoom, true, 0xAF000000));
+		var tmp:Bitmap = new Bitmap(new HxlConsoleBMPData(HxlGraphics.width*Zoom, HxlGraphics.height*Zoom, true, 0xAF000000));
 		addChild(tmp);
 
 		mtrUpdate = new HxlMonitor(8);

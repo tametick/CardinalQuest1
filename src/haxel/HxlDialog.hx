@@ -6,7 +6,7 @@ import flash.display.BitmapData;
 import flash.display.Shape;
 
 import haxel.HxlObject;
-
+class HxlDialogBMPData extends BitmapData {}
 class HxlDialog extends HxlGroup {
 
 	var background:HxlSprite;
@@ -67,7 +67,7 @@ class HxlDialog extends HxlGroup {
 			target.graphics.beginFill(Color);
 			target.graphics.drawRoundRect(0, 0, width, height, CornerRadius, CornerRadius);
 			target.graphics.endFill();
-			var bmp:BitmapData = new BitmapData(Std.int(width), Std.int(height), true, 0x0);
+			var bmp:HxlDialogBMPData = new HxlDialogBMPData(Std.int(width), Std.int(height), true, 0x0);
 			bmp.draw(target);
 			background.width = width;
 			background.height = height;
@@ -96,7 +96,7 @@ class HxlDialog extends HxlGroup {
 			background.width = width;
 			background.height = height;
 			var source:BitmapData = Type.createInstance(Graphic, new Array()).bitmapData;
-			var targetBmp:BitmapData = new BitmapData(Std.int(width), Std.int(height), true, 0x0);
+			var targetBmp:HxlDialogBMPData = new HxlDialogBMPData(Std.int(width), Std.int(height), true, 0x0);
 			var targetShape:Shape = new Shape();
 			targetShape.graphics.beginBitmapFill(source, null, true);
 			// drawRoundRect below if using corner radius

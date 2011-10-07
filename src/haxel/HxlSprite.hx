@@ -14,7 +14,7 @@ import flash.Lib;
 #if flash9
 import flash.display.BlendMode;
 #end
-
+class HxlSpriteBMPData extends BitmapData {}
 class HxlSprite extends HxlObject {
 
 	public var alpha(getAlpha, setAlpha) : Float;
@@ -105,7 +105,7 @@ class HxlSprite extends HxlObject {
 	var _color:Int;
 	var _ct:ColorTransform;
 	var _mtx:Matrix;
-	var _bbb:BitmapData;
+	var _bbb:HxlSpriteBMPData;
 	public var alphaVelocity:Float;
 	public var scaleVelocity:HxlPoint;
 
@@ -276,7 +276,7 @@ class HxlSprite extends HxlObject {
 		if (Frame >= 0) {
 			//Using just a segment of the graphic - find the right bit here
 			var full:BitmapData = brush;
-			brush = new BitmapData(full.height,full.height);
+			brush = new HxlSpriteBMPData(full.height,full.height);
 			var rx:Int = Frame*brush.width;
 			var ry:Int = 0;
 			var fw:Int = full.width;
@@ -572,10 +572,10 @@ class HxlSprite extends HxlObject {
 		_flashRect2.width = _pixels.width;
 		_flashRect2.height = _pixels.height;
 		if ((_framePixels == null) || (_framePixels.width != width) || (_framePixels.height != height)) {
-			_framePixels = new BitmapData(Math.floor(width), Math.floor(height), true, 0xff000000);
+			_framePixels = new HxlSpriteBMPData(Math.floor(width), Math.floor(height), true, 0xff000000);
 		}
 		if ((_bbb == null) || (_bbb.width != width) || (_bbb.height != height)) {
-			_bbb = new BitmapData(Math.floor(width), Math.floor(height));
+			_bbb = new HxlSpriteBMPData(Math.floor(width), Math.floor(height));
 		}
 		origin.x = frameWidth/2;
 		origin.y = frameHeight/2;

@@ -7,6 +7,8 @@ import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Shape;
 
+class HxlUIBarBMPData extends BitmapData {}
+
 class HxlUIBar extends HxlDialog {
 
 	var frame:HxlSprite;
@@ -111,7 +113,7 @@ class HxlUIBar extends HxlDialog {
 			target.graphics.beginFill(Color);
 			target.graphics.drawRoundRect(0, 0, iWidth, iHeight, CornerRadius, CornerRadius);
 			target.graphics.endFill();
-			var bmp:BitmapData = new BitmapData(Std.int(iWidth), Std.int(iHeight), true, 0x0);
+			var bmp:HxlUIBarBMPData = new HxlUIBarBMPData(Std.int(iWidth), Std.int(iHeight), true, 0x0);
 			bmp.draw(target);
 			target = null;
 			TargetSprite.pixels = bmp;

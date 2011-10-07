@@ -8,9 +8,11 @@ import flash.display.SpreadMethod;
 import flash.display.InterpolationMethod;
 import flash.geom.Matrix;
 
+class HxlGradientBMPData extends BitmapData {}
+
 class HxlGradient {
 
-	static public function RectData(Width:Int, Height:Int, Colors:Array<Int>, ?Ratios:Array<Int>=null, ?Alphas:Array<Float>=null, ?Rotation:Float=0.0, ?CornerRadius:Float=0.0):BitmapData {
+	static public function RectData(Width:Int, Height:Int, Colors:Array<Int>, ?Ratios:Array<Int>=null, ?Alphas:Array<Float>=null, ?Rotation:Float=0.0, ?CornerRadius:Float=0.0):HxlGradientBMPData {
 		var type = GradientType.LINEAR; 
 		var colors:Array<Int> = Colors; 
 		var alphas:Array<Float>;
@@ -57,10 +59,10 @@ class HxlGradient {
 			square.graphics.drawRoundRect(0, 0, Width, Height, CornerRadius, CornerRadius);
 		}
 
-		var bmp:Bitmap = new Bitmap(new BitmapData(Width, Height, true, 0x0));
+		var bmp:Bitmap = new Bitmap(new HxlGradientBMPData(Width, Height, true, 0x0));
 		bmp.bitmapData.draw(square);
 
-		return bmp.bitmapData;
+		return cast(bmp.bitmapData,HxlGradientBMPData);
 
 	}
 
@@ -70,7 +72,7 @@ class HxlGradient {
 		return spr;
 	}
 
-	static public function CircleData(Radius:Float, Colors:Array<Int>, ?Ratios:Array<Int>=null, ?Alphas:Array<Float>=null, ?Rotation:Float=0.0):BitmapData {
+	static public function CircleData(Radius:Float, Colors:Array<Int>, ?Ratios:Array<Int>=null, ?Alphas:Array<Float>=null, ?Rotation:Float=0.0):HxlGradientBMPData {
 		var type = GradientType.RADIAL; 
 		var colors:Array<Int> = Colors; 
 		var alphas:Array<Float>;
@@ -113,10 +115,10 @@ class HxlGradient {
 		square.graphics.beginGradientFill(type, colors, alphas, ratios, matrix, spreadMethod, interp, focalPtRatio); 
 		square.graphics.drawCircle(boxWidth/2, boxHeight/2, Radius);
 
-		var bmp:Bitmap = new Bitmap(new BitmapData(boxWidth, boxHeight, true, 0x0));
+		var bmp:Bitmap = new Bitmap(new HxlGradientBMPData(boxWidth, boxHeight, true, 0x0));
 		bmp.bitmapData.draw(square);
 
-		return bmp.bitmapData;
+		return cast(bmp.bitmapData,HxlGradientBMPData);
 
 	}
 

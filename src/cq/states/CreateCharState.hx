@@ -27,7 +27,7 @@ import haxel.HxlGraphics;
 import haxel.HxlSprite;
 import haxel.HxlState;
 import haxel.HxlText;
-
+class CreateCharStateBMPData extends BitmapData {}
 class CreateCharState extends CqState {
 	
 	static var class_buttons_y:Int = 135;
@@ -167,7 +167,7 @@ class CreateCharState extends CqState {
 			target.graphics.beginFill(0x00000000, 0.0);
 			target.graphics.drawRoundRect(2.5, 2.5, 125, 125, 15.0, 15.0);
 			target.graphics.endFill();
-			var bmp:BitmapData = new BitmapData(130, 130, true, 0x0);
+			var bmp:CreateCharStateBMPData = new CreateCharStateBMPData(130, 130, true, 0x0);
 			bmp.draw(target);
 			selectBox.width = selectBox.height = 130;
 			selectBox.pixels = bmp;

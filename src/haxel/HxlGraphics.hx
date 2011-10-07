@@ -18,7 +18,7 @@ import haxel.HxlFade;
 import haxel.HxlObject;
 
 import data.MusicManager;
-
+class HxlGraphicsBMPData extends BitmapData {}
 class HxlGraphics {
 
 	/**
@@ -73,7 +73,7 @@ class HxlGraphics {
 	/**
 	 * References the active graphics buffer.
 	 **/
-	public static var buffer:BitmapData;
+	public static var buffer:HxlGraphicsBMPData;
 	/**
 	 * Tells the camera to follow this <code>FlxCore</code> object around.
 	 */

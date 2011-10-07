@@ -26,7 +26,7 @@ import cq.ui.CqPotionButton;
 
 // tmp
 import cq.ui.inventory.CqInventoryDialog;
-
+class CqInventoryItemBMPData extends BitmapData { }
 class CqInventoryItem extends HxlSprite {
 	public static var backgroundKey:CqGraphicKey;
 	public static var backgroundSelectedKey:CqGraphicKey;
@@ -38,7 +38,7 @@ class CqInventoryItem extends HxlSprite {
 	public static var spellSprite:HxlSprite;
 		
 	var background:BitmapData;
-	var icon:BitmapData;
+	var icon:CqInventoryItemBMPData;
 	public var _dlg:CqInventoryDialog;
 	public var inDialog:HxlDialog;
 	var idleZIndex:Int;
@@ -58,7 +58,7 @@ class CqInventoryItem extends HxlSprite {
 	
 	var selected:Bool;
 	var isGlowing:Bool;
-	var glowSprite:BitmapData;
+	var glowSprite:CqInventoryItemBMPData;
 	var glowRect:Rectangle;
 
 	public function new(Dialog:CqInventoryDialog, ?X:Float=0, ?Y:Float=0) {
@@ -148,7 +148,7 @@ class CqInventoryItem extends HxlSprite {
 	}
 	
 	public function customGlow(color:Int) {
-		var tmp:BitmapData = new BitmapData(48, 48, true, 0x0);
+		var tmp:CqInventoryItemBMPData = new CqInventoryItemBMPData(48, 48, true, 0x0);
 		tmp.copyPixels(getFramePixels(), new Rectangle(0, 0, 48, 48), new Point(0, 0), null, null, true);
 		var glow:GlowFilter = new GlowFilter(color, 0.9, 16.0, 16.0, 1.6, 1, false, false);
 		tmp.applyFilter(tmp, glowRect, new Point(0, 0), glow);
@@ -185,11 +185,11 @@ class CqInventoryItem extends HxlSprite {
 	}
 
 	public function setIcon(Icon:BitmapData) {
-		icon = new BitmapData(Icon.width, Icon.height, true, 0x0);
+		icon = new CqInventoryItemBMPData(Icon.width, Icon.height, true, 0x0);
 		icon.copyPixels(Icon, new Rectangle(0, 0, Icon.width, Icon.height), new Point(0,0), null, null, true);
 		var X:Int = Std.int((width / 2) - (icon.width / 2));
 		var Y:Int = Std.int((height / 2) - (icon.height / 2));
-		var temp:BitmapData = new BitmapData(background.width, background.height, true, 0x0);
+		var temp:CqInventoryItemBMPData = new CqInventoryItemBMPData(background.width, background.height, true, 0x0);
 		temp.copyPixels(background, new Rectangle(0, 0, background.width, background.height), new Point(0, 0), null, null, true);
 		temp.copyPixels(icon, new Rectangle(0, 0, icon.width, icon.height), new Point(X, Y), null, null, true);
 		if ( item.stackSize > 1 ) {

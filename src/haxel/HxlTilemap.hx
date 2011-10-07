@@ -7,6 +7,7 @@ import flash.geom.Rectangle;
 import flash.geom.Point;
 import flash.geom.ColorTransform;
 
+class HxlTilemapBMPData extends BitmapData {}
 /**
  * This is a traditional tilemap display and collision class.
  * It takes a string of comma-separated numbers and then associates
@@ -52,7 +53,7 @@ class HxlTilemap extends HxlObject {
 	public var tileClass:Class<HxlTile>;
 
 	
-	private var tileBMPs:Array<BitmapData>;
+	private var tileBMPs:Array<HxlTilemapBMPData>;
 	//private var tilesByCT:Hash<BitmapData>;
 	/**
 	 * The tilemap constructor just initializes some basic variables.
@@ -77,7 +78,7 @@ class HxlTilemap extends HxlObject {
 			tmpRect = new Rectangle(0, 0, _tileWidth, _tileHeight);
 		
 		if (tmpBitmap == null)
-			tmpBitmap = new BitmapData(_tileWidth, _tileHeight, true, 0x00ffffff);
+			tmpBitmap = new HxlTilemapBMPData(_tileWidth, _tileHeight, true, 0x00ffffff);
 	}
 
 	/**
@@ -144,7 +145,7 @@ class HxlTilemap extends HxlObject {
 			_screenCols = widthInTiles;
 		}
 		//create splitted tile bmp array
-		tileBMPs = new Array<BitmapData>();
+		tileBMPs = new Array<HxlTilemapBMPData>();
 		_flashPoint.x = 0; 
 		_flashPoint.y = 0; 
 		_flashRect.width = _tileWidth;
@@ -158,7 +159,7 @@ class HxlTilemap extends HxlObject {
 		{
 			_flashRect.x = tx;
 			_flashRect.y = ty;
-			var tileBMP:BitmapData = new BitmapData(_tileWidth, _tileHeight);
+			var tileBMP:HxlTilemapBMPData = new HxlTilemapBMPData(_tileWidth, _tileHeight);
 			tileBMP.copyPixels(_pixels, _flashRect, _flashPoint);
 			tileBMPs.push(tileBMP);
 			tx+=_tileWidth;

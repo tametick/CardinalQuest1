@@ -74,6 +74,8 @@ import haxel.HxlTextContainer;
 import haxel.HxlUIBar;
 import haxel.GraphicCache;
 
+class GameUIBMPData extends BitmapData {} 
+
 class GameUI extends HxlDialog {
 
 	// Main UI containers
@@ -644,7 +646,7 @@ class GameUI extends HxlDialog {
 			GraphicCache.addBitmapData(HxlGradient.RectData(size, size, [0xFFCC00, 0xFFFF99], null, [0.5,0.5],Math.PI/2, 5.0), cellBgHighlightKey);
 		}
 
-		var tmp:BitmapData = new BitmapData(79, 79, true, 0x0);
+		var tmp:GameUIBMPData = new GameUIBMPData(79, 79, true, 0x0);
 		tmp.copyPixels(GraphicCache.getBitmap(CqGraphicKey.InventoryCellBG), new Rectangle(0, 0, size, size), new Point(19, 19), null, null, true);
 		var glow:GlowFilter = new GlowFilter(0x00ff00, 0.9, 15.0, 15.0, 1.6, 1, false, true);
 		tmp.applyFilter(tmp, new Rectangle(0, 0, 79, 79), new Point(0, 0), glow);
@@ -969,7 +971,7 @@ class GameUI extends HxlDialog {
 		if (GraphicCache.checkBitmapCache(CqGraphicKey.xball(color))) {
 			ball.loadCachedGraphic(CqGraphicKey.xball(color));
 		} else {
-			var tmp:BitmapData = new BitmapData(12, 17, true, 0x0);
+			var tmp:GameUIBMPData = new GameUIBMPData(12, 17, true, 0x0);
 			var s:Shape = new Shape();
 			var g:Graphics = s.graphics;
 			g.beginFill(color, 0.7);

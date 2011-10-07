@@ -26,6 +26,8 @@ import flash.filters.GlowFilter;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
+class CqItemBMPData extends BitmapData{}
+
 class CqSpecialEffectValue {
 	public var name:String;
 	public var value:Dynamic;
@@ -351,7 +353,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 
 	var isGlowing:Bool;
 	var glowSpriteKey:CqGraphicKey;
-	var glowSprite:BitmapData;
+	var glowSprite:CqItemBMPData;
 	var glowRect:Rectangle;
 	
 	public var isSuperb:Bool;
@@ -405,7 +407,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 /*		if ( GraphicCache.checkBitmapCache(glowSpriteKey) ) {
 			glowSprite = GraphicCache.getBitmap(glowSpriteKey);
 		} else {*/
-			var tmp:BitmapData = new BitmapData(48, 48, true, 0x0);
+			var tmp:CqItemBMPData = new CqItemBMPData(48, 48, true, 0x0);
 			tmp.copyPixels(getFramePixels(), new Rectangle(0, 0, 32, 32), new Point(8, 8), null, null, true);
 			var glow:GlowFilter = new GlowFilter(0xffea00, 0.9, 16.0, 16.0, 1.6, 1, false, false);
 			tmp.applyFilter(tmp, glowRect, new Point(0, 0), glow);
@@ -416,7 +418,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 		//}
 	}
 	public function customGlow(color:Int) {
-		var tmp:BitmapData = new BitmapData(48, 48, true, 0x0);
+		var tmp:CqItemBMPData = new CqItemBMPData(48, 48, true, 0x0);
 		tmp.copyPixels(getFramePixels(), new Rectangle(0, 0, 32, 32), new Point(8, 8), null, null, true);
 		var glow:GlowFilter = new GlowFilter(color, 0.9, 16.0, 16.0, 1.6, 1, false, false);
 		tmp.applyFilter(tmp, glowRect, new Point(0, 0), glow);
