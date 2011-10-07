@@ -224,7 +224,7 @@ class CreateCharState extends CqState {
 		if (!shownIntro) {
 			cursor.visible	= false;
 			scroller = new CqTextScroller(IntroScreen, 1);
-			var introText:String = "The dread minotaur, Asterion, fell upon the peaceful town of Hallemot late one balmy night.  The few townsfolk he did not kill, he made his slaves.  Their misery is his delight.\n\nYears have passed.  Deep in his underground den, he and his minions exult in the spoils of their wicked deeds.  They revel in human suffering.\n\nYou fled when you were young.  You grew strong.  The time has come to rid the land of his dominion.";
+			var introText:String = "The dread minotaur Asterion fell upon the peaceful town of Hallemot late one balmy night.  The few townsfolk he did not kill, he made his slaves.  Their misery is his delight.\n\nYears have passed.  Deep in his underground den, he and his minions exult in the spoils of their wicked deeds.  They revel in human suffering.\n\nYou fled when you were young.  You grew strong.  The time has come to rid the land of his dominion.";
 			//scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,30,0x000000,0x804040);
 			scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,28,0xFFCD55,0x2E170F);
 			//scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,28,0x443322,0x776633);

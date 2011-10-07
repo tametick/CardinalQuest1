@@ -661,12 +661,14 @@ class GameState extends CqState {
 			return;
 		}
 		
+		var isMouseControl:Bool;
 		var facing:HxlPoint, tile:CqTile;
 		var keyFacing:HxlPoint = level.getTargetAccordingToKeyPress();
 		
 		if (keyFacing != null ) {
 			facing = keyFacing;
 			lastMouse = false; //for targeting
+			isMouseControl = false;
 		} else {
 			if (!HxlGraphics.mouse.pressed()) {
 				isPlayerActing = false;
@@ -674,6 +676,7 @@ class GameState extends CqState {
 			}
 			
 			facing = level.getTargetAccordingToMousePosition();
+			isMouseControl = true;
 		}
 		
 		if (facing == null) {
@@ -714,12 +717,16 @@ class GameState extends CqState {
 			// (this is pretty ok sliding -- there's still room to improve it by considering previous motion)
 			var moved:Bool = false;
 			if (facing.x == 0 || facing.y == 0) {
-				moved = tryToActInDirection(facing) || tryToActInDirection(pickBestSlide(facing));
+				if (isMouseControl) {
+					moved = tryToActInDirection(facing) || tryToActInDirection(level.getTargetAccordingToMousePosition(true));
+				} else {
+					moved = tryToActInDirection(facing) || tryToActInDirection(pickBestSlide(facing));
+				}
 			} else {
-				// we need a way to indicate whether facing.x or facing.y should be tried first
+				// we need a way to indicate whether facing.x or facing.y should be tried first (maybe something like what the mouse case does)
 				moved = tryToActInDirection(new HxlPoint(facing.x, 0)) || tryToActInDirection(new HxlPoint(0, facing.y));
 			}
-						
+			
 			isPlayerActing = moved;
 			if (moved) {
 				passTurn();

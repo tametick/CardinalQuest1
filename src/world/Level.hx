@@ -443,8 +443,21 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 						
 						for (loot in Ttile.loots)
 							cast(loot,HxlSprite).visible = true;
-						for (actor in Ttile.actors)
-							cast(actor,HxlSprite).visible = true;
+						for (actor in Ttile.actors) {
+							cast(actor, HxlSprite).visible = true;
+							
+							var asmob = cast(actor, CqMob);
+							if (asmob != null && asmob.xpValue > 0) {
+								// this is a monster and it wasn't spawned to keep you moving,
+								// so deduct 30 ticks from the counter for seeing it each turn.
+								// in practice, this should mean you won't ever see extra spawns
+								// while in the presence of a real monster unless you sit around
+								// for a long long time.
+								
+								ticksSinceNewDiscovery -= 30;
+								if (ticksSinceNewDiscovery < 0) ticksSinceNewDiscovery = 0;
+							}
+						}
 						Ttile.colorTo(normColor, tweenSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
 						for (decoration in Ttile.decorations){
@@ -521,7 +534,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		return if (x < 0) -1 else if (x > 0) 1 else 0;
 	}
 	
-	public function getTargetAccordingToMousePosition():HxlPoint {
+	public function getTargetAccordingToMousePosition(?secondChoice:Bool = false):HxlPoint {
 		// if you don't like grabbing the player from the registry here, change it to an argument
 		var player = Registery.player;
 		var dx:Float = -.5 + (HxlGraphics.mouse.x - player.x) / Configuration.zoomedTileSize();
@@ -534,7 +547,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		if (absdx < give && absdy < give) return new HxlPoint(0, 0);
 		
 		// here it would be nice to track more info about angle than this
-		if (absdx > absdy) {
+		if ((absdx > absdy && !secondChoice) || (absdx < absdy && secondChoice)) {
 			return new HxlPoint(sgn(dx), 0);
 		} else {
 			return new HxlPoint(0, sgn(dy));
