@@ -23,6 +23,7 @@ import haxel.HxlState;
 import haxel.HxlUtil;
 import haxel.HxlGraphics;
 import haxel.HxlLog;
+import haxel.HxlTilemap;
 
 import data.Registery;
 import data.Resources;
@@ -338,7 +339,7 @@ class CqLevel extends Level {
 				var y:Int = Std.int(playerPosition.y + Math.random() * 11 - 5);
 				var tile:CqTile = getTile(x, y);
 				
-				if (tile != null && tile.visible && !isBlockingMovement(x, y, true)) {
+				if (tile != null && tile.visibility == Visibility.IN_SIGHT && !isBlockingMovement(x, y, true)) {
 					freePosition = new HxlPoint(x, y);
 					break;
 				}
