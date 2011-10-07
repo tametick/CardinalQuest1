@@ -1376,7 +1376,8 @@ class CqMob extends CqActor, implements Mob {
 		Actuate.update(deathEffectCallback, 0.5, [ 1.0], [0.0]).onComplete(deactEffectOncompleteCallback);
 	}
 	function deathEffectCallback(params:Dynamic) {
-		alpha = cast(params, Float);
+		if(params!=null)
+			alpha = cast(params, Float);
 	}
 	function deactEffectOncompleteCallback() {
 		HxlGraphics.state.remove(this);

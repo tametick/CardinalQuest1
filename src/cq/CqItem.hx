@@ -474,9 +474,12 @@ class CqItem extends GameObjectImpl, implements Loot {
 		Actuate.update(pickupTweenUpdate, 1.0, [x, y, 1.0], [x,y-48, 0.0]).onComplete(pickupTweenOnComplete).ease(Cubic.easeOut); 
 	}
 	function pickupTweenUpdate(arg0:Dynamic,arg1:Dynamic,arg2:Dynamic) {
-			x = Math.round(cast(arg0,Float));
-			y = Math.round(cast(arg1,Float));
-			alpha = cast(arg2,Float);
+			if (arg0 != null)
+				x = Math.round(cast(arg0,Float));
+			if (arg1 != null)
+				y = Math.round(cast(arg1,Float));
+			if (arg2 != null)
+				alpha = cast(arg2,Float);
 	}
 	function pickupTweenOnComplete() {
 			x = oldX;

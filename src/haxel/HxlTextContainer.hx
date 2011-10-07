@@ -140,7 +140,8 @@ class HxlTextContainer extends HxlDialog {
 		}
 	}
 	function scrollTweenUpdate(params:Dynamic) {
-		line.alpha = cast(params,Float);
+		if (params!= null)
+			line.alpha = cast(params,Float);
 	}
 	function updateLayout() {
 		if ( !reverseOrder  ) {

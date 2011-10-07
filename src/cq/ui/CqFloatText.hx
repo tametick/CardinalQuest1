@@ -35,7 +35,8 @@ class CqFloatText extends HxlText {
 		Actuate.update(onCompleteUpdate, 1.0, [1.0], [0.0]).onComplete(onCompleteSecondCallBack);
 	}
 	function onCompleteUpdate(arg:Dynamic) {
-		alpha = cast(arg,Float);
+		if (arg!= null)
+			alpha = cast(arg,Float);
 	}
 	function onCompleteSecondCallBack()	{
 		destroy();
