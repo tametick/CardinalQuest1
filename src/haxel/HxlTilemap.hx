@@ -7,6 +7,8 @@ import flash.geom.Rectangle;
 import flash.geom.Point;
 import flash.geom.ColorTransform;
 
+import haxel.GraphicCache;
+
 class HxlTilemapBMPData extends BitmapData {}
 /**
  * This is a traditional tilemap display and collision class.
@@ -38,7 +40,7 @@ class HxlTilemap extends HxlObject {
 	 */
 	var _flashRect:Rectangle;
 	
-	var _pixels:BitmapData;
+	var _pixels:GraphicCacheBMPData;
 	var _tileWidth:Int;
 	var _tileHeight:Int;
 	var _screenRows:Int;
@@ -54,7 +56,7 @@ class HxlTilemap extends HxlObject {
 
 	
 	private var tileBMPs:Array<HxlTilemapBMPData>;
-	//private var tilesByCT:Hash<BitmapData>;
+
 	/**
 	 * The tilemap constructor just initializes some basic variables.
 	 */
@@ -154,7 +156,6 @@ class HxlTilemap extends HxlObject {
 		var ty:Int = 0;
 		var tx:Int = 0;
 
-		//tilesByCT = new Hash<BitmapData>();
 		while(ty/_tileHeight < _screenRows)
 		{
 			_flashRect.x = tx;
@@ -255,49 +256,6 @@ class HxlTilemap extends HxlObject {
 
 		tile = null;
 	}
-   
-
-    //Stolen from http://haxe.org/forum/thread/665
-    /*
-    override public function render():Void
-    {
-        //NOTE: While this will only draw the tiles that are actually on screen, it will ALWAYS draw one screen's worth of tiles
-        super.render();
-        getScreenXY(_point);
-        var tx:Int = Math.floor(-_point.x/_tileWidth);
-        var ty:Int = Math.floor(-_point.y/_tileHeight);
-        if(tx < 0) tx = 0;
-        if(tx > widthInTiles-_screenCols) tx = widthInTiles-_screenCols;
-        if(ty < 0) ty = 0;
-        if(ty > heightInTiles-_screenRows) ty = heightInTiles-_screenRows;
-        var ri:Int = ty*widthInTiles+tx;
-        _point.x += tx*_tileWidth;
-        _point.y += ty*_tileHeight;
-        var opx:Int = Std.int(_point.x);
-        var c:Int;
-        var cri:Int;
-        for(r in 0..._screenRows)
-        {
-            cri = ri;
-            for(c in 0..._screenCols)
-            {
-                if(_rects[cri] != null)
-                FlxG.buffer.copyPixels(_pixels,_rects[cri],_point,null,null,true);
-                cri++;
-                _point.x += _tileWidth;
-            }
-            ri += widthInTiles;
-            _point.x = opx;
-            _point.y += _tileHeight;
-        }
-    }    
-    */
-/*
-	public function getTileBitmap(X:Int, Y:Int):BitmapData {
-		var tileBitmap:BitmapData = _pixels;
-		var tile:HxlTile = _tiles[Y][X];
-		return (tilesByCT.get(  ((tile.dataNum-startingIndex) +"_" + tile._ct)));
-	}*/
 
 	/**
 	 * Returns the tile which exists at the specified coordinate.

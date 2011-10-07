@@ -8,7 +8,9 @@ import flash.display.SpreadMethod;
 import flash.display.InterpolationMethod;
 import flash.geom.Matrix;
 
-class HxlGradientBMPData extends BitmapData {}
+import haxel.GraphicCache;
+
+class HxlGradientBMPData extends GraphicCacheBMPData {}
 
 class HxlGradient {
 

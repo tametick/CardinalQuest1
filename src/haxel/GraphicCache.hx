@@ -5,21 +5,21 @@ import flash.geom.Matrix;
 import flash.Lib;
 import flash.system.System;
 
+class GraphicCacheBMPData extends BitmapData {}
 /**
  * a container for graphics, moved out from HxlGraphics.
  */
 
-class GraphicCache 
-{
+class GraphicCache {
 	/**
 	 * Internal storage system to prevent graphics from being used repeatedly in memory.
 	 */
-	static var cache:Hash<BitmapData> = new Hash<BitmapData>();
+	static var cache:Hash<GraphicCacheBMPData> = new Hash<GraphicCacheBMPData>();
 	/**
-	 * Returns a BitmapData object for the cached graphic matching the supplied key.
+	 * Returns a GraphicCacheBMPData object for the cached graphic matching the supplied key.
 	 * If a matching bitmap is not found, returns a 20x20 pixel red square.
 	 **/
-	public static function getBitmap(Key:Dynamic):BitmapData {
+	public static function getBitmap(Key:Dynamic):GraphicCacheBMPData {
 		var keyStr:String = HxlUtil.enumToString( Key );
 		if ( Key == null || !checkBitmapCacheStr(keyStr) ) {
 			return createBitmap(20, 20, 0xff0000); 
@@ -33,9 +33,9 @@ class GraphicCache
 	 * @param	Graphic		The image file that you want to load.
 	 * @param	Reverse		Whether to generate a flipped version.
 	 * 
-	 * @return	The <code>BitmapData</code> we just created.
+	 * @return	The <code>GraphicCacheBMPData</code> we just created.
 	 */
-	public static function addBitmap(Graphic:Class<Bitmap>,?Reverse:Bool=false, ?Unique:Bool=false, ?Key:Dynamic=null, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):BitmapData {
+	public static function addBitmap(Graphic:Class<Bitmap>,?Reverse:Bool=false, ?Unique:Bool=false, ?Key:Dynamic=null, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):GraphicCacheBMPData {
 		var needReverse:Bool = false;//TODO this should actually do the reversing
 		var key:String = "";
 		if ( Key == null ) {
@@ -56,26 +56,32 @@ class GraphicCache
 
 		//If there is no data for this key, generate the requested graphic
 		if (!checkBitmapCache(Key)) {
-			var bd:BitmapData = Type.createInstance(Graphic, new Array()).bitmapData;
-			if ( ScaleX != 1.0 || ScaleY != 1.0 ) {
-				var newPixels:BitmapData = new BitmapData(Std.int(bd.width * ScaleX), Std.int(bd.height * ScaleY), true, 0x00000000);
-				var mtx:Matrix = new Matrix();
-				mtx.scale(ScaleX, ScaleY);
-				newPixels.draw(bd, mtx);
-				bd = newPixels;
-			}
-			cache.set(key, bd);
+			var bd = Type.createInstance(Graphic, new Array()).bitmapData;
 
-			if (Reverse) needReverse = true;
+			var newPixels:GraphicCacheBMPData = new GraphicCacheBMPData(Std.int(bd.width * ScaleX), Std.int(bd.height * ScaleY), true, 0x00000000);
+			var mtx:Matrix = new Matrix();
+			if ( ScaleX != 1.0 || ScaleY != 1.0 ) {
+				mtx.scale(ScaleX, ScaleY);
+			}
+			newPixels.draw(bd, mtx);
+
+			cache.set(key, newPixels);
+
+			if (Reverse) 
+				needReverse = true;
+				
+			bd.dispose();
+			bd = null;
+			newPixels = null;
 		}
 
-		var pixels:BitmapData = cache.get(key);
+		var pixels:GraphicCacheBMPData = cache.get(key);
 
 		if (!needReverse && Reverse && (pixels.width == Type.createInstance(Graphic, new Array()).bitmapData.width)) {
 			needReverse = true;
 		}
 		if (needReverse) {
-			var newPixels:BitmapData = new BitmapData(pixels.width<<1,pixels.height,true,0x00000000);
+			var newPixels:GraphicCacheBMPData = new GraphicCacheBMPData(pixels.width<<1,pixels.height,true,0x00000000);
 			newPixels.draw(pixels);
 			var mtx:Matrix = new Matrix();
 			mtx.scale(-1,1);
@@ -109,7 +115,7 @@ class GraphicCache
 		flash.Lib.trace(System.totalMemory/1024);*/
 	}
 	
-	public static function addBitmapData(Graphic:BitmapData, ?Key:Dynamic=null, ?Force:Bool=false):BitmapData {
+	public static function addBitmapData(Graphic:GraphicCacheBMPData, ?Key:Dynamic=null, ?Force:Bool=false):GraphicCacheBMPData {
 		var inc:Int;
 		var ukey:String;
 		var keystr:String;
@@ -132,7 +138,7 @@ class GraphicCache
 				cache.get(keystr).dispose();
 			}
 			
-			var bd:BitmapData = new BitmapData( Graphic.width, Graphic.height, true, 0x00000000 );
+			var bd:GraphicCacheBMPData = new GraphicCacheBMPData( Graphic.width, Graphic.height, true, 0x00000000 );
 			bd.draw(Graphic);
 			cache.set(keystr, bd);
 		}
@@ -157,15 +163,15 @@ class GraphicCache
 		return cache.exists(keyStr) && cache.get(keyStr) != null;
 	}
 	/**
-	 * Generates a new <code>BitmapData</code> object (a colored square) and caches it.
+	 * Generates a new <code>GraphicCacheBMPData</code> object (a colored square) and caches it.
 	 * 
 	 * @param	Width	How wide the square should be.
 	 * @param	Height	How high the square should be.
 	 * @param	Color	What color the square should be (0xAARRGGBB)
 	 * 
-	 * @return	The <code>BitmapData</code> we just created.
+	 * @return	The <code>GraphicCacheBMPData</code> we just created.
 	 */
-	public static function createBitmap(Width:Int, Height:Int, Color:Int, ?Unique:Bool=false, ?Key:Dynamic=null, ?Cache:Bool=true):BitmapData {
+	public static function createBitmap(Width:Int, Height:Int, Color:Int, ?Unique:Bool=false, ?Key:Dynamic=null, ?Cache:Bool=true):GraphicCacheBMPData {
 		var keystr:String = "";
 		if (Key == null)
 		{
@@ -183,10 +189,10 @@ class GraphicCache
 		}
 
 		if (!checkBitmapCacheStr(keystr) && Cache) {
-			cache.set(keystr, new BitmapData(Width, Height, true, Color));
+			cache.set(keystr, new GraphicCacheBMPData(Width, Height, true, Color));
 			return cache.get(keystr);
 		} else {
-			return new BitmapData(Width, Height, true, Color);
+			return new GraphicCacheBMPData(Width, Height, true, Color);
 		}
 
 		

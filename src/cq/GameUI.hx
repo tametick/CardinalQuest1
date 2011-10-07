@@ -74,7 +74,7 @@ import haxel.HxlTextContainer;
 import haxel.HxlUIBar;
 import haxel.GraphicCache;
 
-class GameUIBMPData extends BitmapData {} 
+class GameUIBMPData extends GraphicCacheBMPData {} 
 
 class GameUI extends HxlDialog {
 
@@ -658,7 +658,15 @@ class GameUI extends HxlDialog {
 		
 		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.buttonSprite) ) {
 			var btn:ButtonSprite = new ButtonSprite();
-			GraphicCache.addBitmapData(btn.pixels, CqGraphicKey.buttonSprite);
+			
+			var btnPixels:GraphicCacheBMPData = new GraphicCacheBMPData(btn.pixels.width, btn.pixels.height, true, 0x00000000);
+			var mtx:Matrix = new Matrix();
+			btnPixels.draw(btn.pixels, mtx);
+			
+			GraphicCache.addBitmapData(btnPixels, CqGraphicKey.buttonSprite);
+			
+			btnPixels.dispose();
+			btnPixels = null;
 			btn.pixels.dispose();
 			btn = null;
 		}
@@ -1014,7 +1022,9 @@ class GameUI extends HxlDialog {
 		for (p in parents) {
 			popup = cast(p, HxlObject).popup;
 			popups.remove(popup);
-			popup.destroy();
+			if(popup!=null){
+				popup.destroy();
+			}
 			p.clearPopup();
 			popup = null;
 		}

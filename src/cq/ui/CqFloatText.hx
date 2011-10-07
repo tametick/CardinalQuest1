@@ -53,7 +53,9 @@ class CqFloatText extends HxlText {
 		Actuate.update(onCompleteFadeOutCallBack, 0.5, [1.0], [0.0] ).onComplete(onFadedOutCallBack );
 	}
 	function onCompleteFadeOutCallBack(params:Dynamic) {
-		alpha = cast(params,Float);
+		if(params!=null){
+			alpha = cast(params, Float);
+		}
 	}
 	function onFadedOutCallBack() {
 		destroy();
