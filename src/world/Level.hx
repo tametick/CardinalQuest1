@@ -23,11 +23,12 @@ import playtomic.PtLevel;
 import data.Configuration;
 import cq.states.WinState;
 
-class Level extends HxlTilemap {
+import com.baseoneonline.haxe.astar.IAStarSearchable;
+
+class Level extends HxlTilemap, implements IAStarSearchable {
 	public var mobs:Array<Mob>;
 	public var loots:Array<Loot>;
 	public var startingLocation:HxlPoint;
-	var _pathMap:PathMap;
 	public var index(default, null):Int;
 	
 	public static inline var CHANCE_DECORATION:Float = 0.2;
@@ -76,9 +77,6 @@ class Level extends HxlTilemap {
 		
 		ptLevel = null;
 		startingLocation = null;
-		
-		_pathMap.destroy();
-		_pathMap = null;
 		
 		dest = null;
 		
@@ -193,14 +191,10 @@ class Level extends HxlTilemap {
 	override public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {
 		var map = super.loadMap(MapData, TileGraphic, TileWidth, TileHeight, ScaleX, ScaleY);
 		
-		_pathMap = new PathMap(widthInTiles, heightInTiles);
-		
 		for (y in 0...map.heightInTiles) {
 			for (x in 0...map.widthInTiles) {
 				cast(_tiles[y][x], Tile).level = this;
 				_tiles[y][x].color = 0x000000;
-				if ( isBlockingMovement(x, y) ) 
-					_pathMap.setWalkable(x, y, false);
 			}
 		}
 
@@ -545,4 +539,17 @@ class Level extends HxlTilemap {
 	}
 	
 	public function tick(state:HxlState) { }
+	
+	// implement IAStarSearchable (isWalkable, getWidth, getHeight)
+	public function isWalkable(x:Int, y:Int):Bool {
+		return !isBlockingMovement(x, y, false);
+	}
+	
+	public function getWidth():Int {
+		return widthInTiles;
+	}
+	
+	public function getHeight():Int {
+		return heightInTiles;
+	}
 }

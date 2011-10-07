@@ -317,9 +317,9 @@ class GameState extends CqState {
 			case CqClass.FIGHTER:
 				classBG = SpriteKnightEntry;
 				//"You enter the dark domicile of the evil minotaur.\n\nIn the distance, you can hear the chatter of the vile creatures that inhabit the depths.\n\nYour adventure begins...";
-				introText = "You descend with shining sword into the dismal dwelling of the maleficent minotaur.  The haughty chatter of his servants, twisted and evil, fills the air.\n\nYou smile, for you will shed much blood today.";
+				introText = "You descend with shining sword into the dismal dwelling of the maleficent minotaur.  The haughty chatter of his servants, twisted and evil, fills the air.\n\nYou smile, for today you will shed much blood.";
 			case CqClass.THIEF:
-				introText = "You slink silently down unlit stairs, to the fetid, labyrinthine halls of the minotaur's demesne.  His wicked servants suspect nothing.\n\nYou cannot help but grin at the thought of the bounteous treasure you will help them relinquish.";
+				introText = "You slink silently down unlit stairs.  The minotaur's wicked servants suspect nothing.\n\nYou cannot help but grin at the thought of the bounteous treasure they will soon relinquish.";
 				classBG = SpriteThiefEntry;
 			case CqClass.WIZARD:
 				classBG = SpriteWizardEntry;
@@ -707,7 +707,7 @@ class GameState extends CqState {
 			return;
 		} else {
 			// motion has been requested.  try first, second, and possibly third choices for movement
-			// (this is very sucky sliding -- not nerely as good as the original -- but I will improve it)
+			// (this is very sucky sliding -- not nearly as good as the original -- but I will improve it)
 			var moved:Bool = false;
 			if (facing.x == 0 || facing.y == 0) {
 				moved = tryToActInDirection(facing) || tryToActInDirection(pickBestSlide(facing));

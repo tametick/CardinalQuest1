@@ -125,9 +125,9 @@ class CqInventoryItemManager
 						if (!old.item.isEnchanted) {	
 							// old is plain, so destroy
 							if (hasMinusses) {
-								GameUI.showTextNotification("I shall keep it.", 0xBFE137);
+								GameUI.showTextNotification("This, I shall keep.", 0xBFE137);
 								uiItem = old;
-							}else{
+							} else {
 								GameUI.showTextNotification("I can drop the old one now.", 0xBFE137);
 								destroyAndGiveMoney(old.item);
 								return true;
@@ -147,7 +147,7 @@ class CqInventoryItemManager
 						//item is the same & plain
 						if ( Item.equalTo( cell.getCellObj().item) && !Item.isEnchanted) {
 							
-							GameUI.showTextNotification("I already have this.", 0xE1CC37);
+							GameUI.showTextNotification("I already have one of these.", 0xE1CC37);
 							destroyAndGiveMoney(Item);
 							return false;
 						}

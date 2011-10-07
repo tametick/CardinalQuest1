@@ -348,10 +348,19 @@ class CqLevel extends Level {
 					t.ticks--;
 					if (t.ticks == 0) {
 						
-						if(t.buffName!= null) {
+						if (t.buffName != null) {
+							if (t.specialMessage != null) {
+								GameUI.showEffectText(creature, t.specialMessage, t.messageColor);
+							} else {
+								if (t.buffValue < 0) {
+									GameUI.showEffectText(creature, "recovered " + ( -t.buffValue) + " " + t.buffName , 0x00ff00);
+								} else {
+									GameUI.showEffectText(creature, (t.buffValue) + " " + t.buffName + " wears off", 0x909090);
+								}
+							}
+							
 							// remove buff effect
 							var newVal = buffs.get(t.buffName) - t.buffValue;
-							GameUI.showEffectText(creature, (-t.buffValue) + " " + t.buffName , 0xff0000);
 							buffs.set(t.buffName, newVal);
 						} 
 						
@@ -432,7 +441,6 @@ class CqLevel extends Level {
 					// update l in case creature killed another creature
 					l = mobs.length + 1;
 				}
-				
 			}
 
 			buffs = null;

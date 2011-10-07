@@ -326,12 +326,12 @@ class CqItem extends GameObjectImpl, implements Loot {
 	
 	function getFullName():String {
 		var prefix = "";
-		if (isMagical)
-			prefix += "Magical ";
 		if(isSuperb)
 			prefix += "Superb ";
 		if (isWondrous)
 			prefix += "Wondrous ";
+		if (isMagical)
+			prefix += "Magical ";
 			
 		return prefix + name;
 	}

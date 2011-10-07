@@ -71,7 +71,7 @@ class CqTextScroller extends HxlGroup {
 		
 		if (Title.length > 0)		{
 			titleText = new HxlText(0, To_Y, 640, Title);
-			titleText.setFormat(null, 72, TitleColor, "center",ShadowColor);
+			titleText.setFormat(null, 72, TitleColor, "center", ShadowColor);
 			to_y += Std.int(titleText.height+10);
 			add(titleText);
 		}

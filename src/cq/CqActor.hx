@@ -35,6 +35,9 @@ import cq.GameUI;
 import cq.ui.CqVitalBar;
 import cq.effects.CqEffectSpell;
 
+import com.baseoneonline.haxe.astar.AStar;
+import com.baseoneonline.haxe.geom.IntPoint;
+
 import playtomic.PtPlayer;
 
 import flash.media.Sound;
@@ -44,6 +47,8 @@ class CqTimer {
 	public var buffName:String;
 	public var buffValue:Int;
 	public var specialEffect:CqSpecialEffectValue;
+	public var specialMessage:String;
+	public var messageColor:Int;
 	
 	public function new(duration:Int, buffName:String, buffValue:Int, specialEffect:CqSpecialEffectValue) {
 		ticks = duration;
@@ -402,9 +407,9 @@ class CqActor extends CqObject, implements Actor {
 		var targetY = tilePos.y + targetTile.y;
 		
 		var level = Registery.level;
-		var tile = cast(level.getTile(targetX,  targetY), CqTile);
+		var tile:CqTile = cast(level.getTile(targetX,  targetY), CqTile);
 		
-		if (level.isBlockingMovement(Math.round(targetX),  Math.round(targetY)) && (!Configuration.debugMoveThroughWalls) || level.getTile(targetX, targetY) == null ) {
+		if (tile == null || (tile.isBlockingMovement() && (!Configuration.debugMoveThroughWalls))) {
 			level = null;
 			tile = null;
 			return false;
@@ -641,7 +646,7 @@ class CqActor extends CqObject, implements Actor {
 	}
 	
 	static var tmpSpellSprite;
-	public static function useOn(itemOrSpell:CqItem,actor:CqActor, other:CqActor) {
+	public static function useOn(itemOrSpell:CqItem, actor:CqActor, victim:CqActor) {
 		if (itemOrSpell.equipSlot == POTION)
 			SoundEffectsManager.play(SpellEquipped);
 			
@@ -673,22 +678,24 @@ class CqActor extends CqObject, implements Actor {
 			for (buff in itemOrSpell.buffs.keys()) {
 				var val = itemOrSpell.buffs.get(buff);
 				var text = (val > 0?"+":"") + val + " " + buff;
-				var c:Int;
-				switch(buff) {
-					case "attack":
-						c = 0x4BE916;
-					case "defense":
-						c = 0x381AE6;
-					case "speed":
-						c = 0xEDD112;
-					default:
-						c = 0xFFFFFF;
-				}
-				if (other == null) {
+
+				if (victim == null) {
+					var c:Int;
+					switch(buff) {
+						case "attack":
+							c = 0x4BE916;
+						case "defense":
+							c = 0x381AE6;
+						case "speed":
+							c = 0xEDD112;
+						default:
+							c = 0xFFFFFF;
+					}
 					GameUI.showEffectText(actor, text, c);
 					
 					// apply to self
 					actor.buffs.set(buff, actor.buffs.get(buff) + itemOrSpell.buffs.get(buff));
+					
 					//special effect
 					var eff:CqEffectSpell = new CqEffectSpell(actor.x+actor.width/2,actor.y+actor.width/2,Effectcolor);
 					eff.zIndex = 1000;
@@ -700,41 +707,47 @@ class CqActor extends CqObject, implements Actor {
 						actor.timers.push(new CqTimer(itemOrSpell.duration, buff, itemOrSpell.buffs.get(buff),null));
 					}
 				} else {
-					GameUI.showEffectText(other, text, 0x00ff00);
-					// apply to other
-					other.buffs.set(buff, other.buffs.get(buff) + itemOrSpell.buffs.get(buff));
+					// apply to victim
+					var delta:Int = itemOrSpell.buffs.get(buff);
+					victim.buffs.set(buff, victim.buffs.get(buff) + itemOrSpell.buffs.get(buff));
+					
+					GameUI.showEffectText(victim, text, 0xff8822);
 				
 					// add timer
 					if (itemOrSpell.duration > -1) {
-						other.timers.push(new CqTimer(itemOrSpell.duration, buff, itemOrSpell.buffs.get(buff),null));
+						var bufftimer: CqTimer = new CqTimer(itemOrSpell.duration, buff, delta, null);
+						
+						victim.timers.push(bufftimer);
 					}
 				}
 			}
 		}
-		if(other != null){
+		if (victim != null){
 			//special effect
-			var eff:CqEffectSpell = new CqEffectSpell(other.x+other.width/2, other.y+other.height/2,Effectcolor);
+			var eff:CqEffectSpell = new CqEffectSpell(victim.x + victim.width/2, victim.y + victim.height/2, Effectcolor);
 			eff.zIndex = 1000;
 			HxlGraphics.state.add(eff);
 			eff.start(true, 1.0, 10);
 		}
+		
 		// apply special effect
 		if(itemOrSpell.specialEffects != null){
-			for ( effect in itemOrSpell.specialEffects) {
-				actor.applyEffect(effect, other);
+			for (effect in itemOrSpell.specialEffects) {
+				actor.applyEffect(effect, victim);
 				
 				if (itemOrSpell.duration > -1) {
-					if (other == null)
+					if (victim == null)
 						actor.timers.push(new CqTimer(itemOrSpell.duration, null, -1, effect));
 					else
-						other.timers.push(new CqTimer(itemOrSpell.duration, null, -1, effect));
+						victim.timers.push(new CqTimer(itemOrSpell.duration, null, -1, effect));
 				}
 			}
 		}
+		
 		// apply damage
 		if (itemOrSpell.damage != null && itemOrSpell.damage.end>0 ) {
 			var dmg = HxlUtil.randomIntInRange(itemOrSpell.damage.start, itemOrSpell.damage.end);
-			if (other == null) {
+			if (victim== null) {
 				actor.hp -= dmg;
 				var lif = actor.hp + actor.buffs.get("life");
 				if (lif > 0)
@@ -742,12 +755,12 @@ class CqActor extends CqObject, implements Actor {
 				else
 					actor.killActor(HxlGraphics.state,actor,dmg);
 			} else {
-				other.hp -= dmg;
-				var lif = other.hp + other.buffs.get("life");
+				victim.hp -= dmg;
+				var lif = victim.hp + victim.buffs.get("life");
 				if (lif > 0)
-					actor.injureActor(other, dmg);
+					actor.injureActor(victim, dmg);
 				else
-					actor.killActor(HxlGraphics.state,other,dmg);
+					actor.killActor(HxlGraphics.state, victim, dmg);
 			}
 		}
 	}
@@ -1168,6 +1181,7 @@ class CqMob extends CqActor, implements Mob {
 	public var type:CqMobType;
 	public var xpValue:Int;
 	
+	public var maxAware:Int;
 	var aware:Int;
 	
 	public function new(X:Float, Y:Float, typeName:String,?player:Bool = false) {
@@ -1179,6 +1193,8 @@ class CqMob extends CqActor, implements Mob {
 		else
 			loadGraphic(SpriteMonsters, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 		faction = FACTION;
+		
+		maxAware = 5;
 		aware = 0;
 
 		type = Type.createEnum(CqMobType,  typeName.toUpperCase());
@@ -1205,6 +1221,9 @@ class CqMob extends CqActor, implements Mob {
 		while(directions.length>0)
 			directions.pop();
 			
+		// I'd like to take this list of directions and put it on actor, add a few utilities to make it more useful,
+		// and employ it much more generally.  It's a very useful thing to have!
+		
 		if (!Registery.level.isBlockingMovement(Std.int(tilePos.x + 1), Std.int(tilePos.y)))
 			directions.push(CqMob.right);
 		if (!Registery.level.isBlockingMovement(Std.int(tilePos.x - 1), Std.int(tilePos.y)))
@@ -1217,7 +1236,6 @@ class CqMob extends CqActor, implements Mob {
 		var direction = HxlUtil.getRandomElement(directions);
 		if (direction != null) {
 			var acted:Bool = actInDirection(state, direction);
-			direction = null;
 			return acted;
 		} else {
 			// fixme - mobs is stuck
@@ -1246,96 +1264,107 @@ class CqMob extends CqActor, implements Mob {
 	}
 	
 	static var direction:HxlPoint;
-	function actAware(state:HxlState):Bool {
-		var target:CqActor = cast(Registery.player,CqActor);
-		if (target.faction == faction) {
-			target = getClosestMob();
-			if (target == null)
-				target = cast(Registery.player,CqActor);
-		}
-			
-		var line:Array<HxlPoint> = HxlUtil.getLine(tilePos, target.tilePos, isBlocking);
-		target = null;
-		var dest = line[1];
-		line = null;
-		
-		if (dest == null) {
-			return true;
-		}
-		
+	
+	function tryToCastSpell(enemy:CqActor):Bool {
 		var spell:CqSpell = null;
 		if ( !specialEffects.exists("fear") && Std.is(this, CqMob) && equippedSpells.length > 0) {
-			// Try casting spell first
+			// Try casting a spell first
 			
-			for (s in equippedSpells){
-				if (s.spiritPoints >=  s.spiritPointsRequired) {
+			for (s in equippedSpells) {
+				if (s.spiritPoints >= s.spiritPointsRequired) {
 					spell = s;
 					break;
 				}
 			}
 			
-			if (spell != null && Math.random() < 0.25) {
-				// Use my spell rather than attack
+			if (spell != null && Math.random() < 0.50) {
 				if(spell.targetsOther)
-					use(spell, cast(Registery.player,CqActor));
+					use(spell, enemy);
 				else
 					use(spell, this);
 				SoundEffectsManager.play(SpellCastNegative);
 				
 				spell.spiritPoints = 0;
-				// end turn
 				
 				spell = null;
-				dest = null;
 				return true;
 			}
 		}
-		spell = null;
-			
+		
+		return false;
+	}
+	
+	
+	function actAware(state:HxlState):Bool {
+		// find out who we're fighting!  (hint: it's the player)
+		var enemy:CqActor = cast(Registery.player,CqActor);
+		if (enemy.faction == faction) {
+			enemy = getClosestMob();
+			if (enemy == null) enemy = cast(Registery.player,CqActor);
+		}
+		
+		// zap him with magic!  (die, die, die)
+		// (aware will be maxAware if we can presently see the player, so it's a good visibility test)
+		if (aware == maxAware && tryToCastSpell(enemy)) return true;
+		
+		// fine.  walk towards him!
+		var astar:AStar = new AStar(Registery.level, new IntPoint(Std.int(tilePos.x), Std.int(tilePos.y)), new IntPoint(Std.int(enemy.tilePos.x), Std.int(enemy.tilePos.y)));
+		var line:Array<IntPoint> = astar.solve(true, false);
+		var dest = line[line.length - 1];
+		
+		if (dest == null) {
+			// no path?  let's become unaware and consume a turn
+			aware = 0;
+			return true;
+		}
+		
 		var dx = dest.x - tilePos.x;
 		var dy = dest.y - tilePos.y;
-		dest = null;
-		
-		// prevent diagonal movement
-		if (dx != 0 && dy != 0) {
-			if (Math.random() < 0.5)
-				dy = 0;
-			else
-				dx = 0;
-		}
 		
 		if (specialEffects.exists("fear")) {
 			dx *= -1;
 			dy *= -1;
 		}
 		
-		if(direction==null)
-			direction = new HxlPoint(dx, dy);
-		else {
-			direction.x = dx;
-			direction.y = dy;
+		if (!actInDirection(state, new HxlPoint(dx, dy))) {
+			// we made a decision but it didn't pan out; maybe we're bumping into someone else,
+			// maybe we're bumping into a wall.  In any case, let's move randomly like we're unaware,
+			// and then stick in an aware state so we might make another random decision next turn
+			actUnaware(state);
+			aware = 0;
 		}
 		
-		return actInDirection(state,direction);
+		return true;
 	}
 	
-	function updateAwarness() {
+	function updateAwareness() {
+		var enemy = Registery.player;
+		var reactionChance = .8;
 		
-		if ( HxlUtil.isInLineOfSight(tilePos, Registery.player.tilePos,isBlocking,Registery.player.visionRadius) )
-			aware = 5;
-		else if (aware > 0)
+		if (enemy.specialEffects.get("invisible") != null) {
+			aware = 0;
+			return;
+		} else 
+			
+		if ( (aware > 0 || Math.random() < reactionChance) && HxlUtil.isInLineOfSight(tilePos, enemy.tilePos, isBlocking, enemy.visionRadius) ) {
+			aware = maxAware;
+			return;
+		}
+		
+		if (aware > 0) {
 			aware--;
+		} else {
+			// this isn't the only place that aware may be decremented, so let's just clip it to 0
+			aware = 0;
+		}
 	}
 	
 	public function act(state:HxlState):Bool {
-		updateAwarness();
+		updateAwareness();
 		
-		var invisible = Registery.player.specialEffects.get("invisible");
-		
-		if (aware>0 && invisible==null)
+		if (aware > 0) {
 			return actAware(state);
-		else {
-			invisible = null;
+		} else {
 			return actUnaware(state);
 		}
 	}
@@ -1364,10 +1393,11 @@ class CqMobFactory {
 		
 		if(Resources.descriptions==null)
 			Resources.descriptions = new Hash<String>();
-			
-		Resources.descriptions.set("Fighter", " A mighty warrior, possessing unparalleled strength and vigor.\n\n Straightforward melee character - recommended for beginners.");
-		Resources.descriptions.set("Wizard", " A wise mage who mastered the arcane secrets of magic.\n\n Can cast spells rapidly - use his mystic powers as often as possible.");
-		Resources.descriptions.set("Thief", " A cunning and agile rogue, his speed allows for a swift escape.\n\n The most challenging character - use his speed and skills to avoid taking damage." );
+		
+		// this is a very questionable place for these descriptions to come up
+		Resources.descriptions.set("Fighter", "A mighty warrior of unparalleled strength and vigor, honorable in battle, master of hack-n-slash melee.\n\nThe best choice for new players.");
+		Resources.descriptions.set("Wizard", "A wise sage, knower of secrets, worker of miracles, master of the arcane arts, maker of satisfactory mixed drinks.\n\nCan cast spells rapidly - use his mystic powers as often as possible.");
+		Resources.descriptions.set("Thief", "A cunning and agile rogue whose one moral credo is this: Always get away alive.\n\nThe most challenging character - use his speed and skills to avoid taking damage." );
 		
 		inited = true;
 	}
@@ -1408,12 +1438,12 @@ class CqMobFactory {
 					shortName = "Kobold";
 				}else{
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.succubi);
-					shortName = "Succubi";
+					shortName = "Succubus";
 				}
 			case 4:
 				if(Math.random()<Configuration.strongerEnemyChance){
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.succubi);
-					shortName = "Succubi";
+					shortName = "Succubus";
 				}else{
 					typeName = HxlUtil.getRandomElement(SpriteMonsters.spiders);
 					shortName = "Spider";
