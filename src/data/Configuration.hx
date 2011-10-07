@@ -54,4 +54,9 @@ class Configuration {
 	public static function getLevelHeight(?level:Int=0) {
 		return 32; 
 	}
+	
+	public static var bindings = {
+		compasses: [["W", "A", "S", "D"], ["K", "H", "J", "L"], ["UP", "LEFT", "DOWN", "RIGHT"]],
+		waitkeys: ["PERIOD", "NONUMLOCK_5", "ENTER", "SPACE"]
+	}
 }

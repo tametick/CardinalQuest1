@@ -30,6 +30,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	public var loots:Array<Loot>;
 	public var startingLocation:HxlPoint;
 	public var index(default, null):Int;
+	public var ticksSinceNewDiscovery:Float; // float for convenient arithmetic
 	
 	public static inline var CHANCE_DECORATION:Float = 0.2;
 	
@@ -43,6 +44,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		loots = new Array();
 		startingIndex = 1;
 		ptLevel = new PtLevel(this);
+		ticksSinceNewDiscovery = 0;
 	}
 	
 	public function isBlockingMovement(X:Int, Y:Int, ?CheckActor:Bool=false):Bool { 
@@ -77,8 +79,6 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		
 		ptLevel = null;
 		startingLocation = null;
-		
-		dest = null;
 		
 		HxlGraphics.unfollow();
 		
@@ -257,15 +257,21 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		}
 	}
 
-	/** gets called for each tile first time seen. */
+	/** gets called for each tile EVERY time it is seen (not just the first time) **/
 	static function firstSeen(state:HxlState,map:Level,p:HxlPoint) { 
 		var t:Tile = map.getTile(Math.round(p.x), Math.round(p.y));
-		if (t.visibility == Visibility.UNSEEN && Math.random() < CHANCE_DECORATION)
-			map.addDecoration(t, state);
-		t.visibility = Visibility.IN_SIGHT ; 
+		if (t.visibility == Visibility.UNSEEN) {
+			if (Math.random() < CHANCE_DECORATION) {
+				map.addDecoration(t, state);
+			}
+			// have to tweak this until it feels right -- but we don't want to reset it to 0 or optimal
+			// play will call for waiting until just before dudes start appearing
+			map.ticksSinceNewDiscovery = map.ticksSinceNewDiscovery - 4 * 60; // every cell we see pays off 4 turns of hanging around (quite a lot, really)
+			if (map.ticksSinceNewDiscovery < 0) map.ticksSinceNewDiscovery = 0;
+		}
+		t.visibility = Visibility.IN_SIGHT ;
 	}
 	
-	var dest:HxlPoint;
 	static var adjacent = [[ -1, -1], [0, -1], [1, -1], [ -1, 0], [1, 0], [ -1, 1], [0, 1], [1, 1]];
 	public function updateFieldOfView(state:HxlState,?otherActorHighlight:Actor,?skipTween:Bool = false, ?gradientColoring:Bool = true, ?seenTween:Int = 64, ?inSightTween:Int=255) {
 		var actor:Actor = null;
@@ -307,15 +313,14 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				} );
 			map = null;
 		}
+		
+		var dest = new HxlPoint(0, 0);
 		for ( x in left...right+1 ) {
 			for ( y in top...bottom+1 ) {
 				tile = getTile(x, y);
-				if (dest == null){
-					dest = new HxlPoint(x, y);
-				} else {
-					dest.x = x;
-					dest.y = y;
-				}
+				
+				dest.x = x;
+				dest.y = y;
 					
 				var dist = HxlUtil.distance(actor.tilePos, dest);
 				var Ttile:Tile = cast(tile, Tile);
@@ -420,15 +425,13 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 					map = null;
 				} );
 		}
+		
+		var dest:HxlPoint = new HxlPoint(0, 0);
 		for ( x in left...right+1 ) {
 			for ( y in top...bottom+1 ) {
 				tile = getTile(x, y);
-				if (dest == null){
-					dest = new HxlPoint(x, y);
-				} else {
-					dest.x = x;
-					dest.y = y;
-				}
+				dest.x = x;
+				dest.y = y;
 					
 				var dist = HxlUtil.distance(tilePos, dest);
 				var Ttile:Tile = cast(tile, Tile);
@@ -476,9 +479,6 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		return Math.round(color);
 	}
 	
-	
-	private static var compasses = [["W", "A", "S", "D"], ["K", "H", "J", "L"], ["UP", "LEFT", "DOWN", "RIGHT"]];
-	
 	/**
 	 * checks the directional and wasd keys, returns custompoint+direction of keys pressed
 	 * @param	?fromCustomPoint if not null uses this as starting point, otherwise uses players tilePos.
@@ -490,7 +490,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		
 		var facing:HxlPoint = new HxlPoint(0, 0);
 		
-		for (compass in compasses) {
+		for (compass in Configuration.bindings.compasses) {
 			if (HxlGraphics.keys.pressed(compass[0])) facing.y = -1;
 			if (HxlGraphics.keys.pressed(compass[1])) facing.x = -1;
 			if (HxlGraphics.keys.pressed(compass[2])) facing.y = 1;
@@ -503,13 +503,16 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		if (facing.x < 0 && pos.x <= 0) facing.x = 0;
 		if (facing.x > 0 && pos.x >= widthInTiles) facing.x = 0;
 		
-		if ( HxlGraphics.keys.ENTER || HxlGraphics.keys.NONUMLOCK_5) {
-			// we're returning [0, 0]
-			return facing;
+		for (waitkey in Configuration.bindings.waitkeys) {
+			if (HxlGraphics.keys.pressed(waitkey)) {
+				// we're returning [0, 0]
+				return facing;
+			}
 		}
 		
-		if (facing.x == 0 && facing.y == 0) return null;
-			
+		
+		if (facing.x == 0 && facing.y == 0) return null; // looks like no bound keys were pressed
+		
 		return facing;
 	}
 	

@@ -1328,10 +1328,10 @@ class CqMob extends CqActor, implements Mob {
 		
 		if (!actInDirection(state, new HxlPoint(dx, dy))) {
 			// we made a decision but it didn't pan out; maybe we're bumping into someone else,
-			// maybe we're bumping into a wall.  In any case, let's move randomly like we're unaware,
-			// and then stick in an aware state so we might make another random decision next turn
+			// maybe we're bumping into a wall.  In any case, let's move randomly like we're unaware;
+			// maybe something will open up.  (This is particularly useful when we're afraid, since otherwise
+			// we'll just walk into a corner and stall.)
 			actUnaware(state);
-			aware = 0;
 		}
 		
 		return true;

@@ -257,6 +257,9 @@ class CqInventoryItemManager
 				mainDialog.dlgEqGrid.setGlowForSlot(UiItem.item.equipSlot, true);
 		}
 	}
+	
+	
+	// need to tie this in with the key stuff in Config.
 	function checkKeys() {
 		if (gridOrder == null){
 			gridOrder = [dlgInvGrid, dlgPotionGrid, dlgSpellGrid, dlgEqGrid];

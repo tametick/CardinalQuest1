@@ -322,11 +322,54 @@ class CqLevel extends Level {
 		return mob;
 	}
 	
+
+	public function tryToSpawnEncouragingMonster() {
+		// you get 9 turns before the game considers hounding you.  That's more than it sounds like --
+		// especially since every new cell you uncover gives you 3 turns back.  (In practice, that means that
+		// every step is a reset.)  Try playing without scumming -- you'll never see this!
+		if (ticksSinceNewDiscovery > 60 * 9 && Math.random() < .6) {
+			// lots of code duplication from polymorph -- beware!
+			
+			var freePosition:HxlPoint = null;
+			var playerPosition:HxlPoint = Registery.player.tilePos;
+			
+			for (tries in 1...14) {
+				var x:Int = Std.int(playerPosition.x + Math.random() * 13 - 6);
+				var y:Int = Std.int(playerPosition.y + Math.random() * 11 - 5);
+				var tile:CqTile = getTile(x, y);
+				
+				if (tile != null && tile.visible && !isBlockingMovement(x, y, true)) {
+					freePosition = new HxlPoint(x, y);
+					break;
+				}
+			}
+			
+			if (freePosition != null) {
+				var mob:CqMob = Registery.level.createAndaddMob(freePosition, Std.int((.5 + .5 * Math.random()) * Registery.player.level), true);
+				mob.xpValue = 0;
+				
+				GameUI.showEffectText(mob, "Keep exploring!", 0xFFEE33);
+				Registery.level.updateFieldOfView(HxlGraphics.state);
+				
+				ticksSinceNewDiscovery -= 60 * 5; // a new monster every 5 turns or so once you stop exploring
+				if (ticksSinceNewDiscovery < 0)ticksSinceNewDiscovery = 0;
+				
+				GameUI.instance.addHealthBar(cast(mob, CqActor));
+				
+				mob.healthBar.setTween(false);
+				mob.healthBar.setTween(true);
+				mob.healthBar.visible = true;
+			}
+		}
+	}
+	
 	public override function tick(state:HxlState) {
 		var l:Float = mobs.length + 1;
 		var i:UInt = 0;
-		while(i < l)
-		{
+		
+		ticksSinceNewDiscovery += 1.0;
+		
+		while(i < l) {
 			var creature:CqActor;
 			if (i == 0)
 				creature = Registery.player;
@@ -450,5 +493,4 @@ class CqLevel extends Level {
 			i++;
 		}
 	}
-
 }

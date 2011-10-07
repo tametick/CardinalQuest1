@@ -57,6 +57,7 @@ class GameState extends CqState {
 	var lastMouse:Bool;
 	var endingAnim:Bool;
 	
+	
 	public function clearGameUi() {
 		gameUI = null;
 	}
@@ -288,6 +289,9 @@ class GameState extends CqState {
 		while (player.actionPoints < 60) {
 			level.tick(this);
 		}
+		
+		level.tryToSpawnEncouragingMonster();
+		
 		gameUI.updateCharges();
 		
 		player = null;
@@ -546,7 +550,7 @@ class GameState extends CqState {
 		
 		// on your marks
 		var player = Registery.player;
-		
+					
 		var left_ok:Bool = true, right_ok:Bool = true;
 		var left_wins:Bool = false, right_wins:Bool = false;
 		
@@ -707,11 +711,12 @@ class GameState extends CqState {
 			return;
 		} else {
 			// motion has been requested.  try first, second, and possibly third choices for movement
-			// (this is very sucky sliding -- not nearly as good as the original -- but I will improve it)
+			// (this is pretty ok sliding -- there's still room to improve it by considering previous motion)
 			var moved:Bool = false;
 			if (facing.x == 0 || facing.y == 0) {
 				moved = tryToActInDirection(facing) || tryToActInDirection(pickBestSlide(facing));
 			} else {
+				// we need a way to indicate whether facing.x or facing.y should be tried first
 				moved = tryToActInDirection(new HxlPoint(facing.x, 0)) || tryToActInDirection(new HxlPoint(0, facing.y));
 			}
 						
