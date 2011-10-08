@@ -281,8 +281,6 @@ class GameState extends CqState {
 		var level = Registery.level;
 		
 		level.updateFieldOfView(this);
-		if (Std.is(GameUI.instance.panels.currentPanel,CqMapDialog))
-			GameUI.instance.panels.currentPanel.updateDialog();
 		
 		player.actionPoints = 0;
 
@@ -293,6 +291,11 @@ class GameState extends CqState {
 		level.tryToSpawnEncouragingMonster();
 		
 		gameUI.updateCharges();
+		
+		// now redraw the map -- but only after all monsters have moved!
+		if (Std.is(GameUI.instance.panels.currentPanel,CqMapDialog)) {
+			GameUI.instance.panels.currentPanel.updateDialog();
+		}
 		
 		player = null;
 		level = null;

@@ -1,6 +1,7 @@
 package cq.ui;
 
 import cq.CqActor;
+import cq.CqLevel;
 import cq.CqResources;
 import cq.CqWorld;
 import world.Tile;
@@ -16,6 +17,7 @@ import haxel.HxlSprite;
 import haxel.HxlTilemap;
 import haxel.HxlUtil;
 class CqMapDialogBMPData extends BitmapData {}
+
 class CqMapDialog extends HxlSlidingDialog {
 
 	var mapDialog:HxlDialog;
@@ -78,97 +80,123 @@ class CqMapDialog extends HxlSlidingDialog {
 		var mapW:Int = Registery.level.widthInTiles;
 		var mapH:Int = Registery.level.heightInTiles;
 		var graph = mapShape.graphics;
-		var Color:Int;
 		var Alpha = 0.7;
-		var SightColor:Int = 0x222222;
-		var SeenColor:Int = 0x111111;
-		var WallSightColor:Int = 0x333399;
-		var WallSeenColor:Int = 0x111166;
-		var StairsColor:Int = 0xffffff;
-		var DoorSightColor:Int = 0x8E6B5D;
-		var DoorSeenColor:Int = 0x563A2F;
-		var playerColor:Int = 0xFFFED2;
-		var mobColor:Int = 0xFF3333;
-		var lootColor:Int = 0xFFCC00;
-
+		
+		var schemes = [
+			// sight/sensed/seen:
+			{
+				floor: 0x222222,
+				wall: 0x333399,
+				door: 0x8E6B5D,
+				loot: 0xFFCC00,
+				lootcore: 0xFFAA00
+			},
+			{
+				floor: 0x060606,
+				wall: 0x151520,
+				door: 0x302520,
+				loot: 0xEEBB00,
+				lootcore: 0xF8A800
+			},
+			{
+				floor: 0x111111,
+				wall: 0x111166,
+				door: 0x563A2F,
+				loot: 0xCC9900,
+				lootcore: 0xDD9900,
+			}
+		];
+		
+		var colors = {
+			stairs: 0xffffff,
+			player: 0xFFFED2,
+			friend: 0xCFCFA2,
+			mob: 0xFF3333
+		};
+		
 		var player = Registery.player;
 		var playerPos = player.getTilePos();
+		var level:CqLevel = Registery.level;
 
 		graph.clear();
 		for ( Y in 0...mapH ) {
 			for ( X in 0...mapW ) {
-				Color = -1;
+				var visibility:Visibility = tiles[Y][X].visibility;
 				
-				if ( tiles[Y][X].visibility == Visibility.SEEN ) {
-								Color = SeenColor;
-					if ( Registery.level.isBlockingMovement(X, Y) ) {
-						Color = WallSeenColor;
+				if (visibility != Visibility.UNSEEN) {
+					var Color:Int = -1;
+					var scheme_number = if (visibility == Visibility.SEEN) 2 else if (visibility == Visibility.IN_SIGHT) 0 else if (visibility == Visibility.SENSED) 1;
+					var scheme = schemes[scheme_number];
+					
+					if (level.isBlockingMovement(X, Y)) {
+						if ( HxlUtil.contains(SpriteTiles.doors.iterator(), tiles[Y][X].dataNum) ) { 
+							Color = scheme.door;
+						} else {
+							Color = scheme.wall;
+						}						
+					} else {
+						Color = scheme.floor;
 					}
-				} else if ( tiles[Y][X].visibility == Visibility.IN_SIGHT ) {
-					Color = SightColor;
-					if ( Registery.level.isBlockingMovement(X, Y) ) {
-						Color = WallSightColor;
-					}
-				}
-				if ( Color != -1 ) {
+					
 					graph.beginFill(Color,Alpha);
 					graph.drawRect( (X * cellSize.x), (Y * cellSize.y), cellSize.x, cellSize.y );
 					graph.endFill();
+					
+					// render stairs and loot:
 					if ( HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tiles[Y][X].dataNum) ) {
-						// Draw stairs
-						var dx:Float = X * cellSize.x + 2;
-						var dy:Float = Y * cellSize.y + 2;
-						graph.moveTo(dx, dy);
-						graph.beginFill(StairsColor,Alpha);
-						graph.lineTo(dx + (cellSize.x - 4), dy);
-						graph.lineTo(dx + ((cellSize.x - 4) / 2), dy + (cellSize.y - 4));
-						graph.lineTo(dx, dy);
+						var dx:Float = X * cellSize.x;
+						var dy:Float = Y * cellSize.y;
+						
+						// draw the stairs slightly bigger than the cell (notice that it only overlaps cells
+						// above it, so we don't clobber it as we draw cells to the right or south.)
+						graph.beginFill(colors.stairs, Alpha);
+						graph.moveTo(dx - 1, dy - 2);
+						graph.lineTo(dx + 1 + cellSize.x, dy - 2);
+						graph.lineTo(dx + cellSize.x / 2, dy + cellSize.y);
+						graph.lineTo(dx - 1, dy - 2);
 						graph.endFill();
-					} else if ( HxlUtil.contains(SpriteTiles.doors.iterator(), tiles[Y][X].dataNum) ) { 
-						// Draw doors
-						if ( !HxlUtil.contains(SpriteTiles.openDoors.iterator(), tiles[Y][X].dataNum) ) {
-							// Dont draw open doors
-							if ( tiles[Y][X].visibility == Visibility.SEEN ) 
-								Color = DoorSeenColor;
-							else 
-								Color = DoorSightColor;
-							graph.beginFill(Color,Alpha);
-							graph.drawRect( (X * cellSize.x), (Y * cellSize.y), cellSize.x, cellSize.y );
-							graph.endFill();			
-						}
-					} else if ( cast(tiles[Y][X],Tile).loots.length >0)  { 
-						// Draw loot
-						graph.beginFill(lootColor,Alpha);
-						graph.drawRect( (X * cellSize.x+1), (Y * cellSize.y+1), cellSize.x-2, cellSize.y-2 );
-						graph.endFill();			
+						
+						graph.beginFill(colors.stairs, Alpha);
+						graph.moveTo(dx + 2, dy);
+						graph.lineTo(dx - 2 + cellSize.x, dy);
+						graph.lineTo(dx + cellSize.x / 2, dy + cellSize.y - 4);
+						graph.lineTo(dx + 2, dy);
+						graph.endFill();
+					} else if ( cast(tiles[Y][X],Tile).loots.length >0)  {
+						graph.beginFill(scheme.loot,Alpha);
+						graph.drawRect( (X * cellSize.x + 2), (Y * cellSize.y + 2), cellSize.x - 4, cellSize.y - 4);
+						graph.endFill();
+						
+						// add a redder center to loot to make it tastier:
+						graph.beginFill(scheme.loot, Alpha);
+						graph.drawRect( (X * cellSize.x + 3), (Y * cellSize.y + 3), cellSize.x - 6, cellSize.y - 6);
+						graph.endFill();
 					}
 					
-					
-					// Render player position
-					var playerPos = Registery.player.getTilePos();
-					if ( playerPos.x == X && playerPos.y == Y ) {
-						var dx:Float = (X * cellSize.x) + (cellSize.x / 2);
-						var dy:Float = (Y * cellSize.y) + (cellSize.y / 2);
-						graph.beginFill(playerColor,Alpha);
-						graph.drawCircle(dx, dy, (cellSize.x / 2) - 1);
-						graph.endFill();
-					} else if ( tiles[Y][X].visibility == Visibility.IN_SIGHT ) {
+					// render mobs
+					if ( tiles[Y][X].visibility == Visibility.IN_SIGHT ) {
 						// Render Mobs
 						var tile = cast(tiles[Y][X], CqTile);
 						if ( tile.actors.length > 0 ) {
-							var other = cast(tile.actors[tile.actors.length-1], CqActor);
-							if ( other.faction != player.faction ) {
-								var dx:Float = (X * cellSize.x) + (cellSize.x / 2);
-								var dy:Float = (Y * cellSize.y) + (cellSize.y / 2);
-								graph.beginFill(mobColor,Alpha);
-								graph.drawCircle(dx, dy, (cellSize.x / 2) - 1);
-								graph.endFill();
-							}
+							var other = cast(tile.actors[tile.actors.length - 1], CqActor);
+							
+							var dx:Float = (X * cellSize.x) + (cellSize.x / 2);
+							var dy:Float = (Y * cellSize.y) + (cellSize.y / 2);
+							graph.beginFill(if (other.faction != player.faction) colors.mob else colors.friend, Alpha);
+							graph.drawCircle(dx, dy, (cellSize.x / 2) - 1);
+							graph.endFill();
 						}
 					}
 				}
 			}
 		}
+
+		// draw the player
+		var px:Float = (player.tilePos.x * cellSize.x) + (cellSize.x / 2);
+		var py:Float = (player.tilePos.y * cellSize.y) + (cellSize.y / 2);
+		graph.beginFill(colors.player, Alpha);
+		graph.drawCircle(px, py, (cellSize.x * .70) - 1); // make the player a little bigger (.70 instead of .5)
+		graph.endFill();
 
 		mapBitmap.bitmapData.fillRect(clearRect, 0x0);
 		mapBitmap.bitmapData.draw(mapShape);

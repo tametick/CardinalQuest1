@@ -344,6 +344,7 @@ enum Visibility {
 	UNSEEN;
 	SEEN;
 	IN_SIGHT;
+	SENSED;
 }
 
 class HxlTile {
