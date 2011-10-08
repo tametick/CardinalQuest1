@@ -245,6 +245,7 @@ class CqActor extends CqObject, implements Actor {
 	}
 
 	public function moveToPixel(state:HxlState, X:Float, Y:Float) {
+		// so this is where we can add bobbing for waiting !
 		isMoving = true;
 		if ( Y < y ) 
 			bobDir = 0;

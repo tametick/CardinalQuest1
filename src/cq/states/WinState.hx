@@ -47,7 +47,7 @@ class WinState extends CqState {
 		defaultGroup.sortMembersByZIndex();
 		scroller.setMinimumTime(2);
 		scroller.onComplete(nextScreen);
-		scroller.startScroll(0,16);
+		scroller.startScroll(16);
 		
 	}
 

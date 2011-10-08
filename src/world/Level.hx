@@ -242,7 +242,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				if(!isBlockedFromAllSides(x,y)){
 					var tile = cast(getTile(x, y),Tile);
 
-					firstSeen(state, this, new HxlPoint(x, y));
+					firstSeen(state, this, new HxlPoint(x, y), Visibility.SENSED);
 					tile.visible = true;
 					tile.color = 0xffffff;
 						
@@ -255,30 +255,43 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				}
 			}
 		}
+		
+		updateFieldOfView(state, Registery.player);
 	}
 
 	/** gets called for each tile EVERY time it is seen (not just the first time) **/
-	static function firstSeen(state:HxlState,map:Level,p:HxlPoint) { 
+	static function firstSeen(state:HxlState,map:Level,p:HxlPoint, newvis:Visibility) { 
 		var t:Tile = map.getTile(Math.round(p.x), Math.round(p.y));
+		
 		if (t.visibility == Visibility.UNSEEN) {
 			if (Math.random() < CHANCE_DECORATION) {
 				map.addDecoration(t, state);
 			}
-			// have to tweak this until it feels right -- but we don't want to reset it to 0 or optimal
-			// play will call for waiting until just before dudes start appearing
-			map.ticksSinceNewDiscovery = map.ticksSinceNewDiscovery - 4 * 60; // every cell we see pays off 4 turns of hanging around (quite a lot, really)
-			if (map.ticksSinceNewDiscovery < 0) map.ticksSinceNewDiscovery = 0;
+			
+			if (newvis == Visibility.SENSED) {
+				t.visibility = Visibility.SENSED;
+			}
 		}
-		t.visibility = Visibility.IN_SIGHT ;
+		
+		if (newvis != Visibility.SENSED) {
+			if (t.visibility == Visibility.UNSEEN || t.visibility == Visibility.SENSED) {
+				// have to tweak this until it feels right -- but we don't want to reset it to 0 or optimal
+				// play will call for waiting until just before dudes start appearing
+				map.ticksSinceNewDiscovery = map.ticksSinceNewDiscovery - 4 * 60; // every cell we see pays off 4 turns of hanging around (quite a lot, really)
+				if (map.ticksSinceNewDiscovery < 0) map.ticksSinceNewDiscovery = 0;
+			}
+			t.visibility = newvis;
+		}
 	}
 	
+	
+	// THIS IS EXACTLY WHY CODE DUPLICATION IS EVIL: two nearly identical functions with tiny, undocumented differences.
+	// this will be rectified momentarily.
 	static var adjacent = [[ -1, -1], [0, -1], [1, -1], [ -1, 0], [1, 0], [ -1, 1], [0, 1], [1, 1]];
 	public function updateFieldOfView(state:HxlState,?otherActorHighlight:Actor,?skipTween:Bool = false, ?gradientColoring:Bool = true, ?seenTween:Int = 64, ?inSightTween:Int=255) {
 		var actor:Actor = null;
-		if (otherActorHighlight == null)
-			actor = Registery.player;
-		else
-			actor = otherActorHighlight;
+		if (otherActorHighlight == null) actor = Registery.player;
+		else actor = otherActorHighlight;
 		
 		var bottom = Std.int(Math.min(heightInTiles - 1, actor.tilePos.y + (actor.visionRadius+1)));
 		var top = Std.int(Math.max(0, actor.tilePos.y - (actor.visionRadius+1)));
@@ -309,7 +322,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 			var map:Level = this;
 			HxlUtil.markFieldOfView(actor.tilePos, actor.visionRadius, this, true, 
 				function(p:HxlPoint) { 
-					firstSeen(state, map, p); 
+					firstSeen(state, map, p, Visibility.IN_SIGHT); 
 				} );
 			map = null;
 		}
@@ -337,7 +350,24 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 							var hpbar = actor.healthBar;
 							if (hpbar != null && actor.hp != actor.maxHp)
 								hpbar.visible = true;
-							hpbar = null;
+								
+							if (Std.is(actor, CqMob)) {
+								var asmob = cast(actor, CqMob);
+								if (asmob != null && asmob.xpValue > 0) {
+									// this is a monster and it wasn't spawned to keep you moving,
+									// so deduct 60 ticks from the counter for seeing it each turn.
+									// in practice, this should mean you won't ever see extra spawns
+									// while in the presence of a real monster.  It would be nice to
+									// work out some more precise math for this.
+									
+									ticksSinceNewDiscovery -= 60;
+								} else {
+									// and if we've spawned a monster to keep you exploring, we don't want to
+									// keep spawning them until you kill it. (But if you sit around again you
+									// should still get what you've got coming.)
+									ticksSinceNewDiscovery -= 25 ;
+								}
+							}
 						}
 						Ttile.colorTo(normColor, actor.moveSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
@@ -345,7 +375,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 							//decoration.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
 							decoration.colorTo(normColor, actor.moveSpeed);
 						}
-					case Visibility.SEEN:
+					case Visibility.SEEN, Visibility.SENSED:
 						tile.visible = true;
 						
 						for (loot in Ttile.loots)
@@ -421,7 +451,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 			
 			HxlUtil.markFieldOfView(tilePos, visionRadius, this, true, 
 				function(p:HxlPoint) { 
-					firstSeen(state, map, p); 
+					firstSeen(state, map, p, Visibility.IN_SIGHT); 
 					map = null;
 				} );
 		}
@@ -445,18 +475,6 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 							cast(loot,HxlSprite).visible = true;
 						for (actor in Ttile.actors) {
 							cast(actor, HxlSprite).visible = true;
-							
-							var asmob = cast(actor, CqMob);
-							if (asmob != null && asmob.xpValue > 0) {
-								// this is a monster and it wasn't spawned to keep you moving,
-								// so deduct 30 ticks from the counter for seeing it each turn.
-								// in practice, this should mean you won't ever see extra spawns
-								// while in the presence of a real monster unless you sit around
-								// for a long long time.
-								
-								ticksSinceNewDiscovery -= 30;
-								if (ticksSinceNewDiscovery < 0) ticksSinceNewDiscovery = 0;
-							}
 						}
 						Ttile.colorTo(normColor, tweenSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
@@ -477,6 +495,21 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 						for (decoration in Ttile.decorations)
 							//decoration.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
 							decoration.colorTo(seenTween, tweenSpeed);
+							
+					case Visibility.SENSED:
+						tile.visible = true;
+						
+						for (loot in Ttile.loots)
+							cast(loot,HxlSprite).visible = false;
+						for (actor in Ttile.actors)
+							cast(actor,HxlSprite).visible = false;
+						
+						Ttile.colorTo(seenTween, tweenSpeed);
+						//Ttile.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
+						for (decoration in Ttile.decorations)
+							//decoration.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
+							decoration.colorTo(seenTween, tweenSpeed);
+							
 							
 					case Visibility.UNSEEN:
 				}

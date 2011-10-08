@@ -15,7 +15,6 @@ import haxel.HxlText;
 
 
 class CqTextScroller extends HxlGroup {
-	static var To_Y:Int = 10;
 	static var Duration:Int = 10;
 	static var MinimumDuration:Float = 0.3;
 	
@@ -30,7 +29,11 @@ class CqTextScroller extends HxlGroup {
 	var tweenStatus:Array<Bool>;
 	var OnComplete:Void->Void;
 	var minimumDuration:Float;
-	var to_y:Int;
+
+	var columns_height:Int;
+	var initial_y:Int;
+	var final_y:Int;
+	
 	var respondInput:Bool;//so you wouldnt accidentally close the window
 	public function new(bg:Class<Bitmap>, scrollDuration:Float, ?Title:String = "", ?TitleColor:Int = 0xFFFFFF, ?ShadowColor:Int = 0x010101, ?scale:Float=1.0) {
 		super();
@@ -40,9 +43,14 @@ class CqTextScroller extends HxlGroup {
 		cols = new Array<HxlText>();
 		tweens = new Array<IGenericActuator>();
 		tweenStatus = new Array<Bool>();
-		to_y = To_Y;
+	
+		// default
+		initial_y = HxlGraphics.stage.stageHeight;
+		final_y = 0;
+		columns_height = 0;
+		
 		minimumDuration = MinimumDuration;
-		setSplash(bg,scale);
+		setSplash(bg, scale);
 		setTitle(Title, TitleColor, ShadowColor);
 		
 		HxlGraphics.stage.addEventListener(MouseEvent.CLICK, onAction);
@@ -65,14 +73,21 @@ class CqTextScroller extends HxlGroup {
 		}
 	}
 	
+	private function repositionTitle() {
+		if (titleText != null) {
+			titleText.y = (HxlGraphics.stage.stageHeight - columns_height - 10) / 2 - titleText.height;
+		}
+	}
+	
 	public function setTitle(?Title:String = "", ?TitleColor:Int = 0xFFFFFF, ?ShadowColor:Int = 0x010101):Void {
 		if (titleText != null)
 			remove(titleText);
 		
-		if (Title.length > 0)		{
-			titleText = new HxlText(0, To_Y, 640, Title);
+		if (Title.length > 0) {
+			titleText = new HxlText(0, 0, 640, Title);
 			titleText.setFormat(null, 72, TitleColor, "center", ShadowColor);
-			to_y += Std.int(titleText.height+10);
+			
+			repositionTitle();
 			add(titleText);
 		}
 	}	
@@ -111,29 +126,37 @@ class CqTextScroller extends HxlGroup {
 		Actuate.pauseAll();
 		clicks++;
 		scrolling = false;
-		for (col in cols)
-		{
+		
+		for (col in cols) {
+			var to_y:Int = Std.int((HxlGraphics.stage.stageHeight - col.height) / 2);
+			
 			col.y = to_y;
 		}
 	}
 	public function addColumn(X:Int, W:Int, text:String,?embeddedfont:Bool = true,?fontName:String = "",?fontSize:Int = 16,?color:Int = 0xFFFFFF, ?shadowColor:Int = 0x010101) {
-		var text:HxlText = new HxlText(X, 0, W, text, embeddedfont, fontName);
-		text.setFormat(fontName, fontSize, color, "left",shadowColor);
+		var text:HxlText = new HxlText(X, initial_y, W, text, embeddedfont, fontName);
+		text.setFormat(fontName, fontSize, color, "left", shadowColor);		
+		
+		if (text.height > columns_height) {
+			columns_height = Std.int(text.height);
+			repositionTitle();
+		}
+		
 		add(text);
 		cols.push(text);
 		tweenStatus.push(false);
-		text.y = HxlGraphics.stage.stageHeight;
 	}
-	public function startScroll(?PosY:Int = -1,?duration:Int = -1) {
-		if (PosY != -1)
-			to_y = PosY;
+	public function startScroll(?duration:Int = -1) {
 		if (duration != -1)
 			Duration = duration;
+			
 		if (cols.length == 0) 
 			return;
+			
 		Actuate.timer(minimumDuration).onComplete(afterMinimum);
-		for (col in cols)
-		{
+		for (col in cols) {
+			var to_y:Int = Std.int((HxlGraphics.stage.stageHeight - col.height) / 2);
+			
 			scrolling = true;
 			tweens.push( Actuate.tween(col, Duration, { y:to_y } , true).onComplete(oncolumnScrolled,[col]));
 		}
