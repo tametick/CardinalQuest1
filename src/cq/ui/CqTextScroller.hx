@@ -147,7 +147,7 @@ class CqTextScroller extends HxlGroup {
 		tweenStatus.push(false);
 	}
 	public function startScroll(?duration:Int = -1) {
-		if (duration != -1)
+		if (duration > 0)
 			Duration = duration;
 			
 		if (cols.length == 0) 

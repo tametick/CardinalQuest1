@@ -85,7 +85,6 @@ class GameState extends CqState {
 		remove(oldGameUI);
 		oldGameUI = null;
 		
-		
 		Registery.world.destroy();
 		Registery.world = null;
 
@@ -158,8 +157,12 @@ class GameState extends CqState {
 			cursor.visible = false;
 		}
 		
-		// this is not clear to me yet:
+		if (Registery.player.isDying) {
+			return;
+		}
+		
 		checkInvKeys();
+		
 		if ( GameUI.isTargeting) {
 			if (Registery.level.getTargetAccordingToKeyPress()!=Registery.player.tilePos && Registery.level.getTargetAccordingToKeyPress()!=null)
 				lastMouse = false;
@@ -216,7 +219,7 @@ class GameState extends CqState {
 		}
 	}
 	private function checkInvKeys():Void
-	{
+	{	
 		if (HxlGraphics.keys.justPressed("M")) {
 			gameUI.showMapDlg();
 		} else if (HxlGraphics.keys.justPressed("I")) {
@@ -225,55 +228,32 @@ class GameState extends CqState {
 			gameUI.showCharDlg();
 		}
 	}
-	private function checkGamePassTurnKeys():Bool {
-		// this is the cause of several bugs
-		
+	
+	private function checkSlotHotkeys():Bool {
 		var item = null;
+		
 		//potions
-		if (HxlGraphics.keys.justPressed("SIX"))
-		{
-			item = gameUI.dlgPotionGrid.cells[0];
-		}else if (HxlGraphics.keys.justPressed("SEVEN"))
-		{
-			item = gameUI.dlgPotionGrid.cells[1];
-		}else if (HxlGraphics.keys.justPressed("EIGHT"))
-		{
-			item = gameUI.dlgPotionGrid.cells[2];
-		}else if (HxlGraphics.keys.justPressed("NINE"))
-		{
-			item = gameUI.dlgPotionGrid.cells[3];
-		}else if (HxlGraphics.keys.justPressed("ZERO"))
-		{
-			item = gameUI.dlgPotionGrid.cells[4];
+		for (i in 0...Configuration.bindings.potions.length) {
+			if (HxlGraphics.keys.justPressed(Configuration.bindings.potions[i])) {
+				item = gameUI.dlgPotionGrid.cells[i];
+				if (item != null) {
+					cast(item, CqPotionCell).potBtn.usePotion();
+					return true;
+				}
+			}
 		}
-		if (item != null)
-		{
-			cast(item, CqPotionCell).potBtn.usePotion();
-			return true;
-		}
-		item = null;
+
 		//spells
-		if (HxlGraphics.keys.justPressed("ONE"))
-		{
-			item = gameUI.dlgSpellGrid.cells[0];
-		}else if (HxlGraphics.keys.justPressed("TWO"))
-		{
-			item = gameUI.dlgSpellGrid.cells[1];
-		}else if (HxlGraphics.keys.justPressed("THREE"))
-		{
-			item = gameUI.dlgSpellGrid.cells[2];
-		}else if (HxlGraphics.keys.justPressed("FOUR"))
-		{
-			item = gameUI.dlgSpellGrid.cells[3];
-		}else if (HxlGraphics.keys.justPressed("FIVE"))
-		{
-			item = gameUI.dlgSpellGrid.cells[4];
+		for (i in 0...Configuration.bindings.spells.length) {
+			if (HxlGraphics.keys.justPressed(Configuration.bindings.spells[i])) {
+				item = gameUI.dlgSpellGrid.cells[i];
+				if (item != null) {
+					cast(item, CqSpellCell).btn.useSpell();
+					return true;
+				}
+			}
 		}
-		if (item != null)
-		{
-			cast(item, CqSpellCell).btn.useSpell();
-			return true;
-		}
+
 		return false;
 	}
 	public function passTurn() {
@@ -339,7 +319,7 @@ class GameState extends CqState {
 		scroller = new CqTextScroller(classBG, 1);
 		scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,30);
 		add(scroller);
-		scroller.startScroll();
+		scroller.startScroll(6);
 		scroller.onComplete(realInit);
 	}
 	
@@ -656,10 +636,8 @@ class GameState extends CqState {
 			return;
 		}
 		
-		if (checkGamePassTurnKeys())
-		{
-			// we check game keys on your turn -- 
-			// is this why so many keys waste extra turns?
+		if (checkSlotHotkeys()) {
+			// verify that this lines up with mouse behavior
 			// passTurn();
 			return;
 		}

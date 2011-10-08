@@ -229,7 +229,7 @@ class CreateCharState extends CqState {
 			scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,28,0xFFCD55,0x2E170F);
 			//scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,28,0x443322,0x776633);
 			add(scroller);
-			scroller.startScroll();
+			scroller.startScroll(8);
 			//scroller.onComplete(removeScrollerAndFade);
 			scroller.onComplete(realInit);
 			shownIntro = true;

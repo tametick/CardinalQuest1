@@ -292,7 +292,7 @@ class CqActor extends CqObject, implements Actor {
 		for ( Callback in onKill )
 			Callback();
 	}
-
+	
 	function killActor(state:HxlState, other:CqActor, dmgTotal:Int) {
 		other.doKill(dmgTotal);
 		// todo
@@ -307,32 +307,12 @@ class CqActor extends CqObject, implements Actor {
 			mob.doDeathEffect();
 		} else {
 			if (Std.is(other, CqPlayer)) {
-				var player = cast(other, CqPlayer);
+				var player:CqPlayer = cast(other, CqPlayer);
 				HxlLog.append("kills you");
 				//It's ok to put it here, not perfect, but easier to test
 				//We will ping simply the kong server twice as often, which should be ok
 				Registery.getKong().SubmitScore( player.xp , "Normal" );
-				if (player.lives >= 1) {
-					SoundEffectsManager.play(Death);
-					player.lives--;
-					player.infoViewLives.setText("x" + player.lives);
-					
-					var startingPostion = Registery.level.getPixelPositionOfTile(
-												Registery.level.startingLocation.x,
-												Registery.level.startingLocation.y);
-					player.setTilePos(
-						Std.int(Registery.level.startingLocation.x), Std.int(Registery.level.startingLocation.y)
-					);
-					player.moveToPixel(state, startingPostion.x, startingPostion.y);
-					player.hp = player.maxHp;
-					player.updatePlayerHealthBars();
-					Registery.level.updateFieldOfView(HxlGraphics.state,true);
-				} else {
-					///todo: Playtomic recording
-					MusicManager.stop();
-					SoundEffectsManager.play(Lose);
-					HxlGraphics.pushState(new GameOverState());
-				}
+				player.doDeathEffect();
 			} else {
 				var mob = cast(other, CqMob);
 				// remove other
@@ -629,18 +609,18 @@ class CqActor extends CqObject, implements Actor {
 	
 	public function use(itemOrSpell:CqItem, ?other:CqActor = null) {
 		if (Std.is(itemOrSpell, CqSpell) && cast(itemOrSpell, CqSpell).targetsOther && other != null) {
-			var c:Int;
+			var colorSource:BitmapData;
 			if (Std.is(this, CqPlayer)) {
 				if (itemOrSpell.fullName == "Fireball")
 					itemOrSpell.damage = CqSpellFactory.getfireBalldamageByLevel(Registery.player.level);
-				c = HxlUtil.averageColour(itemOrSpell.uiItem.pixels);
-			}
-			else {
+				colorSource = itemOrSpell.uiItem.pixels;
+			} else {
 				if (itemOrSpell.fullName == "Fireball")
 					itemOrSpell.damage = CqSpellFactory.getfireBalldamageByLevel(5);
-				c = HxlUtil.averageColour(this._framePixels);
+				colorSource = this._framePixels;
 			}
-			GameUI.instance.shootXBall(this, other, c,itemOrSpell);
+			
+			GameUI.instance.shootXBall(this, other, colorSource, itemOrSpell);
 		}else {
 			useOn(itemOrSpell, this, other);
 		}
@@ -899,6 +879,8 @@ class CqPlayer extends CqActor, implements Player {
 	public var xp:Int;
 	public var level:Int;
 	public var money:Int;
+	
+	public var isDying:Bool;
 
 	var onPickup:List<Dynamic>;
 	var onGainXP:List<Dynamic>;
@@ -906,6 +888,8 @@ class CqPlayer extends CqActor, implements Player {
 	var lastTile:HxlPoint;
 
 	override function destroy() {
+		if (centralHealthBar == null) return; // already destroyed (why is it getting destroyed twice?)
+		
 		if(!centralHealthBar.dead)
 			centralHealthBar.destroy();
 		centralHealthBar = null;
@@ -993,6 +977,8 @@ class CqPlayer extends CqActor, implements Player {
 		
 		xp = 0;
 		level = 1;
+		
+		isDying = false;
 		
 		onGainXP = new List();
 		onPickup = new List();
@@ -1172,6 +1158,81 @@ class CqPlayer extends CqActor, implements Player {
 			}
 		}
 		super.moveToPixel(state, X, Y);
+	}
+	
+	function respawn() {
+		var state:HxlState = HxlGraphics.state;
+		
+		var level:CqLevel = Registery.level;
+		
+		var startingPostion = level.getPixelPositionOfTile(
+			level.startingLocation.x,
+			level.startingLocation.y
+		);
+		
+		var player = this;
+		
+		// jump back to the origin
+		player.setTilePos(Std.int(level.startingLocation.x), Std.int(level.startingLocation.y));
+		
+		player.moveToPixel(state, startingPostion.x, startingPostion.y);
+		player.hp = player.maxHp;
+		player.updatePlayerHealthBars();
+		
+		for (buff in player.buffs.keys()) player.buffs.remove(buff);
+		
+		// undo the death animation
+		angularVelocity = 0;
+		angle = 0;
+		scaleVelocity.x = scaleVelocity.y = 0;
+		scale.x = scale.y = 1.0;
+		
+		level.updateFieldOfView(HxlGraphics.state, true);
+		
+		level.ticksSinceNewDiscovery = 0;
+				
+		isDying = false;
+		
+		// we need to bump all visible mobs somewhere safe and make all mobs unaware
+	}
+	
+	function gameOver() {
+		// too bad!
+		HxlGraphics.setState(new GameOverState());
+	}
+	
+	public function doDeathEffect() {
+		if (isDying) {
+			// can't die twice at once
+			return;
+		}
+		
+		isDying = true;
+		
+		var player:CqPlayer = this;
+		var state:HxlState = HxlGraphics.state;
+		var alive:Bool = player.lives >= 1;
+		if (alive) {
+			SoundEffectsManager.play(Death);
+			
+			player.lives--;
+			player.infoViewLives.setText("x" + player.lives);
+		} else {
+			///todo: Playtomic recording
+			
+			MusicManager.stop();
+			SoundEffectsManager.play(Lose);
+		}
+		
+		HxlGraphics.state.add(this);
+		angularVelocity = -200;
+		scaleVelocity.x = scaleVelocity.y = -1.1;
+		Actuate
+			.update(deathEffectUpdate, 0.75, [1.0], [0.0])
+			.onComplete(if (alive) respawn else gameOver);
+	}
+	function deathEffectUpdate(a:Float) {
+		// do something interesting?
 	}
 }
 
@@ -1369,18 +1430,19 @@ class CqMob extends CqActor, implements Mob {
 			return actUnaware(state);
 		}
 	}
-
+	
 	public function doDeathEffect() {
 		HxlGraphics.state.add(this);
 		angularVelocity = -200;
 		scaleVelocity.x = scaleVelocity.y = -1.2;
-		Actuate.update(deathEffectCallback, 0.5, [ 1.0], [0.0]).onComplete(deactEffectOncompleteCallback);
+		Actuate
+			.update(deathEffectUpdate, 0.5, [1.0], [0.0])
+			.onComplete(deathEffectComplete);
 	}
-	function deathEffectCallback(params:Dynamic) {
-		if(params!=null)
-			alpha = cast(params, Float);
+	function deathEffectUpdate(a:Float) {
+		alpha = a;
 	}
-	function deactEffectOncompleteCallback() {
+	function deathEffectComplete() {
 		HxlGraphics.state.remove(this);
 		destroy();
 	}

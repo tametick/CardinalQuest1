@@ -793,7 +793,7 @@ class GameUI extends HxlDialog {
 	static var effectQueue:Array<CqFloatText> = new Array<CqFloatText>();
 	static function startEffectText(txt:CqFloatText)
 	{
-		txt.InitSemiCustomTween(0.3, { y: txt.y - 20,alpha:0.5 }, effectDone);
+		txt.InitSemiCustomTween(0.6, { y: txt.y - 20,alpha:0.5 }, effectDone);
 		txt.zIndex = 4;
 		HxlGraphics.state.add(txt);
 	}
@@ -969,53 +969,6 @@ class GameUI extends HxlDialog {
 		GameUI.setTargeting(false);
 
 	}
-	public function shootXBall(actor:CqActor, other:CqActor, color:Int,spell:CqItem):Void 
-	{
-		var ball:HxlSprite = new HxlSprite();
-		/*var ang:Float = HxlUtil.angleBetween(fromTile, toObj.tilePos) * 360/ (Math.PI*2);
-		ang = ang < 0? 360 - ang:ang;
-		ang += 90;
-		ball.angle = ang;*/
-		if (GraphicCache.checkBitmapCache(CqGraphicKey.xball(color))) {
-			ball.loadCachedGraphic(CqGraphicKey.xball(color));
-		} else {
-			var tmp:GameUIBMPData = new GameUIBMPData(12, 17, true, 0x0);
-			var s:Shape = new Shape();
-			var g:Graphics = s.graphics;
-			g.beginFill(color, 0.7);
-			g.drawEllipse(1, 1, 10, 15);
-			var lighter:Int = color; //+ 0x151511;
-			//if (lighter > 0xFFFFFF) lighter = 0xFFFFFF;
-			g.beginFill(lighter, 1);
-			g.drawEllipse(3, 3, 6, 11);
-			tmp.draw(s);
-			var glow:GlowFilter = new GlowFilter(color, 0.9, 15.0, 15.0, 1.6, 2, false, false);
-			tmp.applyFilter(tmp, new Rectangle(0, 0, 12, 17), new Point(1, 1), glow);
-			GraphicCache.addBitmapData(tmp, CqGraphicKey.xball(color));
-			ball.setPixels(tmp);
-			tmp = null;
-		}
-		var fromPixel:HxlPoint = new HxlPoint(actor.x + Configuration.tileSize / 2, actor.y+Configuration.tileSize / 2);
-		ball.x = fromPixel.x;
-		ball.y = fromPixel.y;
-		ball.zIndex = 5;
-		HxlGraphics.state.add(ball);
-		var tween= Actuate.tween(ball, 1, { x:other.x, y:other.y } );
-		
-		var args1 = new Array();
-		args1.push(ball);
-		args1.push(actor);
-		args1.push(other);
-		args1.push(spell);
-		var args2 = new Array<Dynamic>();
-		args2.push(ball);
-		args2.push(other);
-		args2.push(tween);
-		
-		tween.onComplete(onXBallHit, args1).onUpdate(updateXBall, args2);
-		args1 = null;
-		args2 = null;
-	}
 	
 	public function removePopups(parents:Array<Dynamic>) {
 		var popup:HxlText = null;
@@ -1041,22 +994,80 @@ class GameUI extends HxlDialog {
 			cqMob.setPopup(pop);
 			popups.add(pop);
 		}
-
 	}
 	
-	private function updateXBall(ball:HxlSprite,other:CqActor,actuator:GenericActuator) {
-		var prop:Dynamic = actuator.properties;
+	
+	private function getXBallGraphic(ball:HxlSprite, colorSource:BitmapData) {
+		// we need multiple colors to make these look cool
+		var color:Int = HxlUtil.averageColour(colorSource);
+		if (GraphicCache.checkBitmapCache(CqGraphicKey.xball(color))) {
+			ball.loadCachedGraphic(CqGraphicKey.xball(color));
+		} else {
+			var tmp:GameUIBMPData = new GameUIBMPData(12, 17, true, 0x0);
+			var s:Shape = new Shape();
+			var g:Graphics = s.graphics;
+			g.beginFill(color, 0.7);
+			g.drawEllipse(1, 1, 10, 15);
+			var lighter:Int = color; //+ 0x151511;
+			//if (lighter > 0xFFFFFF) lighter = 0xFFFFFF;
+			g.beginFill(lighter, 1);
+			g.drawEllipse(3, 3, 6, 11);
+			tmp.draw(s);
+			var glow:GlowFilter = new GlowFilter(color, 0.9, 15.0, 15.0, 1.6, 2, false, false);
+			tmp.applyFilter(tmp, new Rectangle(0, 0, 12, 17), new Point(1, 1), glow);
+			GraphicCache.addBitmapData(tmp, CqGraphicKey.xball(color));
+			ball.setPixels(tmp);
+			tmp = null;
+		}
+	}
+	
+	public function shootXBall(actor:CqActor, victim:CqActor, colorSource:BitmapData, spell:CqItem):Void {
+		var ball:HxlSprite = new HxlSprite();
+		/*var ang:Float = HxlUtil.angleBetween(fromTile, toObj.tilePos) * 360/ (Math.PI*2);
+		ang = ang < 0? 360 - ang:ang;
+		ang += 90;
+		ball.angle = ang;*/
+		
+		getXBallGraphic(ball, colorSource);
+		
+		var fromPixel:HxlPoint = new HxlPoint(actor.x + Configuration.tileSize / 2, actor.y+Configuration.tileSize / 2);
+		ball.x = fromPixel.x;
+		ball.y = fromPixel.y;
+		
+		ball.zIndex = 5;
+		HxlGraphics.state.add(ball);
+		
+		var delta = { dt: 0.0, x1: ball.x, y1: ball.y };
+		
+		var actuator = Actuate.tween(delta, 0.5, { dt: 1.0 } );
+		
+		actuator
+			.onComplete(onXBallHit, [ball, actor, victim, spell])
+			.onUpdate(updateXBall, [ball, victim, actuator]);
+	}
+	
+	private function updateXBall(ball:HxlSprite, victim:CqActor, actuator:GenericActuator) {
+		var delta:Dynamic = actuator.target;
+		var dt:Float = delta.dt;
+		var x1:Float, y1:Float, x2:Float, y2:Float;
+		
+		x1 = delta.x1;
+		y1 = delta.y1;
+		x2 = victim.x + Configuration.tileSize / 2;
+		y2 = victim.y + Configuration.tileSize / 2;
+		
 		ball.angle += 20;
-		prop.x = other.x+Configuration.tileSize/2;
-		prop.y = other.y+Configuration.tileSize/2;
+		ball.x = x1 * (1.0 - dt) + x2 * dt;
+		ball.y = y1 * (1.0 - dt) + y2 * dt;
+		
 		//cast(actuator, SimpleActuator).changeProperties();
-		prop = null;
 	}
 	
 	private function onXBallHit(ball:HxlSprite,actor:CqActor,other:CqActor,spell:CqItem) {
 		HxlGraphics.state.remove(ball);
 		ball.pixels = null;
-		ball = null;
 		CqActor.useOn(spell, actor, other);
 	}
 }
+
+
