@@ -178,13 +178,18 @@ class CqMapDialog extends HxlSlidingDialog {
 						// Render Mobs
 						var tile = cast(tiles[Y][X], CqTile);
 						if ( tile.actors.length > 0 ) {
-							var other = cast(tile.actors[tile.actors.length - 1], CqActor);
+							var other = tile.actors[tile.actors.length - 1];
+							if (Std.is(other, CqMob)) {
+								var mob = cast(other, CqMob);
 							
-							var dx:Float = (X * cellSize.x) + (cellSize.x / 2);
-							var dy:Float = (Y * cellSize.y) + (cellSize.y / 2);
-							graph.beginFill(if (other.faction != player.faction) colors.mob else colors.friend, Alpha);
-							graph.drawCircle(dx, dy, (cellSize.x / 2) - 1);
-							graph.endFill();
+								var dx:Float = (X * cellSize.x) + (cellSize.x / 2);
+								var dy:Float = (Y * cellSize.y) + (cellSize.y / 2);
+							
+								graph.beginFill(mob.averageColor, 1.0);
+
+								graph.drawCircle(dx, dy, (cellSize.x / 2) - 1);
+								graph.endFill();
+							}
 						}
 					}
 				}
@@ -194,6 +199,11 @@ class CqMapDialog extends HxlSlidingDialog {
 		// draw the player
 		var px:Float = (player.tilePos.x * cellSize.x) + (cellSize.x / 2);
 		var py:Float = (player.tilePos.y * cellSize.y) + (cellSize.y / 2);
+							
+		graph.beginFill(colors.friend, Alpha);
+		graph.drawCircle(px, py, (cellSize.x * .45) - 1); // make the player a little bigger (.70 instead of .5)
+		graph.endFill();
+		
 		graph.beginFill(colors.player, Alpha);
 		graph.drawCircle(px, py, (cellSize.x * .70) - 1); // make the player a little bigger (.70 instead of .5)
 		graph.endFill();

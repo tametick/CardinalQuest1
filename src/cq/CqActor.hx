@@ -1190,6 +1190,7 @@ class CqPlayer extends CqActor, implements Player {
 		level.updateFieldOfView(HxlGraphics.state, true);
 		
 		level.ticksSinceNewDiscovery = 0;
+		level.protectRespawnPoint();
 				
 		isDying = false;
 		
@@ -1244,7 +1245,8 @@ class CqMob extends CqActor, implements Mob {
 	public var xpValue:Int;
 	
 	public var maxAware:Int;
-	var aware:Int;
+	public var averageColor:Int;
+	public var aware:Int;
 	
 	public function new(X:Float, Y:Float, typeName:String,?player:Bool = false) {
 		super(X, Y);
@@ -1254,6 +1256,8 @@ class CqMob extends CqActor, implements Mob {
 			loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 		else
 			loadGraphic(SpriteMonsters, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
+			
+		averageColor = HxlUtil.averageColour(this.pixels);
 		faction = FACTION;
 		
 		maxAware = 5;

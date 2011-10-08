@@ -264,6 +264,23 @@ class CqLevel extends Level {
 		
 		return (numberOfActors == 0 && numberOfLoot == 0 && distFromPlayer >= minDistance);
 	}
+	
+	public function protectRespawnPoint() {
+		for (m in mobs) {
+			var mob = cast(m, CqMob);
+			var pos = mob.tilePos;
+			var distFromPlayer = HxlUtil.distance(pos, startingLocation);
+			
+			mob.aware = 0;
+			
+			if (distFromPlayer < 5) {
+				do {
+					pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, SpriteTiles.walkableAndSeeThroughTiles);
+				} while (!isValidMobPosition(pos));
+				mob.setTilePos(Std.int(pos.x), Std.int(pos.y));
+			}
+		}
+	}
 
 	function createAndaddSpell(pos:HxlPoint) {
 		var pixelPos = getPixelPositionOfTile(pos.x, pos.y);
@@ -325,10 +342,10 @@ class CqLevel extends Level {
 	
 
 	public function tryToSpawnEncouragingMonster() {
-		// you get 11 speed-1 turns before the game considers hounding you.  That's more than it sounds like --
+		// you get 9 speed-1 turns before the game considers hounding you.  That's more than it sounds like --
 		// especially since every new cell you uncover gives you 3 turns back and seeing monsters slows the counter
 		// considerably and you're never really speed-1.  Try playing without scumming -- you'll never see this!
-		if (ticksSinceNewDiscovery > 60 * 11 && Math.random() < .6) {
+		if (ticksSinceNewDiscovery > 60 * 9 && Math.random() < .6) {
 			// lots of code duplication from polymorph -- beware!
 			
 			var freePosition:HxlPoint = null;
@@ -352,7 +369,7 @@ class CqLevel extends Level {
 				GameUI.showEffectText(mob, "Keep exploring!", 0xFFEE33);
 				Registery.level.updateFieldOfView(HxlGraphics.state);
 				
-				ticksSinceNewDiscovery -= 60 * 6; // a new monster every 6 turns or so once you stop exploring
+				ticksSinceNewDiscovery -= 60 * 5; // a new monster every 5 turns or so once you stop exploring
 				
 				GameUI.instance.addHealthBar(cast(mob, CqActor));
 				
