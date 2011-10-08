@@ -11,7 +11,7 @@ import cq.states.MainMenuState;
 class Configuration {
 	public static inline var version = "1.1b";
 	
-	public static inline var debug = true;
+	public static inline var debug = false;
 	public static inline var air = false;
 	public static inline var standAlone = false;
 	public static inline var useProductionPlaytomic = false;
