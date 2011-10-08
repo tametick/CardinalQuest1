@@ -639,6 +639,7 @@ class GameState extends CqState {
 		if (checkSlotHotkeys()) {
 			// verify that this lines up with mouse behavior
 			// passTurn();
+			isPlayerActing = false;
 			return;
 		}
 		

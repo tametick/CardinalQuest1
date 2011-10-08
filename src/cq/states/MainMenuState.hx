@@ -232,8 +232,8 @@ class MainMenuState extends CqState {
 
 			buttonY += 50;
 		}
-
-		Actuate.tween(menu, 1, { targetY: 220 } ).ease(Cubic.easeOut);
+		
+		Actuate.tween(menu, 1.00, { targetY: 220 } ).ease(Cubic.easeOut);
 
 		menu.setScrollSound(MenuItemMouseOver);
 		menu.setSelectSound(MenuItemClick);

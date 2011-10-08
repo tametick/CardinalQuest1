@@ -61,6 +61,10 @@ class CqMapDialog extends HxlSlidingDialog {
 		cellSize = new HxlPoint();
 		cellSize.x = Math.floor(mapSize.x / Registery.level.widthInTiles);
 		cellSize.y = Math.floor(mapSize.y / Registery.level.heightInTiles);
+		
+		// make sure cells are an odd number of pixels on each side
+		if (cellSize.x % 2 == 0) cellSize.x -= 1.0;
+		if (cellSize.y % 2 == 0) cellSize.y -= 1.0;
 	}
 
 	public override function show(?ShowCallback:Dynamic=null) {
@@ -168,7 +172,7 @@ class CqMapDialog extends HxlSlidingDialog {
 						graph.endFill();
 						
 						// add a redder center to loot to make it tastier:
-						graph.beginFill(scheme.loot, Alpha);
+						graph.beginFill(scheme.loot, 1.0);
 						graph.drawRect( (X * cellSize.x + 3), (Y * cellSize.y + 3), cellSize.x - 6, cellSize.y - 6);
 						graph.endFill();
 					}
@@ -186,8 +190,11 @@ class CqMapDialog extends HxlSlidingDialog {
 								var dy:Float = (Y * cellSize.y) + (cellSize.y / 2);
 							
 								graph.beginFill(mob.averageColor, 1.0);
-
-								graph.drawCircle(dx, dy, (cellSize.x / 2) - 1);
+								graph.drawCircle(dx, dy, (cellSize.x * .5) - 1);
+								graph.endFill();
+								
+								graph.beginFill(colors.mob, 1.0);
+								graph.drawCircle(dx, dy, (cellSize.x * .30) - 1);
 								graph.endFill();
 							}
 						}

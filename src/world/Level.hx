@@ -576,7 +576,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		var absdx:Float = Math.abs(dx);
 		var absdy:Float = Math.abs(dy);
 		
-		var give:Float = 0.65; // exactly .5 means that you have to point at yourself precisely to wait; higher values make it fuzzier
+		var give:Float = 0.75; // exactly .5 means that you have to point at yourself precisely to wait; higher values make it fuzzier
 		if (absdx < give && absdy < give) return new HxlPoint(0, 0);
 		
 		// here it would be nice to track more info about angle than this

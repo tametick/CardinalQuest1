@@ -1179,9 +1179,18 @@ class CqPlayer extends CqActor, implements Player {
 		player.hp = player.maxHp;
 		player.updatePlayerHealthBars();
 		
+		// clear all buffs, debuffs, and timers
 		for (buff in player.buffs.keys()) player.buffs.remove(buff);
+		player.timers.splice(0, player.timers.length);
 		
-		// undo the death animation
+		// recharge all spells
+		for (spell in player.equippedSpells) {
+			if (spell != null) {
+				spell.spiritPoints = spell.spiritPointsRequired;
+			}
+		}
+		
+		// undo the death animation (we should do this when we arrive, but it looks ok.)
 		angularVelocity = 0;
 		angle = 0;
 		scaleVelocity.x = scaleVelocity.y = 0;
@@ -1190,11 +1199,8 @@ class CqPlayer extends CqActor, implements Player {
 		level.updateFieldOfView(HxlGraphics.state, true);
 		
 		level.ticksSinceNewDiscovery = 0;
-		level.protectRespawnPoint();
-				
-		isDying = false;
 		
-		// we need to bump all visible mobs somewhere safe and make all mobs unaware
+		isDying = false;
 	}
 	
 	function gameOver() {
@@ -1218,6 +1224,7 @@ class CqPlayer extends CqActor, implements Player {
 			
 			player.lives--;
 			player.infoViewLives.setText("x" + player.lives);
+			Registery.level.protectRespawnPoint();
 		} else {
 			///todo: Playtomic recording
 			
@@ -1229,7 +1236,7 @@ class CqPlayer extends CqActor, implements Player {
 		angularVelocity = -200;
 		scaleVelocity.x = scaleVelocity.y = -1.1;
 		Actuate
-			.update(deathEffectUpdate, 0.75, [1.0], [0.0])
+			.update(deathEffectUpdate, 1.25, [1.0], [0.0])
 			.onComplete(if (alive) respawn else gameOver);
 	}
 	function deathEffectUpdate(a:Float) {
@@ -1362,11 +1369,12 @@ class CqMob extends CqActor, implements Mob {
 	
 	
 	function actAware(state:HxlState):Bool {
-		// find out who we're fighting!  (hint: it's the player)
+		// find out who we're fighting!  (hint: it's the player unless we're on his team)
 		var enemy:CqActor = cast(Registery.player,CqActor);
 		if (enemy.faction == faction) {
+			 // we're on the player's team!  we'd better find someone to target...
 			enemy = getClosestMob();
-			if (enemy == null) enemy = cast(Registery.player,CqActor);
+			if (enemy == null) return actUnaware(state);
 		}
 		
 		// zap him with magic!  (die, die, die)

@@ -278,6 +278,9 @@ class CqLevel extends Level {
 					pos = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), mapData, SpriteTiles.walkableAndSeeThroughTiles);
 				} while (!isValidMobPosition(pos));
 				mob.setTilePos(Std.int(pos.x), Std.int(pos.y));
+				var bumpto = getPixelPositionOfTile(pos.x, pos.y);
+		
+				mob.moveToPixel(HxlGraphics.state, bumpto.x, bumpto.y);
 			}
 		}
 	}
