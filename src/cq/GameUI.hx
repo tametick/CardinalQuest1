@@ -996,29 +996,42 @@ class GameUI extends HxlDialog {
 		}
 	}
 	
+	private function randomColor(colorSource:BitmapData):UInt {
+		return colorSource.getPixel(HxlUtil.randomInt(colorSource.width), HxlUtil.randomInt(colorSource.height));
+	}
 	
 	private function getXBallGraphic(ball:HxlSprite, colorSource:BitmapData) {
 		// we need multiple colors to make these look cool
-		var color:Int = HxlUtil.averageColour(colorSource);
-		if (GraphicCache.checkBitmapCache(CqGraphicKey.xball(color))) {
-			ball.loadCachedGraphic(CqGraphicKey.xball(color));
-		} else {
-			var tmp:GameUIBMPData = new GameUIBMPData(12, 17, true, 0x0);
-			var s:Shape = new Shape();
-			var g:Graphics = s.graphics;
-			g.beginFill(color, 0.7);
-			g.drawEllipse(1, 1, 10, 15);
-			var lighter:Int = color; //+ 0x151511;
-			//if (lighter > 0xFFFFFF) lighter = 0xFFFFFF;
-			g.beginFill(lighter, 1);
-			g.drawEllipse(3, 3, 6, 11);
-			tmp.draw(s);
-			var glow:GlowFilter = new GlowFilter(color, 0.9, 15.0, 15.0, 1.6, 2, false, false);
-			tmp.applyFilter(tmp, new Rectangle(0, 0, 12, 17), new Point(1, 1), glow);
-			GraphicCache.addBitmapData(tmp, CqGraphicKey.xball(color));
-			ball.setPixels(tmp);
-			tmp = null;
+		
+		//if (GraphicCache.checkBitmapCache(CqGraphicKey.xball(color))) {
+		//	ball.loadCachedGraphic(CqGraphicKey.xball(color));
+		//} else {
+		
+		var tmp:GameUIBMPData = new GameUIBMPData(12, 17, true, 0x0);
+		var s:Shape = new Shape();
+		var g:Graphics = s.graphics;
+		
+		for (i in 1...15) {
+			// this is just a start, but I think it's coming along ok
+			var x = HxlUtil.randomInt(8) + 2;
+			var y = HxlUtil.randomInt(13) + 2;
+			g.beginFill(randomColor(colorSource), 0.85);
+			//g.drawEllipse(5 - HxlUtil.randomInt(5), 6 - HxlUtil.randomInt(5), 7 + HxlUtil.randomInt(4), 12 + HxlUtil.randomInt(5));
+			g.drawCircle(x, y, 2);
 		}
+		
+		//var lighter:Int = color; //+ 0x151511;
+		//if (lighter > 0xFFFFFF) lighter = 0xFFFFFF;
+		//g.beginFill(lighter, 1);
+		//g.drawEllipse(3, 3, 6, 11);
+		tmp.draw(s);
+		var glow:GlowFilter = new GlowFilter(randomColor(colorSource), 0.9, 15.0, 15.0, 1.6, 2, false, false);
+		tmp.applyFilter(tmp, new Rectangle(0, 0, 12, 17), new Point(1, 1), glow);
+		// GraphicCache.addBitmapData(tmp, CqGraphicKey.xball(color));
+		ball.setPixels(tmp);
+		tmp = null;
+		
+		//}
 	}
 	
 	public function shootXBall(actor:CqActor, victim:CqActor, colorSource:BitmapData, spell:CqItem):Void {
@@ -1039,7 +1052,10 @@ class GameUI extends HxlDialog {
 		
 		var delta = { dt: 0.0, x1: ball.x, y1: ball.y };
 		
-		var actuator = Actuate.tween(delta, 0.5, { dt: 1.0 } );
+		var distance = HxlUtil.distance(fromPixel, new HxlPoint(victim.x + Configuration.tileSize / 2, victim.y + Configuration.tileSize / 2));
+		var time = distance / 160.0;
+		if (time > 0.5) time = 0.5;
+		var actuator = Actuate.tween(delta, time, { dt: 1.0 } );
 		
 		actuator
 			.onComplete(onXBallHit, [ball, actor, victim, spell])
