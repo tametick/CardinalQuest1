@@ -704,12 +704,21 @@ class GameUI extends HxlDialog {
 		btnCharacterView.setActive(false);
 		btnInfoView.setActive(false);
 	}
-	public function checkTileItems(Player:CqPlayer) {
-		var curPos:HxlPoint = Player.getTilePos();
+	public function checkTileItems(player:CqPlayer) {
+		if (player == null || Registery.level == null || HxlGraphics.state == null)
+			return;
+		
+		var curPos:HxlPoint = player.getTilePos();
+		if (curPos == null)
+			return;
+		
 		var curTile = cast(Registery.level.getTile(Std.int(curPos.x), Std.int(curPos.y)), Tile);
+		if (curTile == null || curTile.loots == null)
+			return;
+		
 		if ( curTile.loots.length > 0 ) {
 			var item = cast(curTile.loots[curTile.loots.length - 1], CqItem);
-			Player.pickup(HxlGraphics.state, item);
+			player.pickup(HxlGraphics.state, item);
 		}
 	}
 	override public function onAdd(state:HxlState) {
