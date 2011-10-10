@@ -1083,26 +1083,34 @@ class GameUI extends HxlDialog {
 	private function updateXBall(ball:HxlSprite, victim:CqActor, actuator:GenericActuator) {
 		var delta:Dynamic = actuator.target;
 		var dt:Float = delta.dt;
-		var x1:Float, y1:Float, x2:Float, y2:Float;
+		var x1:Float, y1:Float, x2:Float=0.0, y2:Float=0.0;
 		
 		x1 = delta.x1;
 		y1 = delta.y1;
-		x2 = victim.x + Configuration.tileSize / 2;
-		y2 = victim.y + Configuration.tileSize / 2;
+		if(victim!=null){
+			x2 = victim.x + Configuration.tileSize / 2;
+			y2 = victim.y + Configuration.tileSize / 2;
+		}
 		
-		ball.angle += 20 + 15 * Math.random();
+		if(ball!=null)
+			ball.angle += 20 + 15 * Math.random();
 		
 		dt = dt + .01 * Math.random();
-		
-		ball.x = x1 * (1.0 - dt) + x2 * dt;
-		ball.y = y1 * (1.0 - dt) + y2 * dt;
+
+		if(ball!=null){
+			ball.x = x1 * (1.0 - dt) + x2 * dt;
+			ball.y = y1 * (1.0 - dt) + y2 * dt;
+		}
 		
 		//cast(actuator, SimpleActuator).changeProperties();
 	}
 	
 	private function onXBallHit(ball:HxlSprite,actor:CqActor,other:CqActor,spell:CqItem) {
 		HxlGraphics.state.remove(ball);
-		ball.pixels = null;
+		if (ball != null) {
+			ball.pixels.dispose();
+			ball.pixels = null;
+		}
 		CqActor.useOn(spell, actor, other);
 	}
 }
