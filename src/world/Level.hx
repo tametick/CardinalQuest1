@@ -271,8 +271,13 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	}
 
 	/** gets called for each tile EVERY time it is seen (not just the first time) **/
-	static function firstSeen(state:HxlState,map:Level,p:HxlPoint, newvis:Visibility) { 
+	static function firstSeen(state:HxlState, map:Level, p:HxlPoint, newvis:Visibility) { 
+		if (map == null || p == null)
+			return;
+		
 		var t:Tile = map.getTile(Math.round(p.x), Math.round(p.y));
+		if (t == null)
+			return;
 		
 		if (t.visibility == Visibility.UNSEEN) {
 			if (Math.random() < CHANCE_DECORATION) {
