@@ -303,7 +303,7 @@ class CqActor extends CqObject, implements Actor {
 				//It's ok to put it here, not perfect, but easier to test
 				//We will ping simply the kong server twice as often, which should be ok
 				Registery.getKong().SubmitScore( player.xp , "Normal" );
-				player.doDeathEffect(1.5);
+				player.doDeathEffect(1.25);
 			} else {
 				var mob = cast(other, CqMob);
 				// remove other
@@ -852,8 +852,8 @@ class CqActor extends CqObject, implements Actor {
 	}
 	
 	public function doDeathEffect(delay:Float) {
-		angularVelocity = -200;
-		scaleVelocity.x = scaleVelocity.y = -1.2;
+		angularVelocity = -225;
+		scaleVelocity.x = scaleVelocity.y = -1.3;
 		Actuate
 			.timer(delay)
 			.onComplete(deathEffectComplete);
@@ -1237,10 +1237,11 @@ class CqPlayer extends CqActor, implements Player {
 		
 		var player:CqPlayer = this;
 		var alive:Bool = player.lives >= 1;
+		player.lives--;
+		
 		if (alive) {
 			SoundEffectsManager.play(Death);
 			
-			player.lives--;
 			player.infoViewLives.setText("x" + player.lives);
 			Registery.level.protectRespawnPoint();
 		} else {
