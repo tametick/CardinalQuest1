@@ -101,7 +101,6 @@ class CqActor extends CqObject, implements Actor {
 	var isDodging:Bool;
 	var dodgeDir:Int;
 	var dodgeCounter:Float;
-	var bobDir:Int;
 	var bobCounter:Float;
 	var bobCounterInc:Float;
 	var bobMult:Float;
@@ -117,6 +116,7 @@ class CqActor extends CqObject, implements Actor {
 	var lastDirX:Int;
 	
 	override function destroy() {
+		super.destroy();
 		buffs = null;
 
 		if(healthBar!=null &&  !healthBar.dead)
@@ -166,9 +166,6 @@ class CqActor extends CqObject, implements Actor {
 		onKill = null;
 		onMove = null;
 		onUnequip = null;
-
-		
-		super.destroy();
 	}
 	
 	public function new(X:Float, Y:Float) {
@@ -199,7 +196,6 @@ class CqActor extends CqObject, implements Actor {
 		isDodging = false;
 		dodgeDir = 0;
 		dodgeCounter = 0;
-		bobDir = 0;
 		bobCounter = 0.0;
 		bobCounterInc = 0.1;
 		bobMult = 5.0;
@@ -247,16 +243,9 @@ class CqActor extends CqObject, implements Actor {
 	public function moveToPixel(state:HxlState, X:Float, Y:Float) {
 		// so this is where we can add bobbing for waiting !
 		isMoving = true;
-		if ( Y < y ) 
-			bobDir = 0;
-		else if ( X > x ) 
-			bobDir = 1;
-		else if ( Y > y ) 
-			bobDir = 2;
-		else if ( X < x ) 
-			bobDir = 3;
 		bobCounter = 0.0;
-		Actuate.tween(this, moveSpeed, { x: X, y: Y } ).onComplete(moveStop,new Array());
+		Actuate.tween(this, moveSpeed, { x: X, y: Y } ).onComplete(moveStop);
+		
 		for (Callback in onMove ) 
 			Callback(this);
 	}
@@ -513,25 +502,30 @@ class CqActor extends CqObject, implements Actor {
 	public override function render() {
 		var oldX:Float = x;
 		var oldY:Float = y;
-		if ( isMoving ) {
-			var offset:Float = Math.sin(bobCounter) * bobMult;
-			y -= offset;
-			bobCounter += bobCounterInc;
-		} else if ( isDodging ) {
-			var offset:Float = dodgeCounter;
-			if ( offset > 10 ) offset = 10 - (dodgeCounter - 10);
-			if ( offset < 0 ) offset = 0;
-			switch (dodgeDir) {
-				case 0:
-					y += offset;
-				case 1:
-					x -= offset;
-				case 2:
-					y -= offset;
-				case 3:
-					x += offset;
+		if(!dead && hp>0) {
+			if ( isMoving ) {
+				var offset:Float = Math.sin(bobCounter) * bobMult;
+				y -= offset;
+				bobCounter += bobCounterInc;
+			} else if ( isDodging ) {
+				var offset:Float = dodgeCounter;
+				if ( offset > 10 ) 
+					offset = 10 - (dodgeCounter - 10);
+				if ( offset < 0 ) 
+					offset = 0;
+				switch (dodgeDir) {
+					case 0:
+						y += offset;
+					case 1:
+						x -= offset;
+					case 2:
+						y -= offset;
+					case 3:
+						x += offset;
+				}
 			}
 		}
+		
 		super.render();
 		if ( isDodging ) {
 			x = oldX;
@@ -860,12 +854,13 @@ class CqActor extends CqObject, implements Actor {
 		angularVelocity = -200;
 		scaleVelocity.x = scaleVelocity.y = -1.2;
 		Actuate
-			.update(deathEffectUpdate, 0.5, [1.0], [0.0])
+			.timer(0.5)
+			//.update(deathEffectUpdate, 0.5, [1.0], [0.0])
 			.onComplete(deathEffectComplete);
 	}
-	function deathEffectUpdate(a:Float) {
-		//alpha = a;
-	}
+/*	function deathEffectUpdate(a:Float) {
+		alpha = a;
+	}*/
 	function deathEffectComplete() {
 		if(Std.is(this,CqPlayer)){
 			if (lives >= 1) {
@@ -913,7 +908,10 @@ class CqPlayer extends CqActor, implements Player {
 	var lastTile:HxlPoint;
 
 	override function destroy() {
-		if (centralHealthBar == null) return; // already destroyed (why is it getting destroyed twice?)
+		super.destroy();
+		
+		if (centralHealthBar == null)
+			return; // already destroyed (why is it getting destroyed twice?)
 		
 		if(!centralHealthBar.dead)
 			centralHealthBar.destroy();
@@ -942,8 +940,6 @@ class CqPlayer extends CqActor, implements Player {
 		
 		onGainXP.clear();
 		onPickup.clear();
-		
-		super.destroy();
 	}
 	
 	public function new(PlayerClass:CqClass, ?X:Float = -1, ?Y:Float = -1) {

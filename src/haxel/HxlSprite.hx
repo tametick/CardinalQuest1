@@ -511,13 +511,14 @@ class HxlSprite extends HxlObject {
 	}
 
 	public override function destroy() {
+		super.destroy();
+		
 		toggleDrag(false);
 		dragStopCallback = null;
 		dragStartCallback = null;
 		dragMoveCallback = null;
 		dragStartPoint = null;
 		dragStopPoint = null;
-		super.destroy();
 		
 		offset = null;
 		scale = null;

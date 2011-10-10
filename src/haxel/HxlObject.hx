@@ -289,8 +289,8 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	 * Called by <code>FlxGroup</code>, commonly when game states are changed.
 	 */
 	public function destroy() {
-		active = false;
 		dead = true;
+		active = false;
 		exists = false;
 		
 		if (popup != null){
