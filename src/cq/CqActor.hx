@@ -903,7 +903,7 @@ class CqPlayer extends CqActor, implements Player {
 	var onPickup:List<Dynamic>;
 	var onGainXP:List<Dynamic>;
 
-	var lastTile:HxlPoint;
+	public var lastTile:HxlPoint;
 
 	override function destroy() {
 		super.destroy();
@@ -1146,13 +1146,18 @@ class CqPlayer extends CqActor, implements Player {
 	}
 	
 	public override function actInDirection(state:HxlState, targetTile:HxlPoint):Bool {
-		lastTile = tilePos;
-		var currentTile = cast(Registery.level.getTile(Std.int(lastTile.x), Std.int(lastTile.y)), Tile);
+		var oldx = tilePos.x, oldy = tilePos.y;
+		var currentTile = cast(Registery.level.getTile(Std.int(tilePos.x), Std.int(tilePos.y)), Tile);
 		if ( currentTile.loots.length > 0 ) {
 			var item = cast(currentTile.loots[currentTile.loots.length - 1], CqItem);
 			item.setGlow(false);
 		}
-		return super.actInDirection(state, targetTile);
+		if (super.actInDirection(state, targetTile)) {
+			lastTile = new HxlPoint(oldx, oldy);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public override function moveStop() {

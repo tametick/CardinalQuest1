@@ -533,6 +533,10 @@ class GameState extends CqState {
 		}
 	}
 	
+	private function tileBlocksPlayer(tile:CqTile):Bool {
+		return tile == null || (tile.isBlockingMovement() && !(HxlUtil.contains(SpriteTiles.doors.iterator(), tile.dataNum)));
+	}
+	
 	private function pickBestSlide(facing:HxlPoint):HxlPoint {
 		// treating 'facing' as forward, we hold a little competition between 'left' and 'right'
 		// -- we want to find which of those two directions gets us in place to move forward soonest.
@@ -547,6 +551,12 @@ class GameState extends CqState {
 		var left = new HxlPoint(-facing.y, -facing.x);
 		var right = new HxlPoint(facing.y, facing.x);
 		
+		// you can't move backward, though!
+		
+		if (player.lastTile != null) {
+			if (player.lastTile.x == left.x + player.tilePos.x && player.lastTile.y == left.y + player.tilePos.y) left_ok = false;
+			if (player.lastTile.x == right.x + player.tilePos.x && player.lastTile.y == right.y + player.tilePos.y) right_ok = false;
+		}
 		
 		// get set
 		var left_total:HxlPoint = new HxlPoint(0, 0);
@@ -561,7 +571,7 @@ class GameState extends CqState {
 				left_total.y = left_total.y + left.y;
 				
 				var tile = getPlayerTile(left_total);
-				if (tile == null || tile.isBlockingMovement()) {
+				if (tileBlocksPlayer(tile)) {
 					left_ok = false;
 				} else {
 					// and can we get somewhere from here?
@@ -570,7 +580,7 @@ class GameState extends CqState {
 					
 					tile = getPlayerTile(left_ahead);
 					
-					if (tile != null && (!tile.isBlockingMovement() || (HxlUtil.contains(SpriteTiles.doors.iterator(), tile.dataNum)))) {
+					if (!tileBlocksPlayer(tile)) {
 						left_wins = true;
 					}
 				}
@@ -581,7 +591,7 @@ class GameState extends CqState {
 				right_total.y = right_total.y + right.y;
 				
 				var tile = getPlayerTile(right_total);
-				if (tile == null || tile.isBlockingMovement()) {
+				if (tileBlocksPlayer(tile)) {
 					right_ok = false;
 				} else {
 					// and can we get somewhere from here?
@@ -590,7 +600,7 @@ class GameState extends CqState {
 					
 					tile = getPlayerTile(right_ahead);
 					
-					if (tile != null && (!tile.isBlockingMovement() || (HxlUtil.contains(SpriteTiles.doors.iterator(), tile.dataNum)))) {
+					if (!tileBlocksPlayer(tile)) {
 						right_wins = true;
 					}
 				}
@@ -608,13 +618,13 @@ class GameState extends CqState {
 									
 				var tile = getPlayerTile(left_ahead);
 				
-				if (tile == null || (tile.isBlockingMovement() && !(HxlUtil.contains(SpriteTiles.doors.iterator(), tile.dataNum)))) {
+				if (tileBlocksPlayer(tile)) {
 					left_ok = false;
 				}
 				
 				tile = getPlayerTile(right_ahead);
 				
-				if (tile == null || (tile.isBlockingMovement() && !(HxlUtil.contains(SpriteTiles.doors.iterator(), tile.dataNum)))) {
+				if (tileBlocksPlayer(tile)) {
 					right_ok = false;
 				}
 			}
