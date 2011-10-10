@@ -966,13 +966,15 @@ class GameUI extends HxlDialog {
 				cast(HxlGraphics.state, GameState).passTurn();
 			}
 		} else {
-			if ( tile.actors.length > 0 && cast(tile.actors[0], CqActor).faction != 0) {
-				var player = Registery.player;
-				player.use(targetSpell.getSpell(), cast(tile.actors[0], CqActor));
-				SoundEffectsManager.play(SpellCast);
-				targetSpell.getSpell().spiritPoints = 0;
-				updateCharge(targetSpell);
-				cast(HxlGraphics.state, GameState).passTurn();
+			if(tile!=null && tile.actors !=null){
+				if ( tile.actors.length > 0 && cast(tile.actors[0], CqActor).faction != 0) {
+					var player = Registery.player;
+					player.use(targetSpell.getSpell(), cast(tile.actors[0], CqActor));
+					SoundEffectsManager.play(SpellCast);
+					targetSpell.getSpell().spiritPoints = 0;
+					updateCharge(targetSpell);
+					cast(HxlGraphics.state, GameState).passTurn();
+				}
 			}
 		}
 		GameUI.setTargeting(false);

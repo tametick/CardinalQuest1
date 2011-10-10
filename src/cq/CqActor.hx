@@ -850,20 +850,20 @@ class CqActor extends CqObject, implements Actor {
 		GameUI.instance.popups.setChildrenVisibility(false);
 	}
 	
-	public function doDeathEffect() {
+	public function doDeathEffect(?respawn=false) {
 		angularVelocity = -200;
 		scaleVelocity.x = scaleVelocity.y = -1.2;
 		Actuate
 			.timer(0.5)
 			//.update(deathEffectUpdate, 0.5, [1.0], [0.0])
-			.onComplete(deathEffectComplete);
+			.onComplete(deathEffectComplete,[respawn]);
 	}
 /*	function deathEffectUpdate(a:Float) {
 		alpha = a;
 	}*/
-	function deathEffectComplete() {
+	function deathEffectComplete(respawn:Bool) {
 		if(Std.is(this,CqPlayer)){
-			if (lives >= 1) {
+			if (respawn) {
 				cast(this, CqPlayer).respawn();
 			} else {
 				cast(this,CqPlayer).gameOver();
@@ -1229,7 +1229,7 @@ class CqPlayer extends CqActor, implements Player {
 		HxlGraphics.setState(new GameOverState());
 	}
 	
-	public override function doDeathEffect() {
+	public override function doDeathEffect(?doNotUseThisArgument=false) {
 		if (isDying) {
 			// can't die twice at once
 			return;
@@ -1252,7 +1252,7 @@ class CqPlayer extends CqActor, implements Player {
 		}
 		player = null;
 		
-		super.doDeathEffect();
+		super.doDeathEffect(alive);
 	}
 }
 
