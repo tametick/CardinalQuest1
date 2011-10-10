@@ -54,27 +54,39 @@ class CqLevel extends Level {
 		ptLevel.finish();
 		if (index == Configuration.lastLevel)
 			cast(HxlGraphics.state,GameState).startBossAnim();
-
 	}
 	
 	
 	override public function removeMobFromLevel(state:HxlState, mob:Mob) {
 		var cqmob = cast(mob, CqMob);
 		
+		// remove the monster from the level
 		super.removeMobFromLevel(state, mob);
 		
+		// get its health bar off the stage
 		if (cqmob.healthBar != null) 
 			state.remove(cqmob.healthBar);
 		
+		// now, if we're in a level that has special logic (namely, the last one)
+		// that triggers when all monsters are dead, we need to see if this was the last one.
+		// we have to skip monsters that are friendly (like magic mirror copies), but we
+		// can't count charming as killing.  we must also ignore "encouraging" monsters that
+		// grant no xp.
 		for (m in mobs) {
 			cqmob = cast(m, CqMob);
-			if (cqmob.faction != CqPlayer.faction) 
-				return;
-			if (cqmob.isCharmed)
-				return;
+			if (cqmob.xpValue > 0) {
+				if (cqmob.faction != CqPlayer.faction || cqmob.isCharmed) 
+					return;
+			}
 		}
-			
-		// only got here if no enemy mobs remain & game state hasn't been destroyed
+		
+		// if the player just killed a legitimate monster, we'll credit the exploration clock
+		if (cqmob.xpValue > 0) {
+			ticksSinceNewDiscovery -= 60 * 4;
+		}
+		
+		// all monsters have been killed, so we'll go ahead and give all-monsters-dead a chance
+		// to run as long as the player is still around (for most levels, this won't do anything.)
 		if(Registery.player!=null)
 			levelComplete();
 	}
@@ -366,7 +378,7 @@ class CqLevel extends Level {
 			}
 			
 			if (freePosition != null) {
-				var mob:CqMob = createAndaddMob(freePosition, Std.int((.5 + .5 * Math.random()) * Registery.world.currentLevelIndex), true);
+				var mob:CqMob = createAndaddMob(freePosition, Std.int((.5 + .5 * Math.random()) * index), true);
 				mob.xpValue = 0;
 				
 				if (stairsAreFound && getExplorationProgress() > .8) {

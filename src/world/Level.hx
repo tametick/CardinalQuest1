@@ -103,23 +103,25 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	}
 	
 	public function removeMobFromLevel(state:HxlState, mob:Mob) {
+		if (mob == null) return; // safety against timing issues
+		
+		// take the monster out of the global list of monsters
 		mobs.remove(mob);
 		
+		// take the monster out of the tile it was in
 		var mobPos = null;
-		if (mob != null)
-			mobPos = mob.getTilePos();
+		mobPos = mob.getTilePos();
 		
-		var mobTile = null;
-		if(mobPos!=null)
+		if (mobPos!=null) {
+			var mobTile = null;
 			mobTile = cast(getTile(mobPos.x, mobPos.y), Tile);
 			
-		if(mobTile.actors!=null)
-			mobTile.actors.remove(mob);
+			if(mobTile.actors!=null)
+				mobTile.actors.remove(mob);			
+		}
 		
+		// remove the monster from the graphical stage
 		state.remove(mob);
-		
-		mobPos = null;
-		mobTile = null;
 	}
 	
 	function addObject(state:HxlState, obj:GameObject) {
