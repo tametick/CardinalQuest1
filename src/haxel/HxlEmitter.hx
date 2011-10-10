@@ -1,6 +1,7 @@
 package haxel;
 
 import flash.display.Bitmap;
+import haxel.HxlState;
 
 /**
  * <code>HxlEmitter</code> is a lightweight particle emitter.
@@ -455,4 +456,8 @@ class HxlEmitter extends HxlGroup {
 		on = false;
 	}
 
+	override public function onRemove(state:HxlState) {
+		super.onRemove(state);
+		destroy();
+	}
 }
