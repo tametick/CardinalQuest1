@@ -856,13 +856,10 @@ class CqActor extends CqObject, implements Actor {
 		scaleVelocity.x = scaleVelocity.y = -1.2;
 		Actuate
 			.timer(delay)
-			//.update(deathEffectUpdate, 0.5, [1.0], [0.0])
-			.onComplete(deathEffectComplete,[respawn]);
+			.onComplete(deathEffectComplete);
 	}
-/*	function deathEffectUpdate(a:Float) {
-		alpha = a;
-	}*/
-	function deathEffectComplete(respawn:Bool) {
+	
+	function deathEffectComplete() {
 		if(Std.is(this,CqPlayer)){
 			if (lives >= 0) {
 				cast(this, CqPlayer).respawn();
