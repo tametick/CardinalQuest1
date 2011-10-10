@@ -155,7 +155,8 @@ class GraphicCache {
 	 * @return	Whether or not this file can be found in the cache.
 	 */
 	public static function checkBitmapCache(Key:Dynamic):Bool {
-		if (Key == null) return false;
+		if (Key == null) 
+			return false;
 		var keyStr:String = HxlUtil.enumToString(Key);
 		return cache.exists(keyStr) && cache.get(keyStr) != null;
 	}
