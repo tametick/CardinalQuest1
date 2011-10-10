@@ -72,7 +72,7 @@ class HxlUIBar extends HxlDialog {
 		}
 	}
 	function percentChangeTweenCallback(params:Dynamic)	{
-		if (bar != null){
+		if (bar != null && params != null){
 			bar.scale.x = cast(params, Float);
 		}
 	}

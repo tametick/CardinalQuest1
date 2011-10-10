@@ -304,6 +304,7 @@ class CqActor extends CqObject, implements Actor {
 			cast(this, CqPlayer).gainExperience(mob);
 			// remove other
 			Registery.level.removeMobFromLevel(state, mob);
+			HxlGraphics.state.add(mob);
 			mob.doDeathEffect();
 		} else {
 			if (Std.is(other, CqPlayer)) {
@@ -317,6 +318,7 @@ class CqActor extends CqObject, implements Actor {
 				var mob = cast(other, CqMob);
 				// remove other
 				Registery.level.removeMobFromLevel(state, mob);
+				HxlGraphics.state.add(mob);
 				mob.doDeathEffect();
 			}
 		}
@@ -853,6 +855,29 @@ class CqActor extends CqObject, implements Actor {
 		}
 		GameUI.instance.popups.setChildrenVisibility(false);
 	}
+	
+	public function doDeathEffect() {
+		angularVelocity = -200;
+		scaleVelocity.x = scaleVelocity.y = -1.2;
+		Actuate
+			.update(deathEffectUpdate, 0.5, [1.0], [0.0])
+			.onComplete(deathEffectComplete);
+	}
+	function deathEffectUpdate(a:Float) {
+		//alpha = a;
+	}
+	function deathEffectComplete() {
+		if(Std.is(this,CqPlayer)){
+			if (lives >= 1) {
+				cast(this, CqPlayer).respawn();
+			} else {
+				cast(this,CqPlayer).gameOver();
+			}
+		} else {
+			HxlGraphics.state.remove(this);
+			destroy();
+		}
+	}
 }
 
 
@@ -1160,7 +1185,7 @@ class CqPlayer extends CqActor, implements Player {
 		super.moveToPixel(state, X, Y);
 	}
 	
-	function respawn() {
+	public function respawn() {
 		var state:HxlState = HxlGraphics.state;
 		
 		var level:CqLevel = Registery.level;
@@ -1178,7 +1203,7 @@ class CqPlayer extends CqActor, implements Player {
 		player.moveToPixel(state, startingPostion.x, startingPostion.y);
 		player.hp = player.maxHp;
 		player.updatePlayerHealthBars();
-		
+				
 		// clear all buffs, debuffs, and timers
 		for (buff in player.buffs.keys()) player.buffs.remove(buff);
 		player.timers.splice(0, player.timers.length);
@@ -1203,12 +1228,12 @@ class CqPlayer extends CqActor, implements Player {
 		isDying = false;
 	}
 	
-	function gameOver() {
+	public function gameOver() {
 		// too bad!
 		HxlGraphics.setState(new GameOverState());
 	}
 	
-	public function doDeathEffect() {
+	public override function doDeathEffect() {
 		if (isDying) {
 			// can't die twice at once
 			return;
@@ -1217,7 +1242,6 @@ class CqPlayer extends CqActor, implements Player {
 		isDying = true;
 		
 		var player:CqPlayer = this;
-		var state:HxlState = HxlGraphics.state;
 		var alive:Bool = player.lives >= 1;
 		if (alive) {
 			SoundEffectsManager.play(Death);
@@ -1226,21 +1250,13 @@ class CqPlayer extends CqActor, implements Player {
 			player.infoViewLives.setText("x" + player.lives);
 			Registery.level.protectRespawnPoint();
 		} else {
-			///todo: Playtomic recording
-			
+			///todo: Playtomic recording	
 			MusicManager.stop();
 			SoundEffectsManager.play(Lose);
 		}
+		player = null;
 		
-		HxlGraphics.state.add(this);
-		angularVelocity = -200;
-		scaleVelocity.x = scaleVelocity.y = -1.1;
-		Actuate
-			.update(deathEffectUpdate, 1.25, [1.0], [0.0])
-			.onComplete(if (alive) respawn else gameOver);
-	}
-	function deathEffectUpdate(a:Float) {
-		// do something interesting?
+		super.doDeathEffect();
 	}
 }
 
@@ -1441,22 +1457,6 @@ class CqMob extends CqActor, implements Mob {
 		} else {
 			return actUnaware(state);
 		}
-	}
-	
-	public function doDeathEffect() {
-		HxlGraphics.state.add(this);
-		angularVelocity = -200;
-		scaleVelocity.x = scaleVelocity.y = -1.2;
-		Actuate
-			.update(deathEffectUpdate, 0.5, [1.0], [0.0])
-			.onComplete(deathEffectComplete);
-	}
-	function deathEffectUpdate(a:Float) {
-		alpha = a;
-	}
-	function deathEffectComplete() {
-		HxlGraphics.state.remove(this);
-		destroy();
 	}
 }
 
