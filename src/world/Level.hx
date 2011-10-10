@@ -289,7 +289,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		}
 		
 		if (newvis != Visibility.SENSED) {
-			if (t.visibility != Visibility.SEEN) {
+			if (t.visibility != Visibility.IN_SIGHT) {
 				// have to tweak this until it feels right -- but we don't want to reset it to 0 or optimal
 				// play will call for waiting until just before dudes start appearing
 				
@@ -297,7 +297,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				switch (t.timesUncovered) {
 					case 1: map.ticksSinceNewDiscovery -= 3 * 60; // every cell we see pays off 3 turns of hanging around (quite a lot, really)
 					case 2: map.ticksSinceNewDiscovery -= 1 * 60; // take off one turn every time you uncover something twice (at least you're still moving)
-					case 3: map.ticksSinceNewDiscovery -= 1 * 15; // take off a few ticks the third time
+					case 3: map.ticksSinceNewDiscovery -= 1 * 30; // take off a few ticks the third time
 					default: // nothing happens by default
 				}
 			}

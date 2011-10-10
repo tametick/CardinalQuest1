@@ -366,7 +366,7 @@ class CqLevel extends Level {
 			}
 			
 			if (freePosition != null) {
-				var mob:CqMob = createAndaddMob(freePosition, Std.int((.5 + .5 * Math.random()) * Registery.player.level), true);
+				var mob:CqMob = createAndaddMob(freePosition, Std.int((.5 + .5 * Math.random()) * Registery.world.currentLevelIndex), true);
 				mob.xpValue = 0;
 				
 				if (stairsAreFound && getExplorationProgress() > .8) {

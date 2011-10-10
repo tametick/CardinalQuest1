@@ -902,9 +902,7 @@ class GameUI extends HxlDialog {
 			} else {
 				targetX = targetLastPos.x;
 				targetY = targetLastPos.y;
-
 			}
-			
 		}
 		//
 		if (targetLastPos.x != targetX || targetLastPos.y != targetY ) {
@@ -939,47 +937,49 @@ class GameUI extends HxlDialog {
 	}
 
 	public function targetingExecute(mouse:Bool) {
-		if (!exists || !visible)
-			return;
+		// this line seems to be a guard against something -- but against what?
+		if (!exists || !visible) return;
+		
 		if ( targetSpell == null ) {
 			GameUI.setTargeting(false);
 			return;
 		}
+		
 		var tile:CqTile = null;
 		var targetX:Float;
 		var targetY:Float;
-		if (mouse)
-		{
+		if (mouse) {
 			targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
 			targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
 			tile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)), CqTile);
 		}else {
 			tile = cast(Registery.level.getTile(Std.int(targetLastPos.x), Std.int(targetLastPos.y)), CqTile);
 		}
-			
 		
-		if (isTargetingEmptyTile && tile != null) {
-			if ( tile.actors.length <= 0 && HxlUtil.contains(SpriteTiles.walkableAndSeeThroughTiles.iterator(), tile.dataNum) ) {
-				cast(Registery.player, CqActor).useAt(targetSpell.getSpell(), tile);
-				SoundEffectsManager.play(SpellCast);
-				targetSpell.getSpell().spiritPoints = 0;
-				updateCharge(targetSpell);
-				cast(HxlGraphics.state, GameState).passTurn();
-			}
-		} else {
-			if(tile!=null && tile.actors !=null){
-				if ( tile.actors.length > 0 && cast(tile.actors[0], CqActor).faction != 0) {
-					var player = Registery.player;
-					player.use(targetSpell.getSpell(), cast(tile.actors[0], CqActor));
+		if (tile != null && tile.visibility == Visibility.IN_SIGHT) {
+			if (isTargetingEmptyTile) {
+				if ( tile.actors.length <= 0 && HxlUtil.contains(SpriteTiles.walkableAndSeeThroughTiles.iterator(), tile.dataNum) ) {
+					cast(Registery.player, CqActor).useAt(targetSpell.getSpell(), tile);
 					SoundEffectsManager.play(SpellCast);
 					targetSpell.getSpell().spiritPoints = 0;
 					updateCharge(targetSpell);
 					cast(HxlGraphics.state, GameState).passTurn();
 				}
+			} else {
+				if (tile.actors != null){
+					if ( tile.actors.length > 0 && cast(tile.actors[0], CqActor).faction != 0) {
+						var player = Registery.player;
+						player.use(targetSpell.getSpell(), cast(tile.actors[0], CqActor));
+						SoundEffectsManager.play(SpellCast);
+						targetSpell.getSpell().spiritPoints = 0;
+						updateCharge(targetSpell);
+						cast(HxlGraphics.state, GameState).passTurn();
+					}
+				}
 			}
 		}
+		
 		GameUI.setTargeting(false);
-
 	}
 	
 	public function removePopups(parents:Array<Dynamic>) {
