@@ -1394,7 +1394,9 @@ class CqMob extends CqActor, implements Mob {
 		// fine.  walk towards him!
 		var astar:AStar = new AStar(Registery.level, new IntPoint(Std.int(tilePos.x), Std.int(tilePos.y)), new IntPoint(Std.int(enemy.tilePos.x), Std.int(enemy.tilePos.y)));
 		var line:Array<IntPoint> = astar.solve(true, false);
-		var dest = line[line.length - 1];
+		var dest = null;
+		if (line != null && line.length > 0) 
+			dest = line[line.length - 1];
 		
 		if (dest == null) {
 			// no path?  let's become unaware and consume a turn
