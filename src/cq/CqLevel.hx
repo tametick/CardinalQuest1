@@ -369,10 +369,10 @@ class CqLevel extends Level {
 				var mob:CqMob = createAndaddMob(freePosition, Std.int((.5 + .5 * Math.random()) * Registery.player.level), true);
 				mob.xpValue = 0;
 				
-				if (stairsAreFound && getExplorationProgress() < .8) {
-					GameUI.showEffectText(mob, "Keep exploring!", 0xFFEE33);
-				} else {
+				if (stairsAreFound && getExplorationProgress() > .8) {
 					GameUI.showEffectText(mob, "Head for the stairs!", 0xFFEE33);
+				} else {
+					GameUI.showEffectText(mob, "Keep exploring!", 0xFFEE33);
 				}
 				updateFieldOfView(HxlGraphics.state);
 				

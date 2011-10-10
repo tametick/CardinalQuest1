@@ -117,10 +117,16 @@ class GameState extends CqState {
 	}
 
 	
-	// This is very odd reduplication -- compare this with my compasses
-	static var keys = ["LEFT", "A", "RIGHT", "D", "UP" ,"W" ,"DOWN" ,"S", "ENTER"];
+	// this is a dangerous function -- lots of risky behaviors could come from it
 	function justPressedTargetingKey() {
-		for (k in keys) {
+		for (compass in Configuration.bindings.compasses) {
+			for (k in compass) {
+				if (HxlGraphics.keys.justPressed(k)) {
+					return true;
+				}
+			}
+		}
+		for (k in Configuration.bindings.waitkeys) {
 			if (HxlGraphics.keys.justPressed(k))
 				return true;
 		}
@@ -514,12 +520,13 @@ class GameState extends CqState {
 			// if player just attacked don't continue moving
 			if (player.justAttacked) {
 				resumeActingTime = Timer.stamp() + player.moveSpeed;
-				isPlayerActing = false;
+				isPlayerActing = true; // maybe?
 			}
 			return true;
 		} else if (HxlUtil.contains(SpriteTiles.doors.iterator(), tile.dataNum)) {
 			// would be great to tell player to open the door, wouldn't it just?
 			openDoor(tile);
+			resumeActingTime = Timer.stamp() + player.moveSpeed;
 			return true;
 		} else {
 			return false;
@@ -631,7 +638,7 @@ class GameState extends CqState {
 			return;
 		}
 		
-		if (player.isMoving) {
+		if (player.isMoving || Timer.stamp() < resumeActingTime) {
 			// if the player is being animated presently, we can't take key commands
 			return;
 		}

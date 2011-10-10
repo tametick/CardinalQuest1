@@ -868,6 +868,7 @@ class GameUI extends HxlDialog {
 			var wPos:HxlPoint = Registery.level.getPixelPositionOfTile(Std.int(targetLastPos.x), Std.int(targetLastPos.y));
 			targetSprite.x = wPos.x;
 			targetSprite.y = wPos.y;
+			targetSprite.zIndex = 4;
 			//targetLastPos = null;
 		} else if ( targetSprite.visible == false ) 
 			targetSprite.visible = true;
