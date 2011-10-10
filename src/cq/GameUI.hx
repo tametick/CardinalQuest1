@@ -1024,12 +1024,6 @@ class GameUI extends HxlDialog {
 	}
 	
 	private function getXBallGraphic(ball:HxlSprite, colorSource:BitmapData) {
-		// we need multiple colors to make these look cool
-		
-		//if (GraphicCache.checkBitmapCache(CqGraphicKey.xball(color))) {
-		//	ball.loadCachedGraphic(CqGraphicKey.xball(color));
-		//} else {
-		
 		var w = 27, h = 27;
 		var halfdiagonal = .5 * Math.sqrt(w * w + h * h);
 		
@@ -1045,7 +1039,7 @@ class GameUI extends HxlDialog {
 				y = HxlUtil.randomInt(h - 4) + 2;
 			} while (((Math.sqrt(x - w / 2) * (x - w / 2) + (y - h / 2) * (y - h / 2)) / halfdiagonal) > Math.random());
 			g.beginFill(randomColorBiased(colorSource, x / w, y / h, .1), 1.0);
-			g.drawCircle(x, y, 1 + .5 * HxlUtil.randomInt(3));
+			g.drawCircle(x, y, 1 + .5 * HxlUtil.randomInt(5));
 		}
 		
 		tmp.draw(s);
@@ -1056,10 +1050,6 @@ class GameUI extends HxlDialog {
 	
 	public function shootXBall(actor:CqActor, victim:CqActor, colorSource:BitmapData, spell:CqItem):Void {
 		var ball:HxlSprite = new HxlSprite();
-		/*var ang:Float = HxlUtil.angleBetween(fromTile, toObj.tilePos) * 360/ (Math.PI*2);
-		ang = ang < 0? 360 - ang:ang;
-		ang += 90;
-		ball.angle = ang;*/
 		
 		getXBallGraphic(ball, colorSource);
 		
@@ -1089,22 +1079,18 @@ class GameUI extends HxlDialog {
 		
 		x1 = delta.x1;
 		y1 = delta.y1;
-		if(victim!=null){
+		if (victim!=null) {
 			x2 = victim.x + Configuration.tileSize / 2;
 			y2 = victim.y + Configuration.tileSize / 2;
+		
+			if(ball!=null) {
+				ball.angle += 20 + 15 * Math.random();
+			
+				dt = dt + .01 * Math.random();
+				ball.x = x1 * (1.0 - dt) + x2 * dt;
+				ball.y = y1 * (1.0 - dt) + y2 * dt;
+			}
 		}
-		
-		if(ball!=null)
-			ball.angle += 20 + 15 * Math.random();
-		
-		dt = dt + .01 * Math.random();
-
-		if(ball!=null){
-			ball.x = x1 * (1.0 - dt) + x2 * dt;
-			ball.y = y1 * (1.0 - dt) + y2 * dt;
-		}
-		
-		//cast(actuator, SimpleActuator).changeProperties();
 	}
 	
 	private function onXBallHit(ball:HxlSprite,actor:CqActor,other:CqActor,spell:CqItem) {
