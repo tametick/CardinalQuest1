@@ -1048,6 +1048,7 @@ class GameUI extends HxlDialog {
 		
 		tmp.draw(s);
 		ball.setPixels(tmp);
+		tmp.dispose();
 		tmp = null;
 	}
 	
