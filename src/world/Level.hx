@@ -3,6 +3,7 @@ package world;
 import com.eclecticdesignstudio.motion.Actuate;
 import cq.CqActor;
 import cq.CqItem;
+import cq.CqResources;
 import data.Registery;
 import data.Resources;
 import flash.display.Bitmap;
@@ -15,6 +16,7 @@ import haxel.HxlState;
 import haxel.HxlGraphics;
 import haxel.HxlUtil;
 import haxel.HxlSprite;
+
 
 import data.Registery;
 
@@ -31,6 +33,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	public var startingLocation:HxlPoint;
 	public var index(default, null):Int;
 	public var ticksSinceNewDiscovery:Float; // float for convenient arithmetic
+	public var stairsAreFound:Bool;
 	
 	public static inline var CHANCE_DECORATION:Float = 0.2;
 	
@@ -45,6 +48,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		startingIndex = 1;
 		ptLevel = new PtLevel(this);
 		ticksSinceNewDiscovery = 0;
+		stairsAreFound = false;
 	}
 	
 	public function isBlockingMovement(X:Int, Y:Int, ?CheckActor:Bool=false):Bool { 
@@ -268,17 +272,27 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				map.addDecoration(t, state);
 			}
 			
+			if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), t.dataNum)) {
+				map.stairsAreFound = true;
+			}
+
 			if (newvis == Visibility.SENSED) {
 				t.visibility = Visibility.SENSED;
 			}
 		}
 		
 		if (newvis != Visibility.SENSED) {
-			if (t.visibility == Visibility.UNSEEN || t.visibility == Visibility.SENSED) {
+			if (t.visibility != Visibility.SEEN) {
 				// have to tweak this until it feels right -- but we don't want to reset it to 0 or optimal
 				// play will call for waiting until just before dudes start appearing
-				map.ticksSinceNewDiscovery = map.ticksSinceNewDiscovery - 4 * 60; // every cell we see pays off 4 turns of hanging around (quite a lot, really)
-				if (map.ticksSinceNewDiscovery < 0) map.ticksSinceNewDiscovery = 0;
+				
+				t.timesUncovered++;
+				switch (t.timesUncovered) {
+					case 1: map.ticksSinceNewDiscovery -= 3 * 60; // every cell we see pays off 3 turns of hanging around (quite a lot, really)
+					case 2: map.ticksSinceNewDiscovery -= 1 * 60; // take off one turn every time you uncover something twice (at least you're still moving)
+					case 3: map.ticksSinceNewDiscovery -= 1 * 15; // take off a few ticks the third time
+					default: // nothing happens by default
+				}
 			}
 			t.visibility = newvis;
 		}
@@ -523,6 +537,22 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		var dimness = (maxDist-dist) / maxDist;
 		var color = minColor + (maxColor - minColor)*dimness;
 		return Math.round(color);
+	}
+	
+	
+	public function getExplorationProgress():Float {
+		var explored:Float = 0.0, total:Float = 0.0;
+		// return a fraction in [0,1] indicating the % of floor cells uncovered
+		for (y in 0...heightInTiles) {
+			for (x in 0...widthInTiles) {
+				var t:Tile = cast(_tiles[y][x], Tile);
+				if (!t.isBlockingMovement()) {
+					total += 1.0;
+					if (t.timesUncovered > 0) explored += 1.0;
+				}
+			}
+		}
+		return explored / total;
 	}
 	
 	/**

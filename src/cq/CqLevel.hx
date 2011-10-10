@@ -345,10 +345,10 @@ class CqLevel extends Level {
 	
 
 	public function tryToSpawnEncouragingMonster() {
-		// you get 9 speed-1 turns before the game considers hounding you.  That's more than it sounds like --
+		// you get 8 speed-1 turns before the game considers hounding you.  That's more than it sounds like --
 		// especially since every new cell you uncover gives you 3 turns back and seeing monsters slows the counter
 		// considerably and you're never really speed-1.  Try playing without scumming -- you'll never see this!
-		if (ticksSinceNewDiscovery > 60 * 9 && Math.random() < .6) {
+		if (ticksSinceNewDiscovery > 60 * 8 && Math.random() < .6) {
 			// lots of code duplication from polymorph -- beware!
 			
 			var freePosition:HxlPoint = null;
@@ -366,13 +366,17 @@ class CqLevel extends Level {
 			}
 			
 			if (freePosition != null) {
-				var mob:CqMob = Registery.level.createAndaddMob(freePosition, Std.int((.5 + .5 * Math.random()) * Registery.player.level), true);
+				var mob:CqMob = createAndaddMob(freePosition, Std.int((.5 + .5 * Math.random()) * Registery.player.level), true);
 				mob.xpValue = 0;
 				
-				GameUI.showEffectText(mob, "Keep exploring!", 0xFFEE33);
-				Registery.level.updateFieldOfView(HxlGraphics.state);
+				if (stairsAreFound && getExplorationProgress() < .8) {
+					GameUI.showEffectText(mob, "Keep exploring!", 0xFFEE33);
+				} else {
+					GameUI.showEffectText(mob, "Head for the stairs!", 0xFFEE33);
+				}
+				updateFieldOfView(HxlGraphics.state);
 				
-				ticksSinceNewDiscovery -= 60 * 5; // a new monster every 5 turns or so once you stop exploring
+				ticksSinceNewDiscovery -= 60 * 5; // a new monster every 5 turns or so once you stop exploring (note that the monster itself helps cancel this out)
 				
 				GameUI.instance.addHealthBar(cast(mob, CqActor));
 				

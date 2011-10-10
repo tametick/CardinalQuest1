@@ -17,6 +17,7 @@ class Tile extends HxlTile {
 	public var loots:Array<Loot>;
 	public var decorations:Array<Decoration>;
 	public var level:Level;
+	public var timesUncovered:Int;
 	
 	override public function isBlockingMovement():Bool {
 		return !HxlUtil.contains(Resources.walkableTiles.iterator(), dataNum);
@@ -32,6 +33,7 @@ class Tile extends HxlTile {
 		actors = new Array<Actor>();
 		loots = new Array<Loot>();
 		decorations = new Array<Decoration>();
+		timesUncovered = 0;
 	}
 	
 	public function colorTo(ToColor:Int, Speed:Float) {

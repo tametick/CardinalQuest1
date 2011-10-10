@@ -111,6 +111,7 @@ class CqActor extends CqObject, implements Actor {
 	public var cqhealthBar(getHealthBar, null):CqHealthBar;
 	function getHealthBar() { return cast(healthBar, CqHealthBar); }
 	
+	
 	public var name:String;
 	//track last horizontal direction, for sprite flipping
 	var lastDirX:Int;
@@ -294,7 +295,7 @@ class CqActor extends CqObject, implements Actor {
 			// remove other
 			Registery.level.removeMobFromLevel(state, mob);
 			HxlGraphics.state.add(mob);
-			mob.doDeathEffect();
+			mob.doDeathEffect(.5);
 		} else {
 			if (Std.is(other, CqPlayer)) {
 				var player:CqPlayer = cast(other, CqPlayer);
@@ -302,13 +303,13 @@ class CqActor extends CqObject, implements Actor {
 				//It's ok to put it here, not perfect, but easier to test
 				//We will ping simply the kong server twice as often, which should be ok
 				Registery.getKong().SubmitScore( player.xp , "Normal" );
-				player.doDeathEffect();
+				player.doDeathEffect(1.5);
 			} else {
 				var mob = cast(other, CqMob);
 				// remove other
 				Registery.level.removeMobFromLevel(state, mob);
 				HxlGraphics.state.add(mob);
-				mob.doDeathEffect();
+				mob.doDeathEffect(.5);
 			}
 		}
 	}
@@ -850,11 +851,11 @@ class CqActor extends CqObject, implements Actor {
 		GameUI.instance.popups.setChildrenVisibility(false);
 	}
 	
-	public function doDeathEffect() {
+	public function doDeathEffect(delay:Float) {
 		angularVelocity = -200;
 		scaleVelocity.x = scaleVelocity.y = -1.2;
 		Actuate
-			.timer(0.5)
+			.timer(delay)
 			//.update(deathEffectUpdate, 0.5, [1.0], [0.0])
 			.onComplete(deathEffectComplete);
 	}
@@ -1229,7 +1230,7 @@ class CqPlayer extends CqActor, implements Player {
 		HxlGraphics.setState(new GameOverState());
 	}
 	
-	public override function doDeathEffect() {
+	public override function doDeathEffect(delay) {
 		if (isDying) {
 			// can't die twice at once
 			return;
@@ -1252,7 +1253,7 @@ class CqPlayer extends CqActor, implements Player {
 		}
 		player = null;
 		
-		super.doDeathEffect();
+		super.doDeathEffect(delay);
 	}
 }
 
