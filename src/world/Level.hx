@@ -105,9 +105,16 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	public function removeMobFromLevel(state:HxlState, mob:Mob) {
 		mobs.remove(mob);
 		
-		var mobPos = mob.getTilePos();		
-		var mobTile = cast(getTile(mobPos.x, mobPos.y), Tile);
-		mobTile.actors.remove(mob);
+		var mobPos = null;
+		if (mob != null)
+			mobPos = mob.getTilePos();
+		
+		var mobTile = null;
+		if(mobPos!=null)
+			mobTile = cast(getTile(mobPos.x, mobPos.y), Tile);
+			
+		if(mobTile.actors!=null)
+			mobTile.actors.remove(mob);
 		
 		state.remove(mob);
 		
