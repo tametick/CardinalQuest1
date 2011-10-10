@@ -73,12 +73,6 @@ class CqTextScroller extends HxlGroup {
 		}
 	}
 	
-	private function repositionTitle() {
-		if (titleText != null) {
-			titleText.y = (HxlGraphics.stage.stageHeight - columns_height - 10) / 2 - titleText.height;
-		}
-	}
-	
 	public function setTitle(?Title:String = "", ?TitleColor:Int = 0xFFFFFF, ?ShadowColor:Int = 0x010101):Void {
 		if (titleText != null)
 			remove(titleText);
@@ -87,7 +81,6 @@ class CqTextScroller extends HxlGroup {
 			titleText = new HxlText(0, 0, 640, Title);
 			titleText.setFormat(null, 72, TitleColor, "center", ShadowColor);
 			
-			repositionTitle();
 			add(titleText);
 		}
 	}	
@@ -139,7 +132,6 @@ class CqTextScroller extends HxlGroup {
 		
 		if (text.height > columns_height) {
 			columns_height = Std.int(text.height);
-			repositionTitle();
 		}
 		
 		add(text);
