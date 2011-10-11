@@ -828,7 +828,11 @@ class GameUI extends HxlDialog {
 		isTargeting = Toggle;
 		isTargetingEmptyTile = TargetsEmptyTile; 
 		if ( TargetText != null ) {
-			targetString = TargetText + ": Select A Target";
+			if (TargetsEmptyTile) {
+				targetString = "Select a space for your " + TargetText + " spell";
+			} else {
+				targetString = "Select a target for your " + TargetText + " spell";
+			}
 		}
 		if ( !Toggle ) {
 			if ( instance.targetSprite != null ) 
