@@ -474,17 +474,18 @@ class GameState extends CqState {
 			// If user was in targeting mode, cancel it
 			if ( GameUI.isTargeting ) {
 				GameUI.setTargeting(false);
-			}
-			if (HxlGraphics.keys.justReleased("F1")){
-				gameUI.setActive();
-				gameUI.dlgPotionGrid.pressHelp(false);
-			}else {
-				if (GameUI.instance.panels.currentPanel != null)
-				{
-					gameUI.panels.hideCurrentPanel();
-				}else{
+			} else {
+				if (HxlGraphics.keys.justReleased("F1")){
 					gameUI.setActive();
-					gameUI.dlgPotionGrid.pressMenu(false);
+					gameUI.dlgPotionGrid.pressHelp(false);
+				}else {
+					if (GameUI.instance.panels.currentPanel != null)
+					{
+						gameUI.panels.hideCurrentPanel();
+					}else{
+						gameUI.setActive();
+						gameUI.dlgPotionGrid.pressMenu(false);
+					}
 				}
 			}
 		}
