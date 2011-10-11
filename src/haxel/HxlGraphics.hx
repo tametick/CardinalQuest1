@@ -686,6 +686,9 @@ class HxlGraphics {
 		return _pause;
 	}
 	
+	public static function getGamePaused():Bool {
+		return _game.paused;
+	}
 
 	public static function setPause(Pause:Bool):Bool {
 		var op:Bool = _pause;
