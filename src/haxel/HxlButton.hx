@@ -181,6 +181,8 @@ class HxlButton extends HxlGroup {
 		//refreshHulls();
 		_off.reset(_off.x, _off.y);
 		_on.reset(_on.x, _on.y);
+		
+		
 		return this;
 	}
 
@@ -244,7 +246,7 @@ class HxlButton extends HxlGroup {
 		super.update();
 
 		visibility(false);
-		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
+		if (overlapsPoint(HxlGraphics.mouse.x - (.5*_off.height*(1.0-_off.scale.x)),HxlGraphics.mouse.y - (.5*_off.height*(1.0-_off.scale.y)))) {
 			if (!HxlGraphics.mouse.pressed()) {
 				_pressed = false;
 			} else if (!_pressed) {

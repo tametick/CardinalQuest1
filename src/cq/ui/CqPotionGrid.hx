@@ -67,8 +67,8 @@ class CqPotionGrid extends CqInventoryGrid {
 		HelpSprite.scale = HelpSpriteH.scale = _point.clone();
 		
 		var btnSize:Int = 64;
-		var menuButton:HxlButton = new HxlButton(4, 2, 25, btnSize,pressMenu);
-		var helpButton:HxlButton = new HxlButton(Std.int(width-66), 2, 25, btnSize,pressHelp);
+		var menuButton:HxlButton = new HxlButton(4, 2, Std.int(_point.x * btnSize), Std.int(_point.y * btnSize), pressMenu);
+		var helpButton:HxlButton = new HxlButton(Std.int(width-66), 2, Std.int(_point.x * btnSize), Std.int(_point.y * btnSize),pressHelp);
 		helpButton.loadGraphic(HelpSprite,HelpSpriteH);
 		menuButton.loadGraphic(MenuSprite,MenuSpriteH);
 		helpButton.configEvent(5, true, true);
