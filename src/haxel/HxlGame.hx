@@ -1,5 +1,6 @@
 package haxel;
 
+import cq.states.GameState;
 import data.Configuration;
 import data.MusicManager;
 import flash.display.Bitmap;
@@ -331,6 +332,10 @@ class HxlGame extends Sprite {
 		if ( _autoPause ) {
 			//HxlGraphics.pause = true;
 			MusicManager.pause();
+			if (Std.is(HxlGraphics.state, GameState)) {
+				cast(HxlGraphics.state, GameState).isPlayerActing = false;
+				HxlGraphics.keys.reset();
+			}
 		}
 	}
 
