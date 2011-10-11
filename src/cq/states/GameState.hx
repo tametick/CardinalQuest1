@@ -142,8 +142,11 @@ class GameState extends CqState {
 		System.gc();
 		
 		if (endingAnim) {
-			gameUI.popups.setChildrenVisibility(false);
-			cursor.visible = false;
+			if(gameUI!=null && gameUI.popups != null && gameUI.popups.members != null) {
+				gameUI.popups.setChildrenVisibility(false);
+			}
+			if(cursor!=null)
+				cursor.visible = false;
 			doEndingAnimation();
 			return;
 		}
