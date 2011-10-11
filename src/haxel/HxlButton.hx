@@ -339,7 +339,7 @@ class HxlButton extends HxlGroup {
 			if (!exists || !visible || !active) return;
 		}
 
-		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
+		if (overlapsPoint(HxlGraphics.mouse.x - (.5*_off.height*(1.0-_off.scale.x)),HxlGraphics.mouse.y - (.5*_off.height*(1.0-_off.scale.y)))) {
 			if ( _callback != null ) 
 				_callback();
 			if ( clickSound != null ) 
@@ -358,7 +358,7 @@ class HxlButton extends HxlGroup {
 				return;
 		}
 
-		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
+		if (overlapsPoint(HxlGraphics.mouse.x - (.5*_off.height*(1.0-_off.scale.x)),HxlGraphics.mouse.y - (.5*_off.height*(1.0-_off.scale.y)))) {
 			if ( eventStopPropagate) 
 				event.stopPropagation();
 		}
