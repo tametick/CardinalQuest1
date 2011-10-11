@@ -409,7 +409,8 @@ class HxlGame extends Sprite {
 
 		//Initialize the pause screen
 		_addEventListener(Event.DEACTIVATE, onFocusLost,false,0,true);
-		_addEventListener(Event.ACTIVATE, onFocus,false,0,true);
+		_addEventListener(Event.ACTIVATE, onFocus, false, 0, true);
+		stage.focus = null;
 
 		//Check for saved sound preference data
 		soundPrefs = new HxlSave();
