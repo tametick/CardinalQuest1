@@ -3,7 +3,6 @@ package cq;
 import cq.states.GameOverState;
 import cq.states.GameState;
 import cq.states.MainMenuState;
-import cq.states.SplashState;
 import cq.CqResources;
 import cq.ui.CqPause;
 import flash.events.Event;
@@ -19,6 +18,11 @@ import flash.Lib;
 
 import com.remixtechnology.SWFProfiler;
 import playtomic.Playtomic;
+
+#if flash
+	import flash.system.Capabilities;
+	import flash.ui.ContextMenu;
+#end
 
 class Main extends HxlGame {
 	public static function main() {
@@ -72,7 +76,7 @@ class Main extends HxlGame {
 			super(Configuration.app_width, Configuration.app_height, GameState, 1, FontDungeon.instance.fontName);
 			//super(Configuration.app_width, Configuration.app_height, GameOverState, 1, FontDungeon.instance.fontName);
 		else
-			super(Configuration.app_width,Configuration.app_height, SplashState, 1, FontDungeon.instance.fontName);		
+			super(Configuration.app_width,Configuration.app_height, MainMenuState, 1, FontDungeon.instance.fontName);		
 		
 		pause = new CqPause();
 		useDefaultHotKeys = false;
