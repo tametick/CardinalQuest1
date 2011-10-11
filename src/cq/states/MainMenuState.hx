@@ -333,7 +333,7 @@ class MainMenuState extends CqState {
 		
 		nextScreen();
 		
-		if (copyrightLink.overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
+		if (copyrightLink!=null && copyrightLink.overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
 			Lib.getURL(homePageRequest);
 		}
 		
