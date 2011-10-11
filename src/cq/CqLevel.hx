@@ -67,6 +67,11 @@ class CqLevel extends Level {
 		if (cqmob.healthBar != null) 
 			state.remove(cqmob.healthBar);
 		
+		// if the player just killed a legitimate monster, we'll credit the exploration clock
+		if (cqmob.xpValue > 0) {
+			ticksSinceNewDiscovery -= 60 * 4;
+		}
+		
 		// now, if we're in a level that has special logic (namely, the last one)
 		// that triggers when all monsters are dead, we need to see if this was the last one.
 		// we have to skip monsters that are friendly (like magic mirror copies), but we
@@ -78,11 +83,6 @@ class CqLevel extends Level {
 				if (cqmob.faction != CqPlayer.faction || cqmob.isCharmed) 
 					return;
 			}
-		}
-		
-		// if the player just killed a legitimate monster, we'll credit the exploration clock
-		if (cqmob.xpValue > 0) {
-			ticksSinceNewDiscovery -= 60 * 4;
 		}
 		
 		// all monsters have been killed, so we'll go ahead and give all-monsters-dead a chance
@@ -118,6 +118,10 @@ class CqLevel extends Level {
 		}
 	}
 	
+	public function startMusic():Void {
+		playMusicByIndex(index);
+	}
+	
 	public static function playMusicByIndex(index:Int):Void
 	{
 		if(index==0)
@@ -130,8 +134,6 @@ class CqLevel extends Level {
 	
 	public function new(index:Int) {
 		super(index,Configuration.tileSize*2,Configuration.tileSize*2);
-		
-		playMusicByIndex(index);
 		
 		tileClass = CqTile;
 		

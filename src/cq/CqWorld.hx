@@ -42,7 +42,7 @@ class CqWorld extends World {
 		onNewLevel = new List();
 		CqSpellFactory.resetRemainigSpells();
 			
-		goToLevel(currentLevelIndex);
+		goToLevel(currentLevelIndex, false);
 	}
 	
 	override public function destroy() {
@@ -64,15 +64,19 @@ class CqWorld extends World {
 			Callback();
 	}
 
-	function goToLevel(level:Int) {
-		// destroy existing previosu level
+	function goToLevel(level:Int, ?autoStartMusic:Bool = true) {
+		// destroy existing previous level
 		if (currentLevel != null) {
 			GameUI.instance.removePopups(currentLevel.mobs);
 			HxlGraphics.state.remove(currentLevel);
 			currentLevel.destroy();
 		}
 		
-		currentLevel = new CqLevel(level);
+		var newLevel:CqLevel = new CqLevel(level);
+		if (autoStartMusic) {
+			newLevel.startMusic();
+		}
+		currentLevel = newLevel;
 		doOnNewLevel();
 		
 		// todo - disabled for now, testing memory leaks
@@ -82,7 +86,7 @@ class CqWorld extends World {
 		//Let Kong know
 		//Registery.getKong().SubmitStat( Registery.KONG_MAXLEVEL , level );
 	}
-		
+	
 	public override function goToNextLevel(?jumpToLevel:Int = -1) {
 		if (jumpToLevel > -1)
 			currentLevelIndex = jumpToLevel;

@@ -298,8 +298,9 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				t.timesUncovered++;
 				switch (t.timesUncovered) {
 					case 1: map.ticksSinceNewDiscovery -= 3 * 60; // every cell we see pays off 3 turns of hanging around (quite a lot, really)
-					case 2: map.ticksSinceNewDiscovery -= 1 * 60; // take off one turn every time you uncover something twice (at least you're still moving)
-					case 3: map.ticksSinceNewDiscovery -= 1 * 30; // take off a few ticks the third time
+					case 2: map.ticksSinceNewDiscovery -= 2 * 60; // take off two turn every time you uncover something twice (hey, at least you're still moving)
+					case 3: map.ticksSinceNewDiscovery -= 1 * 60; // take off one turn the third time (pretty much breaking even here)
+					case 4: map.ticksSinceNewDiscovery -= 1 * 15; // take off a few ticks the fourth time
 					default: // nothing happens by default
 				}
 			}

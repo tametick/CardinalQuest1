@@ -34,12 +34,6 @@ class CreateCharState extends CqState {
 	static var shownIntro:Bool = false;
 	var fadeTime:Float;
 	var state:Int;
-	var btnFighter:HxlButton;
-	var btnThief:HxlButton;
-	var btnWizard:HxlButton;
-	var txtFighter:HxlText;
-	var txtThief:HxlText;
-	var txtWizard:HxlText;
 	var txtDesc:HxlText;
 	var selectBox:HxlSprite;
 	var curClass:CqClass;
@@ -66,27 +60,41 @@ class CreateCharState extends CqState {
 	override public function destroy(){
 		super.destroy();
 
-		btnFighter.destroy();
-		btnThief.destroy();
-		btnWizard.destroy();
-		txtFighter.destroy();
-		txtThief.destroy();
-		txtWizard.destroy();
 		txtDesc.destroy();
 		selectBox.destroy();
 		portrait.destroy();
 		playerSprites.bitmapData.dispose();
-		
-		btnFighter = null;
-		btnThief = null;
-		btnWizard = null;
-		txtFighter = null;
-		txtThief = null;
-		txtWizard = null;
+
 		txtDesc = null;
 		selectBox = null;
 		portrait = null;
 		playerSprites = null;
+	}
+	
+	function pickFighter() {
+		changeSelection(FIGHTER);
+	}
+	function pickThief() {
+		changeSelection(THIEF);
+	}
+	function pickWizard() {
+		changeSelection(WIZARD);
+	}
+	
+	function createChoice(className:String, spriteName:String, btnX:Int, textX:Int, cb:Void->Void) {
+		var sprite = new HxlSprite(0, 0);
+		sprite.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 4.0, 4.0);
+		sprite.setFrame(playerSprites.getSpriteIndex(spriteName));
+		sprite.x = btnX;
+		sprite.y = class_buttons_y;
+		add(sprite);
+		
+		var button = new HxlButton(btnX - 30, class_buttons_y - 20, Std.int(selectBox.width), Std.int(selectBox.height), cb, 0.0, 0.0);
+		add(button);
+		
+		var text = new HxlText(textX, class_buttons_y + sprite.height, 150, className);
+		text.setFormat(null, 32, 0xffffff, "center", 0x010101); 
+		add(text);
 	}
 	
 	function realInit() {
@@ -116,50 +124,7 @@ class CreateCharState extends CqState {
 			//self = null;
 		});
 
-		playerSprites= SpritePlayer.instance;
-
-		var sprFighter = new HxlSprite(0, 0);
-		sprFighter.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 4.0, 4.0);
-		sprFighter.setFrame(playerSprites.getSpriteIndex("fighter"));
-		btnFighter = new HxlButton(138, class_buttons_y);
-		btnFighter.loadGraphic(sprFighter);
-		add(btnFighter);
-		btnFighter.setCallback(function() { 
-			changeSelection(FIGHTER); 
-			//self = null;
-		});
-		txtFighter = new HxlText(95, class_buttons_y+sprFighter.height, 150, "Fighter");
-		txtFighter.setFormat(null, 32, 0xffffff, "center", 0x010101);
-		add(txtFighter);
-
-		var sprThief = new HxlSprite(0, 0);
-		sprThief.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 4.0, 4.0);
-		sprThief.setFrame(playerSprites.getSpriteIndex("thief"));
-		btnThief = new HxlButton(288, class_buttons_y);
-		btnThief.loadGraphic(sprThief);
-		add(btnThief);
-		btnThief.setCallback(function() { 
-			changeSelection(THIEF); 
-			//self = null;
-		});
-		txtThief = new HxlText(245, class_buttons_y+sprThief.height, 150, "Thief");
-		txtThief.setFormat(null, 32, 0xffffff, "center", 0x010101);
-		add(txtThief);
-
-		var sprWizard = new HxlSprite(0, 0);
-		sprWizard.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 4.0, 4.0);
-		sprWizard.setFrame(playerSprites.getSpriteIndex("wizard"));
-		btnWizard = new HxlButton(438, class_buttons_y);
-		btnWizard.loadGraphic(sprWizard);
-		add(btnWizard);
-		btnWizard.setCallback(function() { 
-			changeSelection(WIZARD); 
-			//self = null;
-		});
-		txtWizard = new HxlText(395, class_buttons_y+sprWizard.height, 150, "Wizard");
-		txtWizard.setFormat(null, 32, 0xffffff, "center", 0x010101);
-		add(txtWizard);
-
+		
 		selectBox = new HxlSprite(105, class_buttons_y-20);
 		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.CharCreateSelector) ) {
 			var target:Shape = new Shape();
@@ -177,22 +142,29 @@ class CreateCharState extends CqState {
 		} else {
 			selectBox.loadCachedGraphic(CqGraphicKey.CharCreateSelector);
 		}
-		add(selectBox);
+		add(selectBox);		
+		
+		
+		playerSprites = SpritePlayer.instance;
 
+		createChoice("Fighter", "fighter", 138, 95, pickFighter);
+		createChoice("Thief", "thief", 288, 245, pickThief);
+		createChoice("Wizard", "wizard", 438, 395, pickWizard);
+		
 		txtDesc = new HxlText(160, 280, HxlGraphics.width - 220);
 		txtDesc.setFormat(FontAnonymousPro.instance.fontName, 16, 0x000000, "left", 0);
 		add(txtDesc);
+		
 		txtDesc.text = Resources.descriptions.get("Fighter");
 
 		portrait = SpritePortraitPaper.getIcon(FIGHTER, 100 , 1.0);
 		portrait.x = 60;
 		portrait.y = 290;
 		add(portrait);
-		
 		add(btnStartBg);
 		add(btnStart);
 		
-		curClass = FIGHTER;
+		pickFighter();
 		
 /*		// todo: remove later
 		var sponsored= new HxlText(10, 10, 135, "Sponsored by",true,FontAnonymousPro.instance.fontName,18);
@@ -202,9 +174,6 @@ class CreateCharState extends CqState {
 		kongLogo.y = sponsored.y + sponsored.height+5;
 		add(kongLogo);
 */		
-		sprWizard = null;
-		sprThief = null;
-		sprFighter = null;
 		btnStartHigh = null;
 		btnStartBg = null;
 		btnStart = null;
@@ -241,7 +210,6 @@ class CreateCharState extends CqState {
 	}
 
 	function changeSelection(Target:CqClass) {
-		
 		//If this class was already selected, then we assume the player
 		//wants to just play
 		if ( Target == curClass ) 

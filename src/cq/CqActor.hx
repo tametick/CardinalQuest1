@@ -114,7 +114,6 @@ class CqActor extends CqObject, implements Actor {
 	
 	public var name:String;
 	//track last horizontal direction, for sprite flipping
-	var lastDirX:Int;
 	
 	override function destroy() {
 		super.destroy();
@@ -201,8 +200,6 @@ class CqActor extends CqObject, implements Actor {
 		bobCounterInc = 0.1;
 		bobMult = 5.0;
 		isCharmed = false;
-		
-		lastDirX = 0;
 	}
 	
 	function initBuffs(){
@@ -333,19 +330,12 @@ class CqActor extends CqObject, implements Actor {
 			if(specialEffects.get("damage multipler")!=null)
 				dmgMultipler =  Std.parseInt(specialEffects.get("damage multipler").value);
 			
-			var dmgTotal:Int;
-
-			if (equippedWeapon!=null) {
-				// With weapon
-				var damageRange = equippedWeapon.damage;
-				dmgTotal = HxlUtil.randomIntInRange(damageRange.start * dmgMultipler, damageRange.end * dmgMultipler);
-				other.hp -= dmgTotal;
-
-			} else {
-				// With natural attack
-				dmgTotal = HxlUtil.randomIntInRange(damage.start * dmgMultipler, damage.end * dmgMultipler);
-				other.hp -= dmgTotal;
-			}
+			// determine whether we're using a weapon
+			var damageRange = (equippedWeapon != null) ? equippedWeapon.damage : damage;
+			
+			// roll and deal the damage
+			var dmgTotal:Int = HxlUtil.randomIntInRange(damageRange.start * dmgMultipler, damageRange.end * dmgMultipler);
+			other.hp -= dmgTotal;
 			
 			// life buffs
 			var lif = other.hp + other.buffs.get("life");
@@ -387,19 +377,21 @@ class CqActor extends CqObject, implements Actor {
 			tile = null;
 			return false;
 		}
+	
+		//flip sprite
+		var dirx:Int = tile.mapX - Std.int(tilePos.x);
+		if (dirx != 0) {
+			// it's ok if we turn even when we don't act
+			var newfacing = Std.int((-dirx + 1) / 2);
+			if (Std.is(this, CqPlayer)) newfacing = (newfacing == 1?0:1);
+			if (newfacing != _facing) {
+				_facing = newfacing;
+				calcFrame();
+			}
+		}
 		
 		if (tile.actors.length > 0) {
 			var other = cast(tile.actors[tile.actors.length - 1],CqActor);
-			
-			//flip sprite
-			var dirx:Int = tile.mapX - Std.int(tilePos.x);
-			if (dirx != 0 && dirx != lastDirX)
-			{
-				_facing = Std.int((-dirx + 1) / 2);
-				if (Std.is(this, CqPlayer))
-					_facing = (_facing == 1?0:1);
-				calcFrame();
-			}
 		
 			// attack enemy actor
 			if(other.faction != faction) {
@@ -420,18 +412,7 @@ class CqActor extends CqObject, implements Actor {
 		} else if (tile.loots.length > 0 && Std.is(this,CqPlayer)) {
 			var loot = tile.loots[tile.loots.length - 1];
 			if (Std.is(loot, CqChest)) {
-				// bust chest & don't move
-				
-				//flip sprite
-				var dirx:Int = tile.mapX - Std.int(tilePos.x);
-				if (dirx != 0 && dirx != lastDirX)
-				{
-					_facing = Std.int((-dirx + 1) / 2);
-					if (Std.is(this, CqPlayer))
-						_facing = (_facing == 1?0:1);
-					calcFrame();
-				}
-				
+				// bust chest but don't move
 				attackObject(state, loot);
 				justAttacked = true;
 				SoundEffectsManager.play(ChestBusted);
@@ -456,16 +437,6 @@ class CqActor extends CqObject, implements Actor {
 			sound = null;
 		}
 		
-		//flip sprite
-		var dirx:Int = tile.mapX - Std.int(tilePos.x);
-		if (dirx != 0 && dirx != lastDirX) {
-			_facing = Std.int((-dirx + 1) / 2);
-			if (Std.is(this, CqPlayer))
-				_facing = (_facing == 1?0:1);
-			calcFrame();
-		}
-		lastDirX = dirx;
-		
 		setTilePos(Std.int(targetX), Std.int(targetY));
 		
 		// set invisible if moved out of sight range
@@ -473,17 +444,16 @@ class CqActor extends CqObject, implements Actor {
 		if (tile.visibility == Visibility.IN_SIGHT) {
 			visible = true;
 			// only show hp bar if mob is hurt
-			if ( hp < maxHp && healthBar!= null) {
+			if ( hp < maxHp && healthBar != null) {
 				healthBar.visible= true;
-			}
-			
+			}	
 		} else {
 			visible = false;
-			if (healthBar!= null) {
+			if (healthBar != null) {
 				healthBar.visible = false;
 			}
 		}
-			
+		
 		var positionOfTile:HxlPoint = level.getPixelPositionOfTile(Math.round(tilePos.x), Math.round(tilePos.y));
 		moveToPixel(state, positionOfTile.x, positionOfTile.y);
 		
@@ -1042,15 +1012,16 @@ class CqPlayer extends CqActor, implements Player {
 	public function give(?item:CqItem, ?itemType:CqItemType, ?spellType:CqSpellType) {
 		if (item != null) {
 			// add to actor inventory
+			
 			// if this item has a max stack size greater than or less than 1, lets see if we already have the same item in inventory
-			var added:Bool = false;
+			var addedToExistingStack:Bool = false;
 			if ( item.stackSizeMax != 1 ) {
 				for ( i in 0 ... inventory.length ) {
 					if (inventory[i].spriteIndex == item.spriteIndex) {
-						added = true;
+						addedToExistingStack = true;
 						inventory[i].stackSize += item.stackSize;
 						if ( inventory[i].stackSize > inventory[i].stackSizeMax && inventory[i].stackSizeMax > 1) {
-							added = false;
+							addedToExistingStack = false;
 							var diff = inventory[i].stackSize - inventory[i].stackSizeMax;
 							inventory[i].stackSize = inventory[i].stackSizeMax;
 							item.stackSize = diff;
@@ -1062,7 +1033,7 @@ class CqPlayer extends CqActor, implements Player {
 					}
 				}
 			}
-			if ( !added ) {
+			if ( !addedToExistingStack ) {
 				inventory.push(item);
 				// perform pickup callback functions
 				for ( Callback in onPickup ) 
@@ -1093,8 +1064,13 @@ class CqPlayer extends CqActor, implements Player {
 		} else {
 			// remove item from map
 			Registery.level.removeLootFromLevel(state, item);
+			
+			// perform the special effects (this can't be part of give())
 			SoundEffectsManager.play(Pickup);
-			item.doPickupEffect(); //todo: Find out if this should be apart of give()
+			item.doPickupEffect();
+			GameUI.showEffectText(this, item.name, 0x6699ff);
+			
+			// put the item in the player's inventory
 			give(item);
 		}
 	}
@@ -1184,6 +1160,14 @@ class CqPlayer extends CqActor, implements Player {
 		super.moveToPixel(state, X, Y);
 	}
 	
+	public function rechargeSpells() {
+		for (spell in equippedSpells) {
+			if (spell != null) {
+				spell.spiritPoints = spell.spiritPointsRequired;
+			}
+		}
+	}
+	
 	public function respawn() {
 		var state:HxlState = HxlGraphics.state;
 		
@@ -1208,11 +1192,7 @@ class CqPlayer extends CqActor, implements Player {
 		player.timers.splice(0, player.timers.length);
 		
 		// recharge all spells
-		for (spell in player.equippedSpells) {
-			if (spell != null) {
-				spell.spiritPoints = spell.spiritPointsRequired;
-			}
-		}
+		rechargeSpells();
 		
 		// undo the death animation (we should do this when we arrive, but it looks ok.)
 		angularVelocity = 0;
@@ -1473,9 +1453,9 @@ class CqMobFactory {
 			Resources.descriptions = new Hash<String>();
 		
 		// this is a very questionable place for these descriptions to come up
-		Resources.descriptions.set("Fighter", "A mighty warrior of unparalleled strength and vigor, honorable in battle, master of hack-n-slash melee.\n\nThe best choice for new players.");
+		Resources.descriptions.set("Fighter", "A mighty warrior of unparalleled strength and vigor, honorable in battle, high master of hack-n-slash melee.\n\nThe best choice for new players.");
 		Resources.descriptions.set("Wizard", "A wise sage, knower of secrets, worker of miracles, master of the arcane arts, maker of satisfactory mixed drinks.\n\nCan cast spells rapidly - use his mystic powers as often as possible.");
-		Resources.descriptions.set("Thief", "A cunning and agile rogue whose one moral credo is this: Always get away alive.\n\nThe most challenging character - use his speed and skills to avoid taking damage." );
+		Resources.descriptions.set("Thief", "A cunning and agile rogue whose one moral credo is this: Always get out alive.\n\nThe most challenging character - use his speed and skills to avoid taking damage." );
 		
 		inited = true;
 	}
@@ -1496,85 +1476,71 @@ class CqMobFactory {
 			mob.xpValue = player.xp;
 			return mob;
 		}
-		var shortName:String = "";
+		
+		var specialname:String = null;
+		var weaktype, strongtype;
+		
 		switch(level+1) {
 			case 1:
-				typeName = HxlUtil.getRandomElement(SpriteMonsters.bandits);
-				shortName = "Bandit";
+				weaktype = SpriteMonsters.bandits;
+				strongtype = SpriteMonsters.bandits;
 			case 2:
-				if (Math.random() < Configuration.strongerEnemyChance)
-				{
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.bandits);
-					shortName = "Bandit";
-				}else{
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.kobolds);
-					shortName = "Kobold";
-				}
+				weaktype = SpriteMonsters.bandits;
+				strongtype = SpriteMonsters.kobolds;
 			case 3:
-				if(Math.random()<Configuration.strongerEnemyChance){
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.kobolds);
-					shortName = "Kobold";
-				}else{
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.succubi);
-					shortName = "Succubus";
-				}
+				weaktype = SpriteMonsters.kobolds;
+				strongtype = SpriteMonsters.succubi;
 			case 4:
-				if(Math.random()<Configuration.strongerEnemyChance){
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.succubi);
-					shortName = "Succubus";
-				}else{
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.spiders);
-					shortName = "Spider";
-				}
+				weaktype = SpriteMonsters.succubi;
+				strongtype = SpriteMonsters.spiders;
 			case 5:
-				if (Math.random() < Configuration.strongerEnemyChance){
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.spiders);
-					shortName = "Spider";
-				}else{
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.apes);
-					shortName = "Ape";
-				}
+				weaktype = SpriteMonsters.spiders;
+				strongtype = SpriteMonsters.apes;
 			case 6:
-				if (Math.random() < Configuration.strongerEnemyChance){
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.apes);
-					shortName = "Ape";
-				}else{
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.elementeals);
-					shortName = "Elemental";
-				}
+				weaktype = SpriteMonsters.apes;
+				strongtype = SpriteMonsters.elementeals;
 			case 7:
-				if(Math.random()<Configuration.strongerEnemyChance){
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.elementeals);
-					shortName = "Elemental";
-				}else{
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.werewolves);
-					shortName = "Werewolf";
-				}
-			case 8,9:// for "out of depth" enemies in the 8th level 
-				if (Math.random() < Configuration.strongerEnemyChance) {
-					shortName = "Werewolf";
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.werewolves);
-				}else {
-					shortName = "Minotaur";
-					typeName = HxlUtil.getRandomElement(SpriteMonsters.minotauers);
-				}
+				weaktype = SpriteMonsters.elementeals;
+				strongtype = SpriteMonsters.werewolves;
+			case 8, 9:// for "out of depth" enemies in the 8th level 
+				weaktype = SpriteMonsters.werewolves;
+				strongtype = SpriteMonsters.minotauers;
 			case 99,100,101:
 				//ending boss
-				typeName = HxlUtil.getRandomElement(SpriteMonsters.minotauers);
-				shortName = "";
+				weaktype = SpriteMonsters.minotauers;
+				strongtype = SpriteMonsters.minotauers;
+				specialname = "Asterion";
+			default:
+				weaktype = SpriteMonsters.kobolds;
+				strongtype = SpriteMonsters.kobolds;
 		}
+
+		typeName = HxlUtil.getRandomElement(if (Math.random() < Configuration.strongerEnemyChance) weaktype else strongtype);
 		mob = new CqMob(X, Y, typeName.toLowerCase());
-		mob.name = shortName;
+		
 		switch(mob.type) {
 			case BANDIT_LONG_SWORDS, BANDIT_SHORT_SWORDS, BANDIT_SINGLE_LONG_SWORD, BANDIT_KNIVES:
+				mob.name = "Bandit";
 				mob.attack = 2;
 				mob.defense = 2;
 				mob.speed = 3;
 				mob.spirit = 3;
-				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(2, 3);
+				mob.vitality = HxlUtil.randomIntInRange(2, 3);
 				mob.damage = new Range(1, 1);
 				mob.xpValue = 5;
+				
+				if (mob.type == BANDIT_LONG_SWORDS) {
+					// blue captain
+					mob.speed++;
+				}
+				
+				if (mob.type == BANDIT_SHORT_SWORDS) {
+					// short chubby guy
+					mob.speed--;
+					mob.vitality *= 2;
+				}
 			case KOBOLD_SPEAR, KOBOLD_KNIVES, KOBOLD_MAGE:
+				mob.name = "Kobold";
 				mob.attack = 4;
 				mob.defense = 3;
 				mob.speed = 3;
@@ -1582,60 +1548,100 @@ class CqMobFactory {
 				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(1,4);
 				mob.damage = new Range(1, 3);
 				mob.xpValue = 10;
+				if (mob.type == KOBOLD_SPEAR) {
+					mob.damage = new Range(2, 4);
+				}
+				if (mob.type == KOBOLD_MAGE) {
+					mob.speed++;
+					mob.attack--;
+				}
 			case SUCCUBUS, SUCCUBUS_STAFF, SUCCUBUS_WHIP, SUCCUBUS_SCEPTER:
+				mob.name = "Succubus";
 				mob.attack = 3;
 				mob.defense = 4;
 				mob.speed = 4;
 				mob.spirit = 4;
-				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(2,8);
+				mob.vitality = HxlUtil.randomIntInRange(2,8);
 				mob.damage = new Range(2, 4);
 				mob.xpValue = 25;
 				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.ENFEEBLE_MONSTER));
 			case SPIDER_YELLOW, SPIDER_RED, SPIDER_GRAY, SPIDER_GREEN:
+				mob.name = "Spider";
 				mob.attack = 5;
 				mob.defense = 3;
 				mob.speed = 2;
 				mob.spirit = 4;
-				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(3,12);
+				mob.vitality = HxlUtil.randomIntInRange(3,12);
 				mob.damage = new Range(2, 8);
 				mob.xpValue = 50;
 				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.FREEZE));
+				if (mob.type == SPIDER_RED) {
+					mob.name = "Black Widow";
+					mob.vitality += 6;
+					mob.spirit += 2;
+					mob.defense--;
+				}
 			case APE_BLUE, APE_BLACK, APE_RED, APE_WHITE:
+				mob.name = "Ape";
 				mob.attack = 4;
 				mob.defense = 4;
 				mob.speed = 6;
 				mob.spirit = 3;
-				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(4,16);
+				mob.vitality = HxlUtil.randomIntInRange(4,16);
 				mob.damage = new Range(3, 5);
 				mob.xpValue = 125;
 			case ELEMENTAL_GREEN, ELEMENTAL_WHITE, ELEMENTAL_RED, ELEMENTAL_BLUE:
+				mob.name = "Elemental";
 				mob.attack = 6;
 				mob.defense = 6;
 				mob.speed = 2;
 				mob.spirit = 3;
-				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(6,24);
+				mob.vitality = HxlUtil.randomIntInRange(6,24);
 				mob.damage = new Range(4, 8);
 				mob.xpValue = 275;
 				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.FIREBALL));
+				
+				if (mob.type == ELEMENTAL_GREEN) {
+					mob.name = "Nature " + mob.name;
+					mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.STONE_SKIN));
+				}
+				if (mob.type == ELEMENTAL_WHITE) {
+					mob.name = "Sorcery " + mob.name;
+					mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.BLINK));
+				}
+				if (mob.type == ELEMENTAL_RED) {
+					mob.name = "Chaos " + mob.name;
+					mob.spirit += 1; // cast xball much more often
+				}
+				if (mob.type == ELEMENTAL_BLUE) {
+					mob.name = "Air " + mob.name;
+					mob.speed++;
+				}
 			case WEREWOLF_GRAY, WEREWOLF_BLUE, WEREWOLF_PURPLE:
+				mob.name = "Werewolf";
 				mob.attack = 5;
 				mob.defense = 5;
 				mob.speed = 8;
 				mob.spirit = 4;
-				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(8,32);
+				mob.vitality = HxlUtil.randomIntInRange(8,32);
 				mob.damage = new Range(4,8);
 				mob.xpValue = 500;
 				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.HASTE));
 			case MINOTAUER, MINOTAUER_AXE, MINOTAUER_SWORD:
+				mob.name = "Minotaur";
 				mob.attack = 7;
 				mob.defense = 4;
 				mob.speed = 7;
 				mob.spirit = 4;
-				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(24,48);
+				mob.vitality = HxlUtil.randomIntInRange(24,48);
 				mob.damage = new Range(12, 32);
 				mob.xpValue = 950;
 				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.BERSERK));
 		}
+		
+		mob.hp = mob.maxHp = mob.vitality;
+		
+		if (specialname != null) mob.name = specialname;
 		
 		return mob;
 	}

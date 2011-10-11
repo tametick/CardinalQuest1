@@ -13,7 +13,7 @@ class CqPopup extends HxlText{
 	public var mouseBound:Bool;
 	public function new(Width:Int,Text:String,Parent:Dynamic) {
 		parent = Parent;
-		super(0, 0, Width, Text);
+		super(-24, 0, Width, Text); // these used to pop up way to the right
 		setFormat("FontAnonymousPro", 15, 0xC2AC30, "center", 1);
 		mouseBound = true;
 	}

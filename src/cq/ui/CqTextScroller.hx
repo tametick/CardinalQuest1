@@ -28,13 +28,14 @@ class CqTextScroller extends HxlGroup {
 	var tweens:Array<IGenericActuator>;
 	var tweenStatus:Array<Bool>;
 	var OnComplete:Void->Void;
+	var WhileScrolling:Array < Void->Void > ;
 	var minimumDuration:Float;
 
 	var columns_height:Int;
 	var initial_y:Int;
 	var final_y:Int;
 	
-	var respondInput:Bool;//so you wouldnt accidentally close the window
+	var respondInput:Bool;//so you won't accidentally close the window
 	public function new(bg:Class<Bitmap>, scrollDuration:Float, ?Title:String = "", ?TitleColor:Int = 0xFFFFFF, ?ShadowColor:Int = 0x010101, ?scale:Float=1.0) {
 		super();
 		clicks = 0;
@@ -55,6 +56,8 @@ class CqTextScroller extends HxlGroup {
 		
 		HxlGraphics.stage.addEventListener(MouseEvent.CLICK, onAction);
 		HxlGraphics.stage.addEventListener(KeyboardEvent.KEY_UP, onAction);
+		
+		WhileScrolling = [];
 	}
 	
 	public function setSplash(bg:Class<Bitmap>, ?scale:Float=1.0):Void {
@@ -94,8 +97,8 @@ class CqTextScroller extends HxlGroup {
 	private function onAction(e:Event){
 		if (!respondInput)
 			return;
-		if (clicks == 0)
-		{
+			
+		if (clicks == 0) {
 			finishTweens();
 		} else {
 			//end this
@@ -107,25 +110,12 @@ class CqTextScroller extends HxlGroup {
 				splash = null;
 			}
 			
-			if (OnComplete != null)
-				OnComplete();
+			if (OnComplete != null) OnComplete();
+			callWhileScrolling(true);
 		}
 		clicks++;
 	}
-	
-	public function finishTweens() {
-		if (cols.length == 0) 
-			return;
-		Actuate.pauseAll();
-		clicks++;
-		scrolling = false;
-		
-		for (col in cols) {
-			var to_y:Int = Std.int((HxlGraphics.stage.stageHeight - col.height) / 2);
-			
-			col.y = to_y;
-		}
-	}
+
 	public function addColumn(X:Int, W:Int, text:String,?embeddedfont:Bool = true,?fontName:String = "",?fontSize:Int = 16,?color:Int = 0xFFFFFF, ?shadowColor:Int = 0x010101) {
 		var text:HxlText = new HxlText(X, initial_y, W, text, embeddedfont, fontName);
 		text.setFormat(fontName, fontSize, color, "left", shadowColor);		
@@ -150,7 +140,12 @@ class CqTextScroller extends HxlGroup {
 			var to_y:Int = Std.int((HxlGraphics.stage.stageHeight - col.height) / 2);
 			
 			scrolling = true;
-			tweens.push( Actuate.tween(col, Duration, { y:to_y } , true).onComplete(oncolumnScrolled,[col]));
+			tweens.push(
+				Actuate.tween(col, Duration, { y:to_y } , true)
+					.onUpdate(callWhileScrolling)
+					.onComplete(oncolumnScrolled, [col]
+				)
+			);
 		}
 	}
 	
@@ -163,9 +158,42 @@ class CqTextScroller extends HxlGroup {
 		}
 		if (allFinished) finishTweens();
 	}
+	
+	public function finishTweens() {
+		if (cols.length == 0) 
+			return;
+		Actuate.pauseAll();
+		clicks++;
+		scrolling = false;
+		
+		for (col in cols) {
+			var to_y:Int = Std.int((HxlGraphics.stage.stageHeight - col.height) / 2);
+			
+			col.y = to_y;
+		}
+		
+		callWhileScrolling(true);
+	}	
 		
 	public function onComplete(handler:Void->Void):Void {
 		scrolling = false;
 		OnComplete = handler;
+	}
+	
+	private function callWhileScrolling(?finishUp:Bool = false) {
+		while (WhileScrolling.length > 0) {
+			if (finishUp) { // || Math.random() < .05) { // 
+				var cb = WhileScrolling[0];
+				WhileScrolling.splice(0, 1);
+				cb();
+			}
+			if (!finishUp) break;
+		}
+	}
+	
+	public function whileScrolling(calls:Array<Void->Void>):Void {
+		for (fn in calls) {
+			WhileScrolling.push(fn);
+		}
 	}
 }

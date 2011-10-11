@@ -40,6 +40,7 @@ import world.Player;
 
 import cq.CqActor;
 import cq.CqWorld;
+import cq.CqLevel;
 import cq.CqItem;
 import cq.CqSpell;
 import cq.CqResources;
@@ -323,34 +324,36 @@ class GameState extends CqState {
 		
 		cursor.visible = false;
 		scroller = new CqTextScroller(classBG, 1);
-		scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,30);
+		scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,26);
 		add(scroller);
+		
+		// do these two to get their imperceptible delay out of the way
+		initRegistry();
+		Playtomic.play();
+		
+		// now start the text scrolling
 		scroller.startScroll(6);
-		scroller.onComplete(realInit);
+		
+		// so the idea here is that we can actually start getting the gamestate ready before scrolling is complete.
+		// the tradeoff (if we turn this on in the TextScroller) is that the text is slightly jerky.  As it stands,
+		// the scroller will call all of these before the text registers its final click.
+		
+		scroller.whileScrolling([initGameUI]);
+		scroller.onComplete(finalInit);
 	}
 	
-	function realInit() {
-		cursor.visible = true;
-		if (scroller != null) {
-			remove(scroller);
-			scroller = null;
-		}
-			
-		started = true;
-		initRegistry();
-		var world = Registery.world;
-		var player = Registery.player;
-		Playtomic.play();
-
-		// create and init the game gui
-		// todo: do not recreate if already exists from previous games?
+	function initGameUI() {
 		if (gameUI == null) {
-			gameUI = new GameUI();	
+			var world = Registery.world;
+			var player = Registery.player;
+
+			// create and init the game gui
+			gameUI = new GameUI();
+
 			gameUI.zIndex = 50;
-			add(gameUI);
-			gameUI.initChests();
-			gameUI.initHealthBars();
-			gameUI.initPopups();
+			
+			scroller.whileScrolling([gameUI.initChests, gameUI.initHealthBars, gameUI.initPopups]);
+			
 			world.addOnNewLevel(gameUI.panels.panelMap.updateDialog);
 			world.addOnNewLevel(gameUI.initPopups);
 			
@@ -361,17 +364,22 @@ class GameState extends CqState {
 			
 			player = null;
 			pop = null;
+			world = null;
+			player = null;
 		}
-		
-		add(world.currentLevel);
-		world.currentLevel.updateFieldOfView(this, true);
+	}
+	
+	function finalInit() {
+		var world = Registery.world;
+		var player = Registery.player;
 
-		
 		player.addOnPickup(gameUI.itemPickup);
 		player.addOnInjure(gameUI.doPlayerInjureEffect);
 		player.addOnKill(gameUI.doPlayerInjureEffect);
 		player.addOnGainXP(gameUI.doPlayerGainXP);
 		player.addOnMove(gameUI.checkTileItems);
+		
+		world.addOnNewLevel(onNewLevelCallBack);
 
 		switch(chosenClass) {
 			case FIGHTER:
@@ -394,23 +402,44 @@ class GameState extends CqState {
 				player.give(CqItemType.GREEN_POTION);
 				player.give(CqSpellType.SHADOW_WALK);
 		}
-
+		
 		PtPlayer.ClassSelected(chosenClass);
 		
-		world.addOnNewLevel(onNewLevelCallBack);
-		update();
 		if (Configuration.debug) {
 			player.give(CqSpellType.REVEAL_MAP);
 			if(Configuration.debugStartingLevel>0)
 				Registery.world.goToNextLevel(Configuration.debugStartingLevel);
 		}
-		else
+		
+		player.rechargeSpells();
+
+		// kill the scroller
+		if (scroller != null) {
+			remove(scroller);
+			scroller = null;
+		}
+		
+		// put the ui on the screen (the order of many of these is important -- be careful.)
+		add(gameUI);
+		add(world.currentLevel);
+
+		world.currentLevel.updateFieldOfView(this, true);
+		
+		started = true;
+		update();
+		
+		if (!Configuration.debug) {
 			gameUI.dlgPotionGrid.pressHelp(false);
-			
-			
+		}
+		
+		cursor.visible = true;
+		
+		Actuate.timer(.1).onComplete(cast(world.currentLevel, CqLevel).startMusic);
+		
 		world = null;
-		player = null;
+		player = null;		
 	}
+	
 	function onNewLevelCallBack()
 	{
 		GameUI.instance.initHealthBars();

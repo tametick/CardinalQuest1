@@ -858,29 +858,50 @@ class GameUI extends HxlDialog {
 		targetSpell = Spell;
 	}
 
-	public function updateTargeting(mouse:Bool = true) {
+	
+	private var targetColor:UInt;
+	private function setTargetColor(color:UInt) {
 		if ( targetSprite == null ) {
-			targetSprite = new HxlSprite(0, 0);
-			targetSprite.createGraphic(Configuration.zoomedTileSize(), Configuration.zoomedTileSize(), 0x88ffffff, false, CqGraphicKey.targetSprite);
-			targetSprite.zIndex = 1;
-			targetSprite.color = 0x00ff00;
+			targetSprite = new HxlSprite();
+			//targetSprite.setPixels(new GameUIBMPData(Configuration.tileSize, Configuration.tileSize, true, 0x0));
+			//targetSprite.scale.x = Configuration.zoom;
+			//targetSprite.scale.y = Configuration.zoom;
+			
+			targetSprite.setPixels(new GameUIBMPData(Configuration.zoomedTileSize(), Configuration.zoomedTileSize(), true, 0x0));
+			
+			targetSprite.alpha = .5;
+			targetSprite.zIndex = 10;
+			// targetSprite.color = 0x00ff00;
 			HxlGraphics.state.add(targetSprite);
 			var wPos:HxlPoint = Registery.level.getPixelPositionOfTile(Std.int(targetLastPos.x), Std.int(targetLastPos.y));
+			
 			targetSprite.x = wPos.x;
 			targetSprite.y = wPos.y;
-			targetSprite.zIndex = 4;
-			//targetLastPos = null;
-		} else if ( targetSprite.visible == false ) 
+		} else if ( targetSprite.visible == false ) {
 			targetSprite.visible = true;
+		}
+		
+		color |= 0xff000000;
+		if (color != targetColor) {
+			targetSprite.fill(color);
+			targetColor = color;
+		}
+	}
+	
+	public function updateTargeting(mouse:Bool = true) {
+		if (targetSprite == null || targetSprite.visible == false) {
+			setTargetColor(0xffffff);
+		}
+		
 		if ( targetText == null && GameUI.targetString != "" ) {
 			targetText = new HxlText( 80, HxlGraphics.height - 130, HxlGraphics.width - 160, GameUI.targetString );
 			targetText.setFormat(null, 24, 0xffffff, "center", 0x010101);
-			targetText.zIndex = -1;
 			add(targetText);
 		} else if ( targetText.visible == false ) {
 			targetText.visible = true;
 			targetText.setText(GameUI.targetString);
 		}
+		
 		var targetX:Float = 0;
 		var targetY:Float = 0;
 		if (mouse) {
@@ -904,30 +925,31 @@ class GameUI extends HxlDialog {
 				targetY = targetLastPos.y;
 			}
 		}
-		//
+		
 		if (targetLastPos.x != targetX || targetLastPos.y != targetY ) {
 			var worldPos:HxlPoint = Registery.level.getPixelPositionOfTile(Std.int(targetX), Std.int(targetY));
-			targetSprite.x = worldPos.x;
-			targetSprite.y = worldPos.y;
+			
+			Actuate.tween(targetSprite, if (mouse) .046 else .125, { x: worldPos.x, y: worldPos.y} );
+			
 			var tile:CqTile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)), CqTile);
 			if (isTargetingEmptyTile) {
-				if ( tile == null || tile.actors.length > 0 || tile.visibility == Visibility.UNSEEN) {
-					targetSprite.color = 0xff0000;
+				if ( tile == null || tile.actors.length > 0 || tile.visibility != Visibility.IN_SIGHT) {
+					setTargetColor(0xff0000);
 				} else {
 					if (HxlUtil.contains(SpriteTiles.walkableAndSeeThroughTiles.iterator(), tile.dataNum)) {
-						targetSprite.color = 0x00ff00;
+						setTargetColor(0x00ff00);
 					} else {
-						targetSprite.color = 0xff0000;
+						setTargetColor(0xff0000);
 					}
 				}
 			} else {
-				if ( tile == null || tile.actors.length <= 0 || tile.visibility == Visibility.UNSEEN) {
-					targetSprite.color = 0xff0000;
+				if ( tile == null || tile.actors.length <= 0 || tile.visibility != Visibility.IN_SIGHT) {
+					setTargetColor(0xff0000);
 				} else {
 					if ( cast(tile.actors[0], CqActor).faction != 0 ) {
-						targetSprite.color = 0x00ff00;
+						setTargetColor(0x00ff00);
 					} else {
-						targetSprite.color = 0xff0000;
+						setTargetColor(0xff0000);
 					}
 				}
 			}
@@ -999,7 +1021,7 @@ class GameUI extends HxlDialog {
 	}
 	
 	public function initPopups() {
-		for ( actor in Registery.level.mobs ) {
+		for (actor in Registery.level.mobs) {
 			var cqMob:CqActor = cast(actor, CqActor);
 			var pop:CqPopup = new CqPopup(150, cqMob.name, popups);
 			pop.visible = false;
