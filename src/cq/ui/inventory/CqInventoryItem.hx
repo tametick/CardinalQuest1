@@ -248,6 +248,9 @@ class CqInventoryItem extends HxlSprite {
 	 * Sets this object as the CellObj of the target spell cell, and places this object within that cell.
 	 **/
 	public function setSpellCell(Cell:Int):Bool {
+		if (!Std.is(this.item, CqSpell))
+			return false;
+		
 		if (isInCell == SPELL) {
 			// if it was already in a different spell cell before moving to the new spell cell
 			Registery.player.equippedSpells[cellIndex] = null;
