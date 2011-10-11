@@ -473,7 +473,7 @@ class CqActor extends CqObject, implements Actor {
 	public override function render() {
 		var oldX:Float = x;
 		var oldY:Float = y;
-		if(!dead && hp>0 && !HxlGraphics.getGamePaused()) {
+		if(!dead && hp>0 && !HxlGraphics.pause) {
 			if ( isMoving ) {
 				var offset:Float = Math.sin(bobCounter) * bobMult;
 				y -= offset;
@@ -495,6 +495,8 @@ class CqActor extends CqObject, implements Actor {
 						x += offset;
 				}
 			}
+		} else {
+			bobCounter = 0.0;
 		}
 		
 		super.render();

@@ -1,6 +1,7 @@
 package haxel;
 
 import data.Configuration;
+import data.MusicManager;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Sprite;
@@ -287,16 +288,16 @@ class HxlGame extends Sprite {
 	 * Internal function to help with basic pause game functionality.
 	 */
 	public function unpauseGame() {
-		#if flash9
-		//if(!HxlGraphics.panel.visible) flash.ui.Mouse.hide();
-		#end
+
+		flash.ui.Mouse.hide();
+
 		HxlGraphics.resetInput();
 		paused = false;
 		stage.frameRate = framerate;
 		Actuate.resumeAll();
 	}
 	
-	/**
+	/**a
 	 * Internal function to help with basic pause game functionality.
 	 */
 	public function pauseGame() {
@@ -304,9 +305,9 @@ class HxlGame extends Sprite {
 			x = 0;
 			y = 0;
 		}
-		#if flash9
-		//flash.ui.Mouse.show();
-		#end
+
+		flash.ui.Mouse.show();
+
 		paused = true;
 		stage.frameRate = frameratePaused;
 		Actuate.pauseAll();
@@ -317,7 +318,9 @@ class HxlGame extends Sprite {
 	 */
 	function onFocus(?event:Event=null) {
 		if ( _autoPause && HxlGraphics.pause) {
-			HxlGraphics.pause = false;
+			//HxlGraphics.pause = false;
+			if(HxlState.musicOn)
+				MusicManager.resume();
 		}
 	}
 	
@@ -326,7 +329,8 @@ class HxlGame extends Sprite {
 	 */
 	function onFocusLost(?event:Event=null) {
 		if ( _autoPause ) {
-			HxlGraphics.pause = true;
+			//HxlGraphics.pause = true;
+			MusicManager.pause();
 		}
 	}
 
@@ -408,8 +412,8 @@ class HxlGame extends Sprite {
 		addChild(_soundTray);
 
 		//Initialize the pause screen
-		_addEventListener(Event.DEACTIVATE, onFocusLost,false,0,true);
-		_addEventListener(Event.ACTIVATE, onFocus, false, 0, true);
+		root.addEventListener(Event.DEACTIVATE, onFocusLost,false,0,true);
+		root.addEventListener(Event.ACTIVATE, onFocus, false, 0, true);
 		stage.focus = null;
 
 		//Check for saved sound preference data
@@ -592,5 +596,8 @@ class HxlGame extends Sprite {
 		removeChild(_soundTray);
 		removeChild(_screen);
 		removeChild(console);
+		
+		root.removeEventListener(Event.DEACTIVATE, onFocusLost);
+		root.addEventListener(Event.ACTIVATE, onFocus);
 	}
 }
