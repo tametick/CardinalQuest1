@@ -425,6 +425,8 @@ class CqLevel extends Level {
 			var timers = creature.timers;
 			if (timers.length>0) {
 				var expired = new Array();
+				var dead = false;
+				
 				for (t in timers) {
 					t.ticks--;
 					if (t.ticks == 0) {
@@ -454,7 +456,7 @@ class CqLevel extends Level {
 							var currentEffect = specialEffects.get(t.specialEffect.name);
 		
 							if(t.specialEffect.name == "magic_mirror")
-								GameUI.showEffectText(creature, "" + "magic mirror" + " expired", 0xff0000);
+								GameUI.showEffectText(creature, "Your mirror shatters!", 0xff0000);
 							else
 								GameUI.showEffectText(creature, "" + t.specialEffect.name + " expired", 0xff0000);
 							creature.specialEffects.remove(t.specialEffect.name);
@@ -467,15 +469,16 @@ class CqLevel extends Level {
 									creature.speed = currentEffect.value;
 								case "magic_mirror":
 									//spell particle effect
-									var mob:CqMob = cast(currentEffect.value, CqMob);
+									
+									var mob:Mob = cast(creature, Mob);
 									var eff:CqEffectSpell = new CqEffectSpell(mob.x+mob.width/2, mob.y+mob.height/2);
 									eff.zIndex = 1000;
 									HxlGraphics.state.add(eff);
 									eff.start(true, 1.0, 10);
-									removeMobFromLevel(HxlGraphics.state, mob);
-									mob = null;
-									eff = null;
+									removeMobFromLevel(state, mob);
+									dead = true;
 									l--;
+									break;
 								default:
 									//
 							}
@@ -493,6 +496,7 @@ class CqLevel extends Level {
 				}
 				
 				expired = null;
+				if (dead) continue;
 			}
 			
 			
@@ -500,6 +504,7 @@ class CqLevel extends Level {
 			// Apply speed buffs
 			speed += creature.buffs.get("speed");
 			speed = Std.int(Math.max(speed, 0));
+			
 			// apply spirit buffs
 			var spirit = creature.spirit;
 			var specialActive = creature.visibleEffects.length >0;
@@ -523,11 +528,7 @@ class CqLevel extends Level {
 					l = mobs.length + 1;
 				}
 			}
-
-			buffs = null;
-			specialEffects = null;
-			visibleEffects = null;
-			timers = null;
+			
 			i++;
 		}
 	}

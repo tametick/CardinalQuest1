@@ -410,6 +410,7 @@ class GameState extends CqState {
 		
 		if (Configuration.debug) {
 			player.give(CqSpellType.REVEAL_MAP);
+			player.give(CqSpellType.MAGIC_MIRROR);
 			if(Configuration.debugStartingLevel>0)
 				Registery.world.goToNextLevel(Configuration.debugStartingLevel);
 		}
