@@ -44,6 +44,7 @@ class MusicManager {
 		//stops and forgets last played track
 		if (currentlyPlaying != null) {
 			currentlyPlaying.stop();
+			//currentlyPlaying.kill();
 			currentlyPlaying = null;
 		}
 	}
