@@ -6,9 +6,7 @@ import flash.display.BitmapData;
 import flash.display.Sprite;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
-import flash.text.TextFieldType;
 import flash.events.Event;
-import flash.events.FocusEvent;
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.filters.BlurFilter;
@@ -84,9 +82,6 @@ class HxlGame extends Sprite {
 	var _soundTrayBars:Array<Bitmap>;
 	var _defaultFont:String;
 
-	// hack to solve focus getting/losing issues when running in browsers
-	var textCatcher:TextField;
-	
 	public function new(GameSizeX:Int, GameSizeY:Int, InitialState:Class<HxlState>, ?Zoom:Int=1, ?DefaultFont:String="system") {
 		super();
 		_zoom = Zoom;
@@ -413,24 +408,8 @@ class HxlGame extends Sprite {
 		addChild(_soundTray);
 
 		//Initialize the pause screen
-		//_addEventListener(Event.DEACTIVATE, onFocusLost,false,0,true);
-		//_addEventListener(Event.ACTIVATE, onFocus, false, 0, true);
-		
-		textCatcher = new TextField();
-		textCatcher.type = TextFieldType.INPUT;
-		textCatcher.selectable = false;
-		textCatcher.alpha = 0;
-		textCatcher.x = 0;
-		textCatcher.y = 0;
-		textCatcher.width = Configuration.app_width;
-		textCatcher.height = Configuration.app_height;
-		addChild(textCatcher);
-		stage.focus = textCatcher;
-		
-		textCatcher.addEventListener(FocusEvent.FOCUS_OUT, onFocusLost,false,0,true);
-		textCatcher.addEventListener(FocusEvent.FOCUS_IN, onFocus,false,0,true);
-		
-		
+		_addEventListener(Event.DEACTIVATE, onFocusLost,false,0,true);
+		_addEventListener(Event.ACTIVATE, onFocus,false,0,true);
 
 		//Check for saved sound preference data
 		soundPrefs = new HxlSave();
@@ -605,8 +584,6 @@ class HxlGame extends Sprite {
 	}
 	
 	public function destroy() {
-		textCatcher.removeEventListener(FocusEvent.FOCUS_OUT, onFocusLost);
-		textCatcher.removeEventListener(FocusEvent.FOCUS_IN, onFocus);
 		
 		_clearEventListeners();
 		HxlGraphics.buffer.dispose();
@@ -614,6 +591,5 @@ class HxlGame extends Sprite {
 		removeChild(_soundTray);
 		removeChild(_screen);
 		removeChild(console);
-		removeChild(textCatcher);
 	}
 }
