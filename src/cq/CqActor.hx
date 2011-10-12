@@ -324,12 +324,14 @@ class CqActor extends CqObject, implements Actor {
 	
 	public function breakInvisible(?message:String) {
 		if (this.specialEffects != null && this.specialEffects.get("invisible") != null) {
-			var i:Int = this.timers.length;
-			while (i > 0) {
-				i--;
-				var t = this.timers[i];
-				if (t.specialEffect.name == "invisible") {
-					this.timers.splice(i, 1);
+			if (this.timers != null) {
+				var i:Int = this.timers.length;
+				while (i > 0) {
+					i--;
+					var t = this.timers[i];
+					if (t.specialEffect != null && t.specialEffect.name == "invisible") {
+						this.timers.splice(i, 1);
+					}
 				}
 			}
 			this.specialEffects.remove("invisible");
