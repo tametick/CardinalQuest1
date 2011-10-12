@@ -329,7 +329,7 @@ class CqActor extends CqObject, implements Actor {
 				i--;
 				var t = this.timers[i];
 				if (t.specialEffect.name == "invisible") {
-					this.timers.remove(t);
+					this.timers.splice(i, 1);
 				}
 			}
 			this.specialEffects.remove("invisible");
@@ -369,7 +369,11 @@ class CqActor extends CqObject, implements Actor {
 				//// if a monster can be invisible, the player can make it visible by bumping it
 				other.breakInvisible("You bump into an invisible " + cast(other, CqMob).name + ".");
 			} else {
-				other.breakInvisible("The " + cast(this, CqMob).name + " stumbles into you!");
+				// monsters will sometimes pretend not to bump into you even when they should
+				if (Math.random() < .5) {
+					other.breakInvisible("You have been discovered!");
+				}
+				return;
 			}
 		}
 
