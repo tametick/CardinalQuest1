@@ -242,7 +242,8 @@ class HxlGame extends Sprite {
 		_screen.x = 0;
 		_screen.y = 0;
 		state = State;
-		state.isStacked = false;
+		if(state!=null)
+			state.isStacked = false;
 		
 		State = null;
 		System.gc();
