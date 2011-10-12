@@ -399,19 +399,10 @@ class MainMenuState extends CqState {
 	}
 
 	function fadeStateCallBack():Void{
-		//flash.ui.Mouse.cursor = MouseCursor.AUTO;
 		var newState = Type.createInstance(TargetState, new Array());
-		if ( stackId == 0 ) {
-			HxlGraphics.state = newState;
-		}
+		HxlGraphics.state = newState;
 		newState = null;
 	}
-/*	private static function getInstance():MainMenuState
-	{
-		if (_intance == null)
-		 _intance = new MainMenuState();
-		return _intance;
-	}*/
 
 	public override function update() {
 		super.update();
