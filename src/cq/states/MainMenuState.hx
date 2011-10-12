@@ -411,6 +411,10 @@ class MainMenuState extends CqState {
 	
 	override function onKeyUp(event:KeyboardEvent) {
 		nextScreen();
+		
+		if ( stackId != 0 && event.keyCode==27) {
+			resumeGame();
+		}
 	}
 	
 	private function nextScreen() {

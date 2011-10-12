@@ -442,7 +442,7 @@ class CqActor extends CqObject, implements Actor {
 	}
 	
 	public override function setAlpha(alpha:Float):Float {
-		showHealthBar(hp < vitality && alpha != 0);
+		showHealthBar(hp < maxHp && alpha != 0);
 		
 		var old:Float = super.setAlpha(alpha);
 		calcFrame();
@@ -483,6 +483,8 @@ class CqActor extends CqObject, implements Actor {
 			// attack enemy actor
 			if(other.faction != faction) {
 				attackOther(state, other);
+				if (other.hp > 0 && other.hp < other.maxHp)
+					other.showHealthBar(true);
 				justAttacked = true;
 				// end turn
 				
