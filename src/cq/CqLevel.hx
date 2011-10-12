@@ -322,11 +322,11 @@ class CqLevel extends Level {
 		cast(getTile(pos.x, pos.y), CqTile).loots.push(chest);
 	}
 	
-	public function createAndAddMirror(pos:HxlPoint, levelIndex:Int,?additionalAdd:Bool = false,player:CqPlayer):CqMob
+	public function createAndAddMirror(pos:HxlPoint, levelIndex:Int,?additionalAdd:Bool = false, actor:CqActor):CqMob
 	{
 		var tpos = getTilePos(pos.x, pos.y, false);
-		var mob:CqMob = CqMobFactory.newMobFromLevel(tpos.x, tpos.y, levelIndex + 1, player);
-		mob.faction = player.faction;
+		var mob:CqMob = CqMobFactory.newMobFromLevel(tpos.x, tpos.y, levelIndex + 1, actor);
+		mob.faction = actor.faction;
 		// add to level mobs list
 		mobs.push(mob);
 		// for creating mobs not when initializing the level.
@@ -358,6 +358,19 @@ class CqLevel extends Level {
 	}
 	
 
+	public function randomUnblockedTile(origin:HxlPoint):HxlPoint {
+		for (tries in 1...14) {
+			var x:Int = Std.int(origin.x + Math.random() * 13 - 6);
+			var y:Int = Std.int(origin.y + Math.random() * 11 - 5);
+			var tile:CqTile = getTile(x, y);
+			
+			if (tile != null && tile.visibility == Visibility.IN_SIGHT && !isBlockingMovement(x, y, true)) {
+				return new HxlPoint(x, y);
+			}
+		}
+		return null;
+	}
+
 	public function tryToSpawnEncouragingMonster() {
 		// you get 8 speed-1 turns before the game considers hounding you.  That's more than it sounds like --
 		// especially since every new cell you uncover gives you 3 turns back and seeing monsters slows the counter
@@ -365,19 +378,8 @@ class CqLevel extends Level {
 		if (ticksSinceNewDiscovery > 60 * 8 && Math.random() < .6) {
 			// lots of code duplication from polymorph -- beware!
 			
-			var freePosition:HxlPoint = null;
 			var playerPosition:HxlPoint = Registery.player.tilePos;
-			
-			for (tries in 1...14) {
-				var x:Int = Std.int(playerPosition.x + Math.random() * 13 - 6);
-				var y:Int = Std.int(playerPosition.y + Math.random() * 11 - 5);
-				var tile:CqTile = getTile(x, y);
-				
-				if (tile != null && tile.visibility == Visibility.IN_SIGHT && !isBlockingMovement(x, y, true)) {
-					freePosition = new HxlPoint(x, y);
-					break;
-				}
-			}
+			var freePosition:HxlPoint = randomUnblockedTile(playerPosition);
 			
 			if (freePosition != null) {
 				var mob:CqMob = createAndaddMob(freePosition, Std.int((.5 + .5 * Math.random()) * index), true);
@@ -455,10 +457,10 @@ class CqLevel extends Level {
 						if (t.specialEffect != null && HxlUtil.contains(specialEffects.keys(), t.specialEffect.name)) {
 							var currentEffect = specialEffects.get(t.specialEffect.name);
 		
-							if(t.specialEffect.name == "magic_mirror")
-								GameUI.showEffectText(creature, "Your mirror shatters!", 0xff0000);
-							else
-								GameUI.showEffectText(creature, "" + t.specialEffect.name + " expired", 0xff0000);
+							if(t.specialEffect.name == "magic_mirror") GameUI.showEffectText(creature, "Shattered", 0x909090);
+							else if (t.specialEffect.name == "invisible") GameUI.showEffectText(creature, "Reappeared", 0x909090);
+							else GameUI.showEffectText(creature, "" + t.specialEffect.name + " runs out", 0x909090);
+							
 							creature.specialEffects.remove(t.specialEffect.name);
 							
 							switch(currentEffect.name){
@@ -467,6 +469,8 @@ class CqLevel extends Level {
 									creature.isCharmed = false;
 								case "sleep":
 									creature.speed = currentEffect.value;
+								case "invisible":
+									creature.setAlpha(1.00);
 								case "magic_mirror":
 									//spell particle effect
 									

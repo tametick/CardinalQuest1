@@ -321,8 +321,8 @@ class MainMenuState extends CqState {
 			super.create();
 			titleText = new LogoSprite((Configuration.app_width - 345) / 2, (480 - 50) / 2 - 55);
 			add(titleText);
-			showAdditionalButtons();
 			finishSplashing();
+			showAdditionalButtons();
 		}
 	}
 	
@@ -333,12 +333,16 @@ class MainMenuState extends CqState {
 		
 		nextScreen();
 		
-		if (copyrightLink!=null && copyrightLink.overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
-			Lib.getURL(homePageRequest);
-		}
-		
-		if (gamePageLink != null && gamePageLink.overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
-			Lib.getURL(gamePageRequest);
+		if (buttonsAreUp) {
+			if (copyrightLink!=null && copyrightLink.overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
+				Lib.getURL(homePageRequest);
+			}
+			
+			if (gamePageLink != null && gamePageLink.overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
+				Lib.getURL(gamePageRequest);
+			}
+		} else {
+			showAdditionalButtons();
 		}
 	}
 	

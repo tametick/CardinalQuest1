@@ -125,7 +125,7 @@ class CqPotionGrid extends CqInventoryGrid {
 				GameUI.instance.panels.hideCurrentPanel(pressMenu);
 			}else {
 				GameUI.instance.setActive(false);
-				HxlGraphics.pushState(MainMenuState.instance);
+				HxlGraphics.pushState(new MainMenuState());
 			}
 		}
 	}

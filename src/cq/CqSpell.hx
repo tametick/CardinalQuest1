@@ -153,7 +153,7 @@ class CqSpellFactory {
 				spell.specialEffects.add(new CqSpecialEffectValue("fear"));
 				spell.spiritPointsRequired = 960;
 			case MAGIC_MIRROR: 
-				spell.duration = 360;
+				spell.duration = 180; // used to last 360
 				spell.targetsEmptyTile = true;
 				spell.specialEffects.add(new CqSpecialEffectValue("magic_mirror"));
 				spell.spiritPointsRequired = 720*2;

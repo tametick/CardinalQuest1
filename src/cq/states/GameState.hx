@@ -226,6 +226,9 @@ class GameState extends CqState {
 			Registery.world.goToNextLevel(Registery.world.currentLevelIndex-1);
 		} else if (HxlGraphics.keys.justReleased("PERIOD") && Registery.world.currentLevelIndex<Configuration.lastLevel) {
 			Registery.world.goToNextLevel(Registery.world.currentLevelIndex+1);
+		} else if (HxlGraphics.keys.justReleased("SLASH")) {
+			var player:CqPlayer = Registery.player;
+			player.gainExperience(50 + player.xp);
 		}
 	}
 	private function checkInvKeys():Void
@@ -581,15 +584,15 @@ class GameState extends CqState {
 					
 		var left_ok:Bool = true, right_ok:Bool = true;
 		var left_wins:Bool = false, right_wins:Bool = false;
+		var left_back:Bool = false, right_back:Bool = false;
 		
 		var left = new HxlPoint(-facing.y, -facing.x);
 		var right = new HxlPoint(facing.y, facing.x);
 		
 		// you can't move backward, though!
-		
 		if (player.lastTile != null) {
-			if (player.lastTile.x == left.x + player.tilePos.x && player.lastTile.y == left.y + player.tilePos.y) left_ok = false;
-			if (player.lastTile.x == right.x + player.tilePos.x && player.lastTile.y == right.y + player.tilePos.y) right_ok = false;
+			left_back = (player.lastTile.x == left.x + player.tilePos.x && player.lastTile.y == left.y + player.tilePos.y);
+			right_back = (player.lastTile.x == right.x + player.tilePos.x && player.lastTile.y == right.y + player.tilePos.y);
 		}
 		
 		// get set
@@ -639,6 +642,11 @@ class GameState extends CqState {
 					}
 				}
 			}
+		}
+		
+		if (left_back || right_back) {
+			if (left_ok && right_back) { left_wins = true; right_wins = right_ok = false; }
+			if (right_ok && left_back) { right_wins = true; left_wins = left_ok = false; }
 		}
 		
 		if (left_wins && right_wins) {
