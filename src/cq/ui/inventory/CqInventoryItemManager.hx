@@ -150,7 +150,7 @@ class CqInventoryItemManager
 					} else {	
 						//item is the same & plain
 						if ( Item.equalTo( cell.getCellObj().item) && !Item.isEnchanted) {
-							GameUI.showTextNotification("I already have one like this.", 0xE1CC37);
+							GameUI.showTextNotification("I already have one just like this.", 0xE1CC37);
 							destroyAndGiveMoney(Item);
 							return false;
 						}
