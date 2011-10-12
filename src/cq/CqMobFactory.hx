@@ -174,7 +174,7 @@ class CqMobFactory {
 				}
 				if (mob.type == SPIDER_GRAY) {
 					mob.name = "Wolf Spider";
-					mob.speed *= 3;
+					mob.speed *= 2;
 					mob.spirit = 1;
 				}
 			case APE_BLUE, APE_BLACK, APE_RED, APE_WHITE:
