@@ -301,7 +301,7 @@ class CqActor extends CqObject, implements Actor {
 				//It's ok to put it here, not perfect, but easier to test
 				//We will ping simply the kong server twice as often, which should be ok
 				Registery.getKong().SubmitScore( player.xp , "Normal" );
-				player.doDeathEffect(1.25);
+				player.doDeathEffect(1.00);
 			} else {
 				var mob = cast(other, CqMob);
 				// remove other
@@ -324,7 +324,10 @@ class CqActor extends CqObject, implements Actor {
 	
 	public function breakInvisible(?message:String) {
 		if (this.specialEffects != null && this.specialEffects.get("invisible") != null) {
-			for (t in this.timers) {
+			var i:Int = this.timers.length;
+			while (i > 0) {
+				i--;
+				var t = this.timers[i];
 				if (t.specialEffect.name == "invisible") {
 					this.timers.remove(t);
 				}
