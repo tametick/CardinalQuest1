@@ -1,6 +1,5 @@
 package data;
 import cq.CqActor;
-import cq.states.MainMenuState;
 
 /*
  *  Please put in comments what the value should be during in release time

@@ -494,8 +494,7 @@ class GameState extends CqState {
 					gameUI.setActive();
 					gameUI.dlgPotionGrid.pressHelp(false);
 				}else {
-					if (GameUI.instance.panels.currentPanel != null)
-					{
+					if (GameUI.instance.panels.currentPanel != null) {
 						gameUI.panels.hideCurrentPanel();
 					}else{
 						gameUI.setActive();

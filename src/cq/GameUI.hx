@@ -8,7 +8,6 @@ import com.eclecticdesignstudio.motion.easing.Elastic;
 import com.eclecticdesignstudio.motion.easing.Linear;
 import cq.states.GameState;
 import cq.states.HelpState;
-import cq.states.MainMenuState;
 import cq.ui.CqPanelContainer;
 import cq.ui.CqPopup;
 import cq.ui.CqPotionGrid;

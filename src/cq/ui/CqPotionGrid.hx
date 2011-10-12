@@ -113,17 +113,14 @@ class CqPotionGrid extends CqInventoryGrid {
 			HxlGraphics.pushState(HelpState.instance);
 		}
 	}
-	public function pressMenu(?playSound:Bool = false):Void
-	{
-		if (Std.is(HxlGraphics.getState(), GameState))
-		{
+	public function pressMenu(?playSound:Bool = false):Void	{
+		if (Std.is(HxlGraphics.getState(), GameState)) {
 			if (playSound)
 				SoundEffectsManager.play(MenuItemClick);
 			
-			if (GameUI.instance.panels.currentPanel != null)
-			{
+			if (GameUI.instance.panels.currentPanel != null) {
 				GameUI.instance.panels.hideCurrentPanel(pressMenu);
-			}else {
+			} else {
 				GameUI.instance.setActive(false);
 				HxlGraphics.pushState(new MainMenuState());
 			}

@@ -47,7 +47,7 @@ class MainMenuState extends CqState {
 	var stateNum:Int;
 	
 	// from the main menu:
-	public static var instance(getInstance, null):MainMenuState;
+	//public static var instance(getInstance, null):MainMenuState;
 	public static var message:String = "";
 	private static var _intance:MainMenuState;
 	private static var sfxOn:Bool;
@@ -91,7 +91,8 @@ class MainMenuState extends CqState {
 	}
 	
 	private function finishSplashing() {
-		if (!stillSplashing) return;
+		if (!stillSplashing) 
+			return;
 		stillSplashing = false;
 		
 		MusicManager.play(MenuTheme);
@@ -326,6 +327,8 @@ class MainMenuState extends CqState {
 			super.create();
 			titleText = new LogoSprite((Configuration.app_width - 345) / 2, (480 - 50) / 2 - 55);
 			add(titleText);
+			
+			stillSplashing = true;
 			finishSplashing();
 			showAdditionalButtons();
 		}
@@ -393,12 +396,12 @@ class MainMenuState extends CqState {
 		}
 		newState = null;
 	}
-	private static function getInstance():MainMenuState
+/*	private static function getInstance():MainMenuState
 	{
 		if (_intance == null)
 		 _intance = new MainMenuState();
 		return _intance;
-	}
+	}*/
 
 	public override function update() {
 		super.update();
