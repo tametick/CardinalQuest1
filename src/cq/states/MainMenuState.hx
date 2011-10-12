@@ -73,6 +73,7 @@ class MainMenuState extends CqState {
 	
 	var stillSplashing:Bool;
 	var buttonsAreUp:Bool;
+	var finishedAddingGuiElements:Bool;
 
 	public function new()
 	{
@@ -81,6 +82,7 @@ class MainMenuState extends CqState {
 		sfxOn = true;
 		stillSplashing = false;
 		buttonsAreUp = false;
+		finishedAddingGuiElements = false;
 	}
 	
 	override public function destroy() {		
@@ -106,15 +108,19 @@ class MainMenuState extends CqState {
 	}
 	
 	private function resumeGame() {
-		CqLevel.playMusicByIndex(Registery.level.index);
-		HxlGraphics.popState();
+		if(finishedAddingGuiElements) {		
+			CqLevel.playMusicByIndex(Registery.level.index);
+			HxlGraphics.popState();
+		}
 	}
 	
 	private function gotoCharState( ) {
-		changeState(CreateCharState);
+		if(finishedAddingGuiElements)
+			changeState(CreateCharState);
 	}
 	private function gotoCreditState( ) {
-		changeState(CreditsState);
+		if(finishedAddingGuiElements)
+			changeState(CreditsState);
 	}
 
 	
@@ -209,8 +215,10 @@ class MainMenuState extends CqState {
 	}
 	
 	private function showAdditionalButtons() {
-		if (buttonsAreUp) return;
+		if (buttonsAreUp) 
+			return;
 		buttonsAreUp = true;
+		finishedAddingGuiElements = false;
 		
 		if ( !Configuration.startWithMusic )
 			toggleMusic();
@@ -267,6 +275,8 @@ class MainMenuState extends CqState {
 
 		if (message != null)
 			HxlGraphics.state.add(new HxlText(0, 0, 500, message, true, FontAnonymousProB.instance.fontName, 16));
+			
+		finishedAddingGuiElements = true;
 	}
 	
 	private function startSplashing() {
