@@ -318,7 +318,7 @@ class HxlGame extends Sprite {
 	 * Internal event handler for input and focus.
 	 */
 	function onFocus(?event:Event=null) {
-		if ( _autoPause && HxlGraphics.pause) {
+		if ( _autoPause /*&& HxlGraphics.pause*/) {
 			//HxlGraphics.pause = false;
 			if(HxlState.musicOn)
 				MusicManager.resume();
