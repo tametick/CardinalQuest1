@@ -807,18 +807,21 @@ class GameUI extends HxlDialog {
 		HxlGraphics.state.add(txt);
 	}
 	public static function showEffectText(actor:CqActor, text:String, color:Int) {
-		if (!Std.is(HxlGraphics.state ,GameState))
-			return;
-		var fltxt:CqFloatText = new CqFloatText(actor.x + (actor.width / 2), actor.y - 16, text, color, 24, false);
-		effectQueue.push(fltxt);
-		if (effectQueue.length == 1 || effectQueue.length >3)
-			startEffectText(fltxt);
+		if (Std.is(HxlGraphics.state, GameState) && cast(HxlGraphics.state, GameState).started) {
+			if (actor.visible == true && actor.alpha > 0) {
+				var fltxt:CqFloatText = new CqFloatText(actor.x + (actor.width / 2), actor.y - 16, text, color, 24, false);
+				effectQueue.push(fltxt);
+				if (effectQueue.length == 1 || effectQueue.length >3)
+					startEffectText(fltxt);
+			}
+		}
 	}
 	public static function showTextNotification(message:String, ?color:Int = 0xDE913A) {
-		if (!Std.is(HxlGraphics.state ,GameState))
-			return;
-		notifications.notify(message, color);
+		if (Std.is(HxlGraphics.state, GameState) && cast(HxlGraphics.state, GameState).started) {
+			notifications.notify(message, color);
+		}
 	}
+	
 	public function doPlayerGainXP(?xpTotal:Int=0) {
 		infoViewXpBar.updateValue(xpTotal);
 		centralXpBar.updateValue(xpTotal);
@@ -950,7 +953,8 @@ class GameUI extends HxlDialog {
 				if ( tile == null || tile.actors.length <= 0 || tile.visibility != Visibility.IN_SIGHT) {
 					setTargetColor(0xff0000);
 				} else {
-					if ( cast(tile.actors[0], CqActor).faction != 0 ) {
+					var actor:CqActor = cast(tile.actors[0], CqActor);
+					if ( actor.faction != CqPlayer.faction && actor.alpha > 0) {
 						setTargetColor(0x00ff00);
 					} else {
 						setTargetColor(0xff0000);

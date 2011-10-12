@@ -236,7 +236,11 @@ class HxlButton extends HxlGroup {
 	 */
 	
 	public override function overlapsPoint(x:Float, y:Float, ?perPixel:Bool = false ):Bool {
-		return super.overlapsPoint(x - (.5 * _off.height * (1.0 - _off.scale.x)), y - (.5 * _off.height * (1.0 - _off.scale.y)), perPixel);
+		if (_off != null && _off.scale != null) {
+			return super.overlapsPoint(x - (.5 * _off.width * (1.0 - _off.scale.x)), y - (.5 * _off.height * (1.0 - _off.scale.y)), perPixel);
+		} else {
+			return super.overlapsPoint(x, y, perPixel);
+		}
 	}
 	 
 	public override function update() {

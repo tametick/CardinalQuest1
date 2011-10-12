@@ -111,6 +111,7 @@ class CqInventoryItemManager
 				var cell:CqEquipmentCell = dlgEqGrid.getCellWithSlot(Item.equipSlot);
 				//if slot was empty - equip
 				if (cell.getCellObj() == null) {
+					GameUI.showTextNotification("I have needed one of these.", 0xBFE137);
 					uiItem = equipItem(cell, Item, uiItem);
 					cell.getCellObj().updateIcon();
 					dlgInfo.setItem(Item);
@@ -119,34 +120,36 @@ class CqInventoryItemManager
 					var hasMinusses:Bool = hasItemMinusBuffs(Item);
 					var preference:Float = shouldEquipItemInCell(cell, Item);
 					//equip if item is better
-					if (preference > 1)	{	
+					if (preference > 1)	{
 						var old:CqInventoryItem = equipItem(cell, Item, uiItem);
 						dlgInfo.setItem(Item);
-						if (!old.item.isEnchanted) {	
-							// old is plain, so destroy
+						if (old.item.isEnchanted) {
+							GameUI.showTextNotification("I'll stick with my old " + old.item.name + ".", 0xBFE137);
+							uiItem = old;
+						} else {
+							// old is non plain, so just add to inv
+							
 							if (hasMinusses) {
-								GameUI.showTextNotification("This, I shall keep.", 0xBFE137);
+								// the new one is not necessarily better -- ?
+								GameUI.showTextNotification("I'll use it, but it's not perfect.", 0xBFE137);
 								uiItem = old;
 							} else {
-								GameUI.showTextNotification("I can sell the old one now.", 0xBFE137);
+								// old is plain, so destroy
+								GameUI.showTextNotification("I will sell my old " + old.item.name + " now.", 0xBFE137);
 								destroyAndGiveMoney(old.item);
 								return true;
 							}
-						} else {
-							// old is non plain add to inv
-							uiItem = old;
 						}
 					} else if (preference < 1) {
 						//if new is worse than old, and is plain - destroy it
 						if (!Item.isEnchanted) {
-							GameUI.showTextNotification("I don't need this.");
+							GameUI.showTextNotification("Ha! Not half as good as my " + cell.getCellObj().item.name + "." );
 							destroyAndGiveMoney(Item);
 							return false;
 						}
 					} else {	
 						//item is the same & plain
 						if ( Item.equalTo( cell.getCellObj().item) && !Item.isEnchanted) {
-							
 							GameUI.showTextNotification("I already have one like this.", 0xE1CC37);
 							destroyAndGiveMoney(Item);
 							return false;
