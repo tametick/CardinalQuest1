@@ -53,6 +53,6 @@ class CreditsState extends CqState {
 	}
 	function nextScreenFadeCallback()
 	{
-		HxlGraphics.popState();
+		HxlGraphics.state = new MainMenuState();
 	}
 }

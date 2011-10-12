@@ -242,7 +242,8 @@ class HxlGame extends Sprite {
 		_screen.x = 0;
 		_screen.y = 0;
 		state = State;
-		state.isStacked = false;
+		if(state!=null)
+			state.isStacked = false;
 		
 		State = null;
 		System.gc();
@@ -318,7 +319,7 @@ class HxlGame extends Sprite {
 	 * Internal event handler for input and focus.
 	 */
 	function onFocus(?event:Event=null) {
-		if ( _autoPause && HxlGraphics.pause) {
+		if ( _autoPause /*&& HxlGraphics.pause*/) {
 			//HxlGraphics.pause = false;
 			if(HxlState.musicOn)
 				MusicManager.resume();

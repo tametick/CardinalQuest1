@@ -112,6 +112,10 @@ class MainMenuState extends CqState {
 	private function gotoCharState( ) {
 		changeState(CreateCharState);
 	}
+	private function gotoCreditState( ) {
+		changeState(CreditsState);
+	}
+
 	
 	private function makeMenu():HxlMenu {
 		menu = new HxlMenu(200, Configuration.app_width, 240, 200);
@@ -151,7 +155,7 @@ class MainMenuState extends CqState {
 			btnCredits.setNormalFormat(null, 35, textColor, "center");
 			btnCredits.setHoverFormat(null, 35, textHighlight, "center");
 			menu.addItem(btnCredits);
-			btnCredits.setCallback(function() { HxlGraphics.fade.start(true, 0xff000000, sFadeTime, function() { HxlGraphics.pushState(new CreditsState()); } ); } );
+			btnCredits.setCallback(gotoCreditState);
 			buttonY += 50;
 
 /*			var btnHiscores:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Highscores", true, null);
@@ -381,18 +385,11 @@ class MainMenuState extends CqState {
 		HxlGraphics.fade.start(true, 0xff000000, .5, fadeStateCallBack, true);
 	}
 
-	function fadeStateCallBack():Void
-	{
+	function fadeStateCallBack():Void{
 		//flash.ui.Mouse.cursor = MouseCursor.AUTO;
 		var newState = Type.createInstance(TargetState, new Array());
 		if ( stackId == 0 ) {
 			HxlGraphics.state = newState;
-		} else {
-			if ( TargetState == CreditsState ) {
-				HxlGraphics.pushState(new CreditsState());
-			} else {
-				HxlGraphics.state = newState;
-			}
 		}
 		newState = null;
 	}
