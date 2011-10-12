@@ -211,7 +211,7 @@ class CqActor extends CqObject, implements Actor {
 		buffs.set("spirit", 0);
 		
 		specialEffects = new Hash<CqSpecialEffectValue>();
-		specialEffects.set("damage multipler", new CqSpecialEffectValue("damage multipler","1"));
+		specialEffects.set("damage multipler", new CqSpecialEffectValue("damage multipler", "1"));
 	}
 
 	public function addOnInjure(Callback:Dynamic) {
@@ -562,10 +562,7 @@ class CqActor extends CqObject, implements Actor {
 		var Effectcolor:Int = HxlUtil.averageColour(itemOrSpell.pixels);
 		if(itemOrSpell.specialEffects != null){
 			for ( effect in itemOrSpell.specialEffects) {
-				applyEffectAt(effect, tile);
-				if (itemOrSpell.duration > -1) {
-						timers.push(new CqTimer(itemOrSpell.duration, null, -1, effect));
-				}
+				applyEffectAt(effect, tile, itemOrSpell.duration);
 			}
 		}
 		//special effect
@@ -714,7 +711,7 @@ class CqActor extends CqObject, implements Actor {
 			}
 		}
 	}
-	function applyEffectAt(effect:CqSpecialEffectValue, tile:CqTile) {
+	function applyEffectAt(effect:CqSpecialEffectValue, tile:CqTile, ?duration:Int = -1) {
 		switch(effect.name){
 		
 		case "teleport":
@@ -725,15 +722,18 @@ class CqActor extends CqObject, implements Actor {
 			
 			pixelLocation = null;
 		case "magic_mirror":
+			// note that the magic mirror sprite will actually be backwards!  Very cool.
 			var mob = Registery.level.createAndAddMirror(new HxlPoint(tile.mapX,tile.mapY), Registery.player.level, true,Registery.player);
 			GameUI.showEffectText(mob, "Mirror", 0x2DB6D2);
 			//mob.speed = 0;
 			mob.faction = Registery.player.faction;
-			effect.value = mob;
-			specialEffects.set(effect.name, effect);
+			mob.xpValue = 0;
+			mob.specialEffects.set(effect.name, effect);
 			Registery.level.updateFieldOfView(HxlGraphics.state, true);
 			
-			mob = null;
+			if (duration > -1) {
+				mob.timers.push(new CqTimer(duration, null, -1, effect));
+			}
 		}
 	}
 	
@@ -1203,8 +1203,7 @@ class CqPlayer extends CqActor, implements Player {
 		scale.x = scale.y = 1.0;
 		
 		level.updateFieldOfView(HxlGraphics.state, true);
-		
-		level.ticksSinceNewDiscovery = 0;
+		level.restartExploration(1);
 		
 		isDying = false;
 	}

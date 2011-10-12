@@ -109,8 +109,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		mobs.remove(mob);
 		
 		// take the monster out of the tile it was in
-		var mobPos = null;
-		mobPos = mob.getTilePos();
+		var mobPos = mob.getTilePos();
 		
 		if (mobPos!=null) {
 			var mobTile = null;
@@ -568,6 +567,17 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 			}
 		}
 		return explored / total;
+	}
+	
+	public function restartExploration(minTimesSeen:Int) {
+		ticksSinceNewDiscovery = 0;
+		
+		for (y in 0...heightInTiles) {
+			for (x in 0...widthInTiles) {
+				var t:Tile = cast(_tiles[y][x], Tile);
+				if (t.timesUncovered > minTimesSeen) t.timesUncovered = minTimesSeen;
+			}
+		}
 	}
 	
 	/**

@@ -234,6 +234,11 @@ class HxlButton extends HxlGroup {
 	/**
 	 * Called by the game loop automatically, handles mouseover and click detection.
 	 */
+	
+	public override function overlapsPoint(x:Float, y:Float, ?perPixel:Bool = false ):Bool {
+		return super.overlapsPoint(x - (.5 * _off.height * (1.0 - _off.scale.x)), y - (.5 * _off.height * (1.0 - _off.scale.y)), perPixel);
+	}
+	 
 	public override function update() {
 		if (!_initialized) {
 			if (HxlGraphics.stage != null) {
@@ -246,7 +251,7 @@ class HxlButton extends HxlGroup {
 		super.update();
 
 		visibility(false);
-		if (overlapsPoint(HxlGraphics.mouse.x - (.5*_off.height*(1.0-_off.scale.x)),HxlGraphics.mouse.y - (.5*_off.height*(1.0-_off.scale.y)))) {
+		if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
 			if (!HxlGraphics.mouse.pressed()) {
 				_pressed = false;
 			} else if (!_pressed) {
@@ -339,7 +344,7 @@ class HxlButton extends HxlGroup {
 			if (!exists || !visible || !active) return;
 		}
 
-		if (overlapsPoint(HxlGraphics.mouse.x - (.5*_off.height*(1.0-_off.scale.x)),HxlGraphics.mouse.y - (.5*_off.height*(1.0-_off.scale.y)))) {
+		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
 			if ( _callback != null ) 
 				_callback();
 			if ( clickSound != null ) 
@@ -358,7 +363,7 @@ class HxlButton extends HxlGroup {
 				return;
 		}
 
-		if (overlapsPoint(HxlGraphics.mouse.x - (.5*_off.height*(1.0-_off.scale.x)),HxlGraphics.mouse.y - (.5*_off.height*(1.0-_off.scale.y)))) {
+		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
 			if ( eventStopPropagate) 
 				event.stopPropagation();
 		}
