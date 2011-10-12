@@ -91,6 +91,7 @@ class MainMenuState extends CqState {
 	}
 	
 	private function finishSplashing() {
+		if (!stillSplashing) return;
 		stillSplashing = false;
 		
 		MusicManager.play(MenuTheme);

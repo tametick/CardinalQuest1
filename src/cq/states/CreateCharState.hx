@@ -98,6 +98,7 @@ class CreateCharState extends CqState {
 	}
 	
 	function realInit() {
+		add(cursor);
 		cursor.visible	= true;
 		if (scroller != null)
 			remove(scroller);
@@ -202,6 +203,8 @@ class CreateCharState extends CqState {
 			//scroller.onComplete(removeScrollerAndFade);
 			scroller.onComplete(realInit);
 			shownIntro = true;
+			cursor.visible = false;
+			remove(cursor);
 			
 			introText = null;
 		}else {

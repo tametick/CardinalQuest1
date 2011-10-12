@@ -328,11 +328,17 @@ class GameState extends CqState {
 				return;
 		}
 		
-		cursor.visible = false;
+		remove(cursor); // actually get rid of the cursor (hiding it doesn't seem to help)
 		scroller = new CqTextScroller(classBG, 1);
 		scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,26);
 		add(scroller);
 		
+		// continue this in a timer so that we refresh with the image before starting playtomic and generating the level
+		Actuate.timer(.01).onComplete(startScroller);
+	}
+	
+	
+	function startScroller() {
 		// do these two to get their imperceptible delay out of the way
 		initRegistry();
 		Playtomic.play();
@@ -378,6 +384,8 @@ class GameState extends CqState {
 	function finalInit() {
 		var world = Registery.world;
 		var player = Registery.player;
+		
+		add(cursor);
 
 		player.addOnPickup(gameUI.itemPickup);
 		player.addOnInjure(gameUI.doPlayerInjureEffect);
