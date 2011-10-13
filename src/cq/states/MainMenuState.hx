@@ -33,7 +33,7 @@ import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;
 
 import haxel.GraphicCache;
-	
+
 #if flash
 	import flash.ui.MouseCursor;
 	import flash.desktop.NativeApplication;
@@ -45,7 +45,7 @@ class MainMenuState extends CqState {
 	// from the splash state:
 	var waitTime:Float;
 	var stateNum:Int;
-	
+
 	// from the main menu:
 	//public static var instance(getInstance, null):MainMenuState;
 	public static var message:String = "";
@@ -67,10 +67,10 @@ class MainMenuState extends CqState {
 	var sfxText:HxlText;
 	var tglMusicIcon:HxlSprite;
 	var tglSFXIcon:HxlSprite;
-	
+
 	var copyrightLink:HxlText;
 	var gamePageLink:HxlText;
-	
+
 	var stillSplashing:Bool;
 	var buttonsAreUp:Bool;
 	var finishedAddingGuiElements:Bool;
@@ -84,19 +84,19 @@ class MainMenuState extends CqState {
 		buttonsAreUp = false;
 		finishedAddingGuiElements = false;
 	}
-	
-	override public function destroy() {		
+
+	override public function destroy() {
 		super.destroy();
-		
+
 		//instance = null;
 		// todo
 	}
-	
+
 	private function finishSplashing() {
-		if (!stillSplashing) 
+		if (!stillSplashing)
 			return;
 		stillSplashing = false;
-		
+
 		MusicManager.play(MenuTheme);
 		fadeTimer = new HxlTimer();
 		var fadeTime = 0.5;
@@ -104,16 +104,16 @@ class MainMenuState extends CqState {
 		var menu = makeMenu();
 		Actuate.tween(menu, 1.00, { targetY: 220 } )
 			.ease(Cubic.easeOut)
-			.onComplete(showAdditionalButtons);		
+			.onComplete(showAdditionalButtons);
 	}
-	
+
 	private function resumeGame() {
-		if(finishedAddingGuiElements) {		
+		if(finishedAddingGuiElements) {
 			CqLevel.playMusicByIndex(Registery.level.index);
 			HxlGraphics.popState();
 		}
 	}
-	
+
 	private function gotoCharState( ) {
 		if(finishedAddingGuiElements)
 			changeState(CreateCharState);
@@ -123,7 +123,7 @@ class MainMenuState extends CqState {
 			changeState(CreditsState);
 	}
 
-	
+
 	private function makeMenu():HxlMenu {
 		menu = new HxlMenu(200, Configuration.app_width, 240, 200);
 		add(menu);
@@ -210,16 +210,16 @@ class MainMenuState extends CqState {
 
 		menu.setScrollSound(MenuItemMouseOver);
 		menu.setSelectSound(MenuItemClick);
-		
+
 		return menu;
 	}
-	
+
 	private function showAdditionalButtons() {
-		if (buttonsAreUp) 
+		if (buttonsAreUp)
 			return;
 		buttonsAreUp = true;
 		finishedAddingGuiElements = false;
-		
+
 		if ( !Configuration.startWithMusic )
 			toggleMusic();
 
@@ -235,7 +235,7 @@ class MainMenuState extends CqState {
 		btnToggleMusic.setOn(true);
 		if (!HxlState.musicOn)
 			toggleMusic();
-		add(btnToggleMusic);			
+		add(btnToggleMusic);
 
 		tglSFXIcon = new HxlSprite(45,0);
 		tglSFXIcon.loadGraphic(SpriteSoundToggle, true, false, 48, 48,false,0.5,0.5);
@@ -253,17 +253,34 @@ class MainMenuState extends CqState {
 		if ( !Configuration.startWithSound )
 			toggleSFX();
 
-			
+
 		var copyright = new HxlText(375, 459, Configuration.app_width - 375 - 123, "Copyright 2011", true, FontAnonymousPro.instance.fontName, 18);
-		copyrightLink = new HxlText(copyright.x+copyright.width, 459, 123, "Ido Yehieli", true, FontAnonymousPro.instance.fontName, 18,0x77D2FF);
-		copyrightLink.setUnderlined();
 		add(copyright);
-		add(copyrightLink);
-		
-		var version = new HxlText(Configuration.app_width-130-2, copyright.y-copyright.height, 130, "Version " + Configuration.version, true, FontAnonymousPro.instance.fontName, 18);
-		add(version);
-		
-		if(!Configuration.standAlone){
+
+		//Adding porter for ios, I guess android will want to do the same
+		//removing link for iOS, it wont work plus it does not seem to work in air either
+		if( Configuration.iOS ) {
+
+			copyrightLink = new HxlText(copyright.x+copyright.width, 459, 123, "Ido Yehieli", true, FontAnonymousPro.instance.fontName, 18);
+			add(copyrightLink);
+
+			var portedBy = new HxlText(430, copyright.y-copyright.height, 260, "Ported by Tom Demuyt", true, FontAnonymousPro.instance.fontName, 18);
+			add(portedBy);
+
+			var version = new HxlText(Configuration.app_width-130-2, portedBy.y-portedBy.height, 130, "Version " + Configuration.version, true, FontAnonymousPro.instance.fontName, 18);
+			add(version);
+
+		} else {
+
+			copyrightLink = new HxlText(copyright.x+copyright.width, 459, 123, "Ido Yehieli", true, FontAnonymousPro.instance.fontName, 18,0x77D2FF);
+			copyrightLink.setUnderlined();
+			add(copyrightLink);
+
+			var version = new HxlText(Configuration.app_width-130-2, copyright.y-copyright.height, 130, "Version " + Configuration.version, true, FontAnonymousPro.instance.fontName, 18);
+			add(version);
+		}
+
+		if(!Configuration.standAlone && !Configuration.mobile){
 			var findOut = new HxlText(0, 0, 260 , "Get stand-alone version at ", true, FontAnonymousPro.instance.fontName, 18);
 			add(findOut);
 			gamePageLink = new HxlText(findOut.x + findOut.width, 0, 172, "CardinalQuest.com", true, FontAnonymousPro.instance.fontName, 18, 0x77D2FF);
@@ -275,13 +292,13 @@ class MainMenuState extends CqState {
 
 		if (message != null)
 			HxlGraphics.state.add(new HxlText(0, 0, 500, message, true, FontAnonymousProB.instance.fontName, 16));
-			
+
 		finishedAddingGuiElements = true;
 	}
-	
+
 	private function startSplashing() {
 		stillSplashing = true;
-		
+
 		Mouse.hide();
 
 		if (Configuration.standAlone) {
@@ -306,10 +323,10 @@ class MainMenuState extends CqState {
 
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
 		Actuate.tween(titleText, fadeTime, { y: (480 - 50) / 2 - 55 } ).ease(Cubic.easeOut);
-			
+
 		Actuate.timer(.30).onComplete(finishSplashing);
 	}
-	
+
 	public override function create() {
 		btnClicked = false;
 
@@ -318,44 +335,44 @@ class MainMenuState extends CqState {
 			Lib.current.stage.scaleMode = StageScaleMode.SHOW_ALL;
 			if (Configuration.debug)
 				Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
-			
+
 			super.create();
-			
+
 			Lib.current.stage.align = StageAlign.TOP;
 			Lib.current.stage.fullScreenSourceRect = new Rectangle(0, 0, Configuration.app_width, Configuration.app_height);
-			
+
 			var bg = new HxlSprite(0, 0, SpriteMainmenuBg);
 			add(bg);
 			bg.zIndex--;
-			
+
 			titleText = new LogoSprite((Configuration.app_width - 345) / 2, - 55);
 			add(titleText);
-			
+
 			startSplashing();
 		} else {
 			//blur gamestate
 			super.create();
 			titleText = new LogoSprite((Configuration.app_width - 345) / 2, (480 - 50) / 2 - 55);
 			add(titleText);
-			
+
 			stillSplashing = true;
 			finishSplashing();
 			showAdditionalButtons();
 		}
 	}
-	
+
 	static var homePageRequest:URLRequest = new URLRequest("http://www.tametick.com/");
 	static var gamePageRequest:URLRequest = new URLRequest("http://www.cardinalquest.com/");
 	override private function onMouseDown(event:MouseEvent) {
 		super.onMouseDown(event);
-		
+
 		nextScreen();
-		
+
 		if (buttonsAreUp) {
 			if (copyrightLink!=null && copyrightLink.overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
 				Lib.getURL(homePageRequest);
 			}
-			
+
 			if (gamePageLink != null && gamePageLink.overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
 				Lib.getURL(gamePageRequest);
 			}
@@ -363,7 +380,7 @@ class MainMenuState extends CqState {
 			showAdditionalButtons();
 		}
 	}
-	
+
 	private function toggleMusic():Void
 	{
 		btnToggleMusic.setOn(!btnToggleMusic.getOn());
@@ -384,7 +401,7 @@ class MainMenuState extends CqState {
 		tglSFXIcon.setFrame((sfxOn?1:0));
 
 	}
-	
+
 	var TargetState:Class<HxlState>;
 	function changeState(TargetState:Class<HxlState>) {
 		if (btnClicked)
@@ -408,15 +425,15 @@ class MainMenuState extends CqState {
 		super.update();
 		setDiagonalCursor();
 	}
-	
+
 	override function onKeyUp(event:KeyboardEvent) {
 		nextScreen();
-		
+
 		if ( stackId != 0 && event.keyCode==27) {
 			resumeGame();
 		}
 	}
-	
+
 	private function nextScreen() {
 		if (stillSplashing) {
 			finishSplashing();
