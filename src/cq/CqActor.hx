@@ -262,9 +262,11 @@ class CqActor extends CqObject, implements Actor {
 	public function doInjure(?dmgTotal:Int=0) {
 		for ( Callback in onInjure ) 
 			Callback(dmgTotal);
+			
+		showHealthBar(hp > 0 && hp < maxHp && alpha != 0);
 	}
 
-	function injureActor(other:CqActor, dmgTotal:Int) {
+	function injureActor(state:HxlState, other:CqActor, dmgTotal:Int) {
 		if (this == Registery.player) {
 			HxlLog.append("You hit");
 			PtPlayer.hits();
@@ -341,6 +343,26 @@ class CqActor extends CqObject, implements Actor {
 			GameUI.showEffectText(this, message, 0x6699ff);
 		}
 	}
+	
+	public static function biasedRandomInRange(low:Int, high:Int, ndice:Int) {
+		// pick n dice that, when rolled, add up to high - low, and then roll them
+		// the idea here is that by splitting a single roll up into several, we more closely
+		// approximate a normal distribution and come out with more intuitive results.
+		
+		var range = high - low;
+		var sides:Int = Std.int(range / ndice);
+		var bigger:Int = range - sides * ndice;
+		
+		var sum:Int = 0;
+		for (i in 1 ... ndice - bigger) {
+			sum += HxlUtil.randomInt(sides + 1);
+		}
+		for (i in 1 ... bigger) {
+			sum += HxlUtil.randomInt(sides + 2);
+		}
+		
+		return sum + low;
+	}
 
 	public function attackOther(state:HxlState, other:GameObject) {
 		var stealthy = false;
@@ -369,7 +391,8 @@ class CqActor extends CqObject, implements Actor {
 
 			if (!Std.is(other, CqPlayer)) {
 				//// if a monster can be invisible, the player can make it visible by bumping it
-				other.breakInvisible("You bump into an invisible " + cast(other, CqMob).name + ".");
+				other.breakInvisible("You stumble into an invisible " + cast(other, CqMob).name + ".");
+				return;
 			} else {
 				// monsters will sometimes pretend not to bump into you even when they should
 				if (Math.random() < .5) {
@@ -399,19 +422,19 @@ class CqActor extends CqObject, implements Actor {
 			var damageRange = (equippedWeapon != null) ? equippedWeapon.damage : damage;
 			
 			// roll and deal the damage
-			var dmgTotal:Int = HxlUtil.randomIntInRange(damageRange.start * dmgMultiplier, damageRange.end * dmgMultiplier);
+			var dmgTotal:Int = biasedRandomInRange(damageRange.start * dmgMultiplier, damageRange.end * dmgMultiplier, 2);
 			other.hp -= dmgTotal;
 			
 			// life buffs
 			var lif = other.hp + other.buffs.get("life");
 			
 			if (lif <= 0 && stealthy && Std.is(other, CqPlayer)) {
-				lif = 1; // never die to an invisible enemy
-				dmgTotal = other.hp + other.buffs.get("life") - lif;
+				dmgTotal = 1 - (other.hp + dmgTotal);
+				other.hp = lif = 1; // never die to an invisible enemy
 			}
 			
 			if (lif > 0) {
-				injureActor(other, dmgTotal);
+				injureActor(state, other, dmgTotal);
 			} else {
 				killActor(state, other, dmgTotal);
 			}
@@ -483,8 +506,6 @@ class CqActor extends CqObject, implements Actor {
 			// attack enemy actor
 			if(other.faction != faction) {
 				attackOther(state, other);
-				if (other.hp > 0 && other.hp < other.maxHp)
-					other.showHealthBar(true);
 				justAttacked = true;
 				// end turn
 				
@@ -533,14 +554,10 @@ class CqActor extends CqObject, implements Actor {
 		if (tile.visibility == Visibility.IN_SIGHT) {
 			visible = true;
 			// only show hp bar if mob is hurt
-			if ( hp < maxHp && healthBar != null) {
-				showHealthBar(alpha != 0.0);
-			}	
+			showHealthBar(hp < maxHp && alpha != 0.0);
 		} else {
 			visible = false;
-			if (healthBar != null) {
-				showHealthBar(false);
-			}
+			showHealthBar(false);
 		}
 		
 		var positionOfTile:HxlPoint = level.getPixelPositionOfTile(Math.round(tilePos.x), Math.round(tilePos.y));
@@ -649,7 +666,7 @@ class CqActor extends CqObject, implements Actor {
 	}
 	
 	public function useAt(itemOrSpell:CqItem, tile:CqTile) {
-		var Effectcolor:Int = HxlUtil.averageColour(itemOrSpell.pixels);
+		var effectColorSource:BitmapData = itemOrSpell.pixels;
 		if(itemOrSpell.specialEffects != null){
 			for ( effect in itemOrSpell.specialEffects) {
 				applyEffectAt(effect, tile, itemOrSpell.duration);
@@ -657,7 +674,7 @@ class CqActor extends CqObject, implements Actor {
 		}
 		//special effect
 		var pos:HxlPoint = Registery.level.getTilePos(tile.mapX, tile.mapY, true);
-		var eff:CqEffectSpell = new CqEffectSpell(pos.x, pos.y,Effectcolor);
+		var eff:CqEffectSpell = new CqEffectSpell(pos.x, pos.y, effectColorSource);
 		eff.zIndex = 1000;
 		HxlGraphics.state.add(eff);
 		eff.start(true, 1.0, 10);
@@ -675,7 +692,7 @@ class CqActor extends CqObject, implements Actor {
 				colorSource = itemOrSpell.uiItem.pixels;
 			} else {
 				if (itemOrSpell.fullName == "Fireball")
-					itemOrSpell.damage = CqSpellFactory.getfireBalldamageByLevel(5);
+					itemOrSpell.damage = CqSpellFactory.getfireBalldamageByLevel(Registery.world.currentLevelIndex);
 				colorSource = this._framePixels;
 			}
 			
@@ -690,7 +707,7 @@ class CqActor extends CqObject, implements Actor {
 		if (itemOrSpell.equipSlot == POTION)
 			SoundEffectsManager.play(SpellEquipped);
 			
-		var source:BitmapData;
+		var effectColorSource:BitmapData;
 		if (itemOrSpell.uiItem == null) {
 			if (tmpSpellSprite == null )
 				tmpSpellSprite = new HxlSprite();
@@ -698,20 +715,10 @@ class CqActor extends CqObject, implements Actor {
 			// only happens when enemies try to use a spell
 			tmpSpellSprite.loadGraphic(SpriteSpells, true, false, Configuration.tileSize, Configuration.tileSize);
 			tmpSpellSprite.setFrame(SpriteSpells.instance.getSpriteIndex(itemOrSpell.spriteIndex));
-			source = tmpSpellSprite.getFramePixels();
+			effectColorSource = tmpSpellSprite.getFramePixels();
 		} else {
-			source = itemOrSpell.uiItem.pixels;
+			effectColorSource = itemOrSpell.uiItem.pixels;
 		}
-		
-		var Effectcolor:Int = HxlUtil.averageColour(source);
-		
-		if (itemOrSpell.uiItem == null) {
-			// only disposing of the enemies tmp spell sprite 
-			source.dispose();
-			tmpSpellSprite.destroy();
-			tmpSpellSprite = null;
-		}
-		source = null;
 		
 		// add buffs
 		if(itemOrSpell.buffs != null) {
@@ -738,7 +745,7 @@ class CqActor extends CqObject, implements Actor {
 					actor.buffs.set(buff, actor.buffs.get(buff) + itemOrSpell.buffs.get(buff));
 					
 					//special effect
-					var eff:CqEffectSpell = new CqEffectSpell(actor.x+actor.width/2,actor.y+actor.width/2,Effectcolor);
+					var eff:CqEffectSpell = new CqEffectSpell(actor.x+actor.width/2, actor.y+actor.width/2, effectColorSource);
 					eff.zIndex = 1000;
 					HxlGraphics.state.add(eff);
 					eff.start(true, 1.0, 10);
@@ -765,7 +772,7 @@ class CqActor extends CqObject, implements Actor {
 		}
 		if (victim != null){
 			//special effect
-			var eff:CqEffectSpell = new CqEffectSpell(victim.x + victim.width/2, victim.y + victim.height/2, Effectcolor);
+			var eff:CqEffectSpell = new CqEffectSpell(victim.x + victim.width/2, victim.y + victim.height/2, effectColorSource);
 			eff.zIndex = 1000;
 			HxlGraphics.state.add(eff);
 			eff.start(true, 1.0, 10);
@@ -786,25 +793,34 @@ class CqActor extends CqObject, implements Actor {
 		}
 		
 		// apply damage
+		
 		if (itemOrSpell.damage != null && itemOrSpell.damage.end>0 ) {
-			var dmg = HxlUtil.randomIntInRange(itemOrSpell.damage.start, itemOrSpell.damage.end);
+			var dmg = biasedRandomInRange(itemOrSpell.damage.start, itemOrSpell.damage.end, 2);
 			if (victim== null) {
 				actor.hp -= dmg;
 				var lif = actor.hp + actor.buffs.get("life");
 				if (lif > 0)
-					actor.injureActor(actor, dmg);
+					actor.injureActor(HxlGraphics.state, actor, dmg);
 				else
 					actor.killActor(HxlGraphics.state,actor,dmg);
 			} else {
 				victim.hp -= dmg;
 				var lif = victim.hp + victim.buffs.get("life");
 				if (lif > 0)
-					actor.injureActor(victim, dmg);
+					actor.injureActor(HxlGraphics.state, victim, dmg);
 				else
 					actor.killActor(HxlGraphics.state, victim, dmg);
 			}
 		}
+		
+		// dispose of an enemy's tmp spell sprite, if we've made one
+		if (itemOrSpell.uiItem == null) {
+			effectColorSource.dispose();
+			tmpSpellSprite.destroy();
+			tmpSpellSprite = null;
+		}		
 	}
+	
 	function applyEffectAt(effect:CqSpecialEffectValue, tile:CqTile, ?duration:Int = -1) {
 		switch(effect.name){
 		

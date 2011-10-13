@@ -64,8 +64,7 @@ class CqSpellFactory {
 		initDescriptions();
 		return newSpell(X, Y, Type.createEnum(CqSpellType,  newSpellName.toUpperCase()));
 	}
-	public static function getfireBalldamageByLevel(level:Int):Range
-	{
+	public static function getfireBalldamageByLevel(level:Int):Range {
 		var dmg:Range;
 		switch(level) {
 			case 0:
@@ -199,7 +198,7 @@ class CqSpell extends CqItem {
 }
 
 enum CqSpellType {
-	FREEZE; 
+	FREEZE;
 	FIREBALL; 
 	BERSERK; 
 	ENFEEBLE_MONSTER; 

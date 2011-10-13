@@ -22,6 +22,7 @@ import cq.CqSpell;
 import cq.ui.CqSpellButton;
 import cq.CqWorld;
 import cq.ui.CqVitalBar;
+import cq.effects.CqEffectSpell;
 import cq.CqResources;
 import cq.CqGraphicKey;
 import cq.ui.CqCharacterDialog;
@@ -1037,22 +1038,6 @@ class GameUI extends HxlDialog {
 		}
 	}
 	
-	private function randomColor(colorSource:BitmapData):UInt {
-		return colorSource.getPixel(HxlUtil.randomInt(colorSource.width), HxlUtil.randomInt(colorSource.height));
-	}
-	
-	private function randomColorBiased(colorSource:BitmapData, x:Float, y:Float, diverge:Float):UInt {
-		x = x + diverge * (Math.random() - .5);
-		y = y + diverge * (Math.random() - .5);
-		
-		if (x < 0.0) x = 0.0;
-		if (y < 0.0) y = 0.0;
-		if (x > 1.0) x = 1.0;
-		if (y > 1.0) y = 1.0;
-		
-		return colorSource.getPixel(Math.floor(x * colorSource.width), Math.floor(y * colorSource.height));
-	}
-	
 	private function getXBallGraphic(ball:HxlSprite, colorSource:BitmapData) {
 		var w = 27, h = 27;
 		var halfdiagonal = .5 * Math.sqrt(w * w + h * h);
@@ -1068,7 +1053,7 @@ class GameUI extends HxlDialog {
 				x = HxlUtil.randomInt(w - 4) + 2;
 				y = HxlUtil.randomInt(h - 4) + 2;
 			} while (((Math.sqrt(x - w / 2) * (x - w / 2) + (y - h / 2) * (y - h / 2)) / halfdiagonal) > Math.random());
-			g.beginFill(randomColorBiased(colorSource, x / w, y / h, .1), 1.0);
+			g.beginFill(CqEffectSpell.randomColorBiased(colorSource, x / w, y / h, .1), 1.0);
 			g.drawCircle(x, y, 1 + .5 * HxlUtil.randomInt(5));
 		}
 		

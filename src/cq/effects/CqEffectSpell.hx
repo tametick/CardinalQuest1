@@ -1,6 +1,7 @@
 package cq.effects;
 
 import flash.display.BitmapData;
+import haxel.HxlPoint;
 
 import haxel.HxlEmitter;
 import haxel.HxlGradient;
@@ -11,25 +12,49 @@ import haxel.HxlUtil;
 import cq.CqGraphicKey;
 
 class CqEffectSpell extends HxlEmitter {
-	var color:Int;
-	public function new(?X:Float=0, ?Y:Float=0,?color:Int = 0xD8D049) {
+	public function new(?X:Float=0, ?Y:Float=0, colorSource:BitmapData) {
 		super(X, Y);
-		this.color = color;
-		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.SpellEffectParticle(color))) {
-			var bmp = HxlGradient.RectData(12, 12, [color, color+0x222222], [0.8, 0.55], Math.PI/2, 12.0);
+		
+		// ?color:Int = 0xD8D049
+		/*if ( !GraphicCache.checkBitmapCache(CqGraphicKey.SpellEffectParticle(color))) {
+			var bmp = getBall(colorSource);
 			GraphicCache.addBitmapData(bmp, CqGraphicKey.SpellEffectParticle(color));
 			bmp.dispose();
 			bmp = null;
-		}
-		setAlphaVelocity(-5, -2);
+		}*/
+		
+		//setAlphaVelocity( -3, -1);
+		maxParticleScaleVelocity = new HxlPoint(-2, -2);
+		minParticleScaleVelocity = new HxlPoint(-4, -4);
 		gravity = 0.0;
-		makeSprites();
+		makeSprites(colorSource);
+	}
+	
+	public static function randomColorBiased(colorSource:BitmapData, x:Float, y:Float, diverge:Float):UInt {
+		x = x + diverge * (Math.random() - .5);
+		y = y + diverge * (Math.random() - .5);
+		
+		if (x < 0.0) x = 0.0;
+		if (y < 0.0) y = 0.0;
+		if (x > 1.0) x = 1.0;
+		if (y > 1.0) y = 1.0;
+		
+		return colorSource.getPixel(Math.floor(x * colorSource.width), Math.floor(y * colorSource.height));
+	}
+	
+	public static function randomColor(colorSource:BitmapData):UInt {
+		return colorSource.getPixel(HxlUtil.randomInt(colorSource.width), HxlUtil.randomInt(colorSource.height));
+	}
+	
+	private function getBall(colorSource:BitmapData):BitmapData {
+		return HxlGradient.RectData(9, 9, [randomColorBiased(colorSource, .5, .5, .25), randomColorBiased(colorSource, .5, .5, .5)], null, Math.PI / 2, 9.0);
 	}
 
+	
 	/*
 	 * We can remove this and just use sprites when we have them..
 	 */
-	function makeSprites(?Quantity:Int=50, ?BakedRotations:Int=16, ?Multiple:Bool=true, ?Collide:Float=0):HxlEmitter {
+	function makeSprites(colorSource:BitmapData, ?Quantity:Int=50, ?BakedRotations:Int=16, ?Multiple:Bool=true, ?Collide:Float=0):HxlEmitter {
 
 		members = new Array();
 		var r:Int;
@@ -37,30 +62,37 @@ class CqEffectSpell extends HxlEmitter {
 		var tf:Int = 1;
 		var sw:Float;
 		var sh:Float;
+		
 		if (Multiple) {
 			s = new HxlSprite(0,0);
-			s.loadCachedGraphic(CqGraphicKey.SpellEffectParticle(color));
+			//s.loadCachedGraphic(CqGraphicKey.SpellEffectParticle(color));
+			s.setPixels(getBall(colorSource));
 			tf = Math.floor(s.width/s.height);
 		}
 		for (i in 0...Quantity) {
 			s = new HxlSprite();
 			if (Multiple) {
-				r = Math.floor(HxlUtil.random()*tf);
+				r = Math.floor(HxlUtil.random() * tf);
+				var g = getBall(colorSource);
 				if (BakedRotations > 0) {
 					//s.loadRotatedGraphic(Graphics,BakedRotations,r);
-					s.loadCachedGraphic(CqGraphicKey.SpellEffectParticle(color));		
+					s.setPixels(g);
 				} else {
 					//s.loadGraphic(Graphics,true);
-					s.loadCachedGraphic(CqGraphicKey.SpellEffectParticle(color));
-					s.frame = r;
+					//s.loadCachedGraphic(CqGraphicKey.SpellEffectParticle(color));
+					s.setPixels(g);
+					//s.frame = r;
 				}
 			} else {
+				var g = getBall(colorSource);
 				if (BakedRotations > 0) {
 					//s.loadRotatedGraphic(Graphics,BakedRotations);
-					s.loadCachedGraphic(CqGraphicKey.SpellEffectParticle(color));
+					//s.loadCachedGraphic(CqGraphicKey.SpellEffectParticle(color));
+					s.setPixels(g);
 				} else {
 					//s.loadGraphic(Graphics);
-					s.loadCachedGraphic(CqGraphicKey.SpellEffectParticle(color));
+					//s.loadCachedGraphic(CqGraphicKey.SpellEffectParticle(color));
+					s.setPixels(g);
 				}
 			}
 			if (Collide > 0) {

@@ -738,14 +738,30 @@ class GameState extends CqState {
 			tile = getPlayerTile(new HxlPoint(0, 0));
 			
 			if (tile.loots.length > 0) {
-				// there is an item here, so let's pick it up
+				// there is an item here, so let's pick it up (this used to be manual?  crazy!)
 				var item = cast(tile.loots[tile.loots.length - 1], CqItem);
 				player.pickup(this, item);
 				item = null;
 			} else if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tile.dataNum)) {
-				// these are stairs!  time to descend.
-				Registery.world.goToNextLevel();
-				player.popup.setText("");
+				// these are stairs!  time to descend -- but only if the key was JUST pressed
+				
+				var confirmed = true;
+				
+				if (!isMouseControl) {
+					confirmed = false;
+					for (k in Configuration.bindings.waitkeys) {
+						if (HxlGraphics.keys.justPressed(k)) {
+							confirmed = true;
+						}
+					}
+				}
+				
+				if (!confirmed) {
+					return;
+				} else {
+					Registery.world.goToNextLevel();
+					player.popup.setText("");
+				}
 				
 				#if demo
 				if (Configuration.demoLastLevel == Registery.world.currentLevelIndex-1) {

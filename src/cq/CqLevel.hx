@@ -160,7 +160,7 @@ class CqLevel extends Level {
 			var stairsDown:HxlPoint;
 			do {
 				stairsDown = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), newMapData, Resources.walkableAndSeeThroughTiles);
-			} while (HxlUtil.distance(stairsDown, startingLocation) > 10); //>10 for release
+			} while (HxlUtil.distance(stairsDown, startingLocation) < .3 * _tileWidth); // if you push this constant above .5, it might be possible to fail entirely, so don't!
 			
 			newMapData[Std.int(stairsDown.y)][Std.int(stairsDown.x)] = tmpDown;
 		}
@@ -357,6 +357,14 @@ class CqLevel extends Level {
 		return mob;
 	}
 	
+	public override function foundStairs() {
+		if (getExplorationProgress() > .8) {
+			GameUI.showTextNotification("At long last, the stairway down!", 0xFFFFFF);
+		} else {
+			GameUI.showTextNotification("You have found the stairs!", 0xFFFFFF);
+		}
+	}
+	
 
 	public function randomUnblockedTile(origin:HxlPoint):HxlPoint {
 		for (tries in 1...14) {
@@ -475,7 +483,7 @@ class CqLevel extends Level {
 									//spell particle effect
 									
 									var mob:Mob = cast(creature, Mob);
-									var eff:CqEffectSpell = new CqEffectSpell(mob.x+mob.width/2, mob.y+mob.height/2);
+									var eff:CqEffectSpell = new CqEffectSpell(mob.x+mob.width/2, mob.y+mob.height/2, this._pixels);
 									eff.zIndex = 1000;
 									HxlGraphics.state.add(eff);
 									eff.start(true, 1.0, 10);
