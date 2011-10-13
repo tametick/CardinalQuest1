@@ -128,6 +128,7 @@ class CqMobFactory {
 				mob.xpValue = 10;
 				if (mob.type == KOBOLD_SPEAR) {
 					mob.damage = new Range(2, 4);
+					mob.name = "Spearkobold";
 				}
 				if (mob.type == KOBOLD_MAGE) {
 					mob.spirit = 12;

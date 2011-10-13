@@ -111,7 +111,7 @@ class CqInventoryItemManager
 				var cell:CqEquipmentCell = dlgEqGrid.getCellWithSlot(Item.equipSlot);
 				//if slot was empty - equip
 				if (cell.getCellObj() == null) {
-					GameUI.showTextNotification("I have needed one of these.", 0xBFE137);
+					GameUI.showTextNotification("I've beeing wanting one of these.", 0xBFE137);
 					uiItem = equipItem(cell, Item, uiItem);
 					cell.getCellObj().updateIcon();
 					dlgInfo.setItem(Item);
@@ -124,7 +124,7 @@ class CqInventoryItemManager
 						var old:CqInventoryItem = equipItem(cell, Item, uiItem);
 						dlgInfo.setItem(Item);
 						if (old.item.isEnchanted) {
-							GameUI.showTextNotification("I'll stick with my old " + old.item.name + ".", 0xBFE137);
+							GameUI.showTextNotification("I'll keep my old " + old.item.name + " in my bag.", 0xBFE137);
 							uiItem = old;
 						} else {
 							// old is non plain, so just add to inv

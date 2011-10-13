@@ -270,6 +270,10 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		
 		updateFieldOfView(state, Registery.player);
 	}
+	
+	public function foundStairs() {
+		stairsAreFound = true;
+	}
 
 	/** gets called for each tile EVERY time it is seen (not just the first time) **/
 	static function firstSeen(state:HxlState, map:Level, p:HxlPoint, newvis:Visibility) { 
@@ -286,7 +290,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 			}
 			
 			if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), t.dataNum)) {
-				map.stairsAreFound = true;
+				map.foundStairs();
 			}
 
 			if (newvis == Visibility.SENSED) {
