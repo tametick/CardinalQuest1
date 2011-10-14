@@ -402,11 +402,6 @@ class CqLevel extends Level {
 				var mob:CqMob = createAndaddMob(freePosition, Std.int((.5 + .5 * Math.random()) * index), true);
 				mob.xpValue = 0;
 				
-				if (stairsAreFound && getExplorationProgress() > .8) {
-					GameUI.showEffectText(mob, "Head for the stairs!", 0xFFEE33);
-				} else {
-					GameUI.showEffectText(mob, "Keep exploring!", 0xFFEE33);
-				}
 				updateFieldOfView(HxlGraphics.state);
 				
 				ticksSinceNewDiscovery -= 60 * 5; // a new monster every 5 turns or so once you stop exploring (note that the monster itself helps cancel this out)
@@ -415,6 +410,12 @@ class CqLevel extends Level {
 				
 				mob.healthBar.setTween(true);
 				mob.healthBar.visible = true;
+				
+				if (stairsAreFound && getExplorationProgress() > .8) {
+					GameUI.showEffectText(mob, "Head for the stairs!", 0xFFEE33);
+				} else {
+					GameUI.showEffectText(mob, "Keep exploring!", 0xFFEE33);
+				}
 			}
 		}
 	}

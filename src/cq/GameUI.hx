@@ -156,6 +156,8 @@ class GameUI extends HxlDialog {
 		/**
 		 * Create and init main containers
 		 **/
+		
+		// I've tried switching these -- it doesn't quite feel right.
 		var pop:CqPopup;
 		leftButtons = new HxlButtonContainer(0, 30, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
 		leftButtons.scrollFactor.x = leftButtons.scrollFactor.y = 0;
@@ -166,7 +168,7 @@ class GameUI extends HxlDialog {
 		add(dlgSpellGrid);
 
 		var potiongrid_w:Int = 460;
-		dlgPotionGrid = new CqPotionGrid(Configuration.app_width/2-potiongrid_w/2, Configuration.app_height - 84,potiongrid_w, 71);
+		dlgPotionGrid = new CqPotionGrid(Configuration.app_width/2-potiongrid_w/2, Configuration.app_height - 77, potiongrid_w, 71);
 		add(dlgPotionGrid);
 		
 		notifications = new CqTextNotification(300, 0);
