@@ -187,6 +187,14 @@ class CqMobFactory {
 				mob.vitality = HxlUtil.randomIntInRange(4,16);
 				mob.damage = new Range(4, 6);
 				mob.xpValue = 125;
+				
+				if (mob.type == APE_RED) {
+					mob.name = "Demon Ape";
+					mob.speed = 3;
+					mob.attack = 7;
+					mob.defense = 8;
+					mob.vitality = mob.vitality + 4;
+				}
 			case ELEMENTAL_GREEN, ELEMENTAL_WHITE, ELEMENTAL_RED, ELEMENTAL_BLUE:
 				mob.name = "Elemental";
 				mob.attack = 4;
@@ -203,7 +211,7 @@ class CqMobFactory {
 					mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.STONE_SKIN));
 					mob.vitality += 6;
 				}
-				if (mob.type == ELEMENTAL_GREEN) { // really purple or something
+				if (mob.type == ELEMENTAL_RED) { // really purple
 					mob.name = "Sorcery " + mob.name;
 					mob.equippedSpells.pop(); // totally different spell set
 					mob.spirit *= 3; // cast spells freaking constantly, but NO XBALLS.
@@ -214,7 +222,7 @@ class CqMobFactory {
 					mob.name = "Chaos " + mob.name;
 					mob.spirit *= 2; // cast xball much more often
 				}
-				if (mob.type == ELEMENTAL_RED) { // really blue or something?
+				if (mob.type == ELEMENTAL_GREEN) { // really blue
 					mob.name = "Air " + mob.name;
 					mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.SHADOW_WALK));
 					mob.speed *= 2; // faster

@@ -271,7 +271,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		updateFieldOfView(state, Registery.player);
 	}
 	
-	public function foundStairs() {
+	public function foundStairs(magically:Bool) {
 		stairsAreFound = true;
 	}
 
@@ -289,14 +289,15 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				map.addDecoration(t, state);
 			}
 			
-			if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), t.dataNum)) {
-				map.foundStairs();
-			}
-
 			if (newvis == Visibility.SENSED) {
 				t.visibility = Visibility.SENSED;
 			}
+
+			if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), t.dataNum)) {
+				map.foundStairs(newvis == Visibility.SENSED);
+			}
 		}
+		
 		
 		if (newvis != Visibility.SENSED) {
 			if (t.visibility != Visibility.IN_SIGHT) {

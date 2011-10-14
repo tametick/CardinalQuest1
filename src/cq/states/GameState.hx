@@ -80,11 +80,11 @@ class GameState extends CqState {
 		resumeActingTime = msMoveStamp = Timer.stamp();
 	}
 	public override function destroy() {
-		var oldGameUI = gameUI;
+		if (gameUI != null) {
+			gameUI.kill();
+			remove(gameUI);
+		}
 		gameUI = null;
-		oldGameUI.kill();
-		remove(oldGameUI);
-		oldGameUI = null;
 
 		Registery.world.destroy();
 		Registery.world = null;
@@ -229,6 +229,8 @@ class GameState extends CqState {
 		} else if (HxlGraphics.keys.justReleased("SLASH")) {
 			var player:CqPlayer = Registery.player;
 			player.gainExperience(50 + player.xp);
+		} else if (HxlGraphics.keys.justReleased("F12")) {
+			startBossAnim();
 		}
 	}
 	private function checkInvKeys():Void
@@ -420,12 +422,12 @@ class GameState extends CqState {
 		PtPlayer.ClassSelected(chosenClass);
 
 		if (Configuration.debug) {
-			//player.give(CqSpellType.MAGIC_MIRROR);
 			player.give(CqSpellType.HEAL);
 			player.give(CqSpellType.FIREBALL);
 			player.give(CqSpellType.FEAR);
 			player.give(CqSpellType.CHARM_MONSTER);
 			player.give(CqSpellType.REVEAL_MAP);
+			player.give(CqSpellType.MAGIC_MIRROR);
 			
 			player.give(CqItemType.FULL_PLATE_MAIL);
 			player.give(CqItemType.CLAYMORE);
@@ -838,7 +840,6 @@ class GameState extends CqState {
 		portalSprite.angle -= 0.5;
 		if (!startedMoving)
 			return;
-		HxlGraphics.quake.stop();
 		HxlGraphics.follow(boss);
 		boss.x = boss.x + BossTargetDir.x*0.4;
 		boss.y = boss.y + BossTargetDir.y*0.4;
@@ -848,7 +849,9 @@ class GameState extends CqState {
 		cursor.visible = false;
 		gameUI.popups.setChildrenVisibility(false);
 		gameUI.destroy();
+		gameUI = null;
 	}
+	
 	private var startedMoving:Bool;
 	private var boss:CqMob;
 	private var BossTargetDir:HxlPoint;
@@ -856,6 +859,7 @@ class GameState extends CqState {
 	private var acts:Bool;
 	private var bossgroup:HxlGroup;
 	public function startBossAnim()	{
+		
 		//state vars
 		endingAnim = true;
 		startedMoving = false;
@@ -903,9 +907,9 @@ class GameState extends CqState {
 		bossgroup.add(portalSprite);
 
 		//gameui and start boss anim timer
-		Actuate.timer(3).onComplete(startMovingBoss);
-		Actuate.timer(2).onComplete(playWinSound);
-		Actuate.timer(0.5).onComplete(RemoveGameUI);
+		Actuate.timer(0.25).onComplete(RemoveGameUI);
+		Actuate.timer(2.5).onComplete(playWinSound);
+		Actuate.timer(3.5).onComplete(startMovingBoss);
 	}
 
 	private function playWinSound():Void
@@ -915,6 +919,7 @@ class GameState extends CqState {
 	}
 	private function gotoWinState():Void
 	{
+		HxlGraphics.quake.stop();
 		HxlGraphics.fade.start(true, 0xff000000, 1, function() {
 			HxlGraphics.state = new WinState();
 		}, true);

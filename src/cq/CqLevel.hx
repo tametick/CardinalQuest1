@@ -357,11 +357,14 @@ class CqLevel extends Level {
 		return mob;
 	}
 	
-	public override function foundStairs() {
-		if (getExplorationProgress() > .8) {
-			GameUI.showTextNotification("At long last, the stairway down!", 0xFFFFFF);
-		} else {
-			GameUI.showTextNotification("You have found the stairs!", 0xFFFFFF);
+	public override function foundStairs(magically:Bool) {
+		super.foundStairs(magically);
+		if (!magically) {
+			if (getExplorationProgress() > .8) {
+				GameUI.showTextNotification("At long last, the stairway down!", 0xFFFFFF);
+			} else {
+				GameUI.showTextNotification("You have found the stairs!", 0xFFFFFF);
+			}
 		}
 	}
 	
@@ -385,6 +388,12 @@ class CqLevel extends Level {
 		// considerably and you're never really speed-1.  Try playing without scumming -- you'll never see this!
 		if (ticksSinceNewDiscovery > 60 * 8 && Math.random() < .6) {
 			// lots of code duplication from polymorph -- beware!
+			
+			if (Registery.world.currentLevelIndex == Configuration.lastLevel) {
+				// on the last level, we'll never do this to you.  You're welcome.
+				ticksSinceNewDiscovery = 0;
+				return;
+			}
 			
 			var playerPosition:HxlPoint = Registery.player.tilePos;
 			var freePosition:HxlPoint = randomUnblockedTile(playerPosition);

@@ -238,6 +238,10 @@ class CqActor extends CqObject, implements Actor {
 	public function addOnMove(Callback:Dynamic) {
 		onMove.add(Callback);
 	}
+	
+	public function getTile():CqTile {
+		return cast(Registery.level.getTile(Std.int(tilePos.x), Std.int(tilePos.y)), CqTile);
+	}
 
 	public function moveToPixel(state:HxlState, X:Float, Y:Float) {
 		// so this is where we can add bobbing for waiting !
@@ -264,6 +268,7 @@ class CqActor extends CqObject, implements Actor {
 			Callback(dmgTotal);
 			
 		showHealthBar(hp > 0 && hp < maxHp && visible);
+		removeEffect("fear");
 	}
 
 	function injureActor(state:HxlState, other:CqActor, dmgTotal:Int) {
@@ -291,7 +296,7 @@ class CqActor extends CqObject, implements Actor {
 			
 			HxlLog.append("You kill");
 			PtPlayer.kills();
-			cast(this, CqPlayer).gainExperience(mob.xpValue);
+			
 			// remove other
 			Registery.level.removeMobFromLevel(state, mob);
 			HxlGraphics.state.add(mob);
@@ -306,11 +311,16 @@ class CqActor extends CqObject, implements Actor {
 				player.doDeathEffect(1.00);
 			} else {
 				var mob = cast(other, CqMob);
+				
 				// remove other
 				Registery.level.removeMobFromLevel(state, mob);
 				HxlGraphics.state.add(mob);
 				mob.doDeathEffect(.5);
 			}
+		}
+		
+		if (this.faction == CqPlayer.faction && Std.is(other, CqMob)) {
+			Registery.player.gainExperience(cast(other, CqMob).xpValue);
 		}
 	}
 	
@@ -324,19 +334,25 @@ class CqActor extends CqObject, implements Actor {
 		timers.push(timer);
 	}
 	
-	public function breakInvisible(?message:String) {
-		if (this.specialEffects != null && this.specialEffects.get("invisible") != null) {
+	public function removeEffect(effectName:String) {
+		if (this.specialEffects != null && this.specialEffects.get(effectName) != null) {
 			if (this.timers != null) {
 				var i:Int = this.timers.length;
 				while (i > 0) {
 					i--;
 					var t = this.timers[i];
-					if (t.specialEffect != null && t.specialEffect.name == "invisible") {
+					if (t.specialEffect != null && t.specialEffect.name == effectName) {
 						this.timers.splice(i, 1);
 					}
 				}
-			}
-			this.specialEffects.remove("invisible");
+			}	
+			this.specialEffects.remove(effectName);
+		}
+	}
+	
+	public function breakInvisible(?message:String) {
+		if (this.specialEffects != null && this.specialEffects.get("invisible") != null) {
+			removeEffect("invisible");
 			
 			setAlpha(1.00); // must set alpha before the message or the message won't show!
 			if (message == null) message = (Std.is(this, CqPlayer)) ? "You reappear" : "An invisible " + this.name + " appears!";
@@ -348,17 +364,17 @@ class CqActor extends CqObject, implements Actor {
 		// pick n dice that, when rolled, add up to high - low, and then roll them
 		// the idea here is that by splitting a single roll up into several, we more closely
 		// approximate a normal distribution and come out with more intuitive results.
-		
+
 		var range = high - low;
-		var sides:Int = Std.int(range / ndice);
+		var sides:Int = Math.floor(range / ndice);
 		var bigger:Int = range - sides * ndice;
 		
 		var sum:Int = 0;
-		for (i in 1 ... ndice - bigger) {
-			sum += HxlUtil.randomInt(sides + 1);
+		for (i in 0 ... ndice - bigger) {
+			sum += Math.floor(Math.random() * (sides + 1.0));
 		}
-		for (i in 1 ... bigger) {
-			sum += HxlUtil.randomInt(sides + 2);
+		for (i in 0 ... bigger) {
+			sum += Math.floor(Math.random() * (sides + 2.0));
 		}
 		
 		return sum + low;
@@ -438,7 +454,6 @@ class CqActor extends CqObject, implements Actor {
 			} else {
 				killActor(state, other, dmgTotal);
 			}
-
 		} else {
 			// Miss
 			if (Std.is(this, CqPlayer))
@@ -693,7 +708,7 @@ class CqActor extends CqObject, implements Actor {
 				colorSource = itemOrSpell.uiItem.pixels;
 			} else {
 				if (itemOrSpell.fullName == "Fireball")
-					itemOrSpell.damage = CqSpellFactory.getfireBalldamageByLevel(Registery.world.currentLevelIndex);
+					itemOrSpell.damage = CqSpellFactory.getfireBalldamageByLevel(Math.ceil(2 + .5 * Registery.world.currentLevelIndex));
 				colorSource = this._framePixels;
 			}
 			
@@ -909,16 +924,20 @@ class CqActor extends CqObject, implements Actor {
 			other.specialEffects.set(effect.name, effect);
 			GameUI.showEffectText(other, "Morph", 0xA81CE3);
 			var _se = other.specialEffects;
-			var _hp = other.hp;
+			var hppart:Float = other.hp / other.maxHp;
 			var mob = Registery.level.createAndaddMob(other.getTilePos(), Std.int(Math.random() * Registery.player.level), true);
 			Registery.level.removeMobFromLevel(HxlGraphics.state, cast(other, CqMob));
 			Registery.level.updateFieldOfView(HxlGraphics.state);
-			GameUI.instance.addHealthBar(cast(mob, CqActor));
+			
+			// preserve the old monster's level of health
+			mob.hp = Math.ceil(hppart * mob.maxHp);
+			
 			//health bar hacks
+			GameUI.instance.addHealthBar(cast(mob, CqActor));
 			var casted:CqActor = cast(mob, CqActor);
 			casted.specialEffects = _se;
 			casted.healthBar.setTween(false);
-			casted.cqhealthBar.updateValue(_hp);
+			casted.cqhealthBar.updateValue(casted.hp);
 			casted.healthBar.setTween(true);
 			casted.showHealthBar(true);
 		default:
@@ -1244,7 +1263,7 @@ class CqPlayer extends CqActor, implements Player {
 	
 	public override function actInDirection(state:HxlState, targetTile:HxlPoint):Bool {
 		var oldx = tilePos.x, oldy = tilePos.y;
-		var currentTile = cast(Registery.level.getTile(Std.int(tilePos.x), Std.int(tilePos.y)), Tile);
+		var currentTile = getTile();
 		if ( currentTile.loots.length > 0 ) {
 			var item = cast(currentTile.loots[currentTile.loots.length - 1], CqItem);
 			item.setGlow(false);
@@ -1372,6 +1391,7 @@ class CqMob extends CqActor, implements Mob {
 	public var maxAware:Int;
 	public var averageColor:Int;
 	public var aware:Int;
+	public var neverSeen:Bool;
 	
 	public function new(X:Float, Y:Float, typeName:String,?player:Bool = false) {
 		super(X, Y);
@@ -1387,6 +1407,7 @@ class CqMob extends CqActor, implements Mob {
 		
 		maxAware = 5;
 		aware = 0;
+		neverSeen = true;
 
 		this.typeName = typeName;
 		type = Type.createEnum(CqMobType,  typeName.toUpperCase());
@@ -1441,14 +1462,25 @@ class CqMob extends CqActor, implements Mob {
 	}
 	
 	
-	function getClosestMob():CqActor {
-		var minDist:Float = Registery.level.heightInTiles + Registery.level.widthInTiles;
-		var target:CqMob = null;
+	function getClosestEnemy():CqActor {
+		var best:Float = Registery.level.widthInTiles;
+		var target:CqActor = null;
+		
+		if (aware > 0 && faction != CqPlayer.faction) {
+			target = Registery.player;
+			best = Math.abs(tilePos.x - target.tilePos.x) + Math.abs(tilePos.y - target.tilePos.y);
+			
+			best -= 2; // chase a visible player even when a mirror or something else is a bit closer
+		}
+		
 		for (mob in Registery.level.mobs) {
-			var dist = HxlUtil.distance( getTilePos(), mob.getTilePos());
-			if (dist < minDist && mob!=this){
-				minDist = dist;
-				target = cast(mob,CqMob);
+			var cqmob = cast(mob, CqActor);
+			if (cqmob.faction != faction && !cqmob.specialEffects.exists("invisible")) {
+				var dist = Math.abs(tilePos.x - mob.tilePos.x) + Math.abs(tilePos.y - mob.tilePos.y);
+				if (dist < best) {
+					best = dist;
+					target = cqmob;
+				}
 			}
 		}
 		
@@ -1491,14 +1523,39 @@ class CqMob extends CqActor, implements Mob {
 		return false;
 	}
 	
-	function actAware(state:HxlState):Bool {
-		// find out who we're fighting!  (hint: it's the player unless we're on his team)
-		var enemy:CqActor = cast(Registery.player,CqActor);
-		if (enemy.faction == faction) {
-			 // we're on the player's team!  we'd better find someone to target...
-			enemy = getClosestMob();
-			if (enemy == null) return actUnaware(state);
+	function updateAwareness() {
+		var enemy = Registery.player;
+		var reactionChance = .75;
+		
+		if (enemy.specialEffects.get("invisible") != null) {
+			aware = 0;
+			return;
 		}
+			
+		if (getTile().visibility == IN_SIGHT) {
+			neverSeen = false;
+			if (aware > 0 || Math.random() < reactionChance) {
+				aware = maxAware;
+				return;
+			}
+		}
+		
+		if (aware > 0) {
+			aware--;
+		} else {
+			// this isn't the only place that aware may be decremented, so let's just clip it to 0
+			aware = 0;
+		}
+	}
+	
+	public function act(state:HxlState):Bool {
+		updateAwareness();
+		
+		if (neverSeen) return actUnaware(state);
+		
+		// find out who we're fighting!  (it's the player unless we're on his team)
+		var enemy:CqActor = getClosestEnemy();
+		if (enemy == null) return actUnaware(state);
 		
 		// zap him with magic!  (die, die, die)
 		// (aware will be maxAware if we can presently see the player, so it's a good visibility test)
@@ -1534,39 +1591,6 @@ class CqMob extends CqActor, implements Mob {
 		}
 		
 		return true;
-	}
-	
-	function updateAwareness() {
-		var enemy = Registery.player;
-		var reactionChance = .75;
-		
-		if (enemy.specialEffects.get("invisible") != null) {
-			// we should try to find a magic mirror to attack in this case -- but that takes some revamping
-			aware = 0;
-			return;
-		} else 
-			
-		if ( (aware > 0 || Math.random() < reactionChance) && HxlUtil.isInLineOfSight(tilePos, enemy.tilePos, isBlocking, enemy.visionRadius) ) {
-			aware = maxAware;
-			return;
-		}
-		
-		if (aware > 0) {
-			aware--;
-		} else {
-			// this isn't the only place that aware may be decremented, so let's just clip it to 0
-			aware = 0;
-		}
-	}
-	
-	public function act(state:HxlState):Bool {
-		updateAwareness();
-		
-		if (aware > 0) {
-			return actAware(state);
-		} else {
-			return actUnaware(state);
-		}
 	}
 }
 

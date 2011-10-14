@@ -70,21 +70,21 @@ class CqSpellFactory {
 			case 0:
 				dmg = new Range(1, 3);
 			case 1:
-				dmg = new Range(2, 3);
+				dmg = new Range(1, 4);
 			case 2:
-				dmg = new Range(2, 4);
+				dmg = new Range(1, 5);
 			case 3:
-				dmg = new Range(3, 5);
+				dmg = new Range(2, 6);
 			case 4:
-				dmg = new Range(3, 7);
+				dmg = new Range(3, 8);
 			case 5:
-				dmg = new Range(4, 8);
+				dmg = new Range(3, 9);
 			case 6:
-				dmg = new Range(5, 9);
+				dmg = new Range(4, 10);
 			case 7:
-				dmg = new Range(5, 11);
+				dmg = new Range(4, 12);
 			default:
-				dmg = new Range(6, 12);
+				dmg = new Range(5, 14);
 			
 		}
 		return dmg;

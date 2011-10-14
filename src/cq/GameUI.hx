@@ -340,6 +340,7 @@ class GameUI extends HxlDialog {
 	}
 	
 	override public function destroy() {
+		if (btnMainView == null) return; // getting destroyed twice sometimes
 		btnMainView.destroy();
 		dlgPotionGrid.destroy();
 		dlgSpellGrid.destroy();
