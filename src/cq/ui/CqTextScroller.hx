@@ -110,8 +110,8 @@ class CqTextScroller extends HxlGroup {
 				splash = null;
 			}
 			
-			if (OnComplete != null) OnComplete();
 			callWhileScrolling(true);
+			if (OnComplete != null) OnComplete();
 		}
 		clicks++;
 	}
@@ -172,7 +172,8 @@ class CqTextScroller extends HxlGroup {
 			col.y = to_y;
 		}
 		
-		callWhileScrolling(true);
+		// give flash a moment to refresh the text before continuing
+		Actuate.timer(.01).onComplete(callWhileScrolling, [true]);
 	}	
 		
 	public function onComplete(handler:Void->Void):Void {

@@ -205,6 +205,8 @@ class CqMobFactory {
 				}
 				if (mob.type == ELEMENTAL_GREEN) { // really purple or something
 					mob.name = "Sorcery " + mob.name;
+					mob.equippedSpells.pop(); // totally different spell set
+					mob.spirit *= 3; // cast spells freaking constantly, but NO XBALLS.
 					mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.MAGIC_MIRROR));
 					mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.TELEPORT));
 				}

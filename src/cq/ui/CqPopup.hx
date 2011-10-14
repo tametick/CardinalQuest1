@@ -4,6 +4,7 @@ import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 import haxel.HxlGraphics;
 import haxel.HxlGroup;
+import haxel.HxlPoint;
 import haxel.HxlSprite;
 import haxel.HxlState;
 import haxel.HxlText;
@@ -11,11 +12,13 @@ import haxel.HxlText;
 class CqPopup extends HxlText{
 	var parent:Dynamic;
 	public var mouseBound:Bool;
+	public var customBound:HxlPoint;
+	
 	public function new(Width:Int,Text:String,Parent:Dynamic) {
 		parent = Parent;
 		
 		super(0, 0, Width, Text);
-		setFormat("FontAnonymousPro", 15, 0xC2AC30, "left", 1);
+		setFormat("FontAnonymousPro", 15, 0xC2AC30, "center", 1);
 		mouseBound = true;
 	}
 	

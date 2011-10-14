@@ -404,12 +404,15 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		if ( popup != null)
 		{
 			var m:HxlMouse = HxlGraphics.mouse;
-			if ( (overlapsPoint(m.x, m.y) || !popup.mouseBound) && visible)	{
+			if ( (overlapsPoint(m.x, m.y) || !popup.mouseBound) && visible )	{
 				popup.visible = true;
-				if(popup.mouseBound){
+				if (popup.customBound != null) {
+					popup.x = x + popup.customBound.x - (popup.width / 2) + scrollFactor.x * HxlGraphics.scroll.x;
+					popup.y = y + popup.customBound.y + scrollFactor.y * HxlGraphics.scroll.y;
+				} else if(popup.mouseBound){
 					_mp.x = m.screenX; 
 					_mp.y = m.screenY;
-					popup.x = _mp.x-20;
+					popup.x = _mp.x - (popup.width / 2);
 					popup.y = _mp.y + 20;
 				} else {
 					popup.x = (HxlGraphics.stage.stageWidth - popup.width)/2;

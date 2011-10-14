@@ -808,7 +808,7 @@ class GameUI extends HxlDialog {
 	}
 	public static function showEffectText(actor:CqActor, text:String, color:Int) {
 		if (Std.is(HxlGraphics.state, GameState) && cast(HxlGraphics.state, GameState).started) {
-			if (actor.visible == true && actor.alpha > 0) {
+			if (actor.visible) {
 				var fltxt:CqFloatText = new CqFloatText(actor.x + (actor.width / 2), actor.y - 16, text, color, 24, false);
 				effectQueue.push(fltxt);
 				if (effectQueue.length == 1 || effectQueue.length >3)
@@ -826,8 +826,17 @@ class GameUI extends HxlDialog {
 		infoViewXpBar.updateValue(xpTotal);
 		centralXpBar.updateValue(xpTotal);
 	}
-
+	
+	// targeting module:
+	
+	private var targetColor:UInt;
+	private static var hoveredEnemy:CqActor;
 	public static function setTargeting(Toggle:Bool, ?TargetText:String=null, ?TargetsEmptyTile=false) {
+		if (hoveredEnemy != null) {
+			if (hoveredEnemy.popup != null) hoveredEnemy.popup.mouseBound = true;
+			hoveredEnemy = null;
+		}
+		
 		isTargeting = Toggle;
 		isTargetingEmptyTile = TargetsEmptyTile; 
 		if ( TargetText != null ) {
@@ -865,8 +874,6 @@ class GameUI extends HxlDialog {
 		targetSpell = Spell;
 	}
 
-	
-	private var targetColor:UInt;
 	private function setTargetColor(color:UInt) {
 		if ( targetSprite == null ) {
 			targetSprite = new HxlSprite();
@@ -934,6 +941,11 @@ class GameUI extends HxlDialog {
 		}
 		
 		if (targetLastPos.x != targetX || targetLastPos.y != targetY ) {
+			if (hoveredEnemy != null) {
+				if (hoveredEnemy.popup != null) hoveredEnemy.popup.mouseBound = true;
+				hoveredEnemy = null;
+			}
+			
 			var worldPos:HxlPoint = Registery.level.getPixelPositionOfTile(Std.int(targetX), Std.int(targetY));
 			
 			Actuate.tween(targetSprite, if (mouse) .046 else .125, { x: worldPos.x, y: worldPos.y} );
@@ -954,8 +966,11 @@ class GameUI extends HxlDialog {
 					setTargetColor(0xff0000);
 				} else {
 					var actor:CqActor = cast(tile.actors[0], CqActor);
-					if ( actor.faction != CqPlayer.faction && actor.alpha > 0) {
+					if ( actor.faction != CqPlayer.faction && actor.visible) {
 						setTargetColor(0x00ff00);
+
+						hoveredEnemy = actor;
+						if (hoveredEnemy.popup != null) hoveredEnemy.popup.mouseBound = false;
 					} else {
 						setTargetColor(0xff0000);
 					}
@@ -969,6 +984,11 @@ class GameUI extends HxlDialog {
 	public function targetingExecute(mouse:Bool) {
 		// this line seems to be a guard against something -- but against what?
 		if (!exists || !visible) return;
+	
+		if (hoveredEnemy != null) {
+			if (hoveredEnemy.popup != null) hoveredEnemy.popup.mouseBound = true;
+			hoveredEnemy = null;
+		}		
 		
 		if ( targetSpell == null ) {
 			GameUI.setTargeting(false);
@@ -1033,6 +1053,7 @@ class GameUI extends HxlDialog {
 			var cqMob:CqActor = cast(actor, CqActor);
 			var pop:CqPopup = new CqPopup(150, cqMob.name, popups);
 			pop.visible = false;
+			pop.customBound = new HxlPoint(cqMob.width / 2, cqMob.height);
 			cqMob.setPopup(pop);
 			popups.add(pop);
 		}

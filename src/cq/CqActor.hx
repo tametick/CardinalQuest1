@@ -263,7 +263,7 @@ class CqActor extends CqObject, implements Actor {
 		for ( Callback in onInjure ) 
 			Callback(dmgTotal);
 			
-		showHealthBar(hp > 0 && hp < maxHp && alpha != 0);
+		showHealthBar(hp > 0 && hp < maxHp && visible);
 	}
 
 	function injureActor(state:HxlState, other:CqActor, dmgTotal:Int) {
@@ -465,7 +465,8 @@ class CqActor extends CqObject, implements Actor {
 	}
 	
 	public override function setAlpha(alpha:Float):Float {
-		showHealthBar(hp < maxHp && alpha != 0);
+		visible = (alpha > 0.0);
+		showHealthBar(hp < maxHp && visible);
 		
 		var old:Float = super.setAlpha(alpha);
 		calcFrame();
@@ -554,7 +555,7 @@ class CqActor extends CqObject, implements Actor {
 		if (tile.visibility == Visibility.IN_SIGHT) {
 			visible = true;
 			// only show hp bar if mob is hurt
-			showHealthBar(hp < maxHp && alpha != 0.0);
+			showHealthBar(hp < maxHp && visible);
 		} else {
 			visible = false;
 			showHealthBar(false);

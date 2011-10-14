@@ -420,8 +420,20 @@ class GameState extends CqState {
 		PtPlayer.ClassSelected(chosenClass);
 
 		if (Configuration.debug) {
+			//player.give(CqSpellType.MAGIC_MIRROR);
+			player.give(CqSpellType.HEAL);
+			player.give(CqSpellType.FIREBALL);
+			player.give(CqSpellType.FEAR);
+			player.give(CqSpellType.CHARM_MONSTER);
 			player.give(CqSpellType.REVEAL_MAP);
-			player.give(CqSpellType.MAGIC_MIRROR);
+			
+			player.give(CqItemType.FULL_PLATE_MAIL);
+			player.give(CqItemType.CLAYMORE);
+			player.give(CqItemType.TUNDRA_BOOTS);
+			player.give(CqItemType.BROAD_SWORD);
+			player.give(CqItemType.GOLDEN_HELM);
+			player.give(CqItemType.GEMMED_RING);
+			
 			if(Configuration.debugStartingLevel>0)
 				Registery.world.goToNextLevel(Configuration.debugStartingLevel);
 		}
