@@ -1,3 +1,6 @@
+
+
+
 package cq.ui.inventory;
 
 import cq.GameUI;
@@ -382,7 +385,8 @@ class CqInventoryItem extends HxlSprite {
 				if(dragStop_cell_obj == this)
 					stopdrag_gotoSameCell(dragStopCell_class, dragStopCell);
 				else
-					stopdrag_gotoOccupiedCell(dragStopCell_class, dragStopCell,dragStop_cell_obj);
+					stopdrag_revert(); // gotoOccupiedCell simply doesn't work.  Pity.
+					// stopdrag_gotoOccupiedCell(dragStopCell_class, dragStopCell,dragStop_cell_obj);
 			}else {
 				stopdrag_gotoEmptyCell(dragStopCell_class, dragStopCell);
 			}
@@ -414,7 +418,7 @@ class CqInventoryItem extends HxlSprite {
 		}
 	}
 	//when user drops item on another item
-	private function stopdrag_gotoOccupiedCell(dragStopCell_class:Dynamic, dragStopCell:CqInventoryCell,dragStop_cell_obj:CqInventoryItem) {
+	private function stopdrag_gotoOccupiedCell(dragStopCell_class:Dynamic, dragStopCell:CqInventoryCell, dragStop_cell_obj:CqInventoryItem) {
 		// There was already an item in the target cell, switch places with it
 		if (isInCell == null)
 		{
@@ -432,7 +436,7 @@ class CqInventoryItem extends HxlSprite {
 					// Moving the other item into a potion cell
 					dragStop_cell_obj.setPotionCell(cellIndex);
 				default:
-					// Unequipping current item (?)
+					dragStop_cell_obj.setInventoryCell(cellIndex);	
 			}
 		}
 		//from equip to inv
@@ -441,6 +445,7 @@ class CqInventoryItem extends HxlSprite {
 			Registery.player.equipItem(dragStop_cell_obj.item);
 			dragStop_cell_obj.setEquipmentCell(cellIndex);
 		}
+		
 		
 		switch(dragStopCell_class) {
 			case CqSpellCell:
@@ -455,13 +460,12 @@ class CqInventoryItem extends HxlSprite {
 				Registery.player.equipItem(this.item);
 				//move new to other's place
 				setEquipmentCell(dragStopCell.cellIndex);
-				
-			case CqInventoryCell:
-				// Moving this item into an inventory cell
 				popup.setText(item.fullName);
 				setInventoryCell(dragStopCell.cellIndex);
 			default:
-				//unknown cell class
+				// Moving this item into an inventory cell
+				popup.setText(item.fullName);
+				setInventoryCell(dragStopCell.cellIndex);
 		}
 		cellIndex = dragStopCell.cellIndex;
 	}
