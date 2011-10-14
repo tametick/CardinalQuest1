@@ -382,11 +382,13 @@ class CqInventoryItem extends HxlSprite {
 			var dragStop_cell_obj:CqInventoryItem = dragStopCell.getCellObj();	
 			if ( dragStop_cell_obj != null )
 			{
-				if(dragStop_cell_obj == this)
+				if(dragStop_cell_obj == this) {
 					stopdrag_gotoSameCell(dragStopCell_class, dragStopCell);
-				else
+				} else {
+					GameUI.showTextNotification("Use an empty cell to swap items!", 0xFFFFFF);
 					stopdrag_revert(); // gotoOccupiedCell simply doesn't work.  Pity.
 					// stopdrag_gotoOccupiedCell(dragStopCell_class, dragStopCell,dragStop_cell_obj);
+				}
 			}else {
 				stopdrag_gotoEmptyCell(dragStopCell_class, dragStopCell);
 			}
