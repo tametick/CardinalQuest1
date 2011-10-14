@@ -90,6 +90,12 @@ class CqPotionGrid extends CqInventoryGrid {
 		helpButton.setPopup(pop);
 		GameUI.instance.popups.add(pop);
 		
+		menuButton.extendOverlap.x = -16;
+		menuButton.extendOverlap.width = 4;
+		
+		helpButton.extendOverlap.x = -4;
+		helpButton.extendOverlap.width = 16;
+		
 		add(helpButton);
 		add(menuButton);
 	}

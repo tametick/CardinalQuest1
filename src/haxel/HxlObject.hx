@@ -165,6 +165,11 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	 * An array of objects which represent event listeners assigned to this HxlObject.
 	 **/
 	var eventListeners:Array<Dynamic>;
+	
+	/**
+	 * Extends the bounding box for mouse intersection; not subject to scale; width and height are treated as right and bottom for convenience.
+	 **/
+	public var extendOverlap:HxlRect;
 
 	var mountObject:HxlObject;
 	var mountOffsetX:Float;
@@ -207,6 +212,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		mountOffsetY = 0;
 		
 		_mp = new HxlPoint();
+		extendOverlap = new HxlRect(0, 0, 0, 0);
 	}
 
 	/**
@@ -404,7 +410,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		if ( popup != null)
 		{
 			var m:HxlMouse = HxlGraphics.mouse;
-			if ( (overlapsPoint(m.x, m.y) || !popup.mouseBound) && visible )	{
+			if ( visible && (overlapsPoint(m.x, m.y, true) || !popup.mouseBound) )	{
 				popup.visible = true;
 				if (popup.customBound != null) {
 					popup.x = x + popup.customBound.x - (popup.width / 2) + scrollFactor.x * HxlGraphics.scroll.x;
@@ -478,9 +484,16 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 		X += HxlUtil.floor(HxlGraphics.scroll.x);
 		Y += HxlUtil.floor(HxlGraphics.scroll.y);
 		getScreenXY(_point);
-		if ((X <= _point.x) || (X >= _point.x+width) || (Y <= _point.y) || (Y >= _point.y+height)) {
-			return false;
+		if (!PerPixel) {
+			if ((X <= _point.x + extendOverlap.x) || (X >= _point.x+width + extendOverlap.width) || (Y <= _point.y + extendOverlap.y) || (Y >= _point.y+height + extendOverlap.height)) {
+				return false;
+			}
+		} else {
+			if ((X <= _point.x) || (X >= _point.x+width) || (Y <= _point.y) || (Y >= _point.y+height)) {
+				return false;
+			}		
 		}
+		
 		return true;
 	}
 	

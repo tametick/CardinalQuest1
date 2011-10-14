@@ -750,8 +750,26 @@ class GameState extends CqState {
 		if (facing.x == 0 && facing.y == 0) {
 			// perform actions that happen when the PLAYER SELECTS HIMSELF
 			// (this could easily be factored out)
-			tile = getPlayerTile(new HxlPoint(0, 0));
+			
+			// first, make sure the key was JUST pressed, if this is a key command
+			// (otherwise we'll go down stairs or wait after targeting)
+			var confirmed = true;
+			
+			if (!isMouseControl) {
+				confirmed = false;
+				for (k in Configuration.bindings.waitkeys) {
+					if (HxlGraphics.keys.justPressed(k)) {
+						confirmed = true;
+					}
+				}
+			}			
 
+			if (!confirmed) {
+				return;
+			}	
+			
+			tile = getPlayerTile(new HxlPoint(0, 0));
+			
 			if (tile.loots.length > 0) {
 				// there is an item here, so let's pick it up (this used to be manual?  crazy!)
 				var item = cast(tile.loots[tile.loots.length - 1], CqItem);
@@ -759,24 +777,9 @@ class GameState extends CqState {
 				item = null;
 			} else if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tile.dataNum)) {
 				// these are stairs!  time to descend -- but only if the key was JUST pressed
-				
-				var confirmed = true;
-				
-				if (!isMouseControl) {
-					confirmed = false;
-					for (k in Configuration.bindings.waitkeys) {
-						if (HxlGraphics.keys.justPressed(k)) {
-							confirmed = true;
-						}
-					}
-				}
-				
-				if (!confirmed) {
-					return;
-				} else {
-					Registery.world.goToNextLevel();
-					player.popup.setText("");
-				}
+
+				Registery.world.goToNextLevel();
+				player.popup.setText("");
 
 				#if demo
 				if (Configuration.demoLastLevel == Registery.world.currentLevelIndex-1) {
