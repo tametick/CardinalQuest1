@@ -11,9 +11,9 @@ class Configuration {
 	public static inline var version = "1.1c";
 
 	public static inline var debug = false;
-	public static inline var air = false;
-	public static inline var standAlone = false;
-	public static inline var useProductionPlaytomic = false;
+	public static inline var air = true;
+	public static inline var standAlone = true;
+	public static inline var useProductionPlaytomic = true;
 
 	//I am not going to go off air, we will assume air is Desktop air
 	//for iOS we are now assuming not NME but air
