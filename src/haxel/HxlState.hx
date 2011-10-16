@@ -2,6 +2,7 @@ package haxel;
 
 import flash.display.Sprite;
 import flash.events.MouseEvent;
+import flash.events.TouchEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.events.KeyboardEvent;
@@ -134,13 +135,17 @@ class HxlState extends Sprite {
 				resumeEventListeners();
 			} else {
 				_addEventListener(KeyboardEvent.KEY_UP, onKeyUp,false,0,true);
-				_addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown,false,0,true);
+				_addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown, false, 0, true);
 				_addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown,false,0,true);
 				_addEventListener(MouseEvent.MOUSE_UP, onMouseUp,false,0,true);
 				_addEventListener(MouseEvent.MOUSE_OVER, onMouseOver,false,0,true);
 				_addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
-				if(Configuration.air)
-					_addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, onRightMouseDown,false,0,true);
+				if ( Configuration.mobile ) {
+					_addEventListener(TouchEvent.TOUCH_TAP , onTap,false,0,true);
+				} 
+				if(Configuration.air) {
+					_addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, onRightMouseDown, false, 0, true);
+				}
 			}
 			init();
 			initialized = 1;
@@ -173,6 +178,7 @@ class HxlState extends Sprite {
             }
         #end
 	}
+	function onTap(event: TouchEvent){ }
 	function onMouseDown(event:MouseEvent) { }
 	function onRightMouseDown(event:MouseEvent) { 
         //No right clicking on mobile

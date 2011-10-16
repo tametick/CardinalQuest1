@@ -21,6 +21,9 @@ import haxel.HxlDialog;
 import haxel.HxlGraphics;
 import haxel.HxlObjectContainer;
 import haxel.HxlLog;
+import haxel.HxlUtil;
+
+import data.Configuration;
 
 class CqPotionButton extends HxlDialog {
 
@@ -29,7 +32,7 @@ class CqPotionButton extends HxlDialog {
 	var _dlg:CqPotionGrid;
 
 	public function new(Grid:CqPotionGrid, X:Int,Y:Int,?Width:Int=100,?Height:Int=20,?Idx:Int=0) {
-		_dlg = Grid; 
+		_dlg = Grid;
 		super(X, Y, Width, Height);
 
 		initialized = false;
@@ -48,13 +51,37 @@ class CqPotionButton extends HxlDialog {
 				_initialized = true;
 			}
 		}
-		
+
 		super.update();
 	}
 
+	override public function overlapsPoint(X:Float,Y:Float,?PerPixel:Bool = false):Bool {
+
+		//This is totally messed up, but it works..
+		//I suspect this is for the same reason that I cannot trust
+		//HxlGraphics.mouse.x/y to have the right value
+		if( !Configuration.mobile ) {
+			X += HxlUtil.floor(HxlGraphics.scroll.x);
+			Y += HxlUtil.floor(HxlGraphics.scroll.y);
+		}
+
+		getScreenXY(_point);
+		if ((X <= _point.x) || (X >= _point.x+width) || (Y <= _point.y) || (Y >= _point.y+height)) {
+			return false;
+		}
+		return true;
+	}
+
 	function clickMouseDown(event:MouseEvent) {
-		if (!exists || !visible || !active || Std.is(GameUI.instance.panels.currentPanel,CqInventoryDialog) || !Std.is(HxlGraphics.state,GameState) ) 
+		if (!exists || !visible || !active || Std.is(GameUI.instance.panels.currentPanel,CqInventoryDialog) || !Std.is(HxlGraphics.state,GameState) )
 			return;
+
+		if( Configuration.mobile ) {
+
+			HxlGraphics.mouse.x = Std.int(event.localX);
+			HxlGraphics.mouse.y = Std.int(event.localY);
+		}
+
 		if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
 			event.stopPropagation();
 			usePotion();
@@ -80,7 +107,7 @@ class CqPotionButton extends HxlDialog {
 	}
 
 	function clickMouseUp(event:MouseEvent) {
-		if (!exists || !visible || !active || Std.is(GameUI.instance.panels.currentPanel,CqInventoryDialog) ) 
+		if (!exists || !visible || !active || Std.is(GameUI.instance.panels.currentPanel,CqInventoryDialog) )
 			return;
 		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
 			//if ( _callback != null ) _callback();

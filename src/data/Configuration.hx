@@ -11,8 +11,8 @@ class Configuration {
 	public static inline var version = "1.1c";
 
 	public static inline var debug = false;
-	public static inline var air = true;
-	public static inline var standAlone = true;
+	public static inline var air = false;
+	public static inline var standAlone = false;
 	public static inline var useProductionPlaytomic = true;
 
 	//I am not going to go off air, we will assume air is Desktop air
@@ -24,6 +24,7 @@ class Configuration {
 	public static inline var iOS = false; //air-ios
 	public static inline var android = false;
 	public static inline var mobile = false; //air-ios
+	public static inline var noCache = false;
 
 	public static inline var debugStartingLevel:Int = 0;
 	public static inline var debugStartingClass:CqClass = WIZARD;

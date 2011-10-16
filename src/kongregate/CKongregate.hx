@@ -14,6 +14,11 @@ class CKongregate
     public function new()
     {
         kongregate = null;
+		
+		//Dont do kongregate in standalone or mobile version
+		if ( Configuration.mobile || Configuration.standAlone ) {
+			return;
+		}		
 
         #if flash
             

@@ -175,7 +175,12 @@ class CqActor extends CqObject, implements Actor {
 		zIndex = 3;
 
 		actionPoints = 0;
-		moveSpeed = 0.2;
+		//Bobbing is painful
+		if( Configuration.mobile ) {
+			moveSpeed = 0;
+		} else {
+			moveSpeed = 0.2;
+		}
 		visionRadius = 8.2;
 		
 		maxHp = vitality;
@@ -247,7 +252,13 @@ class CqActor extends CqObject, implements Actor {
 		// so this is where we can add bobbing for waiting !
 		isMoving = true;
 		bobCounter = 0.0;
-		Actuate.tween(this, moveSpeed, { x: X, y: Y } ).onComplete(moveStop);
+		if ( Configuration.mobile ) {
+			this.x = X;
+			this.y = Y;
+			isMoving = false;
+		} else {
+			Actuate.tween(this, moveSpeed, { x: X, y: Y } ).onComplete(moveStop);
+		}
 		
 		for (Callback in onMove ) 
 			Callback(this);

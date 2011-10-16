@@ -111,7 +111,7 @@ class CqInventoryItemManager
 				var cell:CqEquipmentCell = dlgEqGrid.getCellWithSlot(Item.equipSlot);
 				//if slot was empty - equip
 				if (cell.getCellObj() == null) {
-					GameUI.showTextNotification("I've beeing wanting one of these.", 0xBFE137);
+					GameUI.showTextNotification("I've been wanting one of these.", 0xBFE137);
 					uiItem = equipItem(cell, Item, uiItem);
 					cell.getCellObj().updateIcon();
 					dlgInfo.setItem(Item);

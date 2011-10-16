@@ -14,6 +14,7 @@ import cq.CqGraphicKey;
 import flash.display.Shape;
 import flash.geom.ColorTransform;
 import haxel.HxlState;
+import haxel.HxlUtil;
 
 import flash.display.BitmapData;
 import flash.events.MouseEvent;
@@ -79,12 +80,8 @@ class CqSpellButton extends HxlDialog {
 	public override function update() {
 		if (!_initialized) {
 			if (HxlGraphics.stage != null) {
-				if( Configuration.mobile ) {
-					addEventListener(TouchEvent.TOUCH_TAP, tap, true, 6,true);
-				} else {
-					addEventListener(MouseEvent.MOUSE_DOWN, clickMouseDown, true, 6,true);
-					addEventListener(MouseEvent.MOUSE_UP, clickMouseUp, true, 6,true);
-				}
+				addEventListener(MouseEvent.MOUSE_DOWN, clickMouseDown, true, 6,true);
+				addEventListener(MouseEvent.MOUSE_UP, clickMouseUp, true, 6,true);
 				_initialized = true;
 			}
 		}
@@ -119,11 +116,41 @@ class CqSpellButton extends HxlDialog {
 		return null;
 	}
 
+	override public function overlapsPoint(X:Float,Y:Float,?PerPixel:Bool = false):Bool {
+
+		//This is totally messed up, but it works..
+		//I suspect this is for the same reason that I cannot trust
+		//HxlGraphics.mouse.x/y to have the right value
+		if( !Configuration.mobile ) {
+			X += HxlUtil.floor(HxlGraphics.scroll.x);
+			Y += HxlUtil.floor(HxlGraphics.scroll.y);
+		}
+
+		/*
+		var tapMessage = "Comparing ";
+		tapMessage = tapMessage + "(" + Std.string( Std.int( X ) ) +"," + Std.string( Std.int( Y ) ) + ") ";
+		tapMessage = tapMessage + "(" + Std.string( Std.int( _point.x  ) ) +"," + Std.string( Std.int( _point.y ) ) + ") ";
+		tapMessage = tapMessage + "(" + Std.string( Std.int( _point.x+width ) ) +"," + Std.string( Std.int( _point.y+height ) ) + ") ";
+		GameUI.showTextNotification( tapMessage );
+		*/
+
+		getScreenXY(_point);
+		if ((X <= _point.x) || (X >= _point.x+width) || (Y <= _point.y) || (Y >= _point.y+height)) {
+			return false;
+		}
+		return true;
+	}
+
 	function clickMouseDown(event:MouseEvent) {
 		if (!exists || !visible || !active || Std.is(GameUI.instance.panels.currentPanel, CqInventoryDialog) ) {
 			if (!exists)
 				clearEventListeners();
 			return;
+		}
+
+		if( Configuration.mobile ) {
+			HxlGraphics.mouse.x = Std.int(event.localX);
+			HxlGraphics.mouse.y = Std.int(event.localY);
 		}
 
 		if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y))
@@ -142,21 +169,6 @@ class CqSpellButton extends HxlDialog {
 			//if ( eventStopPropagate ) event.stopPropagation();
 			event.stopPropagation();
 		}
-	}
-
-	//The design approach is a touch invokes does the same as mouse down and up
-	function tap( event:TouchEvent){
-		if (!exists || !visible || !active || Std.is(GameUI.instance.panels.currentPanel, CqInventoryDialog) ) {
-			if (!exists) {
-				clearEventListeners();
-			}
-			return;
-		}
-
-		if (overlapsPoint(event.stageX, event.stageY)) {
-			useSpell();
-		}
-		event.stopPropagation();
 	}
 
 	public function useSpell(?event:MouseEvent = null)

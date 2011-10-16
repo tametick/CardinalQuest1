@@ -37,6 +37,8 @@ cp icon57.png ./bin/icon57.png
 cp icon72.png ./bin/icon72.png
 cp icon128.png ./bin/icon128.png
 
+echo warn me about the cert/sign
+say need cert signature
 
 echo about to call adt
 /applications/air3/bin/adt -package -target ipa-test -provisioning-profile "./bat/Windows_Machine_Cardinal_Quest.mobileprovision" -storetype pkcs12 -keystore ./bat/Iphone_Dev_Cert_TjD.p12 ./bin/CQ.ipa application.xml -C ./bin .
@@ -44,3 +46,5 @@ echo about to call adt
 
 echo displaying size
 ls -alh ./bin/*.ipa
+
+say All Done!
