@@ -5,6 +5,9 @@ import cq.states.GameState;
 import cq.states.MainMenuState;
 import cq.CqResources;
 import cq.ui.CqPause;
+import data.Resources;
+import data.StatsFile;
+import data.StatsFileEmbed;
 import flash.events.Event;
 import flash.ui.Mouse;
 import haxel.HxlGame;
@@ -52,6 +55,13 @@ class Main extends HxlGame {
 		
 	}
 	
+	function loadStatsFile( _filename:String ) {
+		var file:StatsFile = StatsFile.loadFile( _filename );
+		if ( file != null ) {
+			Resources.statsFiles.set( _filename, file );
+		}
+	}
+	
 	public function new() {
 		var _mochiads_game_id:String = "f7594e4c18588dca";
 		
@@ -77,6 +87,13 @@ class Main extends HxlGame {
 		{
 			SoundEffectsManager.enabled = false;
 		}
+		
+		// Load data files (if applicable).
+		StatsFileEmbed.loadEmbeddedFiles();
+		loadStatsFile( "mobs.txt" );
+		loadStatsFile( "items.txt" );
+		loadStatsFile( "potions.txt" );
+		loadStatsFile( "weapons.txt" );
 		
 		Configuration.tileSize = 16;
 		Configuration.zoom = 2.0;
