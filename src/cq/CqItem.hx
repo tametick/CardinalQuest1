@@ -76,21 +76,22 @@ class CqLootFactory {
 	}
 	
 	public static function newItem(X:Float, Y:Float, id:String):CqItem {
-		var item = new CqItem(X, Y, id);
-		
 		var itemsFile:StatsFile = Resources.statsFiles.get( "items.txt" );
 		var potionsFile:StatsFile = Resources.statsFiles.get( "potions.txt" );
 
+		var item:CqItem = null;
 		var entry:StatsFileEntry;
 		
 		if ( (entry = itemsFile.getEntry( "ID", id )) != null )
 		{
 			// Reading from ITEMS.TXT.
+			item = new CqItem(X, Y, entry.getField( "Sprite" ));
 			completeItem( item, entry );
 		}
 		else if ( (entry = potionsFile.getEntry( "ID", id )) != null )
 		{
 			// Reading from POTIONS.TXT.
+			item = new CqItem(X, Y, entry.getField( "Sprite" ));
 			completePotion( item, entry );
 		}
 		else
@@ -118,7 +119,7 @@ class CqLootFactory {
 		}
 
 		if ( entry != null ) {
-			var item = new CqItem(X, Y, entry.getField( "ID" ) );
+			var item = new CqItem(X, Y, entry.getField( "Sprite" ) );
 			
 			completeItem( item, entry );
 			
@@ -252,30 +253,30 @@ class CqItem extends GameObjectImpl, implements Loot {
 		return isMagical || isSuperb || isWondrous;
 	}
 
-	public function new(X:Float, Y:Float, type:String) {
+	public function new(X:Float, Y:Float, sprite:String) {
 		super(X, Y);
-		var typeName:String = type.toLowerCase();
 		zIndex = 1;
 		isSuperb = false;
 		isMagical = false;
 		isWondrous = false;
 		
+		spriteIndex = sprite.toLowerCase();
+
 		//this is a terrible, terrible work-around, but it'll do for now
 		
 		// fixme - new arrays created every time
 		if (Std.is(this, CqSpell)) {
 			loadGraphic(SpriteSpells, false, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
-			addAnimation("idle", [SpriteSpells.instance.getSpriteIndex(typeName)], 0 );
+			addAnimation("idle", [SpriteSpells.instance.getSpriteIndex(spriteIndex)], 0 );
 		} else if (Std.is(this, CqItem)) {
 			loadGraphic(SpriteItems, false, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
-			addAnimation("idle", [SpriteItems.instance.getSpriteIndex(typeName)], 0 );
+			addAnimation("idle", [SpriteItems.instance.getSpriteIndex(spriteIndex)], 0 );
 		} else {
 			//BOOM!
 			throw "Invalid Item/Spell type provided";
 		}
 	
 		consumable = false;
-		spriteIndex = typeName;
 		damage = new Range(0, 0);
 		buffs = new Hash<Int>();
 		specialEffects = new List<CqSpecialEffectValue>();

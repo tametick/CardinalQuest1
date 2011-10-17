@@ -73,6 +73,7 @@ Field String Description
 [Reveal map]       [Reveals the layout of the current floor.]
 [Heal]             [Restores health and vigor.]
 ";		embedFile = StatsFile.loadFromString( embedText );		if ( embedFile != null ) { 			Resources.statsFiles.set( "descriptions.txt", embedFile );		}		embedText = "Field String ID
+Field String Sprite
 Field String Name
 Field String Slot
 Field Int LevelMin
@@ -85,44 +86,44 @@ Field Int Buff1Val
 Field String Buff2
 Field Int Buff2Val
 
-; ID            Name                         Slot    Lv- Lv+ Wgt Dmg- Dmg+ Buff1   V1 Buff2   V2 
-BOOTS           [Boots of Escape]            SHOES     0   0 100    0    0 speed    1
-WINGED_SANDLES  [Hermes' Sandals]            SHOES     2   3 100    0    0 speed    2
-TUNDRA_BOOTS    [Tundra Lizard Boots]        SHOES     6  99 100    0    0 speed    2 defense  1
+; ID            Sprite          Name                         Slot    Lv- Lv+ Wgt Dmg- Dmg+ Buff1   V1 Buff2   V2 
+BOOTS           boots           [Boots of Escape]            SHOES     1   1 100    0    0 speed    1
+WINGED_SANDLES  winged_sandles  [Hermes' Sandals]            SHOES     3   4 100    0    0 speed    2
+TUNDRA_BOOTS    tundra_boots    [Tundra Lizard Boots]        SHOES     7  99 100    0    0 speed    2 defense  1
 
-; ID            Name                         Slot    Lv- Lv+ Wgt Dmg- Dmg+ Buff1   V1 Buff2   V2 
-LEATHER_ARMOR   [Leather Armor]              ARMOR     0   0 100    0    0 defense  1
-BRESTPLATE      [Breastplate]                ARMOR     1   2 100    0    0 defense  2
-CLOAK           [Rogues' Cloak of Swiftness] ARMOR     4   5 100    0    0 defense  2 speed    2
-FULL_PLATE_MAIL [Full Plate Armor]           ARMOR     6  99 100    0    0 defense  3
+; ID            Sprite          Name                         Slot    Lv- Lv+ Wgt Dmg- Dmg+ Buff1   V1 Buff2   V2 
+LEATHER_ARMOR   leather_armor   [Leather Armor]              ARMOR     1   1 100    0    0 defense  1
+BRESTPLATE      brestplate      [Breastplate]                ARMOR     2   3 100    0    0 defense  2
+CLOAK           cloak           [Rogues' Cloak of Swiftness] ARMOR     5   6 100    0    0 defense  2 speed    2
+FULL_PLATE_MAIL full_plate_mail [Full Plate Armor]           ARMOR     7  99 100    0    0 defense  3
 
-; ID            Name                         Slot    Lv- Lv+ Wgt Dmg- Dmg+ Buff1   V1 Buff2   V2 
-RING            [Ring of Wisdom]             JEWELRY   1   2 100    0    0 spirit   1
-AMULET          [Amulet of Enlightenment]    JEWELRY   3   4 100    0    0 spirit   2
-GEMMED_AMULET   [Supernatural Amulet]        JEWELRY   5   6 100    0    0 spirit   2 defense  2
-GEMMED_RING     [Ring of Rubies]             JEWELRY   7  99 100    0    0 life     3 spirit   2
+; ID            Sprite          Name                         Slot    Lv- Lv+ Wgt Dmg- Dmg+ Buff1   V1 Buff2   V2 
+RING            ring            [Ring of Wisdom]             JEWELRY   2   3 100    0    0 spirit   1
+AMULET          amulet          [Amulet of Enlightenment]    JEWELRY   4   5 100    0    0 spirit   2
+GEMMED_AMULET   gemmed_amulet   [Supernatural Amulet]        JEWELRY   6   7 100    0    0 spirit   2 defense  2
+GEMMED_RING     gemmed_ring     [Ring of Rubies]             JEWELRY   8  99 100    0    0 life     3 spirit   2
 
-; ID            Name                         Slot    Lv- Lv+ Wgt Dmg- Dmg+ Buff1   V1 Buff2   V2 
-CAP             [Cap of Endurance]           HAT       0   1 100    0    0 life     1
-HELM            [Helm of Hardiness]          HAT       3   4 100    0    0 life     2
-FULL_HELM       [Full Helmet of Vitality]    HAT       5   6 100    0    0 life     4
-GOLDEN_HELM     [King's Golden Helm]         HAT       7  99 100    0    0 life     2 defense  3
+; ID            Sprite          Name                         Slot    Lv- Lv+ Wgt Dmg- Dmg+ Buff1   V1 Buff2   V2 
+CAP             cap             [Cap of Endurance]           HAT       1   2 100    0    0 life     1
+HELM            helm            [Helm of Hardiness]          HAT       4   5 100    0    0 life     2
+FULL_HELM       full_helm       [Full Helmet of Vitality]    HAT       6   7 100    0    0 life     4
+GOLDEN_HELM     golden_helm     [King's Golden Helm]         HAT       8  99 100    0    0 life     2 defense  3
 
-; ID            Name                         Slot    Lv- Lv+ Wgt Dmg- Dmg+ Buff1   V1 Buff2   V2 
-GLOVE           [Gloves of Dexterity]        GLOVES    0   1 100    0    0 attack   1
-BRACELET        [Achilles' Bracer]           GLOVES    2   3 100    0    0 attack   2
-GAUNTLET        [Gauntlets of Sturdiness]    GLOVES    5   6 100    0    0 attack   2 defense  2
+; ID            Sprite          Name                         Slot    Lv- Lv+ Wgt Dmg- Dmg+ Buff1   V1 Buff2   V2 
+GLOVE           glove           [Gloves of Dexterity]        GLOVES    1   2 100    0    0 attack   1
+BRACELET        bracelet        [Achilles' Bracer]           GLOVES    3   4 100    0    0 attack   2
+GAUNTLET        gauntlet        [Gauntlets of Sturdiness]    GLOVES    6   7 100    0    0 attack   2 defense  2
 
-; ID            Name                         Slot    Lv- Lv+ Wgt Dmg- Dmg+ Buff1   V1 Buff2   V2 
-DAGGER          [Dagger]                     WEAPON    0   0 100    1    2
-SHORT_SWORD     [Short Sword]                WEAPON    0   1 100    1    3
-STAFF           [Staff]                      WEAPON    1   2 100    1    3
-LONG_SWORD      [Long Sword]                 WEAPON    2   3 100    2    4
-AXE             [Axe]                        WEAPON    3   4 100    4    6
-BATTLE_AXE      [Hardened Battle Axe]        WEAPON    4   5 100    5   12 speed   -2
-MACE            [Beastly Mace]               WEAPON    4   5 100    4   11
-CLAYMORE        [Broad Claymore]             WEAPON    6  99 100    6   10 speed   -1
-BROAD_SWORD     [Twin Bladed Katana]         WEAPON    7  99 100    5   12 defense -2 speed    2
+; ID            Sprite          Name                         Slot    Lv- Lv+ Wgt Dmg- Dmg+ Buff1   V1 Buff2   V2 
+DAGGER          dagger          [Dagger]                     WEAPON    1   1 100    1    2
+SHORT_SWORD     short_sword     [Short Sword]                WEAPON    1   2 100    1    3
+STAFF           staff           [Staff]                      WEAPON    2   3 100    1    3
+LONG_SWORD      long_sword      [Long Sword]                 WEAPON    3   4 100    2    4
+AXE             axe             [Axe]                        WEAPON    4   5 100    4    6
+BATTLE_AXE      battle_axe      [Hardened Battle Axe]        WEAPON    5   6 100    5   12 speed   -2
+MACE            mace            [Beastly Mace]               WEAPON    5   6 100    4   11
+CLAYMORE        claymore        [Broad Claymore]             WEAPON    7  99 100    6   10 speed   -1
+BROAD_SWORD     broad_sword     [Twin Bladed Katana]         WEAPON    8  99 100    5   12 defense -2 speed    2
 ";		embedFile = StatsFile.loadFromString( embedText );		if ( embedFile != null ) { 			Resources.statsFiles.set( "items.txt", embedFile );		}		embedText = "Field String Class
 Field Int Weight
 Field String Sprite
@@ -184,6 +185,7 @@ Minotaur      1 minotaur                 [Minotaur]           7   4   7   4 24 4
 Minotaur      1 minotaur_axe             [Minotaur]           7   4   7   4 24 48 12 32 950 BERSERK
 Minotaur      1 minotaur_sword           [Minotaur]           7   4   7   4 24 48 12 32 950 BERSERK
 ";		embedFile = StatsFile.loadFromString( embedText );		if ( embedFile != null ) { 			Resources.statsFiles.set( "mobs.txt", embedFile );		}		embedText = "Field String ID
+Field String Sprite
 Field String Name
 Field Int Duration
 Field String Buff
@@ -191,10 +193,10 @@ Field Int BuffVal
 Field String Effect
 Field String EffectVal
 
-; ID          Name                     Duration Buff      BV Effect             EV
-GREEN_POTION  [Elixir of the Hawk]     120      attack     3
-PURPLE_POTION [Elixir of the Lion]     120      []         0 [damage multipler] 2
-BLUE_POTION   [Elixir of the Elephant] 120      defense    3
-YELLOW_POTION [Coca-leaf Cocktail]     120      speed      3
-RED_POTION    [Healing Potion]         0        []         0 heal               full
+; ID          Sprite        Name                     Duration Buff      BV Effect             EV
+GREEN_POTION  green_potion  [Elixir of the Hawk]     120      attack     3
+PURPLE_POTION purple_potion [Elixir of the Lion]     120      []         0 [damage multipler] 2
+BLUE_POTION   blue_potion   [Elixir of the Elephant] 120      defense    3
+YELLOW_POTION yellow_potion [Coca-leaf Cocktail]     120      speed      3
+RED_POTION    red_potion    [Healing Potion]         0        []         0 heal               full
 ";		embedFile = StatsFile.loadFromString( embedText );		if ( embedFile != null ) { 			Resources.statsFiles.set( "potions.txt", embedFile );		}	}}
