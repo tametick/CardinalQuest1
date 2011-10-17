@@ -1,0 +1,14 @@
+Field String ID
+Field String Name
+Field Int Duration
+Field String Buff
+Field Int BuffVal
+Field String Effect
+Field String EffectVal
+
+; ID          Name                     Duration Buff      BV Effect             EV
+GREEN_POTION  [Elixir of the Hawk]     120      attack     3
+PURPLE_POTION [Elixir of the Lion]     120      []         0 [damage multipler] 2
+BLUE_POTION   [Elixir of the Elephant] 120      defense    3
+YELLOW_POTION [Coca-leaf Cocktail]     120      speed      3
+RED_POTION    [Healiong Potion]        0        []         0 heal               full
