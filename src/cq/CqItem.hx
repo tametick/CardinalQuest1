@@ -100,54 +100,54 @@ class CqLootFactory {
 		
 		if ( (entry = itemsFile.getEntry( "ID", type + "" )) != null ) {
 			// Reading from ITEMS.TXT.
-			item.name = itemsFile.getEntryField( entry, "Name" );
+			item.name = entry.getField( "Name" );
 			
-			var slot:String = itemsFile.getEntryField( entry, "Slot" );
+			var slot:String = entry.getField( "Slot" );
 			item.equipSlot =  Type.createEnum( CqEquipSlot, slot );
 
-			if ( itemsFile.getEntryField( entry, "Buff1" ) != "" )	{
-				item.buffs.set(itemsFile.getEntryField( entry, "Buff1" ), itemsFile.getEntryField( entry, "Buff1Val" ));
+			if ( entry.getField( "Buff1" ) != "" )	{
+				item.buffs.set(entry.getField( "Buff1" ), entry.getField( "Buff1Val" ));
 			}
-			if ( itemsFile.getEntryField( entry, "Buff2" ) != "" )	{
-				item.buffs.set(itemsFile.getEntryField( entry, "Buff2" ), itemsFile.getEntryField( entry, "Buff2Val" ));
+			if ( entry.getField( "Buff2" ) != "" )	{
+				item.buffs.set(entry.getField( "Buff2" ), entry.getField( "Buff2Val" ));
 			}
 		}
 		else if ( (entry = weaponsFile.getEntry( "ID", type + "" )) != null )
 		{
 			// Reading from WEAPONS.TXT.
-			item.name = weaponsFile.getEntryField( entry, "Name" );
+			item.name = entry.getField( "Name" );
 			
-			var slot:String = weaponsFile.getEntryField( entry, "Slot" );
+			var slot:String = entry.getField( "Slot" );
 			item.equipSlot =  Type.createEnum( CqEquipSlot, slot );
 
-			item.damage = new Range(weaponsFile.getEntryField( entry, "DamageMin" ),
-									weaponsFile.getEntryField( entry, "DamageMax" ));
+			item.damage = new Range(entry.getField( "DamageMin" ),
+									entry.getField( "DamageMax" ));
 			
-			if ( weaponsFile.getEntryField( entry, "Buff1" ) != "" )	{
-				item.buffs.set(weaponsFile.getEntryField( entry, "Buff1" ), weaponsFile.getEntryField( entry, "Buff1Val" ));
+			if ( entry.getField( "Buff1" ) != "" )	{
+				item.buffs.set(entry.getField( "Buff1" ), entry.getField( "Buff1Val" ));
 			}
-			if ( weaponsFile.getEntryField( entry, "Buff2" ) != "" )	{
-				item.buffs.set(weaponsFile.getEntryField( entry, "Buff2" ), weaponsFile.getEntryField( entry, "Buff2Val" ));
+			if ( entry.getField( "Buff2" ) != "" )	{
+				item.buffs.set(entry.getField( "Buff2" ), entry.getField( "Buff2Val" ));
 			}
 		}
 		else if ( (entry = potionsFile.getEntry( "ID", type + "" )) != null )
 		{
 			// Reading from POTIONS.TXT.
-			item.name = potionsFile.getEntryField( entry, "Name" );
+			item.name = entry.getField( "Name" );
 			item.equipSlot = CqEquipSlot.POTION;
 			
-			item.duration = potionsFile.getEntryField( entry, "Duration" );
+			item.duration = entry.getField( "Duration" );
 			item.consumable = true;
 			item.stackSizeMax = -1;			
 
-			var buff:String = potionsFile.getEntryField( entry, "Buff" );
+			var buff:String = entry.getField( "Buff" );
 			if ( buff != "" )	{
-				item.buffs.set(buff, potionsFile.getEntryField( entry, "BuffVal" ));
+				item.buffs.set(buff, entry.getField( "BuffVal" ));
 			}
 			
-			var effect:String = potionsFile.getEntryField( entry, "Effect" );
+			var effect:String = entry.getField( "Effect" );
 			if ( effect != "" )	{
-				item.specialEffects.add(new CqSpecialEffectValue(effect, potionsFile.getEntryField( entry, "EffectVal" )));
+				item.specialEffects.add(new CqSpecialEffectValue(effect, entry.getField( "EffectVal" )));
 			}
 		}
 		else

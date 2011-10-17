@@ -1395,7 +1395,6 @@ class CqMob extends CqActor, implements Mob {
 	public static inline var FACTION = 1;
 	
 	static var sprites = SpriteMonsters.instance;
-	public var type:CqMobType;
 	public var typeName:String;
 	public var xpValue:Int;
 	
@@ -1421,7 +1420,6 @@ class CqMob extends CqActor, implements Mob {
 		neverSeen = true;
 
 		this.typeName = typeName;
-		type = Type.createEnum(CqMobType,  typeName.toUpperCase());
 		visible = false;
 		
 		var anim = new Array();

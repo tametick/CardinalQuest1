@@ -29,14 +29,26 @@ class StatsFileFieldDesc
  
 class StatsFileEntry
 {
+	var m_fieldDescs : Array<StatsFileFieldDesc>;
 	var m_fields : Array<Dynamic>;
 	
-	public function new( _fields:Array<Dynamic> ) {
+	public function new( _fieldDescs:Array<StatsFileFieldDesc>, _fields:Array<Dynamic> ) {
+		m_fieldDescs = _fieldDescs;
 		m_fields = _fields;
 	}
 	
-	public function getField( _i:Int ) : Dynamic {
+	private function getFieldByIndex( _i:Int ) : Dynamic {
 		return m_fields[_i];
+	}
+	
+	public function getField( _keyField:String ) : Dynamic {
+		for ( i in 0 ... m_fieldDescs.length ) {
+			if ( m_fieldDescs[i].m_name == _keyField ) {
+				return getFieldByIndex(i);
+			}
+		}
+		
+		return null;
 	}
 }
 
@@ -146,7 +158,7 @@ class StatsFile
 					}
 				}
 				
-				m_entries.push( new StatsFileEntry( fields ) );
+				m_entries.push( new StatsFileEntry( m_fieldDescs, fields ) );
 			}
 		}
 
@@ -163,7 +175,7 @@ class StatsFile
 	
 	public function getEntry( _keyField:String, _key:Dynamic ) : StatsFileEntry {
 		for ( e in m_entries ) {
-			if ( getEntryField( e, _keyField ) == _key ) {
+			if ( e.getField( _keyField ) == _key ) {
 				return e;
 			}
 		}
@@ -171,13 +183,7 @@ class StatsFile
 		return null;
 	}
 	
-	public function getEntryField( _entry:StatsFileEntry, _keyField:String ) : Dynamic {
-		for ( i in 0 ... m_fieldDescs.length ) {
-			if ( m_fieldDescs[i].m_name == _keyField ) {
-				return _entry.getField(i);
-			}
-		}
-		
-		return null;
+	public function iterator() : Iterator<StatsFileEntry> {
+		return m_entries.iterator();
 	}
 }

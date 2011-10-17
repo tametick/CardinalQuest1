@@ -242,10 +242,10 @@ class SpriteItems extends HxlSpriteSheet {
 class SpriteMonsters extends HxlSpriteSheet {
 	static var _spriteNames:Array<Array<String>>;
 	public static var instance = new SpriteMonsters();
-	public static var kobolds = ["kobold_spear", "kobold_knives", "kobold_mage",];
+	public static var kobolds = ["kobold_spear", "kobold_knives", "kobold_mage"];
 	public static var werewolves = ["werewolf_gray", "werewolf_blue", "werewolf_purple"];
 	public static var bandits = ["bandit_long_swords", "bandit_short_swords", "bandit_single_long_sword", "bandit_knives"];
-	public static var minotauers = ["minotauer", "minotauer_axe", "minotauer_sword"];
+	public static var minotaurs = ["minotaur", "minotaur_axe", "minotaur_sword"];
 	public static var succubi = ["succubus", "succubus_staff", "succubus_whip", "succubus_scepter", ];
 	public static var spiders = ["spider_yellow", "spider_red", "spider_gray", "spider_green"];
 	// todo: ape->golem
@@ -258,7 +258,7 @@ class SpriteMonsters extends HxlSpriteSheet {
 				kobolds.concat(["kobold_blank"]),
 				werewolves.concat(["werewolf_blank"]),
 				bandits,
-				minotauers.concat(["minotauer_blank"]),
+				minotaurs.concat(["minotaur_blank"]),
 				succubi,
 				spiders,
 				apes,
