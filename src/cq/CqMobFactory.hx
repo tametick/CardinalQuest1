@@ -122,6 +122,10 @@ class CqMobFactory {
 				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, Type.createEnum( CqSpellType, spell2 ) ) );
 			}
 		}
+		else
+		{
+			throw "Mob type not found in mobs.txt.";
+		}
 		
 		mob.hp = mob.maxHp = mob.vitality;
 		
