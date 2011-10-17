@@ -5,6 +5,9 @@ import cq.states.GameState;
 import cq.states.MainMenuState;
 import cq.CqResources;
 import cq.ui.CqPause;
+import data.Resources;
+import data.StatsFile;
+import data.StatsFileEmbed;
 import flash.events.Event;
 import flash.ui.Mouse;
 import haxel.HxlGame;
@@ -76,6 +79,14 @@ class Main extends HxlGame {
 		if ( !HxlState.sfxOn )
 		{
 			SoundEffectsManager.enabled = false;
+		}
+		
+		// Load data files (if applicable).
+		StatsFileEmbed.loadEmbeddedFiles();
+		
+		var mobsFile:StatsFile = StatsFile.loadFile( "mobs.txt" );
+		if ( mobsFile != null ) {
+			Resources.statsFiles.set( "mobs.txt", mobsFile );
 		}
 		
 		Configuration.tileSize = 16;

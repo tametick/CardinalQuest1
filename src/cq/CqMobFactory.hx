@@ -7,6 +7,7 @@ import cq.CqWorld;
 import cq.GameUI;
 import cq.ui.CqVitalBar;
 import cq.effects.CqEffectSpell;
+import data.StatsFile;
 
 import data.Resources;
 import data.Configuration;
@@ -96,157 +97,30 @@ class CqMobFactory {
 		typeName = HxlUtil.getRandomElement(if (Math.random() < Configuration.strongerEnemyChance) weaktype else strongtype);
 		mob = new CqMob(X, Y, typeName.toLowerCase());
 		
-		switch(mob.type) {
-			case BANDIT_LONG_SWORDS, BANDIT_SHORT_SWORDS, BANDIT_SINGLE_LONG_SWORD, BANDIT_KNIVES:
-				mob.name = "Bandit";
-				mob.attack = 2;
-				mob.defense = 2;
-				mob.speed = 3;
-				mob.spirit = 30;
-				mob.vitality = HxlUtil.randomIntInRange(2, 3);
-				mob.damage = new Range(1, 1);
-				mob.xpValue = 5;
-				
-				if (mob.type == BANDIT_LONG_SWORDS) {
-					mob.name = "Captain";
-					mob.speed++;
-				}
-				
-				if (mob.type == BANDIT_SHORT_SWORDS) {
-					// short chubby guy
-					mob.speed--;
-					mob.vitality *= 2;
-				}
-			case KOBOLD_SPEAR, KOBOLD_KNIVES, KOBOLD_MAGE:
-				mob.name = "Kobold";
-				mob.attack = 4;
-				mob.defense = 3;
-				mob.speed = 3;
-				mob.spirit = 3;
-				mob.hp = mob.maxHp = mob.vitality = HxlUtil.randomIntInRange(1,4);
-				mob.damage = new Range(1, 3);
-				mob.xpValue = 10;
-				if (mob.type == KOBOLD_SPEAR) {
-					mob.damage = new Range(2, 4);
-					mob.name = "Spearkobold";
-				}
-				if (mob.type == KOBOLD_MAGE) {
-					mob.spirit = 12;
-					mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.TELEPORT));
-					mob.name = "Kobold Trickster";
-				}
-			case SUCCUBUS, SUCCUBUS_STAFF, SUCCUBUS_WHIP, SUCCUBUS_SCEPTER:
-				mob.name = "Succubus";
-				mob.attack = 3;
-				mob.defense = 4;
-				mob.speed = 4;
-				mob.spirit = 4;
-				mob.vitality = HxlUtil.randomIntInRange(2,8);
-				mob.damage = new Range(2, 4);
-				mob.xpValue = 25;
-				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.ENFEEBLE_MONSTER));
-				
-				if (mob.type == SUCCUBUS_WHIP) {
-					mob.speed += 2;
-					mob.spirit -= 2;
-					mob.name = "Dominatrix";
-				}
-				if (mob.type == SUCCUBUS_SCEPTER) {
-					mob.spirit *= 2;
-					mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.SHADOW_WALK));
-					mob.name = "Enchantress";
-				}
-			case SPIDER_YELLOW, SPIDER_RED, SPIDER_GRAY, SPIDER_GREEN:
-				mob.name = "Spider";
-				mob.attack = 5;
-				mob.defense = 3;
-				mob.speed = 3;
-				mob.spirit = 4;
-				mob.vitality = HxlUtil.randomIntInRange(3,12);
-				mob.damage = new Range(2, 6);
-				mob.xpValue = 50;
-				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.FREEZE));
-				if (mob.type == SPIDER_RED) {
-					mob.name = "Black Widow";
-					mob.vitality += 7;
-					mob.spirit += 3;
-					mob.speed++;
-					mob.defense = 1;
-				}
-				if (mob.type == SPIDER_GRAY) {
-					mob.name = "Wolf Spider";
-					mob.speed *= 2;
-					mob.spirit = 1;
-				}
-			case APE_BLUE, APE_BLACK, APE_RED, APE_WHITE:
-				mob.name = "Ape";
-				mob.attack = 6;
-				mob.defense = 6;
-				mob.speed = 6;
-				mob.spirit = 3;
-				mob.vitality = HxlUtil.randomIntInRange(4,16);
-				mob.damage = new Range(4, 6);
-				mob.xpValue = 125;
-				
-				if (mob.type == APE_RED) {
-					mob.name = "Demon Ape";
-					mob.speed = 3;
-					mob.attack = 7;
-					mob.defense = 8;
-					mob.vitality = mob.vitality + 4;
-				}
-			case ELEMENTAL_GREEN, ELEMENTAL_WHITE, ELEMENTAL_RED, ELEMENTAL_BLUE:
-				mob.name = "Elemental";
-				mob.attack = 4;
-				mob.defense = 4;
-				mob.speed = 4;
-				mob.spirit = 6;
-				mob.vitality = HxlUtil.randomIntInRange(8,26);
-				mob.damage = new Range(4, 8);
-				mob.xpValue = 275;
-				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.FIREBALL));
-				
-				if (mob.type == ELEMENTAL_WHITE) { // really green
-					mob.name = "Nature " + mob.name;
-					mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.STONE_SKIN));
-					mob.vitality += 6;
-				}
-				if (mob.type == ELEMENTAL_RED) { // really purple
-					mob.name = "Sorcery " + mob.name;
-					mob.equippedSpells.pop(); // totally different spell set
-					mob.spirit *= 3; // cast spells freaking constantly, but NO XBALLS.
-					mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.MAGIC_MIRROR));
-					mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.TELEPORT));
-				}
-				if (mob.type == ELEMENTAL_BLUE) { // really red
-					mob.name = "Chaos " + mob.name;
-					mob.spirit *= 2; // cast xball much more often
-				}
-				if (mob.type == ELEMENTAL_GREEN) { // really blue
-					mob.name = "Air " + mob.name;
-					mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.SHADOW_WALK));
-					mob.speed *= 2; // faster
-				}
-			case WEREWOLF_GRAY, WEREWOLF_BLUE, WEREWOLF_PURPLE:
-				mob.name = "Werewolf";
-				mob.attack = 5;
-				mob.defense = 5;
-				mob.speed = 8;
-				mob.spirit = 4;
-				mob.vitality = HxlUtil.randomIntInRange(8,32);
-				mob.damage = new Range(4,8);
-				mob.xpValue = 500;
-				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.HASTE));
-			case MINOTAUER, MINOTAUER_AXE, MINOTAUER_SWORD:
-				mob.name = "Minotaur";
-				mob.attack = 7;
-				mob.defense = 4;
-				mob.speed = 7;
-				mob.spirit = 4;
-				mob.vitality = HxlUtil.randomIntInRange(24,48);
-				mob.damage = new Range(12, 32);
-				mob.xpValue = 950;
-				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, CqSpellType.BERSERK));
+		var mobsFile:StatsFile = Resources.statsFiles.get( "mobs.txt" );
+		var entry:StatsFileEntry = mobsFile.getEntry( "ID", mob.type + "" );
+		
+		if ( entry != null ) {
+			mob.name = mobsFile.getEntryField( entry, "Name" );
+			mob.attack = mobsFile.getEntryField( entry, "Attack" );
+			mob.defense = mobsFile.getEntryField( entry, "Defense" );
+			mob.speed = mobsFile.getEntryField( entry, "Speed" );
+			mob.spirit = mobsFile.getEntryField( entry, "Spirit" );
+			mob.vitality = HxlUtil.randomIntInRange( mobsFile.getEntryField( entry, "VitalityMin" ),
+													 mobsFile.getEntryField( entry, "VitalityMax" ) );
+			mob.damage = new Range( mobsFile.getEntryField( entry, "DamageMin" ),
+									mobsFile.getEntryField( entry, "DamageMax" ) );
+			mob.xpValue = mobsFile.getEntryField( entry, "XP" );
+			
+			var spell1:String = mobsFile.getEntryField( entry, "Spell1" );
+			if ( spell1 != "" ) {
+				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, Type.createEnum( CqSpellType, spell1 ) ) );
+			}
+			
+			var spell2:String = mobsFile.getEntryField( entry, "Spell2" );
+			if ( spell2 != "" ) {
+				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, Type.createEnum( CqSpellType, spell2 ) ) );
+			}
 		}
 		
 		mob.hp = mob.maxHp = mob.vitality;
