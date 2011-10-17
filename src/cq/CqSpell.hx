@@ -9,37 +9,8 @@ import cq.CqResources;
 import data.Resources;
 
 class CqSpellFactory {
-	static var inited = false;
 	public static var remainingSpells:Array<String>;
 	
-	static function initDescriptions() {
-		if (inited)
-			return;
-		
-		if(Resources.descriptions==null)
-			Resources.descriptions = new Hash<String>();
-		
-		Resources.descriptions.set("Freeze", "Freezes a monster in place for a short duration.");
-		Resources.descriptions.set("Fireball", "Hurls a ball of fire that explodes on impact.");
-		Resources.descriptions.set("Berserk", "Induces a berserked rage that greatly increases your strength and speed.");
-		Resources.descriptions.set("Enfeeble monster", "Weakens monsters and renders them less dangerous.");
-		Resources.descriptions.set("Bless weapon", "Blesses the currently wielded weapon, providing a temporary boost to its effectivness.");
-		Resources.descriptions.set("Haste", "Makes you faster and more nimble.");
-		Resources.descriptions.set("Shadow walk", "Renders you invisible for a few seconds.");
-		Resources.descriptions.set("Charm monster","Charms a foe and temporarily brings them to your side."); 
-		Resources.descriptions.set("Polymorph","Transform a creature into another form."); 
-		Resources.descriptions.set("Sleep","Puts a monster into a deep slumber."); 
-		Resources.descriptions.set("Fear","Makes a monster flee in horror."); 
-		Resources.descriptions.set("Magic mirror","Creates a duplicate of yourself to draw enemies away."); 
-		Resources.descriptions.set("Stone skin","Hardens your skin, rendering you tough but slow."); 
-		Resources.descriptions.set("Blink","Transports you to a random location.");
-		Resources.descriptions.set("Magic armor","Engulfs you in a magical protective aura."); 
-		Resources.descriptions.set("Pass wall","Enables walking through walls as if they were thin air.");
-		Resources.descriptions.set("Teleport","Transports you to a specific location of your choice."); 
-		Resources.descriptions.set("Reveal map","Reveals the layout of the current floor."); 
-		Resources.descriptions.set("Heal","Restores health and vigor.");
-		inited = true;
-	}
 	public static function resetRemainigSpells()
 	{
 		if (CqSpellFactory.remainingSpells != null)
@@ -61,7 +32,6 @@ class CqSpellFactory {
 		// uncomment if you want every spell is only be given once
 		remainingSpells.remove(newSpellName);
 		
-		initDescriptions();
 		return newSpell(X, Y, Type.createEnum(CqSpellType,  newSpellName.toUpperCase()));
 	}
 	public static function getfireBalldamageByLevel(level:Int):Range {
@@ -90,8 +60,6 @@ class CqSpellFactory {
 		return dmg;
 	}
 	public static function newSpell(X:Float, Y:Float, type:CqSpellType):CqSpell {
-		initDescriptions();
-		
 		var typeName:String = Type.enumConstructor(type).toLowerCase();
 		var spell = new CqSpell(X, Y, type);
 		
@@ -190,7 +158,7 @@ class CqSpell extends CqItem {
 	public var spiritPoints:Int;
 	public var spiritPointsRequired:Int;
 	public function new(X:Float, Y:Float, type:CqSpellType) {
-		super(X, Y, type);
+		super(X, Y, Type.enumConstructor(type).toLowerCase());
 		equipSlot = SPELL;
 		visible = false;
 		spiritPoints = 0;

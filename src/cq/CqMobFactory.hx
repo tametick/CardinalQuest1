@@ -16,32 +16,14 @@ import haxel.HxlUtil;
 
 
 class CqMobFactory {	
-	static var inited = false;
-	
-	public static function initDescriptions() {
-		if (inited)
-			return;
-		
-		if(Resources.descriptions==null)
-			Resources.descriptions = new Hash<String>();
-		
-		// this is a very questionable place for these descriptions to come up
-		Resources.descriptions.set("Fighter", "A mighty warrior of unparalleled strength and vigor, honorable in battle, high master of hack-n-slash melee.\n\nThe best choice for new players.");
-		Resources.descriptions.set("Wizard", "A wise sage, knower of secrets, worker of miracles, master of the arcane arts, maker of satisfactory mixed drinks.\n\nCan cast spells rapidly - use his mystic powers as often as possible.");
-		Resources.descriptions.set("Thief", "A cunning and agile rogue whose one moral credo is this: Always get out alive.\n\nThe most challenging character - use his speed and skills to avoid taking damage." );
-		
-		inited = true;
-	}
-	
 	public static function newMobFromLevel(X:Float, Y:Float, level:Int, ?cloneOf:CqActor = null):CqMob {
-		initDescriptions();
 		var mob;
 		var typeName:String = "";
 		
 		if (cloneOf != null) {
 			if (Std.is(cloneOf, CqPlayer)) {
 				// pretend the player is a bandit, just for mirror bookkeeping
-				mob = new CqMob(X, Y, HxlUtil.getRandomElement(SpriteMonsters.bandits), true);
+				mob = new CqMob(X, Y, "bandit_long_swords", true);
 			} else {
 				mob = new CqMob(X, Y, cast(cloneOf, CqMob).typeName, false);
 			}
@@ -99,19 +81,17 @@ class CqMobFactory {
 		// Search through mobs.txt for mobs of the right type and pick one.
 		var mobsFile:StatsFile = Resources.statsFiles.get( "mobs.txt" );
 		
-		var idealMob:StatsFileEntry = null;
+		var entry:StatsFileEntry = null;
 		var weightSoFar:Int = 0;
 		for ( m in mobsFile ) {
 			if ( m.getField( "Class" ) == typeName ) {
 				var weight = m.getField( "Weight" );
 				if ( Math.random() > (weightSoFar / (weightSoFar + weight)) ) {
-					idealMob = m;
+					entry = m;
 				}
 				weightSoFar += weight;
 			}
 		}
-		
-		var entry:StatsFileEntry = idealMob;
 		
 		if ( entry != null ) {
 			mob = new CqMob(X, Y, entry.getField( "Sprite" ) );

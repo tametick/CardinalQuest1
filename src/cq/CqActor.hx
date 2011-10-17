@@ -1160,7 +1160,7 @@ class CqPlayer extends CqActor, implements Player {
 		}
 	}
 	
-	public function give(?item:CqItem, ?itemType:CqItemType, ?spellType:CqSpellType) {
+	public function give(?item:CqItem, ?itemType:String, ?spellType:CqSpellType) {
 		if (item != null) {
 			// add to actor inventory
 			

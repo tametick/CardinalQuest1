@@ -90,10 +90,10 @@ class Main extends HxlGame {
 		
 		// Load data files (if applicable).
 		StatsFileEmbed.loadEmbeddedFiles();
-		loadStatsFile( "mobs.txt" );
+		loadStatsFile( "descriptions.txt" );
 		loadStatsFile( "items.txt" );
+		loadStatsFile( "mobs.txt" );
 		loadStatsFile( "potions.txt" );
-		loadStatsFile( "weapons.txt" );
 		
 		Configuration.tileSize = 16;
 		Configuration.zoom = 2.0;

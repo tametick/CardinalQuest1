@@ -399,23 +399,23 @@ class GameState extends CqState {
 
 		switch(chosenClass) {
 			case FIGHTER:
-				player.give(CqItemType.SHORT_SWORD);
-				player.give(CqItemType.RED_POTION);
-				player.give(CqItemType.RED_POTION);
-				player.give(CqItemType.PURPLE_POTION);
+				player.give("SHORT_SWORD");
+				player.give("RED_POTION");
+				player.give("RED_POTION");
+				player.give("PURPLE_POTION");
 				player.give(CqSpellType.BERSERK);
 			case WIZARD:
-				player.give(CqItemType.STAFF);
-				player.give(CqItemType.RED_POTION);
-				player.give(CqItemType.RED_POTION);
-				player.give(CqItemType.BLUE_POTION);
+				player.give("STAFF");
+				player.give("RED_POTION");
+				player.give("RED_POTION");
+				player.give("BLUE_POTION");
 				player.give(CqSpellType.FIREBALL);
 			case THIEF:
-				player.give(CqItemType.DAGGER);
-				player.give(CqItemType.RED_POTION);
-				player.give(CqItemType.RED_POTION);
-				player.give(CqItemType.YELLOW_POTION);
-				player.give(CqItemType.GREEN_POTION);
+				player.give("DAGGER");
+				player.give("RED_POTION");
+				player.give("RED_POTION");
+				player.give("YELLOW_POTION");
+				player.give("GREEN_POTION");
 				player.give(CqSpellType.SHADOW_WALK);
 		}
 
@@ -429,12 +429,12 @@ class GameState extends CqState {
 			player.give(CqSpellType.REVEAL_MAP);
 			player.give(CqSpellType.MAGIC_MIRROR);
 			
-			player.give(CqItemType.FULL_PLATE_MAIL);
-			player.give(CqItemType.CLAYMORE);
-			player.give(CqItemType.TUNDRA_BOOTS);
-			player.give(CqItemType.BROAD_SWORD);
-			player.give(CqItemType.GOLDEN_HELM);
-			player.give(CqItemType.GEMMED_RING);
+			player.give("FULL_PLATE_MAIL");
+			player.give("CLAYMORE");
+			player.give("TUNDRA_BOOTS");
+			player.give("BROAD_SWORD");
+			player.give("GOLDEN_HELM");
+			player.give("GEMMED_RING");
 			
 			if(Configuration.debugStartingLevel>0)
 				Registery.world.goToNextLevel(Configuration.debugStartingLevel);

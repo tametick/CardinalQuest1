@@ -242,27 +242,18 @@ class SpriteItems extends HxlSpriteSheet {
 class SpriteMonsters extends HxlSpriteSheet {
 	static var _spriteNames:Array<Array<String>>;
 	public static var instance = new SpriteMonsters();
-	public static var kobolds = ["kobold_spear", "kobold_knives", "kobold_mage"];
-	public static var werewolves = ["werewolf_gray", "werewolf_blue", "werewolf_purple"];
-	public static var bandits = ["bandit_long_swords", "bandit_short_swords", "bandit_single_long_sword", "bandit_knives"];
-	public static var minotaurs = ["minotaur", "minotaur_axe", "minotaur_sword"];
-	public static var succubi = ["succubus", "succubus_staff", "succubus_whip", "succubus_scepter", ];
-	public static var spiders = ["spider_yellow", "spider_red", "spider_gray", "spider_green"];
-	// todo: ape->golem
-	public static var apes = ["ape_blue", "ape_black", "ape_red","ape_white"];
-	public static var elementeals= ["elemental_green", "elemental_white", "elemental_red", "elemental_blue"];
 	public function new() {
 		
 		if (_spriteNames ==null)
 			_spriteNames = [
-				kobolds.concat(["kobold_blank"]),
-				werewolves.concat(["werewolf_blank"]),
-				bandits,
-				minotaurs.concat(["minotaur_blank"]),
-				succubi,
-				spiders,
-				apes,
-				elementeals,
+				["kobold_spear", "kobold_knives", "kobold_mage", "kobold_blank"],
+				["werewolf_gray", "werewolf_blue", "werewolf_purple", "werewolf_blank"],
+				["bandit_long_swords", "bandit_short_swords", "bandit_single_long_sword", "bandit_knives"],
+				["minotaur", "minotaur_axe", "minotaur_sword", "minotaur_blank"],
+				["succubus", "succubus_staff", "succubus_whip", "succubus_scepter"],
+				["spider_yellow", "spider_red", "spider_gray", "spider_green"],
+				["ape_blue", "ape_black", "ape_red","ape_white"],
+				["elemental_green", "elemental_white", "elemental_red", "elemental_blue"],
 			];
 		spriteNames = _spriteNames;
 		super(0);

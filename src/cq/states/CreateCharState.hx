@@ -4,6 +4,7 @@ import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;
 import cq.CqGraphicKey;
 import cq.ui.CqTextScroller;
+import data.StatsFile;
 import flash.events.Event;
 import haxel.GraphicCache;
 import haxel.HxlSpriteSheet;
@@ -46,7 +47,6 @@ class CreateCharState extends CqState {
 	public override function create() {
 		super.create();
 		
-		CqMobFactory.initDescriptions();
 		fadeTime = 0.5;
 		state = 0;
 		storyScreen = true;
@@ -156,8 +156,17 @@ class CreateCharState extends CqState {
 		txtDesc.setFormat(FontAnonymousPro.instance.fontName, 16, 0x000000, "left", 0);
 		add(txtDesc);
 		
-		txtDesc.text = Resources.descriptions.get("Fighter");
+		var descriptions:StatsFile = Resources.statsFiles.get( "descriptions.txt" );
+		var desc:StatsFileEntry = descriptions.getEntry( "Name", "Fighter" );
+		var descText:String = if (desc != null) desc.getField( "Description" ); else "???";
+		var descTextLines:Array<String> = descText.split( "\\n" );
+		descText = "";
+		for ( l in descTextLines ) {
+			descText += l + "\n";
+		}
 
+		txtDesc.text = descText;
+		
 		portrait = SpritePortraitPaper.getIcon(FIGHTER, 100 , 1.0);
 		portrait.x = 60;
 		portrait.y = 290;
@@ -219,22 +228,37 @@ class CreateCharState extends CqState {
 			gotoState(GameState);
 		
 		SoundEffectsManager.play(MenuItemMouseOver);
-		
+
+		var descriptions:StatsFile = Resources.statsFiles.get( "descriptions.txt" );
+
 		curClass = Target;
 		var targetX:Float = 0;
+		var descText:String = "";
 		if ( curClass == FIGHTER ) {
 			targetX = 105;
-			txtDesc.text = Resources.descriptions.get("Fighter");
+			var desc:StatsFileEntry = descriptions.getEntry( "Name", "Fighter" );
+			descText = if (desc != null) desc.getField( "Description" ); else "???";
 			portrait.setFrame(1);
 		} else if ( curClass == THIEF ) {
 			targetX = 255;
-			txtDesc.text = Resources.descriptions.get("Thief");
+			var desc:StatsFileEntry = descriptions.getEntry( "Name", "Thief" );
+			descText = if (desc != null) desc.getField( "Description" ); else "???";
 			portrait.setFrame(0);
 		} else if ( curClass == WIZARD ) {
 			targetX = 405;
-			txtDesc.text = Resources.descriptions.get("Wizard");
+			var desc:StatsFileEntry = descriptions.getEntry( "Name", "Wizard" );
+			descText = if (desc != null) desc.getField( "Description" ); else "???";
 			portrait.setFrame(2);
 		}
+		
+		var descTextLines:Array<String> = descText.split( "\\n" );
+		descText = "";
+		for ( l in descTextLines ) {
+			descText += l + "\n";
+		}
+
+		txtDesc.text = descText;
+		
 		Actuate.tween(selectBox, 0.25, { x: targetX }).ease(Cubic.easeOut);
 	}
 

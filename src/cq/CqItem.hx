@@ -39,123 +39,93 @@ class CqSpecialEffectValue {
 }
 
 class CqLootFactory {
-	static var inited = false;
-	static var itemArray:Array<String>;
-	static function initDescriptions() {
-		if (inited)
-			return;
+	static function completeItem( _item:CqItem, _entry:StatsFileEntry ) {
+		_item.name = _entry.getField( "Name" );
 		
-		if (itemArray == null)
-		{
-			itemArray = SpriteItems.potions;
+		var slot:String = _entry.getField( "Slot" );
+		_item.equipSlot =  Type.createEnum( CqEquipSlot, slot );
+
+		_item.damage = new Range(_entry.getField( "DamageMin" ),
+								 _entry.getField( "DamageMax" ));
+		
+		if ( _entry.getField( "Buff1" ) != "" )	{
+			_item.buffs.set(_entry.getField( "Buff1" ), _entry.getField( "Buff1Val" ));
 		}
-		if(Resources.descriptions==null)
-			Resources.descriptions = new Hash<String>();
-			Resources.descriptions.set("Healing Potion", "A small vial containing a fragrant, red salve. It restores life when applied.");
-			Resources.descriptions.set("Coca-leaf Cocktail","This mysterious beverage grants great speed when quaffed.");
-			Resources.descriptions.set("Elixir of the Elephant","This elixir temporarily protects the drinker's body with a thick hide.");
-			Resources.descriptions.set("Elixir of the Hawk","This elixir temporarily grants ultra-human eyesight and reflexes.");
-			Resources.descriptions.set("Elixir of the Lion","This elixir temporarily increases the drinker's strength immensely.");
-			Resources.descriptions.set("Boots of Escape", "These finely crafted leather boots allow the wearer to run with great speed.");
-			Resources.descriptions.set("Hermes' Sandals","These winged sandals are made of imperishable gold and allow the wearer to move as swiftly as any bird.");
-			Resources.descriptions.set("Leather Armor","This armor is made of leather that was boiled in wax for extra toughness.");
-			Resources.descriptions.set("Breastplate", "This iron breastplate offers excellent protection to vital organs without limiting mobility.");
-			Resources.descriptions.set("Ring of Wisdom","This small, silver ring imbues its wearer with uncanny wisdom.");
-			Resources.descriptions.set("Amulet of Enlightenment","Enlightenment permeates this simple looking amulet, granting its wearer the spirit of the gods.");
-			Resources.descriptions.set("Cap of Endurance", "This steel skullcap protects the head without restricting the wearer's ability to wear fashionable hats.");
-			Resources.descriptions.set("Helm of Hardiness", "This helm is crafted by dwarven smiths in the Roshaggon mines using an alloy jealously kept secret.");
-			Resources.descriptions.set("Gloves of Dexterity","The swiftness of these hand gloves allows their wearer to perform faster in battle.");
-			Resources.descriptions.set("Achilles' Bracer","This magical bronze bracer contains within it the great warrior's spirit.");
-			Resources.descriptions.set("Short Sword", "A one handed hilt attached to a thrusting blade approximately 60cm in length.");
-			Resources.descriptions.set("Long Sword","Long swords have long cruciform hilts with grips and double-edged blades over one meter long.");
-			Resources.descriptions.set("Staff","A sturdy shaft of hardwood with metal tips.");
-			Resources.descriptions.set("Dagger", "A double-edged blade used for stabbing or thrusting.");
-			Resources.descriptions.set("Axe", "A mighty axe, good for chopping both wood and flesh.");
-			Resources.descriptions.set("Hardened Battle Axe", "Crafted from the finest of metals, this axe can deal lethal slashing, cleaving and slicing blows.");
-			Resources.descriptions.set("Broad Claymore", "An ancient weapon. Many bards have sung of glorious victories won with it.");
-			Resources.descriptions.set("King's Golden Helm", "Made of pure gold, this helmet gives you unbreachable head protection and irresistible looks.");
-			Resources.descriptions.set("Beastly Mace", "A mighty huge and spiky mace made for fast swinging and powerful rips.");
-			Resources.descriptions.set("Twin Bladed Katana", "An elegant weapon for a more civilized age. It was crafted by a master blacksmith from the distant orient.");
-			Resources.descriptions.set("Full Helmet of Vitality", "Originally worn by dark priests, this helmet helps you tap into energies of the full moon.");
-			Resources.descriptions.set("Full Plate Armor", "A classic, well tested model of armor highly praised by knights from around the globe.");
-			Resources.descriptions.set("Rogues' Cloak of Swiftness", "Made from enchanted cloth, both light and durable. Wearing this feels like touching the sky.");
-			Resources.descriptions.set("Gauntlets of Sturdiness", "These decorated gauntlets are crafted skillfully and with attention to detail.");
-			Resources.descriptions.set("Supernatural Amulet", "Inscribed upon this amulet are magic runes, which yield many benefits for the wearer.");
-			Resources.descriptions.set("Ring of Rubies", "You sense a powerful force in this ring. It feels like life itself is flowing from it.");
-			Resources.descriptions.set("Tundra Lizard Boots", "Made for the toughest of conditions, these boots give you superior mobility on every terrain.");
-		
-		inited = true;
+		if ( _entry.getField( "Buff2" ) != "" )	{
+			_item.buffs.set(_entry.getField( "Buff2" ), _entry.getField( "Buff2Val" ));
+		}
 	}
 	
-	public static function newItem(X:Float, Y:Float, type:CqItemType):CqItem {
-		initDescriptions();
+	static function completePotion( _item:CqItem, _entry:StatsFileEntry ) {
+		_item.name = _entry.getField( "Name" );
+		_item.equipSlot = CqEquipSlot.POTION;
+		
+		_item.duration = _entry.getField( "Duration" );
+		_item.consumable = true;
+		_item.stackSizeMax = -1;			
 
-		var item = new CqItem(X, Y, type);
+		var buff:String = _entry.getField( "Buff" );
+		if ( buff != "" )	{
+			_item.buffs.set(buff, _entry.getField( "BuffVal" ));
+		}
+		
+		var effect:String = _entry.getField( "Effect" );
+		if ( effect != "" )	{
+			_item.specialEffects.add(new CqSpecialEffectValue(effect, _entry.getField( "EffectVal" )));
+		}
+	}
+	
+	public static function newItem(X:Float, Y:Float, id:String):CqItem {
+		var item = new CqItem(X, Y, id);
 		
 		var itemsFile:StatsFile = Resources.statsFiles.get( "items.txt" );
 		var potionsFile:StatsFile = Resources.statsFiles.get( "potions.txt" );
-		var weaponsFile:StatsFile = Resources.statsFiles.get( "weapons.txt" );
 
 		var entry:StatsFileEntry;
 		
-		if ( (entry = itemsFile.getEntry( "ID", type + "" )) != null ) {
-			// Reading from ITEMS.TXT.
-			item.name = entry.getField( "Name" );
-			
-			var slot:String = entry.getField( "Slot" );
-			item.equipSlot =  Type.createEnum( CqEquipSlot, slot );
-
-			if ( entry.getField( "Buff1" ) != "" )	{
-				item.buffs.set(entry.getField( "Buff1" ), entry.getField( "Buff1Val" ));
-			}
-			if ( entry.getField( "Buff2" ) != "" )	{
-				item.buffs.set(entry.getField( "Buff2" ), entry.getField( "Buff2Val" ));
-			}
-		}
-		else if ( (entry = weaponsFile.getEntry( "ID", type + "" )) != null )
+		if ( (entry = itemsFile.getEntry( "ID", id )) != null )
 		{
-			// Reading from WEAPONS.TXT.
-			item.name = entry.getField( "Name" );
-			
-			var slot:String = entry.getField( "Slot" );
-			item.equipSlot =  Type.createEnum( CqEquipSlot, slot );
-
-			item.damage = new Range(entry.getField( "DamageMin" ),
-									entry.getField( "DamageMax" ));
-			
-			if ( entry.getField( "Buff1" ) != "" )	{
-				item.buffs.set(entry.getField( "Buff1" ), entry.getField( "Buff1Val" ));
-			}
-			if ( entry.getField( "Buff2" ) != "" )	{
-				item.buffs.set(entry.getField( "Buff2" ), entry.getField( "Buff2Val" ));
-			}
+			// Reading from ITEMS.TXT.
+			completeItem( item, entry );
 		}
-		else if ( (entry = potionsFile.getEntry( "ID", type + "" )) != null )
+		else if ( (entry = potionsFile.getEntry( "ID", id )) != null )
 		{
 			// Reading from POTIONS.TXT.
-			item.name = entry.getField( "Name" );
-			item.equipSlot = CqEquipSlot.POTION;
-			
-			item.duration = entry.getField( "Duration" );
-			item.consumable = true;
-			item.stackSizeMax = -1;			
-
-			var buff:String = entry.getField( "Buff" );
-			if ( buff != "" )	{
-				item.buffs.set(buff, entry.getField( "BuffVal" ));
-			}
-			
-			var effect:String = entry.getField( "Effect" );
-			if ( effect != "" )	{
-				item.specialEffects.add(new CqSpecialEffectValue(effect, entry.getField( "EffectVal" )));
-			}
+			completePotion( item, entry );
 		}
 		else
 		{
-			throw "Item type not found in items.txt, weapons.txt or potions.txt.";
+			throw "Item type " + id + " not found in items.txt or potions.txt.";
 		}		
 
 		return item;
+	}
+	
+	public static function newRandomItem(X:Float, Y:Float, level:Int):CqItem {
+		// Search through items.txt for appropriate items.
+		var itemsFile:StatsFile = Resources.statsFiles.get( "items.txt" );
+		
+		var entry:StatsFileEntry = null;
+		var weightSoFar:Int = 0;
+		for ( m in itemsFile ) {
+			if ( m.getField( "LevelMin" ) <= level+1 && m.getField( "LevelMax" ) >= level+1 ) {
+				var weight = m.getField( "Weight" );
+				if ( Math.random() > (weightSoFar / (weightSoFar + weight)) ) {
+					entry = m;
+				}
+				weightSoFar += weight;
+			}
+		}
+
+		if ( entry != null ) {
+			var item = new CqItem(X, Y, entry.getField( "ID" ) );
+			
+			completeItem( item, entry );
+			
+			return item;
+		} else {
+			throw( "Failed to generate random item!" );
+		}
 	}
 	
 	public static function enchantItem(Item:CqItem, DungeonLevel:Int) {
@@ -282,9 +252,9 @@ class CqItem extends GameObjectImpl, implements Loot {
 		return isMagical || isSuperb || isWondrous;
 	}
 
-	public function new(X:Float, Y:Float, type:Dynamic) {
+	public function new(X:Float, Y:Float, type:String) {
 		super(X, Y);
-		var typeName:String = Type.enumConstructor(type).toLowerCase();
+		var typeName:String = type.toLowerCase();
 		zIndex = 1;
 		isSuperb = false;
 		isMagical = false;
@@ -456,7 +426,7 @@ class CqChest extends CqItem {
 	var onBust:List<Dynamic>;
 
 	public function new(X:Float, Y:Float) {
-		super(X, Y, CqItemType.CHEST);
+		super(X, Y, "CHEST");
 		onBust = new List();
 		visible = false;
 	}
@@ -476,96 +446,34 @@ class CqChest extends CqItem {
 		// chance of getting a potion
 		if (Math.random() < Configuration.dropPotionChance){
 			typeName = HxlUtil.getRandomElement(SpriteItems.potions).toUpperCase();
-		} else {
-			//set up equipment array. means filter out potions from the item enum.
-			if (equipment == null) {
-				var li:Array<String> 			= Type.getEnumConstructs(CqItemType);
-				var upperCasePotions			= Lambda.map(SpriteItems.potions, function (a:String):String { return a.toUpperCase(); });
-				var isNotPotion:String->Bool	= function (a:String):Bool { return (!Lambda.has(upperCasePotions, a)); }
-				CqChest.equipment				= Lambda.array(Lambda.filter(li, isNotPotion));
-				CqChest.equipment.shift();
-			}
+			var item = CqLootFactory.newItem(x, y, typeName);
 			
+			// add item to level
+			Registery.level.addLootToLevel(state, item);
+		} else {
+			// Get a random level-appropriate item.
 			if (Math.random() < Configuration.betterItemChance)
 				level = level + 1;
-				
-			var itemsPerLevelVariety:Int = 6;
-			var itemsPerLevelShift:Int = 3;
 			
-			var cap:Int = itemsPerLevelVariety+((level) * itemsPerLevelShift);		
-			if (cap >= equipment.length)//make last level items have same variety
-				cap = equipment.length-1;
-			var minimum:Int = cap - itemsPerLevelVariety;
-
-			var itemIndex:Int = minimum + Math.floor( Math.random() * cap);
-			//back to bounds, just in case
-			if (itemIndex >= equipment.length)
-				itemIndex = equipment.length - 1;
-			if (itemIndex < 0)
-				itemIndex = 0;
-				
-			typeName	= equipment[itemIndex];
-		}
-		
-		var item = CqLootFactory.newItem(x, y, Type.createEnum(CqItemType,  typeName));
-		
-		if (Math.random() < Configuration.EnchantItemChance) {
-			// 10% chance of magical item
-			if (Math.random() < Configuration.BetterEnchantItemChance){
-				// 1% chance of that item being out-of-depth
-				CqLootFactory.enchantItem(item, Registery.level.index + 1);
-			} else {
-				CqLootFactory.enchantItem(item, Registery.level.index);
+			var item = CqLootFactory.newRandomItem(x, y, level);
+			
+			if (Math.random() < Configuration.EnchantItemChance) {
+				// 10% chance of magical item
+				if (Math.random() < Configuration.BetterEnchantItemChance){
+					// 1% chance of that item being out-of-depth
+					CqLootFactory.enchantItem(item, Registery.level.index + 1);
+				} else {
+					CqLootFactory.enchantItem(item, Registery.level.index);
+				}
 			}
+			
+			// add item to level
+			Registery.level.addLootToLevel(state, item);
 		}
-		
-		// add item to level
-		Registery.level.addLootToLevel(state, item);
 		
 		// remove chest
-		Registery.level.removeLootFromLevel(state, this);
+		Registery.level.removeLootFromLevel(state, this);			
 	}
-}
-
-enum CqItemType {
-	CHEST;//chest constructor must be left on top.
-	
-	PURPLE_POTION;
-	GREEN_POTION;
-	BLUE_POTION;
-	YELLOW_POTION;
-	RED_POTION;
-	//
-	LEATHER_ARMOR;
-	DAGGER;
-	BOOTS;
-	GLOVE;
-	CAP;
-	SHORT_SWORD;
-	RING;
-	STAFF;
-	//
-	BRESTPLATE;
-	LONG_SWORD;
-	WINGED_SANDLES;
-	BRACELET;
-	HELM;
-	AMULET;
-	AXE;
-	//
-	CLOAK;
-	MACE;
-	BATTLE_AXE;
-	GAUNTLET;
-	FULL_HELM;
-	GEMMED_AMULET;
-	//
-	FULL_PLATE_MAIL;
-	CLAYMORE;
-	TUNDRA_BOOTS;
-	BROAD_SWORD;
-	GOLDEN_HELM;
-	GEMMED_RING;
 }
 
 enum CqEquipSlot {

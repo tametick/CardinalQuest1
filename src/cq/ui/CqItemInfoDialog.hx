@@ -3,6 +3,7 @@ package cq.ui;
 import cq.CqItem;
 import cq.CqResources;
 import cq.CqSpell;
+import data.StatsFile;
 
 import data.Configuration;
 import data.Resources;
@@ -63,7 +64,11 @@ class CqItemInfoDialog extends HxlDialog {
   public function setItem(Item:CqItem) {
     _item = Item;
     _itemName.text = Item.fullName;
-    _itemDesc.text = Resources.descriptions.get(Item.name);
+	
+	var descriptions:StatsFile = Resources.statsFiles.get( "descriptions.txt" );
+	var desc:StatsFileEntry = descriptions.getEntry( "Name", Item.name );
+	_itemDesc.text = if (desc != null) desc.getField( "Description" ); else "???";
+	
     _itemDesc.y = _itemName.y + _itemName.height - 2;
     if ( Std.is(Item, CqSpell) ) {
       spellSprite.setFrame(spellSheet.getSpriteIndex(Item.spriteIndex));
