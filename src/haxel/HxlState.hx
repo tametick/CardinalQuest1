@@ -14,6 +14,7 @@ import data.Configuration;
 
 class HxlState extends Sprite {
 	public static var musicOn:Bool;
+	public static var sfxOn:Bool;
 	public static var screen:HxlSprite;
 	public static var bgColor:Int;
 	public var defaultGroup:HxlGroup;

@@ -50,7 +50,6 @@ class MainMenuState extends CqState {
 	//public static var instance(getInstance, null):MainMenuState;
 	public static var message:String = "";
 	private static var _intance:MainMenuState;
-	private static var sfxOn:Bool;
 	var fadeTimer:HxlTimer;
 	// var fadeTime:Float;
 	var titleText:HxlSprite;
@@ -78,8 +77,7 @@ class MainMenuState extends CqState {
 	public function new()
 	{
 		super();
-		HxlState.musicOn = true;
-		sfxOn = true;
+		
 		stillSplashing = false;
 		buttonsAreUp = false;
 		finishedAddingGuiElements = false;
@@ -220,9 +218,6 @@ class MainMenuState extends CqState {
 		buttonsAreUp = true;
 		finishedAddingGuiElements = false;
 
-		if ( !Configuration.startWithMusic )
-			toggleMusic();
-
 		tglMusicIcon = new HxlSprite(45,0);
 		tglMusicIcon.loadGraphic(SpriteSoundToggle, true, false, 48, 48,false,0.5,0.5);
 		tglMusicIcon.setFrame(1);
@@ -232,9 +227,7 @@ class MainMenuState extends CqState {
 		btnToggleMusic.add(tglMusicIcon);
 		musicText = new HxlText(0, 3, 100, "Music", true, FontAnonymousPro.instance.fontName, 14);
 		btnToggleMusic.loadText(musicText);
-		btnToggleMusic.setOn(true);
-		if (!HxlState.musicOn)
-			toggleMusic();
+		setMusic(HxlState.musicOn);
 		add(btnToggleMusic);
 
 		tglSFXIcon = new HxlSprite(45,0);
@@ -245,14 +238,8 @@ class MainMenuState extends CqState {
 		btnToggleSFX.add(tglSFXIcon);
 		sfxText = new HxlText(0, 3, 100, "Sound", true, FontAnonymousPro.instance.fontName, 14);
 		btnToggleSFX.loadText(sfxText);
-		btnToggleSFX.setOn(true);
-		if (!sfxOn)
-			toggleSFX();
+		setSFX(HxlState.sfxOn);
 		add(btnToggleSFX);
-
-		if ( !Configuration.startWithSound )
-			toggleSFX();
-
 
 		var copyright = new HxlText(375, 459, Configuration.app_width - 375 - 123, "Copyright 2011", true, FontAnonymousPro.instance.fontName, 18);
 		add(copyright);
@@ -381,12 +368,11 @@ class MainMenuState extends CqState {
 		}
 	}
 
-	private function toggleMusic():Void
+	private function setMusic(_on:Bool):Void
 	{
-		btnToggleMusic.setOn(!btnToggleMusic.getOn());
-		var on:Bool = btnToggleMusic.getOn();
-		HxlState.musicOn = on;
-		if (on)	{
+		btnToggleMusic.setOn(_on);
+		HxlState.musicOn = _on;
+		if (_on)	{
 			MusicManager.resume();
 			tglMusicIcon.setFrame(1);
 		} else {
@@ -394,14 +380,25 @@ class MainMenuState extends CqState {
 			tglMusicIcon.setFrame(0);
 		}
 	}
-	private function toggleSFX():Void
+	
+	private function setSFX(_on:Bool):Void
 	{
-		btnToggleSFX.setOn(!btnToggleSFX.getOn());
-		SoundEffectsManager.enabled = sfxOn = btnToggleSFX.getOn();
-		tglSFXIcon.setFrame((sfxOn?1:0));
-
+		btnToggleSFX.setOn(_on);
+		HxlState.sfxOn = _on;
+		SoundEffectsManager.enabled = _on;
+		tglSFXIcon.setFrame((_on?1:0));
 	}
 
+	private function toggleMusic():Void
+	{
+		setMusic(!btnToggleMusic.getOn());
+	}
+
+	private function toggleSFX():Void
+	{
+		setSFX(!btnToggleSFX.getOn());
+	}
+	
 	var TargetState:Class<HxlState>;
 	function changeState(TargetState:Class<HxlState>) {
 		if (btnClicked)

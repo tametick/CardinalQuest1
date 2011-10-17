@@ -12,7 +12,9 @@ import haxel.HxlGraphics;
 import haxel.HxlState;
 import haxel.HxlText;
 import data.Configuration;
+import data.MusicManager;
 import data.Registery;
+import data.SoundEffectsManager;
 
 import flash.Lib;
 
@@ -61,6 +63,19 @@ class Main extends HxlGame {
 		//Just opening doors seems to add 1 or 2 megs..
 		if (Configuration.debug) {
 			SWFProfiler.init( this );
+		}
+
+		// Initialise sound/music.
+		HxlState.musicOn = Configuration.startWithMusic;
+		if ( !HxlState.musicOn )
+		{
+			MusicManager.pause();
+		}
+		
+		HxlState.sfxOn = Configuration.startWithSound;
+		if ( !HxlState.sfxOn )
+		{
+			SoundEffectsManager.enabled = false;
 		}
 		
 		Configuration.tileSize = 16;
