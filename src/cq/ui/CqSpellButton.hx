@@ -194,8 +194,8 @@ class CqSpellButton extends HxlDialog {
 					return;
 
 				GameUI.setTargeting(false);
-				cast(HxlGraphics.state, GameState).passTurn();
 				Registery.player.use(spellObj.item, null);
+				cast(HxlGraphics.state, GameState).passTurn();
 				spell.spiritPoints = 0;
 				GameUI.instance.updateCharge(this);
 				SoundEffectsManager.play(SpellCast);
