@@ -83,12 +83,6 @@ class HxlTilemap extends HxlObject {
 		if (tmpRect == null)
 			tmpRect = new Rectangle(0, 0, _tileWidth, _tileHeight);
 
-		if (tmpPoint == null)
-			tmpPoint = new Point(0, 0);
-			
-		if (tmpBitmap == null)
-			tmpBitmap = new HxlTilemapBMPData(_tileWidth, _tileHeight, true, 0x00ffffff);
-			
 		cachedTilemapBuffer = null;
 	}
 
@@ -215,11 +209,6 @@ class HxlTilemap extends HxlObject {
 		}
 		_tiles = null;
 		
-		if (tmpBitmap != null){
-			tmpBitmap.dispose();
-			tmpBitmap = null;				
-		}
-		
 		if(_pixels!=null) {
 			_pixels.dispose();
 			_pixels = null;		
@@ -231,9 +220,7 @@ class HxlTilemap extends HxlObject {
 	/**
 	 * Internal function that actually renders the tilemap.  Called by render().
      */
-	static var tmpBitmap:BitmapData;
 	static var tmpRect:Rectangle;
-	static var tmpPoint:Point;
 	static var originPoint:Point = new Point(0, 0);
 
     public override function render() {
@@ -259,30 +246,28 @@ class HxlTilemap extends HxlObject {
 				tile = _tiles[r][c];
 				
 				if ( tile.visible && tile.dirty ) {
-//					var name = (tile.dataNum - startingIndex) +"_" + tile._ct;
-					tmpBitmap = tileBMPs[(tile.getDataNum()-startingIndex)].clone();
+					tmpRect = tileBMPs[0].rect;
+					cachedTilemapBuffer.copyPixels(tileBMPs[(tile.getDataNum()-startingIndex)], tmpRect, _flashPoint, null, null, false);
 					
 					for ( d in tile.decorationIndices ) {
-						var dx:Int = Std.int( d % (decorations.width / tmpBitmap.width) );
-						var dy:Int = HxlUtil.floor( d / (decorations.width / tmpBitmap.width) );
+						var dx:Int = Std.int( d % (decorations.width / _tileWidth) );
+						var dy:Int = HxlUtil.floor( d / (decorations.width / _tileWidth) );
 						
-						tmpRect.left = dx * tmpBitmap.width;
-						tmpRect.right = tmpRect.left + tmpBitmap.width;
-						tmpRect.top = dy * tmpBitmap.height;
-						tmpRect.bottom = tmpRect.top + tmpBitmap.height;
-						tmpBitmap.copyPixels( decorations, tmpRect, tmpPoint, null, null, true );
+						tmpRect.left = dx * _tileWidth;
+						tmpRect.right = tmpRect.left + _tileWidth;
+						tmpRect.top = dy * _tileHeight;
+						tmpRect.bottom = tmpRect.top + _tileHeight;
+						cachedTilemapBuffer.copyPixels( decorations, tmpRect, _flashPoint, null, null, true );
 					}
 				
-					tmpRect = tmpBitmap.rect;
+					tmpRect.left = _flashPoint.x;
+					tmpRect.top = _flashPoint.y;
+					tmpRect.right = _flashPoint.x + _tileWidth;
+					tmpRect.bottom = _flashPoint.y + _tileHeight;
 					
 					if (tile._ct != null){
-						tmpBitmap.colorTransform( tmpRect,  tile._ct);
+						cachedTilemapBuffer.colorTransform( tmpRect,  tile._ct);
 					}
-					
-					cachedTilemapBuffer.copyPixels(tmpBitmap, tmpRect, _flashPoint, null, null, false);
-					tmpBitmap.dispose();
-					tmpBitmap = null;
-//					name = null;
 
 					tile.dirty = false;
 				}
