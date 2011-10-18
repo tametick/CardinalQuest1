@@ -133,7 +133,7 @@ class CqMapDialog extends HxlSlidingDialog {
 					var scheme = schemes[scheme_number];
 					
 					if (level.isBlockingMovement(X, Y)) {
-						if ( HxlUtil.contains(SpriteTiles.doors.iterator(), tiles[Y][X].dataNum) ) { 
+						if ( HxlUtil.contains(SpriteTiles.doors.iterator(), tiles[Y][X].getDataNum()) ) { 
 							Color = scheme.door;
 						} else {
 							Color = scheme.wall;
@@ -147,7 +147,7 @@ class CqMapDialog extends HxlSlidingDialog {
 					graph.endFill();
 					
 					// render stairs and loot:
-					if ( HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tiles[Y][X].dataNum) ) {
+					if ( HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tiles[Y][X].getDataNum()) ) {
 						var dx:Float = X * cellSize.x;
 						var dy:Float = Y * cellSize.y;
 						

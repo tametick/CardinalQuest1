@@ -110,7 +110,7 @@ class GameState extends CqState {
 
 			var currentTile = cast(Registery.level.getTile(Std.int(Registery.player.tilePos.x), Std.int(Registery.player.tilePos.y)), CqTile);
 			//stairs popup
-			if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), currentTile.dataNum)) {
+			if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), currentTile.getDataNum())) {
 				Registery.player.popup.mouseBound = false;
 				Registery.player.popup.setText("Click to go downstairs\n[hotkey enter]");
 			} else {
@@ -605,7 +605,7 @@ class GameState extends CqState {
 				isPlayerActing = true; // maybe?
 			}
 			return true;
-		} else if (HxlUtil.contains(SpriteTiles.doors.iterator(), tile.dataNum)) {
+		} else if (HxlUtil.contains(SpriteTiles.doors.iterator(), tile.getDataNum())) {
 			// would be great to tell player to open the door, wouldn't it just?
 			openDoor(tile);
 			resumeActingTime = Timer.stamp() + player.moveSpeed;
@@ -616,7 +616,7 @@ class GameState extends CqState {
 	}
 
 	private function tileBlocksPlayer(tile:CqTile):Bool {
-		return tile == null || (tile.isBlockingMovement() && !(HxlUtil.contains(SpriteTiles.doors.iterator(), tile.dataNum)));
+		return tile == null || (tile.isBlockingMovement() && !(HxlUtil.contains(SpriteTiles.doors.iterator(), tile.getDataNum())));
 	}
 
 	private function pickBestSlide(facing:HxlPoint):HxlPoint {
@@ -809,7 +809,7 @@ class GameState extends CqState {
 				var item = cast(tile.loots[tile.loots.length - 1], CqItem);
 				player.pickup(this, item);
 				item = null;
-			} else if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tile.dataNum)) {
+			} else if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tile.getDataNum())) {
 				// these are stairs!  time to descend -- but only if the key was JUST pressed
 
 				var confirmed = true;

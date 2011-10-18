@@ -9,6 +9,8 @@ import data.Resources;
 import flash.display.Bitmap;
 import com.baseoneonline.haxe.astar.PathMap;
 import flash.system.System;
+import haxel.GraphicCache;
+import haxel.HxlSpriteSheet;
 
 import haxel.HxlPoint;
 import haxel.HxlTilemap;
@@ -200,9 +202,10 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		lootPos = null;
 		lootTile  = null;
 	}
+	
 
-	override public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {
-		var map = super.loadMap(MapData, TileGraphic, TileWidth, TileHeight, ScaleX, ScaleY);
+	override public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, Decorations:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {
+		var map = super.loadMap(MapData, TileGraphic, Decorations, TileWidth, TileHeight, ScaleX, ScaleY);
 
 		for (y in 0...map.heightInTiles) {
 			for (x in 0...map.widthInTiles) {
@@ -227,10 +230,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		for (y in 0...heightInTiles) {
 			for (x in 0...widthInTiles) {
 				var t:Tile = cast(_tiles[y][x], Tile);
-				for(dec in t.decorations) {
-					state.remove(dec);
-				}
-				t.decorations = null;
+				t.decorationIndices = new Array<Int>();
 			}
 		}
 	}
@@ -263,8 +263,6 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 						cast(loot,HxlSprite).visible = true;
 					for (actor in tile.actors)
 						cast(actor,HxlSprite).visible = true;
-					for (decoration in tile.decorations)
-						cast(decoration,HxlSprite).visible = true;
 				}
 			}
 		}
@@ -294,7 +292,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				t.visibility = Visibility.SENSED;
 			}
 
-			if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), t.dataNum)) {
+			if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), t.getDataNum())) {
 				map.foundStairs(newvis == Visibility.SENSED);
 			}
 		}
@@ -405,10 +403,6 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 						}
 						Ttile.colorTo(normColor, actor.moveSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
-						for (decoration in Ttile.decorations){
-							//decoration.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
-							decoration.colorTo(normColor, actor.moveSpeed);
-						}
 					case Visibility.SEEN, Visibility.SENSED:
 						tile.visible = true;
 
@@ -428,9 +422,6 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 
 						Ttile.colorTo(seenTween, actor.moveSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
-						for (decoration in Ttile.decorations)
-							//decoration.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
-							decoration.colorTo(seenTween, actor.moveSpeed);
 
 					case Visibility.UNSEEN:
 						for (actor in Ttile.actors) {
@@ -512,10 +503,6 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 						}
 						Ttile.colorTo(normColor, tweenSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
-						for (decoration in Ttile.decorations){
-							//decoration.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
-							decoration.colorTo(normColor, tweenSpeed);
-						}
 					case Visibility.SEEN:
 						tile.visible = true;
 
@@ -526,9 +513,6 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 
 						Ttile.colorTo(seenTween, tweenSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
-						for (decoration in Ttile.decorations)
-							//decoration.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
-							decoration.colorTo(seenTween, tweenSpeed);
 
 					case Visibility.SENSED:
 						tile.visible = true;
@@ -540,10 +524,6 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 
 						Ttile.colorTo(seenTween, tweenSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
-						for (decoration in Ttile.decorations)
-							//decoration.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
-							decoration.colorTo(seenTween, tweenSpeed);
-
 
 					case Visibility.UNSEEN:
 				}

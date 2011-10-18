@@ -15,7 +15,6 @@ import world.Mob;
 import world.Loot;
 import world.Tile;
 import world.GameObject;
-import world.Decoration;
 
 import haxel.HxlSprite;
 import haxel.HxlPoint;
