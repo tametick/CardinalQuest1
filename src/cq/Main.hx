@@ -21,7 +21,6 @@ import data.SoundEffectsManager;
 
 import flash.Lib;
 
-import com.remixtechnology.SWFProfiler;
 import playtomic.Playtomic;
 
 #if flash
@@ -60,13 +59,6 @@ class Main extends HxlGame {
 		
 		Configuration.app_width = 640;//Lib.current.stage.stageWidth;
 		Configuration.app_height = 480;//Lib.current.stage.stageHeight;
-		
-		//This is so cool
-		//The very good news is that changing level does not change much
-		//Just opening doors seems to add 1 or 2 megs..
-		if (Configuration.debug) {
-			SWFProfiler.init( this );
-		}
 
 		// Initialise sound/music.
 		HxlState.musicOn = Configuration.startWithMusic;
@@ -83,13 +75,16 @@ class Main extends HxlGame {
 		
 		// Load data files (if applicable).
 		StatsFileEmbed.loadEmbeddedFiles();
-		StatsFile.loadFile( "classes.txt" );
-		StatsFile.loadFile( "descriptions.txt" );
-		StatsFile.loadFile( "items.txt" );
-		StatsFile.loadFile( "mobs.txt" );
-		StatsFile.loadFile( "potions.txt" );
-		StatsFile.loadFile( "spells.txt" );
-		StatsFile.loadFile( "spellDamage.txt" );
+		
+		if( !Configuration.mobile ) {
+			StatsFile.loadFile( "classes.txt" );
+			StatsFile.loadFile( "descriptions.txt" );
+			StatsFile.loadFile( "items.txt" );
+			StatsFile.loadFile( "mobs.txt" );
+			StatsFile.loadFile( "potions.txt" );
+			StatsFile.loadFile( "spells.txt" );
+			StatsFile.loadFile( "spellDamage.txt" );
+		}
 		
 		Configuration.tileSize = 16;
 		Configuration.zoom = 2.0;

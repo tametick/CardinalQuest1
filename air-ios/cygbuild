@@ -44,4 +44,4 @@ echo about to call adt
 echo displaying size
 ls -alh ./bin/*.ipa
 
-mpg123 DoorPounding.mp3
+mpg123 -q DoorPounding.mp3
