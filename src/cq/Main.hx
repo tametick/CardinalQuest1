@@ -55,13 +55,6 @@ class Main extends HxlGame {
 		
 	}
 	
-	function loadStatsFile( _filename:String ) {
-		var file:StatsFile = StatsFile.loadFile( _filename );
-		if ( file != null ) {
-			Resources.statsFiles.set( _filename, file );
-		}
-	}
-	
 	public function new() {
 		var _mochiads_game_id:String = "f7594e4c18588dca";
 		
@@ -90,13 +83,13 @@ class Main extends HxlGame {
 		
 		// Load data files (if applicable).
 		StatsFileEmbed.loadEmbeddedFiles();
-		loadStatsFile( "classes.txt" );
-		loadStatsFile( "descriptions.txt" );
-		loadStatsFile( "items.txt" );
-		loadStatsFile( "mobs.txt" );
-		loadStatsFile( "potions.txt" );
-		loadStatsFile( "spells.txt" );
-		loadStatsFile( "spellDamage.txt" );
+		StatsFile.loadFile( "classes.txt" );
+		StatsFile.loadFile( "descriptions.txt" );
+		StatsFile.loadFile( "items.txt" );
+		StatsFile.loadFile( "mobs.txt" );
+		StatsFile.loadFile( "potions.txt" );
+		StatsFile.loadFile( "spells.txt" );
+		StatsFile.loadFile( "spellDamage.txt" );
 		
 		Configuration.tileSize = 16;
 		Configuration.zoom = 2.0;

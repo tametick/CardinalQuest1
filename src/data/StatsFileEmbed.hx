@@ -19,7 +19,7 @@ Field String Item6
 FIGHTER Fighter fighter   1 SpriteKnightEntry    5   2   3   1   4 SHORT_SWORD BERSERK     RED_POTION RED_POTION PURPLE_POTION
 WIZARD  Wizard  wizard    2 SpriteWizardEntry    2   2   3   5   3 STAFF       FIREBALL    RED_POTION RED_POTION BLUE_POTION
 THIEF   Thief   thief     0 SpriteThiefEntry     3   3   5   3   2 DAGGER      SHADOW_WALK RED_POTION RED_POTION YELLOW_POTION GREEN_POTION
-";		embedFile = StatsFile.loadFromString( embedText );		if ( embedFile != null ) { 			Resources.statsFiles.set( "classes.txt", embedFile );		}		embedText = "Field String Name
+";		embedFile = StatsFile.loadFromString( "classes.txt", embedText );		embedText = "Field String Name
 Field String Description
 
 ; Classes.
@@ -98,7 +98,7 @@ Field String Description
 [Teleport]         [Transports you to a specific location of your choice.]
 [Reveal Map]       [Reveals the layout of the current floor.]
 [Heal]             [Restores health and vigor.]
-";		embedFile = StatsFile.loadFromString( embedText );		if ( embedFile != null ) { 			Resources.statsFiles.set( "descriptions.txt", embedFile );		}		embedText = "Field String ID
+";		embedFile = StatsFile.loadFromString( "descriptions.txt", embedText );		embedText = "Field String ID
 Field String Sprite
 Field String Name
 Field String Slot
@@ -150,7 +150,7 @@ BATTLE_AXE      battle_axe      [Hardened Battle Axe]        WEAPON    5   6 100
 MACE            mace            [Beastly Mace]               WEAPON    5   6 100    4   11
 CLAYMORE        claymore        [Broad Claymore]             WEAPON    7  99 100    6   10 speed   -1
 BROAD_SWORD     broad_sword     [Twin Bladed Katana]         WEAPON    8  99 100    5   12 defense -2 speed    2
-";		embedFile = StatsFile.loadFromString( embedText );		if ( embedFile != null ) { 			Resources.statsFiles.set( "items.txt", embedFile );		}		embedText = "Field String Class
+";		embedFile = StatsFile.loadFromString( "items.txt", embedText );		embedText = "Field String Class
 Field Int Weight
 Field String Sprite
 Field String Name
@@ -210,7 +210,7 @@ Werewolf      1 werewolf_purple          [Werewolf]           5   5   8   4  8 3
 Minotaur      1 minotaur                 [Minotaur]           7   4   7   4 24 48 12 32 950 BERSERK
 Minotaur      1 minotaur_axe             [Minotaur]           7   4   7   4 24 48 12 32 950 BERSERK
 Minotaur      1 minotaur_sword           [Minotaur]           7   4   7   4 24 48 12 32 950 BERSERK
-";		embedFile = StatsFile.loadFromString( embedText );		if ( embedFile != null ) { 			Resources.statsFiles.set( "mobs.txt", embedFile );		}		embedText = "Field String ID
+";		embedFile = StatsFile.loadFromString( "mobs.txt", embedText );		embedText = "Field String ID
 Field String Sprite
 Field String Name
 Field Int Duration
@@ -225,7 +225,7 @@ PURPLE_POTION purple_potion [Elixir of the Lion]     120      []         0 [dama
 BLUE_POTION   blue_potion   [Elixir of the Elephant] 120      defense    3
 YELLOW_POTION yellow_potion [Coca-leaf Cocktail]     120      speed      3
 RED_POTION    red_potion    [Healing Potion]         0        []         0 heal               full
-";		embedFile = StatsFile.loadFromString( embedText );		if ( embedFile != null ) { 			Resources.statsFiles.set( "potions.txt", embedFile );		}		embedText = "Field String ID
+";		embedFile = StatsFile.loadFromString( "potions.txt", embedText );		embedText = "Field String ID
 Field Int Level
 Field Int DamageMin
 Field Int DamageMax
@@ -239,7 +239,7 @@ FIREBALL    4  3  8
 FIREBALL    5  3  9
 FIREBALL    6  4 10
 FIREBALL    7  4 12
-FIREBALL    8  5 14";		embedFile = StatsFile.loadFromString( embedText );		if ( embedFile != null ) { 			Resources.statsFiles.set( "spellDamage.txt", embedFile );		}		embedText = "Field String ID
+FIREBALL    8  5 14";		embedFile = StatsFile.loadFromString( "spellDamage.txt", embedText );		embedText = "Field String ID
 Field String Sprite
 Field String Name
 Field Int Target
@@ -284,4 +284,4 @@ FEAR             fear             [Fear]              1 180 spirit  960 [] 0 [] 
 ; ID             Sprite           Name               Tr Dur Stat   Pts. (B1 B1V B2 B2V Ef EfV)
 MAGIC_MIRROR     magic_mirror     [Magic Mirror]      2 180 spirit 1440 [] 0 [] 0 magic_mirror
 TELEPORT         teleport         [Teleport]          2   0 spirit 1440 [] 0 [] 0 teleport
-";		embedFile = StatsFile.loadFromString( embedText );		if ( embedFile != null ) { 			Resources.statsFiles.set( "spells.txt", embedFile );		}	}}
+";		embedFile = StatsFile.loadFromString( "spells.txt", embedText );	}}

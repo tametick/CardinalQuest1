@@ -2,6 +2,7 @@ package data;
 
 import flash.errors.SecurityError;
 import flash.events.Event;
+import flash.events.IOErrorEvent;
 import flash.net.URLLoader;
 import flash.net.URLRequest;
 
@@ -54,36 +55,41 @@ class StatsFileEntry
 
 class StatsFile 
 {
+	var m_filename : String;
 	var m_loaded : Bool;
 	
 	var m_fieldDescs : Array<StatsFileFieldDesc>;
 	var m_entries : List<StatsFileEntry>;
 	
-	public static function loadFromString( embedText:String ) : StatsFile {
-		var statsFile:StatsFile = new StatsFile();
+	public static function loadFromString( _filename:String, embedText:String ) : StatsFile {
+		var statsFile:StatsFile = new StatsFile( _filename );
 		
 		statsFile.buildFromText( embedText );
+		Resources.statsFiles.set( _filename, statsFile );
 		
 		return statsFile;
 	}
 	
 	public static function loadFile( _filename:String ) : StatsFile {
-		var statsFile:StatsFile = new StatsFile();
+		var statsFile:StatsFile = new StatsFile( _filename );
 		
 		var loader:URLLoader = new URLLoader();
 		loader.addEventListener(Event.COMPLETE, statsFile.onLoaded);
+		loader.addEventListener(IOErrorEvent.IO_ERROR, statsFile.onFail);
 		var request:URLRequest = new URLRequest(_filename);
 		try { 
 			loader.load(request);
 		} catch (error:SecurityError) { 
 			loader.removeEventListener(Event.COMPLETE, statsFile.onLoaded);
+			loader.removeEventListener(IOErrorEvent.IO_ERROR, statsFile.onFail);
 			return null;
 		} 
 
 		return statsFile;
 	}
 	
-	private function new() {
+	private function new( _filename:String ) {
+		m_filename = _filename;
 		m_loaded = false;
 		
 		m_fieldDescs = new Array<StatsFileFieldDesc>();
@@ -170,6 +176,18 @@ class StatsFile
 		var fileText:String = e.target.data;
 		
 		buildFromText( fileText );
+		
+		// Register.
+		Resources.statsFiles.set( m_filename, this );
+		
+		loader.removeEventListener(Event.COMPLETE, this.onLoaded);
+		loader.removeEventListener(IOErrorEvent.IO_ERROR, this.onFail);
+	}
+	
+	function onFail( e:Event) {
+		var loader:URLLoader = e.target;
+		loader.removeEventListener(Event.COMPLETE, this.onLoaded);
+		loader.removeEventListener(IOErrorEvent.IO_ERROR, this.onFail);
 	}
 	
 	public function getEntry( _keyField:String, _key:Dynamic ) : StatsFileEntry {

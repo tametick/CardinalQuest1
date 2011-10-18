@@ -28,12 +28,9 @@ char *fileEmbed1 =
 "		embedText = \"";
 
 char *fileEmbed2 = "\";\r\
-		embedFile = StatsFile.loadFromString( embedText );\r\
-		if ( embedFile != null ) { \r\
-			Resources.statsFiles.set( \"";
+		embedFile = StatsFile.loadFromString( \"";
 
-char *fileEmbed3 = "\", embedFile );\r\
-		}\r\
+char *fileEmbed3 = "\", embedText );\r\
 \r\
 ";
 
