@@ -624,7 +624,7 @@ class GameState extends CqState {
 		var right_ahead:HxlPoint = new HxlPoint(0, 0);
 
 		// go!
-		while ((left_ok || right_ok) && !(left_wins || right_wins)) {
+		while ((left_ok || right_ok) && !((left_wins && !left_back) || (right_wins && !right_back))) {
 			if (left_ok) {
 				left_total.x = left_total.x + left.x;
 				left_total.y = left_total.y + left.y;
