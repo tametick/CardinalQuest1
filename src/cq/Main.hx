@@ -90,6 +90,7 @@ class Main extends HxlGame {
 		
 		// Load data files (if applicable).
 		StatsFileEmbed.loadEmbeddedFiles();
+		loadStatsFile( "classes.txt" );
 		loadStatsFile( "descriptions.txt" );
 		loadStatsFile( "items.txt" );
 		loadStatsFile( "mobs.txt" );

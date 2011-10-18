@@ -2,6 +2,7 @@ package cq;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import cq.states.GameOverState;
+import data.StatsFile;
 import flash.display.BitmapData;
 import haxe.Timer;
 import haxel.HxlSprite;
@@ -1003,7 +1004,10 @@ class CqPlayer extends CqActor, implements Player {
 	
 	static var sprites = SpritePlayer.instance;
 	
-	public var playerClass:CqClass;
+	public var playerClassID:String;
+	public var playerClassName:String;
+	public var playerClassSprite:String;
+	
 	public var inventory:Array<CqItem>;
 	
 	public var infoViewHealthBar:CqHealthBar;
@@ -1064,36 +1068,31 @@ class CqPlayer extends CqActor, implements Player {
 		onPickup.clear();
 	}
 	
-	public function new(PlayerClass:CqClass, ?X:Float = -1, ?Y:Float = -1) {
-		playerClass = PlayerClass;
-		switch(playerClass) {
-			case FIGHTER:
-				attack = 5;
-				defense = 2;
-				speed = 3;
-				spirit = 1;
-				vitality = 4;
-				damage = new Range(1, 1);
-				//Let Kongregate know, for now we only deal with "Normal" mode
-				Registery.getKong().SubmitStat( Registery.KONG_STARTFIGHTER , 1 );
-			case WIZARD:
-				attack = 2;
-				defense = 2;
-				speed = 3;
-				spirit = 5;
-				vitality = 3;
-				damage = new Range(1, 1);
-				//Let Kongregate know, for now we only deal with "Normal" mode
-				Registery.getKong().SubmitStat( Registery.KONG_STARTWIZARD , 1 );				
-			case THIEF:
-				attack = 3;
-				defense = 3;
-				speed = 5;
-				spirit = 3;
-				vitality = 2;
-				damage = new Range(1, 1);
-				//Let Kongregate know, for now we only deal with "Normal" mode
-				Registery.getKong().SubmitStat( Registery.KONG_STARTTHIEF , 1 );					
+	public function new(PlayerClass:String, ?X:Float = -1, ?Y:Float = -1) {
+		playerClassID = PlayerClass;
+		
+		var classes:StatsFile = Resources.statsFiles.get( "classes.txt" );
+		var classEntry:StatsFileEntry = classes.getEntry( "ID", PlayerClass );
+		
+		if ( classEntry != null ) {
+			playerClassName = classEntry.getField( "Name" );
+			playerClassSprite = classEntry.getField( "Sprite" );
+			
+			attack = classEntry.getField( "Attack" );
+			defense = classEntry.getField( "Defense" );
+			speed = classEntry.getField( "Speed" );
+			spirit = classEntry.getField( "Spirit" );
+			vitality = classEntry.getField( "Vitality" );
+			damage = new Range(1, 1);
+		} else {
+			throw( "Unknown class." );
+		}
+		
+		//Let Kongregate know, for now we only deal with "Normal" mode
+		switch(playerClassID) {
+			case "FIGHTER": Registery.getKong().SubmitStat( Registery.KONG_STARTFIGHTER , 1 );
+			case "WIZARD": Registery.getKong().SubmitStat( Registery.KONG_STARTWIZARD , 1 );				
+			case "THIEF": Registery.getKong().SubmitStat( Registery.KONG_STARTTHIEF , 1 );					
 		}
 		if (Configuration.debug) {
 /*			vitality = 500;
@@ -1111,12 +1110,12 @@ class CqPlayer extends CqActor, implements Player {
 		maxHp = vitality * 2;
 		hp = maxHp;
 
-		addAnimation("idle", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase())], 0 );
-		addAnimation("idle_dagger", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase() + "_dagger")], 0 );
-		addAnimation("idle_short_sword", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase() + "_short_sword")], 0 );
-		addAnimation("idle_long_sword", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase() + "_long_sword")], 0 );
-		addAnimation("idle_staff", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase() + "_staff")], 0 );
-		addAnimation("idle_axe", [sprites.getSpriteIndex(Type.enumConstructor(playerClass).toLowerCase() + "_axe")], 0 );
+		addAnimation("idle", [sprites.getSpriteIndex(playerClassSprite)], 0 );
+		addAnimation("idle_dagger", [sprites.getSpriteIndex(playerClassSprite + "_dagger")], 0 );
+		addAnimation("idle_short_sword", [sprites.getSpriteIndex(playerClassSprite + "_short_sword")], 0 );
+		addAnimation("idle_long_sword", [sprites.getSpriteIndex(playerClassSprite + "_long_sword")], 0 );
+		addAnimation("idle_staff", [sprites.getSpriteIndex(playerClassSprite + "_staff")], 0 );
+		addAnimation("idle_axe", [sprites.getSpriteIndex(playerClassSprite + "_axe")], 0 );
 		
 		xp = 0;
 		level = 1;
@@ -1435,7 +1434,7 @@ class CqMob extends CqActor, implements Mob {
 		
 		var anim = new Array();
 		if(player)
-			anim.push(SpritePlayer.instance.getSpriteIndex(Type.enumConstructor(Registery.player.playerClass).toLowerCase()));
+			anim.push(SpritePlayer.instance.getSpriteIndex(Registery.player.playerClassSprite));
 		else
 			anim.push(sprites.getSpriteIndex(typeName));
 			
@@ -1612,10 +1611,4 @@ class CqMob extends CqActor, implements Mob {
 		
 		return true;
 	}
-}
-
-enum CqClass {
-	FIGHTER;
-	WIZARD;
-	THIEF;
 }

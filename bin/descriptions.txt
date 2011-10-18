@@ -2,9 +2,14 @@ Field String Name
 Field String Description
 
 ; Classes.
-[Fighter]    [A mighty warrior of unparalleled strength and vigor, honorable in battle, high master of hack-n-slash melee.\n\nThe best choice for new players.]
-[Wizard]     [A wise sage, knower of secrets, worker of miracles, master of the arcane arts, maker of satisfactory mixed drinks.\n\nCan cast spells rapidly - use his mystic powers as often as possible.]
-[Thief]      [A cunning and agile rogue whose one moral credo is this: Always get out alive.\n\nThe most challenging character - use his speed and skills to avoid taking damage.]
+[FIGHTER]    [A mighty warrior of unparalleled strength and vigor, honorable in battle, high master of hack-n-slash melee.\n\nThe best choice for new players.]
+[WIZARD]     [A wise sage, knower of secrets, worker of miracles, master of the arcane arts, maker of satisfactory mixed drinks.\n\nCan cast spells rapidly - use his mystic powers as often as possible.]
+[THIEF]      [A cunning and agile rogue whose one moral credo is this: Always get out alive.\n\nThe most challenging character - use his speed and skills to avoid taking damage.]
+
+; Class entry blurb.
+[SpriteKnightEntry] [You descend with shining sword into the dismal dwelling of the maleficent minotaur.  The haughty chatter of his servants, twisted and evil, fills the air.\n\nYou smile, for today you will shed much blood.]
+[SpriteWizardEntry] [The unsettled souls of the anguished dead whisper of the minotaur's misdeeds.  On bended knee you swear to them that they will be avenged.\n\nArcane flames dance between your hands.  The minotaur's wretched minions will be the most delightful playthings.]
+[SpriteThiefEntry]  [You slink silently down unlit stairs.  The minotaur's wicked servants suspect nothing.\n\nYou cannot help but grin at the thought of the bounteous treasure they will soon relinquish.]
 
 ; Potions.
 [Healing Potion]             [A small vial containing a fragrant, red salve. It restores life when applied.]
@@ -56,19 +61,19 @@ Field String Description
 [Freeze]           [Freezes a monster in place for a short duration.]
 [Fireball]         [Hurls a ball of fire that explodes on impact.]
 [Berserk]          [Induces a berserked rage that greatly increases your strength and speed.]
-[Enfeeble monster] [Weakens monsters and renders them less dangerous.]
-[Bless weapon]     [Blesses the currently wielded weapon, providing a temporary boost to its effectiveness.]
+[Enfeeble Monster] [Weakens monsters and renders them less dangerous.]
+[Bless Weapon]     [Blesses the currently wielded weapon, providing a temporary boost to its effectiveness.]
 [Haste]            [Makes you faster and more nimble.]
-[Shadow walk]      [Renders you invisible for a few seconds.]
-[Charm monster]    [Charms a foe and temporarily brings them to your side.]
+[Shadow Walk]      [Renders you invisible for a few seconds.]
+[Charm Monster]    [Charms a foe and temporarily brings them to your side.]
 [Polymorph]        [Transform a creature into another form.]
 [Sleep]            [Puts a monster into a deep slumber.]
 [Fear]             [Makes a monster flee in horror.]
-[Magic mirror]     [Creates a duplicate of yourself to draw enemies away.]
-[Stone skin]       [Hardens your skin, rendering you tough but slow.]
+[Magic Mirror]     [Creates a duplicate of yourself to draw enemies away.]
+[Stone Skin]       [Hardens your skin, rendering you tough but slow.]
 [Blink]            [Transports you to a random location.]
-[Magic armor]      [Engulfs you in a magical protective aura.]
-[Pass wall]        [Enables walking through walls as if they were thin air.]
+[Magic Armor]      [Engulfs you in a magical protective aura.]
+[Pass Wall]        [Enables walking through walls as if they were thin air.]
 [Teleport]         [Transports you to a specific location of your choice.]
-[Reveal map]       [Reveals the layout of the current floor.]
+[Reveal Map]       [Reveals the layout of the current floor.]
 [Heal]             [Restores health and vigor.]

@@ -137,15 +137,13 @@ class SpritePortrait extends HxlSpriteSheet {
 	static var _spriteNames:Array<Array<String>>;
 	public function new() {
 		if (_spriteNames ==null)
-			_spriteNames = [HxlUtil.enumToStringArray(
-				[CqClass.THIEF, CqClass.FIGHTER, CqClass.WIZARD]
-			)];
+			_spriteNames = [["thief", "fighter", "wizard"]];
 		spriteNames = _spriteNames;
 		super(0);
 	} 
 	
-	public static function getIcon(IconName:CqClass, Size:Int, Zoom:Float):HxlSprite {
-		return HxlSpriteSheet.getSprite(SpritePortrait, instance.getSpriteIndex(HxlUtil.enumToString(IconName)), Size, Zoom);
+	public static function getIcon(IconName:String, Size:Int, Zoom:Float):HxlSprite {
+		return HxlSpriteSheet.getSprite(SpritePortrait, instance.getSpriteIndex(IconName), Size, Zoom);
 	}
 }
 class SpritePortraitPaper extends HxlSpriteSheet { 
@@ -153,16 +151,14 @@ class SpritePortraitPaper extends HxlSpriteSheet {
 	static var _spriteNames:Array<Array<String>>;
 	public function new() {
 		if (_spriteNames ==null)
-			_spriteNames = [HxlUtil.enumToStringArray(
-				[CqClass.THIEF, CqClass.FIGHTER, CqClass.WIZARD]
-			)];
+			_spriteNames = [["thief", "fighter", "wizard"]];
 		
 		spriteNames = _spriteNames;
 		super(0);
 	} 
 	
-	public static function getIcon(IconName:CqClass, Size:Int, Zoom:Float):HxlSprite {
-		return HxlSpriteSheet.getSprite(SpritePortraitPaper, instance.getSpriteIndex(HxlUtil.enumToString(IconName)), Size, Zoom);
+	public static function getIcon(IconName:String, Size:Int, Zoom:Float):HxlSprite {
+		return HxlSpriteSheet.getSprite(SpritePortraitPaper, instance.getSpriteIndex(IconName), Size, Zoom);
 	}
 }
 class SpriteEquipmentIcons extends HxlSpriteSheet { 

@@ -1,6 +1,8 @@
 package cq.states;
 
 import com.eclecticdesignstudio.motion.Actuate;
+import data.Resources;
+import data.StatsFile;
 import flash.system.System;
 import haxel.HxlGame;
 
@@ -51,7 +53,7 @@ import flash.events.MouseEvent;
 class GameState extends CqState {
 	static private var msHideDelay:Float = 3;
 	var gameUI:GameUI;
-	public var chosenClass:CqClass;
+	public var chosenClass:String;
 	public var isPlayerActing:Bool;
 	public var resumeActingTime:Float;//time till when acting is blocked
 	public var started:Bool;
@@ -71,7 +73,7 @@ class GameState extends CqState {
 	{
 		super.create();
 		lastMouse = started = endingAnim = false;
-		chosenClass = FIGHTER;
+		chosenClass = "FIGHTER";
 		HxlGraphics.keys.onJustPressed = onKeyJustPressed;
 		HxlGraphics.fade.start(false, 0x00000000, 0.25);
 
@@ -313,23 +315,33 @@ class GameState extends CqState {
 		if(Configuration.debug)
 			chosenClass = Configuration.debugStartingClass;
 
-		var classBG:Class<Bitmap>;
-		var introText:String;
-		switch(chosenClass){
-			case CqClass.FIGHTER:
-				classBG = SpriteKnightEntry;
-				//"You enter the dark domicile of the evil minotaur.\n\nIn the distance, you can hear the chatter of the vile creatures that inhabit the depths.\n\nYour adventure begins...";
-				introText = "You descend with shining sword into the dismal dwelling of the maleficent minotaur.  The haughty chatter of his servants, twisted and evil, fills the air.\n\nYou smile, for today you will shed much blood.";
-			case CqClass.THIEF:
-				introText = "You slink silently down unlit stairs.  The minotaur's wicked servants suspect nothing.\n\nYou cannot help but grin at the thought of the bounteous treasure they will soon relinquish.";
-				classBG = SpriteThiefEntry;
-			case CqClass.WIZARD:
-				classBG = SpriteWizardEntry;
-				introText = "The unsettled souls of the anguished dead whisper of the minotaur's misdeeds.  On bended knee you swear to them that they will be avenged.\n\nArcane flames dance between your hands.  The minotaur's wretched minions will be the most delightful playthings.";
-			default:
-				return;
+		// Determine class intro.
+		var classes:StatsFile = Resources.statsFiles.get( "classes.txt" );
+		var descriptions:StatsFile = Resources.statsFiles.get( "descriptions.txt" );
+
+		var classEntry:StatsFileEntry = classes.getEntry( "ID", chosenClass );
+		var entrySprite:String = classEntry.getField( "EntryBG" );
+		
+		var desc:StatsFileEntry = descriptions.getEntry( "Name", entrySprite );
+		var descText:String = if (desc != null) desc.getField( "Description" ); else "???";
+		
+		// Reformat \ns in description text.
+		var descTextLines:Array<String> = descText.split( "\\n" );
+		descText = "";
+		for ( l in descTextLines ) {
+			descText += l + "\n";
 		}
 
+		// Pick background image.
+		var classBG:Class<Bitmap>;
+		var introText:String = descText;
+		switch(classEntry.getField( "EntryBG" )){
+			case "SpriteKnightEntry": classBG = SpriteKnightEntry;
+			case "SpriteThiefEntry": classBG = SpriteThiefEntry;
+			case "SpriteWizardEntry": classBG = SpriteWizardEntry;
+			default:
+				return;
+		}		
 		remove(cursor); // actually get rid of the cursor (hiding it doesn't seem to help)
 		scroller = new CqTextScroller(classBG, 1);
 		scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,26);
@@ -397,26 +409,13 @@ class GameState extends CqState {
 
 		world.addOnNewLevel(onNewLevelCallBack);
 
-		switch(chosenClass) {
-			case FIGHTER:
-				player.give("SHORT_SWORD");
-				player.give("RED_POTION");
-				player.give("RED_POTION");
-				player.give("PURPLE_POTION");
-				player.give("BERSERK");
-			case WIZARD:
-				player.give("STAFF");
-				player.give("RED_POTION");
-				player.give("RED_POTION");
-				player.give("BLUE_POTION");
-				player.give("FIREBALL");
-			case THIEF:
-				player.give("DAGGER");
-				player.give("RED_POTION");
-				player.give("RED_POTION");
-				player.give("YELLOW_POTION");
-				player.give("GREEN_POTION");
-				player.give("SHADOW_WALK");
+		// Give player items specified in classes.txt.
+		var classes:StatsFile = Resources.statsFiles.get( "classes.txt" );
+		var classEntry:StatsFileEntry = classes.getEntry( "ID", chosenClass );
+		for ( i in 1 ... 7 ) {
+			if ( classEntry.getField( "Item" + i ) != "" ) {
+				player.give(null, classEntry.getField( "Item" + i ));
+			}
 		}
 
 		PtPlayer.ClassSelected(chosenClass);

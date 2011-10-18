@@ -37,7 +37,7 @@ class CreateCharState extends CqState {
 	var state:Int;
 	var txtDesc:HxlText;
 	var selectBox:HxlSprite;
-	var curClass:CqClass;
+	var curClass:String;
 	var storyScreen:Bool;
 	var portrait:HxlSprite;
 	var playerSprites:HxlSpriteSheet;
@@ -72,13 +72,13 @@ class CreateCharState extends CqState {
 	}
 	
 	function pickFighter() {
-		changeSelection(FIGHTER);
+		changeSelection("FIGHTER");
 	}
 	function pickThief() {
-		changeSelection(THIEF);
+		changeSelection("THIEF");
 	}
 	function pickWizard() {
-		changeSelection(WIZARD);
+		changeSelection("WIZARD");
 	}
 	
 	function createChoice(className:String, spriteName:String, btnX:Int, textX:Int, cb:Void->Void) {
@@ -167,7 +167,7 @@ class CreateCharState extends CqState {
 
 		txtDesc.text = descText;
 		
-		portrait = SpritePortraitPaper.getIcon(FIGHTER, 100 , 1.0);
+		portrait = SpritePortraitPaper.getIcon("FIGHTER", 100 , 1.0);
 		portrait.x = 60;
 		portrait.y = 290;
 		add(portrait);
@@ -221,35 +221,35 @@ class CreateCharState extends CqState {
 		}
 	}
 
-	function changeSelection(Target:CqClass) {
+	function changeSelection(TargetClass:String) {
 		//If this class was already selected, then we assume the player
 		//wants to just play
-		if ( Target == curClass ) 
+		if ( TargetClass == curClass ) 
 			gotoState(GameState);
 		
 		SoundEffectsManager.play(MenuItemMouseOver);
 
+		var classes:StatsFile = Resources.statsFiles.get( "classes.txt" );
 		var descriptions:StatsFile = Resources.statsFiles.get( "descriptions.txt" );
 
-		curClass = Target;
+		var classEntry:StatsFileEntry = classes.getEntry( "ID", TargetClass );
+		
+		curClass = TargetClass;
+		
 		var targetX:Float = 0;
-		var descText:String = "";
-		if ( curClass == FIGHTER ) {
+		
+		if ( curClass == "FIGHTER" ) {
 			targetX = 105;
-			var desc:StatsFileEntry = descriptions.getEntry( "Name", "Fighter" );
-			descText = if (desc != null) desc.getField( "Description" ); else "???";
-			portrait.setFrame(1);
-		} else if ( curClass == THIEF ) {
+		} else if ( curClass == "THIEF" ) {
 			targetX = 255;
-			var desc:StatsFileEntry = descriptions.getEntry( "Name", "Thief" );
-			descText = if (desc != null) desc.getField( "Description" ); else "???";
-			portrait.setFrame(0);
-		} else if ( curClass == WIZARD ) {
+		} else if ( curClass == "WIZARD" ) {
 			targetX = 405;
-			var desc:StatsFileEntry = descriptions.getEntry( "Name", "Wizard" );
-			descText = if (desc != null) desc.getField( "Description" ); else "???";
-			portrait.setFrame(2);
 		}
+
+		portrait.setFrame( classEntry.getField( "Portrait" ) );
+		
+		var desc:StatsFileEntry = descriptions.getEntry( "Name", curClass );
+		var descText:String = if (desc != null) desc.getField( "Description" ); else "???";
 		
 		var descTextLines:Array<String> = descText.split( "\\n" );
 		descText = "";
@@ -274,22 +274,22 @@ class CreateCharState extends CqState {
 		} else if (HxlGraphics.keys.justReleased("LEFT") || HxlGraphics.keys.justReleased("A")) {
 			if (curClass == null) return;
 			switch(curClass) {
-				case FIGHTER:
-					changeSelection(WIZARD);
-				case THIEF:
-					changeSelection(FIGHTER);
-				case WIZARD:
-					changeSelection(THIEF);
+				case "FIGHTER":
+					changeSelection("WIZARD");
+				case "THIEF":
+					changeSelection("FIGHTER");
+				case "WIZARD":
+					changeSelection("THIEF");
 			}
 		} else if (HxlGraphics.keys.justReleased("RIGHT") || HxlGraphics.keys.justReleased("D")) {
 			if (curClass == null) return;
 			switch(curClass) {
-				case FIGHTER:
-					changeSelection(THIEF);
-				case THIEF:
-					changeSelection(WIZARD);
-				case WIZARD:
-					changeSelection(FIGHTER);
+				case "FIGHTER":
+					changeSelection("THIEF");
+				case "THIEF":
+					changeSelection("WIZARD");
+				case "WIZARD":
+					changeSelection("FIGHTER");
 			}			
 		} else if (HxlGraphics.keys.justReleased("ENTER")) {
 			gotoState(GameState);

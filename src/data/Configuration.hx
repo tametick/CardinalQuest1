@@ -27,7 +27,7 @@ class Configuration {
 	public static inline var noCache = false;
 
 	public static inline var debugStartingLevel:Int = 0;
-	public static inline var debugStartingClass:CqClass = WIZARD;
+	public static inline var debugStartingClass:String = "WIZARD";
 	static public inline var debugMoveThroughWalls:Bool = false;
 
 	public static var app_width:Int = 0;
