@@ -327,6 +327,7 @@ class CqLevel extends Level {
 		var tpos = getTilePos(pos.x, pos.y, false);
 		var mob:CqMob = CqMobFactory.newMobFromLevel(tpos.x, tpos.y, levelIndex + 1, actor);
 		mob.faction = actor.faction;
+		
 		// add to level mobs list
 		mobs.push(mob);
 		// for creating mobs not when initializing the level.

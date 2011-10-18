@@ -412,6 +412,7 @@ class CqActor extends CqObject, implements Actor {
 			}
 		}
 		
+		
 		if (other.specialEffects.get("invisible") != null) {
 			// attacking something that's invisible (probably the player) -- big boost to defense
 			def += 2 * atk;
@@ -428,16 +429,11 @@ class CqActor extends CqObject, implements Actor {
 				return;
 			}
 		}
+		
+		var missed = true;
 
 		if (Math.random() < atk / (atk + def)) {
 			// hit
-			
-			if (Std.is(this, CqPlayer)) {
-				SoundEffectsManager.play(EnemyHit);	
-			} else {
-				SoundEffectsManager.play(PlayerHit);
-			}
-			
 			var dmgMultiplier:Int = 1;
 			if(specialEffects.get("damage multipler")!=null)
 				dmgMultiplier =  Std.parseInt(specialEffects.get("damage multipler").value);
@@ -446,26 +442,39 @@ class CqActor extends CqObject, implements Actor {
 			if (stealthy) dmgMultiplier += 1;
 			
 			// determine whether we're using a weapon
-			var damageRange = (equippedWeapon != null) ? equippedWeapon.damage : damage;
+			var damageRange = (equippedWeapon != null) ? new Range(equippedWeapon.damage.start, equippedWeapon.damage.end) : damage;
+			
+			
+			if (Std.is(this, CqPlayer)) {
+				SoundEffectsManager.play(EnemyHit);	
+			} else {
+				SoundEffectsManager.play(PlayerHit);
+			}
 			
 			// roll and deal the damage
 			var dmgTotal:Int = biasedRandomInRange(damageRange.start * dmgMultiplier, damageRange.end * dmgMultiplier, 2);
-			other.hp -= dmgTotal;
 			
-			// life buffs
-			var lif = other.hp + other.buffs.get("life");
-			
-			if (lif <= 0 && stealthy && Std.is(other, CqPlayer)) {
-				dmgTotal = 1 - (other.hp + dmgTotal);
-				other.hp = lif = 1; // never die to an invisible enemy
+			if (dmgTotal > 0) {
+				missed = false;
+				other.hp -= dmgTotal;
+				
+				// life buffs
+				var lif = other.hp + other.buffs.get("life");
+				
+				if (lif <= 0 && stealthy && Std.is(other, CqPlayer)) {
+					dmgTotal = 1 - (other.hp + dmgTotal);
+					other.hp = lif = 1; // never die to an invisible enemy
+				}
+				
+				if (lif > 0) {
+					injureActor(state, other, dmgTotal);
+				} else {
+					killActor(state, other, dmgTotal);
+				}
 			}
-			
-			if (lif > 0) {
-				injureActor(state, other, dmgTotal);
-			} else {
-				killActor(state, other, dmgTotal);
-			}
-		} else {
+		}
+		
+		if (missed) {
 			// Miss
 			if (Std.is(this, CqPlayer))
 				SoundEffectsManager.play(EnemyMiss);	
@@ -859,14 +868,13 @@ class CqActor extends CqObject, implements Actor {
 			
 			pixelLocation = null;
 		case "magic_mirror":
-			// note that the magic mirror sprite will actually be backwards!  Very cool.
+			// note that the player's magic mirror sprite will actually be backwards!  Very cool.
 			var mob = Registery.level.createAndAddMirror(new HxlPoint(tile.mapX,tile.mapY), Registery.player.level, true, this);
-			GameUI.showEffectText(mob, "Mirror", 0x2DB6D2);
-			//mob.speed = 0;
-			mob.faction = this.faction;
-			mob.xpValue = 0;
 			mob.specialEffects.set(effect.name, effect);
 			Registery.level.updateFieldOfView(HxlGraphics.state, true);
+			
+			// if this is not after updateFieldOfView, we will not see the message
+			GameUI.showEffectText(mob, "Mirror", 0x2DB6D2);
 			
 			if (duration > -1) {
 				mob.addTimer(new CqTimer(duration, null, -1, effect));
@@ -1081,7 +1089,7 @@ class CqPlayer extends CqActor, implements Player {
 				vitality = 3;
 				damage = new Range(1, 1);
 				//Let Kongregate know, for now we only deal with "Normal" mode
-				Registery.getKong().SubmitStat( Registery.KONG_STARTWIZARD , 1 );				
+				Registery.getKong().SubmitStat( Registery.KONG_STARTWIZARD, 1 );
 			case THIEF:
 				attack = 3;
 				defense = 3;
