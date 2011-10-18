@@ -25,7 +25,7 @@ class CqSpellFactory {
 	}
 	public static function newRandomSpell(X:Float, Y:Float) {
 		if (remainingSpells.length < 1)
-			resetRemainigSpells();
+			resetRemainingSpells();
 		
 		var newSpellName = HxlUtil.getRandomElement(remainingSpells);
 		

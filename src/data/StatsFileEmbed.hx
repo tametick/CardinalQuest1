@@ -88,12 +88,12 @@ Field Int Buff2Val
 
 ; ID            Sprite          Name                         Slot    Lv- Lv+ Wgt Dmg- Dmg+ Buff1   V1 Buff2   V2 
 BOOTS           boots           [Boots of Escape]            SHOES     1   1 100    0    0 speed    1
-WINGED_SANDLES  winged_sandles  [Hermes' Sandals]            SHOES     3   4 100    0    0 speed    2
+WINGED_SANDALS  winged_sandals  [Hermes' Sandals]            SHOES     3   4 100    0    0 speed    2
 TUNDRA_BOOTS    tundra_boots    [Tundra Lizard Boots]        SHOES     7  99 100    0    0 speed    2 defense  1
 
 ; ID            Sprite          Name                         Slot    Lv- Lv+ Wgt Dmg- Dmg+ Buff1   V1 Buff2   V2 
 LEATHER_ARMOR   leather_armor   [Leather Armor]              ARMOR     1   1 100    0    0 defense  1
-BRESTPLATE      brestplate      [Breastplate]                ARMOR     2   3 100    0    0 defense  2
+BREASTPLATE     breastplate     [Breastplate]                ARMOR     2   3 100    0    0 defense  2
 CLOAK           cloak           [Rogues' Cloak of Swiftness] ARMOR     5   6 100    0    0 defense  2 speed    2
 FULL_PLATE_MAIL full_plate_mail [Full Plate Armor]           ARMOR     7  99 100    0    0 defense  3
 
