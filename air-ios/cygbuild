@@ -1,0 +1,47 @@
+echo delete some stuff
+rm ./bin/*
+
+
+echo go back
+cd ..
+
+
+echo make sure that we are compiling for iOS
+sed -i 's/iOS \= false/iOS \= true/' src/data/Configuration.hx
+sed -i 's/mobile \= false/mobile \= true/' src/data/Configuration.hx
+cat src/data/Configuration.hx | grep air-ios
+
+
+echo compile a release version
+haxe -cp src -lib air2 -swf9 ./bin/cq.swf -swf-header 640:480:30:000000 -swf-lib obj/cqResources.swf --flash-strict -swf-version 10 -main cq.Main -swf-lib lib/playtomic.swf -swf-version 10.1
+
+
+echo setting it back
+sed -i 's/iOS \= true/iOS \= false/' src/data/Configuration.hx
+sed -i 's/mobile \= true/mobile \= false/' src/data/Configuration.hx
+cat src/data/Configuration.hx | grep air-ios
+
+echo going back to air-ios
+cd air-ios
+
+
+echo copying over the compiled release swf
+cp ../bin/cq.swf ./bin/cq.swf
+
+
+echo copying over some other files
+cp icon16.png ./bin/icon16.png
+cp icon32.png ./bin/icon32.png
+cp icon48.png ./bin/icon48.png
+cp icon57.png ./bin/icon57.png
+cp icon72.png ./bin/icon72.png
+cp icon128.png ./bin/icon128.png
+
+
+echo about to call adt
+/cygdrive/c/haxe/air3/bin/adt.bat -package -target ipa-test -provisioning-profile "./bat/Windows_Machine_Cardinal_Quest.mobileprovision" -storetype pkcs12 -keystore ./bat/Iphone_Dev_Cert_TjD.p12 ./bin/CQ.ipa application.xml -C ./bin .
+
+echo displaying size
+ls -alh ./bin/*.ipa
+
+mpg123 DoorPounding.mp3
