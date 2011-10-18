@@ -40,7 +40,7 @@ class CqWorld extends World {
 		super();
 
 		onNewLevel = new List();
-		CqSpellFactory.resetRemainigSpells();
+		CqSpellFactory.resetRemainingSpells();
 			
 		goToLevel(currentLevelIndex, false);
 	}

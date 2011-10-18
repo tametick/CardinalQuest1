@@ -11,7 +11,7 @@ import data.Resources;
 class CqSpellFactory {
 	public static var remainingSpells:Array<String>;
 	
-	public static function resetRemainigSpells()
+	public static function resetRemainingSpells()
 	{
 		if (CqSpellFactory.remainingSpells != null)
 			CqSpellFactory.remainingSpells.splice(0, CqSpellFactory.remainingSpells.length);
