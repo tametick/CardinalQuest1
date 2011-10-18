@@ -223,6 +223,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 	public var consumable:Bool;
 	public var spriteIndex:String;
 	public var damage:Range;
+	public var lastDamage:Int;
 	// changes to basic abilities (attack, defense, speed, spirit)
 	public var buffs:Hash<Int>;
 	// special effects beyond changes to basic abilities

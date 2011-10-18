@@ -100,6 +100,7 @@ class CqActor extends CqObject, implements Actor {
 	var onMove:List<Dynamic>;
 	
 	// effect helpers
+	var isGhost:Bool;
 	var isDodging:Bool;
 	var dodgeDir:Int;
 	var dodgeCounter:Float;
@@ -200,6 +201,7 @@ class CqActor extends CqObject, implements Actor {
 		onAttackMiss = new List();
 		onMove = new List();
 
+		isGhost = false;
 		isDodging = false;
 		dodgeDir = 0;
 		dodgeCounter = 0;
@@ -275,6 +277,14 @@ class CqActor extends CqObject, implements Actor {
 		chest = null;
 	}
 	
+	public function doGhost(?dmgTotal:Int = 0) {
+		isGhost = true;
+	}
+	
+	function ghostActor(state:HxlState, other:CqActor, dmgTotal:Int) {
+		other.doGhost(dmgTotal);
+	}
+
 	public function doInjure(?dmgTotal:Int=0) {
 		for ( Callback in onInjure ) 
 			Callback(dmgTotal);
@@ -532,7 +542,7 @@ class CqActor extends CqObject, implements Actor {
 			var other = cast(tile.actors[tile.actors.length - 1],CqActor);
 		
 			// attack enemy actor
-			if(other.faction != faction) {
+			if(other.faction != faction && !other.isGhost) {
 				attackOther(state, other);
 				justAttacked = true;
 				// end turn
@@ -727,13 +737,18 @@ class CqActor extends CqObject, implements Actor {
 			
 			itemOrSpell.damage = CqSpellFactory.getSpellDamageByLevel(cast(itemOrSpell, CqSpell).id, spellLevel);
 			
+			useOn(itemOrSpell, this, other);
+			
+			// Fire off the effect.
 			GameUI.instance.shootXBall(this, other, colorSource, itemOrSpell);
 		}else {
 			useOn(itemOrSpell, this, other);
+			completeUseOn(itemOrSpell, this, other);
 		}
 	}
 	
 	static var tmpSpellSprite;
+	
 	public static function useOn(itemOrSpell:CqItem, actor:CqActor, victim:CqActor) {
 		if (itemOrSpell.equipSlot == POTION)
 			SoundEffectsManager.play(SpellEquipped);
@@ -758,28 +773,8 @@ class CqActor extends CqObject, implements Actor {
 				var text = (val > 0?"+":"") + val + " " + buff;
 
 				if (victim == null) {
-					var c:Int;
-					switch(buff) {
-						case "attack":
-							c = 0x4BE916;
-						case "defense":
-							c = 0x381AE6;
-						case "speed":
-							c = 0xEDD112;
-						default:
-							c = 0xFFFFFF;
-					}
-					
-					GameUI.showEffectText(actor, text, c);
-					
 					// apply to self
 					actor.buffs.set(buff, actor.buffs.get(buff) + itemOrSpell.buffs.get(buff));
-					
-					//special effect
-					var eff:CqEffectSpell = new CqEffectSpell(actor.x+actor.width/2, actor.y+actor.width/2, effectColorSource);
-					eff.zIndex = 1000;
-					HxlGraphics.state.add(eff);
-					eff.start(true, 1.0, 10);
 					
 					// add timer
 					if (itemOrSpell.duration > -1) {
@@ -790,8 +785,6 @@ class CqActor extends CqObject, implements Actor {
 					var delta:Int = itemOrSpell.buffs.get(buff);
 					victim.buffs.set(buff, victim.buffs.get(buff) + itemOrSpell.buffs.get(buff));
 					
-					GameUI.showEffectText(victim, text, 0xff8822);
-				
 					// add timer
 					if (itemOrSpell.duration > -1) {
 						var bufftimer: CqTimer = new CqTimer(itemOrSpell.duration, buff, delta, null);
@@ -801,14 +794,6 @@ class CqActor extends CqObject, implements Actor {
 				}
 			}
 		}
-		if (victim != null){
-			//special effect
-			var eff:CqEffectSpell = new CqEffectSpell(victim.x + victim.width/2, victim.y + victim.height/2, effectColorSource);
-			eff.zIndex = 1000;
-			HxlGraphics.state.add(eff);
-			eff.start(true, 1.0, 10);
-		}
-		
 		// apply special effect
 		if(itemOrSpell.specialEffects != null){
 			for (effect in itemOrSpell.specialEffects) {
@@ -823,24 +808,20 @@ class CqActor extends CqObject, implements Actor {
 			}
 		}
 		
-		// apply damage
-		
+		// calculate damage
 		if (itemOrSpell.damage != null && itemOrSpell.damage.end>0 ) {
 			var dmg = biasedRandomInRange(itemOrSpell.damage.start, itemOrSpell.damage.end, 2);
+			itemOrSpell.lastDamage = dmg; // Stored for "completeUseOn" when spell visually hits.
+
+			// "Ghost" killed actors now so they can't act any more.
 			if (victim== null) {
-				actor.hp -= dmg;
 				var lif = actor.hp + actor.buffs.get("life");
-				if (lif > 0)
-					actor.injureActor(HxlGraphics.state, actor, dmg);
-				else
-					actor.killActor(HxlGraphics.state,actor,dmg);
+				if (lif - dmg <= 0)
+					actor.ghostActor(HxlGraphics.state,actor,dmg);
 			} else {
-				victim.hp -= dmg;
 				var lif = victim.hp + victim.buffs.get("life");
-				if (lif > 0)
-					actor.injureActor(HxlGraphics.state, victim, dmg);
-				else
-					actor.killActor(HxlGraphics.state, victim, dmg);
+				if (lif - dmg <= 0)
+					actor.ghostActor(HxlGraphics.state, victim, dmg);
 			}
 		}
 		
@@ -850,6 +831,77 @@ class CqActor extends CqObject, implements Actor {
 			tmpSpellSprite.destroy();
 			tmpSpellSprite = null;
 		}		
+	}
+
+	// Called when a spell hits, even though the effects are applied immediately.
+	public static function completeUseOn(itemOrSpell:CqItem, actor:CqActor, victim:CqActor) {
+		var effectColorSource:BitmapData;
+		if (itemOrSpell.uiItem == null) {
+			effectColorSource = tmpSpellSprite.getFramePixels();
+		} else {
+			effectColorSource = itemOrSpell.uiItem.pixels;
+		}
+		
+		// show buffs
+		if(itemOrSpell.buffs != null) {
+			for (buff in itemOrSpell.buffs.keys()) {
+				var val = itemOrSpell.buffs.get(buff);
+				var text = (val > 0?"+":"") + val + " " + buff;
+
+				if (victim == null) {
+					var c:Int;
+					switch(buff) {
+						case "attack":
+							c = 0x4BE916;
+						case "defense":
+							c = 0x381AE6;
+						case "speed":
+							c = 0xEDD112;
+						default:
+							c = 0xFFFFFF;
+					}
+					
+					GameUI.showEffectText(actor, text, c);
+					
+					//special effect
+					var eff:CqEffectSpell = new CqEffectSpell(actor.x+actor.width/2, actor.y+actor.width/2, effectColorSource);
+					eff.zIndex = 1000;
+					HxlGraphics.state.add(eff);
+					eff.start(true, 1.0, 10);
+				} else {
+					// apply to victim
+					GameUI.showEffectText(victim, text, 0xff8822);
+				}
+			}
+		}
+		if (victim != null){
+			//special effect
+			var eff:CqEffectSpell = new CqEffectSpell(victim.x + victim.width/2, victim.y + victim.height/2, effectColorSource);
+			eff.zIndex = 1000;
+			HxlGraphics.state.add(eff);
+			eff.start(true, 1.0, 10);
+		}
+		
+		// apply damage
+		if (itemOrSpell.damage != null && itemOrSpell.damage.end>0 ) {
+			var dmg = itemOrSpell.lastDamage;
+			
+			if (victim== null) {
+				actor.hp -= dmg;
+				var lif = actor.hp + actor.buffs.get("life");
+				if (lif > 0 && !actor.isGhost)
+					actor.injureActor(HxlGraphics.state, actor, dmg);
+				else
+					actor.killActor(HxlGraphics.state,actor,dmg);
+			} else {
+				victim.hp -= dmg;
+				var lif = victim.hp + victim.buffs.get("life");
+				if (lif > 0 && !victim.isGhost)
+					actor.injureActor(HxlGraphics.state, victim, dmg);
+				else
+					actor.killActor(HxlGraphics.state, victim, dmg);
+			}
+		}
 	}
 	
 	function applyEffectAt(effect:CqSpecialEffectValue, tile:CqTile, ?duration:Int = -1) {
@@ -1568,6 +1620,10 @@ class CqMob extends CqActor, implements Mob {
 	}
 	
 	public function act(state:HxlState):Bool {
+		if ( isGhost ) {
+			return true; // Don't act if we're dead.
+		}
+		
 		updateAwareness();
 		
 		if (neverSeen) return actUnaware(state);

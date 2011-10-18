@@ -1138,7 +1138,7 @@ class GameUI extends HxlDialog {
 			ball.pixels.dispose();
 			ball.pixels = null;
 		}
-		CqActor.useOn(spell, actor, other);
+		CqActor.completeUseOn(spell, actor, other);
 	}
 }
 
