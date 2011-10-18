@@ -1,0 +1,21 @@
+Field String ID
+Field String Name
+Field String Sprite
+Field Int Portrait
+Field String EntryBG
+Field Int Attack
+Field Int Defense
+Field Int Speed
+Field Int Spirit
+Field Int Vitality
+Field String Item1
+Field String Item2
+Field String Item3
+Field String Item4
+Field String Item5
+Field String Item6
+
+; ID    Name    Sprite  Prt EntryBG            Atk Def Spd Spr Vit Items
+FIGHTER Fighter fighter   1 SpriteKnightEntry    5   2   3   1   4 SHORT_SWORD BERSERK     RED_POTION RED_POTION PURPLE_POTION
+WIZARD  Wizard  wizard    2 SpriteWizardEntry    2   2   3   5   3 STAFF       FIREBALL    RED_POTION RED_POTION BLUE_POTION
+THIEF   Thief   thief     0 SpriteThiefEntry     3   3   5   3   2 DAGGER      SHADOW_WALK RED_POTION RED_POTION YELLOW_POTION GREEN_POTION

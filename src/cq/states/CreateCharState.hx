@@ -4,6 +4,7 @@ import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;
 import cq.CqGraphicKey;
 import cq.ui.CqTextScroller;
+import data.StatsFile;
 import flash.events.Event;
 import haxel.GraphicCache;
 import haxel.HxlSpriteSheet;
@@ -36,7 +37,7 @@ class CreateCharState extends CqState {
 	var state:Int;
 	var txtDesc:HxlText;
 	var selectBox:HxlSprite;
-	var curClass:CqClass;
+	var curClass:String;
 	var storyScreen:Bool;
 	var portrait:HxlSprite;
 	var playerSprites:HxlSpriteSheet;
@@ -46,7 +47,6 @@ class CreateCharState extends CqState {
 	public override function create() {
 		super.create();
 		
-		CqMobFactory.initDescriptions();
 		fadeTime = 0.5;
 		state = 0;
 		storyScreen = true;
@@ -72,13 +72,13 @@ class CreateCharState extends CqState {
 	}
 	
 	function pickFighter() {
-		changeSelection(FIGHTER);
+		changeSelection("FIGHTER");
 	}
 	function pickThief() {
-		changeSelection(THIEF);
+		changeSelection("THIEF");
 	}
 	function pickWizard() {
-		changeSelection(WIZARD);
+		changeSelection("WIZARD");
 	}
 	
 	function createChoice(className:String, spriteName:String, btnX:Int, textX:Int, cb:Void->Void) {
@@ -156,9 +156,18 @@ class CreateCharState extends CqState {
 		txtDesc.setFormat(FontAnonymousPro.instance.fontName, 16, 0x000000, "left", 0);
 		add(txtDesc);
 		
-		txtDesc.text = Resources.descriptions.get("Fighter");
+		var descriptions:StatsFile = Resources.statsFiles.get( "descriptions.txt" );
+		var desc:StatsFileEntry = descriptions.getEntry( "Name", "Fighter" );
+		var descText:String = if (desc != null) desc.getField( "Description" ); else "???";
+		var descTextLines:Array<String> = descText.split( "\\n" );
+		descText = "";
+		for ( l in descTextLines ) {
+			descText += l + "\n";
+		}
 
-		portrait = SpritePortraitPaper.getIcon(FIGHTER, 100 , 1.0);
+		txtDesc.text = descText;
+		
+		portrait = SpritePortraitPaper.getIcon("FIGHTER", 100 , 1.0);
 		portrait.x = 60;
 		portrait.y = 290;
 		add(portrait);
@@ -212,29 +221,44 @@ class CreateCharState extends CqState {
 		}
 	}
 
-	function changeSelection(Target:CqClass) {
+	function changeSelection(TargetClass:String) {
 		//If this class was already selected, then we assume the player
 		//wants to just play
-		if ( Target == curClass ) 
+		if ( TargetClass == curClass ) 
 			gotoState(GameState);
 		
 		SoundEffectsManager.play(MenuItemMouseOver);
+
+		var classes:StatsFile = Resources.statsFiles.get( "classes.txt" );
+		var descriptions:StatsFile = Resources.statsFiles.get( "descriptions.txt" );
+
+		var classEntry:StatsFileEntry = classes.getEntry( "ID", TargetClass );
 		
-		curClass = Target;
+		curClass = TargetClass;
+		
 		var targetX:Float = 0;
-		if ( curClass == FIGHTER ) {
+		
+		if ( curClass == "FIGHTER" ) {
 			targetX = 105;
-			txtDesc.text = Resources.descriptions.get("Fighter");
-			portrait.setFrame(1);
-		} else if ( curClass == THIEF ) {
+		} else if ( curClass == "THIEF" ) {
 			targetX = 255;
-			txtDesc.text = Resources.descriptions.get("Thief");
-			portrait.setFrame(0);
-		} else if ( curClass == WIZARD ) {
+		} else if ( curClass == "WIZARD" ) {
 			targetX = 405;
-			txtDesc.text = Resources.descriptions.get("Wizard");
-			portrait.setFrame(2);
 		}
+
+		portrait.setFrame( classEntry.getField( "Portrait" ) );
+		
+		var desc:StatsFileEntry = descriptions.getEntry( "Name", curClass );
+		var descText:String = if (desc != null) desc.getField( "Description" ); else "???";
+		
+		var descTextLines:Array<String> = descText.split( "\\n" );
+		descText = "";
+		for ( l in descTextLines ) {
+			descText += l + "\n";
+		}
+
+		txtDesc.text = descText;
+		
 		Actuate.tween(selectBox, 0.25, { x: targetX }).ease(Cubic.easeOut);
 	}
 
@@ -250,22 +274,22 @@ class CreateCharState extends CqState {
 		} else if (HxlGraphics.keys.justReleased("LEFT") || HxlGraphics.keys.justReleased("A")) {
 			if (curClass == null) return;
 			switch(curClass) {
-				case FIGHTER:
-					changeSelection(WIZARD);
-				case THIEF:
-					changeSelection(FIGHTER);
-				case WIZARD:
-					changeSelection(THIEF);
+				case "FIGHTER":
+					changeSelection("WIZARD");
+				case "THIEF":
+					changeSelection("FIGHTER");
+				case "WIZARD":
+					changeSelection("THIEF");
 			}
 		} else if (HxlGraphics.keys.justReleased("RIGHT") || HxlGraphics.keys.justReleased("D")) {
 			if (curClass == null) return;
 			switch(curClass) {
-				case FIGHTER:
-					changeSelection(THIEF);
-				case THIEF:
-					changeSelection(WIZARD);
-				case WIZARD:
-					changeSelection(FIGHTER);
+				case "FIGHTER":
+					changeSelection("THIEF");
+				case "THIEF":
+					changeSelection("WIZARD");
+				case "WIZARD":
+					changeSelection("FIGHTER");
 			}			
 		} else if (HxlGraphics.keys.justReleased("ENTER")) {
 			gotoState(GameState);

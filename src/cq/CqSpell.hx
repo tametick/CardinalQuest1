@@ -1,7 +1,9 @@
 package cq;
 
 import cq.ui.CqSpellButton;
+import data.StatsFile;
 import haxel.HxlUtil;
+import playtomic.base.Data;
 
 import cq.CqItem;
 import cq.CqResources;
@@ -9,177 +11,86 @@ import cq.CqResources;
 import data.Resources;
 
 class CqSpellFactory {
-	static var inited = false;
 	public static var remainingSpells:Array<String>;
 	
-	static function initDescriptions() {
-		if (inited)
-			return;
-		
-		if(Resources.descriptions==null)
-			Resources.descriptions = new Hash<String>();
-		
-		Resources.descriptions.set("Freeze", "Freezes a monster in place for a short duration.");
-		Resources.descriptions.set("Fireball", "Hurls a ball of fire that explodes on impact.");
-		Resources.descriptions.set("Berserk", "Induces a berserked rage that greatly increases your strength and speed.");
-		Resources.descriptions.set("Enfeeble monster", "Weakens monsters and renders them less dangerous.");
-		Resources.descriptions.set("Bless weapon", "Blesses the currently wielded weapon, providing a temporary boost to its effectivness.");
-		Resources.descriptions.set("Haste", "Makes you faster and more nimble.");
-		Resources.descriptions.set("Shadow walk", "Renders you invisible for a few seconds.");
-		Resources.descriptions.set("Charm monster","Charms a foe and temporarily brings them to your side."); 
-		Resources.descriptions.set("Polymorph","Transform a creature into another form."); 
-		Resources.descriptions.set("Sleep","Puts a monster into a deep slumber."); 
-		Resources.descriptions.set("Fear","Makes a monster flee in horror."); 
-		Resources.descriptions.set("Magic mirror","Creates a duplicate of yourself to draw enemies away."); 
-		Resources.descriptions.set("Stone skin","Hardens your skin, rendering you tough but slow."); 
-		Resources.descriptions.set("Blink","Transports you to a random location.");
-		Resources.descriptions.set("Magic armor","Engulfs you in a magical protective aura."); 
-		Resources.descriptions.set("Pass wall","Enables walking through walls as if they were thin air.");
-		Resources.descriptions.set("Teleport","Transports you to a specific location of your choice."); 
-		Resources.descriptions.set("Reveal map","Reveals the layout of the current floor."); 
-		Resources.descriptions.set("Heal","Restores health and vigor.");
-		inited = true;
-	}
-	public static function resetRemainigSpells()
+	public static function resetRemainingSpells()
 	{
 		if (CqSpellFactory.remainingSpells != null)
 			CqSpellFactory.remainingSpells.splice(0, CqSpellFactory.remainingSpells.length);
 		else 
 			CqSpellFactory.remainingSpells = new Array();
 			
-		for(line in SpriteSpells.instance.spriteNames)
-			CqSpellFactory.remainingSpells = CqSpellFactory.remainingSpells.concat(line);
-		// no passwall for now
-		CqSpellFactory.remainingSpells.remove("pass_wall");
+		var spellsFile:StatsFile = Resources.statsFiles.get( "spells.txt" );
+		for ( s in spellsFile ) {
+			remainingSpells.push( s.getField( "ID" ) );
+		}
 	}
+	
 	public static function newRandomSpell(X:Float, Y:Float) {
 		if (remainingSpells.length < 1)
-			resetRemainigSpells();
+			resetRemainingSpells();
 		
-		var newSpellName = HxlUtil.getRandomElement(remainingSpells);
+		var newSpellID:String = HxlUtil.getRandomElement(remainingSpells);
 		
-		// uncomment if you want every spell is only be given once
-		remainingSpells.remove(newSpellName);
+		// uncomment if you want every spell to only be given once
+		remainingSpells.remove(newSpellID);
 		
-		initDescriptions();
-		return newSpell(X, Y, Type.createEnum(CqSpellType,  newSpellName.toUpperCase()));
+		return newSpell(X, Y, newSpellID);
 	}
-	public static function getfireBalldamageByLevel(level:Int):Range {
-		var dmg:Range;
-		switch(level) {
-			case 0:
-				dmg = new Range(1, 3);
-			case 1:
-				dmg = new Range(1, 4);
-			case 2:
-				dmg = new Range(1, 5);
-			case 3:
-				dmg = new Range(2, 6);
-			case 4:
-				dmg = new Range(3, 8);
-			case 5:
-				dmg = new Range(3, 9);
-			case 6:
-				dmg = new Range(4, 10);
-			case 7:
-				dmg = new Range(4, 12);
-			default:
-				dmg = new Range(5, 14);
-			
+	
+	public static function getSpellDamageByLevel(_id:String, _level:Int):Range {
+		var spellDamageFile:StatsFile = Resources.statsFiles.get( "spellDamage.txt" );
+		var dmg:Range = new Range(0, 0);
+		var bestLevel:Int = 0;
+		
+		for ( sd in spellDamageFile ) {
+			if ( sd.getField( "ID" ) == _id ) {
+				var level:Int = sd.getField( "Level" );
+				if ( level > bestLevel && level <= _level ) {
+					dmg.start = sd.getField( "DamageMin" );
+					dmg.end = sd.getField( "DamageMax" );
+					bestLevel = level;
+				}
+			}
 		}
+		
 		return dmg;
 	}
-	public static function newSpell(X:Float, Y:Float, type:CqSpellType):CqSpell {
-		initDescriptions();
+	
+	public static function newSpell(X:Float, Y:Float, id:String):CqSpell {
+		var spell:CqSpell = null;
 		
-		var typeName:String = Type.enumConstructor(type).toLowerCase();
-		var spell = new CqSpell(X, Y, type);
+		var spellsFile:StatsFile = Resources.statsFiles.get( "spells.txt" );
+		var entry:StatsFileEntry = spellsFile.getEntry( "ID", id );
 		
-		spell.name = StringTools.replace(typeName, "_", " ");
-		spell.name = spell.name.substr(0, 1).toUpperCase() + spell.name.substr(1);
-		
-		switch(type) {
-			case FREEZE:
-				spell.targetsOther = true;
-				spell.duration = 120;
-				spell.buffs.set("speed", -3);
-				spell.spiritPointsRequired = 1440;
-			case FIREBALL:
-				spell.targetsOther = true;
-				//gets modified to character level when spell is casted
-				spell.damage = new Range(1, 6);
-				spell.spiritPointsRequired = 720;
-			case BERSERK:
-				spell.duration = 60;
-				spell.buffs.set("attack", 3);
-				spell.buffs.set("speed", 3);
-				spell.spiritPointsRequired = 720;
-			case ENFEEBLE_MONSTER:
-				spell.targetsOther = true;
-				spell.duration = 120;
-				spell.buffs.set("attack", -3);
-				spell.spiritPointsRequired = 720;
-			case BLESS_WEAPON:
-				spell.duration = 120;
-				spell.buffs.set("attack", 3);
-				spell.spiritPointsRequired = 720;
-			case HASTE:
-				spell.duration = 120;
-				spell.buffs.set("speed", 3);
-				spell.spiritPointsRequired = 720;
-			case SHADOW_WALK:
-				spell.duration = 120;
-				spell.specialEffects.add(new CqSpecialEffectValue("invisible"));
-				spell.spiritPointsRequired = 720;
-			case CHARM_MONSTER:
-				spell.duration = 120;
-				spell.targetsOther = true;
-				spell.specialEffects.add(new CqSpecialEffectValue("charm"));
-				spell.spiritPointsRequired = 1440;
-			case POLYMORPH:
-				spell.duration = 180;
-				spell.targetsOther = true;
-				spell.specialEffects.add(new CqSpecialEffectValue("polymorph", "true"));
-				spell.spiritPointsRequired = 2160;
-			case SLEEP:
-				spell.duration = 90;
-				spell.targetsOther = true;
-				spell.specialEffects.add(new CqSpecialEffectValue("sleep", 0));
-				spell.spiritPointsRequired = 1440;
-			case FEAR:
-				spell.duration = 180;
-				spell.targetsOther = true;
-				spell.specialEffects.add(new CqSpecialEffectValue("fear"));
-				spell.spiritPointsRequired = 960;
-			case MAGIC_MIRROR: 
-				spell.duration = 180; // used to last 360
-				spell.targetsEmptyTile = true;
-				spell.specialEffects.add(new CqSpecialEffectValue("magic_mirror"));
-				spell.spiritPointsRequired = 720*2;
-			case STONE_SKIN: 
-				spell.duration = 120;
-				spell.buffs.set("defense", 5);
-				spell.buffs.set("speed", -1);
-				spell.spiritPointsRequired = 720;			
-			case BLINK:
-				spell.specialEffects.add(new CqSpecialEffectValue("blink"));
-				spell.spiritPointsRequired = 720;
-			case MAGIC_ARMOR: 
-				spell.duration = 120;
-				spell.buffs.set("defense", 3);
-				spell.spiritPointsRequired = 720;
-			case TELEPORT:
-				spell.targetsEmptyTile = true;
-				spell.specialEffects.add(new CqSpecialEffectValue("teleport"));
-				spell.spiritPointsRequired = 720*2;
-			case REVEAL_MAP:
-				spell.specialEffects.add(new CqSpecialEffectValue("reveal"));
-				spell.spiritPointsRequired = 7200;
-			case HEAL:
-				spell.specialEffects.add(new CqSpecialEffectValue("heal","full"));
-				spell.spiritPointsRequired = 720*4;
+		if ( entry != null ) {
+			spell = new CqSpell(X, Y, id, entry.getField( "Sprite" ) );
+			
+			spell.name = entry.getField( "Name" );
+
+			switch ( entry.getField( "Target" ) ) {
+			case 1: spell.targetsOther = true;
+			case 2: spell.targetsEmptyTile = true;
+			default:
+			}
+			
+			spell.duration = entry.getField( "Duration" );
+			spell.stat = entry.getField( "Stat" );
+			spell.statPointsRequired = entry.getField( "StatPoints" );
+			
+			if ( entry.getField( "Buff1" ) != "" ) {
+				spell.buffs.set( entry.getField( "Buff1" ), entry.getField( "Buff1Val" ) );
+			}
+			
+			if ( entry.getField( "Buff2" ) != "" ) {
+				spell.buffs.set( entry.getField( "Buff2" ), entry.getField( "Buff2Val" ) );
+			}
+
+			if ( entry.getField( "Effect" ) != "" ) {
+				spell.specialEffects.add(new CqSpecialEffectValue( entry.getField( "Effect" ), entry.getField( "EffectVal" ) ));
+			}
 		}
-		
+
 		return spell;
 	}
 }
@@ -187,34 +98,16 @@ class CqSpellFactory {
 class CqSpell extends CqItem {
 	public var targetsOther:Bool;
 	public var targetsEmptyTile:Bool;
-	public var spiritPoints:Int;
-	public var spiritPointsRequired:Int;
-	public function new(X:Float, Y:Float, type:CqSpellType) {
-		super(X, Y, type);
+	public var id:String;
+	public var stat:String;
+	public var statPoints:Int;
+	public var statPointsRequired:Int;
+	public function new(X:Float, Y:Float, _id:String, _sprite:String) {
+		super(X, Y, _sprite);
+		id = _id;
 		equipSlot = SPELL;
 		visible = false;
-		spiritPoints = 0;
+		stat = "spirit";
+		statPoints = 0;
 	}
-}
-
-enum CqSpellType {
-	FREEZE;
-	FIREBALL; 
-	BERSERK; 
-	ENFEEBLE_MONSTER; 
-	BLESS_WEAPON; 
-	HASTE; 
-	POLYMORPH; 
-	SHADOW_WALK;
-	MAGIC_ARMOR;
-	CHARM_MONSTER; 
-	REVEAL_MAP; 
-	BLINK;
-	SLEEP;
-	HEAL;
-	FEAR; 
-	MAGIC_MIRROR; 
-	STONE_SKIN; 
-	//PASS_WALL;
-	TELEPORT; 
 }

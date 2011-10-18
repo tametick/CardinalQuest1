@@ -1,6 +1,8 @@
 package cq.states;
 
 import com.eclecticdesignstudio.motion.Actuate;
+import data.Resources;
+import data.StatsFile;
 import flash.system.System;
 import haxel.HxlGame;
 
@@ -47,16 +49,19 @@ import cq.CqResources;
 
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
+import flash.events.TouchEvent;
+import flash.events.Event;
 
 class GameState extends CqState {
 	static private var msHideDelay:Float = 3;
 	var gameUI:GameUI;
-	public var chosenClass:CqClass;
+	public var chosenClass:String;
 	public var isPlayerActing:Bool;
 	public var resumeActingTime:Float;//time till when acting is blocked
 	public var started:Bool;
 	var lastMouse:Bool;
 	var endingAnim:Bool;
+	var mobileMoveAllowed:Bool;
 
 
 	public function clearGameUi() {
@@ -71,7 +76,7 @@ class GameState extends CqState {
 	{
 		super.create();
 		lastMouse = started = endingAnim = false;
-		chosenClass = FIGHTER;
+		chosenClass = "FIGHTER";
 		HxlGraphics.keys.onJustPressed = onKeyJustPressed;
 		HxlGraphics.fade.start(false, 0x00000000, 0.25);
 
@@ -105,7 +110,7 @@ class GameState extends CqState {
 
 			var currentTile = cast(Registery.level.getTile(Std.int(Registery.player.tilePos.x), Std.int(Registery.player.tilePos.y)), CqTile);
 			//stairs popup
-			if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), currentTile.dataNum)) {
+			if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), currentTile.getDataNum())) {
 				Registery.player.popup.mouseBound = false;
 				Registery.player.popup.setText("Click to go downstairs\n[hotkey enter]");
 			} else {
@@ -313,23 +318,33 @@ class GameState extends CqState {
 		if(Configuration.debug)
 			chosenClass = Configuration.debugStartingClass;
 
-		var classBG:Class<Bitmap>;
-		var introText:String;
-		switch(chosenClass){
-			case CqClass.FIGHTER:
-				classBG = SpriteKnightEntry;
-				//"You enter the dark domicile of the evil minotaur.\n\nIn the distance, you can hear the chatter of the vile creatures that inhabit the depths.\n\nYour adventure begins...";
-				introText = "You descend with shining sword into the dismal dwelling of the maleficent minotaur.  The haughty chatter of his servants, twisted and evil, fills the air.\n\nYou smile, for today you will shed much blood.";
-			case CqClass.THIEF:
-				introText = "You slink silently down unlit stairs.  The minotaur's wicked servants suspect nothing.\n\nYou cannot help but grin at the thought of the bounteous treasure they will soon relinquish.";
-				classBG = SpriteThiefEntry;
-			case CqClass.WIZARD:
-				classBG = SpriteWizardEntry;
-				introText = "The unsettled souls of the anguished dead whisper of the minotaur's misdeeds.  On bended knee you swear to them that they will be avenged.\n\nArcane flames dance between your hands.  The minotaur's wretched minions will be the most delightful playthings.";
-			default:
-				return;
+		// Determine class intro.
+		var classes:StatsFile = Resources.statsFiles.get( "classes.txt" );
+		var descriptions:StatsFile = Resources.statsFiles.get( "descriptions.txt" );
+
+		var classEntry:StatsFileEntry = classes.getEntry( "ID", chosenClass );
+		var entrySprite:String = classEntry.getField( "EntryBG" );
+		
+		var desc:StatsFileEntry = descriptions.getEntry( "Name", entrySprite );
+		var descText:String = if (desc != null) desc.getField( "Description" ); else "???";
+		
+		// Reformat \ns in description text.
+		var descTextLines:Array<String> = descText.split( "\\n" );
+		descText = "";
+		for ( l in descTextLines ) {
+			descText += l + "\n";
 		}
 
+		// Pick background image.
+		var classBG:Class<Bitmap>;
+		var introText:String = descText;
+		switch(classEntry.getField( "EntryBG" )){
+			case "SpriteKnightEntry": classBG = SpriteKnightEntry;
+			case "SpriteThiefEntry": classBG = SpriteThiefEntry;
+			case "SpriteWizardEntry": classBG = SpriteWizardEntry;
+			default:
+				return;
+		}		
 		remove(cursor); // actually get rid of the cursor (hiding it doesn't seem to help)
 		scroller = new CqTextScroller(classBG, 1);
 		scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,26);
@@ -397,45 +412,32 @@ class GameState extends CqState {
 
 		world.addOnNewLevel(onNewLevelCallBack);
 
-		switch(chosenClass) {
-			case FIGHTER:
-				player.give(CqItemType.SHORT_SWORD);
-				player.give(CqItemType.RED_POTION);
-				player.give(CqItemType.RED_POTION);
-				player.give(CqItemType.PURPLE_POTION);
-				player.give(CqSpellType.BERSERK);
-			case WIZARD:
-				player.give(CqItemType.STAFF);
-				player.give(CqItemType.RED_POTION);
-				player.give(CqItemType.RED_POTION);
-				player.give(CqItemType.BLUE_POTION);
-				player.give(CqSpellType.FIREBALL);
-			case THIEF:
-				player.give(CqItemType.DAGGER);
-				player.give(CqItemType.RED_POTION);
-				player.give(CqItemType.RED_POTION);
-				player.give(CqItemType.YELLOW_POTION);
-				player.give(CqItemType.GREEN_POTION);
-				player.give(CqSpellType.SHADOW_WALK);
+		// Give player items specified in classes.txt.
+		var classes:StatsFile = Resources.statsFiles.get( "classes.txt" );
+		var classEntry:StatsFileEntry = classes.getEntry( "ID", chosenClass );
+		for ( i in 1 ... 7 ) {
+			if ( classEntry.getField( "Item" + i ) != "" ) {
+				player.give(null, classEntry.getField( "Item" + i ));
+			}
 		}
 
 		PtPlayer.ClassSelected(chosenClass);
 
 		if (Configuration.debug) {
-			player.give(CqSpellType.HEAL);
-			player.give(CqSpellType.FIREBALL);
-			player.give(CqSpellType.FEAR);
-			player.give(CqSpellType.CHARM_MONSTER);
-			player.give(CqSpellType.REVEAL_MAP);
-			player.give(CqSpellType.MAGIC_MIRROR);
-			
-			player.give(CqItemType.FULL_PLATE_MAIL);
-			player.give(CqItemType.CLAYMORE);
-			player.give(CqItemType.TUNDRA_BOOTS);
-			player.give(CqItemType.BROAD_SWORD);
-			player.give(CqItemType.GOLDEN_HELM);
-			player.give(CqItemType.GEMMED_RING);
-			
+			player.give("HEAL");
+			player.give("FIREBALL");
+			player.give("FEAR");
+			player.give("CHARM_MONSTER");
+			player.give("REVEAL_MAP");
+			player.give("MAGIC_MIRROR");
+
+			player.give("FULL_PLATE_MAIL");
+			player.give("CLAYMORE");
+			player.give("TUNDRA_BOOTS");
+			player.give("BROAD_SWORD");
+			player.give("GOLDEN_HELM");
+			player.give("GEMMED_RING");
+
 			if(Configuration.debugStartingLevel>0)
 				Registery.world.goToNextLevel(Configuration.debugStartingLevel);
 		}
@@ -497,6 +499,10 @@ class GameState extends CqState {
 	}
 
 	override function onKeyUp(event:KeyboardEvent) {
+
+		//A cookie if you discover the raison d'etre
+		mobileMoveAllowed = true;
+
 		if (!started || endingAnim) return;
 
 		// another direct query of keys -- we'll want to offload most of these checks
@@ -531,14 +537,26 @@ class GameState extends CqState {
 	var msMoveStamp:Float;
 	override function onMouseMove(event:MouseEvent)
 	{
+		updateTouchLocation( event );
+
 		msMoveStamp = Timer.stamp();
 		cursor.visible = true;
 		lastMouse = true;
 	}
 	override function onMouseDown(event:MouseEvent) {
+
+		updateTouchLocation( event );
+
 		if (HxlGraphics.justUnpaused) {
 			HxlGraphics.justUnpaused = false;
 			return;
+		}
+
+		if( Configuration.mobile ){
+			isPlayerActing = true;
+			HxlGraphics.updateInput();
+			act();
+			isPlayerActing = false;
 		}
 
 		if (!started || endingAnim || Timer.stamp() < resumeActingTime)
@@ -552,6 +570,11 @@ class GameState extends CqState {
 	}
 
 	override function onMouseUp(event:MouseEvent) {
+
+		updateTouchLocation( event );
+
+		mobileMoveAllowed = true;
+
 		if (!started || endingAnim)
 			return;
 
@@ -582,7 +605,7 @@ class GameState extends CqState {
 				isPlayerActing = true; // maybe?
 			}
 			return true;
-		} else if (HxlUtil.contains(SpriteTiles.doors.iterator(), tile.dataNum)) {
+		} else if (HxlUtil.contains(SpriteTiles.doors.iterator(), tile.getDataNum())) {
 			// would be great to tell player to open the door, wouldn't it just?
 			openDoor(tile);
 			resumeActingTime = Timer.stamp() + player.moveSpeed;
@@ -593,7 +616,7 @@ class GameState extends CqState {
 	}
 
 	private function tileBlocksPlayer(tile:CqTile):Bool {
-		return tile == null || (tile.isBlockingMovement() && !(HxlUtil.contains(SpriteTiles.doors.iterator(), tile.dataNum)));
+		return tile == null || (tile.isBlockingMovement() && !(HxlUtil.contains(SpriteTiles.doors.iterator(), tile.getDataNum())));
 	}
 
 	private function pickBestSlide(facing:HxlPoint):HxlPoint {
@@ -712,10 +735,20 @@ class GameState extends CqState {
 			return;
 		}
 
-		if (player.isMoving || Timer.stamp() < resumeActingTime) {
-			// if the player is being animated presently, we can't take key commands
-			return;
+		//Should we take the input ?
+		if ( (player.isMoving || Timer.stamp() < resumeActingTime ) ) {
+			//if the player is being animated presently,
+			//we can't take key commands unless we are on a mobile device
+			if( Configuration.mobile ){
+				if( !mobileMoveAllowed ) {
+					return;
+				}
+			} else {
+				return;
+			}
 		}
+
+		mobileMoveAllowed = false;
 
 		if (checkSlotHotkeys()) {
 			// verify that this lines up with mouse behavior
@@ -729,6 +762,7 @@ class GameState extends CqState {
 		var keyFacing:HxlPoint = level.getTargetAccordingToKeyPress();
 
 		if (keyFacing != null ) {
+
 			facing = keyFacing;
 			lastMouse = false; //for targeting
 			isMouseControl = false;
@@ -750,11 +784,11 @@ class GameState extends CqState {
 		if (facing.x == 0 && facing.y == 0) {
 			// perform actions that happen when the PLAYER SELECTS HIMSELF
 			// (this could easily be factored out)
-			
+
 			// first, make sure the key was JUST pressed, if this is a key command
 			// (otherwise we'll go down stairs or wait after targeting)
 			var confirmed = true;
-			
+
 			if (!isMouseControl) {
 				confirmed = false;
 				for (k in Configuration.bindings.waitkeys) {
@@ -762,24 +796,39 @@ class GameState extends CqState {
 						confirmed = true;
 					}
 				}
-			}			
+			}
 
 			if (!confirmed) {
 				return;
-			}	
-			
+			}
+
 			tile = getPlayerTile(new HxlPoint(0, 0));
-			
+
 			if (tile.loots.length > 0) {
 				// there is an item here, so let's pick it up (this used to be manual?  crazy!)
 				var item = cast(tile.loots[tile.loots.length - 1], CqItem);
 				player.pickup(this, item);
 				item = null;
-			} else if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tile.dataNum)) {
+			} else if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tile.getDataNum())) {
 				// these are stairs!  time to descend -- but only if the key was JUST pressed
 
-				Registery.world.goToNextLevel();
-				player.popup.setText("");
+				var confirmed = true;
+
+				if (!isMouseControl) {
+					confirmed = false;
+					for (k in Configuration.bindings.waitkeys) {
+						if (HxlGraphics.keys.justPressed(k)) {
+							confirmed = true;
+						}
+					}
+				}
+
+				if (!confirmed) {
+					return;
+				} else {
+					Registery.world.goToNextLevel();
+					player.popup.setText("");
+				}
 
 				#if demo
 				if (Configuration.demoLastLevel == Registery.world.currentLevelIndex-1) {
@@ -854,7 +903,7 @@ class GameState extends CqState {
 		gameUI.destroy();
 		gameUI = null;
 	}
-	
+
 	private var startedMoving:Bool;
 	private var boss:CqMob;
 	private var BossTargetDir:HxlPoint;
@@ -862,7 +911,7 @@ class GameState extends CqState {
 	private var acts:Bool;
 	private var bossgroup:HxlGroup;
 	public function startBossAnim()	{
-		
+
 		//state vars
 		endingAnim = true;
 		startedMoving = false;

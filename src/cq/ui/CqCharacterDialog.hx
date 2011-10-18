@@ -41,7 +41,7 @@ class CqCharacterDialog extends HxlSlidingDialog {
 		add(bg);
 		
 		var textColor:Int = 0x6D564B;
-		var player_class:String = HxlUtil.capitalizeFirstCharacter(HxlUtil.enumToString(Registery.player.playerClass, false).toLowerCase());
+		var player_class:String = Registery.player.playerClassName;
 		var txt_string:Array<String> = [player_class, "Health:", "0", "Attack:", "0", "Defense:", "0", "Speed:", "0", "Spirit:", "0", "Vitality:", "0"];
 		
 		
@@ -60,8 +60,8 @@ class CqCharacterDialog extends HxlSlidingDialog {
 		var shadow = new HxlSprite(0, 0);
 		player.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 8.0, 8.0);
 		shadow.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 8.0, 8.0);
-		player.setFrame(SpritePlayer.instance.getSpriteIndex(Type.enumConstructor(Registery.player.playerClass).toLowerCase()));
-		shadow.setFrame(SpritePlayer.instance.getSpriteIndex(Type.enumConstructor(Registery.player.playerClass).toLowerCase()));
+		player.setFrame(SpritePlayer.instance.getSpriteIndex(Registery.player.playerClassSprite));
+		shadow.setFrame(SpritePlayer.instance.getSpriteIndex(Registery.player.playerClassSprite));
 		//shadow.
 		shadow.setAlpha(0.7);
 		shadow.setColor(1);

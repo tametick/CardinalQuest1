@@ -1,7 +1,7 @@
 Quick List for compiling Cardinal Quest
 
 - Get FlashDevelop
-	Requirements : 
+	Requirements :
 	- .NET 2.0			Google..
 	- Java 1.6 JRE		http://www.oracle.com/technetwork/java/javase/downloads/index.html
 	- Flash player		http://www.adobe.com/support/flashplayer/downloads.html
@@ -11,18 +11,30 @@ Quick List for compiling Cardinal Quest
 - Clone cardinal quest in a convenient folder
 
 	hg clone https://<your user-name>@bitbucket.org/ido.yehieli/cardinal-quest-haxe
-	
+
 - Make sure you have the air2 haxelib :
-	
+
 	haxelib install air2
-   
+
 - Make sure you have swfmill either in the rsrc/cq folder or on the path
 
 	http://swfmill.org/
-		
+
 - run generate_resources.bat to compile the assets into one swf file.
-- Fire up FlashDevelop 
+- Fire up FlashDevelop
 - Open cq.hxproj
 - Build Project F8
 - Run Project F5
-- UI for version control : 
+- UI for version control :
+
+
+Note for developers that want to trace stuff
+The following trick should do it:
+
+		/*
+		var tapMessage = "Comparing ";
+		tapMessage = tapMessage + "(" + Std.string( Std.int( X ) ) +"," + Std.string( Std.int( Y ) ) + ") ";
+		tapMessage = tapMessage + "(" + Std.string( Std.int( _point.x  ) ) +"," + Std.string( Std.int( _point.y ) ) + ") ";
+		tapMessage = tapMessage + "(" + Std.string( Std.int( _point.x+width ) ) +"," + Std.string( Std.int( _point.y+height ) ) + ") ";
+		GameUI.showTextNotification( tapMessage );
+		*/

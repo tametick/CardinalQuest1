@@ -15,7 +15,6 @@ import com.eclecticdesignstudio.motion.actuators.MethodActuator;
 class Tile extends HxlTile {
 	public var actors:Array<Actor>;
 	public var loots:Array<Loot>;
-	public var decorations:Array<Decoration>;
 	public var level:Level;
 	public var timesUncovered:Int;
 	
@@ -32,7 +31,6 @@ class Tile extends HxlTile {
 		
 		actors = new Array<Actor>();
 		loots = new Array<Loot>();
-		decorations = new Array<Decoration>();
 		timesUncovered = 0;
 	}
 	

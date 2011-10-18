@@ -16,7 +16,7 @@
 	<minimizable>true</minimizable>
 	<maximizable>false</maximizable>
 	<resizable>false</resizable>
-	<renderMode>auto</renderMode>
+	<renderMode>gpu</renderMode>
 	<aspectRatio>landscape</aspectRatio>
 	<fullScreen>true</fullScreen>
   </initialWindow>

@@ -7,6 +7,7 @@ import cq.CqActor;
 import cq.effects.CqEffectSpell;
 import cq.ui.CqDecoration;
 import cq.states.GameState;
+import haxel.GraphicCache;
 
 import generators.BSP;
 import world.World;
@@ -15,7 +16,6 @@ import world.Mob;
 import world.Loot;
 import world.Tile;
 import world.GameObject;
-import world.Decoration;
 
 import haxel.HxlSprite;
 import haxel.HxlPoint;
@@ -95,26 +95,25 @@ class CqLevel extends Level {
 		super.addDecoration(t, state);
 		
 		//return if is door.
-		if (Lambda.has( Resources.doors, t.dataNum))
+		if (Lambda.has( Resources.doors, t.getDataNum()))
 			return;
 			
 		//return if stair or ladder
-		if (Lambda.has( Resources.stairsDown, t.dataNum))
+		if (Lambda.has( Resources.stairsDown, t.getDataNum()))
 			return;
 			
-		var floor:Bool = Lambda.has( Resources.walkableAndSeeThroughTiles, t.dataNum);
-		var frame:String = floor?CqDecoration.randomFloor():CqDecoration.randomWall();
-		var pos:HxlPoint = getPixelPositionOfTile(t.mapX, t.mapY);
-		var dec:CqDecoration = new CqDecoration(pos.x, pos.y,frame);
-		t.decorations.push( dec );
-		addObject(state, dec );
+		var floor:Bool = Lambda.has( Resources.walkableAndSeeThroughTiles, t.getDataNum());
+
+		var dec:Int = floor?CqDecoration.randomFloorIndex():CqDecoration.randomWallIndex();
+		t.decorationIndices.push( dec );
+		
 		var minimumZ:Int = 0;
 		
 		for (loot in t.loots) {
 			var field:Dynamic = Reflect.field(loot, "zIndex");
 			Reflect.setField(loot, "zIndex", field+1);
-			if (field < minimumZ) 
-				dec.zIndex = minimumZ = field;
+//			if (field < minimumZ) 
+//				dec.zIndex = minimumZ = field;
 		}
 	}
 	
@@ -186,8 +185,8 @@ class CqLevel extends Level {
 				newMapData[y][x] =  tiles.getSpriteIndex(prefix+suffix);
 			}
 		}
-		
-		loadMap(newMapData, SpriteTiles, Configuration.tileSize, Configuration.tileSize, 2.0, 2.0);
+	
+		loadMap(newMapData, SpriteTiles, SpriteDecorations, Configuration.tileSize, Configuration.tileSize, 2.0, 2.0);
 	
 		// mark as visible in fov
 		markInvisible();
@@ -534,12 +533,34 @@ class CqLevel extends Level {
 			spirit += creature.buffs.get("spirit");
 			spirit = Std.int(Math.max(spirit, 1));
 			
+			// Calc attack, defense and vitality as well, for various spells
+			var attack = creature.attack;
+			attack += creature.buffs.get("attack");
+			attack = Std.int(Math.max(attack, 0));
+			
+			var defense = creature.defense;
+			defense += creature.buffs.get("defense");
+			defense = Std.int(Math.max(defense, 0));
+			
+			var vitality = creature.vitality;
+			vitality += creature.buffs.get("vitality");
+			vitality = Std.int(Math.max(vitality, 0));
+			
 			// Charge action & spirit points
 			creature.actionPoints += speed;
 			if (!specialActive) {
 				for (s in creature.equippedSpells) {
-					if(s!=null)
-						s.spiritPoints = Std.int(Math.min( s.spiritPointsRequired, s.spiritPoints + spirit));
+					if (s != null) {
+						var boost:Int = 0;
+						switch ( s.stat ) {
+							case "spirit": boost = spirit;
+							case "speed": boost = speed;
+							case "attack": boost = attack;
+							case "defense": boost = defense;
+							case "vitality": boost = vitality;
+						}
+						s.statPoints = Std.int(Math.min( s.statPointsRequired, s.statPoints + boost));
+					}
 				}
 			}
 			

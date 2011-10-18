@@ -54,8 +54,10 @@ class HxlTilemap extends HxlObject {
 
 	public var tileClass:Class<HxlTile>;
 
-	
 	private var tileBMPs:Array<HxlTilemapBMPData>;
+	private var decorations:GraphicCacheBMPData;
+	
+	private var cachedTilemapBuffer:BitmapData;
 
 	/**
 	 * The tilemap constructor just initializes some basic variables.
@@ -75,12 +77,13 @@ class HxlTilemap extends HxlObject {
 		_alpha = 1;
 		_color = 0x00ffffff;
 
+		mapData = null;
+		
 		tileClass = HxlTile;
 		if (tmpRect == null)
 			tmpRect = new Rectangle(0, 0, _tileWidth, _tileHeight);
-		
-		if (tmpBitmap == null)
-			tmpBitmap = new HxlTilemapBMPData(_tileWidth, _tileHeight, true, 0x00ffffff);
+
+		cachedTilemapBuffer = null;
 	}
 
 	/**
@@ -88,6 +91,7 @@ class HxlTilemap extends HxlObject {
 	 * 
 	 * @param	MapData			2d array of Ints, specifies index of sprite to use from TileGraphic.	
 	 * @param	TileGraphic		All the tiles you want to use, arranged in a strip corresponding to the numbers in MapData.
+	 * @param	Decorations 	An HxlSpriteSheet containing all the decorations tiles can optionally possess.
 	 * @param	TileWidth		The width of your tiles (e.g. 8) - defaults to height of the tile graphic if unspecified.
 	 * @param	TileHeight		The height of your tiles (e.g. 8) - defaults to width if unspecified.
 	 * @param 	ScaleX 			Desired X scale of the rendered graphics.
@@ -95,16 +99,21 @@ class HxlTilemap extends HxlObject {
 	 * 
 	 * @return	A pointer this instance of HxlTilemap, for chaining as usual :)
 	 */
-	public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {
+	public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, Decorations:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {
 		mapData = MapData;
 	
 		tileGraphicName = Type.getClassName(TileGraphic);
 
+		decorations = GraphicCache.addBitmap(Decorations,false,false, null, ScaleX, ScaleY);
+		
 		//Figure out the map dimensions based on the mapdata
 		var c:Int;
 		heightInTiles = MapData.length;
 		widthInTiles = MapData[0].length;
-		
+
+		// Create buffer.
+		cachedTilemapBuffer = new BitmapData( _tileWidth * widthInTiles, _tileHeight * heightInTiles, false, 0x000000 );
+
 		//Pre-process the map data if it's auto-tiled
 		var i:Int;
 		totalTiles = widthInTiles*heightInTiles;
@@ -180,6 +189,11 @@ class HxlTilemap extends HxlObject {
 	override public function destroy() 	{
 		super.destroy();
 		
+		if ( cachedTilemapBuffer != null ) {
+			cachedTilemapBuffer.dispose();
+			cachedTilemapBuffer = null;
+		}
+		
 	    for( i in 0...tileBMPs.length ) {
 			tileBMPs[i].dispose();
 			tileBMPs[i] = null;
@@ -195,11 +209,6 @@ class HxlTilemap extends HxlObject {
 		}
 		_tiles = null;
 		
-		if (tmpBitmap != null){
-			tmpBitmap.dispose();
-			tmpBitmap = null;				
-		}
-		
 		if(_pixels!=null) {
 			_pixels.dispose();
 			_pixels = null;		
@@ -211,42 +220,56 @@ class HxlTilemap extends HxlObject {
 	/**
 	 * Internal function that actually renders the tilemap.  Called by render().
      */
-	static var tmpBitmap:BitmapData;
 	static var tmpRect:Rectangle;
 	static var originPoint:Point = new Point(0, 0);
 
     public override function render() {
-
 		getScreenXY(_point);
 		_flashPoint.x = _point.x;
 		_flashPoint.y = _point.y;
-		var tx:Int = Math.floor(-_flashPoint.x/_tileWidth);
-		var ty:Int = Math.floor(-_flashPoint.y/_tileHeight);
-		if (tx < 0) tx = 0;
-		if (tx > widthInTiles-_screenCols) tx = widthInTiles-_screenCols;
-		if (ty < 0) ty = 0;
-		if (ty > heightInTiles-_screenRows) ty = heightInTiles-_screenRows;
-		_flashPoint.x += tx * _tileWidth;
-		_flashPoint.y += ty * _tileHeight;
+		var txMin:Int = Math.floor( -_point.x / _tileWidth);
+		var txMax:Int = txMin + _screenCols;
+		var tyMin:Int = Math.floor( -_point.y / _tileHeight);
+		var tyMax:Int = tyMin + _screenRows;
+		if (txMin < 0) txMin = 0;
+		if (txMax > widthInTiles) txMax = widthInTiles;
+		if (tyMin < 0) tyMin = 0;
+		if (tyMax > heightInTiles) tyMax = heightInTiles;
+		
+		_flashPoint.x = txMin * _tileWidth;
+		_flashPoint.y = tyMin * _tileHeight;
 		var opx:Int = Std.int(_flashPoint.x);
-		var c:Int;
+		
 		var tile:HxlTile;
-		for (r in 0..._screenRows) {
-			for (c in 0..._screenCols) {
-				tile = _tiles[r+ty][c+tx];
-				if ( tile.visible ) {
-					var name = (tile.dataNum - startingIndex) +"_" + tile._ct;
-					tmpBitmap = tileBMPs[(tile.dataNum-startingIndex)].clone();
-
-					if (tile._ct != null){
-						tmpBitmap.colorTransform( tmpRect,  tile._ct);
-					}
+		for (r in tyMin...tyMax) {
+			for (c in txMin...txMax) {
+				tile = _tiles[r][c];
+				
+				if ( tile.visible && tile.dirty ) {
+					tmpRect = tileBMPs[0].rect;
+					cachedTilemapBuffer.copyPixels(tileBMPs[(tile.getDataNum()-startingIndex)], tmpRect, _flashPoint, null, null, false);
 					
-					HxlGraphics.buffer.copyPixels(tmpBitmap, tmpRect, _flashPoint, null, null, false);
-					tmpBitmap.dispose();
-					tmpBitmap = null;
-					HxlGraphics.numRenders++;
-					name = null;
+					for ( d in tile.decorationIndices ) {
+						var dx:Int = Std.int( d % (decorations.width / _tileWidth) );
+						var dy:Int = HxlUtil.floor( d / (decorations.width / _tileWidth) );
+						
+						tmpRect.left = dx * _tileWidth;
+						tmpRect.right = tmpRect.left + _tileWidth;
+						tmpRect.top = dy * _tileHeight;
+						tmpRect.bottom = tmpRect.top + _tileHeight;
+						cachedTilemapBuffer.copyPixels( decorations, tmpRect, _flashPoint, null, null, true );
+					}
+				
+					tmpRect.left = _flashPoint.x;
+					tmpRect.top = _flashPoint.y;
+					tmpRect.right = _flashPoint.x + _tileWidth;
+					tmpRect.bottom = _flashPoint.y + _tileHeight;
+					
+					if (tile._ct != null){
+						cachedTilemapBuffer.colorTransform( tmpRect,  tile._ct);
+					}
+
+					tile.dirty = false;
 				}
 				_flashPoint.x += _tileWidth;
 			}
@@ -254,7 +277,16 @@ class HxlTilemap extends HxlObject {
 			_flashPoint.y += _tileHeight;
 		}
 
-		tile = null;
+		tile = null;	
+
+		tmpRect.left = -_point.x;
+		tmpRect.right = -_point.x + _screenCols * _tileWidth;
+		tmpRect.top = -_point.y;
+		tmpRect.bottom = -_point.y + _screenRows * _tileHeight;
+		_flashPoint.x = 0;
+		_flashPoint.y = 0;
+		HxlGraphics.buffer.copyPixels(cachedTilemapBuffer, tmpRect, _flashPoint, null, null, false);
+		HxlGraphics.numRenders++;
 	}
 
 	/**
@@ -336,7 +368,7 @@ class HxlTilemap extends HxlObject {
 		var tile:HxlTile = getTile(X,Y);
 		if ( tile == null ) 
 			return;	
-		tile.dataNum = Data;
+		tile.setDataNum( Data );
 	}
 }
 
@@ -350,7 +382,7 @@ enum Visibility {
 class HxlTile {
 	public var visible:Bool;
 	public var visibility:Visibility;
-	
+
 	// override these
 	public function isBlockingView():Bool {	return false; }
 	public function isBlockingMovement():Bool {	return false;}	
@@ -365,11 +397,13 @@ class HxlTile {
 	/**
 	 * An Int representing the index of the graphic to use for this tile. If 0, tile has no graphic.
 	 **/
-	public var dataNum:Int;
+	var dataNum:Int;
+	public var decorationIndices:Array<Int>;
 
 	var _alpha:Float;
 	var _color:Int;
 	public var _ct:ColorTransform;
+	public var dirty:Bool;
 
 	public var alpha(getAlpha, setAlpha) : Float;
 	public var color(getColor, setColor) : Int;
@@ -381,6 +415,9 @@ class HxlTile {
 		_alpha = 1;
 		_color = 0x00ffffff;
 		visible = true;
+		dirty = true;
+		
+		decorationIndices = new Array<Int>();
 	}
 
 	public function destroy() {
@@ -404,9 +441,23 @@ class HxlTile {
 			_ct = new ColorTransform((_color>>16)/255.0,(_color>>8&0xff)/255.0,(_color&0xff)/255.0,_alpha);
 		else 
 			_ct = null;
+		
+		dirty = true;
+		
 		return Alpha;
 	}
 
+	public function getDataNum():Int {
+		return dataNum;
+	}
+	
+	public function setDataNum(DataNum:Int):Int {
+		if (DataNum == dataNum) return DataNum;
+		dataNum = DataNum;
+		dirty = true;
+		return DataNum;
+	}
+	
 	/**
 	 * Set <code>color</code> to a number in this format: 0xRRGGBB.
 	 * <code>color</code> IGNORES ALPHA.  To change the opacity use <code>alpha</code>.
@@ -425,6 +476,9 @@ class HxlTile {
 			_ct = new ColorTransform((_color>>16)/255.0,(_color>>8&0xff)/255.0,(_color&0xff)/255.0,_alpha);
 		else 
 			_ct = null;
+			
+		dirty = true;
+			
 		return Color;
 	}
 

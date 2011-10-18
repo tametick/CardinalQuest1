@@ -15,7 +15,6 @@ import world.Mob;
 import world.Loot;
 import world.Tile;
 import world.GameObject;
-import world.Decoration;
 
 import haxel.HxlSprite;
 import haxel.HxlPoint;
@@ -40,7 +39,7 @@ class CqWorld extends World {
 		super();
 
 		onNewLevel = new List();
-		CqSpellFactory.resetRemainigSpells();
+		CqSpellFactory.resetRemainingSpells();
 			
 		goToLevel(currentLevelIndex, false);
 	}

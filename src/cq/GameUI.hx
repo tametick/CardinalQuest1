@@ -180,7 +180,7 @@ class GameUI extends HxlDialog {
 		panels = new CqPanelContainer();	
 		add(panels);
 		panels.zIndex = 2;
-		var mainBtn = SpritePortrait.getIcon(Registery.player.playerClass,64 ,1.0);
+		var mainBtn = SpritePortrait.getIcon(Registery.player.playerClassSprite,64 ,1.0);
 		var infoBtn = new HxlSprite();
 		infoBtn.loadGraphic(SpriteInfo, false, false, 64, 64, true, 1, 1);
 		
@@ -560,15 +560,15 @@ class GameUI extends HxlDialog {
 		var chargeBmp:Bitmap = new Bitmap(GraphicCache.getBitmap(CqGraphicKey.EquipmentCellBG));
 		var chargeShape:Shape = new Shape();
 
-		var spiritPoints = 0;
-		var spiritPointsRequired = 1;
+		var statPoints = 0;
+		var statPointsRequired = 1;
 		if(btn.getSpell()!=null){		
-			spiritPoints = btn.getSpell().spiritPoints;
-			spiritPointsRequired = btn.getSpell().spiritPointsRequired;
+			statPoints = btn.getSpell().statPoints;
+			statPointsRequired = btn.getSpell().statPointsRequired;
 		}
 
 		var start = -Math.PI / 2;
-		var end = 2*Math.PI * (3/4 - spiritPoints/spiritPointsRequired);
+		var end = 2*Math.PI * (3/4 - statPoints/statPointsRequired);
 			
 		var G = chargeShape.graphics;
 		G.clear();
@@ -958,7 +958,7 @@ class GameUI extends HxlDialog {
 				if ( tile == null || tile.actors.length > 0 || tile.visibility != Visibility.IN_SIGHT) {
 					setTargetColor(0xff0000);
 				} else {
-					if (HxlUtil.contains(SpriteTiles.walkableAndSeeThroughTiles.iterator(), tile.dataNum)) {
+					if (HxlUtil.contains(SpriteTiles.walkableAndSeeThroughTiles.iterator(), tile.getDataNum())) {
 						setTargetColor(0x00ff00);
 					} else {
 						setTargetColor(0xff0000);
@@ -1011,10 +1011,10 @@ class GameUI extends HxlDialog {
 		
 		if (tile != null && tile.visibility == Visibility.IN_SIGHT) {
 			if (isTargetingEmptyTile) {
-				if ( tile.actors.length <= 0 && HxlUtil.contains(SpriteTiles.walkableAndSeeThroughTiles.iterator(), tile.dataNum) ) {
+				if ( tile.actors.length <= 0 && HxlUtil.contains(SpriteTiles.walkableAndSeeThroughTiles.iterator(), tile.getDataNum()) ) {
 					cast(Registery.player, CqActor).useAt(targetSpell.getSpell(), tile);
 					SoundEffectsManager.play(SpellCast);
-					targetSpell.getSpell().spiritPoints = 0;
+					targetSpell.getSpell().statPoints = 0;
 					updateCharge(targetSpell);
 					cast(HxlGraphics.state, GameState).passTurn();
 				}
@@ -1024,7 +1024,7 @@ class GameUI extends HxlDialog {
 						var player = Registery.player;
 						player.use(targetSpell.getSpell(), cast(tile.actors[0], CqActor));
 						SoundEffectsManager.play(SpellCast);
-						targetSpell.getSpell().spiritPoints = 0;
+						targetSpell.getSpell().statPoints = 0;
 						updateCharge(targetSpell);
 						cast(HxlGraphics.state, GameState).passTurn();
 					}
@@ -1138,7 +1138,7 @@ class GameUI extends HxlDialog {
 			ball.pixels.dispose();
 			ball.pixels = null;
 		}
-		CqActor.useOn(spell, actor, other);
+		CqActor.completeUseOn(spell, actor, other);
 	}
 }
 

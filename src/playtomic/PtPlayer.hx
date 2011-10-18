@@ -1,6 +1,8 @@
 package playtomic;
 
 import cq.CqActor;
+import data.Resources;
+import data.StatsFile;
 
 import data.Registery;
 
@@ -14,7 +16,7 @@ class PtPlayer {
 	static var beenHit:Int;
 	static var enemiesKilled:Int;
 	
-	static var classSelected:CqClass;
+	static var classSelectedID:String;
 	static var classSelectedStr:String;
 	
 	public static function startLevel() {
@@ -73,13 +75,16 @@ class PtPlayer {
 		Log.LevelCounterMetric("Player Died U", Registery.level.index, true);
 	}
 */
-	public static function ClassSelected(SelectedClass:CqClass) {
+	public static function ClassSelected(SelectedClass:String) {
 		if (!Playtomic.isEnabled())
 			return;
-		classSelectedStr = Type.enumConstructor(SelectedClass).toLowerCase();
-		classSelectedStr = classSelectedStr.charAt(0).toUpperCase() + classSelectedStr.substr(1);
+			
+		var classes:StatsFile = Resources.statsFiles.get( "classes.txt" );
+		var classEntry:StatsFileEntry = classes.getEntry( "ID", SelectedClass );
+			
+		classSelectedID = SelectedClass;
+		classSelectedStr = classEntry.getField( "Name" );
 		Log.CustomMetric(classSelectedStr, "Class Selected");
-		classSelected = SelectedClass;
 	}
 }
 

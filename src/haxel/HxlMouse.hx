@@ -6,6 +6,7 @@ import flash.ui.Mouse;
 import haxel.HxlPoint;
 import haxel.HxlSprite;
 import haxel.HxlUtil;
+import cq.GameUI;
 
 #if flash
   import flash.ui.MouseCursor;
@@ -58,14 +59,14 @@ class HxlMouse {
    * Constructor.
    */
   public function new() {
-    x = 0;
-    y = 0;
-    screenX = 0;
-    screenY = 0;
-    _current = 0;
-    _last = 0;
-    cursor = null;
-    _out = false;
+	x = 0;
+	y = 0;
+	screenX = 0;
+	screenY = 0;
+	_current = 0;
+	_last = 0;
+	cursor = null;
+	_out = false;
   }
 
   /**
@@ -76,31 +77,31 @@ class HxlMouse {
    * * @param	YOffset		The number of pixels between the mouse's screen position and the graphic's top left corner.
    */
   public function show(?Graphic:Class<Bitmap>=null,?XOffset:Int=0,?YOffset:Int=0) {
-    _out = true;
-    if (Graphic != null) {
-      load(Graphic,XOffset,YOffset);
-    } else if(cursor != null) {
-      cursor.visible = true;
-    } else {
-      load(null);
-    }
+	_out = true;
+	if (Graphic != null) {
+	  load(Graphic,XOffset,YOffset);
+	} else if(cursor != null) {
+	  cursor.visible = true;
+	} else {
+	  load(null);
+	}
   }
 
   /**
    * Sets the system mouse cursor. Valid arguments are: 'auto', 'ibeam', 'hand', 'button' and 'arrow'.
    **/
   public function set(Cursor:String="auto") {
-    Reflect.setField(flash.ui.Mouse, "cursor", Cursor);
+	Reflect.setField(flash.ui.Mouse, "cursor", Cursor);
   }
 
   /**
    * Hides the mouse cursor
    */
   public function hide() {
-    if (cursor != null) {
-      cursor.visible = false;
-      _out = false;
-    }
+	if (cursor != null) {
+	  cursor.visible = false;
+	  _out = false;
+	}
   }
 
   /**
@@ -111,13 +112,13 @@ class HxlMouse {
    * * @param	YOffset		The number of pixels between the mouse's screen position and the graphic's top left corner.
    */
   public function load(Graphic:Class<Bitmap>,?XOffset:Int=0,?YOffset:Int=0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0) {
-    if (Graphic == null) {
-      Graphic = ImgDefaultCursor;
-    }
-    cursor = new HxlSprite(screenX,screenY,Graphic,ScaleX,ScaleY);
-    cursor.offset.x = XOffset;
-    cursor.offset.y = YOffset;
-    cursor.visible = true;
+	if (Graphic == null) {
+	  Graphic = ImgDefaultCursor;
+	}
+	cursor = new HxlSprite(screenX,screenY,Graphic,ScaleX,ScaleY);
+	cursor.offset.x = XOffset;
+	cursor.offset.y = YOffset;
+	cursor.visible = true;
   }
 
   /**
@@ -125,13 +126,13 @@ class HxlMouse {
    * then the default system cursor is loaded up to replace the old one.
    */
   public function unload() {
-    if (cursor != null) 	{
-      if (cursor.visible) {
-        load(null);
-      } else {
-        cursor = null;
-      }
-    }
+	if (cursor != null) 	{
+	  if (cursor.visible) {
+		load(null);
+	  } else {
+		cursor = null;
+	  }
+	}
   }
 
   /**
@@ -144,28 +145,36 @@ class HxlMouse {
    * @param	YScroll		The amount the game world has scrolled vertically.
    */
   public function update(X:Int,Y:Int,XScroll:Float,YScroll:Float) {
-    screenX = X;
-    screenY = Y;
-    x = Math.floor(screenX-HxlUtil.floor(XScroll));
-    y = Math.floor(screenY-HxlUtil.floor(YScroll));
-    if (cursor != null) {
-      cursor.x = x;
-      cursor.y = y;
-    }
-    if ((_last == -1) && (_current == -1)) {
-      _current = 0;
-    } else if ((_last == 2) && (_current == 2)) {
-      _current = 1;
-    }
-    _last = _current;
+
+ /*
+	var msg = "Mouse "; //TjD
+	msg = msg + "(" + Std.string( Std.int( X ) ) +"," + Std.string( Std.int( Y ) ) + ") ";
+	msg = msg + "(" + Std.string( Std.int( XScroll ) ) +"," + Std.string( Std.int( YScroll ) ) + ") ";
+	GameUI.showTextNotification( msg );
+*/
+
+	screenX = X;
+	screenY = Y;
+	x = Math.floor(screenX-HxlUtil.floor(XScroll));
+	y = Math.floor(screenY-HxlUtil.floor(YScroll));
+	if (cursor != null) {
+	  cursor.x = x;
+	  cursor.y = y;
+	}
+	if ((_last == -1) && (_current == -1)) {
+	  _current = 0;
+	} else if ((_last == 2) && (_current == 2)) {
+	  _current = 1;
+	}
+	_last = _current;
   }
 
   /**
    * Resets the just pressed/just released flags and sets mouse to not pressed.
    */
   public function reset() {
-    _current = 0;
-    _last = 0;
+	_current = 0;
+	_last = 0;
   }
 
   /**
@@ -195,11 +204,11 @@ class HxlMouse {
    * @param	event	A <code>MouseEvent</code> object.
    */
   public function handleMouseDown(event:MouseEvent) {
-    if (_current > 0) {
-      _current = 1;
-    } else {
-      _current = 2;
-    }
+	if (_current > 0) {
+	  _current = 1;
+	} else {
+	  _current = 2;
+	}
   }
 
   /**
@@ -208,11 +217,11 @@ class HxlMouse {
    * @param	event	A <code>MouseEvent</code> object.
    */
   public function handleMouseUp(event:MouseEvent) {
-    if (_current > 0) {
-      _current = -1;
-    } else {
-      _current = 0;
-    }
+	if (_current > 0) {
+	  _current = -1;
+	} else {
+	  _current = 0;
+	}
   }
 
   /**
@@ -221,10 +230,10 @@ class HxlMouse {
    * @param	event	A <code>MouseEvent</code> object.
    */
   public function handleMouseOut(event:MouseEvent)  {
-    if (cursor != null) {
-      _out = cursor.visible;
-      cursor.visible = false;
-    }
+	if (cursor != null) {
+	  _out = cursor.visible;
+	  cursor.visible = false;
+	}
   }
 
   /**
@@ -233,9 +242,9 @@ class HxlMouse {
    * @param	event	A <code>MouseEvent</code> object.
    */
   public function handleMouseOver(event:MouseEvent) {
-    if (cursor != null) {
-      cursor.visible = _out;
-    }
+	if (cursor != null) {
+	  cursor.visible = _out;
+	}
   }
 
 }

@@ -2,6 +2,7 @@ package data;
 
 import flash.errors.SecurityError;
 import flash.events.Event;
+import flash.events.IOErrorEvent;
 import flash.net.URLLoader;
 import flash.net.URLRequest;
 
@@ -29,49 +30,66 @@ class StatsFileFieldDesc
  
 class StatsFileEntry
 {
+	var m_fieldDescs : Array<StatsFileFieldDesc>;
 	var m_fields : Array<Dynamic>;
 	
-	public function new( _fields:Array<Dynamic> ) {
+	public function new( _fieldDescs:Array<StatsFileFieldDesc>, _fields:Array<Dynamic> ) {
+		m_fieldDescs = _fieldDescs;
 		m_fields = _fields;
 	}
 	
-	public function getField( _i:Int ) : Dynamic {
+	private function getFieldByIndex( _i:Int ) : Dynamic {
 		return m_fields[_i];
+	}
+	
+	public function getField( _keyField:String ) : Dynamic {
+		for ( i in 0 ... m_fieldDescs.length ) {
+			if ( m_fieldDescs[i].m_name == _keyField ) {
+				return getFieldByIndex(i);
+			}
+		}
+		
+		return null;
 	}
 }
 
 class StatsFile 
 {
+	var m_filename : String;
 	var m_loaded : Bool;
 	
 	var m_fieldDescs : Array<StatsFileFieldDesc>;
 	var m_entries : List<StatsFileEntry>;
 	
-	public static function loadFromString( embedText:String ) : StatsFile {
-		var statsFile:StatsFile = new StatsFile();
+	public static function loadFromString( _filename:String, embedText:String ) : StatsFile {
+		var statsFile:StatsFile = new StatsFile( _filename );
 		
 		statsFile.buildFromText( embedText );
+		Resources.statsFiles.set( _filename, statsFile );
 		
 		return statsFile;
 	}
 	
 	public static function loadFile( _filename:String ) : StatsFile {
-		var statsFile:StatsFile = new StatsFile();
+		var statsFile:StatsFile = new StatsFile( _filename );
 		
 		var loader:URLLoader = new URLLoader();
 		loader.addEventListener(Event.COMPLETE, statsFile.onLoaded);
+		loader.addEventListener(IOErrorEvent.IO_ERROR, statsFile.onFail);
 		var request:URLRequest = new URLRequest(_filename);
 		try { 
 			loader.load(request);
 		} catch (error:SecurityError) { 
 			loader.removeEventListener(Event.COMPLETE, statsFile.onLoaded);
+			loader.removeEventListener(IOErrorEvent.IO_ERROR, statsFile.onFail);
 			return null;
 		} 
 
 		return statsFile;
 	}
 	
-	private function new() {
+	private function new( _filename:String ) {
+		m_filename = _filename;
 		m_loaded = false;
 		
 		m_fieldDescs = new Array<StatsFileFieldDesc>();
@@ -110,21 +128,20 @@ class StatsFile
 				var wordIndex:Int = 0;
 				
 				for ( i in 0 ... m_fieldDescs.length ) {
-					if ( wordIndex >= words.length ) { // We've read all the words we can find.
+					var curString:String = "";
+					
+					while ( curString == "" && wordIndex < words.length ) {
+						curString = words[wordIndex];
+						++wordIndex;
+					}
+					
+					if ( curString == "" && wordIndex >= words.length ) { // We've read all the words we can find.
 						if ( m_fieldDescs[i].m_type == FIELD_INT ) {
 							fields.push( 0 ); // Default Int value.
 						} else {
 							fields.push( "" ); // Default String value.
 						}
 					} else {
-						var curString:String = words[wordIndex];
-						++wordIndex;
-						
-						while ( curString == "" ) {
-							curString = words[wordIndex];
-							++wordIndex;
-						}
-						
 						if ( m_fieldDescs[i].m_type == FIELD_INT ) {
 							fields.push( Std.parseInt( curString ) );
 						} else {
@@ -146,7 +163,7 @@ class StatsFile
 					}
 				}
 				
-				m_entries.push( new StatsFileEntry( fields ) );
+				m_entries.push( new StatsFileEntry( m_fieldDescs, fields ) );
 			}
 		}
 
@@ -159,11 +176,23 @@ class StatsFile
 		var fileText:String = e.target.data;
 		
 		buildFromText( fileText );
+		
+		// Register.
+		Resources.statsFiles.set( m_filename, this );
+		
+		loader.removeEventListener(Event.COMPLETE, this.onLoaded);
+		loader.removeEventListener(IOErrorEvent.IO_ERROR, this.onFail);
+	}
+	
+	function onFail( e:Event) {
+		var loader:URLLoader = e.target;
+		loader.removeEventListener(Event.COMPLETE, this.onLoaded);
+		loader.removeEventListener(IOErrorEvent.IO_ERROR, this.onFail);
 	}
 	
 	public function getEntry( _keyField:String, _key:Dynamic ) : StatsFileEntry {
 		for ( e in m_entries ) {
-			if ( getEntryField( e, _keyField ) == _key ) {
+			if ( e.getField( _keyField ) == _key ) {
 				return e;
 			}
 		}
@@ -171,13 +200,7 @@ class StatsFile
 		return null;
 	}
 	
-	public function getEntryField( _entry:StatsFileEntry, _keyField:String ) : Dynamic {
-		for ( i in 0 ... m_fieldDescs.length ) {
-			if ( m_fieldDescs[i].m_name == _keyField ) {
-				return _entry.getField(i);
-			}
-		}
-		
-		return null;
+	public function iterator() : Iterator<StatsFileEntry> {
+		return m_entries.iterator();
 	}
 }

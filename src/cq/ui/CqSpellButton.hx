@@ -126,14 +126,6 @@ class CqSpellButton extends HxlDialog {
 			Y += HxlUtil.floor(HxlGraphics.scroll.y);
 		}
 
-		/*
-		var tapMessage = "Comparing ";
-		tapMessage = tapMessage + "(" + Std.string( Std.int( X ) ) +"," + Std.string( Std.int( Y ) ) + ") ";
-		tapMessage = tapMessage + "(" + Std.string( Std.int( _point.x  ) ) +"," + Std.string( Std.int( _point.y ) ) + ") ";
-		tapMessage = tapMessage + "(" + Std.string( Std.int( _point.x+width ) ) +"," + Std.string( Std.int( _point.y+height ) ) + ") ";
-		GameUI.showTextNotification( tapMessage );
-		*/
-
 		getScreenXY(_point);
 		if ((X <= _point.x) || (X >= _point.x+width) || (Y <= _point.y) || (Y >= _point.y+height)) {
 			return false;
@@ -177,7 +169,7 @@ class CqSpellButton extends HxlDialog {
 		if ( spellObj != null ) {
 			var spell = cast(spellObj.item, CqSpell);
 			var player = Registery.player;
-			if ( spell.spiritPoints < spell.spiritPointsRequired ) {
+			if ( spell.statPoints < spell.statPointsRequired ) {
 				if (event != null)
 					event.stopPropagation();
 				return;
@@ -194,9 +186,9 @@ class CqSpellButton extends HxlDialog {
 					return;
 
 				GameUI.setTargeting(false);
-				cast(HxlGraphics.state, GameState).passTurn();
 				Registery.player.use(spellObj.item, null);
-				spell.spiritPoints = 0;
+				cast(HxlGraphics.state, GameState).passTurn();
+				spell.statPoints = 0;
 				GameUI.instance.updateCharge(this);
 				SoundEffectsManager.play(SpellCast);
 			}

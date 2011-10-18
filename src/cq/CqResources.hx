@@ -137,15 +137,13 @@ class SpritePortrait extends HxlSpriteSheet {
 	static var _spriteNames:Array<Array<String>>;
 	public function new() {
 		if (_spriteNames ==null)
-			_spriteNames = [HxlUtil.enumToStringArray(
-				[CqClass.THIEF, CqClass.FIGHTER, CqClass.WIZARD]
-			)];
+			_spriteNames = [["thief", "fighter", "wizard"]];
 		spriteNames = _spriteNames;
 		super(0);
 	} 
 	
-	public static function getIcon(IconName:CqClass, Size:Int, Zoom:Float):HxlSprite {
-		return HxlSpriteSheet.getSprite(SpritePortrait, instance.getSpriteIndex(HxlUtil.enumToString(IconName)), Size, Zoom);
+	public static function getIcon(IconName:String, Size:Int, Zoom:Float):HxlSprite {
+		return HxlSpriteSheet.getSprite(SpritePortrait, instance.getSpriteIndex(IconName), Size, Zoom);
 	}
 }
 class SpritePortraitPaper extends HxlSpriteSheet { 
@@ -153,16 +151,14 @@ class SpritePortraitPaper extends HxlSpriteSheet {
 	static var _spriteNames:Array<Array<String>>;
 	public function new() {
 		if (_spriteNames ==null)
-			_spriteNames = [HxlUtil.enumToStringArray(
-				[CqClass.THIEF, CqClass.FIGHTER, CqClass.WIZARD]
-			)];
+			_spriteNames = [["thief", "fighter", "wizard"]];
 		
 		spriteNames = _spriteNames;
 		super(0);
 	} 
 	
-	public static function getIcon(IconName:CqClass, Size:Int, Zoom:Float):HxlSprite {
-		return HxlSpriteSheet.getSprite(SpritePortraitPaper, instance.getSpriteIndex(HxlUtil.enumToString(IconName)), Size, Zoom);
+	public static function getIcon(IconName:String, Size:Int, Zoom:Float):HxlSprite {
+		return HxlSpriteSheet.getSprite(SpritePortraitPaper, instance.getSpriteIndex(IconName), Size, Zoom);
 	}
 }
 class SpriteEquipmentIcons extends HxlSpriteSheet { 
@@ -229,7 +225,7 @@ class SpriteItems extends HxlSpriteSheet {
 		//potions = HxlUtil.enumToStringArray([CqItemType.PURPLE_POTION, CqItemType.GREEN_POTION, CqItemType.BLUE_POTION, CqItemType.YELLOW_POTION, CqItemType.RED_POTION]);
 		if (_spriteNames ==null)
 			_spriteNames = [
-				["amulet","boots","leather_armor","brestplate","chest","glove","cap","ring","bracelet","winged_sandles"],
+				["amulet","boots","leather_armor","breastplate","chest","glove","cap","ring","bracelet","winged_sandals"],
 				["staff", "dagger", "short_sword", "long_sword"].concat(potions).concat(["helm"]),
 				["axe", "battle_axe", "claymore", "golden_helm", "mace", "broad_sword", "full_helm", "full_plate_mail", "cloak", "gauntlet"],
 				["gemmed_amulet","gemmed_ring","tundra_boots"]
@@ -242,27 +238,18 @@ class SpriteItems extends HxlSpriteSheet {
 class SpriteMonsters extends HxlSpriteSheet {
 	static var _spriteNames:Array<Array<String>>;
 	public static var instance = new SpriteMonsters();
-	public static var kobolds = ["kobold_spear", "kobold_knives", "kobold_mage",];
-	public static var werewolves = ["werewolf_gray", "werewolf_blue", "werewolf_purple"];
-	public static var bandits = ["bandit_long_swords", "bandit_short_swords", "bandit_single_long_sword", "bandit_knives"];
-	public static var minotauers = ["minotauer", "minotauer_axe", "minotauer_sword"];
-	public static var succubi = ["succubus", "succubus_staff", "succubus_whip", "succubus_scepter", ];
-	public static var spiders = ["spider_yellow", "spider_red", "spider_gray", "spider_green"];
-	// todo: ape->golem
-	public static var apes = ["ape_blue", "ape_black", "ape_red","ape_white"];
-	public static var elementeals= ["elemental_green", "elemental_white", "elemental_red", "elemental_blue"];
 	public function new() {
 		
 		if (_spriteNames ==null)
 			_spriteNames = [
-				kobolds.concat(["kobold_blank"]),
-				werewolves.concat(["werewolf_blank"]),
-				bandits,
-				minotauers.concat(["minotauer_blank"]),
-				succubi,
-				spiders,
-				apes,
-				elementeals,
+				["kobold_spear", "kobold_knives", "kobold_mage", "kobold_blank"],
+				["werewolf_gray", "werewolf_blue", "werewolf_purple", "werewolf_blank"],
+				["bandit_long_swords", "bandit_short_swords", "bandit_single_long_sword", "bandit_knives"],
+				["minotaur", "minotaur_axe", "minotaur_sword", "minotaur_blank"],
+				["succubus", "succubus_staff", "succubus_whip", "succubus_scepter"],
+				["spider_yellow", "spider_red", "spider_gray", "spider_green"],
+				["ape_blue", "ape_black", "ape_red","ape_white"],
+				["elemental_green", "elemental_white", "elemental_red", "elemental_blue"],
 			];
 		spriteNames = _spriteNames;
 		super(0);

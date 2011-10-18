@@ -16,32 +16,14 @@ import haxel.HxlUtil;
 
 
 class CqMobFactory {	
-	static var inited = false;
-	
-	public static function initDescriptions() {
-		if (inited)
-			return;
-		
-		if(Resources.descriptions==null)
-			Resources.descriptions = new Hash<String>();
-		
-		// this is a very questionable place for these descriptions to come up
-		Resources.descriptions.set("Fighter", "A mighty warrior of unparalleled strength and vigor, honorable in battle, high master of hack-n-slash melee.\n\nThe best choice for new players.");
-		Resources.descriptions.set("Wizard", "A wise sage, knower of secrets, worker of miracles, master of the arcane arts, maker of satisfactory mixed drinks.\n\nCan cast spells rapidly - use his mystic powers as often as possible.");
-		Resources.descriptions.set("Thief", "A cunning and agile rogue whose one moral credo is this: Always get out alive.\n\nThe most challenging character - use his speed and skills to avoid taking damage." );
-		
-		inited = true;
-	}
-	
 	public static function newMobFromLevel(X:Float, Y:Float, level:Int, ?cloneOf:CqActor = null):CqMob {
-		initDescriptions();
 		var mob;
 		var typeName:String = "";
 		
 		if (cloneOf != null) {
 			if (Std.is(cloneOf, CqPlayer)) {
 				// pretend the player is a bandit, just for mirror bookkeeping
-				mob = new CqMob(X, Y, HxlUtil.getRandomElement(SpriteMonsters.bandits), true);
+				mob = new CqMob(X, Y, "bandit_long_swords", true);
 			} else {
 				mob = new CqMob(X, Y, cast(cloneOf, CqMob).typeName, false);
 			}
@@ -61,70 +43,83 @@ class CqMobFactory {
 		
 		switch(level+1) {
 			case 1:
-				weaktype = SpriteMonsters.bandits;
-				strongtype = SpriteMonsters.bandits;
+				weaktype = "Bandit";
+				strongtype = "Bandit";
 			case 2:
-				weaktype = SpriteMonsters.bandits;
-				strongtype = SpriteMonsters.kobolds;
+				weaktype = "Bandit";
+				strongtype = "Kobold";
 			case 3:
-				weaktype = SpriteMonsters.kobolds;
-				strongtype = SpriteMonsters.succubi;
+				weaktype = "Kobold";
+				strongtype = "Succubus";
 			case 4:
-				weaktype = SpriteMonsters.succubi;
-				strongtype = SpriteMonsters.spiders;
+				weaktype = "Succubus";
+				strongtype = "Spider";
 			case 5:
-				weaktype = SpriteMonsters.spiders;
-				strongtype = SpriteMonsters.apes;
+				weaktype = "Spider";
+				strongtype = "Ape";
 			case 6:
-				weaktype = SpriteMonsters.apes;
-				strongtype = SpriteMonsters.elementeals;
+				weaktype = "Ape";
+				strongtype = "Elemental";
 			case 7:
-				weaktype = SpriteMonsters.elementeals;
-				strongtype = SpriteMonsters.werewolves;
+				weaktype = "Elemental";
+				strongtype = "Werewolf";
 			case 8, 9:// for "out of depth" enemies in the 8th level 
-				weaktype = SpriteMonsters.werewolves;
-				strongtype = SpriteMonsters.minotauers;
+				weaktype = "Werewolf";
+				strongtype = "Minotaur";
 			case 99,100,101:
 				//ending boss
-				weaktype = SpriteMonsters.minotauers;
-				strongtype = SpriteMonsters.minotauers;
+				weaktype = "Minotaur";
+				strongtype = "Minotaur";
 				specialname = "Asterion";
 			default:
-				weaktype = SpriteMonsters.kobolds;
-				strongtype = SpriteMonsters.kobolds;
+				weaktype = "Kobold";
+				strongtype = "Kobold";
 		}
 
-		typeName = HxlUtil.getRandomElement(if (Math.random() < Configuration.strongerEnemyChance) weaktype else strongtype);
-		mob = new CqMob(X, Y, typeName.toLowerCase());
+		typeName = if (Math.random() < Configuration.strongerEnemyChance) weaktype else strongtype;
 		
+		// Search through mobs.txt for mobs of the right type and pick one.
 		var mobsFile:StatsFile = Resources.statsFiles.get( "mobs.txt" );
-		var entry:StatsFileEntry = mobsFile.getEntry( "ID", mob.type + "" );
+		
+		var entry:StatsFileEntry = null;
+		var weightSoFar:Int = 0;
+		for ( m in mobsFile ) {
+			if ( m.getField( "Class" ) == typeName ) {
+				var weight = m.getField( "Weight" );
+				if ( Math.random() > (weightSoFar / (weightSoFar + weight)) ) {
+					entry = m;
+				}
+				weightSoFar += weight;
+			}
+		}
 		
 		if ( entry != null ) {
-			mob.name = mobsFile.getEntryField( entry, "Name" );
-			mob.attack = mobsFile.getEntryField( entry, "Attack" );
-			mob.defense = mobsFile.getEntryField( entry, "Defense" );
-			mob.speed = mobsFile.getEntryField( entry, "Speed" );
-			mob.spirit = mobsFile.getEntryField( entry, "Spirit" );
-			mob.vitality = HxlUtil.randomIntInRange( mobsFile.getEntryField( entry, "VitalityMin" ),
-													 mobsFile.getEntryField( entry, "VitalityMax" ) );
-			mob.damage = new Range( mobsFile.getEntryField( entry, "DamageMin" ),
-									mobsFile.getEntryField( entry, "DamageMax" ) );
-			mob.xpValue = mobsFile.getEntryField( entry, "XP" );
+			mob = new CqMob(X, Y, entry.getField( "Sprite" ) );
 			
-			var spell1:String = mobsFile.getEntryField( entry, "Spell1" );
+			mob.name = entry.getField( "Name" );
+			mob.attack = entry.getField( "Attack" );
+			mob.defense = entry.getField( "Defense" );
+			mob.speed = entry.getField( "Speed" );
+			mob.spirit = entry.getField( "Spirit" );
+			mob.vitality = HxlUtil.randomIntInRange( entry.getField( "VitalityMin" ),
+													 entry.getField( "VitalityMax" ) );
+			mob.damage = new Range( entry.getField( "DamageMin" ),
+									entry.getField( "DamageMax" ) );
+			mob.xpValue = entry.getField( "XP" );
+			
+			var spell1:String = entry.getField( "Spell1" );
 			if ( spell1 != "" ) {
-				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, Type.createEnum( CqSpellType, spell1 ) ) );
+				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, spell1 ) );
 			}
 			
-			var spell2:String = mobsFile.getEntryField( entry, "Spell2" );
+			var spell2:String = entry.getField( "Spell2" );
 			if ( spell2 != "" ) {
-				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, Type.createEnum( CqSpellType, spell2 ) ) );
+				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, spell2 ) );
 			}
 		}
 		else
 		{
-			throw "Mob type not found in mobs.txt.";
+			throw "Mob type \"" + typeName + "\" not found in mobs.txt.";
 		}
 		
 		mob.hp = mob.maxHp = mob.vitality;
@@ -133,15 +128,4 @@ class CqMobFactory {
 		
 		return mob;
 	}
-}
-
-enum CqMobType {
-	BANDIT_LONG_SWORDS; BANDIT_SHORT_SWORDS; BANDIT_SINGLE_LONG_SWORD; BANDIT_KNIVES;
-	KOBOLD_SPEAR; KOBOLD_KNIVES; KOBOLD_MAGE;
-	SUCCUBUS; SUCCUBUS_STAFF; SUCCUBUS_WHIP; SUCCUBUS_SCEPTER;
-	SPIDER_YELLOW; SPIDER_RED; SPIDER_GRAY; SPIDER_GREEN;
-	APE_BLUE; APE_BLACK; APE_RED; APE_WHITE;
-	ELEMENTAL_GREEN; ELEMENTAL_WHITE; ELEMENTAL_RED; ELEMENTAL_BLUE;
-	WEREWOLF_GRAY; WEREWOLF_BLUE; WEREWOLF_PURPLE;
-	MINOTAUER; MINOTAUER_AXE; MINOTAUER_SWORD;	
 }
