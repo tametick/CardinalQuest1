@@ -94,6 +94,8 @@ class Main extends HxlGame {
 		loadStatsFile( "items.txt" );
 		loadStatsFile( "mobs.txt" );
 		loadStatsFile( "potions.txt" );
+		loadStatsFile( "spells.txt" );
+		loadStatsFile( "spellDamage.txt" );
 		
 		Configuration.tileSize = 16;
 		Configuration.zoom = 2.0;

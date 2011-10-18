@@ -122,21 +122,20 @@ class StatsFile
 				var wordIndex:Int = 0;
 				
 				for ( i in 0 ... m_fieldDescs.length ) {
-					if ( wordIndex >= words.length ) { // We've read all the words we can find.
+					var curString:String = "";
+					
+					while ( curString == "" && wordIndex < words.length ) {
+						curString = words[wordIndex];
+						++wordIndex;
+					}
+					
+					if ( curString == "" && wordIndex >= words.length ) { // We've read all the words we can find.
 						if ( m_fieldDescs[i].m_type == FIELD_INT ) {
 							fields.push( 0 ); // Default Int value.
 						} else {
 							fields.push( "" ); // Default String value.
 						}
 					} else {
-						var curString:String = words[wordIndex];
-						++wordIndex;
-						
-						while ( curString == "" ) {
-							curString = words[wordIndex];
-							++wordIndex;
-						}
-						
 						if ( m_fieldDescs[i].m_type == FIELD_INT ) {
 							fields.push( Std.parseInt( curString ) );
 						} else {

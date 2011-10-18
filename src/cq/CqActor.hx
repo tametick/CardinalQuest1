@@ -713,15 +713,18 @@ class CqActor extends CqObject, implements Actor {
 			
 			// and now shoot
 			var colorSource:BitmapData;
+			
+			// Update spell damage.
+			var spellLevel:Int = 0;
 			if (Std.is(this, CqPlayer)) {
-				if (itemOrSpell.fullName == "Fireball")
-					itemOrSpell.damage = CqSpellFactory.getfireBalldamageByLevel(Registery.player.level);
+				spellLevel = Registery.player.level;
 				colorSource = itemOrSpell.uiItem.pixels;
 			} else {
-				if (itemOrSpell.fullName == "Fireball")
-					itemOrSpell.damage = CqSpellFactory.getfireBalldamageByLevel(Math.ceil(2 + .5 * Registery.world.currentLevelIndex));
+				spellLevel = Math.ceil(2 + .5 * Registery.world.currentLevelIndex);
 				colorSource = this._framePixels;
 			}
+			
+			itemOrSpell.damage = CqSpellFactory.getSpellDamageByLevel(cast(itemOrSpell, CqSpell).id, spellLevel);
 			
 			GameUI.instance.shootXBall(this, other, colorSource, itemOrSpell);
 		}else {
@@ -1160,7 +1163,7 @@ class CqPlayer extends CqActor, implements Player {
 		}
 	}
 	
-	public function give(?item:CqItem, ?itemType:String, ?spellType:CqSpellType) {
+	public function give(?item:CqItem, ?itemOrSpellID:String) {
 		if (item != null) {
 			// add to actor inventory
 			
@@ -1191,10 +1194,18 @@ class CqPlayer extends CqActor, implements Player {
 					Callback(item);
 			}
 			return;
-		} else if (itemType != null) {
-			give(CqLootFactory.newItem(-1, -1, itemType));
-		} else if (spellType != null) {
-			give(CqSpellFactory.newSpell(-1, -1, spellType));
+		} else if (itemOrSpellID != null) {
+			var item:CqItem = CqLootFactory.newItem( -1, -1, itemOrSpellID);
+			if ( item != null ) {
+				give(item);
+			} else {
+				var spell:CqSpell = CqSpellFactory.newSpell( -1, -1, itemOrSpellID);
+				if ( spell != null ) {
+					give(spell);
+				} else {
+					throw( "Unknown item or spell \"" + itemOrSpellID + "\"." );
+				}
+			}
 		}
 	}
 	public function giveMoney(amount:Int) {
@@ -1314,7 +1325,7 @@ class CqPlayer extends CqActor, implements Player {
 	public function rechargeSpells() {
 		for (spell in equippedSpells) {
 			if (spell != null) {
-				spell.spiritPoints = spell.spiritPointsRequired;
+				spell.statPoints = spell.statPointsRequired;
 			}
 		}
 	}
@@ -1503,7 +1514,7 @@ class CqMob extends CqActor, implements Mob {
 		var afraid = specialEffects.exists("fear");
 		if (Std.is(this, CqMob) && equippedSpells.length > 0 && Math.random() < 0.40) {
 			for (spell in equippedSpells) {
-				if (spell.spiritPoints >= spell.spiritPointsRequired) {
+				if (spell.statPoints >= spell.statPointsRequired) {
 					if (!(afraid && spell.targetsOther)) {
 						if(spell.targetsOther) {
 							use(spell, enemy);
@@ -1520,7 +1531,7 @@ class CqMob extends CqActor, implements Mob {
 						}
 						SoundEffectsManager.play(SpellCastNegative);
 						
-						spell.spiritPoints = 0;
+						spell.statPoints = 0;
 						
 						spell = null;
 						return true;

@@ -533,12 +533,34 @@ class CqLevel extends Level {
 			spirit += creature.buffs.get("spirit");
 			spirit = Std.int(Math.max(spirit, 1));
 			
+			// Calc attack, defense and vitality as well, for various spells
+			var attack = creature.attack;
+			attack += creature.buffs.get("attack");
+			attack = Std.int(Math.max(attack, 0));
+			
+			var defense = creature.defense;
+			defense += creature.buffs.get("defense");
+			defense = Std.int(Math.max(defense, 0));
+			
+			var vitality = creature.vitality;
+			vitality += creature.buffs.get("vitality");
+			vitality = Std.int(Math.max(vitality, 0));
+			
 			// Charge action & spirit points
 			creature.actionPoints += speed;
 			if (!specialActive) {
 				for (s in creature.equippedSpells) {
-					if(s!=null)
-						s.spiritPoints = Std.int(Math.min( s.spiritPointsRequired, s.spiritPoints + spirit));
+					if (s != null) {
+						var boost:Int = 0;
+						switch ( s.stat ) {
+							case "spirit": boost = spirit;
+							case "speed": boost = speed;
+							case "attack": boost = attack;
+							case "defense": boost = defense;
+							case "vitality": boost = vitality;
+						}
+						s.statPoints = Std.int(Math.min( s.statPointsRequired, s.statPoints + boost));
+					}
 				}
 			}
 			

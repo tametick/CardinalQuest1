@@ -94,10 +94,6 @@ class CqLootFactory {
 			item = new CqItem(X, Y, entry.getField( "Sprite" ));
 			completePotion( item, entry );
 		}
-		else
-		{
-			throw "Item type " + id + " not found in items.txt or potions.txt.";
-		}		
 
 		return item;
 	}

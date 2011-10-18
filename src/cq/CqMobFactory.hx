@@ -109,12 +109,12 @@ class CqMobFactory {
 			
 			var spell1:String = entry.getField( "Spell1" );
 			if ( spell1 != "" ) {
-				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, Type.createEnum( CqSpellType, spell1 ) ) );
+				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, spell1 ) );
 			}
 			
 			var spell2:String = entry.getField( "Spell2" );
 			if ( spell2 != "" ) {
-				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, Type.createEnum( CqSpellType, spell2 ) ) );
+				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, spell2 ) );
 			}
 		}
 		else

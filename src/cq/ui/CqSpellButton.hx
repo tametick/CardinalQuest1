@@ -177,7 +177,7 @@ class CqSpellButton extends HxlDialog {
 		if ( spellObj != null ) {
 			var spell = cast(spellObj.item, CqSpell);
 			var player = Registery.player;
-			if ( spell.spiritPoints < spell.spiritPointsRequired ) {
+			if ( spell.statPoints < spell.statPointsRequired ) {
 				if (event != null)
 					event.stopPropagation();
 				return;
@@ -196,7 +196,7 @@ class CqSpellButton extends HxlDialog {
 				GameUI.setTargeting(false);
 				Registery.player.use(spellObj.item, null);
 				cast(HxlGraphics.state, GameState).passTurn();
-				spell.spiritPoints = 0;
+				spell.statPoints = 0;
 				GameUI.instance.updateCharge(this);
 				SoundEffectsManager.play(SpellCast);
 			}

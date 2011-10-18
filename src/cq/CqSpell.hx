@@ -1,7 +1,9 @@
 package cq;
 
 import cq.ui.CqSpellButton;
+import data.StatsFile;
 import haxel.HxlUtil;
+import playtomic.base.Data;
 
 import cq.CqItem;
 import cq.CqResources;
@@ -18,54 +20,77 @@ class CqSpellFactory {
 		else 
 			CqSpellFactory.remainingSpells = new Array();
 			
-		for(line in SpriteSpells.instance.spriteNames)
-			CqSpellFactory.remainingSpells = CqSpellFactory.remainingSpells.concat(line);
-		// no passwall for now
-		CqSpellFactory.remainingSpells.remove("pass_wall");
+		var spellsFile:StatsFile = Resources.statsFiles.get( "spells.txt" );
+		for ( s in spellsFile ) {
+			remainingSpells.push( s.getField( "ID" ) );
+		}
 	}
+	
 	public static function newRandomSpell(X:Float, Y:Float) {
 		if (remainingSpells.length < 1)
 			resetRemainingSpells();
 		
-		var newSpellName = HxlUtil.getRandomElement(remainingSpells);
+		var newSpellID:String = HxlUtil.getRandomElement(remainingSpells);
 		
-		// uncomment if you want every spell is only be given once
-		remainingSpells.remove(newSpellName);
+		// uncomment if you want every spell to only be given once
+		remainingSpells.remove(newSpellID);
 		
-		return newSpell(X, Y, Type.createEnum(CqSpellType,  newSpellName.toUpperCase()));
+		return newSpell(X, Y, newSpellID);
 	}
-	public static function getfireBalldamageByLevel(level:Int):Range {
-		var dmg:Range;
-		switch(level) {
-			case 0:
-				dmg = new Range(1, 3);
-			case 1:
-				dmg = new Range(1, 4);
-			case 2:
-				dmg = new Range(1, 5);
-			case 3:
-				dmg = new Range(2, 6);
-			case 4:
-				dmg = new Range(3, 8);
-			case 5:
-				dmg = new Range(3, 9);
-			case 6:
-				dmg = new Range(4, 10);
-			case 7:
-				dmg = new Range(4, 12);
-			default:
-				dmg = new Range(5, 14);
-			
+	
+	public static function getSpellDamageByLevel(_id:String, _level:Int):Range {
+		var spellDamageFile:StatsFile = Resources.statsFiles.get( "spellDamage.txt" );
+		var dmg:Range = new Range(0, 0);
+		var bestLevel:Int = 0;
+		
+		for ( sd in spellDamageFile ) {
+			if ( sd.getField( "ID" ) == _id ) {
+				var level:Int = sd.getField( "Level" );
+				if ( level > bestLevel && level <= _level ) {
+					dmg.start = sd.getField( "DamageMin" );
+					dmg.end = sd.getField( "DamageMax" );
+					bestLevel = level;
+				}
+			}
 		}
+		
 		return dmg;
 	}
-	public static function newSpell(X:Float, Y:Float, type:CqSpellType):CqSpell {
-		var typeName:String = Type.enumConstructor(type).toLowerCase();
-		var spell = new CqSpell(X, Y, type);
+	
+	public static function newSpell(X:Float, Y:Float, id:String):CqSpell {
+		var spell:CqSpell = null;
 		
-		spell.name = StringTools.replace(typeName, "_", " ");
-		spell.name = spell.name.substr(0, 1).toUpperCase() + spell.name.substr(1);
+		var spellsFile:StatsFile = Resources.statsFiles.get( "spells.txt" );
+		var entry:StatsFileEntry = spellsFile.getEntry( "ID", id );
 		
+		if ( entry != null ) {
+			spell = new CqSpell(X, Y, id, entry.getField( "Sprite" ) );
+			
+			spell.name = entry.getField( "Name" );
+
+			switch ( entry.getField( "Target" ) ) {
+			case 1: spell.targetsOther = true;
+			case 2: spell.targetsEmptyTile = true;
+			default:
+			}
+			
+			spell.duration = entry.getField( "Duration" );
+			spell.stat = entry.getField( "Stat" );
+			spell.statPointsRequired = entry.getField( "StatPoints" );
+			
+			if ( entry.getField( "Buff1" ) != "" ) {
+				spell.buffs.set( entry.getField( "Buff1" ), entry.getField( "Buff1Val" ) );
+			}
+			
+			if ( entry.getField( "Buff2" ) != "" ) {
+				spell.buffs.set( entry.getField( "Buff2" ), entry.getField( "Buff2Val" ) );
+			}
+
+			if ( entry.getField( "Effect" ) != "" ) {
+				spell.specialEffects.add(new CqSpecialEffectValue( entry.getField( "Effect" ), entry.getField( "EffectVal" ) ));
+			}
+		}
+/*
 		switch(type) {
 			case FREEZE:
 				spell.targetsOther = true;
@@ -147,7 +172,7 @@ class CqSpellFactory {
 				spell.specialEffects.add(new CqSpecialEffectValue("heal","full"));
 				spell.spiritPointsRequired = 720*4;
 		}
-		
+		*/
 		return spell;
 	}
 }
@@ -155,34 +180,16 @@ class CqSpellFactory {
 class CqSpell extends CqItem {
 	public var targetsOther:Bool;
 	public var targetsEmptyTile:Bool;
-	public var spiritPoints:Int;
-	public var spiritPointsRequired:Int;
-	public function new(X:Float, Y:Float, type:CqSpellType) {
-		super(X, Y, Type.enumConstructor(type).toLowerCase());
+	public var id:String;
+	public var stat:String;
+	public var statPoints:Int;
+	public var statPointsRequired:Int;
+	public function new(X:Float, Y:Float, _id:String, _sprite:String) {
+		super(X, Y, _sprite);
+		id = _id;
 		equipSlot = SPELL;
 		visible = false;
-		spiritPoints = 0;
+		stat = "spirit";
+		statPoints = 0;
 	}
-}
-
-enum CqSpellType {
-	FREEZE;
-	FIREBALL; 
-	BERSERK; 
-	ENFEEBLE_MONSTER; 
-	BLESS_WEAPON; 
-	HASTE; 
-	POLYMORPH; 
-	SHADOW_WALK;
-	MAGIC_ARMOR;
-	CHARM_MONSTER; 
-	REVEAL_MAP; 
-	BLINK;
-	SLEEP;
-	HEAL;
-	FEAR; 
-	MAGIC_MIRROR; 
-	STONE_SKIN; 
-	//PASS_WALL;
-	TELEPORT; 
 }

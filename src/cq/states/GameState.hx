@@ -403,31 +403,31 @@ class GameState extends CqState {
 				player.give("RED_POTION");
 				player.give("RED_POTION");
 				player.give("PURPLE_POTION");
-				player.give(CqSpellType.BERSERK);
+				player.give("BERSERK");
 			case WIZARD:
 				player.give("STAFF");
 				player.give("RED_POTION");
 				player.give("RED_POTION");
 				player.give("BLUE_POTION");
-				player.give(CqSpellType.FIREBALL);
+				player.give("FIREBALL");
 			case THIEF:
 				player.give("DAGGER");
 				player.give("RED_POTION");
 				player.give("RED_POTION");
 				player.give("YELLOW_POTION");
 				player.give("GREEN_POTION");
-				player.give(CqSpellType.SHADOW_WALK);
+				player.give("SHADOW_WALK");
 		}
 
 		PtPlayer.ClassSelected(chosenClass);
 
 		if (Configuration.debug) {
-			player.give(CqSpellType.HEAL);
-			player.give(CqSpellType.FIREBALL);
-			player.give(CqSpellType.FEAR);
-			player.give(CqSpellType.CHARM_MONSTER);
-			player.give(CqSpellType.REVEAL_MAP);
-			player.give(CqSpellType.MAGIC_MIRROR);
+			player.give("HEAL");
+			player.give("FIREBALL");
+			player.give("FEAR");
+			player.give("CHARM_MONSTER");
+			player.give("REVEAL_MAP");
+			player.give("MAGIC_MIRROR");
 			
 			player.give("FULL_PLATE_MAIL");
 			player.give("CLAYMORE");

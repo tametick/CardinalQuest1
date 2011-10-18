@@ -1,0 +1,15 @@
+Field String ID
+Field Int Level
+Field Int DamageMin
+Field Int DamageMax
+
+; ID      Lvl D- D+
+FIREBALL    0  1  3
+FIREBALL    1  1  4
+FIREBALL    2  1  5
+FIREBALL    3  2  6
+FIREBALL    4  3  8
+FIREBALL    5  3  9
+FIREBALL    6  4 10
+FIREBALL    7  4 12
+FIREBALL    8  5 14

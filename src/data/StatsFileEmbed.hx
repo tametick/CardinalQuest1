@@ -199,4 +199,63 @@ PURPLE_POTION purple_potion [Elixir of the Lion]     120      []         0 [dama
 BLUE_POTION   blue_potion   [Elixir of the Elephant] 120      defense    3
 YELLOW_POTION yellow_potion [Coca-leaf Cocktail]     120      speed      3
 RED_POTION    red_potion    [Healing Potion]         0        []         0 heal               full
-";		embedFile = StatsFile.loadFromString( embedText );		if ( embedFile != null ) { 			Resources.statsFiles.set( "potions.txt", embedFile );		}	}}
+";		embedFile = StatsFile.loadFromString( embedText );		if ( embedFile != null ) { 			Resources.statsFiles.set( "potions.txt", embedFile );		}		embedText = "Field String ID
+Field Int Level
+Field Int DamageMin
+Field Int DamageMax
+
+; ID      Lvl D- D+
+FIREBALL    0  1  3
+FIREBALL    1  1  4
+FIREBALL    2  1  5
+FIREBALL    3  2  6
+FIREBALL    4  3  8
+FIREBALL    5  3  9
+FIREBALL    6  4 10
+FIREBALL    7  4 12
+FIREBALL    8  5 14";		embedFile = StatsFile.loadFromString( embedText );		if ( embedFile != null ) { 			Resources.statsFiles.set( "spellDamage.txt", embedFile );		}		embedText = "Field String ID
+Field String Sprite
+Field String Name
+Field Int Target
+Field Int Duration
+Field String Stat
+Field Int StatPoints
+Field String Buff1
+Field Int Buff1Val
+Field String Buff2
+Field Int Buff2Val
+Field String Effect
+Field String EffectVal
+
+; Legit values for Stat are attack, defense, speed, spirit and vitality.
+
+; Targets self.
+
+; ID             Sprite           Name               Tr Dur Stat   Pts. (B1 B1V B2 B2V Ef EfV)
+BERSERK          berserk          [Berserk]           0  60 spirit  720 attack 3 speed 3
+BLESS_WEAPON     bless_weapon     [Bless Weapon]      0 120 spirit  720 attack 3
+HASTE            haste            [Haste]             0 120 spirit  720 speed  3
+SHADOW_WALK      shadow_walk      [Shadow Walk]       0 120 spirit  720 [] 0 [] 0 invisible
+STONE_SKIN       stone_skin       [Stone Skin]        0 120 spirit  720 defense 5 speed -1
+BLINK            blink            [Blink]             0   0 spirit  720 [] 0 [] 0 blink
+MAGIC_ARMOR      magic_armor      [Magic Armor]       0 120 spirit  720 defense 3
+REVEAL_MAP       reveal_map       [Reveal Map]        0   0 spirit 7200 [] 0 [] 0 reveal
+HEAL             heal             [Heal]              0   0 spirit 2880 [] 0 [] 0 heal full
+
+; Targets enemy.
+
+; ID             Sprite           Name               Tr Dur Stat   Pts. (B1 B1V B2 B2V Ef EfV)
+FREEZE           freeze           [Freeze]            1 120 spirit 1440 speed -3
+FIREBALL         fireball         [Fireball]          1   0 spirit  720 
+ENFEEBLE_MONSTER enfeeble_monster [Enfeeble Monster]  1 120 spirit  720 attack -3
+CHARM_MONSTER    charm_monster    [Charm Monster]     1 120 spirit 1440 [] 0 [] 0 charm
+POLYMORPH        polymorph        [Polymorph]         1 180 spirit 2160 [] 0 [] 0 polymorph true
+SLEEP            sleep            [Sleep]             1  90 spirit 1440 [] 0 [] 0 sleep
+FEAR             fear             [Fear]              1 180 spirit  960 [] 0 [] 0 fear
+
+; Targets empty square.
+
+; ID             Sprite           Name               Tr Dur Stat   Pts. (B1 B1V B2 B2V Ef EfV)
+MAGIC_MIRROR     magic_mirror     [Magic Mirror]      2 180 spirit 1440 [] 0 [] 0 magic_mirror
+TELEPORT         teleport         [Teleport]          2   0 spirit 1440 [] 0 [] 0 teleport
+";		embedFile = StatsFile.loadFromString( embedText );		if ( embedFile != null ) { 			Resources.statsFiles.set( "spells.txt", embedFile );		}	}}
