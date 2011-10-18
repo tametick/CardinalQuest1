@@ -49,6 +49,8 @@ import cq.CqResources;
 
 import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
+import flash.events.TouchEvent;
+import flash.events.Event;
 
 class GameState extends CqState {
 	static private var msHideDelay:Float = 3;
@@ -59,6 +61,7 @@ class GameState extends CqState {
 	public var started:Bool;
 	var lastMouse:Bool;
 	var endingAnim:Bool;
+	var mobileMoveAllowed:Bool;
 
 
 	public function clearGameUi() {
@@ -427,14 +430,14 @@ class GameState extends CqState {
 			player.give("CHARM_MONSTER");
 			player.give("REVEAL_MAP");
 			player.give("MAGIC_MIRROR");
-			
+
 			player.give("FULL_PLATE_MAIL");
 			player.give("CLAYMORE");
 			player.give("TUNDRA_BOOTS");
 			player.give("BROAD_SWORD");
 			player.give("GOLDEN_HELM");
 			player.give("GEMMED_RING");
-			
+
 			if(Configuration.debugStartingLevel>0)
 				Registery.world.goToNextLevel(Configuration.debugStartingLevel);
 		}
@@ -496,6 +499,10 @@ class GameState extends CqState {
 	}
 
 	override function onKeyUp(event:KeyboardEvent) {
+
+		//A cookie if you discover the raison d'etre
+		mobileMoveAllowed = true;
+
 		if (!started || endingAnim) return;
 
 		// another direct query of keys -- we'll want to offload most of these checks
@@ -530,14 +537,26 @@ class GameState extends CqState {
 	var msMoveStamp:Float;
 	override function onMouseMove(event:MouseEvent)
 	{
+		updateTouchLocation( event );
+
 		msMoveStamp = Timer.stamp();
 		cursor.visible = true;
 		lastMouse = true;
 	}
 	override function onMouseDown(event:MouseEvent) {
+
+		updateTouchLocation( event );
+
 		if (HxlGraphics.justUnpaused) {
 			HxlGraphics.justUnpaused = false;
 			return;
+		}
+
+		if( Configuration.mobile ){
+			isPlayerActing = true;
+			HxlGraphics.updateInput();
+			act();
+			isPlayerActing = false;
 		}
 
 		if (!started || endingAnim || Timer.stamp() < resumeActingTime)
@@ -551,6 +570,11 @@ class GameState extends CqState {
 	}
 
 	override function onMouseUp(event:MouseEvent) {
+
+		updateTouchLocation( event );
+
+		mobileMoveAllowed = true;
+
 		if (!started || endingAnim)
 			return;
 
@@ -711,10 +735,20 @@ class GameState extends CqState {
 			return;
 		}
 
-		if (player.isMoving || Timer.stamp() < resumeActingTime) {
-			// if the player is being animated presently, we can't take key commands
-			return;
+		//Should we take the input ?
+		if ( (player.isMoving || Timer.stamp() < resumeActingTime ) ) {
+			//if the player is being animated presently,
+			//we can't take key commands unless we are on a mobile device
+			if( Configuration.mobile ){
+				if( !mobileMoveAllowed ) {
+					return;
+				}
+			} else {
+				return;
+			}
 		}
+
+		mobileMoveAllowed = false;
 
 		if (checkSlotHotkeys()) {
 			// verify that this lines up with mouse behavior
@@ -728,6 +762,7 @@ class GameState extends CqState {
 		var keyFacing:HxlPoint = level.getTargetAccordingToKeyPress();
 
 		if (keyFacing != null ) {
+
 			facing = keyFacing;
 			lastMouse = false; //for targeting
 			isMouseControl = false;
@@ -749,11 +784,11 @@ class GameState extends CqState {
 		if (facing.x == 0 && facing.y == 0) {
 			// perform actions that happen when the PLAYER SELECTS HIMSELF
 			// (this could easily be factored out)
-			
+
 			// first, make sure the key was JUST pressed, if this is a key command
 			// (otherwise we'll go down stairs or wait after targeting)
 			var confirmed = true;
-			
+
 			if (!isMouseControl) {
 				confirmed = false;
 				for (k in Configuration.bindings.waitkeys) {
@@ -761,14 +796,14 @@ class GameState extends CqState {
 						confirmed = true;
 					}
 				}
-			}			
+			}
 
 			if (!confirmed) {
 				return;
-			}	
-			
+			}
+
 			tile = getPlayerTile(new HxlPoint(0, 0));
-			
+
 			if (tile.loots.length > 0) {
 				// there is an item here, so let's pick it up (this used to be manual?  crazy!)
 				var item = cast(tile.loots[tile.loots.length - 1], CqItem);
@@ -777,8 +812,23 @@ class GameState extends CqState {
 			} else if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tile.dataNum)) {
 				// these are stairs!  time to descend -- but only if the key was JUST pressed
 
-				Registery.world.goToNextLevel();
-				player.popup.setText("");
+				var confirmed = true;
+
+				if (!isMouseControl) {
+					confirmed = false;
+					for (k in Configuration.bindings.waitkeys) {
+						if (HxlGraphics.keys.justPressed(k)) {
+							confirmed = true;
+						}
+					}
+				}
+
+				if (!confirmed) {
+					return;
+				} else {
+					Registery.world.goToNextLevel();
+					player.popup.setText("");
+				}
 
 				#if demo
 				if (Configuration.demoLastLevel == Registery.world.currentLevelIndex-1) {
@@ -853,7 +903,7 @@ class GameState extends CqState {
 		gameUI.destroy();
 		gameUI = null;
 	}
-	
+
 	private var startedMoving:Bool;
 	private var boss:CqMob;
 	private var BossTargetDir:HxlPoint;
@@ -861,7 +911,7 @@ class GameState extends CqState {
 	private var acts:Bool;
 	private var bossgroup:HxlGroup;
 	public function startBossAnim()	{
-		
+
 		//state vars
 		endingAnim = true;
 		startedMoving = false;

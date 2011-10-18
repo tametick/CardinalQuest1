@@ -126,14 +126,6 @@ class CqSpellButton extends HxlDialog {
 			Y += HxlUtil.floor(HxlGraphics.scroll.y);
 		}
 
-		/*
-		var tapMessage = "Comparing ";
-		tapMessage = tapMessage + "(" + Std.string( Std.int( X ) ) +"," + Std.string( Std.int( Y ) ) + ") ";
-		tapMessage = tapMessage + "(" + Std.string( Std.int( _point.x  ) ) +"," + Std.string( Std.int( _point.y ) ) + ") ";
-		tapMessage = tapMessage + "(" + Std.string( Std.int( _point.x+width ) ) +"," + Std.string( Std.int( _point.y+height ) ) + ") ";
-		GameUI.showTextNotification( tapMessage );
-		*/
-
 		getScreenXY(_point);
 		if ((X <= _point.x) || (X >= _point.x+width) || (Y <= _point.y) || (Y >= _point.y+height)) {
 			return false;
