@@ -48,8 +48,8 @@ class HxlGame extends Sprite {
 	 * Override with your own <code>HxlLayer</code> for hot custom pause action!
 	 * Defaults to <code>data.HxlPause</code>.
 	 */
-	public var pause:HxlGroup;	
-	
+	public var pause:HxlGroup;
+
 	// initialization stuff
 	var _created:Bool;
 	var _iState:Class<HxlState>;
@@ -108,14 +108,14 @@ class HxlGame extends Sprite {
 		paused = false;
 		_autoPause = true;
 		_created = false;
-		
+
 		// adding to this, not to stage
 		addEventListener(Event.ENTER_FRAME, create, false, 0, true);
 	}
 
 	/**
 	 * Makes the little volume tray slide out.
-	 * 
+	 *
 	 * @param	Silent	Whether or not it should beep.
 	 */
 	public function showSoundTray(?Silent:Bool=false) {
@@ -138,23 +138,23 @@ class HxlGame extends Sprite {
 	/**
 	 * Switch from one <code>HxlState</code> to another.
 	 * Usually called from <code>HxlGraphics</code>.
-	 * 
+	 *
 	 * @param	State		The class name of the state you want (e.g. PlayState)
 	 */
-	public function switchState(State:HxlState, ?Push:Bool = false) { 
+	public function switchState(State:HxlState, ?Push:Bool = false) {
 		var oldState = state;
-		
+
 		// Swap the new state for the old one and dispose of it
 		_screen.addChild(State);
 		state = State;
 		if (oldState != null) {
 			if ( Push ) {
-				// destroy old unstacked state	
+				// destroy old unstacked state
 				if (!HxlUtil.contains(stateStack.iterator(),oldState)) {
 					oldState.destroy();
 					_screen.removeChild(oldState);
 				}
-				
+
 				State.stackId = stateStack.length;
 				if(stateStack.length>0)
 					stateStack[stateStack.length-1].isStacked = true;
@@ -169,9 +169,9 @@ class HxlGame extends Sprite {
 				_screen.y = 0;
 			} else {
 				// If we aren't pushing a state to the stack, we should clear out any previously stacked states
-				
+
 				if (stateStack.length > 0) {
-					var i:HxlState;	
+					var i:HxlState;
 					while ( stateStack.length > 0 ) {
 						i = stateStack.pop();
 						if ( i != null ) {
@@ -181,17 +181,17 @@ class HxlGame extends Sprite {
 						i  = null;
 					}
 				}
-				
+
 				System.gc();
 				System.gc();
-				
+
 				if(!oldState.destroyed){
 					// destroy old state that wasn't in the state stack
 					oldState.destroy();
 					_screen.removeChild(oldState);
 				}
-				
-				
+
+
 				HxlGraphics.unfollow();
 				HxlGraphics.resetInput();
 				HxlGraphics.destroySounds();
@@ -216,22 +216,22 @@ class HxlGame extends Sprite {
 			stateStack.push(State);
 		}
 		state.scaleX = state.scaleY = _zoom;
-		
+
 		// Finally, create the new state
 		state.create();
 		state.isStacked = false;
-		
+
 		oldState = null;
 	}
 
 	public function popState() {
 		if ( stateStack.length < 1 )
 			return;
-			
+
 		var State:HxlState = stateStack.pop();
 		State.destroy();
 		_screen.removeChild(State);
-		
+
 		State = stateStack[stateStack.length-1];
 		HxlGraphics.unfollow();
 		HxlGraphics.resetInput();
@@ -244,7 +244,7 @@ class HxlGame extends Sprite {
 		state = State;
 		if(state!=null)
 			state.isStacked = false;
-		
+
 		State = null;
 		System.gc();
 		System.gc();
@@ -268,14 +268,14 @@ class HxlGame extends Sprite {
 				case 109:
 				case 189:
 					HxlGraphics.mute = false;
-		    		HxlGraphics.volume = HxlGraphics.volume - 0.1;
-		    		showSoundTray();
+					HxlGraphics.volume = HxlGraphics.volume - 0.1;
+					showSoundTray();
 					return;
 				case 107:
 				case 187:
 					HxlGraphics.mute = false;
-		    		HxlGraphics.volume = HxlGraphics.volume + 0.1;
-		    		showSoundTray();
+					HxlGraphics.volume = HxlGraphics.volume + 0.1;
+					showSoundTray();
 					return;
 				case 80:
 					//HxlGraphics.pause = !HxlGraphics.pause;
@@ -298,7 +298,7 @@ class HxlGame extends Sprite {
 		stage.frameRate = framerate;
 		Actuate.resumeAll();
 	}
-	
+
 	/**a
 	 * Internal function to help with basic pause game functionality.
 	 */
@@ -325,7 +325,7 @@ class HxlGame extends Sprite {
 				MusicManager.resume();
 		}
 	}
-	
+
 	/**
 	 * Internal event handler for input and focus.
 	 */
@@ -349,8 +349,8 @@ class HxlGame extends Sprite {
 
 		//Set up the view window and double buffering
 		stage.scaleMode = StageScaleMode.NO_SCALE;
-        stage.align = StageAlign.TOP_LEFT;
-        stage.frameRate = framerate;
+		stage.align = StageAlign.TOP_LEFT;
+		stage.frameRate = framerate;
 
 		_screen = new Sprite();
 		addChild(_screen);
@@ -436,21 +436,21 @@ class HxlGame extends Sprite {
 
 		//All set!
 		_created = true;
-		
+
 		var args = new Array();
 		var newState = Type.createInstance(_iState, args);
-		
+
 		switchState(newState);
-		
+
 		args = null;
 		newState = null;
-		
+
 		HxlState.screen.unsafeBind(HxlGraphics.buffer);
-		
+
 		_addEventListener(Event.ENTER_FRAME, update, false, 0, true);
 		//_addEventListener(Event.CLOSING, destroy, false, 0, true);
-		
-		
+
+
 		// remove from this, all future event listeners should be on stage
 		removeEventListener(Event.ENTER_FRAME, create);
 	}
@@ -465,7 +465,7 @@ class HxlGame extends Sprite {
 		_elapsed = ems/1000;
 		console.mtrTotal.add(ems);
 		_total = mark;
-		
+
 		HxlGraphics.elapsed = _elapsed;
 		if (HxlGraphics.elapsed > HxlGraphics.maxElapsed) {
 			HxlGraphics.elapsed = HxlGraphics.maxElapsed;
@@ -481,7 +481,7 @@ class HxlGame extends Sprite {
 				_soundTray.y -= _elapsed*HxlGraphics.height*2;
 				if (_soundTray.y <= -_soundTray.height) {
 					_soundTray.visible = false;
-					
+
 					//Save sound preferences
 					soundPrefs = new HxlSave();
 					if (soundPrefs.bind("haxegame")) {
@@ -525,7 +525,7 @@ class HxlGame extends Sprite {
 			_screen.x = HxlGraphics.quake.x;
 			_screen.y = HxlGraphics.quake.y;
 		}
-		
+
 		//Keep track of how long it took to update everything
 		var updateMark:Int = Lib.getTimer();
 		console.mtrUpdate.add(updateMark-mark);
@@ -537,8 +537,8 @@ class HxlGame extends Sprite {
 		// rough state stack rendering code, not currently working..
 		if ( stateStack.length > 1 ) {
 			var startState:Int = 0;
-			for ( i in 0...stateStack.length ) {					
-				if ( stateStack[i].stackBlockRender ) 
+			for ( i in 0...stateStack.length ) {
+				if ( stateStack[i].stackBlockRender )
 					startState = i;
 			}
 			if ( startState != state.stackId ) {
@@ -549,7 +549,7 @@ class HxlGame extends Sprite {
 		}
 
 		state.render();
-		
+
 		if ( HxlGraphics.flash.exists ) {
 			HxlGraphics.flash.render();
 		}
@@ -565,13 +565,13 @@ class HxlGame extends Sprite {
 		console.mtrRender.add(Lib.getTimer()-updateMark);
 	}
 
-	
+
 	var eventListeners:Array<Dynamic>;
-	
-	function _addEventListener(Type:String, Listener:Dynamic, UseCapture:Bool = false, Priority:Int = 0, UseWeakReference:Bool = true) { 
+
+	function _addEventListener(Type:String, Listener:Dynamic, UseCapture:Bool = false, Priority:Int = 0, UseWeakReference:Bool = true) {
 		if (eventListeners == null)
 			eventListeners = new Array();
-		
+
 		stage.addEventListener(Type, Listener, UseCapture, Priority, UseWeakReference);
 		eventListeners.push( {Type: Type, Listener: Listener, UseCapture: UseCapture, Priority: Priority} );
 	}
@@ -593,16 +593,16 @@ class HxlGame extends Sprite {
 			stage.removeEventListener(i.Type, i.Listener);
 		}
 	}
-	
+
 	public function destroy() {
-		
+
 		_clearEventListeners();
 		HxlGraphics.buffer.dispose();
 		HxlGraphics.buffer = null;
 		removeChild(_soundTray);
 		removeChild(_screen);
 		removeChild(console);
-		
+
 		root.removeEventListener(Event.DEACTIVATE, onFocusLost);
 		root.addEventListener(Event.ACTIVATE, onFocus);
 	}

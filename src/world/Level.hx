@@ -26,6 +26,7 @@ import data.Configuration;
 import cq.states.WinState;
 
 import com.baseoneonline.haxe.astar.IAStarSearchable;
+import cq.GameUI;
 
 class Level extends HxlTilemap, implements IAStarSearchable {
 	public var mobs:Array<Mob>;
@@ -34,14 +35,14 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	public var index(default, null):Int;
 	public var ticksSinceNewDiscovery:Float; // float for convenient arithmetic
 	public var stairsAreFound:Bool;
-	
+
 	public static inline var CHANCE_DECORATION:Float = 0.2;
-	
+
 	var ptLevel:PtLevel;
-	
+
 	public function new(index:Int,tileW:Int,tileH:Int) {
 		super(tileW,tileH);
-		
+
 		this.index = index;
 		mobs = new Array();
 		loots = new Array();
@@ -50,97 +51,97 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		ticksSinceNewDiscovery = 0;
 		stairsAreFound = false;
 	}
-	
-	public function isBlockingMovement(X:Int, Y:Int, ?CheckActor:Bool=false):Bool { 
-		if ( X < 0 || Y < 0 || X >= widthInTiles || Y >= heightInTiles ) 
+
+	public function isBlockingMovement(X:Int, Y:Int, ?CheckActor:Bool=false):Bool {
+		if ( X < 0 || Y < 0 || X >= widthInTiles || Y >= heightInTiles )
 			return true;
 		if ( CheckActor && cast(_tiles[Y][X], Tile).actors.length>0 )
 			return true;
 		return _tiles[Y][X].isBlockingMovement();
 	}
-	
+
 	public function isBlockingView(X:Int, Y:Int):Bool {
-		if ( X < 0 || Y < 0 || X >= widthInTiles || Y >= heightInTiles ) 
+		if ( X < 0 || Y < 0 || X >= widthInTiles || Y >= heightInTiles )
 			return true;
 		return _tiles[Y][X].isBlockingView();
 	}
-	
+
 	public override function onAdd(state:HxlState) {
 		super.onAdd(state);
-		
+
 		addAllActors(state);
 		addAllLoots(state);
 		ptLevel.start();
 		//follow();
 		HxlGraphics.follow(Registery.player, 10);
 	}
-	
+
 	override public function destroy() {
 		removeAllActors(HxlGraphics.state);
 		removeAllLoots(HxlGraphics.state);
 		removeAllDecorations(HxlGraphics.state);
 		ptLevel.destroy();
-		
+
 		ptLevel = null;
 		startingLocation = null;
-		
+
 		HxlGraphics.unfollow();
-		
+
 		Actuate.reset();
-		
+
 		super.destroy();
 	}
-	
+
 	public override function onRemove(state:HxlState) {
 		super.onRemove(state);
 	}
-	
+
 	public function addMobToLevel(state:HxlState, mob:Mob) {
 		mobs.push(mob);
 		var tile = cast(getTile(mob.getTilePos().x, mob.getTilePos().y), Tile);
 		tile.actors.push(mob);
 		addObject(state, mob);
 	}
-	
+
 	public function removeMobFromLevel(state:HxlState, mob:Mob) {
 		if (mob == null) return; // safety against timing issues
-		
+
 		// take the monster out of the global list of monsters
 		mobs.remove(mob);
-		
+
 		// take the monster out of the tile it was in
 		var mobPos = mob.getTilePos();
-		
+
 		if (mobPos!=null) {
 			var mobTile = null;
 			mobTile = cast(getTile(mobPos.x, mobPos.y), Tile);
-			
+
 			if(mobTile.actors!=null)
-				mobTile.actors.remove(mob);			
+				mobTile.actors.remove(mob);
 		}
-		
+
 		// remove the monster from the graphical stage
 		state.remove(mob);
 	}
-	
+
 	function addObject(state:HxlState, obj:GameObject) {
 		state.add(obj);
 	}
-	
+
 	function addAllActors(state:HxlState) {
 		var player = Registery.player;
 		player.setTilePos(Std.int(startingLocation.x),Std.int(startingLocation.y));
 		player.x = getPixelPositionOfTile(player.tilePos.x, player.tilePos.y).x;
 		player.y = getPixelPositionOfTile(player.tilePos.x, player.tilePos.y).y;
 		state.add(player);
-		
+
 		for (mob in mobs)
 			addObject(state, mob);
-			
+
 		player = null;
 		state = null;
 	}
-	
+
 	public function addLootToLevel(state:HxlState, loot:Loot) {
 		// add item to level loot list
 		loots.push(loot);
@@ -150,20 +151,20 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		// make item viewable on level
 		addObject(state, loot);
 	}
-	
+
 	function addLoot(state:HxlState, loot:Loot) {
 		state.add(loot);
 	}
-	
+
 	function addAllLoots(state:HxlState) {
 		for (loot in loots )
 			addObject(state,loot);
 	}
-	
+
 	public function removeAllActors(state:HxlState) {
 		if(Registery.player!=null)
 			state.remove(Registery.player);
-			
+
 		var m:CqMob;
 		while(mobs.length>0){
 			m = cast(mobs.pop(), CqMob);
@@ -171,11 +172,11 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 			m.destroy();
 			m = null;
 		}
-		
+
 		mobs = null;
 	}
-	
-	public function removeAllLoots(state:HxlState) {			
+
+	public function removeAllLoots(state:HxlState) {
 		var l:CqItem;
 		while (loots.length > 0) {
 			l = cast(loots.pop(),CqItem);
@@ -183,26 +184,26 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 			l.destroy();
 			l = null;
 		}
-			
+
 		loots = null;
 	}
-	
+
 	public function removeLootFromLevel(state:HxlState, loot:Loot) {
 		loots.remove(loot);
-		
-		var lootPos = loot.getTilePos();		
+
+		var lootPos = loot.getTilePos();
 		var lootTile = cast(getTile(lootPos.x, lootPos.y), Tile);
 		lootTile.loots.remove(loot);
-		
+
 		state.remove(loot);
-		
+
 		lootPos = null;
 		lootTile  = null;
 	}
-	
+
 	override public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {
 		var map = super.loadMap(MapData, TileGraphic, TileWidth, TileHeight, ScaleX, ScaleY);
-		
+
 		for (y in 0...map.heightInTiles) {
 			for (x in 0...map.widthInTiles) {
 				cast(_tiles[y][x], Tile).level = this;
@@ -212,16 +213,16 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 
 		return map;
 	}
-	
+
 	/**
 	 * Slightly less confusing name in this context
 	 */
 	public function getPixelPositionOfTile(X:Dynamic, Y:Dynamic, ?Center:Bool = false):HxlPoint {
 		return super.getTilePos(X, Y, Center);
 	}
-		
+
 	public function addDecoration(t:Tile, state:HxlState) {	}
-	
+
 	public function removeAllDecorations(state:HxlState) {
 		for (y in 0...heightInTiles) {
 			for (x in 0...widthInTiles) {
@@ -233,21 +234,21 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 			}
 		}
 	}
-	
+
 	inline function isBlockedFromAllSides(x:Int,y:Int):Bool {
 		var blocked = (x == 0 || getTile(x - 1, y).isBlockingMovement());
 		blocked = blocked && (x == widthInTiles - 1 || getTile(x + 1, y).isBlockingMovement());
 		blocked = blocked && (y == heightInTiles - 1 || getTile(x, y + 1).isBlockingMovement());
 		blocked = blocked && (y == 0 || getTile(x, y - 1).isBlockingMovement());
-		
+
 		blocked = blocked && ((x==0 || y==0)  ||  getTile(x - 1, y-1).isBlockingMovement());
 		blocked = blocked && ((x==widthInTiles-1 || y==heightInTiles-1)  ||  getTile(x + 1, y+1).isBlockingMovement());
 		blocked = blocked && ((x==0 || y==heightInTiles-1) ||  getTile(x-1, y + 1).isBlockingMovement());
 		blocked = blocked && ((x==widthInTiles-1 || y==0)  ||  getTile(x+1, y - 1).isBlockingMovement());
-		
+
 		return blocked;
 	}
-	
+
 	public function showAll(state:HxlState) {
 		for ( x in 0...widthInTiles-1 ) {
 			for ( y in 0...heightInTiles - 1) {
@@ -257,7 +258,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 					firstSeen(state, this, new HxlPoint(x, y), Visibility.SENSED);
 					tile.visible = true;
 					tile.color = 0xffffff;
-						
+
 					for (loot in tile.loots)
 						cast(loot,HxlSprite).visible = true;
 					for (actor in tile.actors)
@@ -267,28 +268,28 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				}
 			}
 		}
-		
+
 		updateFieldOfView(state, Registery.player);
 	}
-	
+
 	public function foundStairs(magically:Bool) {
 		stairsAreFound = true;
 	}
 
 	/** gets called for each tile EVERY time it is seen (not just the first time) **/
-	static function firstSeen(state:HxlState, map:Level, p:HxlPoint, newvis:Visibility) { 
+	static function firstSeen(state:HxlState, map:Level, p:HxlPoint, newvis:Visibility) {
 		if (map == null || p == null)
 			return;
-		
+
 		var t:Tile = map.getTile(Math.round(p.x), Math.round(p.y));
 		if (t == null)
 			return;
-		
+
 		if (t.visibility == Visibility.UNSEEN) {
 			if (Math.random() < CHANCE_DECORATION) {
 				map.addDecoration(t, state);
 			}
-			
+
 			if (newvis == Visibility.SENSED) {
 				t.visibility = Visibility.SENSED;
 			}
@@ -297,13 +298,13 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				map.foundStairs(newvis == Visibility.SENSED);
 			}
 		}
-		
-		
+
+
 		if (newvis != Visibility.SENSED) {
 			if (t.visibility != Visibility.IN_SIGHT) {
 				// have to tweak this until it feels right -- but we don't want to reset it to 0 or optimal
 				// play will call for waiting until just before dudes start appearing
-				
+
 				t.timesUncovered++;
 				switch (t.timesUncovered) {
 					case 1: map.ticksSinceNewDiscovery -= 3 * 60; // every cell we see pays off 3 turns of hanging around (quite a lot, really)
@@ -316,8 +317,8 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 			t.visibility = newvis;
 		}
 	}
-	
-	
+
+
 	// THIS IS EXACTLY WHY CODE DUPLICATION IS EVIL: two nearly identical functions with tiny, undocumented differences.
 	// this will be rectified momentarily.
 	static var adjacent = [[ -1, -1], [0, -1], [1, -1], [ -1, 0], [1, 0], [ -1, 1], [0, 1], [1, 1]];
@@ -325,13 +326,13 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		var actor:Actor = null;
 		if (otherActorHighlight == null) actor = Registery.player;
 		else actor = otherActorHighlight;
-		
+
 		var bottom = Std.int(Math.min(heightInTiles - 1, actor.tilePos.y + (actor.visionRadius+1)));
 		var top = Std.int(Math.max(0, actor.tilePos.y - (actor.visionRadius+1)));
 		var right = Std.int(Math.min(widthInTiles - 1, actor.tilePos.x + (actor.visionRadius+1)));
 		var left = Std.int(Math.max(0, actor.tilePos.x - (actor.visionRadius+1)));
 		var tile:HxlTile;
-		
+
 		// reset previously seen tiles
 		for ( x in left...right+1 ) {
 			for ( y in top...bottom+1 ) {
@@ -353,21 +354,21 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 			}
 		} else {
 			var map:Level = this;
-			HxlUtil.markFieldOfView(actor.tilePos, actor.visionRadius, this, true, 
-				function(p:HxlPoint) { 
-					firstSeen(state, map, p, Visibility.IN_SIGHT); 
+			HxlUtil.markFieldOfView(actor.tilePos, actor.visionRadius, this, true,
+				function(p:HxlPoint) {
+					firstSeen(state, map, p, Visibility.IN_SIGHT);
 				} );
 			map = null;
 		}
-		
+
 		var dest = new HxlPoint(0, 0);
 		for ( x in left...right+1 ) {
 			for ( y in top...bottom+1 ) {
 				tile = getTile(x, y);
-				
+
 				dest.x = x;
 				dest.y = y;
-					
+
 				var dist = HxlUtil.distance(actor.tilePos, dest);
 				var Ttile:Tile = cast(tile, Tile);
 				var normColor:Int = normalizeColor(dist, actor.visionRadius, seenTween, inSightTween);
@@ -375,7 +376,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				switch (tile.visibility) {
 					case Visibility.IN_SIGHT:
 						tile.visible = true;
-						
+
 						for (loot in Ttile.loots)
 							cast(loot,HxlSprite).visible = true;
 						for (actor in Ttile.actors) {
@@ -383,7 +384,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 							var hpbar = actor.healthBar;
 							if (hpbar != null && actor.hp != actor.maxHp)
 								hpbar.visible = true;
-								
+
 							if (Std.is(actor, CqMob)) {
 								var asmob = cast(actor, CqMob);
 								if (asmob != null && asmob.xpValue > 0) {
@@ -392,7 +393,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 									// in practice, this should mean you won't ever see extra spawns
 									// while in the presence of a real monster.  It would be nice to
 									// work out some more precise math for this.
-									
+
 									ticksSinceNewDiscovery -= 60;
 								} else {
 									// and if we've spawned a monster to keep you exploring, we don't want to
@@ -410,7 +411,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 						}
 					case Visibility.SEEN, Visibility.SENSED:
 						tile.visible = true;
-						
+
 						for (loot in Ttile.loots)
 							cast(loot,HxlSprite).visible = false;
 						for (actor in Ttile.actors) {
@@ -424,13 +425,13 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 							pop = null;
 							hpbar = null;
 						}
-						
+
 						Ttile.colorTo(seenTween, actor.moveSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
 						for (decoration in Ttile.decorations)
 							//decoration.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
 							decoration.colorTo(seenTween, actor.moveSpeed);
-							
+
 					case Visibility.UNSEEN:
 						for (actor in Ttile.actors) {
 							var pop = cast(actor, HxlSprite).getPopup();
@@ -446,20 +447,20 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				Ttile = null;
 			}
 		}
-		
-		
+
+
 		actor = null;
 		tile = null;
-		
+
 	}
-	public function updateFieldOfViewByPoint(state:HxlState, tilePos:HxlPoint,visionRadius:Int,tweenSpeed:Int, ?seenTween:Int = 64, ?inSightTween:Int=255):Void 
+	public function updateFieldOfViewByPoint(state:HxlState, tilePos:HxlPoint,visionRadius:Int,tweenSpeed:Int, ?seenTween:Int = 64, ?inSightTween:Int=255):Void
 	{
 		var bottom = Std.int(Math.min(heightInTiles - 1, tilePos.y + (visionRadius+1)));
 		var top = Std.int(Math.max(0, tilePos.y - (visionRadius+1)));
 		var right = Std.int(Math.min(widthInTiles - 1, tilePos.x + (visionRadius+1)));
 		var left = Std.int(Math.max(0, tilePos.x - (visionRadius+1)));
 		var tile:HxlTile;
-		
+
 		// reset previously seen tiles
 		for ( x in left...right+1 ) {
 			for ( y in top...bottom+1 ) {
@@ -481,21 +482,21 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 			}
 		} else {
 			var map:Level = this;
-			
-			HxlUtil.markFieldOfView(tilePos, visionRadius, this, true, 
-				function(p:HxlPoint) { 
-					firstSeen(state, map, p, Visibility.IN_SIGHT); 
+
+			HxlUtil.markFieldOfView(tilePos, visionRadius, this, true,
+				function(p:HxlPoint) {
+					firstSeen(state, map, p, Visibility.IN_SIGHT);
 					map = null;
 				} );
 		}
-		
+
 		var dest:HxlPoint = new HxlPoint(0, 0);
 		for ( x in left...right+1 ) {
 			for ( y in top...bottom+1 ) {
 				tile = getTile(x, y);
 				dest.x = x;
 				dest.y = y;
-					
+
 				var dist = HxlUtil.distance(tilePos, dest);
 				var Ttile:Tile = cast(tile, Tile);
 				var normColor:Int = normalizeColor(dist, visionRadius, seenTween, inSightTween);
@@ -503,7 +504,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				switch (tile.visibility) {
 					case Visibility.IN_SIGHT:
 						tile.visible = true;
-						
+
 						for (loot in Ttile.loots)
 							cast(loot,HxlSprite).visible = true;
 						for (actor in Ttile.actors) {
@@ -517,33 +518,33 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 						}
 					case Visibility.SEEN:
 						tile.visible = true;
-						
+
 						for (loot in Ttile.loots)
 							cast(loot,HxlSprite).visible = false;
 						for (actor in Ttile.actors)
 							cast(actor,HxlSprite).visible = false;
-						
+
 						Ttile.colorTo(seenTween, tweenSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
 						for (decoration in Ttile.decorations)
 							//decoration.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
 							decoration.colorTo(seenTween, tweenSpeed);
-							
+
 					case Visibility.SENSED:
 						tile.visible = true;
-						
+
 						for (loot in Ttile.loots)
 							cast(loot,HxlSprite).visible = false;
 						for (actor in Ttile.actors)
 							cast(actor,HxlSprite).visible = false;
-						
+
 						Ttile.colorTo(seenTween, tweenSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
 						for (decoration in Ttile.decorations)
 							//decoration.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
 							decoration.colorTo(seenTween, tweenSpeed);
-							
-							
+
+
 					case Visibility.UNSEEN:
 				}
 				Ttile = null;
@@ -557,8 +558,8 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		var color = minColor + (maxColor - minColor)*dimness;
 		return Math.round(color);
 	}
-	
-	
+
+
 	public function getExplorationProgress():Float {
 		var explored:Float = 0.0, total:Float = 0.0;
 		// return a fraction in [0,1] indicating the % of floor cells uncovered
@@ -573,10 +574,10 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		}
 		return explored / total;
 	}
-	
+
 	public function restartExploration(minTimesSeen:Int) {
 		ticksSinceNewDiscovery = 0;
-		
+
 		for (y in 0...heightInTiles) {
 			for (x in 0...widthInTiles) {
 				var t:Tile = cast(_tiles[y][x], Tile);
@@ -584,7 +585,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 			}
 		}
 	}
-	
+
 	/**
 	 * checks the directional and wasd keys, returns custompoint+direction of keys pressed
 	 * @param	?fromCustomPoint if not null uses this as starting point, otherwise uses players tilePos.
@@ -593,52 +594,61 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	public function getTargetAccordingToKeyPress(?fromCustomPoint:HxlPoint = null):HxlPoint {
 		var pos:HxlPoint = fromCustomPoint;
 		if (pos == null) pos = Registery.player.tilePos;
-		
+
 		var facing:HxlPoint = new HxlPoint(0, 0);
-		
+
 		for (compass in Configuration.bindings.compasses) {
 			if (HxlGraphics.keys.pressed(compass[0])) facing.y = -1;
 			if (HxlGraphics.keys.pressed(compass[1])) facing.x = -1;
 			if (HxlGraphics.keys.pressed(compass[2])) facing.y = 1;
 			if (HxlGraphics.keys.pressed(compass[3])) facing.x = 1;
 		}
-		
+
 		// now clip the request to the edge of the map (mostly for when this is used in targeting)
 		if (facing.y < 0 && pos.y <= 0) facing.y = 0;
 		if (facing.y > 0 && pos.y >= heightInTiles) facing.y = 0;
 		if (facing.x < 0 && pos.x <= 0) facing.x = 0;
 		if (facing.x > 0 && pos.x >= widthInTiles) facing.x = 0;
-		
+
 		for (waitkey in Configuration.bindings.waitkeys) {
 			if (HxlGraphics.keys.pressed(waitkey)) {
 				// we're returning [0, 0]
 				return facing;
 			}
 		}
-		
-		
+
+
 		if (facing.x == 0 && facing.y == 0) return null; // looks like no bound keys were pressed
-		
+
 		return facing;
 	}
-	
-	
+
+
 	private inline static function sgn(x:Float):Int {
 		return if (x < 0) -1 else if (x > 0) 1 else 0;
 	}
-	
+
 	public function getTargetAccordingToMousePosition(?secondChoice:Bool = false):HxlPoint {
 		// if you don't like grabbing the player from the registry here, change it to an argument
 		var player = Registery.player;
+
 		var dx:Float = -.5 + (HxlGraphics.mouse.x - player.x) / Configuration.zoomedTileSize();
 		var dy:Float = -.5 + (HxlGraphics.mouse.y - player.y) / Configuration.zoomedTileSize();
-		
+
 		var absdx:Float = Math.abs(dx);
 		var absdy:Float = Math.abs(dy);
-		
+/*
+		var msg = "Comparing "; //TjD
+		msg = msg + "(" + Std.string( Std.int( dx ) ) +"," + Std.string( Std.int( dy ) ) + ") ";
+		msg = msg + "(" + Std.string( Std.int( player.x ) ) +"," + Std.string( Std.int( player.y ) ) + ") ";
+		msg = msg + "(" + Std.string( Std.int( HxlGraphics.mouse.x ) ) +"," + Std.string( Std.int( HxlGraphics.mouse.y ) ) + ") ";
+		GameUI.showTextNotification( msg );
+*/
+
+
 		var give:Float = 0.75; // exactly .5 means that you have to point at yourself precisely to wait; higher values make it fuzzier
 		if (absdx < give && absdy < give) return new HxlPoint(0, 0);
-		
+
 		// here it would be nice to track more info about angle than this
 		if ((absdx > absdy && !secondChoice) || (absdx < absdy && secondChoice)) {
 			return new HxlPoint(sgn(dx), 0);
@@ -646,18 +656,18 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 			return new HxlPoint(0, sgn(dy));
 		}
 	}
-	
+
 	public function tick(state:HxlState) { }
-	
+
 	// implement IAStarSearchable (isWalkable, getWidth, getHeight)
 	public function isWalkable(x:Int, y:Int):Bool {
 		return !isBlockingMovement(x, y, false);
 	}
-	
+
 	public function getWidth():Int {
 		return widthInTiles;
 	}
-	
+
 	public function getHeight():Int {
 		return heightInTiles;
 	}

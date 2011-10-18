@@ -18,6 +18,8 @@ import haxel.HxlFade;
 import haxel.HxlObject;
 
 import data.MusicManager;
+import data.Configuration;
+
 class HxlGraphicsBMPData extends BitmapData {}
 class HxlGraphics {
 
@@ -67,7 +69,7 @@ class HxlGraphics {
 	 * <code>HxlGraphics.saves</code> is a generic bucket for storing
 	 * FlxSaves so you can access them whenever you want.
 	 */
-	public static var saves:Array<Dynamic>; 
+	public static var saves:Array<Dynamic>;
 	public static var save:Int;
 
 	/**
@@ -131,7 +133,7 @@ class HxlGraphics {
 	/**
 	 * Number of updates made for the current frame.
 	 **/
-	public static var numUpdates:Int = 0;	
+	public static var numUpdates:Int = 0;
 
 	/**
 	 * A handy container for a background music object.
@@ -180,7 +182,7 @@ class HxlGraphics {
 	 * will sort its members according to zIndex, lowest to highest.
 	 **/
 	public static var autoZSort:Bool = true;
-	
+
 	public static var _defaultFont:String = "system";
 
 	public function new() { }
@@ -224,7 +226,7 @@ class HxlGraphics {
 
 	/**
 	 * Log data to the developer console.
-	 * 
+	 *
 	 * @param	Data		Anything you want to log to the console.
 	 */
 	public static function log(Data:Dynamic) {
@@ -257,7 +259,7 @@ class HxlGraphics {
 
 	/**
 	 * Tells the camera subsystem what <code>HxlCore</code> object to follow.
-	 * 
+	 *
 	 * @param	Target		The object to follow.
 	 * @param	Lerp		How much lag the camera should have (can help smooth out the camera movement).
 	 */
@@ -274,7 +276,7 @@ class HxlGraphics {
 	/**
 	 * Specify an additional camera component - the velocity-based "lead",
 	 * or amount the camera should track in front of a sprite.
-	 * 
+	 *
 	 * @param	LeadX		Percentage of X velocity to add to the camera's motion.
 	 * @param	LeadY		Percentage of Y velocity to add to the camera's motion.
 	 */
@@ -284,7 +286,7 @@ class HxlGraphics {
 
 	/**
 	 * Specify the boundaries of the level or where the camera is allowed to move.
-	 * 
+	 *
 	 * @param	MinX				The smallest X value of your level (usually 0).
 	 * @param	MinY				The smallest Y value of your level (usually 0).
 	 * @param	MaxX				The largest X value of your level (usually the level width).
@@ -308,7 +310,7 @@ class HxlGraphics {
 
 	/**
 	 * Used to counter the flickering of dithered surfaced when scrolling
-	 */ 
+	 */
 	static function makeEven(val:Float):Int {
 		var intVal = Math.round(val);
 		if (intVal / 2 == Std.int(intVal / 2))
@@ -316,7 +318,7 @@ class HxlGraphics {
 		else
 			return intVal + 1;
 	}
-	
+
 	/**
 	 * Internal function that updates the camera and parallax scrolling.
 	 */
@@ -331,7 +333,7 @@ class HxlGraphics {
 			}
 			scroll.x += makeEven((_scrollTarget.x-scroll.x)*followLerp*HxlGraphics.elapsed);
 			scroll.y += makeEven((_scrollTarget.y-scroll.y)*followLerp*HxlGraphics.elapsed);
-			
+
 			if (followMin != null) {
 				if (scroll.x > followMin.x) {
 					scroll.x = followMin.x;
@@ -340,7 +342,7 @@ class HxlGraphics {
 					scroll.y = followMin.y;
 				}
 			}
-			
+
 			if (followMax != null) {
 				if (scroll.x < followMax.x) {
 					scroll.x = followMax.x;
@@ -362,7 +364,7 @@ class HxlGraphics {
 
 	/**
 	 * Retrieves the Flash stage object (required for event listeners)
-	 * 
+	 *
 	 * @return	A Flash <code>MovieClip</code> object.
 	 */
 	public static function getStage():Stage {
@@ -379,7 +381,7 @@ class HxlGraphics {
 	public static function getFramerate():Int {
 		return _game.framerate;
 	}
-	
+
 	/**
 	 * @private
 	 */
@@ -390,20 +392,20 @@ class HxlGraphics {
 		}
 		return Framerate;
 	}
-	
+
 	/**
 	 * The game and SWF framerate while paused; default is 10.
 	 */
 	public static function getFrameratePaused():Int {
 		return _game.frameratePaused;
 	}
-	
+
 	/**
 	 * @private
 	 */
 	public static function setFrameratePaused(Framerate:Int):Int{
 		return Framerate;
-		
+
 		_game.frameratePaused = Framerate;
 		if(_game.paused && (_game.stage != null))
 			_game.stage.frameRate = Framerate;
@@ -416,7 +418,7 @@ class HxlGraphics {
 	public static function getShowBounds():Bool {
 		return _showBounds;
 	}
-	
+
 	/**
 	 * @private
 	 */
@@ -431,7 +433,7 @@ class HxlGraphics {
 
 	/**
 	 * Set up and play a looping background soundtrack.
-	 * 
+	 *
 	 * @param	Music		The sound file you want to loop in the background.
 	 * @param	Volume		How loud the sound should be, from 0 to 1.
 	 */
@@ -446,14 +448,14 @@ class HxlGraphics {
 		music.survive = true;
 		music.play();
 	}
-	
+
 	/**
 	 * Creates a new sound object from an embedded <code>Class</code> object.
-	 * 
+	 *
 	 * @param	EmbeddedSound	The sound you want to play.
 	 * @param	Volume			How loud to play it (0 to 1).
 	 * @param	Looped			Whether or not to loop this sound.
-	 * 
+	 *
 	 * @return	A <code>HxlSound</code> object.
 	 */
 	public static function play(EmbeddedSound:Class<Sound>,?Volume:Float=1.0,?Looped:Bool=false):HxlSound {
@@ -474,14 +476,14 @@ class HxlGraphics {
 		s.play();
 		return s;
 	}
-	
+
 	/**
 	 * Creates a new sound object from a URL.
-	 * 
+	 *
 	 * @param	EmbeddedSound	The sound you want to play.
 	 * @param	Volume			How loud to play it (0 to 1).
 	 * @param	Looped			Whether or not to loop this sound.
-	 * 
+	 *
 	 * @return	A HxlSound object.
 	 */
 	public static function stream(URL:String,?Volume:Float=1.0,?Looped:Bool=false):HxlSound {
@@ -502,16 +504,16 @@ class HxlGraphics {
 		s.play();
 		return s;
 	}
-	
+
 	/**
 	 * Set <code>mute</code> to true to turn off the sound.
-	 * 
+	 *
 	 * @default false
 	 */
 	public static function getMute():Bool {
 		return _mute;
 	}
-	
+
 	/**
 	 * @private
 	 */
@@ -520,10 +522,10 @@ class HxlGraphics {
 		changeSounds();
 		return Mute;
 	}
-	
+
 	/**
 	 * Get a number that represents the mute state that we can multiply into a sound transform.
-	 * 
+	 *
 	 * @return		An unsigned integer - 0 if muted, 1 if not muted.
 	 */
 	public static function getMuteValue():Int {
@@ -533,14 +535,14 @@ class HxlGraphics {
 			return 1;
 		}
 	}
-	
+
 	/**
 	 * Set <code>volume</code> to a number between 0 and 1 to change the global volume.
-	 * 
+	 *
 	 * @default 0.5
 	 */
 	 public static function getVolume():Float{ return _volume; }
-	 
+
 	/**
 	 * @private
 	 */
@@ -557,7 +559,7 @@ class HxlGraphics {
 
 	/**
 	 * Called by HxlGame on state changes to stop and destroy sounds.
-	 * 
+	 *
 	 * @param	ForceDestroy		Kill sounds even if they're flagged <code>survive</code>.
 	 */
 	public static function destroySounds(?ForceDestroy:Bool=false) {
@@ -593,7 +595,7 @@ class HxlGraphics {
 			}
 		}
 	}
-	
+
 	/**
 	 * Called by the game loop to make sure the sounds get updated each frame.
 	 */
@@ -611,7 +613,7 @@ class HxlGraphics {
 			}
 		}
 	}
-	
+
 	/**
 	 * Internal helper, pauses all game sounds.
 	 */
@@ -629,7 +631,7 @@ class HxlGraphics {
 		}*/
 		MusicManager.pause();
 	}
-	
+
 	/**
 	 * Internal helper, unpauses all game sounds.
 	 */
@@ -655,7 +657,11 @@ class HxlGraphics {
 	 */
 	public static function updateInput() {
 		keys.update();
-		mouse.update(Math.floor(state.mouseX),Math.floor(state.mouseY),scroll.x,scroll.y);
+		if( !Configuration.mobile ){
+			mouse.update(Math.floor(state.mouseX),Math.floor(state.mouseY),scroll.x,scroll.y);
+		} else {
+			mouse.update(Math.floor(state.touchX),Math.floor(state.touchY),scroll.x,scroll.y);
+		}
 	}
 
 	/**
@@ -664,7 +670,7 @@ class HxlGraphics {
 	public static function getState():HxlState {
 		return _game.state;
 	}
-	
+
 	public static function setState(State:HxlState):HxlState {
 		_game.switchState(State);
 		return State;
@@ -685,7 +691,7 @@ class HxlGraphics {
 	public static function getPause():Bool {
 		return _pause;
 	}
-	
+
 	public static function getGamePaused():Bool {
 		return _game.paused;
 	}

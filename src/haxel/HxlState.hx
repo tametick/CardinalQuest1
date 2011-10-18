@@ -12,6 +12,8 @@ import haxel.HxlObject;
 import data.Registery;
 import data.Configuration;
 
+import cq.GameUI;
+
 class HxlState extends Sprite {
 	public static var musicOn:Bool;
 	public static var sfxOn:Bool;
@@ -31,19 +33,23 @@ class HxlState extends Sprite {
 	var _followMin:Point;
 	var _followMax:Point;
 	var _scroll:Point;
-	
+
+	//For mobile only, public because HxlGraphics needs access to it
+	public var touchX:Int;
+	public var touchY:Int;
+
 	public var destroyed:Bool;
 
 	//var keyboard:HxlKeyboard;
 	var initialized:Int;
 	//var loadingBox:LoadingBox;
-	
+
 	var cursor(getCursor, setCursor):HxlSprite;
-	
+
 	static var _cursor:HxlSprite;
 	function getCursor() { return _cursor; }
 	function setCursor(c:HxlSprite) { return _cursor=c; }
-	
+
 	public function new() {
 		super();
 		stackId = 0;
@@ -58,12 +64,12 @@ class HxlState extends Sprite {
 			defaultGroup = new HxlGroup();
 		else
 			throw "defaultGroup should be null!";
-			
+
 		if(eventListeners == null)
 			eventListeners = new Array();
 		else
 			throw "eventListeners should be null!";
-			
+
 		if ( screen == null ) {
 			screen = new HxlSprite();
 			screen.createGraphic(HxlGraphics.width, HxlGraphics.height, 0, true);
@@ -73,23 +79,23 @@ class HxlState extends Sprite {
 			//screen.solid = false;
 			//screen.fixed = true;
 		}
-		
-		
+
+
 		if(cursor!=null){
 			Mouse.hide();
 			cursor.zIndex = 100;
 			add(cursor);
 		}
-		
+
 		initialized = -1;
 	}
-	
+
 	public function add(obj:HxlObjectI):HxlObjectI {
 		defaultGroup.add(obj);
 		obj.onAdd(this);
 		return obj;
 	}
-	
+
 	public function remove(obj:HxlObjectI):HxlObjectI {
 		obj.onRemove(this);
 		if (defaultGroup == null)
@@ -97,7 +103,7 @@ class HxlState extends Sprite {
 		else
 			return defaultGroup.remove(obj);
 	}
-	
+
 	public function preProcess() {
 		screen.fill(bgColor);
 		HxlGraphics.numRenders = 0;
@@ -120,12 +126,12 @@ class HxlState extends Sprite {
 	public function update() {
 		if(defaultGroup!=null)
 			defaultGroup.update();
-		
+
 		if(cursor!=null) {
 			cursor.x = HxlGraphics.mouse.screenX;
 			cursor.y = HxlGraphics.mouse.screenY;
 		}
-		
+
 		if ( initialized == -1 ) {
 //			loadingBox.visible = true;
 			initialized = 0;
@@ -143,7 +149,7 @@ class HxlState extends Sprite {
 				_addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove, false, 0, true);
 				if ( Configuration.mobile ) {
 					_addEventListener(TouchEvent.TOUCH_TAP , onTap,false,0,true);
-				} 
+				}
 				if(Configuration.air) {
 					_addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, onRightMouseDown, false, 0, true);
 				}
@@ -161,36 +167,46 @@ class HxlState extends Sprite {
 		clearEventListeners();
 		defaultGroup.destroy();
 		defaultGroup = null;
-		
+
 		// defualt values
 		stackId = 0;
 		stackRender = true;
 		stackBlockRender = false;
 		isStacked = false;
 	}
-	
+
 	function init() { }
 	function onKeyUp(event:KeyboardEvent) { }
 	function onKeyDown(event:KeyboardEvent) {
-        //No escape key on mobile
-        #if flash
-            if (event.charCode == 27) {
-                event.preventDefault();
-            }
-        #end
+		//No escape key on mobile
+		#if flash
+			if (event.charCode == 27) {
+				event.preventDefault();
+			}
+		#end
 	}
 	function onTap(event: TouchEvent){ }
-	function onMouseDown(event:MouseEvent) { }
-	function onRightMouseDown(event:MouseEvent) { 
-        //No right clicking on mobile
-        #if flash
-            event.preventDefault();
-            Mouse.hide();
-        #end
+	function onMouseDown(event:MouseEvent) { updateTouchLocation( event ); }
+	function onRightMouseDown(event:MouseEvent) {
+		//No right clicking on mobile
+		#if flash
+			event.preventDefault();
+			Mouse.hide();
+		#end
+		 updateTouchLocation( event );
 	}
-	function onMouseUp(event:MouseEvent) { }
-	function onMouseOver(event:MouseEvent) { }
-	function onMouseMove(event:MouseEvent) { }
+	function onMouseUp(event:MouseEvent) { updateTouchLocation( event ); }
+	function onMouseOver(event:MouseEvent) { updateTouchLocation( event ); }
+	function onMouseMove(event:MouseEvent) { updateTouchLocation( event ); }
+	function updateTouchLocation(event:MouseEvent) {
+		//This due to bug in air..
+		//I am hoping all mobile devices have resolutions below 2000 :P
+		if( Configuration.mobile && event.localX < 2000 && event.localY < 2000) {
+
+			touchX = Std.int( event.localX );
+			touchY = Std.int( event.localY );
+		}
+	}
 
 	public function getIsStacked():Bool {
 		return _isStacked;
@@ -198,10 +214,10 @@ class HxlState extends Sprite {
 
 	public function setIsStacked(Toggle:Bool):Bool {
 		_isStacked = Toggle;
-		
+
 		if (eventListeners == null || defaultGroup == null)
 			return _isStacked;
-				
+
 		if ( initialized > 0 ) {
 			if ( _isStacked ) {
 				pauseEventListeners();
@@ -229,7 +245,7 @@ class HxlState extends Sprite {
 		return _isStacked;
 	}
 
-	function _addEventListener(Type:String, Listener:Dynamic, UseCapture:Bool=false, Priority:Int=0, UseWeakReference:Bool=true) { 
+	function _addEventListener(Type:String, Listener:Dynamic, UseCapture:Bool=false, Priority:Int=0, UseWeakReference:Bool=true) {
 		HxlGraphics.stage.addEventListener(Type, Listener, UseCapture, Priority, UseWeakReference);
 		eventListeners.push( {Type: Type, Listener: Listener, UseCapture: UseCapture} );
 	}
@@ -251,7 +267,7 @@ class HxlState extends Sprite {
 	}
 
 	function resumeEventListeners() {
-		if ( HxlGraphics.stage == null ) 
+		if ( HxlGraphics.stage == null )
 			return;
 		for ( i in eventListeners ) {
 			HxlGraphics.stage.addEventListener(i.Type, i.Listener, i.UseCapture,0,true);
