@@ -9,6 +9,7 @@ import flash.display.Graphics;
 import flash.display.MovieClip;
 import flash.display.Shape;
 import flash.events.Event;
+import flash.events.IOErrorEvent;
 import flash.events.MouseEvent;
 import flash.Lib;
 import flash.net.URLRequest;
@@ -59,34 +60,42 @@ class Preloader extends MovieClip {
 		
 		kongAd = new Sprite();
 		kongAdLoader = new Loader();
-		try{
-			kongAdLoader.load(new URLRequest("http://www.kongnet.net/www/delivery/avw.php?zoneid=11&cb=98732479&n=aab5b069"));
+		try {
+			var urlr = new URLRequest("http://www.kongnet.net/www/delivery/avw.php?zoneid=11&cb=98732479&n=aab5b069");
+			kongAdLoader.load(urlr);
+			kongAdLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, playKongAd, false, 0, true);
 		} catch( msg : String ) {
-			trace("1 Error message : " + msg );
+			//trace("1 Error message : " + msg );
 		} catch( errorCode : Int ) {
-			trace("1 Error #"+errorCode);
+			//trace("1 Error #" + errorCode);
 		} catch( unknown : Dynamic ) {
-			trace("1 Unknown exception : " + Std.string(unknown));
-		}
-		
-		kongAdLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, playKongAd, false, 0, true);		
+			//trace("1 Unknown exception : " + Std.string(unknown));
+		} 
 	}
 	
 	function playKongAd(e : Event) : Void
 	{
-		kongAdLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, playKongAd);
-		kongAd.addEventListener(MouseEvent.CLICK, clickOnKongAd, false, 0, true);
-		
-		
-		addChild(kongAd);
-		kongAd.addChild(kongAdLoader);
-		kongAd.buttonMode = true;
-		kongAd.mouseChildren = false;
-		kongAd.width = kongAdLoader.width;
-		kongAd.x = (640 - kongAdLoader.width) / 2;
-		kongAd.y = (400 - kongAdLoader.height) / 2;
-		
-		Timer.delay(markAdAsSeen, 1000);
+		try{
+			kongAdLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, playKongAd);
+			kongAd.addEventListener(MouseEvent.CLICK, clickOnKongAd, false, 0, true);
+			
+			
+			addChild(kongAd);
+			kongAd.addChild(kongAdLoader);
+			kongAd.buttonMode = true;
+			kongAd.mouseChildren = false;
+			kongAd.width = kongAdLoader.width;
+			kongAd.x = (640 - kongAdLoader.width) / 2;
+			kongAd.y = (400 - kongAdLoader.height) / 2;
+			
+			Timer.delay(markAdAsSeen, 1000);
+		} catch( msg : String ) {
+			//trace("1 Error message : " + msg );
+		} catch( errorCode : Int ) {
+			//trace("1 Error #" + errorCode);
+		} catch( unknown : Dynamic ) {
+			//trace("1 Unknown exception : " + Std.string(unknown));
+		}  
 	}
 
 	function clickOnKongAd(e : Event) : Void
@@ -96,12 +105,14 @@ class Preloader extends MovieClip {
 			request = new URLRequest("http://www.kongnet.net/www/delivery/ck.php?n=aab5b069&cb=783912374");
 			Lib.getURL(request);
 		} catch( msg : String ) {
-			trace("2 Error message : " + msg );
+			//trace("2 Error message : " + msg );
 		} catch( errorCode : Int ) {
-			trace("2 Error #"+errorCode);
+			//trace("2 Error #" + errorCode);
 		} catch( unknown : Dynamic ) {
-			trace("2 Unknown exception : " + Std.string(unknown));
-		}
+			//trace("2 Unknown exception : " + Std.string(unknown));
+		} catch ( error:IOErrorEvent) {
+			//trace("1 IOErrorEvent: " + Std.string(error));
+		} 
 		
 		request = null;
 	}
@@ -114,18 +125,26 @@ class Preloader extends MovieClip {
 	{
 		progressBar.scaleX = root.loaderInfo.bytesLoaded / root.loaderInfo.bytesTotal;
 		
-		var timeLine = cast(this.parent,MovieClip);
+		var timeLine = cast(this.parent, MovieClip);
+		
 		if(adSeen && timeLine.currentFrame  == timeLine.totalFrames)
 		{
 			kongAdLoader.removeEventListener(MouseEvent.CLICK, clickOnKongAd);
-			removeChild(kongAd);
-			kongAd.removeChild(kongAdLoader);
-			kongAdLoader.unloadAndStop();
+			try{
+				removeChild(kongAd);
+				kongAd.removeChild(kongAdLoader);
+				kongAdLoader.unloadAndStop();
+			} catch( unknown : Dynamic ) {
+				//trace("2 Unknown exception : " + Std.string(unknown));
+			}
+			
 			kongAdLoader = null;
 			kongAd = null;
 			
 			cast(this.parent, MovieClip).stop();
 			loadingFinished();
+		} else if (timeLine.currentFrame == timeLine.totalFrames) {
+			Timer.delay(markAdAsSeen, 3000);
 		}
 		timeLine = null;
 	}
