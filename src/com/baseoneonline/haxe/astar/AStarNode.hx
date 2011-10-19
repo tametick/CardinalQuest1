@@ -8,6 +8,7 @@ import com.baseoneonline.haxe.geom.IntPoint;
  */
 class AStarNode extends IntPoint
 {
+	public var searchIdx:Int;
 	
 	public var g:Float;
 	public var h:Float;
@@ -22,11 +23,22 @@ class AStarNode extends IntPoint
 	
 	public function new(x:Int, y:Int, walkable:Bool=true)
 	{
+		searchIdx = -1;
+		
 		g = 0;
 		h = 0;
 		cost = 1;
 		super(x,y);
 		this.walkable = walkable;
+	}
+	
+	public function requestForSearch( _searchIdx:Int ) {
+		if ( _searchIdx != searchIdx ) {
+			g = 0;
+			h = 0;
+			cost = 1;
+			searchIdx = _searchIdx;
+		}
 	}
 	
 	function get_f():Float {

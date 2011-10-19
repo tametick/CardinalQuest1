@@ -27,11 +27,11 @@ class CqMobFactory {
 			} else {
 				mob = new CqMob(X, Y, cast(cloneOf, CqMob).typeName, false);
 			}
-			mob.attack = cloneOf.attack;
+			mob.attack = Math.ceil(cloneOf.attack * .4 * (1 + Math.random())); // between 40% and 80% of your attack
 			mob.defense = cloneOf.defense;
-			mob.speed = cloneOf.speed;
+			mob.speed = Math.ceil(cloneOf.speed * .75 * (1 + Math.random())); // between 75% and 150% of your speed
 			mob.spirit = cloneOf.spirit;
-			mob.hp = mob.maxHp = mob.vitality = cloneOf.maxHp;
+			mob.hp = mob.maxHp = mob.vitality = Math.ceil(cloneOf.maxHp * .3 * (1 + Math.random())); // between 30% and 60% of your health
 			mob.damage = cloneOf.damage;
 			mob.xpValue = 0;
 			mob.name = "Mirror";

@@ -4,16 +4,19 @@ import com.baseoneonline.haxe.geom.IntPoint;
 
 class AStar
 {
+	public static var c_searchIndex = 0;
+	
 	// The dimensions of the entire map
 	var width:Int;
 	var height:Int;
+	var map:IAStarSearchable;
 	
 	// Our start and goal nodes
 	var start:AStarNode;
 	var goal:AStarNode;
 	
 	// must be two-dimensional array containing AStarNodes;
-	var map:Array<Array<AStarNode>>;
+//	var map:Array<Array<AStarNode>>;
 	
 	// open set: nodes to be considered
 	public var open:Array<AStarNode>;
@@ -43,6 +46,8 @@ class AStar
 	 */
 	public function new(map:IAStarSearchable, start:IntPoint, goal:IntPoint)
 	{
+		++c_searchIndex;
+		
 		width = map.getWidth();
 		height = map.getHeight();
 		
@@ -50,8 +55,8 @@ class AStar
 		
 		this.start = new AStarNode(start.x, start.y);
 		this.goal = new AStarNode(goal.x, goal.y); 
-		this.map = createMap(map);
 		
+		this.map = map;
 	}
 	
 	
@@ -106,6 +111,7 @@ class AStar
 				
 				if (!hasElement(open,n) && !hasElement(closed,n)) {
 					open.push(n);
+					n.requestForSearch(c_searchIndex);
 					n.parent = node;
 					n.h = dist(n);
 					n.g = node.g + n.cost;
@@ -184,7 +190,7 @@ class AStar
 			// N
 			if (x > 0) {
 				
-				n = map[x-1][y];
+				n = map.getNode(x-1, y);
 				if (n.walkable) {
 					n.cost = COST_ORTHOGONAL;
 					a.push(n);
@@ -192,7 +198,7 @@ class AStar
 			}
 			// E
 			if (x < width-1) {
-				n = map[x+1][y];
+				n = map.getNode(x+1, y);
 				if (n.walkable) {
 					n.cost = COST_ORTHOGONAL;
 					a.push(n);
@@ -200,7 +206,7 @@ class AStar
 			} 
 			// N
 			if (y > 0) {
-				n = map[x][y-1];
+				n = map.getNode(x, y-1);
 				if (n.walkable) {
 					n.cost = COST_ORTHOGONAL;
 					a.push(n);
@@ -208,7 +214,7 @@ class AStar
 			}
 			// S
 			if (y < height-1) {
-				n = map[x][y+1];
+				n = map.getNode(x, y+1);
 				if (n.walkable) {
 					n.cost = COST_ORTHOGONAL;
 					a.push(n);
@@ -222,10 +228,10 @@ class AStar
 		if ( allowDiagonal ) {
 			// NW
 			if (x > 0 && y > 0) {
-				n = map[x-1][y-1];
+				n = map.getNode(x-1, y-1);
 				if (n.walkable 
-					&& map[x-1][y].walkable 
-					&& map[x][y-1].walkable
+					&& map.getNode(x-1, y).walkable 
+					&& map.getNode(x, y-1).walkable
 				) {						
 					n.cost = COST_DIAGONAL;
 					a.push(n);
@@ -233,10 +239,10 @@ class AStar
 			}
 			// NE
 			if (x < width-1 && y > 0) {
-				n = map[x+1][y-1];
+				n = map.getNode(x+1, y-1);
 				if (n.walkable 
-					&& map[x+1][y].walkable 
-					&& map[x][y-1].walkable
+					&& map.getNode(x+1, y).walkable 
+					&& map.getNode(x, y-1).walkable
 				) {
 					n.cost = COST_DIAGONAL;
 					a.push(n);
@@ -244,10 +250,10 @@ class AStar
 			}
 			// SW
 			if (x > 0 && y < height-1) {
-				n = map[x-1][y+1];
+				n = map.getNode(x-1, y+1);
 				if (n.walkable
-					&& map[x-1][y].walkable 
-					&& map[x][y+1].walkable
+					&& map.getNode(x-1, y).walkable 
+					&& map.getNode(x, y+1).walkable
 				) {
 					n.cost = COST_DIAGONAL;
 					a.push(n);
@@ -255,10 +261,10 @@ class AStar
 			}
 			// SE
 			if (x < width-1 && y < height-1) {
-				n = map[x+1][y+1];
+				n = map.getNode(x+1, y+1);
 				if (n.walkable
-					&& map[x+1][y].walkable
-					&& map[x][y+1].walkable
+					&& map.getNode(x+1, y).walkable
+					&& map.getNode(x, y+1).walkable
 				) {
 					n.cost = COST_DIAGONAL;
 					a.push(n);
@@ -268,30 +274,6 @@ class AStar
 		
 		return a;
 		
-	}
-	
-	
-	/**
-	 * 		CREATE MAP
-	 * 
-	 * Create a map with cost and heuristic values for each tile
-	 * 
-	 */
-	function createMap(map:IAStarSearchable):Array<Array<AStarNode>>
-	{
-		var a:Array<Array<AStarNode>> = new Array<Array<AStarNode>>();
-		var x:Int;
-		var y:Int;
-		for (x in 0...width) {
-			a.push(new Array<AStarNode>());
-			
-			for (y in 0...height) {
-				var node:AStarNode = new AStarNode(x,y,map.isWalkable(x,y));
-				a[x].push(node);
-			}
-		}
-		
-		return a;
 	}
 	
 	

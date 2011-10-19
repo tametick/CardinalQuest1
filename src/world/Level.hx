@@ -7,7 +7,7 @@ import cq.CqResources;
 import data.Registery;
 import data.Resources;
 import flash.display.Bitmap;
-import com.baseoneonline.haxe.astar.PathMap;
+import com.baseoneonline.haxe.astar.AStarNode;
 import flash.system.System;
 import haxel.GraphicCache;
 import haxel.HxlSpriteSheet;
@@ -38,6 +38,8 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	public var ticksSinceNewDiscovery:Float; // float for convenient arithmetic
 	public var stairsAreFound:Bool;
 
+	var aStarNodes:Array<AStarNode>;
+	
 	public static inline var CHANCE_DECORATION:Float = 0.2;
 
 	var ptLevel:PtLevel;
@@ -52,6 +54,8 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		ptLevel = new PtLevel(this);
 		ticksSinceNewDiscovery = 0;
 		stairsAreFound = false;
+		
+		aStarNodes = null;
 	}
 
 	public function isBlockingMovement(X:Int, Y:Int, ?CheckActor:Bool=false):Bool {
@@ -86,6 +90,11 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 
 		ptLevel = null;
 		startingLocation = null;
+		
+		while (aStarNodes.length > 0) {
+			aStarNodes.pop();
+		}
+		aStarNodes = null;
 
 		HxlGraphics.unfollow();
 
@@ -100,7 +109,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 
 	public function addMobToLevel(state:HxlState, mob:Mob) {
 		mobs.push(mob);
-		var tile = cast(getTile(mob.getTilePos().x, mob.getTilePos().y), Tile);
+		var tile = getTile(mob.getTilePos().x, mob.getTilePos().y);
 		tile.actors.push(mob);
 		addObject(state, mob);
 	}
@@ -116,7 +125,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 
 		if (mobPos!=null) {
 			var mobTile = null;
-			mobTile = cast(getTile(mobPos.x, mobPos.y), Tile);
+			mobTile = getTile(mobPos.x, mobPos.y);
 
 			if(mobTile.actors!=null)
 				mobTile.actors.remove(mob);
@@ -148,7 +157,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		// add item to level loot list
 		loots.push(loot);
 		// add item to tile loot list
-		var tile = cast(getTile(loot.getTilePos().x, loot.getTilePos().y), Tile);
+		var tile = getTile(loot.getTilePos().x, loot.getTilePos().y);
 		tile.loots.push(loot);
 		// make item viewable on level
 		addObject(state, loot);
@@ -194,7 +203,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		loots.remove(loot);
 
 		var lootPos = loot.getTilePos();
-		var lootTile = cast(getTile(lootPos.x, lootPos.y), Tile);
+		var lootTile = getTile(lootPos.x, lootPos.y);
 		lootTile.loots.remove(loot);
 
 		state.remove(loot);
@@ -214,6 +223,20 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 			}
 		}
 
+		if ( aStarNodes != null ) {
+			while ( aStarNodes.length > 0 ) {
+				aStarNodes.pop();
+			}
+		} else {
+			aStarNodes = new Array<AStarNode>();
+		}
+		
+		for ( i in 0 ... map.widthInTiles * map.heightInTiles ) {
+			var x:Int = i % map.widthInTiles;
+			var y:Int = Std.int( i / map.widthInTiles );
+			aStarNodes.push( new AStarNode( x, y, this.isWalkable( x, y ) ) );
+		}
+		
 		return map;
 	}
 
@@ -253,7 +276,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		for ( x in 0...widthInTiles-1 ) {
 			for ( y in 0...heightInTiles - 1) {
 				if(!isBlockedFromAllSides(x,y)){
-					var tile = cast(getTile(x, y),Tile);
+					var tile = cast(getTile(x, y), Tile);
 
 					firstSeen(state, this, new HxlPoint(x, y), Visibility.SENSED);
 					tile.visible = true;
@@ -275,7 +298,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	}
 
 	/** gets called for each tile EVERY time it is seen (not just the first time) **/
-	static function firstSeen(state:HxlState, map:Level, p:HxlPoint, newvis:Visibility) {
+	static function firstSeen(state:HxlState, map:Level, p:HxlPoint, newvis:Visibility, visAmount:Float=1.0) {
 		if (map == null || p == null)
 			return;
 
@@ -313,71 +336,210 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				}
 			}
 			t.visibility = newvis;
+			t.visAmount = Math.min( 1.0, t.visAmount + visAmount );
 		}
 	}
 
+	// Brand spanky new field-of-view test.
+	private function updateFieldOfViewAtRange( _state:HxlState, _centreX:Int, _centreY:Int, _range:Int, _maxRange:Int, _radMin:Float, _radMax:Float ) {
+		var hxlPoint:HxlPoint = new HxlPoint(0, 0);
+		var testX:Int = _centreX;
+		var testY:Int = _centreY - _range;
+		var testXDir:Int = -1;
+		var testYDir:Int = 0;
+		var firstTile:Bool = true;
+		var prevWasBlocking:Bool = true;
+		var subRadMin:Float = _radMin;
 
-	// THIS IS EXACTLY WHY CODE DUPLICATION IS EVIL: two nearly identical functions with tiny, undocumented differences.
-	// this will be rectified momentarily.
-	static var adjacent = [[ -1, -1], [0, -1], [1, -1], [ -1, 0], [1, 0], [ -1, 1], [0, 1], [1, 1]];
-	public function updateFieldOfView(state:HxlState,?otherActorHighlight:Actor,?skipTween:Bool = false, ?gradientColoring:Bool = true, ?seenTween:Int = 64, ?inSightTween:Int=255) {
-		var actor:Actor = null;
-		if (otherActorHighlight == null) actor = Registery.player;
-		else actor = otherActorHighlight;
+		if ( _range >= _maxRange ) {
+			return;
+		}
 
-		var bottom = Std.int(Math.min(heightInTiles - 1, actor.tilePos.y + (actor.visionRadius+1)));
+		if ( _radMin > 0.5 * Math.PI ) {
+			testX = _centreX + _range;
+			testY = _centreY + 1;
+			testXDir = 0;
+			testYDir = -1;
+			firstTile = false;
+		} else if ( _radMin > 0 ) {
+			testX = _centreX - 1;
+			testY = _centreY + _range;
+			testXDir = 1;
+			testYDir = 0;
+			firstTile = false;
+		} else if ( _radMin > -0.5 * Math.PI ) {
+			testX = _centreX - _range;
+			testY = _centreY - 1;
+			testXDir = 0;
+			testYDir = 1;
+			firstTile = false;
+		}
+		
+		// Loop round all tiles at this distance, finding those in our range.
+		while (true) {
+			var minTileAngle:Float = 0;
+			var maxTileAngle:Float = 0;
+			
+			// Check the max. and min. angles of the tiles observed.
+			if ( testX < _centreX ) {
+				if ( testY < _centreY ) {
+					minTileAngle = Math.atan2( testX + 0.5 - _centreX, testY - 0.5 - _centreY );
+					maxTileAngle = Math.atan2( testX - 0.5 - _centreX, testY + 0.5 - _centreY );
+				} else if ( testY > _centreY ) {
+					minTileAngle = Math.atan2( testX - 0.5 - _centreX, testY - 0.5 - _centreY );
+					maxTileAngle = Math.atan2( testX + 0.5 - _centreX, testY + 0.5 - _centreY );
+				} else {
+					minTileAngle = Math.atan2( testX + 0.5 - _centreX, testY - 0.5 - _centreY );
+					maxTileAngle = Math.atan2( testX + 0.5 - _centreX, testY + 0.5 - _centreY );
+				}
+			} else if ( testX > _centreX ) {
+				if ( testY < _centreY ) {
+					minTileAngle = Math.atan2( testX + 0.5 - _centreX, testY + 0.5 - _centreY );
+					maxTileAngle = Math.atan2( testX - 0.5 - _centreX, testY - 0.5 - _centreY );
+				} else if ( testY > _centreY ) {
+					minTileAngle = Math.atan2( testX - 0.5 - _centreX, testY + 0.5 - _centreY );
+					maxTileAngle = Math.atan2( testX + 0.5 - _centreX, testY - 0.5 - _centreY );
+				} else {
+					minTileAngle = Math.atan2( testX - 0.5 - _centreX, testY + 0.5 - _centreY );
+					maxTileAngle = Math.atan2( testX - 0.5 - _centreX, testY - 0.5 - _centreY );
+				}
+			} else {
+				if ( testY < _centreY ) {
+					if ( firstTile ) {
+						minTileAngle = Math.atan2( testX + 0.5 - _centreX, testY + 0.5 - _centreY ) - 2 * Math.PI;
+						maxTileAngle = Math.atan2( testX - 0.5 - _centreX, testY + 0.5 - _centreY );
+					} else {
+						minTileAngle = Math.atan2( testX + 0.5 - _centreX, testY + 0.5 - _centreY );
+						maxTileAngle = Math.atan2( testX - 0.5 - _centreX, testY + 0.5 - _centreY ) + 2 * Math.PI;
+					}
+				} else {
+					minTileAngle = Math.atan2( testX - 0.5 - _centreX, testY - 0.5 - _centreY );
+					maxTileAngle = Math.atan2( testX + 0.5 - _centreX, testY - 0.5 - _centreY );
+				}
+			}
+			
+			// Is this tile inside the range?
+			if ( maxTileAngle > _radMin && minTileAngle < _radMax ) {
+				var blocking:Bool = isBlockingView(testX, testY);
+				var visibleFraction:Float = (Math.min( maxTileAngle, _radMax ) - Math.max( minTileAngle, _radMin )) / (maxTileAngle - minTileAngle);
+				
+				if ( blocking ) {
+					// Blocking tiles are always visible if we can see any of them.
+					hxlPoint.x = testX;
+					hxlPoint.y = testY;
+					firstSeen(_state, this, hxlPoint, Visibility.IN_SIGHT, 0.5+visibleFraction);
+					
+					// If the previous *wasn't* blocking, scan deeper on the range prior to this tile.
+					if ( !prevWasBlocking ) {
+						updateFieldOfViewAtRange( _state, _centreX, _centreY, _range + 1, _maxRange, subRadMin, minTileAngle );
+					}
+					
+					prevWasBlocking = true;
+					
+					// Update the min. range to after this tile.
+					subRadMin = maxTileAngle;
+				} else {
+					hxlPoint.x = testX;
+					hxlPoint.y = testY;
+					firstSeen(_state, this, hxlPoint, Visibility.IN_SIGHT, 0.3 + 0.7 * visibleFraction);
+					
+					prevWasBlocking = false;
+				}
+			}
+			
+			if ( maxTileAngle > _radMax ) { // Once we pass our max, we're done.
+				break;
+			}
+			
+			// Continue looping round.
+			testX += testXDir;
+			testY += testYDir;
+			
+			if ( Math.abs(testX-_centreX) == Math.abs(testY-_centreY) ) {
+				var t:Int = testXDir;
+				testXDir = testYDir;
+				testYDir = -t;
+			}
+			
+			firstTile = false;
+		}
+		
+		// We ended on an open range. Scan it.
+		if ( !prevWasBlocking ) {
+			updateFieldOfViewAtRange( _state, _centreX, _centreY, _range + 1, _maxRange, subRadMin, _radMax );
+		}
+	}
+	
+	public function updateFieldOfView(state:HxlState, ?otherActorHighlight:Actor, ?skipTween:Bool = false, ?gradientColoring:Bool = true, ?seenTween:Int = 64, ?inSightTween:Int = 255) {
+		var actor:Actor = if ( otherActorHighlight != null ) otherActorHighlight else Registery.player;
+
+		// Bounds. Only update tiles in this region.
 		var top = Std.int(Math.max(0, actor.tilePos.y - (actor.visionRadius+1)));
-		var right = Std.int(Math.min(widthInTiles - 1, actor.tilePos.x + (actor.visionRadius+1)));
+		var bottom = Std.int(Math.min(heightInTiles, actor.tilePos.y + (actor.visionRadius+1) + 1));
 		var left = Std.int(Math.max(0, actor.tilePos.x - (actor.visionRadius+1)));
-		var tile:HxlTile;
+		var right = Std.int(Math.min(widthInTiles, actor.tilePos.x + (actor.visionRadius+1) + 1));
 
-		// reset previously seen tiles
-		for ( x in left...right+1 ) {
-			for ( y in top...bottom+1 ) {
+		// First, reset previously seen tiles.
+		var tile:Tile;		
+		for ( x in left...right ) {
+			for ( y in top...bottom ) {
 				tile = getTile(x, y);
 				if ( tile.visibility == Visibility.IN_SIGHT ) {
 					tile.visibility = Visibility.SEEN;
+					tile.visAmount = 0.0;
 				}
 			}
 		}
-
-		if ( isBlockingView(Std.int(actor.tilePos.x), Std.int(actor.tilePos.y)) ) {
-			// if actor is on a view blocking tile, only show adjacent tiles
-			for ( i in adjacent) {
-				var xx = Std.int(actor.tilePos.x + i[0]);
-				var yy = Std.int(actor.tilePos.y + i[1]);
-				if (yy < heightInTiles && xx < widthInTiles && yy >= 0 && xx >= 0) {
-					cast(getTile(xx, yy), Tile).visibility = Visibility.IN_SIGHT;
-				}
-			}
-		} else {
-			var map:Level = this;
-			HxlUtil.markFieldOfView(actor.tilePos, actor.visionRadius, this, true,
-				function(p:HxlPoint) {
-					firstSeen(state, map, p, Visibility.IN_SIGHT);
-				} );
-			map = null;
+		
+		// Hide all mobs and loot..
+		for ( m in mobs ) {
+			var pop = cast(m, HxlSprite).getPopup();
+			var hpbar = m.healthBar;
+			if (hpbar != null)
+				hpbar.visible = false;
+			if (pop != null)
+				pop.visible = false;
+			pop = null;
+			hpbar = null;			
 		}
-
+		
+		for (loot in loots) {
+			cast(loot, HxlSprite).visible = false;
+		}
+		
+		// Set the tile we're on to visible.
+		var x:Int = Std.int( actor.tilePos.x );
+		var y:Int = Std.int( actor.tilePos.y );
+		firstSeen(state, this, new HxlPoint( x, y ), Visibility.IN_SIGHT, 1.0);
+		
+		// Now recurse outwards, scanning visible-angle ranges.
+		updateFieldOfViewAtRange( state, x, y, 1, Std.int(actor.visionRadius), -Math.PI, Math.PI );
+		
+		// Update tile and item attributes based on visibility.
 		var dest = new HxlPoint(0, 0);
-		for ( x in left...right+1 ) {
-			for ( y in top...bottom+1 ) {
+		for ( x in left...right ) {
+			for ( y in top...bottom ) {
 				tile = getTile(x, y);
 
 				dest.x = x;
 				dest.y = y;
 
 				var dist = HxlUtil.distance(actor.tilePos, dest);
-				var Ttile:Tile = cast(tile, Tile);
-				var normColor:Int = normalizeColor(dist, actor.visionRadius, seenTween, inSightTween);
-				var dimness = (actor.visionRadius - dist) / actor.visionRadius;
 				switch (tile.visibility) {
 					case Visibility.IN_SIGHT:
 						tile.visible = true;
 
-						for (loot in Ttile.loots)
+						// Light tile.
+						var lightColor:Int = Std.int( seenTween + (inSightTween - seenTween) * tile.visAmount );
+						var normColor:Int = normalizeColor(dist, actor.visionRadius, seenTween, lightColor);
+						
+						tile.colorTo(normColor, actor.moveSpeed);
+						//Ttile.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
+						
+						// Set loot and mobs visible.
+						for (loot in tile.loots)
 							cast(loot,HxlSprite).visible = true;
-						for (actor in Ttile.actors) {
+						for (actor in tile.actors) {
 							cast(actor, HxlSprite).visible = true;
 							var hpbar = actor.healthBar;
 							if (hpbar != null && actor.hp != actor.maxHp)
@@ -401,49 +563,24 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 								}
 							}
 						}
-						Ttile.colorTo(normColor, actor.moveSpeed);
-						//Ttile.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
 					case Visibility.SEEN, Visibility.SENSED:
 						tile.visible = true;
 
-						for (loot in Ttile.loots)
-							cast(loot,HxlSprite).visible = false;
-						for (actor in Ttile.actors) {
-							cast(actor, HxlSprite).visible = false;
-							var pop = cast(actor, HxlSprite).getPopup();
-							var hpbar = actor.healthBar;
-							if (hpbar != null)
-								hpbar.visible = false;
-							if (pop != null)
-								pop.visible = false;
-							pop = null;
-							hpbar = null;
-						}
-
-						Ttile.colorTo(seenTween, actor.moveSpeed);
+						// Darken tile.
+						tile.colorTo(seenTween, actor.moveSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
 
 					case Visibility.UNSEEN:
-						for (actor in Ttile.actors) {
-							var pop = cast(actor, HxlSprite).getPopup();
-							var hpbar = actor.healthBar;
-							if (hpbar != null)
-								hpbar.visible = false;
-							if (pop != null)
-								pop.visible = false;
-							pop = null;
-							hpbar = null;
-						}
+						// Nothing to do :D
 				}
-				Ttile = null;
+				tile = null;
 			}
 		}
-
-
-		actor = null;
-		tile = null;
-
 	}
+
+	static var adjacent = [[ -1, -1], [0, -1], [1, -1], [ -1, 0], [1, 0], [ -1, 1], [0, 1], [1, 1]];
+
+	// This now bears almost no resemblance to the proper field of view calcs above, but it'll do.
 	public function updateFieldOfViewByPoint(state:HxlState, tilePos:HxlPoint,visionRadius:Int,tweenSpeed:Int, ?seenTween:Int = 64, ?inSightTween:Int=255):Void
 	{
 		var bottom = Std.int(Math.min(heightInTiles - 1, tilePos.y + (visionRadius+1)));
@@ -640,7 +777,15 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	public function tick(state:HxlState) { }
 
 	// implement IAStarSearchable (isWalkable, getWidth, getHeight)
-	public function isWalkable(x:Int, y:Int):Bool {
+	public function getNode(x:Int, y:Int):AStarNode {
+		return aStarNodes[y * getWidth() + x];
+	}
+	
+	public function updateWalkable(x:Int, y:Int) {
+		aStarNodes[y * getWidth() + x].walkable = !isBlockingMovement(x, y, false);
+	}
+	
+	private function isWalkable(x:Int, y:Int):Bool {
 		return !isBlockingMovement(x, y, false);
 	}
 

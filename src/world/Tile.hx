@@ -17,6 +17,7 @@ class Tile extends HxlTile {
 	public var loots:Array<Loot>;
 	public var level:Level;
 	public var timesUncovered:Int;
+	public var visAmount:Float;
 	
 	override public function isBlockingMovement():Bool {
 		return !HxlUtil.contains(Resources.walkableTiles.iterator(), dataNum);
@@ -32,10 +33,19 @@ class Tile extends HxlTile {
 		actors = new Array<Actor>();
 		loots = new Array<Loot>();
 		timesUncovered = 0;
+		visAmount = 0.0;
 	}
 	
 	public function colorTo(ToColor:Int, Speed:Float) {
-		Actuate.update(colorTween, Speed, [HxlUtil.colorRGB(_color)[0]], [ToColor]);
+		var FromColor:Int = HxlUtil.colorRGB(_color)[0];
+		
+		if ( FromColor != ToColor ) {
+			if ( Math.abs( FromColor - ToColor ) < 5 ) {
+				setColor(HxlUtil.colorInt(ToColor, ToColor, ToColor));
+			} else {
+				Actuate.update(colorTween, Speed, [FromColor], [ToColor]);
+			}
+		}
 	}
 
 	function colorTween(params:Dynamic) {
