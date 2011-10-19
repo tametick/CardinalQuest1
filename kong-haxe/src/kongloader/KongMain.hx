@@ -118,6 +118,7 @@ class KongMain extends Sprite
 		var logo = new KongLogo();
 		logo.x = label.x+2;
 		logo.y = label.y + label.height + 1;
+		logo.width -= 2;
 		kongSprite.addChild(logo);
 		
 		addChild(kongSprite);
