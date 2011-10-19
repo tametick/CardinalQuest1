@@ -885,6 +885,7 @@ class GameState extends CqState {
 		SoundEffectsManager.play(DoorOpen);
 		var col = Registery.level.getColor();
 		Registery.level.updateTileGraphic(tile.mapX, tile.mapY, SpriteTiles.instance.getSpriteIndex(col + "_door_open"));
+		Registery.level.updateWalkable(tile.mapX, tile.mapY);
 	}
 	private function startMovingBoss():Void {
 		Actuate.timer(1.8).onComplete(gotoWinState);

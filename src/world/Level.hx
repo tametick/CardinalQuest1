@@ -7,7 +7,7 @@ import cq.CqResources;
 import data.Registery;
 import data.Resources;
 import flash.display.Bitmap;
-import com.baseoneonline.haxe.astar.PathMap;
+import com.baseoneonline.haxe.astar.AStarNode;
 import flash.system.System;
 import haxel.GraphicCache;
 import haxel.HxlSpriteSheet;
@@ -38,6 +38,8 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	public var ticksSinceNewDiscovery:Float; // float for convenient arithmetic
 	public var stairsAreFound:Bool;
 
+	var aStarNodes:Array<AStarNode>;
+	
 	public static inline var CHANCE_DECORATION:Float = 0.2;
 
 	var ptLevel:PtLevel;
@@ -52,6 +54,8 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		ptLevel = new PtLevel(this);
 		ticksSinceNewDiscovery = 0;
 		stairsAreFound = false;
+		
+		aStarNodes = null;
 	}
 
 	public function isBlockingMovement(X:Int, Y:Int, ?CheckActor:Bool=false):Bool {
@@ -86,6 +90,11 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 
 		ptLevel = null;
 		startingLocation = null;
+		
+		while (aStarNodes.length > 0) {
+			aStarNodes.pop();
+		}
+		aStarNodes = null;
 
 		HxlGraphics.unfollow();
 
@@ -214,6 +223,20 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 			}
 		}
 
+		if ( aStarNodes != null ) {
+			while ( aStarNodes.length > 0 ) {
+				aStarNodes.pop();
+			}
+		} else {
+			aStarNodes = new Array<AStarNode>();
+		}
+		
+		for ( i in 0 ... map.widthInTiles * map.heightInTiles ) {
+			var x:Int = i % map.widthInTiles;
+			var y:Int = Std.int( i / map.widthInTiles );
+			aStarNodes.push( new AStarNode( x, y, this.isWalkable( x, y ) ) );
+		}
+		
 		return map;
 	}
 
@@ -754,7 +777,15 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	public function tick(state:HxlState) { }
 
 	// implement IAStarSearchable (isWalkable, getWidth, getHeight)
-	public function isWalkable(x:Int, y:Int):Bool {
+	public function getNode(x:Int, y:Int):AStarNode {
+		return aStarNodes[y * getWidth() + x];
+	}
+	
+	public function updateWalkable(x:Int, y:Int) {
+		aStarNodes[y * getWidth() + x].walkable = !isBlockingMovement(x, y, false);
+	}
+	
+	private function isWalkable(x:Int, y:Int):Bool {
 		return !isBlockingMovement(x, y, false);
 	}
 
