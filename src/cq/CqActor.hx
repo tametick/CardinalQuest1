@@ -846,6 +846,12 @@ class CqActor extends CqObject, implements Actor {
 	public static function completeUseOn(itemOrSpell:CqItem, actor:CqActor, victim:CqActor) {
 		var effectColorSource:BitmapData;
 		if (itemOrSpell.uiItem == null) {
+			if (tmpSpellSprite == null )
+				tmpSpellSprite = new HxlSprite();
+				
+			// only happens when enemies try to use a spell
+			tmpSpellSprite.loadGraphic(SpriteSpells, true, false, Configuration.tileSize, Configuration.tileSize);
+			tmpSpellSprite.setFrame(SpriteSpells.instance.getSpriteIndex(itemOrSpell.spriteIndex));
 			effectColorSource = tmpSpellSprite.getFramePixels();
 		} else {
 			effectColorSource = itemOrSpell.uiItem.pixels;
@@ -911,6 +917,13 @@ class CqActor extends CqObject, implements Actor {
 					actor.killActor(HxlGraphics.state, victim, dmg);
 			}
 		}
+		
+		// dispose of an enemy's tmp spell sprite, if we've made one
+		if (itemOrSpell.uiItem == null) {
+			effectColorSource.dispose();
+			tmpSpellSprite.destroy();
+			tmpSpellSprite = null;
+		}		
 	}
 	
 	function applyEffectAt(effect:CqSpecialEffectValue, tile:CqTile, ?duration:Int = -1) {

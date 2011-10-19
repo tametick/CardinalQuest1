@@ -143,8 +143,8 @@ class GameState extends CqState {
 	public override function update() {
 		super.update();
 
-		System.gc();
-		System.gc();
+//		System.gc();
+//		System.gc();
 
 		if (endingAnim) {
 			if(gameUI!=null && gameUI.popups != null && gameUI.popups.members != null) {
@@ -276,18 +276,19 @@ class GameState extends CqState {
 
 		return false;
 	}
+	
 	public function passTurn() {
 		var player = Registery.player;
 		var level = Registery.level;
 
 		level.updateFieldOfView(this);
-
+		
 		player.actionPoints = 0;
 
 		while (player.actionPoints < 60) {
 			level.tick(this);
 		}
-
+		
 		level.tryToSpawnEncouragingMonster();
 
 		gameUI.updateCharges();
@@ -604,11 +605,13 @@ class GameState extends CqState {
 				resumeActingTime = Timer.stamp() + player.moveSpeed;
 				isPlayerActing = true; // maybe?
 			}
+			
 			return true;
 		} else if (HxlUtil.contains(SpriteTiles.doors.iterator(), tile.getDataNum())) {
 			// would be great to tell player to open the door, wouldn't it just?
 			openDoor(tile);
 			resumeActingTime = Timer.stamp() + player.moveSpeed;
+			
 			return true;
 		} else {
 			return false;
