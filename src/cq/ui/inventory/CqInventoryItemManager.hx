@@ -117,48 +117,65 @@ class CqInventoryItemManager
 					dlgInfo.setItem(Item);
 					return true;
 				} else {
-					var hasMinusses:Bool = hasItemMinusBuffs(Item);
-					var preference:Float = shouldEquipItemInCell(cell, Item);
-					//equip if item is better
-					if (preference > 1)	{
+					
+					if ( Item.equalTo( cell.getCellObj().item) ) {// && !Item.isEnchanted && !cell.getCellObj().item.isEnchanted) {
+						GameUI.showTextNotification("I already have one just like this.", 0xE1CC37);
+						destroyAndGiveMoney(Item);
+						return false;
+					}
+
+					if ( Item.makesRedundant( cell.getCellObj().item ) ) {
+						// Totally better than the old item.
 						var old:CqInventoryItem = equipItem(cell, Item, uiItem);
 						dlgInfo.setItem(Item);
-						if (old.item.isEnchanted) {
+						
+						GameUI.showTextNotification("I will sell my old " + old.item.name + " now.", 0xBFE137);
+						destroyAndGiveMoney(old.item);
+						return true;
+					} else if ( cell.getCellObj().item.makesRedundant( Item ) ) {
+						// Old item is totally better than this one!
+						GameUI.showTextNotification("Ha! Not half as good as my " + cell.getCellObj().item.name + "." );
+						destroyAndGiveMoney(Item);
+						return false;
+					} else {
+						// It's a valid alternative. But do we want to use it right now?
+						var preference:Float = shouldEquipItemInCell(cell, Item);
+						
+						if ( preference > 1 ) {
+							// Yep, let's equip it!
+							var old:CqInventoryItem = equipItem(cell, Item, uiItem);
+							dlgInfo.setItem(Item);
+							
 							GameUI.showTextNotification("I'll keep my old " + old.item.name + " in my bag.", 0xBFE137);
 							uiItem = old;
 						} else {
-							// old is non plain, so just add to inv
+							// Nope. Make sure it's not redundant.
+							for ( cell in dlgInvGrid.cells ) {
+								if ( cell.getCellObj() != null ) {
+									var cellItem:CqItem = cell.getCellObj().item;
+									
+									if ( cellItem.equipSlot == uiItem.item.equipSlot ) {
+										if ( uiItem.item.makesRedundant( cellItem ) ) {
+											// Sell the cell item.
+											dlgInvGrid.remove(cell.getCellObj());
+											destroyAndGiveMoney(cellItem);
+										} else if ( cellItem.makesRedundant( uiItem.item ) ) {
+											// Sell the item.
+											GameUI.showTextNotification("I've got better in my bag.", 0xBFE137);
+											destroyAndGiveMoney(uiItem.item);
+											return false;
+										}
+									}
+								}
+							}							
 							
-							if (hasMinusses) {
-								// the new one is not necessarily better -- ?
-								GameUI.showTextNotification("I'll use it, but it's not perfect.", 0xBFE137);
-								uiItem = old;
-							} else {
-								// old is plain, so destroy
-								GameUI.showTextNotification("I will sell my old " + old.item.name + " now.", 0xBFE137);
-								destroyAndGiveMoney(old.item);
-								return true;
-							}
-						}
-					} else if (preference < 1) {
-						//if new is worse than old, and is plain - destroy it
-						if (!Item.isEnchanted) {
-							GameUI.showTextNotification("Ha! Not half as good as my " + cell.getCellObj().item.name + "." );
-							destroyAndGiveMoney(Item);
-							return false;
-						}
-					} else {	
-						//item is the same & plain
-						if ( Item.equalTo( cell.getCellObj().item) && !Item.isEnchanted) {
-							GameUI.showTextNotification("I already have one just like this.", 0xE1CC37);
-							destroyAndGiveMoney(Item);
-							return false;
+							GameUI.showTextNotification("I'll put this " + Item.name + " in my bag.", 0xBFE137);
 						}
 					}
 				}
 			}
 		}
-		
+
 		var emptyCell:CqInventoryCell = getEmptyCell();
 		if (emptyCell != null ) {
 			// add to inventory

@@ -483,9 +483,9 @@ class CqLevel extends Level {
 			defense += creature.buffs.get("defense");
 			defense = Std.int(Math.max(defense, 0));
 			
-			var vitality = creature.vitality;
-			vitality += creature.buffs.get("vitality");
-			vitality = Std.int(Math.max(vitality, 0));
+			var life = creature.maxHp;
+			life += creature.buffs.get("life");
+			life = Std.int(Math.max(life, 0));
 			
 			// Charge action & spirit points
 			creature.actionPoints += speed;
@@ -498,7 +498,7 @@ class CqLevel extends Level {
 							case "speed": boost = speed;
 							case "attack": boost = attack;
 							case "defense": boost = defense;
-							case "vitality": boost = vitality;
+							case "life": boost = life;
 						}
 						s.statPoints = Std.int(Math.min( s.statPointsRequired, s.statPoints + boost));
 					}

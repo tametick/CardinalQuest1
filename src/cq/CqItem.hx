@@ -371,6 +371,20 @@ class CqItem extends GameObjectImpl, implements Loot {
 			//destroy();
 	}
 	public function equalTo(other:CqItem):Bool {
+		if ( other.buffs.get( "attack" ) == buffs.get( "attack" )
+		  && other.buffs.get( "defense" ) == buffs.get( "defense" )
+		  && other.buffs.get( "speed" ) == buffs.get( "speed" )
+		  && other.buffs.get( "spirit" ) == buffs.get( "spirit" )
+		  && other.buffs.get( "life" ) == buffs.get( "life" )
+		  && other.damage.start == damage.start
+		  && other.damage.end == damage.end )
+		{
+			return true;
+		}
+		
+		return false;
+		
+		/*
 		if (isSuperb != other.isSuperb || isWondrous != other.isWondrous || isMagical != other.isMagical)
 			return false;
 		if (spriteIndex != other.spriteIndex)
@@ -382,7 +396,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 			if (other.buffs.get(key) != buffs.get(key))
 				return false;
 		}
-		return true;
+		return true;*/
 	}
 	/**
 	 * <1 other is worse 1 == equal, >1 other is better
@@ -403,11 +417,30 @@ class CqItem extends GameObjectImpl, implements Loot {
 		else if(dmgAvgThis < dmgAvgOther)
 			sumBuffsOther+=dmgAvgOther-dmgAvgThis;
 		//do nothing if damage is equal
-		if ( sumBuffsOther == 0) sumBuffsOther = 0.1;
+//		if ( sumBuffsOther == 0) sumBuffsOther = 0.1;
 		preference = sumBuffsThis / sumBuffsOther;
 		
 		return preference;
 	}
+	
+	public function makesRedundant(other:CqItem):Bool {
+		if ( other.buffs.get( "attack" ) > buffs.get( "attack" )
+		  || other.buffs.get( "defense" ) > buffs.get( "defense" )
+		  || other.buffs.get( "speed" ) > buffs.get( "speed" )
+		  || other.buffs.get( "spirit" ) > buffs.get( "spirit" )
+		  || other.buffs.get( "life" ) > buffs.get( "life" )
+		  || other.damage.start + other.damage.end > damage.start + damage.end )
+		{
+			return false;
+		}
+
+		if ( equalTo(other) ) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public function getMonetaryValue():Int {
 		var sumBuffsThis:Float  = HxlUtil.sumHashInt(buffs);
 		var dmgAvgThis:Float  = (damage.start + damage.end)/2;
