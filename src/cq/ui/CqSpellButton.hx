@@ -15,6 +15,7 @@ import flash.display.Shape;
 import flash.geom.ColorTransform;
 import haxel.HxlState;
 import haxel.HxlUtil;
+import world.Mob;
 
 import flash.display.BitmapData;
 import flash.events.MouseEvent;
@@ -193,7 +194,31 @@ class CqSpellButton extends HxlDialog {
 				SoundEffectsManager.play(SpellCast);
 			}
 			//event == null means it was called by keypress. which in turn means we want to start targeting from players pos.
-			if (event == null) GameUI.setTargetingPos(player.tilePos);
+			if (event == null) {
+				GameUI.setTargetingPos(player.tilePos);
+					
+				if ( spell.targetsOther ) { // Targeting the player sucks. Let's target the nearest enemy instead.
+					var nearestMob:Mob = null;
+					var nearestMobDistSq:Float = 1000000;
+					for ( m in Registery.level.mobs ) {
+						var cqmob:CqMob = cast(m, CqMob);
+						
+						if ( cqmob.visible && cqmob.faction != player.faction && !cqmob.specialEffects.exists("invisible") ) {
+							var mobDistX:Float = m.x - player.x;
+							var mobDistY:Float = m.y - player.y;
+							var mobDistSq = mobDistX * mobDistX + mobDistY * mobDistY;
+							if ( mobDistSq < nearestMobDistSq ) {
+								nearestMobDistSq = mobDistSq;
+								nearestMob = m;
+							}
+						}
+					}
+					
+					if ( nearestMob != null ) {
+						GameUI.setTargetingPos(nearestMob.tilePos);
+					}
+				}
+			}
 			if (event != null) event.stopPropagation();
 		}
 	}

@@ -871,6 +871,8 @@ class GameUI extends HxlDialog {
 				instance.targetSprite.x = wPos.x;
 				instance.targetSprite.y = wPos.y;
 			}
+			
+			instance.updateTargetingTarget(pos.x, pos.y);
 		}
 	}
 	public static function setTargetingSpell(Spell:CqSpellButton) {
@@ -902,6 +904,40 @@ class GameUI extends HxlDialog {
 		if (color != targetColor) {
 			targetSprite.fill(color);
 			targetColor = color;
+		}
+	}
+	
+	private function updateTargetingTarget( _tileX:Float, _tileY:Float ) {
+		if (hoveredEnemy != null) {
+			if (hoveredEnemy.popup != null) hoveredEnemy.popup.mouseBound = true;
+			hoveredEnemy = null;
+		}
+		
+		var tile:CqTile = cast(Registery.level.getTile(Std.int(_tileX), Std.int(_tileY)), CqTile);
+		if (isTargetingEmptyTile) {
+			if ( tile == null || tile.actors.length > 0 || tile.visibility != Visibility.IN_SIGHT) {
+				setTargetColor(0xff0000);
+			} else {
+				if (HxlUtil.contains(SpriteTiles.walkableAndSeeThroughTiles.iterator(), tile.getDataNum())) {
+					setTargetColor(0x00ff00);
+				} else {
+					setTargetColor(0xff0000);
+				}
+			}
+		} else {
+			if ( tile == null || tile.actors.length <= 0 || tile.visibility != Visibility.IN_SIGHT) {
+				setTargetColor(0xff0000);
+			} else {
+				var actor:CqActor = cast(tile.actors[0], CqActor);
+				if ( actor.faction != CqPlayer.faction && actor.visible && !cast(tile.actors[0], CqActor).specialEffects.exists("invisible")) {
+					setTargetColor(0x00ff00);
+
+					hoveredEnemy = actor;
+					if (hoveredEnemy.popup != null) hoveredEnemy.popup.mouseBound = false;
+				} else {
+					setTargetColor(0xff0000);
+				}
+			}
 		}
 	}
 	
@@ -944,41 +980,11 @@ class GameUI extends HxlDialog {
 		}
 		
 		if (targetLastPos.x != targetX || targetLastPos.y != targetY ) {
-			if (hoveredEnemy != null) {
-				if (hoveredEnemy.popup != null) hoveredEnemy.popup.mouseBound = true;
-				hoveredEnemy = null;
-			}
+			updateTargetingTarget(targetX, targetY);
 			
 			var worldPos:HxlPoint = Registery.level.getPixelPositionOfTile(Std.int(targetX), Std.int(targetY));
-			
 			Actuate.tween(targetSprite, if (mouse) .046 else .125, { x: worldPos.x, y: worldPos.y} );
 			
-			var tile:CqTile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)), CqTile);
-			if (isTargetingEmptyTile) {
-				if ( tile == null || tile.actors.length > 0 || tile.visibility != Visibility.IN_SIGHT) {
-					setTargetColor(0xff0000);
-				} else {
-					if (HxlUtil.contains(SpriteTiles.walkableAndSeeThroughTiles.iterator(), tile.getDataNum())) {
-						setTargetColor(0x00ff00);
-					} else {
-						setTargetColor(0xff0000);
-					}
-				}
-			} else {
-				if ( tile == null || tile.actors.length <= 0 || tile.visibility != Visibility.IN_SIGHT) {
-					setTargetColor(0xff0000);
-				} else {
-					var actor:CqActor = cast(tile.actors[0], CqActor);
-					if ( actor.faction != CqPlayer.faction && actor.visible && !cast(tile.actors[0], CqActor).specialEffects.exists("invisible")) {
-						setTargetColor(0x00ff00);
-
-						hoveredEnemy = actor;
-						if (hoveredEnemy.popup != null) hoveredEnemy.popup.mouseBound = false;
-					} else {
-						setTargetColor(0xff0000);
-					}
-				}
-			}
 			targetLastPos.x = targetX;
 			targetLastPos.y = targetY;
 		}
