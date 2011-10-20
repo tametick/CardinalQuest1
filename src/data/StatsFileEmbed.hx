@@ -275,7 +275,7 @@ FREEZE           freeze           [Freeze]            1 120 spirit 1440 speed -3
 FIREBALL         fireball         [Fireball]          1   0 spirit  720 
 ENFEEBLE_MONSTER enfeeble_monster [Enfeeble Monster]  1 120 spirit  720 attack -3
 CHARM_MONSTER    charm_monster    [Charm Monster]     1 120 spirit 1440 [] 0 [] 0 charm
-POLYMORPH        polymorph        [Polymorph]         1 180 spirit 2160 [] 0 [] 0 polymorph true
+POLYMORPH        polymorph        [Polymorph]         1   0 spirit 2160 [] 0 [] 0 polymorph true
 SLEEP            sleep            [Sleep]             1  90 spirit 1440 [] 0 [] 0 sleep
 FEAR             fear             [Fear]              1 180 spirit  960 [] 0 [] 0 fear
 
