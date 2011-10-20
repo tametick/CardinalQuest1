@@ -379,6 +379,8 @@ class CqActor extends CqObject, implements Actor {
 			setAlpha(1.00); // must set alpha before the message or the message won't show!
 			if (message == null) message = (Std.is(this, CqPlayer)) ? "You reappear" : "An invisible " + this.name + " appears!";
 			GameUI.showEffectText(this, message, 0x6699ff);
+			
+			updateHealthBar();
 		}
 	}
 	
@@ -509,7 +511,8 @@ class CqActor extends CqObject, implements Actor {
 	}
 	
 	public function updateHealthBar() {
-		var healthBarVis:Bool = hp > 0 && hp < maxHp;
+		var healthBarVis:Bool = visible && hp > 0 && hp < maxHp && (!specialEffects.exists("invisible") || faction == CqPlayer.faction);
+
 		if (healthBar != null) {
 			healthBar.visible = healthBarVis;
 			healthBar.setChildrenVisibility(healthBarVis);
@@ -811,7 +814,7 @@ class CqActor extends CqObject, implements Actor {
 			for (effect in itemOrSpell.specialEffects) {
 				actor.applyEffect(effect, victim);
 				
-				if (itemOrSpell.duration > -1) {
+				if (itemOrSpell.duration != 0) {
 					if (victim == null)
 						actor.addTimer(new CqTimer(itemOrSpell.duration, null, -1, effect));
 					else
@@ -1049,6 +1052,8 @@ class CqActor extends CqObject, implements Actor {
 				if (faction == CqPlayer.faction) setAlpha(0.40);
 				else setAlpha(0.00);
 			}
+			
+			updateHealthBar();
 		}
 		GameUI.instance.popups.setChildrenVisibility(false);
 	}

@@ -969,7 +969,7 @@ class GameUI extends HxlDialog {
 					setTargetColor(0xff0000);
 				} else {
 					var actor:CqActor = cast(tile.actors[0], CqActor);
-					if ( actor.faction != CqPlayer.faction && actor.visible) {
+					if ( actor.faction != CqPlayer.faction && actor.visible && !cast(tile.actors[0], CqActor).specialEffects.exists("invisible")) {
 						setTargetColor(0x00ff00);
 
 						hoveredEnemy = actor;
@@ -1020,7 +1020,7 @@ class GameUI extends HxlDialog {
 				}
 			} else {
 				if (tile.actors != null){
-					if ( tile.actors.length > 0 && cast(tile.actors[0], CqActor).faction != 0) {
+					if ( tile.actors.length > 0 && cast(tile.actors[0], CqActor).faction != 0 && !cast(tile.actors[0], CqActor).specialEffects.exists("invisible")) {
 						var player = Registery.player;
 						player.use(targetSpell.getSpell(), cast(tile.actors[0], CqActor));
 						SoundEffectsManager.play(SpellCast);
