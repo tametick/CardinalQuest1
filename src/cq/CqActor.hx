@@ -288,8 +288,8 @@ class CqActor extends CqObject, implements Actor {
 	public function doInjure(?dmgTotal:Int=0) {
 		for ( Callback in onInjure ) 
 			Callback(dmgTotal);
-			
-		showHealthBar(hp > 0 && hp < maxHp && visible);
+
+		updateHealthBar();
 		removeEffect("fear");
 	}
 
@@ -503,16 +503,22 @@ class CqActor extends CqObject, implements Actor {
 		}
 	}
 	
-	public function showHealthBar(vis:Bool) {
-		if (healthBar != null) {
-			healthBar.visible = vis;
-			healthBar.setChildrenVisibility(vis);
-		}
+	public function setVisible(vis:Bool) {
+		visible = vis;
+		updateHealthBar();
 	}
 	
+	public function updateHealthBar() {
+		var healthBarVis:Bool = hp > 0 && hp < maxHp;
+		if (healthBar != null) {
+			healthBar.visible = healthBarVis;
+			healthBar.setChildrenVisibility(healthBarVis);
+		}
+	}
+
 	public override function setAlpha(alpha:Float):Float {
-		visible = (alpha > 0.0);
-		showHealthBar(hp < maxHp && visible);
+		setVisible(alpha > 0.0);
+		updateHealthBar();
 		
 		var old:Float = super.setAlpha(alpha);
 		calcFrame();
@@ -599,12 +605,9 @@ class CqActor extends CqObject, implements Actor {
 		// only show the mob if we can see it
 		var tile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)),HxlTile);
 		if (tile.visibility == Visibility.IN_SIGHT) {
-			visible = true;
-			// only show hp bar if mob is hurt
-			showHealthBar(hp < maxHp && visible);
+			setVisible(true);
 		} else {
-			visible = false;
-			showHealthBar(false);
+			setVisible(false);
 		}
 		
 		var positionOfTile:HxlPoint = level.getPixelPositionOfTile(Math.round(tilePos.x), Math.round(tilePos.y));
@@ -958,7 +961,7 @@ class CqActor extends CqObject, implements Actor {
 		case "heal":
 			if (effect.value == "full"){
 				if (other == null) {
-					if (healthBar != null) showHealthBar(true);
+					updateHealthBar(); // was showHealthBar(true)
 					//As per Ido's suggestion :P
 					if ( hp == 1 )
 						Registery.getKong().SubmitStat( Registery.KONG_FULLHEALAT1 , 1 );
@@ -973,7 +976,7 @@ class CqActor extends CqObject, implements Actor {
 					}
 					GameUI.showEffectText(this, "Healed", 0x0080FF);
 				} else {
-					showHealthBar(true);
+					other.updateHealthBar();
 					other.hp = other.maxHp;
 					
 					if (other.cqhealthBar != null)
@@ -1015,6 +1018,7 @@ class CqActor extends CqObject, implements Actor {
 			var hppart:Float = other.hp / other.maxHp;
 			var mob = Registery.level.createAndaddMob(other.getTilePos(), Std.int(Math.random() * Registery.player.level), true);
 			Registery.level.removeMobFromLevel(HxlGraphics.state, cast(other, CqMob));
+			cast(other, CqMob).destroy();
 			Registery.level.updateFieldOfView(HxlGraphics.state);
 			
 			// preserve the old monster's level of health
@@ -1027,7 +1031,7 @@ class CqActor extends CqObject, implements Actor {
 			casted.healthBar.setTween(false);
 			casted.cqhealthBar.updateValue(casted.hp);
 			casted.healthBar.setTween(true);
-			casted.showHealthBar(true);
+			casted.updateHealthBar();
 		default:
 			var text:String = effect.name;
 			
@@ -1502,7 +1506,7 @@ class CqMob extends CqActor, implements Mob {
 		neverSeen = true;
 
 		this.typeName = typeName;
-		visible = false;
+		setVisible(false);
 		
 		var anim = new Array();
 		if(player)

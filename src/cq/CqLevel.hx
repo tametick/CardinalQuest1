@@ -409,7 +409,6 @@ class CqLevel extends Level {
 				GameUI.instance.addHealthBar(cast(mob, CqActor));
 				
 				mob.healthBar.setTween(true);
-				mob.healthBar.visible = true;
 				
 				if (stairsAreFound && getExplorationProgress() > .8) {
 					GameUI.showEffectText(mob, "Head for the stairs!", 0xFFEE33);
@@ -498,6 +497,7 @@ class CqLevel extends Level {
 									HxlGraphics.state.add(eff);
 									eff.start(true, 1.0, 10);
 									removeMobFromLevel(state, mob);
+									cast(mob, CqMob).destroy();
 									dead = true;
 									l--;
 									break;
