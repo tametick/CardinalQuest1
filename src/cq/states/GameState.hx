@@ -829,6 +829,7 @@ class GameState extends CqState {
 				if (!confirmed) {
 					return;
 				} else {
+					GameUI.clearEffectText();
 					Registery.world.goToNextLevel();
 					player.popup.setText("");
 				}

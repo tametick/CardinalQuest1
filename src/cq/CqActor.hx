@@ -277,6 +277,11 @@ class CqActor extends CqObject, implements Actor {
 		chest = null;
 	}
 	
+	public function isAGhost() : Bool
+	{
+		return isGhost;
+	}
+	
 	public function doGhost(?dmgTotal:Int = 0) {
 		isGhost = true;
 	}
@@ -1084,6 +1089,11 @@ class CqActor extends CqObject, implements Actor {
 			var _se = other.specialEffects;
 			var hppart:Float = other.hp / other.maxHp;
 			var mob = Registery.level.createAndaddMob(other.getTilePos(), Std.int(Math.random() * Registery.player.level), true);
+			
+			if ( cast(other,CqMob).xpValue == 0 ) {
+				mob.xpValue = 0; // Polymorphing worthless monsters won't let you get XP.
+			}
+			
 			Registery.level.removeMobFromLevel(HxlGraphics.state, cast(other, CqMob));
 			cast(other, CqMob).destroy();
 			Registery.level.updateFieldOfView(HxlGraphics.state);

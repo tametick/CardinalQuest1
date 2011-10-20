@@ -203,7 +203,7 @@ class CqSpellButton extends HxlDialog {
 					for ( m in Registery.level.mobs ) {
 						var cqmob:CqMob = cast(m, CqMob);
 						
-						if ( cqmob.visible && cqmob.faction != player.faction && !cqmob.specialEffects.exists("invisible") ) {
+						if ( cqmob.visible && cqmob.faction != player.faction && !cqmob.isAGhost() && !cqmob.specialEffects.exists("invisible") ) {
 							var mobDistX:Float = m.x - player.x;
 							var mobDistY:Float = m.y - player.y;
 							var mobDistSq = mobDistX * mobDistX + mobDistY * mobDistY;

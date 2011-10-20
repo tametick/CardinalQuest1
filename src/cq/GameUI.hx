@@ -819,6 +819,15 @@ class GameUI extends HxlDialog {
 			}
 		}
 	}
+	
+	public static function clearEffectText() {
+		for ( e in effectQueue ) {
+			e.destroy();
+		}
+
+		effectQueue.splice( 0, effectQueue.length );
+	}
+
 	public static function showTextNotification(message:String, ?color:Int = 0xDE913A) {
 		if (Std.is(HxlGraphics.state, GameState) && cast(HxlGraphics.state, GameState).started) {
 			notifications.notify(message, color);
@@ -929,7 +938,7 @@ class GameUI extends HxlDialog {
 				setTargetColor(0xff0000);
 			} else {
 				var actor:CqActor = cast(tile.actors[0], CqActor);
-				if ( actor.faction != CqPlayer.faction && actor.visible && !cast(tile.actors[0], CqActor).specialEffects.exists("invisible")) {
+				if ( actor.faction != CqPlayer.faction && actor.visible && !actor.isAGhost() && !cast(tile.actors[0], CqActor).specialEffects.exists("invisible")) {
 					setTargetColor(0x00ff00);
 
 					hoveredEnemy = actor;
@@ -1025,8 +1034,9 @@ class GameUI extends HxlDialog {
 					cast(HxlGraphics.state, GameState).passTurn();
 				}
 			} else {
-				if (tile.actors != null){
-					if ( tile.actors.length > 0 && cast(tile.actors[0], CqActor).faction != 0 && !cast(tile.actors[0], CqActor).specialEffects.exists("invisible")) {
+				if (tile.actors != null) {
+					var cqActor:CqActor = cast(tile.actors[0], CqActor);
+					if ( tile.actors.length > 0 && cqActor.faction != 0 && !cqActor.isAGhost() && !cqActor.specialEffects.exists("invisible")) {
 						var player = Registery.player;
 						player.use(targetSpell.getSpell(), cast(tile.actors[0], CqActor));
 						SoundEffectsManager.play(SpellCast);
