@@ -436,77 +436,15 @@ class CqLevel extends Level {
 			if (creature == null)
 				continue;
 				
-			var buffs = creature.buffs;
-			var specialEffects = creature.specialEffects;
-			var visibleEffects = creature.visibleEffects;
-			
 			// remove timed out buffs & visibleEffects
 			var timers = creature.timers;
 			if (timers.length>0) {
 				var expired = new Array();
-				var dead = false;
 				
 				for (t in timers) {
 					t.ticks--;
 					if (t.ticks == 0) {
-						
-						if (t.buffName != null) {
-							if (t.specialMessage != null) {
-								GameUI.showEffectText(creature, t.specialMessage, t.messageColor);
-							} else {
-								if (t.buffValue < 0) {
-									GameUI.showEffectText(creature, "recovered " + ( -t.buffValue) + " " + t.buffName , 0x00ff00);
-								} else {
-									GameUI.showEffectText(creature, (t.buffValue) + " " + t.buffName + " wears off", 0x909090);
-								}
-							}
-							
-							// remove buff effect
-							var newVal = buffs.get(t.buffName) - t.buffValue;
-							buffs.set(t.buffName, newVal);
-						} 
-						
-						if(HxlUtil.contains(visibleEffects.iterator(), t.buffName)) {
-							// remove visibleEffect
-							creature.visibleEffects.remove(t.buffName);
-						}
-						
-						if (t.specialEffect != null && HxlUtil.contains(specialEffects.keys(), t.specialEffect.name)) {
-							var currentEffect = specialEffects.get(t.specialEffect.name);
-		
-							if(t.specialEffect.name == "magic_mirror") GameUI.showEffectText(creature, "Shattered", 0x909090);
-							else if (t.specialEffect.name == "invisible") GameUI.showEffectText(creature, "Reappeared", 0x909090);
-							else GameUI.showEffectText(creature, "" + t.specialEffect.name + " runs out", 0x909090);
-							
-							creature.specialEffects.remove(t.specialEffect.name);
-							
-							switch(currentEffect.name){
-								case "charm":
-									creature.faction = CqMob.FACTION;
-									creature.isCharmed = false;
-								case "sleep":
-									creature.speed = currentEffect.value;
-								case "invisible":
-									creature.setAlpha(1.00);
-								case "magic_mirror":
-									//spell particle effect
-									
-									var mob:Mob = cast(creature, Mob);
-									var eff:CqEffectSpell = new CqEffectSpell(mob.x+mob.width/2, mob.y+mob.height/2, this._pixels);
-									eff.zIndex = 1000;
-									HxlGraphics.state.add(eff);
-									eff.start(true, 1.0, 10);
-									removeMobFromLevel(state, mob);
-									cast(mob, CqMob).destroy();
-									dead = true;
-									l--;
-									break;
-								default:
-									//
-							}
-							currentEffect = null;
-						}
-						
+						creature.applyTimerEffect(state, t);
 						expired.push(t);
 					}
 				}
@@ -518,7 +456,10 @@ class CqLevel extends Level {
 				}
 				
 				expired = null;
-				if (dead) continue;
+				if (creature.dead) {
+					l--;
+					continue;
+				}
 			}
 			
 			

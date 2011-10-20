@@ -356,6 +356,62 @@ class CqActor extends CqObject, implements Actor {
 		timers.push(timer);
 	}
 	
+	public function applyTimerEffect(state:HxlState, t:CqTimer) {
+		if (t.buffName != null) {
+			if (t.specialMessage != null) {
+				GameUI.showEffectText(this, t.specialMessage, t.messageColor);
+			} else {
+				if (t.buffValue < 0) {
+					GameUI.showEffectText(this, "recovered " + ( -t.buffValue) + " " + t.buffName , 0x00ff00);
+				} else {
+					GameUI.showEffectText(this, (t.buffValue) + " " + t.buffName + " wears off", 0x909090);
+				}
+			}
+			
+			// remove buff effect
+			var newVal = buffs.get(t.buffName) - t.buffValue;
+			buffs.set(t.buffName, newVal);
+		} 
+		
+		if(HxlUtil.contains(visibleEffects.iterator(), t.buffName)) {
+			// remove visibleEffect
+			visibleEffects.remove(t.buffName);
+		}
+		
+		if (t.specialEffect != null && HxlUtil.contains(specialEffects.keys(), t.specialEffect.name)) {
+			var currentEffect = specialEffects.get(t.specialEffect.name);
+
+			if(t.specialEffect.name == "magic_mirror") GameUI.showEffectText(this, "Shattered", 0x909090);
+			else if (t.specialEffect.name == "invisible") GameUI.showEffectText(this, "Reappeared", 0x909090);
+			else GameUI.showEffectText(this, "" + t.specialEffect.name + " runs out", 0x909090);
+			
+			specialEffects.remove(t.specialEffect.name);
+			
+			switch(currentEffect.name){
+				case "charm":
+					this.faction = CqMob.FACTION;
+					this.isCharmed = false;
+				case "sleep":
+					this.speed = currentEffect.value;
+				case "invisible":
+					this.setAlpha(1.00);
+				case "magic_mirror":
+					//spell particle effect
+					
+					var mob:Mob = cast(this, Mob);
+					var eff:CqEffectSpell = new CqEffectSpell(mob.x+mob.width/2, mob.y+mob.height/2, this._pixels);
+					eff.zIndex = 1000;
+					HxlGraphics.state.add(eff);
+					eff.start(true, 1.0, 10);
+					Registery.level.removeMobFromLevel(state, mob);
+					cast(this, CqMob).destroy();
+				default:
+					//
+			}
+			currentEffect = null;
+		}		
+	}
+	
 	public function removeEffect(effectName:String) {
 		if (this.specialEffects != null && this.specialEffects.get(effectName) != null) {
 			if (this.timers != null) {
@@ -676,12 +732,7 @@ class CqActor extends CqObject, implements Actor {
 
 	function updateSprite(){ }
 	
-	public function equipItem(item:CqItem) {
-		if (CqEquipSlot.WEAPON == item.equipSlot) {
-			equippedWeapon = item;
-			updateSprite();
-		}
-
+	public function applyItemBuff(item:CqItem) {
 		// add buffs
 		if(item.buffs != null) {
 			for (buff in item.buffs.keys()) {
@@ -695,14 +746,8 @@ class CqActor extends CqObject, implements Actor {
 			}
 		}
 	}
-
-	public function unequipItem(item:CqItem) {
-		if (item == equippedWeapon) {
-			equippedWeapon = null;
-			updateSprite();
-		}
-			
-		// remove buffs
+	
+	public function removeItemBuff(item:CqItem) {
 		if(item.buffs != null) {
 			for (buff in item.buffs.keys()) {
 				buffs.set(buff, buffs.get(buff) - item.buffs.get(buff));
@@ -715,7 +760,26 @@ class CqActor extends CqObject, implements Actor {
 					}
 				}
 			}
+		}		
+	}
+	
+	public function equipItem(item:CqItem) {
+		if (CqEquipSlot.WEAPON == item.equipSlot) {
+			equippedWeapon = item;
+			updateSprite();
 		}
+
+		applyItemBuff(item);
+	}
+
+	public function unequipItem(item:CqItem) {
+		if (item == equippedWeapon) {
+			equippedWeapon = null;
+			updateSprite();
+		}
+			
+		// remove buffs
+		removeItemBuff(item);
 	}
 	
 	public function useAt(itemOrSpell:CqItem, tile:CqTile) {
@@ -1408,6 +1472,8 @@ class CqPlayer extends CqActor, implements Player {
 				spell.statPoints = spell.statPointsRequired;
 			}
 		}
+		
+		GameUI.instance.updateCharges();
 	}
 	
 	public function respawn() {
@@ -1429,8 +1495,10 @@ class CqPlayer extends CqActor, implements Player {
 		player.hp = player.maxHp;
 		player.updatePlayerHealthBars();
 				
-		// clear all buffs, debuffs, and timers
-		for (buff in player.buffs.keys()) player.buffs.remove(buff);
+		// Apply all timers to clear effects, etc.
+		for ( t in player.timers ) {
+			applyTimerEffect( null, t );
+		}
 		player.timers.splice(0, player.timers.length);
 		
 		player.setAlpha(1.0);
