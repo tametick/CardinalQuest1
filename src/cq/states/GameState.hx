@@ -321,20 +321,10 @@ class GameState extends CqState {
 
 		// Determine class intro.
 		var classes:StatsFile = Resources.statsFiles.get( "classes.txt" );
-		var descriptions:StatsFile = Resources.statsFiles.get( "descriptions.txt" );
-
 		var classEntry:StatsFileEntry = classes.getEntry( "ID", chosenClass );
 		var entrySprite:String = classEntry.getField( "EntryBG" );
 		
-		var desc:StatsFileEntry = descriptions.getEntry( "Name", entrySprite );
-		var descText:String = if (desc != null) desc.getField( "Description" ); else "???";
-		
-		// Reformat \ns in description text.
-		var descTextLines:Array<String> = descText.split( "\\n" );
-		descText = "";
-		for ( l in descTextLines ) {
-			descText += l + "\n";
-		}
+		var descText:String = Resources.getString( entrySprite, true );
 
 		// Pick background image.
 		var classBG:Class<Bitmap>;

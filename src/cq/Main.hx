@@ -84,6 +84,7 @@ class Main extends HxlGame {
 			StatsFile.loadFile( "potions.txt" );
 			StatsFile.loadFile( "spells.txt" );
 			StatsFile.loadFile( "spellDamage.txt" );
+			StatsFile.loadFile( "strings.txt" );
 		}
 		
 		Configuration.tileSize = 16;

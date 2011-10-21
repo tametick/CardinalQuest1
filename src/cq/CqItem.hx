@@ -40,7 +40,7 @@ class CqSpecialEffectValue {
 
 class CqLootFactory {
 	static function completeItem( _item:CqItem, _entry:StatsFileEntry ) {
-		_item.name = _entry.getField( "Name" );
+		_item.name = Resources.getString( _entry.getField( "ID" ) );
 		
 		var slot:String = _entry.getField( "Slot" );
 		_item.equipSlot =  Type.createEnum( CqEquipSlot, slot );
@@ -57,7 +57,7 @@ class CqLootFactory {
 	}
 	
 	static function completePotion( _item:CqItem, _entry:StatsFileEntry ) {
-		_item.name = _entry.getField( "Name" );
+		_item.name = Resources.getString( _entry.getField( "ID" ) );
 		_item.equipSlot = CqEquipSlot.POTION;
 		
 		_item.duration = _entry.getField( "Duration" );
@@ -85,13 +85,13 @@ class CqLootFactory {
 		if ( (entry = itemsFile.getEntry( "ID", id )) != null )
 		{
 			// Reading from ITEMS.TXT.
-			item = new CqItem(X, Y, entry.getField( "Sprite" ));
+			item = new CqItem(X, Y, id, entry.getField( "Sprite" ));
 			completeItem( item, entry );
 		}
 		else if ( (entry = potionsFile.getEntry( "ID", id )) != null )
 		{
 			// Reading from POTIONS.TXT.
-			item = new CqItem(X, Y, entry.getField( "Sprite" ));
+			item = new CqItem(X, Y, id, entry.getField( "Sprite" ));
 			completePotion( item, entry );
 		}
 
@@ -115,7 +115,7 @@ class CqLootFactory {
 		}
 
 		if ( entry != null ) {
-			var item = new CqItem(X, Y, entry.getField( "Sprite" ) );
+			var item = new CqItem(X, Y, entry.getField( "ID" ), entry.getField( "Sprite" ) );
 			
 			completeItem( item, entry );
 			
@@ -204,6 +204,7 @@ class CqLootFactory {
 }
 
 class CqItem extends GameObjectImpl, implements Loot {
+	public var id:String;
 	public var name:String;
 	public var fullName(getFullName, null):String;
 	
@@ -250,15 +251,17 @@ class CqItem extends GameObjectImpl, implements Loot {
 		return isMagical || isSuperb || isWondrous;
 	}
 
-	public function new(X:Float, Y:Float, sprite:String) {
+	public function new(X:Float, Y:Float, _id:String, sprite:String) {
 		super(X, Y);
+		
+		this.id = _id;
+		spriteIndex = sprite.toLowerCase();
+		
 		zIndex = 1;
 		isSuperb = false;
 		isMagical = false;
 		isWondrous = false;
 		
-		spriteIndex = sprite.toLowerCase();
-
 		//this is a terrible, terrible work-around, but it'll do for now
 		
 		// fixme - new arrays created every time
@@ -457,7 +460,7 @@ class CqChest extends CqItem {
 	var onBust:List<Dynamic>;
 
 	public function new(X:Float, Y:Float) {
-		super(X, Y, "CHEST");
+		super(X, Y, "CHEST", "CHEST");
 		onBust = new List();
 		visible = false;
 	}

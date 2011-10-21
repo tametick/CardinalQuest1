@@ -83,7 +83,7 @@ class PtPlayer {
 		var classEntry:StatsFileEntry = classes.getEntry( "ID", SelectedClass );
 			
 		classSelectedID = SelectedClass;
-		classSelectedStr = classEntry.getField( "Name" );
+		classSelectedStr = Resources.getString(SelectedClass);
 		Log.CustomMetric(classSelectedStr, "Class Selected");
 	}
 }

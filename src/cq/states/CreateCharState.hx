@@ -155,17 +155,9 @@ class CreateCharState extends CqState {
 		txtDesc = new HxlText(160, 280, HxlGraphics.width - 220);
 		txtDesc.setFormat(FontAnonymousPro.instance.fontName, 16, 0x000000, "left", 0);
 		add(txtDesc);
-		
-		var descriptions:StatsFile = Resources.statsFiles.get( "descriptions.txt" );
-		var desc:StatsFileEntry = descriptions.getEntry( "Name", "Fighter" );
-		var descText:String = if (desc != null) desc.getField( "Description" ); else "???";
-		var descTextLines:Array<String> = descText.split( "\\n" );
-		descText = "";
-		for ( l in descTextLines ) {
-			descText += l + "\n";
-		}
 
-		txtDesc.text = descText;
+		// Initialise text.
+		txtDesc.text = Resources.getString( "FIGHTER", true );
 		
 		portrait = SpritePortraitPaper.getIcon("FIGHTER", 100 , 1.0);
 		portrait.x = 60;
@@ -230,8 +222,6 @@ class CreateCharState extends CqState {
 		SoundEffectsManager.play(MenuItemMouseOver);
 
 		var classes:StatsFile = Resources.statsFiles.get( "classes.txt" );
-		var descriptions:StatsFile = Resources.statsFiles.get( "descriptions.txt" );
-
 		var classEntry:StatsFileEntry = classes.getEntry( "ID", TargetClass );
 		
 		curClass = TargetClass;
@@ -247,17 +237,8 @@ class CreateCharState extends CqState {
 		}
 
 		portrait.setFrame( classEntry.getField( "Portrait" ) );
-		
-		var desc:StatsFileEntry = descriptions.getEntry( "Name", curClass );
-		var descText:String = if (desc != null) desc.getField( "Description" ); else "???";
-		
-		var descTextLines:Array<String> = descText.split( "\\n" );
-		descText = "";
-		for ( l in descTextLines ) {
-			descText += l + "\n";
-		}
 
-		txtDesc.text = descText;
+		txtDesc.text = Resources.getString( curClass, true );
 		
 		Actuate.tween(selectBox, 0.25, { x: targetX }).ease(Cubic.easeOut);
 	}

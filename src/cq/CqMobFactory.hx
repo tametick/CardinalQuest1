@@ -96,7 +96,7 @@ class CqMobFactory {
 		if ( entry != null ) {
 			mob = new CqMob(X, Y, entry.getField( "Sprite" ) );
 			
-			mob.name = entry.getField( "Name" );
+			mob.name = Resources.getString( entry.getField( "NameID" ) );
 			mob.attack = entry.getField( "Attack" );
 			mob.defense = entry.getField( "Defense" );
 			mob.speed = entry.getField( "Speed" );

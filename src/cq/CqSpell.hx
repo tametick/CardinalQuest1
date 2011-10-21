@@ -66,7 +66,7 @@ class CqSpellFactory {
 		if ( entry != null ) {
 			spell = new CqSpell(X, Y, id, entry.getField( "Sprite" ) );
 			
-			spell.name = entry.getField( "Name" );
+			spell.name = Resources.getString( id );
 
 			switch ( entry.getField( "Target" ) ) {
 			case 1: spell.targetsOther = true;
@@ -98,13 +98,11 @@ class CqSpellFactory {
 class CqSpell extends CqItem {
 	public var targetsOther:Bool;
 	public var targetsEmptyTile:Bool;
-	public var id:String;
 	public var stat:String;
 	public var statPoints:Int;
 	public var statPointsRequired:Int;
 	public function new(X:Float, Y:Float, _id:String, _sprite:String) {
-		super(X, Y, _sprite);
-		id = _id;
+		super(X, Y, _id, _sprite);
 		equipSlot = SPELL;
 		visible = false;
 		stat = "spirit";

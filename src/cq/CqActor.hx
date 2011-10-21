@@ -1231,7 +1231,7 @@ class CqPlayer extends CqActor, implements Player {
 		var classEntry:StatsFileEntry = classes.getEntry( "ID", PlayerClass );
 		
 		if ( classEntry != null ) {
-			playerClassName = classEntry.getField( "Name" );
+			playerClassName = Resources.getString( PlayerClass );
 			playerClassSprite = classEntry.getField( "Sprite" );
 			
 			attack = classEntry.getField( "Attack" );

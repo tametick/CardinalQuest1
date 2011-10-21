@@ -65,9 +65,7 @@ class CqItemInfoDialog extends HxlDialog {
     _item = Item;
     _itemName.text = Item.fullName;
 	
-	var descriptions:StatsFile = Resources.statsFiles.get( "descriptions.txt" );
-	var desc:StatsFileEntry = descriptions.getEntry( "Name", Item.name );
-	_itemDesc.text = if (desc != null) desc.getField( "Description" ); else "???";
+	_itemDesc.text = Resources.getString( Item.id, true );
 	
     _itemDesc.y = _itemName.y + _itemName.height - 2;
     if ( Std.is(Item, CqSpell) ) {

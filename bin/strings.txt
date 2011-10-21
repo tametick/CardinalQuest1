@@ -1,0 +1,106 @@
+Field String ID
+Field String Data
+
+; Class names.
+
+FIGHTER         [Fighter]
+WIZARD          [Wizard]
+THIEF           [Thief]
+
+; Item names.
+
+BOOTS           [Boots of Escape]
+WINGED_SANDALS  [Hermes' Sandals]
+TUNDRA_BOOTS    [Tundra Lizard Boots]
+
+LEATHER_ARMOR   [Leather Armor]
+BREASTPLATE     [Breastplate]
+CLOAK           [Rogues' Cloak of Swiftness]
+FULL_PLATE_MAIL [Full Plate Armor]
+
+RING            [Ring of Wisdom]
+AMULET          [Amulet of Enlightenment]
+GEMMED_AMULET   [Supernatural Amulet]
+GEMMED_RING     [Ring of Rubies]
+
+CAP             [Cap of Endurance]
+HELM            [Helm of Hardiness]
+FULL_HELM       [Full Helmet of Vitality]
+GOLDEN_HELM     [King's Golden Helm]
+
+GLOVE           [Gloves of Dexterity]
+BRACELET        [Achilles' Bracer]
+GAUNTLET        [Gauntlets of Sturdiness]
+
+DAGGER          [Dagger]
+SHORT_SWORD     [Short Sword]
+STAFF           [Staff]
+LONG_SWORD      [Long Sword]
+AXE             [Axe]
+BATTLE_AXE      [Hardened Battle Axe]
+MACE            [Beastly Mace]
+CLAYMORE        [Broad Claymore]
+BROAD_SWORD     [Twin Bladed Katana]
+
+; Potions.
+
+GREEN_POTION    [Elixir of the Hawk]
+PURPLE_POTION   [Elixir of the Lion]
+BLUE_POTION     [Elixir of the Elephant]
+YELLOW_POTION   [Coca-leaf Cocktail]
+RED_POTION      [Healing Potion]
+
+; Spells.
+
+BERSERK         [Berserk]
+BLESS_WEAPON    [Bless Weapon]
+HASTE           [Haste]
+SHADOW_WALK     [Shadow Walk]
+STONE_SKIN      [Stone Skin]
+BLINK           [Blink]
+MAGIC_ARMOR     [Magic Armor]
+REVEAL_MAP      [Reveal Map]
+HEAL            [Heal]
+
+FREEZE          [Freeze]
+FIREBALL        [Fireball]
+ENFEEBLE_MONSTER [Enfeeble Monster]
+CHARM_MONSTER   [Charm Monster]
+POLYMORPH       [Polymorph]
+SLEEP           [Sleep]
+FEAR            [Fear]
+
+MAGIC_MIRROR    [Magic Mirror]
+TELEPORT        [Teleport]
+
+; Mobs.
+
+BANDIT_CAPTAIN  [Captain]
+BANDIT          [Bandit]
+
+KOBOLD_SPEAR    [Spearkobold]
+KOBOLD_KNIVES   [Kobold]
+KOBOLD_MAGE     [Kobold Trickster]
+
+SUCCUBUS        [Succubus]
+SUCCUBUS_WHIP   [Dominatrix]
+
+SPIDER          [Spider]
+SPIDER_RED      [Black Widow]
+SPIDER_GRAY     [Wolf Spider]
+
+APE             [Ape]
+APE_DEMONIC     [Demon Ape]
+
+ELEMENTAL_AIR     [Air Elemental]
+ELEMENTAL_NATURE  [Nature Elemental]
+ELEMENTAL_SORCERY [Sorcery Elemental]
+ELEMENTAL_CHAOS   [Chaos Elemental]
+
+WEREWOLF        [Werewolf]
+
+MINOTAUR        [Minotaur]
+
+; Misc.
+
+CHEST           [Chest]
