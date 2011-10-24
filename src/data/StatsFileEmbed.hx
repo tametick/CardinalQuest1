@@ -22,87 +22,87 @@ THIEF   thief     0 SpriteThiefEntry     3   3   5   3   2 DAGGER      SHADOW_WA
 Field String Data
 
 ; Cutscenes!
-[AsterionIntro]    [The dread minotaur Asterion fell upon the peaceful town of Hallemot late one balmy night.  The few townsfolk he did not kill, he made his slaves.  Their misery is his delight.\n\nYears have passed.  Deep in his underground den, he and his minions exult in the spoils of their wicked deeds.  They revel in human suffering.\n\nYou fled when you were young.  You grew strong.  The time has come to rid the land of his dominion.]
-[AsterionDefeated] [As you slay the last of his servants, Asterion himself draws near, bellowing laughter, pleased by the show.  He intones an ancient incantation.\n\nA shimmering portal appears.  He steps inside.  You have driven the minotaur away!  There is peace again in Hallemot!\n\nYes, there is peace again.  For now.]
+\"AsterionIntro\"    \"The dread minotaur Asterion fell upon the peaceful town of Hallemot late one balmy night.  The few townsfolk he did not kill, he made his slaves.  Their misery is his delight.\n\nYears have passed.  Deep in his underground den, he and his minions exult in the spoils of their wicked deeds.  They revel in human suffering.\n\nYou fled when you were young.  You grew strong.  The time has come to rid the land of his dominion.\"
+\"AsterionDefeated\" \"As you slay the last of his servants, Asterion himself draws near, bellowing laughter, pleased by the show.  He intones an ancient incantation.\n\nA shimmering portal appears.  He steps inside.  You have driven the minotaur away!  There is peace again in Hallemot!\n\nYes, there is peace again.  For now.\"
 
 ; Classes.
-[FIGHTER]    [A mighty warrior of unparalleled strength and vigor, honorable in battle, high master of hack-n-slash melee.\n\nThe best choice for new players.]
-[WIZARD]     [A wise sage, knower of secrets, worker of miracles, master of the arcane arts, maker of satisfactory mixed drinks.\n\nCan cast spells rapidly - use his mystic powers as often as possible.]
-[THIEF]      [A cunning and agile rogue whose one moral credo is this: Always get out alive.\n\nThe most challenging character - use his speed and skills to avoid taking damage.]
+\"FIGHTER\"    \"A mighty warrior of unparalleled strength and vigor, honorable in battle, high master of hack-n-slash melee.\n\nThe best choice for new players.\"
+\"WIZARD\"     \"A wise sage, knower of secrets, worker of miracles, master of the arcane arts, maker of satisfactory mixed drinks.\n\nCan cast spells rapidly - use his mystic powers as often as possible.\"
+\"THIEF\"      \"A cunning and agile rogue whose one moral credo is this: Always get out alive.\n\nThe most challenging character - use his speed and skills to avoid taking damage.\"
 
 ; Class entry blurb.
-[SpriteKnightEntry] [You descend with shining sword into the dismal dwelling of the maleficent minotaur.  The haughty chatter of his servants, twisted and evil, fills the air.\n\nYou smile, for today you will shed much blood.]
-[SpriteWizardEntry] [The unsettled souls of the anguished dead whisper of the minotaur's misdeeds.  On bended knee you swear to them that they will be avenged.\n\nArcane flames dance between your hands.  The minotaur's wretched minions will be the most delightful playthings.]
-[SpriteThiefEntry]  [You slink silently down unlit stairs.  The minotaur's wicked servants suspect nothing.\n\nYou cannot help but grin at the thought of the bounteous treasure they will soon relinquish.]
+\"SpriteKnightEntry\" \"You descend with shining sword into the dismal dwelling of the maleficent minotaur.  The haughty chatter of his servants, twisted and evil, fills the air.\n\nYou smile, for today you will shed much blood.\"
+\"SpriteWizardEntry\" \"The unsettled souls of the anguished dead whisper of the minotaur's misdeeds.  On bended knee you swear to them that they will be avenged.\n\nArcane flames dance between your hands.  The minotaur's wretched minions will be the most delightful playthings.\"
+\"SpriteThiefEntry\"  \"You slink silently down unlit stairs.  The minotaur's wicked servants suspect nothing.\n\nYou cannot help but grin at the thought of the bounteous treasure they will soon relinquish.\"
 
 ; Potions.
-GREEN_POTION     [This elixir temporarily grants ultra-human eyesight and reflexes.]
-PURPLE_POTION    [This elixir temporarily increases the drinker's strength immensely.]
-BLUE_POTION      [This elixir temporarily protects the drinker's body with a thick hide.]
-YELLOW_POTION    [This mysterious beverage grants great speed when quaffed.]
-RED_POTION       [A small vial containing a fragrant, red salve. It restores life when applied.]
+GREEN_POTION     \"This elixir temporarily grants ultra-human eyesight and reflexes.\"
+PURPLE_POTION    \"This elixir temporarily increases the drinker's strength immensely.\"
+BLUE_POTION      \"This elixir temporarily protects the drinker's body with a thick hide.\"
+YELLOW_POTION    \"This mysterious beverage grants great speed when quaffed.\"
+RED_POTION       \"A small vial containing a fragrant, red salve. It restores life when applied.\"
 
 ; Boots.
-BOOTS            [These finely crafted leather boots allow the wearer to run with great speed.]
-WINGED_SANDALS   [These winged sandals are made of imperishable gold and allow the wearer to move as swiftly as any bird.]
-TUNDRA_BOOTS     [Made for the toughest of conditions, these boots give you superior mobility on every terrain.]
+BOOTS            \"These finely crafted leather boots allow the wearer to run with great speed.\"
+WINGED_SANDALS   \"These winged sandals are made of imperishable gold and allow the wearer to move as swiftly as any bird.\"
+TUNDRA_BOOTS     \"Made for the toughest of conditions, these boots give you superior mobility on every terrain.\"
 
 ; Armor.
-LEATHER_ARMOR    [This armor is made of leather that was boiled in wax for extra toughness.]
-BREASTPLATE      [This iron breastplate offers excellent protection to vital organs without limiting mobility.]
-CLOAK            [Made from enchanted cloth, both light and durable. Wearing this feels like touching the sky.]
-FULL_PLATE_MAIL  [A classic, well tested model of armor highly praised by knights from around the globe.]
+LEATHER_ARMOR    \"This armor is made of leather that was boiled in wax for extra toughness.\"
+BREASTPLATE      \"This iron breastplate offers excellent protection to vital organs without limiting mobility.\"
+CLOAK            \"Made from enchanted cloth, both light and durable. Wearing this feels like touching the sky.\"
+FULL_PLATE_MAIL  \"A classic, well tested model of armor highly praised by knights from around the globe.\"
 
 ; Jewelry.
-RING             [This small, silver ring imbues its wearer with uncanny wisdom.]
-AMULET           [Enlightenment permeates this simple looking amulet, granting its wearer the spirit of the gods.]
-GEMMED_AMULET    [Inscribed upon this amulet are magic runes, which yield many benefits for the wearer.]
-GEMMED_RING      [You sense a powerful force in this ring. It feels like life itself is flowing from it.]
+RING             \"This small, silver ring imbues its wearer with uncanny wisdom.\"
+AMULET           \"Enlightenment permeates this simple looking amulet, granting its wearer the spirit of the gods.\"
+GEMMED_AMULET    \"Inscribed upon this amulet are magic runes, which yield many benefits for the wearer.\"
+GEMMED_RING      \"You sense a powerful force in this ring. It feels like life itself is flowing from it.\"
 
 ; Hats.
-CAP              [This steel skullcap protects the head without restricting the wearer's ability to wear fashionable hats.]
-HELM             [This helm is crafted by dwarven smiths in the Roshaggon mines using an alloy jealously kept secret.]
-FULL_HELM        [Originally worn by dark priests, this helmet helps you tap into energies of the full moon.]
-GOLDEN_HELM      [Made of pure gold, this helmet gives you unbreachable head protection and irresistible looks.]
+CAP              \"This steel skullcap protects the head without restricting the wearer's ability to wear fashionable hats.\"
+HELM             \"This helm is crafted by dwarven smiths in the Roshaggon mines using an alloy jealously kept secret.\"
+FULL_HELM        \"Originally worn by dark priests, this helmet helps you tap into energies of the full moon.\"
+GOLDEN_HELM      \"Made of pure gold, this helmet gives you unbreachable head protection and irresistible looks.\"
 
 ; Gloves.
-GLOVE            [The swiftness of these hand gloves allows their wearer to perform faster in battle.]
-BRACELET         [This magical bronze bracer contains within it the great warrior's spirit.]
-GAUNTLET         [These decorated gauntlets are crafted skillfully and with attention to detail.]
+GLOVE            \"The swiftness of these hand gloves allows their wearer to perform faster in battle.\"
+BRACELET         \"This magical bronze bracer contains within it the great warrior's spirit.\"
+GAUNTLET         \"These decorated gauntlets are crafted skillfully and with attention to detail.\"
 
 ; Weapons.
-DAGGER           [A double-edged blade used for stabbing or thrusting.]
-SHORT_SWORD      [A one handed hilt attached to a thrusting blade approximately 60cm in length.]
-STAFF            [A sturdy shaft of hardwood with metal tips.]
-LONG_SWORD       [Long swords have long cruciform hilts with grips and double-edged blades over one meter long.]
-AXE              [A mighty axe, good for chopping both wood and flesh.]
-BATTLE_AXE       [Crafted from the finest of metals, this axe can deal lethal slashing, cleaving and slicing blows.]
-MACE             [A mighty huge and spiky mace made for fast swinging and powerful rips.]
-CLAYMORE         [An ancient weapon. Many bards have sung of glorious victories won with it.]
-BROAD_SWORD      [An elegant weapon for a more civilized age. It was crafted by a master blacksmith from the distant orient.]
+DAGGER           \"A double-edged blade used for stabbing or thrusting.\"
+SHORT_SWORD      \"A one handed hilt attached to a thrusting blade approximately 60cm in length.\"
+STAFF            \"A sturdy shaft of hardwood with metal tips.\"
+LONG_SWORD       \"Long swords have long cruciform hilts with grips and double-edged blades over one meter long.\"
+AXE              \"A mighty axe, good for chopping both wood and flesh.\"
+BATTLE_AXE       \"Crafted from the finest of metals, this axe can deal lethal slashing, cleaving and slicing blows.\"
+MACE             \"A mighty huge and spiky mace made for fast swinging and powerful rips.\"
+CLAYMORE         \"An ancient weapon. Many bards have sung of glorious victories won with it.\"
+BROAD_SWORD      \"An elegant weapon for a more civilized age. It was crafted by a master blacksmith from the distant orient.\"
 
 ; Spells.
-BERSERK          [Induces a berserked rage that greatly increases your strength and speed.]
-BLESS_WEAPON     [Blesses the currently wielded weapon, providing a temporary boost to its effectiveness.]
-HASTE            [Makes you faster and more nimble.]
-SHADOW_WALK      [Renders you invisible for a few seconds.]
-STONE_SKIN       [Hardens your skin, rendering you tough but slow.]
-BLINK            [Transports you to a random location.]
-MAGIC_ARMOR      [Engulfs you in a magical protective aura.]
-PASS_WALL        [Enables walking through walls as if they were thin air.]
-REVEAL_MAP       [Reveals the layout of the current floor.]
-HEAL             [Restores health and vigor.]
+BERSERK          \"Induces a berserked rage that greatly increases your strength and speed.\"
+BLESS_WEAPON     \"Blesses the currently wielded weapon, providing a temporary boost to its effectiveness.\"
+HASTE            \"Makes you faster and more nimble.\"
+SHADOW_WALK      \"Renders you invisible for a few seconds.\"
+STONE_SKIN       \"Hardens your skin, rendering you tough but slow.\"
+BLINK            \"Transports you to a random location.\"
+MAGIC_ARMOR      \"Engulfs you in a magical protective aura.\"
+PASS_WALL        \"Enables walking through walls as if they were thin air.\"
+REVEAL_MAP       \"Reveals the layout of the current floor.\"
+HEAL             \"Restores health and vigor.\"
 
-FREEZE           [Freezes a monster in place for a short duration.]
-FIREBALL         [Hurls a ball of fire that explodes on impact.]
-ENFEEBLE_MONSTER [Weakens monsters and renders them less dangerous.]
-CHARM_MONSTER    [Charms a foe and temporarily brings them to your side.]
-POLYMORPH        [Transform a creature into another form.]
-SLEEP            [Puts a monster into a deep slumber.]
-FEAR             [Makes a monster flee in horror.]
+FREEZE           \"Freezes a monster in place for a short duration.\"
+FIREBALL         \"Hurls a ball of fire that explodes on impact.\"
+ENFEEBLE_MONSTER \"Weakens monsters and renders them less dangerous.\"
+CHARM_MONSTER    \"Charms a foe and temporarily brings them to your side.\"
+POLYMORPH        \"Transform a creature into another form.\"
+SLEEP            \"Puts a monster into a deep slumber.\"
+FEAR             \"Makes a monster flee in horror.\"
 
-MAGIC_MIRROR     [Creates a duplicate of yourself to draw enemies away.]
-TELEPORT         [Transports you to a specific location of your choice.]
+MAGIC_MIRROR     \"Creates a duplicate of yourself to draw enemies away.\"
+TELEPORT         \"Transports you to a specific location of your choice.\"
 ";		embedFile = StatsFile.loadFromString( "descriptions.txt", embedText );		embedText = "Field String ID
 Field String Sprite
 Field String Slot
@@ -224,10 +224,10 @@ Field String EffectVal
 
 ; ID          Sprite        Duration Buff      BV Effect              EV
 GREEN_POTION  green_potion  120      attack     3
-PURPLE_POTION purple_potion 120      []         0 [damage multiplier] 2
+PURPLE_POTION purple_potion 120      \"\"         0 \"damage multiplier\" 2
 BLUE_POTION   blue_potion   120      defense    3
 YELLOW_POTION yellow_potion 120      speed      3
-RED_POTION    red_potion    0        []         0 heal                full
+RED_POTION    red_potion    0        \"\"         0 heal                full
 ";		embedFile = StatsFile.loadFromString( "potions.txt", embedText );		embedText = "Field String ID
 Field Int Level
 Field Int DamageMin
@@ -263,12 +263,12 @@ Field String EffectVal
 BERSERK          berserk           0  60 spirit  720 attack 3 speed 3
 BLESS_WEAPON     bless_weapon      0 120 spirit  720 attack 3
 HASTE            haste             0 120 spirit  720 speed  3
-SHADOW_WALK      shadow_walk       0 120 spirit  720 [] 0 [] 0 invisible
+SHADOW_WALK      shadow_walk       0 120 spirit  720 \"\" 0 \"\" 0 invisible
 STONE_SKIN       stone_skin        0 120 spirit  720 defense 5 speed -1
-BLINK            blink             0   0 spirit  720 [] 0 [] 0 blink
+BLINK            blink             0   0 spirit  720 \"\" 0 \"\" 0 blink
 MAGIC_ARMOR      magic_armor       0 120 spirit  720 defense 3
-REVEAL_MAP       reveal_map        0   0 spirit 7200 [] 0 [] 0 reveal
-HEAL             heal              0   0 spirit 2880 [] 0 [] 0 heal full
+REVEAL_MAP       reveal_map        0   0 spirit 7200 \"\" 0 \"\" 0 reveal
+HEAL             heal              0   0 spirit 2880 \"\" 0 \"\" 0 heal full
 
 ; Targets enemy.
 
@@ -276,257 +276,257 @@ HEAL             heal              0   0 spirit 2880 [] 0 [] 0 heal full
 FREEZE           freeze            1 120 spirit 1440 speed -3
 FIREBALL         fireball          1   0 spirit  720 
 ENFEEBLE_MONSTER enfeeble_monster  1 120 spirit  720 attack -3
-CHARM_MONSTER    charm_monster     1 120 spirit 1440 [] 0 [] 0 charm
-POLYMORPH        polymorph         1   0 spirit 2160 [] 0 [] 0 polymorph true
-SLEEP            sleep             1  90 spirit 1440 [] 0 [] 0 sleep
-FEAR             fear              1 180 spirit  960 [] 0 [] 0 fear
+CHARM_MONSTER    charm_monster     1 120 spirit 1440 \"\" 0 \"\" 0 charm
+POLYMORPH        polymorph         1   0 spirit 2160 \"\" 0 \"\" 0 polymorph true
+SLEEP            sleep             1  90 spirit 1440 \"\" 0 \"\" 0 sleep
+FEAR             fear              1 180 spirit  960 \"\" 0 \"\" 0 fear
 
 ; Targets empty square.
 
 ; ID             Sprite           Name               Tr Dur Stat   Pts. (B1 B1V B2 B2V Ef EfV)
-MAGIC_MIRROR     magic_mirror     2 180 spirit 1440 [] 0 [] 0 magic_mirror
-TELEPORT         teleport         2   0 spirit 1440 [] 0 [] 0 teleport
+MAGIC_MIRROR     magic_mirror     2 180 spirit 1440 \"\" 0 \"\" 0 magic_mirror
+TELEPORT         teleport         2   0 spirit 1440 \"\" 0 \"\" 0 teleport
 ";		embedFile = StatsFile.loadFromString( "spells.txt", embedText );		embedText = "Field String ID
 Field String Data
 
 ; Class names.
 
-FIGHTER         [Fighter]
-WIZARD          [Wizard]
-THIEF           [Thief]
+FIGHTER         \"Fighter\"
+WIZARD          \"Wizard\"
+THIEF           \"Thief\"
 
 ; Item names.
 
-BOOTS           [Boots of Escape]
-WINGED_SANDALS  [Hermes' Sandals]
-TUNDRA_BOOTS    [Tundra Lizard Boots]
+BOOTS           \"Boots of Escape\"
+WINGED_SANDALS  \"Hermes' Sandals\"
+TUNDRA_BOOTS    \"Tundra Lizard Boots\"
 
-LEATHER_ARMOR   [Leather Armor]
-BREASTPLATE     [Breastplate]
-CLOAK           [Rogues' Cloak of Swiftness]
-FULL_PLATE_MAIL [Full Plate Armor]
+LEATHER_ARMOR   \"Leather Armor\"
+BREASTPLATE     \"Breastplate\"
+CLOAK           \"Rogues' Cloak of Swiftness\"
+FULL_PLATE_MAIL \"Full Plate Armor\"
 
-RING            [Ring of Wisdom]
-AMULET          [Amulet of Enlightenment]
-GEMMED_AMULET   [Supernatural Amulet]
-GEMMED_RING     [Ring of Rubies]
+RING            \"Ring of Wisdom\"
+AMULET          \"Amulet of Enlightenment\"
+GEMMED_AMULET   \"Supernatural Amulet\"
+GEMMED_RING     \"Ring of Rubies\"
 
-CAP             [Cap of Endurance]
-HELM            [Helm of Hardiness]
-FULL_HELM       [Full Helmet of Vitality]
-GOLDEN_HELM     [King's Golden Helm]
+CAP             \"Cap of Endurance\"
+HELM            \"Helm of Hardiness\"
+FULL_HELM       \"Full Helmet of Vitality\"
+GOLDEN_HELM     \"King's Golden Helm\"
 
-GLOVE           [Gloves of Dexterity]
-BRACELET        [Achilles' Bracer]
-GAUNTLET        [Gauntlets of Sturdiness]
+GLOVE           \"Gloves of Dexterity\"
+BRACELET        \"Achilles' Bracer\"
+GAUNTLET        \"Gauntlets of Sturdiness\"
 
-DAGGER          [Dagger]
-SHORT_SWORD     [Short Sword]
-STAFF           [Staff]
-LONG_SWORD      [Long Sword]
-AXE             [Axe]
-BATTLE_AXE      [Hardened Battle Axe]
-MACE            [Beastly Mace]
-CLAYMORE        [Broad Claymore]
-BROAD_SWORD     [Twin Bladed Katana]
+DAGGER          \"Dagger\"
+SHORT_SWORD     \"Short Sword\"
+STAFF           \"Staff\"
+LONG_SWORD      \"Long Sword\"
+AXE             \"Axe\"
+BATTLE_AXE      \"Hardened Battle Axe\"
+MACE            \"Beastly Mace\"
+CLAYMORE        \"Broad Claymore\"
+BROAD_SWORD     \"Twin Bladed Katana\"
 
 ; Potions.
 
-GREEN_POTION    [Elixir of the Hawk]
-PURPLE_POTION   [Elixir of the Lion]
-BLUE_POTION     [Elixir of the Elephant]
-YELLOW_POTION   [Coca-leaf Cocktail]
-RED_POTION      [Healing Potion]
+GREEN_POTION    \"Elixir of the Hawk\"
+PURPLE_POTION   \"Elixir of the Lion\"
+BLUE_POTION     \"Elixir of the Elephant\"
+YELLOW_POTION   \"Coca-leaf Cocktail\"
+RED_POTION      \"Healing Potion\"
 
 ; Spells.
 
-BERSERK         [Berserk]
-BLESS_WEAPON    [Bless Weapon]
-HASTE           [Haste]
-SHADOW_WALK     [Shadow Walk]
-STONE_SKIN      [Stone Skin]
-BLINK           [Blink]
-MAGIC_ARMOR     [Magic Armor]
-REVEAL_MAP      [Reveal Map]
-HEAL            [Heal]
+BERSERK         \"Berserk\"
+BLESS_WEAPON    \"Bless Weapon\"
+HASTE           \"Haste\"
+SHADOW_WALK     \"Shadow Walk\"
+STONE_SKIN      \"Stone Skin\"
+BLINK           \"Blink\"
+MAGIC_ARMOR     \"Magic Armor\"
+REVEAL_MAP      \"Reveal Map\"
+HEAL            \"Heal\"
 
-FREEZE          [Freeze]
-FIREBALL        [Fireball]
-ENFEEBLE_MONSTER [Enfeeble Monster]
-CHARM_MONSTER   [Charm Monster]
-POLYMORPH       [Polymorph]
-SLEEP           [Sleep]
-FEAR            [Fear]
+FREEZE          \"Freeze\"
+FIREBALL        \"Fireball\"
+ENFEEBLE_MONSTER \"Enfeeble Monster\"
+CHARM_MONSTER   \"Charm Monster\"
+POLYMORPH       \"Polymorph\"
+SLEEP           \"Sleep\"
+FEAR            \"Fear\"
 
-MAGIC_MIRROR    [Magic Mirror]
-TELEPORT        [Teleport]
+MAGIC_MIRROR    \"Magic Mirror\"
+TELEPORT        \"Teleport\"
 
 ; Mobs.
 
-BANDIT_CAPTAIN  [Captain]
-BANDIT          [Bandit]
+BANDIT_CAPTAIN  \"Captain\"
+BANDIT          \"Bandit\"
 
-KOBOLD_SPEAR    [Spearkobold]
-KOBOLD_KNIVES   [Kobold]
-KOBOLD_MAGE     [Kobold Trickster]
+KOBOLD_SPEAR    \"Spearkobold\"
+KOBOLD          \"Kobold\"
+KOBOLD_MAGE     \"Kobold Trickster\"
 
-SUCCUBUS        [Succubus]
-SUCCUBUS_WHIP   [Dominatrix]
+SUCCUBUS        \"Succubus\"
+SUCCUBUS_WHIP   \"Dominatrix\"
 
-SPIDER          [Spider]
-SPIDER_RED      [Black Widow]
-SPIDER_GRAY     [Wolf Spider]
+SPIDER          \"Spider\"
+SPIDER_RED      \"Black Widow\"
+SPIDER_GRAY     \"Wolf Spider\"
 
-APE             [Ape]
-APE_DEMONIC     [Demon Ape]
+APE             \"Ape\"
+APE_DEMONIC     \"Demon Ape\"
 
-ELEMENTAL_AIR     [Air Elemental]
-ELEMENTAL_NATURE  [Nature Elemental]
-ELEMENTAL_SORCERY [Sorcery Elemental]
-ELEMENTAL_CHAOS   [Chaos Elemental]
+ELEMENTAL_AIR     \"Air Elemental\"
+ELEMENTAL_NATURE  \"Nature Elemental\"
+ELEMENTAL_SORCERY \"Sorcery Elemental\"
+ELEMENTAL_CHAOS   \"Chaos Elemental\"
 
-WEREWOLF        [Werewolf]
+WEREWOLF        \"Werewolf\"
 
-MINOTAUR        [Minotaur]
+MINOTAUR        \"Minotaur\"
 
 ; Misc.
 
-CHEST           [Chest]
+CHEST           \"Chest\"
 
 ; Statistics
-[attack]        [attack]
-[defense]       [defense]
-[life]          [life]
-[vitality]      [vitality]
-[speed]         [speed]
-[spirit]        [spirit]
+\"attack\"        \"attack\"
+\"defense\"       \"defense\"
+\"life\"          \"life\"
+\"vitality\"      \"vitality\"
+\"speed\"         \"speed\"
+\"spirit\"        \"spirit\"
 
 ; Special effects
-[damage multiplier] [damage multiplier]
-[charm]             [charm]
-[fear]              [fear]
-[sleep]             [sleep]
-[heal]              [heal]
+\"damage multiplier\" \"damage multiplier\"
+\"charm\"             \"charm\"
+\"fear\"              \"fear\"
+\"sleep\"             \"sleep\"
+\"heal\"              \"heal\"
 
 ; Ingame messages.
-STAT_HEALTH          [Health]
-STAT_ATTACK          [Attack]
-STAT_DEFENSE         [Defense]
-STAT_LIFE            [Life]
-STAT_VITALITY        [Vitality]
-STAT_SPEED           [Speed]
-STAT_SPIRIT          [Spirit]
+STAT_HEALTH          \"Health\"
+STAT_ATTACK          \"Attack\"
+STAT_DEFENSE         \"Defense\"
+STAT_LIFE            \"Life\"
+STAT_VITALITY        \"Vitality\"
+STAT_SPEED           \"Speed\"
+STAT_SPIRIT          \"Spirit\"
 
-PREFIX_SUPERB        [Superb]
-PREFIX_WONDROUS      [Wondrous]
-PREFIX_MAGICAL       [Magical]
+PREFIX_SUPERB        \"Superb\"
+PREFIX_WONDROUS      \"Wondrous\"
+PREFIX_MAGICAL       \"Magical\"
 
-UI_LEVEL             [Level]
-UI_TIMES             [x]
-UI_FLOOR             [Floor]
-UI_MAP               [Map]
-UI_INV               [Inv]
-UI_CHAR              [Char]
-UI_DAMAGE            [Damage]
-UI_DESTROY           [Destroy]
+UI_LEVEL             \"Level\"
+UI_TIMES             \"x\"
+UI_FLOOR             \"Floor\"
+UI_MAP               \"Map\"
+UI_INV               \"Inv\"
+UI_CHAR              \"Char\"
+UI_DAMAGE            \"Damage\"
+UI_DESTROY           \"Destroy\"
 
-POPUP_C              [(hotkey C)]
-POPUP_I              [(hotkey I)]
-POPUP_M              [(hotkey M)]
-POPUP_0              [(hotkey 0)]
-POPUP_1              [(hotkey 1)]
-POPUP_2              [(hotkey 2)]
-POPUP_3              [(hotkey 3)]
-POPUP_4              [(hotkey 4)]
-POPUP_5              [(hotkey 5)]
-POPUP_6              [(hotkey 6)]
-POPUP_7              [(hotkey 7)]
-POPUP_8              [(hotkey 8)]
-POPUP_9              [(hotkey 9)]
-POPUP_ENTER          [(hotkey enter)]
-POPUP_ESC            [(hotkey ESC)]
-POPUP_F1             [(hotkey F1)]
+POPUP_C              \"[hotkey C]\"
+POPUP_I              \"[hotkey I]\"
+POPUP_M              \"[hotkey M]\"
+POPUP_0              \"[hotkey 0]\"
+POPUP_1              \"[hotkey 1]\"
+POPUP_2              \"[hotkey 2]\"
+POPUP_3              \"[hotkey 3]\"
+POPUP_4              \"[hotkey 4]\"
+POPUP_5              \"[hotkey 5]\"
+POPUP_6              \"[hotkey 6]\"
+POPUP_7              \"[hotkey 7]\"
+POPUP_8              \"[hotkey 8]\"
+POPUP_9              \"[hotkey 9]\"
+POPUP_ENTER          \"[hotkey enter]\"
+POPUP_ESC            \"[hotkey ESC]\"
+POPUP_F1             \"[hotkey F1]\"
 
-POPUP_RECOVERED      [recovered]
-POPUP_EXPIRED        [wears off]
-POPUP_MIRROR         [Mirror]
-POPUP_MIRROR_EXPIRED [Shattered]
-POPUP_INVIS_EXPIRED  [Reappeared]
-POPUP_EFFECT_EXPIRED [runs out]
-POPUP_INVIS_BREAK1   [An invisible]
-POPUP_INVIS_BREAK2   [appears!]
-POPUP_INVIS_BROKEN   [You reappear]
-POPUP_BACKSTAB       [Backstab!]
-POPUP_BUMP1          [You stumble into an invisible]
-POPUP_BUMP2          [.]
-POPUP_BUMPED         [You have been discovered!]
-POPUP_INVIS          [Vanished]
-POPUP_HEALED         [Healed]
-POPUP_CHARM          [Charm]
-POPUP_FEAR           [Fear]
-POPUP_SLEEP          [Sleep]
-POPUP_POLYMORPH      [Morph]
-POPUP_COIN           [coin]
-POPUP_COINS          [coins]
+POPUP_RECOVERED      \"recovered\"
+POPUP_EXPIRED        \"wears off\"
+POPUP_MIRROR         \"Mirror\"
+POPUP_MIRROR_EXPIRED \"Shattered\"
+POPUP_INVIS_EXPIRED  \"Reappeared\"
+POPUP_EFFECT_EXPIRED \"runs out\"
+POPUP_INVIS_BREAK1   \"An invisible\"
+POPUP_INVIS_BREAK2   \"appears!\"
+POPUP_INVIS_BROKEN   \"You reappear\"
+POPUP_BACKSTAB       \"Backstab!\"
+POPUP_BUMP1          \"You stumble into an invisible\"
+POPUP_BUMP2          \".\"
+POPUP_BUMPED         \"You have been discovered!\"
+POPUP_INVIS          \"Vanished\"
+POPUP_HEALED         \"Healed\"
+POPUP_CHARM          \"Charm\"
+POPUP_FEAR           \"Fear\"
+POPUP_SLEEP          \"Sleep\"
+POPUP_POLYMORPH      \"Morph\"
+POPUP_COIN           \"coin\"
+POPUP_COINS          \"coins\"
 
-NOTIFY_INV_FULL      [Inventory is full!]
-NOTIFY_STAIRS        [You have found the stairs!]
-NOTIFY_LATE_STAIRS   [At long last, the stairway down!]
-NOTIFY_EXPLORE       [Keep exploring!]
-NOTIFY_LATE_EXPLORE  [Head for the stairs!]
-NOTIFY_DOWNSTAIRS    [Click to go downstairs]
-NOTIFY_PICK_SPACE1   [Select a space for your]
-NOTIFY_PICK_SPACE2   [spell]
-NOTIFY_PICK_TARGET1  [Select a target for your]
-NOTIFY_PICK_TARGET2  [spell]
-NOTIFY_GET_FIRST     [I've been wanting one of these.]
-NOTIFY_GET_DUPLICATE [I already have one just like this.]
-NOTIFY_GET_SELLOLD1  [I will sell my old]
-NOTIFY_GET_SELLOLD2  [ now.]
-NOTIFY_GET_SELLNEW1  [Ha! Not half as good as my]
-NOTIFY_GET_SELLNEW2  [.]
-NOTIFY_GET_STASHOLD1 [I'll keep my old]
-NOTIFY_GET_STASHOLD2 [ in my bag.]
-NOTIFY_GET_REDUNDANT [I've got better in my bag.]
-NOTIFY_GET_STASHNEW1 [I'll put this]
-NOTIFY_GET_STASHNEW2 [ in my bag.]
-NOTIFY_EMPTYCELL     [Use an empty cell to swap items!]
+NOTIFY_INV_FULL      \"Inventory is full!\"
+NOTIFY_STAIRS        \"You have found the stairs!\"
+NOTIFY_LATE_STAIRS   \"At long last, the stairway down!\"
+NOTIFY_EXPLORE       \"Keep exploring!\"
+NOTIFY_LATE_EXPLORE  \"Head for the stairs!\"
+NOTIFY_DOWNSTAIRS    \"Click to go downstairs\"
+NOTIFY_PICK_SPACE1   \"Select a space for your\"
+NOTIFY_PICK_SPACE2   \"spell\"
+NOTIFY_PICK_TARGET1  \"Select a target for your\"
+NOTIFY_PICK_TARGET2  \"spell\"
+NOTIFY_GET_FIRST     \"I've been wanting one of these.\"
+NOTIFY_GET_DUPLICATE \"I already have one just like this.\"
+NOTIFY_GET_SELLOLD1  \"I will sell my old\"
+NOTIFY_GET_SELLOLD2  \" now.\"
+NOTIFY_GET_SELLNEW1  \"Ha! Not half as good as my\"
+NOTIFY_GET_SELLNEW2  \".\"
+NOTIFY_GET_STASHOLD1 \"I'll keep my old\"
+NOTIFY_GET_STASHOLD2 \" in my bag.\"
+NOTIFY_GET_REDUNDANT \"I've got better in my bag.\"
+NOTIFY_GET_STASHNEW1 \"I'll put this\"
+NOTIFY_GET_STASHNEW2 \" in my bag.\"
+NOTIFY_EMPTYCELL     \"Use an empty cell to swap items!\"
 
-LOG_YOU_HIT          [You hit]
-LOG_HIT_YOU          [Hit you]
-LOG_YOU_KILL         [You kill]
-LOG_KILLS_YOU        [kills you]
-LOG_YOU_MISS         [You miss]
-LOG_MISS_YOU         [Misses you]
-LOG_EFFECT           [Applied special effect:]
-LOG_XP1              [gained]
-LOG_XP2              [xp]
-LOG_EXPIRED_TIMER    [removed expired timer:]
-LOG_POTION           [Using potion]
+LOG_YOU_HIT          \"You hit\"
+LOG_HIT_YOU          \"Hit you\"
+LOG_YOU_KILL         \"You kill\"
+LOG_KILLS_YOU        \"kills you\"
+LOG_YOU_MISS         \"You miss\"
+LOG_MISS_YOU         \"Misses you\"
+LOG_EFFECT           \"Applied special effect:\"
+LOG_XP1              \"gained\"
+LOG_XP2              \"xp\"
+LOG_EXPIRED_TIMER    \"removed expired timer:\"
+LOG_POTION           \"Using potion\"
 
 ; UI - Menu
-MENU_NEW_GAME        [New Game]
-MENU_RESUME_GAME     [Resume Game]
-MENU_CREDITS         [Credits]
-MENU_QUIT            [Quit]
-MENU_MUSIC           [Music]
-MENU_SOUND           [Sound]
-MENU_COPYRIGHT       [Copyright 2011]
-MENU_PORTEDBY        [Ported by]
-MENU_VERSION         [Version]
-MENU_STANDALONE      [Get stand-alone version at]
+MENU_NEW_GAME        \"New Game\"
+MENU_RESUME_GAME     \"Resume Game\"
+MENU_CREDITS         \"Credits\"
+MENU_QUIT            \"Quit\"
+MENU_MUSIC           \"Music\"
+MENU_SOUND           \"Sound\"
+MENU_COPYRIGHT       \"Copyright 2011\"
+MENU_PORTEDBY        \"Ported by\"
+MENU_VERSION         \"Version\"
+MENU_STANDALONE      \"Get stand-alone version at\"
 
-MENU_HIGHSCORES      [Highscores]
+MENU_HIGHSCORES      \"Highscores\"
 
-MENU_CREATECHARACTER [Create Character]
-MENU_START           [Start]
-MENU_MENU            [Menu]
-MENU_MAIN_MENU       [Main Menu]
-MENU_HELP            [Help]
-MENU_GAME_OVER       [Game over]
+MENU_CREATECHARACTER \"Create Character\"
+MENU_START           \"Start\"
+MENU_MENU            \"Menu\"
+MENU_MAIN_MENU       \"Main Menu\"
+MENU_HELP            \"Help\"
+MENU_GAME_OVER       \"Game over\"
 
-PRELOADER1           [Hi there!  It looks like somebody copied this game without my permission.  Just click anywhere, or copy-paste this URL into your browser.\n\n]
-PRELOADER2           [\n\nto play the game at my site.  Thanks, and have fun!]
+PRELOADER1           \"Hi there!  It looks like somebody copied this game without my permission.  Just click anywhere, or copy-paste this URL into your browser.\n\n\"
+PRELOADER2           \"\n\nto play the game at my site.  Thanks, and have fun!\"
 
-DEMO_OVER            [Demo Over!]
-DEMO_OVER_MORE       [Want more?]";		embedFile = StatsFile.loadFromString( "strings.txt", embedText );	}}
+DEMO_OVER            \"Demo Over!\"
+DEMO_OVER_MORE       \"Want more?\"";		embedFile = StatsFile.loadFromString( "strings.txt", embedText );	}}

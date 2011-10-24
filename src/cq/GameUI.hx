@@ -856,7 +856,7 @@ class GameUI extends HxlDialog {
 			if (TargetsEmptyTile) {
 				targetString = Resources.getString( "NOTIFY_PICK_SPACE1" ) + " " + TargetText + " " + Resources.getString( "NOTIFY_PICK_SPACE2" );
 			} else {
-				targetString = Resources.getString( "NOTIFY_PICK_TARGET1" ) + " " + TargetText + " " + Resources.getString( "NOTIFY_PICK_TARGET1" );
+				targetString = Resources.getString( "NOTIFY_PICK_TARGET1" ) + " " + TargetText + " " + Resources.getString( "NOTIFY_PICK_TARGET2" );
 			}
 		}
 		if ( !Toggle ) {

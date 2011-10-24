@@ -2,84 +2,84 @@ Field String ID
 Field String Data
 
 ; Cutscenes!
-[AsterionIntro]    [The dread minotaur Asterion fell upon the peaceful town of Hallemot late one balmy night.  The few townsfolk he did not kill, he made his slaves.  Their misery is his delight.\n\nYears have passed.  Deep in his underground den, he and his minions exult in the spoils of their wicked deeds.  They revel in human suffering.\n\nYou fled when you were young.  You grew strong.  The time has come to rid the land of his dominion.]
-[AsterionDefeated] [As you slay the last of his servants, Asterion himself draws near, bellowing laughter, pleased by the show.  He intones an ancient incantation.\n\nA shimmering portal appears.  He steps inside.  You have driven the minotaur away!  There is peace again in Hallemot!\n\nYes, there is peace again.  For now.]
+"AsterionIntro"    "The dread minotaur Asterion fell upon the peaceful town of Hallemot late one balmy night.  The few townsfolk he did not kill, he made his slaves.  Their misery is his delight.\n\nYears have passed.  Deep in his underground den, he and his minions exult in the spoils of their wicked deeds.  They revel in human suffering.\n\nYou fled when you were young.  You grew strong.  The time has come to rid the land of his dominion."
+"AsterionDefeated" "As you slay the last of his servants, Asterion himself draws near, bellowing laughter, pleased by the show.  He intones an ancient incantation.\n\nA shimmering portal appears.  He steps inside.  You have driven the minotaur away!  There is peace again in Hallemot!\n\nYes, there is peace again.  For now."
 
 ; Classes.
-[FIGHTER]    [A mighty warrior of unparalleled strength and vigor, honorable in battle, high master of hack-n-slash melee.\n\nThe best choice for new players.]
-[WIZARD]     [A wise sage, knower of secrets, worker of miracles, master of the arcane arts, maker of satisfactory mixed drinks.\n\nCan cast spells rapidly - use his mystic powers as often as possible.]
-[THIEF]      [A cunning and agile rogue whose one moral credo is this: Always get out alive.\n\nThe most challenging character - use his speed and skills to avoid taking damage.]
+"FIGHTER"    "A mighty warrior of unparalleled strength and vigor, honorable in battle, high master of hack-n-slash melee.\n\nThe best choice for new players."
+"WIZARD"     "A wise sage, knower of secrets, worker of miracles, master of the arcane arts, maker of satisfactory mixed drinks.\n\nCan cast spells rapidly - use his mystic powers as often as possible."
+"THIEF"      "A cunning and agile rogue whose one moral credo is this: Always get out alive.\n\nThe most challenging character - use his speed and skills to avoid taking damage."
 
 ; Class entry blurb.
-[SpriteKnightEntry] [You descend with shining sword into the dismal dwelling of the maleficent minotaur.  The haughty chatter of his servants, twisted and evil, fills the air.\n\nYou smile, for today you will shed much blood.]
-[SpriteWizardEntry] [The unsettled souls of the anguished dead whisper of the minotaur's misdeeds.  On bended knee you swear to them that they will be avenged.\n\nArcane flames dance between your hands.  The minotaur's wretched minions will be the most delightful playthings.]
-[SpriteThiefEntry]  [You slink silently down unlit stairs.  The minotaur's wicked servants suspect nothing.\n\nYou cannot help but grin at the thought of the bounteous treasure they will soon relinquish.]
+"SpriteKnightEntry" "You descend with shining sword into the dismal dwelling of the maleficent minotaur.  The haughty chatter of his servants, twisted and evil, fills the air.\n\nYou smile, for today you will shed much blood."
+"SpriteWizardEntry" "The unsettled souls of the anguished dead whisper of the minotaur's misdeeds.  On bended knee you swear to them that they will be avenged.\n\nArcane flames dance between your hands.  The minotaur's wretched minions will be the most delightful playthings."
+"SpriteThiefEntry"  "You slink silently down unlit stairs.  The minotaur's wicked servants suspect nothing.\n\nYou cannot help but grin at the thought of the bounteous treasure they will soon relinquish."
 
 ; Potions.
-GREEN_POTION     [This elixir temporarily grants ultra-human eyesight and reflexes.]
-PURPLE_POTION    [This elixir temporarily increases the drinker's strength immensely.]
-BLUE_POTION      [This elixir temporarily protects the drinker's body with a thick hide.]
-YELLOW_POTION    [This mysterious beverage grants great speed when quaffed.]
-RED_POTION       [A small vial containing a fragrant, red salve. It restores life when applied.]
+GREEN_POTION     "This elixir temporarily grants ultra-human eyesight and reflexes."
+PURPLE_POTION    "This elixir temporarily increases the drinker's strength immensely."
+BLUE_POTION      "This elixir temporarily protects the drinker's body with a thick hide."
+YELLOW_POTION    "This mysterious beverage grants great speed when quaffed."
+RED_POTION       "A small vial containing a fragrant, red salve. It restores life when applied."
 
 ; Boots.
-BOOTS            [These finely crafted leather boots allow the wearer to run with great speed.]
-WINGED_SANDALS   [These winged sandals are made of imperishable gold and allow the wearer to move as swiftly as any bird.]
-TUNDRA_BOOTS     [Made for the toughest of conditions, these boots give you superior mobility on every terrain.]
+BOOTS            "These finely crafted leather boots allow the wearer to run with great speed."
+WINGED_SANDALS   "These winged sandals are made of imperishable gold and allow the wearer to move as swiftly as any bird."
+TUNDRA_BOOTS     "Made for the toughest of conditions, these boots give you superior mobility on every terrain."
 
 ; Armor.
-LEATHER_ARMOR    [This armor is made of leather that was boiled in wax for extra toughness.]
-BREASTPLATE      [This iron breastplate offers excellent protection to vital organs without limiting mobility.]
-CLOAK            [Made from enchanted cloth, both light and durable. Wearing this feels like touching the sky.]
-FULL_PLATE_MAIL  [A classic, well tested model of armor highly praised by knights from around the globe.]
+LEATHER_ARMOR    "This armor is made of leather that was boiled in wax for extra toughness."
+BREASTPLATE      "This iron breastplate offers excellent protection to vital organs without limiting mobility."
+CLOAK            "Made from enchanted cloth, both light and durable. Wearing this feels like touching the sky."
+FULL_PLATE_MAIL  "A classic, well tested model of armor highly praised by knights from around the globe."
 
 ; Jewelry.
-RING             [This small, silver ring imbues its wearer with uncanny wisdom.]
-AMULET           [Enlightenment permeates this simple looking amulet, granting its wearer the spirit of the gods.]
-GEMMED_AMULET    [Inscribed upon this amulet are magic runes, which yield many benefits for the wearer.]
-GEMMED_RING      [You sense a powerful force in this ring. It feels like life itself is flowing from it.]
+RING             "This small, silver ring imbues its wearer with uncanny wisdom."
+AMULET           "Enlightenment permeates this simple looking amulet, granting its wearer the spirit of the gods."
+GEMMED_AMULET    "Inscribed upon this amulet are magic runes, which yield many benefits for the wearer."
+GEMMED_RING      "You sense a powerful force in this ring. It feels like life itself is flowing from it."
 
 ; Hats.
-CAP              [This steel skullcap protects the head without restricting the wearer's ability to wear fashionable hats.]
-HELM             [This helm is crafted by dwarven smiths in the Roshaggon mines using an alloy jealously kept secret.]
-FULL_HELM        [Originally worn by dark priests, this helmet helps you tap into energies of the full moon.]
-GOLDEN_HELM      [Made of pure gold, this helmet gives you unbreachable head protection and irresistible looks.]
+CAP              "This steel skullcap protects the head without restricting the wearer's ability to wear fashionable hats."
+HELM             "This helm is crafted by dwarven smiths in the Roshaggon mines using an alloy jealously kept secret."
+FULL_HELM        "Originally worn by dark priests, this helmet helps you tap into energies of the full moon."
+GOLDEN_HELM      "Made of pure gold, this helmet gives you unbreachable head protection and irresistible looks."
 
 ; Gloves.
-GLOVE            [The swiftness of these hand gloves allows their wearer to perform faster in battle.]
-BRACELET         [This magical bronze bracer contains within it the great warrior's spirit.]
-GAUNTLET         [These decorated gauntlets are crafted skillfully and with attention to detail.]
+GLOVE            "The swiftness of these hand gloves allows their wearer to perform faster in battle."
+BRACELET         "This magical bronze bracer contains within it the great warrior's spirit."
+GAUNTLET         "These decorated gauntlets are crafted skillfully and with attention to detail."
 
 ; Weapons.
-DAGGER           [A double-edged blade used for stabbing or thrusting.]
-SHORT_SWORD      [A one handed hilt attached to a thrusting blade approximately 60cm in length.]
-STAFF            [A sturdy shaft of hardwood with metal tips.]
-LONG_SWORD       [Long swords have long cruciform hilts with grips and double-edged blades over one meter long.]
-AXE              [A mighty axe, good for chopping both wood and flesh.]
-BATTLE_AXE       [Crafted from the finest of metals, this axe can deal lethal slashing, cleaving and slicing blows.]
-MACE             [A mighty huge and spiky mace made for fast swinging and powerful rips.]
-CLAYMORE         [An ancient weapon. Many bards have sung of glorious victories won with it.]
-BROAD_SWORD      [An elegant weapon for a more civilized age. It was crafted by a master blacksmith from the distant orient.]
+DAGGER           "A double-edged blade used for stabbing or thrusting."
+SHORT_SWORD      "A one handed hilt attached to a thrusting blade approximately 60cm in length."
+STAFF            "A sturdy shaft of hardwood with metal tips."
+LONG_SWORD       "Long swords have long cruciform hilts with grips and double-edged blades over one meter long."
+AXE              "A mighty axe, good for chopping both wood and flesh."
+BATTLE_AXE       "Crafted from the finest of metals, this axe can deal lethal slashing, cleaving and slicing blows."
+MACE             "A mighty huge and spiky mace made for fast swinging and powerful rips."
+CLAYMORE         "An ancient weapon. Many bards have sung of glorious victories won with it."
+BROAD_SWORD      "An elegant weapon for a more civilized age. It was crafted by a master blacksmith from the distant orient."
 
 ; Spells.
-BERSERK          [Induces a berserked rage that greatly increases your strength and speed.]
-BLESS_WEAPON     [Blesses the currently wielded weapon, providing a temporary boost to its effectiveness.]
-HASTE            [Makes you faster and more nimble.]
-SHADOW_WALK      [Renders you invisible for a few seconds.]
-STONE_SKIN       [Hardens your skin, rendering you tough but slow.]
-BLINK            [Transports you to a random location.]
-MAGIC_ARMOR      [Engulfs you in a magical protective aura.]
-PASS_WALL        [Enables walking through walls as if they were thin air.]
-REVEAL_MAP       [Reveals the layout of the current floor.]
-HEAL             [Restores health and vigor.]
+BERSERK          "Induces a berserked rage that greatly increases your strength and speed."
+BLESS_WEAPON     "Blesses the currently wielded weapon, providing a temporary boost to its effectiveness."
+HASTE            "Makes you faster and more nimble."
+SHADOW_WALK      "Renders you invisible for a few seconds."
+STONE_SKIN       "Hardens your skin, rendering you tough but slow."
+BLINK            "Transports you to a random location."
+MAGIC_ARMOR      "Engulfs you in a magical protective aura."
+PASS_WALL        "Enables walking through walls as if they were thin air."
+REVEAL_MAP       "Reveals the layout of the current floor."
+HEAL             "Restores health and vigor."
 
-FREEZE           [Freezes a monster in place for a short duration.]
-FIREBALL         [Hurls a ball of fire that explodes on impact.]
-ENFEEBLE_MONSTER [Weakens monsters and renders them less dangerous.]
-CHARM_MONSTER    [Charms a foe and temporarily brings them to your side.]
-POLYMORPH        [Transform a creature into another form.]
-SLEEP            [Puts a monster into a deep slumber.]
-FEAR             [Makes a monster flee in horror.]
+FREEZE           "Freezes a monster in place for a short duration."
+FIREBALL         "Hurls a ball of fire that explodes on impact."
+ENFEEBLE_MONSTER "Weakens monsters and renders them less dangerous."
+CHARM_MONSTER    "Charms a foe and temporarily brings them to your side."
+POLYMORPH        "Transform a creature into another form."
+SLEEP            "Puts a monster into a deep slumber."
+FEAR             "Makes a monster flee in horror."
 
-MAGIC_MIRROR     [Creates a duplicate of yourself to draw enemies away.]
-TELEPORT         [Transports you to a specific location of your choice.]
+MAGIC_MIRROR     "Creates a duplicate of yourself to draw enemies away."
+TELEPORT         "Transports you to a specific location of your choice."

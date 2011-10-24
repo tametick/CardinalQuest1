@@ -149,8 +149,8 @@ class CreateCharState extends CqState {
 		playerSprites = SpritePlayer.instance;
 
 		createChoice(Resources.getString( "FIGHTER" ), "fighter", 138, 95, pickFighter);
-		createChoice(Resources.getString( "WIZARD" ), "thief", 288, 245, pickThief);
-		createChoice(Resources.getString( "THIEF" ), "wizard", 438, 395, pickWizard);
+		createChoice(Resources.getString( "THIEF" ), "thief", 288, 245, pickThief);
+		createChoice(Resources.getString( "WIZARD" ), "wizard", 438, 395, pickWizard);
 		
 		txtDesc = new HxlText(160, 280, HxlGraphics.width - 220);
 		txtDesc.setFormat(FontAnonymousPro.instance.fontName, 16, 0x000000, "left", 0);

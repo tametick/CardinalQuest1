@@ -19,12 +19,12 @@ Field String EffectVal
 BERSERK          berserk           0  60 spirit  720 attack 3 speed 3
 BLESS_WEAPON     bless_weapon      0 120 spirit  720 attack 3
 HASTE            haste             0 120 spirit  720 speed  3
-SHADOW_WALK      shadow_walk       0 120 spirit  720 [] 0 [] 0 invisible
+SHADOW_WALK      shadow_walk       0 120 spirit  720 "" 0 "" 0 invisible
 STONE_SKIN       stone_skin        0 120 spirit  720 defense 5 speed -1
-BLINK            blink             0   0 spirit  720 [] 0 [] 0 blink
+BLINK            blink             0   0 spirit  720 "" 0 "" 0 blink
 MAGIC_ARMOR      magic_armor       0 120 spirit  720 defense 3
-REVEAL_MAP       reveal_map        0   0 spirit 7200 [] 0 [] 0 reveal
-HEAL             heal              0   0 spirit 2880 [] 0 [] 0 heal full
+REVEAL_MAP       reveal_map        0   0 spirit 7200 "" 0 "" 0 reveal
+HEAL             heal              0   0 spirit 2880 "" 0 "" 0 heal full
 
 ; Targets enemy.
 
@@ -32,13 +32,13 @@ HEAL             heal              0   0 spirit 2880 [] 0 [] 0 heal full
 FREEZE           freeze            1 120 spirit 1440 speed -3
 FIREBALL         fireball          1   0 spirit  720 
 ENFEEBLE_MONSTER enfeeble_monster  1 120 spirit  720 attack -3
-CHARM_MONSTER    charm_monster     1 120 spirit 1440 [] 0 [] 0 charm
-POLYMORPH        polymorph         1   0 spirit 2160 [] 0 [] 0 polymorph true
-SLEEP            sleep             1  90 spirit 1440 [] 0 [] 0 sleep
-FEAR             fear              1 180 spirit  960 [] 0 [] 0 fear
+CHARM_MONSTER    charm_monster     1 120 spirit 1440 "" 0 "" 0 charm
+POLYMORPH        polymorph         1   0 spirit 2160 "" 0 "" 0 polymorph true
+SLEEP            sleep             1  90 spirit 1440 "" 0 "" 0 sleep
+FEAR             fear              1 180 spirit  960 "" 0 "" 0 fear
 
 ; Targets empty square.
 
 ; ID             Sprite           Name               Tr Dur Stat   Pts. (B1 B1V B2 B2V Ef EfV)
-MAGIC_MIRROR     magic_mirror     2 180 spirit 1440 [] 0 [] 0 magic_mirror
-TELEPORT         teleport         2   0 spirit 1440 [] 0 [] 0 teleport
+MAGIC_MIRROR     magic_mirror     2 180 spirit 1440 "" 0 "" 0 magic_mirror
+TELEPORT         teleport         2   0 spirit 1440 "" 0 "" 0 teleport

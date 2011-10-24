@@ -135,7 +135,7 @@ class CqInventoryItemManager
 						return true;
 					} else if ( cell.getCellObj().item.makesRedundant( Item ) ) {
 						// Old item is totally better than this one!
-						GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_SELLNEW1" ) + " " + cell.getCellObj().item.name + Resources.getString( "NOTIFY_GET_SELLOLD2" ) );
+						GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_SELLNEW1" ) + " " + cell.getCellObj().item.name + Resources.getString( "NOTIFY_GET_SELLNEW2" ) );
 						destroyAndGiveMoney(Item);
 						return false;
 					} else {
