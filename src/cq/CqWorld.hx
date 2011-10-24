@@ -92,7 +92,7 @@ class CqWorld extends World {
 		else
 			currentLevelIndex++;
 		goToLevel(currentLevelIndex);
-		Registery.player.infoViewFloor.setText("Floor " +(currentLevelIndex + 1));
+		Registery.player.infoViewFloor.setText(Resources.getString( "UI_FLOOR" ) + " " +(currentLevelIndex + 1));
 
 		currentLevel.zIndex = -1;	
 		HxlGraphics.state.add(currentLevel);

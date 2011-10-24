@@ -1,6 +1,7 @@
 package cq.ui;
 
 import data.Registery;
+import data.Resources;
 
 import cq.states.GameState;
 import cq.ui.inventory.CqEquipmentCell;
@@ -92,7 +93,7 @@ class CqPotionButton extends HxlDialog {
 		if ( cell.getCellObj() != null ) {
 			var cellObj = cell.getCellObj();
 			var item:CqItem = cellObj.item;
-			HxlLog.append("Using potion");
+			HxlLog.append(Resources.getString( "LOG_POTION" ));
 			Registery.player.use(item);
 			item.stackSize--;
 			if ( item.stackSize <= 0 ) {

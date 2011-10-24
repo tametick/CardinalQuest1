@@ -21,6 +21,10 @@ THIEF   thief     0 SpriteThiefEntry     3   3   5   3   2 DAGGER      SHADOW_WA
 ";		embedFile = StatsFile.loadFromString( "classes.txt", embedText );		embedText = "Field String ID
 Field String Data
 
+; Cutscenes!
+[AsterionIntro]    [The dread minotaur Asterion fell upon the peaceful town of Hallemot late one balmy night.  The few townsfolk he did not kill, he made his slaves.  Their misery is his delight.\n\nYears have passed.  Deep in his underground den, he and his minions exult in the spoils of their wicked deeds.  They revel in human suffering.\n\nYou fled when you were young.  You grew strong.  The time has come to rid the land of his dominion.]
+[AsterionDefeated] [As you slay the last of his servants, Asterion himself draws near, bellowing laughter, pleased by the show.  He intones an ancient incantation.\n\nA shimmering portal appears.  He steps inside.  You have driven the minotaur away!  There is peace again in Hallemot!\n\nYes, there is peace again.  For now.]
+
 ; Classes.
 [FIGHTER]    [A mighty warrior of unparalleled strength and vigor, honorable in battle, high master of hack-n-slash melee.\n\nThe best choice for new players.]
 [WIZARD]     [A wise sage, knower of secrets, worker of miracles, master of the arcane arts, maker of satisfactory mixed drinks.\n\nCan cast spells rapidly - use his mystic powers as often as possible.]
@@ -218,12 +222,12 @@ Field Int BuffVal
 Field String Effect
 Field String EffectVal
 
-; ID          Sprite        Duration Buff      BV Effect             EV
+; ID          Sprite        Duration Buff      BV Effect              EV
 GREEN_POTION  green_potion  120      attack     3
-PURPLE_POTION purple_potion 120      []         0 [damage multipler] 2
+PURPLE_POTION purple_potion 120      []         0 [damage multiplier] 2
 BLUE_POTION   blue_potion   120      defense    3
 YELLOW_POTION yellow_potion 120      speed      3
-RED_POTION    red_potion    0        []         0 heal               full
+RED_POTION    red_potion    0        []         0 heal                full
 ";		embedFile = StatsFile.loadFromString( "potions.txt", embedText );		embedText = "Field String ID
 Field Int Level
 Field Int DamageMin
@@ -387,4 +391,142 @@ MINOTAUR        [Minotaur]
 
 ; Misc.
 
-CHEST           [Chest]";		embedFile = StatsFile.loadFromString( "strings.txt", embedText );	}}
+CHEST           [Chest]
+
+; Statistics
+[attack]        [attack]
+[defense]       [defense]
+[life]          [life]
+[vitality]      [vitality]
+[speed]         [speed]
+[spirit]        [spirit]
+
+; Special effects
+[damage multiplier] [damage multiplier]
+[charm]             [charm]
+[fear]              [fear]
+[sleep]             [sleep]
+[heal]              [heal]
+
+; Ingame messages.
+STAT_HEALTH          [Health]
+STAT_ATTACK          [Attack]
+STAT_DEFENSE         [Defense]
+STAT_LIFE            [Life]
+STAT_VITALITY        [Vitality]
+STAT_SPEED           [Speed]
+STAT_SPIRIT          [Spirit]
+
+PREFIX_SUPERB        [Superb]
+PREFIX_WONDROUS      [Wondrous]
+PREFIX_MAGICAL       [Magical]
+
+UI_LEVEL             [Level]
+UI_TIMES             [x]
+UI_FLOOR             [Floor]
+UI_MAP               [Map]
+UI_INV               [Inv]
+UI_CHAR              [Char]
+UI_DAMAGE            [Damage]
+UI_DESTROY           [Destroy]
+
+POPUP_C              [(hotkey C)]
+POPUP_I              [(hotkey I)]
+POPUP_M              [(hotkey M)]
+POPUP_0              [(hotkey 0)]
+POPUP_1              [(hotkey 1)]
+POPUP_2              [(hotkey 2)]
+POPUP_3              [(hotkey 3)]
+POPUP_4              [(hotkey 4)]
+POPUP_5              [(hotkey 5)]
+POPUP_6              [(hotkey 6)]
+POPUP_7              [(hotkey 7)]
+POPUP_8              [(hotkey 8)]
+POPUP_9              [(hotkey 9)]
+POPUP_ENTER          [(hotkey enter)]
+POPUP_ESC            [(hotkey ESC)]
+POPUP_F1             [(hotkey F1)]
+
+POPUP_RECOVERED      [recovered]
+POPUP_EXPIRED        [wears off]
+POPUP_MIRROR         [Mirror]
+POPUP_MIRROR_EXPIRED [Shattered]
+POPUP_INVIS_EXPIRED  [Reappeared]
+POPUP_EFFECT_EXPIRED [runs out]
+POPUP_INVIS_BREAK1   [An invisible]
+POPUP_INVIS_BREAK2   [appears!]
+POPUP_INVIS_BROKEN   [You reappear]
+POPUP_BACKSTAB       [Backstab!]
+POPUP_BUMP1          [You stumble into an invisible]
+POPUP_BUMP2          [.]
+POPUP_BUMPED         [You have been discovered!]
+POPUP_INVIS          [Vanished]
+POPUP_HEALED         [Healed]
+POPUP_CHARM          [Charm]
+POPUP_FEAR           [Fear]
+POPUP_SLEEP          [Sleep]
+POPUP_POLYMORPH      [Morph]
+POPUP_COIN           [coin]
+POPUP_COINS          [coins]
+
+NOTIFY_INV_FULL      [Inventory is full!]
+NOTIFY_STAIRS        [You have found the stairs!]
+NOTIFY_LATE_STAIRS   [At long last, the stairway down!]
+NOTIFY_EXPLORE       [Keep exploring!]
+NOTIFY_LATE_EXPLORE  [Head for the stairs!]
+NOTIFY_DOWNSTAIRS    [Click to go downstairs]
+NOTIFY_PICK_SPACE1   [Select a space for your]
+NOTIFY_PICK_SPACE2   [spell]
+NOTIFY_PICK_TARGET1  [Select a target for your]
+NOTIFY_PICK_TARGET2  [spell]
+NOTIFY_GET_FIRST     [I've been wanting one of these.]
+NOTIFY_GET_DUPLICATE [I already have one just like this.]
+NOTIFY_GET_SELLOLD1  [I will sell my old]
+NOTIFY_GET_SELLOLD2  [ now.]
+NOTIFY_GET_SELLNEW1  [Ha! Not half as good as my]
+NOTIFY_GET_SELLNEW2  [.]
+NOTIFY_GET_STASHOLD1 [I'll keep my old]
+NOTIFY_GET_STASHOLD2 [ in my bag.]
+NOTIFY_GET_REDUNDANT [I've got better in my bag.]
+NOTIFY_GET_STASHNEW1 [I'll put this]
+NOTIFY_GET_STASHNEW2 [ in my bag.]
+NOTIFY_EMPTYCELL     [Use an empty cell to swap items!]
+
+LOG_YOU_HIT          [You hit]
+LOG_HIT_YOU          [Hit you]
+LOG_YOU_KILL         [You kill]
+LOG_KILLS_YOU        [kills you]
+LOG_YOU_MISS         [You miss]
+LOG_MISS_YOU         [Misses you]
+LOG_EFFECT           [Applied special effect:]
+LOG_XP1              [gained]
+LOG_XP2              [xp]
+LOG_EXPIRED_TIMER    [removed expired timer:]
+LOG_POTION           [Using potion]
+
+; UI - Menu
+MENU_NEW_GAME        [New Game]
+MENU_RESUME_GAME     [Resume Game]
+MENU_CREDITS         [Credits]
+MENU_QUIT            [Quit]
+MENU_MUSIC           [Music]
+MENU_SOUND           [Sound]
+MENU_COPYRIGHT       [Copyright 2011]
+MENU_PORTEDBY        [Ported by]
+MENU_VERSION         [Version]
+MENU_STANDALONE      [Get stand-alone version at]
+
+MENU_HIGHSCORES      [Highscores]
+
+MENU_CREATECHARACTER [Create Character]
+MENU_START           [Start]
+MENU_MENU            [Menu]
+MENU_MAIN_MENU       [Main Menu]
+MENU_HELP            [Help]
+MENU_GAME_OVER       [Game over]
+
+PRELOADER1           [Hi there!  It looks like somebody copied this game without my permission.  Just click anywhere, or copy-paste this URL into your browser.\n\n]
+PRELOADER2           [\n\nto play the game at my site.  Thanks, and have fun!]
+
+DEMO_OVER            [Demo Over!]
+DEMO_OVER_MORE       [Want more?]";		embedFile = StatsFile.loadFromString( "strings.txt", embedText );	}}

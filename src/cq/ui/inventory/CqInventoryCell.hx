@@ -1,5 +1,6 @@
 package cq.ui.inventory;
 
+import data.Resources;
 import haxel.HxlDialog;
 import haxel.HxlSprite;
 import haxel.HxlText;
@@ -98,7 +99,7 @@ class CqInventoryCell extends HxlDialog {
 		icon.x += 13;
 		icon.y += 3;
 			
-		var droptext:HxlText = new HxlText(-5, 35, Std.int(width), "Destroy");
+		var droptext:HxlText = new HxlText(-5, 35, Std.int(width), Resources.getString("UI_DESTROY"));
 		droptext.setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101);
 		droptext.zIndex = 10;
 		droptext.setAlpha(0.3);

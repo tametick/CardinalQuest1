@@ -32,6 +32,7 @@ import cq.ui.CqTextNotification;
 import cq.ui.CqSpellGrid;
 import cq.ui.inventory.CqInventoryItem;
 import cq.ui.inventory.CqInventoryItemManager;
+import data.Resources;
 import flash.display.BitmapData;
 import flash.display.Shape;
 import flash.events.Event;
@@ -236,11 +237,11 @@ class GameUI extends HxlDialog {
 		// map
 		btnMapView = new HxlButton(0, 0, btnSize, btnSize);
 		btnMapView.loadGraphic(mapBtn,mapBtnHigh);
-		btnMapView.loadText(new HxlText(0, 40, btnSize, "Map", true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
+		btnMapView.loadText(new HxlText(0, 40, btnSize, Resources.getString( "UI_MAP" ), true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
 		btnMapView.setCallback(showMapDlg);
 		btnMapView.configEvent(5, true, true);
 		leftButtons.addButton(btnMapView);
-		pop = new CqPopup(100, "\n[hotkey M]", popups);
+		pop = new CqPopup(100, "\n" + Resources.getString( "POPUP_M" ), popups);
 		pop.zIndex = 15;
 		btnMapView.setPopup(pop);
 		popups.add(pop);
@@ -248,22 +249,22 @@ class GameUI extends HxlDialog {
 		// inv
 		btnInventoryView = new HxlButton(0, 0, btnSize, btnSize);
 		btnInventoryView.loadGraphic(invBtn,invBtnHigh);
-		btnInventoryView.loadText(new HxlText(0, 40, btnSize, "Inv", true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
+		btnInventoryView.loadText(new HxlText(0, 40, btnSize, Resources.getString( "UI_INV" ), true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
 		btnInventoryView.setCallback(showInvDlg);
 		btnInventoryView.configEvent(5, true, true);
 		leftButtons.addButton(btnInventoryView);
-		pop = new CqPopup(100, "\n[hotkey I]", popups);
+		pop = new CqPopup(100, "\n" + Resources.getString( "POPUP_I" ), popups);
 		pop.zIndex = 15;
 		btnInventoryView.setPopup(pop);
 		popups.add(pop);
 		// stats
 		btnCharacterView = new HxlButton(0, 0, btnSize, btnSize);
 		btnCharacterView.loadGraphic(charBtn,charBtnHigh);
-		btnCharacterView.loadText(new HxlText(0, 40, btnSize, "Char", true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
+		btnCharacterView.loadText(new HxlText(0, 40, btnSize, Resources.getString( "UI_CHAR" ), true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
 		
 		btnCharacterView.setCallback(showCharDlg);
 		btnCharacterView.configEvent(5, true, true);
-		pop = new CqPopup(100, "\n[hotkey C]", popups);
+		pop = new CqPopup(100, "\n" + Resources.getString( "POPUP_C" ), popups);
 		pop.zIndex = 15;
 		btnCharacterView.setPopup(pop);
 		popups.add(pop);
@@ -499,7 +500,7 @@ class GameUI extends HxlDialog {
 		var heart = new HeartSprite();
 		heart.x -= 2;
 		heart.y += 3;
-		var lives = new HxlText(heart.x + heart.width-6, 0, Std.int(infoViewHearts.width - heart.width), "x" + player.lives, true, FontAnonymousPro.instance.fontName);
+		var lives = new HxlText(heart.x + heart.width-6, 0, Std.int(infoViewHearts.width - heart.width), Resources.getString( "UI_TIMES" ) + player.lives, true, FontAnonymousPro.instance.fontName);
 		player.infoViewLives = lives;
 		
 		//coins
@@ -519,14 +520,14 @@ class GameUI extends HxlDialog {
 		add(infoViewHearts);
 
 		//level info
-		infoViewLevel = new HxlText(infoViewXpBar.x, infoViewHearts.y + infoViewHearts.height - 2, Std.int(btnInfoView.width), "Level " + player.level, true, FontAnonymousPro.instance.fontName);
+		infoViewLevel = new HxlText(infoViewXpBar.x, infoViewHearts.y + infoViewHearts.height - 2, Std.int(btnInfoView.width), Resources.getString( "UI_LEVEL" ) + " " + player.level, true, FontAnonymousPro.instance.fontName);
 		infoViewLevel.zIndex = zIndex+1;
 		player.infoViewLevel = infoViewLevel;
 		infoViewLevel.setSize(fontSize);
 		infoViewLevel.scrollFactor.x = infoViewLevel.scrollFactor.y = 0;
 		add(infoViewLevel);
 		
-		infoViewFloor = new HxlText(infoViewXpBar.x, infoViewLevel.y + infoViewLevel.height-4, Std.int(btnInfoView.width), "Floor " + (level.index+1), true, FontAnonymousPro.instance.fontName);
+		infoViewFloor = new HxlText(infoViewXpBar.x, infoViewLevel.y + infoViewLevel.height-4, Std.int(btnInfoView.width), Resources.getString( "UI_FLOOR" ) + " " + (level.index+1), true, FontAnonymousPro.instance.fontName);
 		infoViewFloor.zIndex = zIndex+1;
 		player.infoViewFloor = infoViewFloor;
 		infoViewFloor.setSize(fontSize);
@@ -853,9 +854,9 @@ class GameUI extends HxlDialog {
 		isTargetingEmptyTile = TargetsEmptyTile; 
 		if ( TargetText != null ) {
 			if (TargetsEmptyTile) {
-				targetString = "Select a space for your " + TargetText + " spell";
+				targetString = Resources.getString( "NOTIFY_PICK_SPACE1" ) + " " + TargetText + " " + Resources.getString( "NOTIFY_PICK_SPACE2" );
 			} else {
-				targetString = "Select a target for your " + TargetText + " spell";
+				targetString = Resources.getString( "NOTIFY_PICK_TARGET1" ) + " " + TargetText + " " + Resources.getString( "NOTIFY_PICK_TARGET1" );
 			}
 		}
 		if ( !Toggle ) {

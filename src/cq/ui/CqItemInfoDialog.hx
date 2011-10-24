@@ -79,13 +79,13 @@ class CqItemInfoDialog extends HxlDialog {
       var statStr:String = "";
       // display weapon damage
       if ( _item.damage.end > 0 ) {
-        statStr += "" + _item.damage.start + " - " + _item.damage.end + " Damage\n";
+        statStr += "" + _item.damage.start + " - " + _item.damage.end + " " + Resources.getString( "UI_DAMAGE" ) + "\n";
       }
       // display special effects
       if ( _item.specialEffects.length > 0 ) {
         var str = "";
         for ( effect in _item.specialEffects ) {
-          str += "" + effect.value + " " + effect.name + "\n";
+          str += "" + effect.value + " " + Resources.getString( effect.name ) + "\n";
         }
         statStr += str;
       }
@@ -94,7 +94,7 @@ class CqItemInfoDialog extends HxlDialog {
         var str = "";
         for ( key in _item.buffs.keys() ) {
           if ( _item.buffs.get(key) > 0 ) str += "+";
-          var keyname:String = key.substr(0,1).toUpperCase() + key.substr(1);
+          var keyname:String = Resources.getString( "STAT_" + key.toUpperCase() );
           str += "" + _item.buffs.get(key) + " " + keyname + "\n";
         }
         statStr += str;

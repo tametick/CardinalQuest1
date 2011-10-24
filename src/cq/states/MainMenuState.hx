@@ -5,6 +5,7 @@ import cq.CqResources;
 import cq.CqWorld;
 import cq.GameUI;
 import cq.Main;
+import data.Resources;
 import data.SoundEffectsManager;
 import data.Configuration;
 import flash.events.MouseEvent;
@@ -134,7 +135,7 @@ class MainMenuState extends CqState {
 			textColor = 0xffffff;
 			textHighlight = 0xffff00;
 
-			var btnResumeGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Resume Game");
+			var btnResumeGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, Resources.getString( "MENU_RESUME_GAME" ) );
 			btnResumeGame.setNormalFormat(null, 35, textColor, "center");
 			btnResumeGame.setHoverFormat(null, 35, textHighlight, "center");
 			menu.addItem(btnResumeGame);
@@ -146,7 +147,7 @@ class MainMenuState extends CqState {
 			SoundEffectsManager.play(MenuItemMouseOver);
 		};
 
-		var btnNewGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "New Game", true, null);
+		var btnNewGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, Resources.getString( "MENU_NEW_GAME" ), true, null);
 		btnNewGame.setNormalFormat(null, 35, textColor, "center");
 		btnNewGame.setHoverFormat(null, 35, textHighlight, "center");
 		menu.addItem(btnNewGame);
@@ -156,7 +157,7 @@ class MainMenuState extends CqState {
 
 		if ( stackId == 0 ) {
 			var sFadeTime = .5;
-			var btnCredits:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Credits", true, null);
+			var btnCredits:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, Resources.getString( "MENU_CREDITS" ), true, null);
 			btnCredits.setNormalFormat(null, 35, textColor, "center");
 			btnCredits.setHoverFormat(null, 35, textHighlight, "center");
 			menu.addItem(btnCredits);
@@ -190,7 +191,7 @@ class MainMenuState extends CqState {
 			} */
 		}
 		if (Configuration.standAlone) {
-			var btnQuit:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Quit", true, null);
+			var btnQuit:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, Resources.getString( "MENU_QUIT" ), true, null);
 			btnQuit.setNormalFormat(null, 35, textColor, "center");
 			btnQuit.setHoverFormat(null, 35, textHighlight, "center");
 			menu.addItem(btnQuit);
@@ -225,7 +226,7 @@ class MainMenuState extends CqState {
 		var musicWidth = 70;
 		btnToggleMusic = new HxlButton(Configuration.app_width-musicWidth, 0,musicWidth, 20, toggleMusic, 0, 0);
 		btnToggleMusic.add(tglMusicIcon);
-		musicText = new HxlText(0, 3, 100, "Music", true, FontAnonymousPro.instance.fontName, 14);
+		musicText = new HxlText(0, 3, 100, Resources.getString( "MENU_MUSIC" ), true, FontAnonymousPro.instance.fontName, 14);
 		btnToggleMusic.loadText(musicText);
 		setMusic(HxlState.musicOn);
 		add(btnToggleMusic);
@@ -236,12 +237,12 @@ class MainMenuState extends CqState {
 
 		btnToggleSFX = new HxlButton(Std.int(btnToggleMusic.x), Std.int(btnToggleMusic.y+btnToggleMusic.height), musicWidth, 20, toggleSFX, 0, 0);
 		btnToggleSFX.add(tglSFXIcon);
-		sfxText = new HxlText(0, 3, 100, "Sound", true, FontAnonymousPro.instance.fontName, 14);
+		sfxText = new HxlText(0, 3, 100, Resources.getString( "MENU_SOUND" ), true, FontAnonymousPro.instance.fontName, 14);
 		btnToggleSFX.loadText(sfxText);
 		setSFX(HxlState.sfxOn);
 		add(btnToggleSFX);
 
-		var copyright = new HxlText(375, 459, Configuration.app_width - 375 - 123, "Copyright 2011", true, FontAnonymousPro.instance.fontName, 18);
+		var copyright = new HxlText(375, 459, Configuration.app_width - 375 - 123, Resources.getString( "MENU_COPYRIGHT" ), true, FontAnonymousPro.instance.fontName, 18);
 		add(copyright);
 
 		//Adding porter for ios, I guess android will want to do the same
@@ -251,10 +252,10 @@ class MainMenuState extends CqState {
 			copyrightLink = new HxlText(copyright.x+copyright.width, 459, 123, "Ido Yehieli", true, FontAnonymousPro.instance.fontName, 18);
 			add(copyrightLink);
 
-			var portedBy = new HxlText(430, copyright.y-copyright.height, 260, "Ported by Tom Demuyt", true, FontAnonymousPro.instance.fontName, 18);
+			var portedBy = new HxlText(430, copyright.y-copyright.height, 260, Resources.getString( "MENU_PORTEDBY" ) + " Tom Demuyt", true, FontAnonymousPro.instance.fontName, 18);
 			add(portedBy);
 
-			var version = new HxlText(Configuration.app_width-130-2, portedBy.y-portedBy.height, 130, "Version " + Configuration.version, true, FontAnonymousPro.instance.fontName, 18);
+			var version = new HxlText(Configuration.app_width-130-2, portedBy.y-portedBy.height, 130, Resources.getString( "MENU_VERSION" ) + " " + Configuration.version, true, FontAnonymousPro.instance.fontName, 18);
 			add(version);
 
 		} else {
@@ -263,12 +264,12 @@ class MainMenuState extends CqState {
 			copyrightLink.setUnderlined();
 			add(copyrightLink);
 
-			var version = new HxlText(Configuration.app_width-130-2, copyright.y-copyright.height, 130, "Version " + Configuration.version, true, FontAnonymousPro.instance.fontName, 18);
+			var version = new HxlText(Configuration.app_width-130-2, copyright.y-copyright.height, 130, Resources.getString( "MENU_VERSION" ) + " " + Configuration.version, true, FontAnonymousPro.instance.fontName, 18);
 			add(version);
 		}
 
 		if(!Configuration.standAlone && !Configuration.mobile){
-			var findOut = new HxlText(0, 0, 260 , "Get stand-alone version at ", true, FontAnonymousPro.instance.fontName, 18);
+			var findOut = new HxlText(0, 0, 260 , Resources.getString( "MENU_STANDALONE" ) + " ", true, FontAnonymousPro.instance.fontName, 18);
 			add(findOut);
 			gamePageLink = new HxlText(findOut.x + findOut.width, 0, 172, "CardinalQuest.com", true, FontAnonymousPro.instance.fontName, 18, 0x77D2FF);
 			gamePageLink.setUnderlined();

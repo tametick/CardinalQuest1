@@ -5,6 +5,7 @@ package cq.ui.inventory;
 
 import cq.GameUI;
 import cq.states.GameState;
+import data.Resources;
 import data.SoundEffectsManager;
 import data.Registery;
 import flash.display.BitmapData;
@@ -269,7 +270,7 @@ class CqInventoryItem extends HxlSprite {
 			return false;
 		}*/
 		SoundEffectsManager.play(SpellEquipped);
-		popup.setText(item.fullName+"\n[hotkey " + (Cell + 1) + "]");
+		popup.setText(item.fullName+"\n" + Resources.getString( "POPUP_" + (Cell + 1)) );
 		addToDialog(_dlg.dlgSpellGrid);
 		cellIndex = Cell;
 		setPos(_dlg.dlgSpellGrid.getCellItemPos(Cell));
@@ -311,7 +312,7 @@ class CqInventoryItem extends HxlSprite {
 			return false;
 		}
 		SoundEffectsManager.play(PotionEquipped);
-		popup.setText(item.fullName+"\n[hotkey " + ((Cell>3)?Cell-4:Cell + 6) + "]");
+		popup.setText(item.fullName+"\n" + Resources.getString( "POPUP_" + ((Cell>3)?Cell-4:Cell + 6)));
 		addToDialog(_dlg.dlgPotionGrid);
 		cellIndex = Cell;
 		setPos(_dlg.dlgPotionGrid.getCellItemPos(Cell));
@@ -385,7 +386,7 @@ class CqInventoryItem extends HxlSprite {
 				if(dragStop_cell_obj == this) {
 					stopdrag_gotoSameCell(dragStopCell_class, dragStopCell);
 				} else {
-					GameUI.showTextNotification("Use an empty cell to swap items!", 0xFFFFFF);
+					GameUI.showTextNotification(Resources.getString( "NOTIFY_EMPTYCELL" ), 0xFFFFFF);
 					stopdrag_revert(); // gotoOccupiedCell simply doesn't work.  Pity.
 					// stopdrag_gotoOccupiedCell(dragStopCell_class, dragStopCell,dragStop_cell_obj);
 				}

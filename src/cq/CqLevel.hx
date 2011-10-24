@@ -361,9 +361,9 @@ class CqLevel extends Level {
 		super.foundStairs(magically);
 		if (!magically) {
 			if (getExplorationProgress() > .8) {
-				GameUI.showTextNotification("At long last, the stairway down!", 0xFFFFFF);
+				GameUI.showTextNotification(Resources.getString( "NOTIFY_LATE_STAIRS" ), 0xFFFFFF);
 			} else {
-				GameUI.showTextNotification("You have found the stairs!", 0xFFFFFF);
+				GameUI.showTextNotification(Resources.getString( "NOTIFY_STAIRS" ), 0xFFFFFF);
 			}
 		}
 	}
@@ -411,9 +411,9 @@ class CqLevel extends Level {
 				mob.healthBar.setTween(true);
 				
 				if (stairsAreFound && getExplorationProgress() > .8) {
-					GameUI.showEffectText(mob, "Head for the stairs!", 0xFFEE33);
+					GameUI.showEffectText(mob, Resources.getString( "NOTIFY_LATE_EXPLORE" ), 0xFFEE33);
 				} else {
-					GameUI.showEffectText(mob, "Keep exploring!", 0xFFEE33);
+					GameUI.showEffectText(mob, Resources.getString( "NOTIFY_EXPLORE" ), 0xFFEE33);
 				}
 			}
 		}
@@ -452,7 +452,7 @@ class CqLevel extends Level {
 				// remove expired timers
 				for (t in expired) {
 					timers.remove(t);
-					HxlLog.append("removed expired timer: " + t.buffName);
+					HxlLog.append(Resources.getString( "LOG_EXPIRED_TIMER" ) + " " + t.buffName);
 				}
 				
 				expired = null;

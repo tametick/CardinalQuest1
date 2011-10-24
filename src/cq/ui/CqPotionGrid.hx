@@ -4,6 +4,7 @@ import cq.states.GameState;
 import cq.states.HelpState;
 import cq.states.MainMenuState;
 import cq.ui.inventory.CqInventoryGrid;
+import data.Resources;
 import data.SoundEffectsManager;
 import haxel.HxlButton;
 import haxel.HxlGraphics;
@@ -74,18 +75,18 @@ class CqPotionGrid extends CqInventoryGrid {
 		helpButton.configEvent(5, true, true);
 		menuButton.configEvent(5, true, true);
 		
-		helpButton.loadText(new HxlText(15, 32, btnSize, "Help", true).setFormat(FontDungeon.instance.fontName, 23, 0xffffff, "center", 0x010101));
+		helpButton.loadText(new HxlText(15, 32, btnSize, Resources.getString( "MENU_HELP" ), true).setFormat(FontDungeon.instance.fontName, 23, 0xffffff, "center", 0x010101));
 		helpButton.getText().angle = 90;
 		
-		menuButton.loadText(new HxlText(-14, 32, btnSize, "Menu", true).setFormat(FontDungeon.instance.fontName, 23, 0xffffff, "center", 0x010101));
+		menuButton.loadText(new HxlText(-14, 32, btnSize, Resources.getString( "MENU_MENU" ), true).setFormat(FontDungeon.instance.fontName, 23, 0xffffff, "center", 0x010101));
 		menuButton.getText().angle = -90;
 		
 		var pop:CqPopup;
-		pop = new CqPopup(150,"[hotkey ESC]", GameUI.instance.popups);
+		pop = new CqPopup(150,Resources.getString( "POPUP_ESC" ), GameUI.instance.popups);
 		pop.zIndex = 15;
 		menuButton.setPopup(pop);
 		GameUI.instance.popups.add(pop);
-		pop = new CqPopup(150,"[hotkey F1]", GameUI.instance.popups);
+		pop = new CqPopup(150,Resources.getString( "POPUP_F1" ), GameUI.instance.popups);
 		pop.zIndex = 15;
 		helpButton.setPopup(pop);
 		GameUI.instance.popups.add(pop);
