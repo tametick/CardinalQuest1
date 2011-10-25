@@ -57,6 +57,7 @@ class GameState extends CqState {
 	var gameUI:GameUI;
 	public var chosenClass:String;
 	public var isPlayerActing:Bool;
+	public var justOpenedDoor:Bool;
 	public var resumeActingTime:Float;//time till when acting is blocked
 	public var started:Bool;
 	var lastMouse:Bool;
@@ -277,7 +278,7 @@ class GameState extends CqState {
 		return false;
 	}
 	
-	public function passTurn() {
+	public function passTurn( _halfTurn:Bool = false ) {
 		var player = Registery.player;
 		var level = Registery.level;
 
@@ -285,7 +286,7 @@ class GameState extends CqState {
 		
 		player.actionPoints = 0;
 
-		while (player.actionPoints < 60) {
+		while (player.actionPoints < (_halfTurn ? 30 : 60)) {
 			level.tick(this);
 		}
 		
@@ -584,6 +585,8 @@ class GameState extends CqState {
 		var player = Registery.player;
 		var tile = getPlayerTile(facing);
 
+		justOpenedDoor = false;
+		
 		if (tile == null) {
 			return false;
 		} else if ( !isBlockingMovement(facing) || (Configuration.debugMoveThroughWalls && Configuration.debug)) {
@@ -600,7 +603,8 @@ class GameState extends CqState {
 		} else if (HxlUtil.contains(SpriteTiles.doors.iterator(), tile.getDataNum())) {
 			// would be great to tell player to open the door, wouldn't it just?
 			openDoor(tile);
-			resumeActingTime = Timer.stamp() + player.moveSpeed;
+			justOpenedDoor = true;
+			resumeActingTime = Timer.stamp() + 1.5*player.moveSpeed;
 			
 			return true;
 		} else {
@@ -856,7 +860,7 @@ class GameState extends CqState {
 
 			isPlayerActing = moved;
 			if (moved) {
-				passTurn();
+				passTurn( justOpenedDoor );
 			}
 		}
 	}
