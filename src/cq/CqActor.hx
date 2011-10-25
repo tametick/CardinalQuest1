@@ -1441,45 +1441,7 @@ class CqPlayer extends CqActor, implements Player {
 		infoViewHealthBar.updateValue();
 		centralHealthBar.updateValue();
 	}
-	
-	public override function actInDirection(state:HxlState, targetTile:HxlPoint):Bool {
-		var oldx = tilePos.x, oldy = tilePos.y;
-		var currentTile = getTile();
-		if ( currentTile.loots.length > 0 ) {
-			var item = cast(currentTile.loots[currentTile.loots.length - 1], CqItem);
-			item.setGlow(false);
-		}
-		if (super.actInDirection(state, targetTile)) {
-			lastTile = new HxlPoint(oldx, oldy);
-			return true;
-		} else {
-			return false;
-		}
-	}
 
-	public override function moveStop() {
-		super.moveStop();
-		var xx = Std.int(tilePos.x);
-		var yy = Std.int(tilePos.y);
-		var currentTile = cast(Registery.level.getTile(xx, yy), Tile);
-		if ( currentTile.loots.length > 0 ) {
-			var item = cast(currentTile.loots[currentTile.loots.length - 1], CqItem);
-			item.setGlow(true);
-		}
-	}
-
-	public override function moveToPixel(state:HxlState, X:Float, Y:Float) {
-		if ( lastTile != null ) {
-			if ( Registery.level.getTile(Std.int(lastTile.x), Std.int(lastTile.y)) != null ) {
-				var tile = cast(Registery.level.getTile(Std.int(lastTile.x), Std.int(lastTile.y)), Tile);
-				if ( tile.loots.length > 0 ) {
-					for ( item in tile.loots ) cast(item, CqItem).setGlow(false);
-				}
-			}
-		}
-		super.moveToPixel(state, X, Y);
-	}
-	
 	public function rechargeSpells() {
 		for (spell in equippedSpells) {
 			if (spell != null) {

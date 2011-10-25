@@ -722,7 +722,9 @@ class GameUI extends HxlDialog {
 		
 		if ( curTile.loots.length > 0 ) {
 			var item = cast(curTile.loots[curTile.loots.length - 1], CqItem);
-			player.pickup(HxlGraphics.state, item);
+			if (!Std.is(item, CqChest)) {
+				player.pickup(HxlGraphics.state, item);
+			}
 		}
 	}
 	override public function onAdd(state:HxlState) {

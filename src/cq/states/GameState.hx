@@ -800,7 +800,9 @@ class GameState extends CqState {
 			if (tile.loots.length > 0) {
 				// there is an item here, so let's pick it up (this used to be manual?  crazy!)
 				var item = cast(tile.loots[tile.loots.length - 1], CqItem);
-				player.pickup(this, item);
+				if (!Std.is(item, CqChest)) {
+					player.pickup(this, item);
+				}
 				item = null;
 			} else if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tile.getDataNum())) {
 				// these are stairs!  time to descend -- but only if the key was JUST pressed
