@@ -1008,6 +1008,7 @@ class CqActor extends CqObject, implements Actor {
 			var pixelLocation = Registery.level.getPixelPositionOfTile(tile.mapX,tile.mapY);
 			setTilePos(Std.int(tile.mapX), Std.int(tile.mapY));
 			moveToPixel(HxlGraphics.state, pixelLocation.x, pixelLocation.y);
+			Registery.level.hideAll(HxlGraphics.state);
 			Registery.level.updateFieldOfView(HxlGraphics.state, true);
 			
 			pixelLocation = null;
@@ -1082,6 +1083,7 @@ class CqActor extends CqObject, implements Actor {
 			var pixelLocation = Registery.level.getPixelPositionOfTile(tileLocation.x,tileLocation.y);
 			setTilePos(Std.int(tileLocation.x), Std.int(tileLocation.y));
 			moveToPixel(HxlGraphics.state, pixelLocation.x, pixelLocation.y);
+			Registery.level.hideAll(HxlGraphics.state);
 			Registery.level.updateFieldOfView(HxlGraphics.state,true);
 		case "polymorph":
 			other.specialEffects.set(effect.name, effect);
@@ -1487,6 +1489,7 @@ class CqPlayer extends CqActor, implements Player {
 		scaleVelocity.x = scaleVelocity.y = 0;
 		scale.x = scale.y = 1.0;
 		
+		level.hideAll(HxlGraphics.state);
 		level.updateFieldOfView(HxlGraphics.state, true);
 		level.restartExploration(1);
 		
@@ -1610,7 +1613,8 @@ class CqMob extends CqActor, implements Mob {
 		var best:Float = Registery.level.widthInTiles;
 		var target:CqActor = null;
 		
-		if (aware > 0 && faction != CqPlayer.faction) {
+		// If we know of the player and they have line of sight on us, attack 'em.
+		if (aware > 0 && faction != CqPlayer.faction && visible) {
 			target = Registery.player;
 			best = Math.abs(tilePos.x - target.tilePos.x) + Math.abs(tilePos.y - target.tilePos.y);
 			

@@ -272,6 +272,33 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		return blocked;
 	}
 
+	public function hideAll(state:HxlState) {
+		// Reset previously seen tiles.
+		var tile:Tile;		
+		for ( x in 0...widthInTiles-1 ) {
+			for ( y in 0...heightInTiles - 1) {
+				tile = getTile(x, y);
+				if ( tile.visibility == Visibility.IN_SIGHT ) {
+					tile.visibility = Visibility.SEEN;
+					tile.visAmount = 0.0;
+				}
+			}
+		}		
+
+		// Hide all mobs and loot..
+		for ( m in mobs ) {
+			cast(m, CqActor).setVisible( false );
+			var pop = cast(m, HxlSprite).getPopup();
+			if (pop != null)
+				pop.visible = false;
+			pop = null;
+		}
+		
+		for (loot in loots) {
+			cast(loot, HxlSprite).visible = false;
+		}		
+	}
+	
 	public function showAll(state:HxlState) {
 		for ( x in 0...widthInTiles-1 ) {
 			for ( y in 0...heightInTiles - 1) {
