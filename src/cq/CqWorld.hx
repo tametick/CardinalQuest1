@@ -97,7 +97,6 @@ class CqWorld extends World {
 		currentLevel.zIndex = -1;	
 		HxlGraphics.state.add(currentLevel);
 		currentLevel.updateFieldOfView(HxlGraphics.state,true);
-		doOnNewLevel();
 	}
 
 	static public function onActorAdded(Actor:CqActor) {
