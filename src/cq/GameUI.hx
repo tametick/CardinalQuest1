@@ -797,38 +797,77 @@ class GameUI extends HxlDialog {
 	}
 
 	public static function showDamageText(Actor:CqActor, Damage:Int) {
-		showEffectText(Actor, ""+Damage, 0xff2222);
+		showEffectText(Actor, ""+Damage, 0xff2222, true);
 	}
-	
-	static function effectDone() {
-		effectQueue.shift();
-		if (effectQueue.length > 0)
-			startEffectText(effectQueue.shift());
-	}
+
+	static var effectsActive:Array<CqFloatText> = new Array<CqFloatText>();
 	static var effectQueue:Array<CqFloatText> = new Array<CqFloatText>();
+	
 	static function startEffectText(txt:CqFloatText)
 	{
 		txt.InitSemiCustomTween(0.6, { y: txt.y - 20,alpha:0.5 }, effectDone);
 		txt.zIndex = 4;
 		HxlGraphics.state.add(txt);
 	}
-	public static function showEffectText(actor:CqActor, text:String, color:Int) {
+	
+	static function startAvailableEffects()
+	{
+		for ( e in effectQueue )
+		{
+			var matched:Bool = false;
+			for ( active in effectsActive ) {
+				if ( active.actor == e.actor ) {
+					matched = true;
+					break;
+				}
+			}
+			
+			if ( !matched ) {
+				startEffectText( e );
+				effectsActive.push( e );
+				effectQueue.remove( e );
+			}
+		}
+	}
+	
+	static function effectDone() {
+		for ( i in 0 ... effectsActive.length ) {
+			while ( i < effectsActive.length && effectsActive[i].dead ) {
+				effectsActive.remove( effectsActive[i] );
+			}
+		}
+
+		startAvailableEffects();
+	}
+	
+	public static function showEffectText(actor:CqActor, text:String, color:Int,immediate:Bool = false) {
 		if (Std.is(HxlGraphics.state, GameState) && cast(HxlGraphics.state, GameState).started) {
 			if (actor.visible) {
-				var fltxt:CqFloatText = new CqFloatText(actor.x + (actor.width / 2), actor.y - 16, text, color, 24, false);
-				effectQueue.push(fltxt);
-				if (effectQueue.length == 1 || effectQueue.length >3)
-					startEffectText(fltxt);
+				var fltxt:CqFloatText = new CqFloatText(actor, actor.x + (actor.width / 2), actor.y - 16, text, color, 24, false);
+				
+				if ( immediate ) {
+					startEffectText(fltxt); // Don't even *track* immediate texts. They'd block important ones.
+				} else {
+					effectQueue.push(fltxt);
+					startAvailableEffects();
+				}
 			}
 		}
 	}
 	
 	public static function clearEffectText() {
+		for ( e in effectsActive ) {
+			e.destroy();
+		}
+		
 		for ( e in effectQueue ) {
 			e.destroy();
 		}
 
+		effectsActive.splice( 0, effectsActive.length );
 		effectQueue.splice( 0, effectQueue.length );
+		
+		notifications.clear();
 	}
 
 	public static function showTextNotification(message:String, ?color:Int = 0xDE913A) {
