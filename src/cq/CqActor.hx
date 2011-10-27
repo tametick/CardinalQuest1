@@ -185,7 +185,6 @@ class CqActor extends CqObject, implements Actor {
 		}
 		visionRadius = 8.2;
 		
-		maxHp = vitality;
 		hp = maxHp;
 		
 		equippedSpells = new Array<CqSpell>();
@@ -917,6 +916,26 @@ class CqActor extends CqObject, implements Actor {
 		}		
 	}
 
+	public static function showBuff(actor:CqActor, val:Int, buffName:String, col:Int=0 ) {
+		var text = (val > 0?"+":"") + val + " " + Resources.getString( buffName );
+		
+		var c:Int = col;
+		if ( c == 0 ) {
+			switch(buffName) {
+				case "attack":
+					c = 0x4BE916;
+				case "defense":
+					c = 0x381AE6;
+				case "speed":
+					c = 0xEDD112;
+				default:
+					c = 0xFFFFFF;
+			}
+		}
+		
+		GameUI.showEffectText(actor, text, c);		
+	}
+	
 	// Called when a spell hits, even though the effects are applied immediately.
 	public static function completeUseOn(itemOrSpell:CqItem, actor:CqActor, victim:CqActor) {
 		var effectColorSource:BitmapData;
@@ -935,23 +954,11 @@ class CqActor extends CqObject, implements Actor {
 		// show buffs
 		if(itemOrSpell.buffs != null) {
 			for (buff in itemOrSpell.buffs.keys()) {
+				
 				var val = itemOrSpell.buffs.get(buff);
-				var text = (val > 0?"+":"") + val + " " + Resources.getString( buff );
 
 				if (victim == null) {
-					var c:Int;
-					switch(buff) {
-						case "attack":
-							c = 0x4BE916;
-						case "defense":
-							c = 0x381AE6;
-						case "speed":
-							c = 0xEDD112;
-						default:
-							c = 0xFFFFFF;
-					}
-					
-					GameUI.showEffectText(actor, text, c);
+					showBuff(actor, val, buff);
 					
 					//special effect
 					var eff:CqEffectSpell = new CqEffectSpell(actor.x+actor.width/2, actor.y+actor.width/2, effectColorSource);
@@ -960,7 +967,7 @@ class CqActor extends CqObject, implements Actor {
 					eff.start(true, 1.0, 10);
 				} else {
 					// apply to victim
-					GameUI.showEffectText(victim, text, 0xff8822);
+					showBuff(victim, val, buff, 0xff8822);
 				}
 			}
 		}
@@ -1087,7 +1094,7 @@ class CqActor extends CqObject, implements Actor {
 			Registery.level.updateFieldOfView(HxlGraphics.state,true);
 		case "polymorph":
 			other.specialEffects.set(effect.name, effect);
-			GameUI.showEffectText(other, Resources.getString( "POPUP_MORPH" ), 0xA81CE3);
+			GameUI.showEffectText(other, Resources.getString( "POPUP_POLYMORPH" ), 0xA81CE3);
 			var _se = other.specialEffects;
 			var hppart:Float = other.hp / other.maxHp;
 			var mob = Registery.level.createAndaddMob(other.getTilePos(), Std.int(Math.random() * Registery.player.level), true);
@@ -1230,24 +1237,47 @@ class CqPlayer extends CqActor, implements Player {
 		onPickup.clear();
 	}
 	
+	public static function getStatsEntry(PlayerClass:String, Level:Int) : StatsFileEntry {
+		var classStats:StatsFile = Resources.statsFiles.get( "classStats.txt" );
+		
+		var entry:StatsFileEntry = null;
+		var bestLevel:Int = -1;
+		
+		for ( statsLine in classStats ) {
+			if ( statsLine.getField( "ID" ) == PlayerClass ) {
+				var statsLevel:Int = statsLine.getField( "Level" );
+				if ( statsLevel > bestLevel && statsLevel <= Level ) {
+					entry = statsLine;
+					bestLevel = statsLevel;
+				}
+			}
+		}
+		
+		return entry;
+	}
+	
 	public function new(PlayerClass:String, ?X:Float = -1, ?Y:Float = -1) {
+		super(X, Y);
+		
 		playerClassID = PlayerClass;
 		
 		var classes:StatsFile = Resources.statsFiles.get( "classes.txt" );
 		var classEntry:StatsFileEntry = classes.getEntry( "ID", PlayerClass );
+		var classStatsEntry:StatsFileEntry = getStatsEntry( PlayerClass, 1 );
 		
-		if ( classEntry != null ) {
+		if ( classEntry != null && classStatsEntry != null ) {
 			playerClassName = Resources.getString( PlayerClass );
 			playerClassSprite = classEntry.getField( "Sprite" );
 			
-			attack = classEntry.getField( "Attack" );
-			defense = classEntry.getField( "Defense" );
-			speed = classEntry.getField( "Speed" );
-			spirit = classEntry.getField( "Spirit" );
-			vitality = classEntry.getField( "Vitality" );
+			attack = classStatsEntry.getField( "Attack" );
+			defense = classStatsEntry.getField( "Defense" );
+			speed = classStatsEntry.getField( "Speed" );
+			spirit = classStatsEntry.getField( "Spirit" );
+			vitality = classStatsEntry.getField( "Vitality" );
+			hp = maxHp = classStatsEntry.getField( "HP" );
 			damage = new Range(1, 1);
 		} else {
-			throw( "Unknown class." );
+			throw( "Unknown class, or missing stats entry for level 1." );
 		}
 		
 		//Let Kongregate know, for now we only deal with "Normal" mode
@@ -1262,16 +1292,12 @@ class CqPlayer extends CqActor, implements Player {
 			spirit = 30;
 			Configuration.playerLives = 4;
 		}
-		super(X, Y);
 
 		lives = Configuration.playerLives;
 		money = 0;
 		for (s in 0...5)
 			equippedSpells[s] = null;
 		
-		maxHp = vitality * 2;
-		hp = maxHp;
-
 		addAnimation("idle", [sprites.getSpriteIndex(playerClassSprite)], 0 );
 		addAnimation("idle_dagger", [sprites.getSpriteIndex(playerClassSprite + "_dagger")], 0 );
 		addAnimation("idle_short_sword", [sprites.getSpriteIndex(playerClassSprite + "_short_sword")], 0 );
@@ -1434,7 +1460,38 @@ class CqPlayer extends CqActor, implements Player {
 		HxlLog.append(Resources.getString( "UI_LEVEL" ) + " " + level);
 		GameUI.showEffectText(this, Resources.getString( "UI_LEVEL" ) + " " + level, 0xFFFF66);
 		SoundEffectsManager.play(LevelUp);
-		maxHp += vitality;
+		
+		// Boost stats.
+		var oldStats:StatsFileEntry = getStatsEntry( playerClassID, level-1 );
+		var newStats:StatsFileEntry = getStatsEntry( playerClassID, level );
+
+		var attackBoost:Int = Std.int( newStats.getField( "Attack" ) - oldStats.getField( "Attack" ) );
+		var defenseBoost:Int = Std.int( newStats.getField( "Defense" ) - oldStats.getField( "Defense" ) );
+		var speedBoost:Int = Std.int( newStats.getField( "Speed" ) - oldStats.getField( "Speed" ) );
+		var spiritBoost:Int = Std.int( newStats.getField( "Spirit" ) - oldStats.getField( "Spirit" ) );
+		var hpBoost:Int = Std.int( newStats.getField( "HP" ) - oldStats.getField( "HP" ) );
+		
+		if ( attackBoost != 0 ) {
+			attack += attackBoost;
+			CqActor.showBuff( this, attackBoost, "attack" );
+		}
+		if ( defenseBoost != 0 ) {
+			defense += defenseBoost;
+			CqActor.showBuff( this, defenseBoost, "defense" );
+		}
+		if ( speedBoost != 0 ) {
+			speed += speedBoost;
+			CqActor.showBuff( this, speedBoost, "speed" );
+		}
+		if ( spiritBoost != 0 ) {
+			spirit += spiritBoost;
+			CqActor.showBuff( this, spiritBoost, "spirit" );
+		}
+		if ( hpBoost != 0 ) {
+			maxHp += hpBoost;
+			CqActor.showBuff( this, hpBoost, "life" );
+		}
+		
 		hp = maxHp;
 		updatePlayerHealthBars();
 	}

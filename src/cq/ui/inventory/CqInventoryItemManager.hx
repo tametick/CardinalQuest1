@@ -1,4 +1,5 @@
 package cq.ui.inventory;
+import cq.CqActor;
 import cq.CqGraphicKey;
 import cq.CqItem;
 import data.Registery;
@@ -113,6 +114,10 @@ class CqInventoryItemManager
 				//if slot was empty - equip
 				if (cell.getCellObj() == null) {
 					GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_FIRST" ), 0xBFE137);
+					// Show buffs.
+					for ( buffName in Item.buffs.keys() ) {
+						CqActor.showBuff( Registery.player, Item.buffs.get(buffName), buffName );
+					}
 					uiItem = equipItem(cell, Item, uiItem);
 					cell.getCellObj().updateIcon();
 					dlgInfo.setItem(Item);
@@ -127,6 +132,13 @@ class CqInventoryItemManager
 
 					if ( Item.makesRedundant( cell.getCellObj().item ) ) {
 						// Totally better than the old item.
+						// Show buffs.
+						for ( buffName in Item.buffs.keys() ) {
+							var buffAmt:Int = Item.buffs.get(buffName) - cell.getCellObj().item.buffs.get(buffName);
+							if ( buffAmt != 0 ) {
+								CqActor.showBuff( Registery.player, buffAmt, buffName );
+							}
+						}
 						var old:CqInventoryItem = equipItem(cell, Item, uiItem);
 						dlgInfo.setItem(Item);
 						
@@ -144,6 +156,20 @@ class CqInventoryItemManager
 						
 						if ( preference > 1 ) {
 							// Yep, let's equip it!
+							// (Show buffs first.)
+							var oldItemBuffs:Hash<Int> = cell.getCellObj().item.buffs;
+							for ( buffName in oldItemBuffs.keys() ) {
+								var buffAmt:Int = Item.buffs.get(buffName) - oldItemBuffs.get(buffName);
+								if ( buffAmt != 0 ) {
+									CqActor.showBuff( Registery.player, buffAmt, buffName );
+								}
+							}
+							for ( buffName in Item.buffs.keys() ) {
+								if ( !oldItemBuffs.exists( buffName ) ) {
+									CqActor.showBuff( Registery.player, Item.buffs.get(buffName), buffName );
+								}
+							}
+							
 							var old:CqInventoryItem = equipItem(cell, Item, uiItem);
 							dlgInfo.setItem(Item);
 							

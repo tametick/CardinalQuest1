@@ -78,6 +78,7 @@ class Main extends HxlGame {
 		
 		if( !Configuration.mobile ) {
 			StatsFile.loadFile( "classes.txt" );
+			StatsFile.loadFile( "classStats.txt" );
 			StatsFile.loadFile( "descriptions.txt" );
 			StatsFile.loadFile( "items.txt" );
 			StatsFile.loadFile( "mobs.txt" );
