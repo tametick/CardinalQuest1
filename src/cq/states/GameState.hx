@@ -78,7 +78,7 @@ class GameState extends CqState {
 		super.create();
 		lastMouse = started = endingAnim = false;
 		chosenClass = "FIGHTER";
-		HxlGraphics.keys.onJustPressed = onKeyJustPressed;
+//		HxlGraphics.keys.onJustPressed = onKeyJustPressed;
 		HxlGraphics.fade.start(false, 0x00000000, 0.25);
 
 		//loadingBox = new HxlLoadingBox();
@@ -517,7 +517,11 @@ class GameState extends CqState {
 			}
 		}
 
-		isPlayerActing = false;
+		if ( Registery.level.getTargetAccordingToKeyPress() == null )
+		{
+			isPlayerActing = false;
+		}
+		
 		if (Configuration.debug){
 			checkJumpKeys();
 			checkResetKeys();
@@ -572,9 +576,15 @@ class GameState extends CqState {
 
 		isPlayerActing = false;
 	}
-	function onKeyJustPressed(event:KeyboardEvent) {
-		if (!started || endingAnim || Timer.stamp() < resumeActingTime)
+
+	override function onKeyDown(event:KeyboardEvent) {
+		if (!started || endingAnim || Timer.stamp() < resumeActingTime) {
+			if ( Registery.level.getTargetAccordingToKeyPress() != null )
+			{
+				isPlayerActing = true;
+			}
 			return;
+		}
 		if(Registery.level != null && Timer.stamp() > resumeActingTime)
 			isPlayerActing = true;
 	}
