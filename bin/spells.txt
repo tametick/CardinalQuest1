@@ -29,7 +29,7 @@ HEAL             heal              0   0 spirit  1440 "" 0 "" 0 heal full
 ; Targets enemy.
 
 ; ID             Sprite           Tr Dur Stat   Pts. (B1 B1V B2 B2V Ef EfV)
-FREEZE           freeze            1  60 spirit  720 speed -3
+FREEZE           freeze            1  60 spirit  360 speed -4
 FIREBALL         fireball          1   0 spirit  360 
 ENFEEBLE_MONSTER enfeeble_monster  1  60 spirit  360 attack -3
 CHARM_MONSTER    charm_monster     1  60 spirit  720 "" 0 "" 0 charm

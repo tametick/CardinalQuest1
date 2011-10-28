@@ -284,6 +284,14 @@ class GameState extends CqState {
 
 		level.updateFieldOfView(this);
 		
+		// Update player minHP to prevent insta-kill.
+		var lifeBuff = player.buffs.get("life");
+		if ( player.hp + lifeBuff >= 0.5 * (player.maxHp + lifeBuff) ) {
+			player.minHp = HxlUtil.randomIntInRange( 1, Math.floor(0.25*(player.maxHp+lifeBuff)) );
+		} else {
+			player.minHp = 0;
+		}
+		
 		player.actionPoints = 0;
 
 		while (player.actionPoints < (_halfTurn ? 30 : 60)) {

@@ -76,6 +76,8 @@ class CqActor extends CqObject, implements Actor {
 	public var spirit:Int;
 	public var vitality:Int;
 	
+	public var minHp:Int; // Minimum HP is the furthest the actor can currently be hurt.
+	
 	// natural damage without weapon
 	public var damage:Range;
 	
@@ -186,6 +188,7 @@ class CqActor extends CqObject, implements Actor {
 		visionRadius = 8.2;
 		
 		hp = maxHp;
+		minHp = 0;
 		
 		equippedSpells = new Array<CqSpell>();
 		
@@ -361,6 +364,10 @@ class CqActor extends CqObject, implements Actor {
 	}
 	
 	public function applyTimerEffect(state:HxlState, t:CqTimer) {
+		if (dead) {
+			return;
+		}
+		
 		if (t.buffName != null) {
 			if (t.specialMessage != null) {
 				GameUI.showEffectText(this, t.specialMessage, t.messageColor);
@@ -533,6 +540,11 @@ class CqActor extends CqObject, implements Actor {
 				
 				// life buffs
 				var lif = other.hp + other.buffs.get("life");
+				
+				if ( lif < other.minHp ) {
+					other.hp += other.minHp - lif;
+					lif = other.minHp;
+				}
 				
 				if (lif <= 0 && stealthy && Std.is(other, CqPlayer)) {
 					dmgTotal = 1 - (other.hp + dmgTotal);
@@ -897,14 +909,11 @@ class CqActor extends CqObject, implements Actor {
 			itemOrSpell.lastDamage = dmg; // Stored for "completeUseOn" when spell visually hits.
 
 			// "Ghost" killed actors now so they can't act any more.
-			if (victim== null) {
-				var lif = actor.hp + actor.buffs.get("life");
-				if (lif - dmg <= 0)
-					actor.ghostActor(HxlGraphics.state,actor,dmg);
-			} else {
-				var lif = victim.hp + victim.buffs.get("life");
-				if (lif - dmg <= 0)
-					actor.ghostActor(HxlGraphics.state, victim, dmg);
+			var injured:CqActor = (victim == null) ? actor : victim;
+
+			var lif = injured.hp + injured.buffs.get("life");
+			if (lif - dmg <= 0 && injured.minHp <= 0) {
+				actor.ghostActor(HxlGraphics.state, injured, dmg);
 			}
 		}
 		
@@ -916,6 +925,11 @@ class CqActor extends CqObject, implements Actor {
 		}		
 	}
 
+	public static function showWeaponDamage(actor:CqActor, damage:Range) {
+		var text = "" + damage.start + " - " + damage.end + " " + Resources.getString("damage");
+		GameUI.showEffectText(actor, text, 0xff4422);		
+	}
+	
 	public static function showBuff(actor:CqActor, val:Int, buffName:String, col:Int=0 ) {
 		var text = (val > 0?"+":"") + val + " " + Resources.getString( buffName );
 		
@@ -983,20 +997,18 @@ class CqActor extends CqObject, implements Actor {
 		if (itemOrSpell.damage != null && itemOrSpell.damage.end>0 ) {
 			var dmg = itemOrSpell.lastDamage;
 			
-			if (victim== null) {
-				actor.hp -= dmg;
-				var lif = actor.hp + actor.buffs.get("life");
-				if (lif > 0 && !actor.isGhost)
-					actor.injureActor(HxlGraphics.state, actor, dmg);
-				else
-					actor.killActor(HxlGraphics.state,actor,dmg);
+			var injured:CqActor = (victim == null) ? actor : victim;
+			
+			injured.hp -= dmg;
+			var lif = injured.hp + injured.buffs.get("life");
+			if ( lif < injured.minHp ) {
+				injured.hp += injured.minHp - lif;
+				lif = injured.minHp;
+			}
+			if (lif > 0 && !injured.isGhost) {
+				actor.injureActor(HxlGraphics.state, injured, dmg);
 			} else {
-				victim.hp -= dmg;
-				var lif = victim.hp + victim.buffs.get("life");
-				if (lif > 0 && !victim.isGhost)
-					actor.injureActor(HxlGraphics.state, victim, dmg);
-				else
-					actor.killActor(HxlGraphics.state, victim, dmg);
+				actor.killActor(HxlGraphics.state, injured, dmg);
 			}
 		}
 		
@@ -1190,6 +1202,12 @@ class CqPlayer extends CqActor, implements Player {
 	public var infoViewLevel:HxlText;
 	public var infoViewFloor:HxlText;
 
+	public var prefDamage:Int;	
+	public var prefAttack:Int;	
+	public var prefDefense:Int;	
+	public var prefSpeed:Int;	
+	public var prefSpirit:Int;	
+	public var prefLife:Int;	
 	
 	public var xp:Int;
 	public var level:Int;
@@ -1265,9 +1283,21 @@ class CqPlayer extends CqActor, implements Player {
 		var classEntry:StatsFileEntry = classes.getEntry( "ID", PlayerClass );
 		var classStatsEntry:StatsFileEntry = getStatsEntry( PlayerClass, 1 );
 		
-		if ( classEntry != null && classStatsEntry != null ) {
+		if ( classEntry != null ) {
 			playerClassName = Resources.getString( PlayerClass );
 			playerClassSprite = classEntry.getField( "Sprite" );
+			
+			prefDamage = classEntry.getField( "DamagePref" );
+			prefAttack = classEntry.getField( "AttackPref" );
+			prefDefense = classEntry.getField( "DefensePref" );
+			prefSpeed = classEntry.getField( "SpeedPref" );
+			prefSpirit = classEntry.getField( "SpiritPref" );
+			prefLife = classEntry.getField( "LifePref" );
+		} else {
+			throw( "Unknown class." );
+		}
+			
+		if ( classStatsEntry != null ) {
 			
 			attack = classStatsEntry.getField( "Attack" );
 			defense = classStatsEntry.getField( "Defense" );
@@ -1277,7 +1307,7 @@ class CqPlayer extends CqActor, implements Player {
 			hp = maxHp = classStatsEntry.getField( "HP" );
 			damage = new Range(1, 1);
 		} else {
-			throw( "Unknown class, or missing stats entry for level 1." );
+			throw( "Missing class stats entry for level 1." );
 		}
 		
 		//Let Kongregate know, for now we only deal with "Normal" mode
@@ -1348,6 +1378,18 @@ class CqPlayer extends CqActor, implements Player {
 			
 			play("idle_" + weaponName);
 		}
+	}
+	
+	public function valueItem(Item:CqItem) : Float {
+		var valueItem:Float = prefDamage * (Item.damage.start + Item.damage.end) / 2;
+		
+		valueItem += prefAttack * Item.buffs.get("attack");
+		valueItem += prefDefense * Item.buffs.get("defense");
+		valueItem += prefSpeed * Item.buffs.get("speed");
+		valueItem += prefSpirit * Item.buffs.get("spirit");
+		valueItem += prefLife * Item.buffs.get("life");
+		
+		return valueItem;
 	}
 	
 	public function give(?item:CqItem, ?itemOrSpellID:String) {

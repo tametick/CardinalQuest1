@@ -2,11 +2,12 @@
 Field String Sprite
 Field Int Portrait
 Field String EntryBG
-Field Int Attack
-Field Int Defense
-Field Int Speed
-Field Int Spirit
-Field Int Vitality
+Field Int DamagePref
+Field Int AttackPref
+Field Int DefensePref
+Field Int SpeedPref
+Field Int SpiritPref
+Field Int LifePref
 Field String Item1
 Field String Item2
 Field String Item3
@@ -14,11 +15,49 @@ Field String Item4
 Field String Item5
 Field String Item6
 
-; ID    Sprite  Prt EntryBG            Atk Def Spd Spr Vit Items
-FIGHTER fighter   1 SpriteKnightEntry    5   2   3   1   4 SHORT_SWORD BERSERK     RED_POTION RED_POTION PURPLE_POTION
-WIZARD  wizard    2 SpriteWizardEntry    2   2   3   5   3 STAFF       FIREBALL    RED_POTION RED_POTION BLUE_POTION
-THIEF   thief     0 SpriteThiefEntry     3   3   5   3   2 DAGGER      SHADOW_WALK RED_POTION RED_POTION YELLOW_POTION GREEN_POTION
+; ID    Sprite  Prt EntryBG            Dmg Atk Def Spd Spr Lif Items
+FIGHTER fighter   1 SpriteKnightEntry   80 100 100  90  25  50 SHORT_SWORD BERSERK     RED_POTION RED_POTION PURPLE_POTION
+WIZARD  wizard    2 SpriteWizardEntry   25  50  50 200 300 100 STAFF       FIREBALL    RED_POTION RED_POTION BLUE_POTION
+THIEF   thief     0 SpriteThiefEntry    55 100  50 200  50  50 DAGGER      SHADOW_WALK RED_POTION RED_POTION YELLOW_POTION GREEN_POTION
 ";		embedFile = StatsFile.loadFromString( "classes.txt", embedText );		embedText = "Field String ID
+Field Int Level
+Field Int Attack
+Field Int Defense
+Field Int Speed
+Field Int Spirit
+Field Int Vitality
+Field Int HP
+
+; ID    Lvl Atk Def Spd Spr Vit HP
+FIGHTER   1   5   3   5   1   4 12
+FIGHTER   2   5   3   5   1   4 16
+FIGHTER   3   5   3   5   1   4 20
+FIGHTER   4   5   3   5   1   4 24
+FIGHTER   5   5   3   5   1   4 28
+FIGHTER   6   5   3   5   1   4 32
+FIGHTER   7   5   3   5   1   4 36
+FIGHTER   8   5   3   5   1   4 40
+FIGHTER   9   5   3   5   1   4 44
+
+WIZARD    1   2   2   6   4   2  8
+WIZARD    2   2   2   6   4   2 10
+WIZARD    3   2   2   6   4   2 12
+WIZARD    4   2   2   6   4   2 14
+WIZARD    5   2   2   6   4   2 16
+WIZARD    6   2   2   6   4   2 18
+WIZARD    7   2   2   6   4   2 20
+WIZARD    8   2   2   6   4   2 22
+WIZARD    9   2   2   6   4   2 24
+
+THIEF     1   3   3  10   3   3  6
+THIEF     2   3   3  10   3   3  9
+THIEF     3   3   3  10   3   3 12
+THIEF     4   3   3  10   3   3 15
+THIEF     5   3   3  10   3   3 18
+THIEF     6   3   3  10   3   3 21
+THIEF     7   3   3  10   3   3 24
+THIEF     8   3   3  10   3   3 27
+THIEF     9   3   3  10   3   3 30";		embedFile = StatsFile.loadFromString( "classStats.txt", embedText );		embedText = "Field String ID
 Field String Data
 
 ; Cutscenes!
@@ -125,7 +164,7 @@ TUNDRA_BOOTS    tundra_boots    SHOES     7  99 100    0    0 speed    2 defense
 LEATHER_ARMOR   leather_armor   ARMOR     1   1 100    0    0 defense  1
 BREASTPLATE     breastplate     ARMOR     2   3 100    0    0 defense  2
 CLOAK           cloak           ARMOR     5   6 100    0    0 defense  2 speed    2
-FULL_PLATE_MAIL full_plate_mail ARMOR     7  99 100    0    0 defense  3
+FULL_PLATE_MAIL full_plate_mail ARMOR     7  99 100    0    0 defense  4
 
 ; ID            Sprite          Slot    Lv- Lv+ Wgt Dmg- Dmg+ Buff1   V1 Buff2   V2 
 RING            ring            JEWELRY   2   3 100    0    0 spirit   1
@@ -147,7 +186,7 @@ GAUNTLET        gauntlet        GLOVES    6   7 100    0    0 attack   2 defense
 ; ID            Sprite          Slot    Lv- Lv+ Wgt Dmg- Dmg+ Buff1   V1 Buff2   V2 
 DAGGER          dagger          WEAPON    1   1 100    1    2
 SHORT_SWORD     short_sword     WEAPON    1   2 100    1    3
-STAFF           staff           WEAPON    2   3 100    1    3
+STAFF           staff           WEAPON    2   3 100    1    3 spirit   1
 LONG_SWORD      long_sword      WEAPON    3   4 100    2    4
 AXE             axe             WEAPON    4   5 100    4    6
 BATTLE_AXE      battle_axe      WEAPON    5   6 100    5   12 speed   -2
@@ -171,49 +210,49 @@ Field String Spell1
 Field String Spell2
 
 ; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Bandit        1 bandit_long_swords       BANDIT_CAPTAIN       2   2   4  30  2  3  1  1   5
-Bandit        1 bandit_short_swords      BANDIT               2   2   2  30  4  6  1  1   5
-Bandit        1 bandit_single_long_sword BANDIT               2   2   3  30  2  3  1  1   5
-Bandit        1 bandit_knives            BANDIT               2   2   3  30  2  3  1  1   5
+Bandit        1 bandit_long_swords       BANDIT_CAPTAIN       2   2   8  30  2  3  1  1   5
+Bandit        1 bandit_short_swords      BANDIT               2   2   5  30  4  6  1  1   5
+Bandit        1 bandit_single_long_sword BANDIT               2   2   6  30  2  3  1  1   5
+Bandit        1 bandit_knives            BANDIT               2   2   6  30  2  3  1  1   5
 
 ; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Kobold        1 kobold_spear             KOBOLD_SPEAR         4   3   3   3  1  4  2  4  10
-Kobold        1 kobold_knives            KOBOLD               4   3   3   3  1  4  1  3  10
-Kobold        1 kobold_mage              KOBOLD_MAGE          4   3   3  12  1  4  1  3  10 TELEPORT
+Kobold        1 kobold_spear             KOBOLD_SPEAR         4   3   6   3  2  6  2  4  10
+Kobold        1 kobold_knives            KOBOLD               4   3   8   3  2  6  1  4  10
+Kobold        1 kobold_mage              KOBOLD_MAGE          4   3   6  12  2  6  1  3  10 TELEPORT
 
 ; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Succubus      1 succubus                 SUCCUBUS             3   4   4   4  2  8  2  4  25 ENFEEBLE_MONSTER
-Succubus      1 succubus_staff           SUCCUBUS             3   4   4   4  2  8  2  4  25 ENFEEBLE_MONSTER
-Succubus      1 succubus_whip            SUCCUBUS_WHIP        3   4   6   2  2  8  2  4  25 ENFEEBLE_MONSTER
-Succubus      1 succubus_scepter         SUCCUBUS             3   4   4   8  2  8  2  4  25 ENFEEBLE_MONSTER SHADOW_WALK
+Succubus      1 succubus                 SUCCUBUS             3   2   8   4  2  8  2  5  25 ENFEEBLE_MONSTER
+Succubus      1 succubus_staff           SUCCUBUS             3   2   8   4  2  8  2  5  25 ENFEEBLE_MONSTER
+Succubus      1 succubus_whip            SUCCUBUS_WHIP        3   2  10   2  2  8  2  5  25 ENFEEBLE_MONSTER
+Succubus      1 succubus_scepter         SUCCUBUS             3   2   8   8  2  8  2  5  25 ENFEEBLE_MONSTER SHADOW_WALK
 
 ; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Spider        1 spider_yellow            SPIDER               5   3   3   4  3 12  2  6  50 FREEZE
-Spider        1 spider_red               SPIDER_RED           5   1   4   7 10 19  2  6  50 FREEZE
-Spider        1 spider_gray              SPIDER_GRAY          5   3   6   1  3 12  2  6  50 FREEZE
-Spider        1 spider_green             SPIDER               5   3   3   4  3 12  2  6  50 FREEZE
+Spider        1 spider_yellow            SPIDER               5   3   6   2  5 12  2  8  50 FREEZE
+Spider        1 spider_red               SPIDER_RED           5   1   6   4 10 19  2  6  50 FREEZE
+Spider        1 spider_gray              SPIDER_GRAY          5   2   9   1  5 12  2  6  50 FREEZE
+Spider        1 spider_green             SPIDER               5   3   6   2  5 12  2  8  50 FREEZE
 
 ; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Ape           1 ape_blue                 APE                  6   6   6   3  4 16  4  6 125
-Ape           1 ape_black                APE                  6   6   6   3  4 16  4  6 125
-Ape           1 ape_red                  APE_DEMONIC          7   8   3   3  8 20  4  6 125
-Ape           1 ape_white                APE                  6   6   6   3  4 16  4  6 125
+Ape           1 ape_blue                 APE                  6   6  10   3  4 16  3  6 125
+Ape           1 ape_black                APE                  6   6  10   3  4 16  3  6 125
+Ape           1 ape_red                  APE_DEMONIC          7   8   7   3  8 20  3  6 125
+Ape           1 ape_white                APE                  6   6  10   3  4 16  3  6 125
 
 ; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Elemental     1 elemental_green          ELEMENTAL_AIR        4   4   8   6  8 26  4  8 275 FIREBALL         SHADOW_WALK
-Elemental     1 elemental_white          ELEMENTAL_NATURE     4   4   4   6 14 32  4  8 275 FIREBALL         STONE_SKIN
-Elemental     1 elemental_red            ELEMENTAL_SORCERY    4   4   4  18  8 26  4  8 275 MAGIC_MIRROR     TELEPORT
-Elemental     1 elemental_blue           ELEMENTAL_CHAOS      4   4   4  12  8 26  4  8 275 FIREBALL
+Elemental     1 elemental_green          ELEMENTAL_AIR        4   4  12   6  8 26  4  8 275 FIREBALL         SHADOW_WALK
+Elemental     1 elemental_white          ELEMENTAL_NATURE     4   4   8   6 14 32  4  8 275 FIREBALL         STONE_SKIN
+Elemental     1 elemental_red            ELEMENTAL_SORCERY    4   4  10  18  8 26  4  8 275 MAGIC_MIRROR     TELEPORT
+Elemental     1 elemental_blue           ELEMENTAL_CHAOS      4   4   8  12  8 26  4  8 275 FIREBALL
 
 ; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Werewolf      1 werewolf_gray            WEREWOLF             5   5   8   4  8 32  4  8 500 HASTE
-Werewolf      1 werewolf_blue            WEREWOLF             5   5   8   4  8 32  4  8 500 HASTE
-Werewolf      1 werewolf_purple          WEREWOLF             5   5   8   4  8 32  4  8 500 HASTE
+Werewolf      1 werewolf_gray            WEREWOLF             5   5  12   4 12 32  4 10 500 HASTE
+Werewolf      1 werewolf_blue            WEREWOLF             5   5  12   4 12 32  4 10 500 HASTE
+Werewolf      1 werewolf_purple          WEREWOLF             5   5  12   4 12 32  4 10 500 HASTE
 
 ; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Minotaur      1 minotaur                 MINOTAUR             7   4   7   4 24 48 12 32 950 BERSERK
-Minotaur      1 minotaur_axe             MINOTAUR             7   4   7   4 24 48 12 32 950 BERSERK
-Minotaur      1 minotaur_sword           MINOTAUR             7   4   7   4 24 48 12 32 950 BERSERK
+Minotaur      1 minotaur                 MINOTAUR             7   6  12   4 48 72  8 14 950 BERSERK
+Minotaur      1 minotaur_axe             MINOTAUR             7   6  10   4 48 72 12 18 950 BERSERK
+Minotaur      1 minotaur_sword           MINOTAUR             7   6  10   4 48 72 12 18 950 BERSERK
 ";		embedFile = StatsFile.loadFromString( "mobs.txt", embedText );		embedText = "Field String ID
 Field String Sprite
 Field Int Duration
@@ -223,10 +262,10 @@ Field String Effect
 Field String EffectVal
 
 ; ID          Sprite        Duration Buff      BV Effect              EV
-GREEN_POTION  green_potion  120      attack     3
-PURPLE_POTION purple_potion 120      \"\"         0 \"damage multiplier\" 2
-BLUE_POTION   blue_potion   120      defense    3
-YELLOW_POTION yellow_potion 120      speed      3
+GREEN_POTION  green_potion  60       attack     3
+PURPLE_POTION purple_potion 60       \"\"         0 \"damage multiplier\" 2
+BLUE_POTION   blue_potion   60       defense    3
+YELLOW_POTION yellow_potion 60       speed      5
 RED_POTION    red_potion    0        \"\"         0 heal                full
 ";		embedFile = StatsFile.loadFromString( "potions.txt", embedText );		embedText = "Field String ID
 Field Int Level
@@ -259,33 +298,33 @@ Field String EffectVal
 
 ; Targets self.
 
-; ID             Sprite           Tr Dur Stat   Pts. (B1 B1V B2 B2V Ef EfV)
-BERSERK          berserk           0  60 spirit  720 attack 3 speed 3
-BLESS_WEAPON     bless_weapon      0 120 spirit  720 attack 3
-HASTE            haste             0 120 spirit  720 speed  3
-SHADOW_WALK      shadow_walk       0 120 spirit  720 \"\" 0 \"\" 0 invisible
-STONE_SKIN       stone_skin        0 120 spirit  720 defense 5 speed -1
-BLINK            blink             0   0 spirit  720 \"\" 0 \"\" 0 blink
-MAGIC_ARMOR      magic_armor       0 120 spirit  720 defense 3
-REVEAL_MAP       reveal_map        0   0 spirit 7200 \"\" 0 \"\" 0 reveal
-HEAL             heal              0   0 spirit 2880 \"\" 0 \"\" 0 heal full
+; ID             Sprite           Tr Dur Stat    Pts. (B1 B1V B2 B2V Ef EfV)
+BERSERK          berserk           0  45 attack  1080 attack 3 speed 3
+BLESS_WEAPON     bless_weapon      0  60 spirit   360 attack 3
+HASTE            haste             0  60 spirit   540 speed  5
+SHADOW_WALK      shadow_walk       0  60 speed   1200 \"\" 0 \"\" 0 invisible
+STONE_SKIN       stone_skin        0  60 spirit   480 defense 5 speed -1
+BLINK            blink             0   0 spirit   360 \"\" 0 \"\" 0 blink
+MAGIC_ARMOR      magic_armor       0  60 spirit   480 defense 3
+REVEAL_MAP       reveal_map        0   0 spirit  3600 \"\" 0 \"\" 0 reveal
+HEAL             heal              0   0 spirit  1440 \"\" 0 \"\" 0 heal full
 
 ; Targets enemy.
 
-; ID             Sprite           Name               Tr Dur Stat   Pts. (B1 B1V B2 B2V Ef EfV)
-FREEZE           freeze            1 120 spirit 1440 speed -3
-FIREBALL         fireball          1   0 spirit  720 
-ENFEEBLE_MONSTER enfeeble_monster  1 120 spirit  720 attack -3
-CHARM_MONSTER    charm_monster     1 120 spirit 1440 \"\" 0 \"\" 0 charm
-POLYMORPH        polymorph         1   0 spirit 2160 \"\" 0 \"\" 0 polymorph true
-SLEEP            sleep             1  90 spirit 1440 \"\" 0 \"\" 0 sleep
-FEAR             fear              1 180 spirit  960 \"\" 0 \"\" 0 fear
+; ID             Sprite           Tr Dur Stat   Pts. (B1 B1V B2 B2V Ef EfV)
+FREEZE           freeze            1  60 spirit  360 speed -4
+FIREBALL         fireball          1   0 spirit  360 
+ENFEEBLE_MONSTER enfeeble_monster  1  60 spirit  360 attack -3
+CHARM_MONSTER    charm_monster     1  60 spirit  720 \"\" 0 \"\" 0 charm
+POLYMORPH        polymorph         1   0 spirit 1080 \"\" 0 \"\" 0 polymorph true
+SLEEP            sleep             1  45 spirit  720 \"\" 0 \"\" 0 sleep
+FEAR             fear              1   0 spirit  480 \"\" 0 \"\" 0 fear
 
 ; Targets empty square.
 
-; ID             Sprite           Name               Tr Dur Stat   Pts. (B1 B1V B2 B2V Ef EfV)
-MAGIC_MIRROR     magic_mirror     2 180 spirit 1440 \"\" 0 \"\" 0 magic_mirror
-TELEPORT         teleport         2   0 spirit 1440 \"\" 0 \"\" 0 teleport
+; ID             Sprite           Tr Dur Stat   Pts. (B1 B1V B2 B2V Ef EfV)
+MAGIC_MIRROR     magic_mirror     2   90 spirit  720 \"\" 0 \"\" 0 magic_mirror
+TELEPORT         teleport         2    0 spirit  720 \"\" 0 \"\" 0 teleport
 ";		embedFile = StatsFile.loadFromString( "spells.txt", embedText );		embedText = "Field String ID
 Field String Data
 
@@ -394,6 +433,7 @@ MINOTAUR        \"Minotaur\"
 CHEST           \"Chest\"
 
 ; Statistics
+\"damage\"        \"damage\"
 \"attack\"        \"attack\"
 \"defense\"       \"defense\"
 \"life\"          \"life\"

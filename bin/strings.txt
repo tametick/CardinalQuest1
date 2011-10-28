@@ -106,6 +106,7 @@ MINOTAUR        "Minotaur"
 CHEST           "Chest"
 
 ; Statistics
+"damage"        "damage"
 "attack"        "attack"
 "defense"       "defense"
 "life"          "life"

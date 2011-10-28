@@ -115,6 +115,9 @@ class CqInventoryItemManager
 				if (cell.getCellObj() == null) {
 					GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_FIRST" ), 0xBFE137);
 					// Show buffs.
+					if ( Item.equipSlot == WEAPON ) {
+						CqActor.showWeaponDamage( Registery.player, Item.damage );
+					}
 					for ( buffName in Item.buffs.keys() ) {
 						CqActor.showBuff( Registery.player, Item.buffs.get(buffName), buffName );
 					}
@@ -133,6 +136,9 @@ class CqInventoryItemManager
 					if ( Item.makesRedundant( cell.getCellObj().item ) ) {
 						// Totally better than the old item.
 						// Show buffs.
+						if ( Item.equipSlot == WEAPON ) {
+							CqActor.showWeaponDamage( Registery.player, Item.damage );
+						}
 						for ( buffName in Item.buffs.keys() ) {
 							var buffAmt:Int = Item.buffs.get(buffName) - cell.getCellObj().item.buffs.get(buffName);
 							if ( buffAmt != 0 ) {
@@ -157,6 +163,9 @@ class CqInventoryItemManager
 						if ( preference > 1 ) {
 							// Yep, let's equip it!
 							// (Show buffs first.)
+							if ( Item.equipSlot == WEAPON ) {
+								CqActor.showWeaponDamage( Registery.player, Item.damage );
+							}
 							var oldItemBuffs:Hash<Int> = cell.getCellObj().item.buffs;
 							for ( buffName in oldItemBuffs.keys() ) {
 								var buffAmt:Int = Item.buffs.get(buffName) - oldItemBuffs.get(buffName);
@@ -179,15 +188,17 @@ class CqInventoryItemManager
 							// Nope. Make sure it's not redundant.
 							for ( cell in dlgInvGrid.cells ) {
 								if ( cell.getCellObj() != null ) {
-									var cellItem:CqItem = cell.getCellObj().item;
-									
+									var cellUiItem:CqInventoryItem = cell.getCellObj();
+									var cellItem:CqItem = cellUiItem.item;
+
 									if ( cellItem.equipSlot == uiItem.item.equipSlot ) {
-										if ( uiItem.item.makesRedundant( cellItem ) ) {
+										/*if ( uiItem.item.makesRedundant( cellItem ) ) {
 											// Sell the cell item.
+											mainDialog.remove(cell.getCellObj());
 											dlgInvGrid.remove(cell.getCellObj());
 											destroyAndGiveMoney(cellItem);
-										} else if ( cellItem.makesRedundant( uiItem.item ) ) {
-											// Sell the item.
+										} else */if ( cellItem.makesRedundant( uiItem.item ) ) {
+											// Sell the item we just picked up.
 											GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_REDUNDANT" ), 0xBFE137);
 											destroyAndGiveMoney(uiItem.item);
 											return false;
@@ -241,7 +252,7 @@ class CqInventoryItemManager
 		if (Cell.getCellObj() == null)
 			return 2.0;
 		
-		return Item.compareTo( Cell.getCellObj().item );
+		return Registery.player.valueItem( Item ) / Registery.player.valueItem( Cell.getCellObj().item );
 	}
 	
 	private function equipItem(Cell:CqInventoryCell, Item:CqItem, UiItem:CqInventoryItem):CqInventoryItem {

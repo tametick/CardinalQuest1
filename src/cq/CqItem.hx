@@ -401,30 +401,6 @@ class CqItem extends GameObjectImpl, implements Loot {
 		}
 		return true;*/
 	}
-	/**
-	 * <1 other is worse 1 == equal, >1 other is better
-	 * */
-	public function compareTo(other:CqItem):Float {
-		if (other.equipSlot != equipSlot)
-			return 0.0;
-			
-		
-		var preference:Float = 0.0;
-		var sumBuffsThis:Float  = HxlUtil.sumHashInt(buffs);
-		var sumBuffsOther:Float = HxlUtil.sumHashInt(other.buffs);
-		
-		var dmgAvgThis:Float  = (damage.start + damage.end)/2;
-		var dmgAvgOther:Float = (other.damage.start + other.damage.end)/2;
-		if (dmgAvgThis > dmgAvgOther)
-			sumBuffsThis += dmgAvgThis-dmgAvgOther;
-		else if(dmgAvgThis < dmgAvgOther)
-			sumBuffsOther+=dmgAvgOther-dmgAvgThis;
-		//do nothing if damage is equal
-//		if ( sumBuffsOther == 0) sumBuffsOther = 0.1;
-		preference = sumBuffsThis / sumBuffsOther;
-		
-		return preference;
-	}
 	
 	public function makesRedundant(other:CqItem):Bool {
 		if ( other.buffs.get( "attack" ) > buffs.get( "attack" )
