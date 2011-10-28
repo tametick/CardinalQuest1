@@ -1592,6 +1592,7 @@ class CqPlayer extends CqActor, implements Player {
 		level.updateFieldOfView(HxlGraphics.state, true);
 		level.restartExploration(1);
 		
+		isGhost = false;
 		isDying = false;
 	}
 	
