@@ -816,7 +816,7 @@ class GameUI extends HxlDialog {
 		{
 			var matched:Bool = false;
 			for ( active in effectsActive ) {
-				if ( active.actor == e.actor ) {
+				if ( active.actor == e.actor && active.startX == e.startX && active.startY == e.startY ) {
 					matched = true;
 					break;
 				}

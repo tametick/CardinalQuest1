@@ -13,11 +13,15 @@ import haxel.HxlText;
 
 class CqFloatText extends HxlText {
 	public var actor:CqActor;
+	public var startX:Float;
+	public var startY:Float;
 	
 	public function new(Actor:CqActor, X:Float, Y:Float, Text:String=null, ?Color:Int=0xffffff,?Font:String, ?FontSize:Int=18,?Alignment:String = "center",?initDefaultTween:Bool = true) {
 		super(X, Y, 500, Text);
 		
 		actor = Actor;
+		startX = X;
+		startY = Y;
 		
 		//note: hardcoded max width of 500
 		setProperties(false, false, false);
