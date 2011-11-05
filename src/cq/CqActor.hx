@@ -33,8 +33,8 @@ import cq.CqItem;
 import cq.CqSpell;
 import cq.CqWorld;
 import cq.GameUI;
+import cq.CqBag;
 import cq.ui.CqVitalBar;
-import cq.effects.CqEffectSpell;
 import cq.CqMobFactory;
 
 import com.baseoneonline.haxe.astar.AStar;
@@ -79,8 +79,8 @@ class CqActor extends CqObject, implements Actor {
 	// natural damage without weapon
 	public var damage:Range;
 	
-	var equippedWeapon:CqItem;
-	public var equippedSpells:Array<CqSpell>;
+	// all spells, items and intrinsics go in the bag
+	public var bag:CqBag;
 	
 	// changes to basic abilities (attack, defense, speed, spirit) caused by equipped items or spells
 	public var buffs:Hash<Int>;
@@ -94,13 +94,11 @@ class CqActor extends CqObject, implements Actor {
 	// callbacks
 	var onInjure:List<Dynamic>;
 	var onKill:List<Dynamic>;
-	var onEquip:List<Dynamic>;
-	var onUnequip:List<Dynamic>;
 	var onAttackMiss:List<Dynamic>;
 	var onMove:List<Dynamic>;
 	
 	// effect helpers
-	var isGhost:Bool;
+	public var isGhost:Bool; // shouldn't be public, but needed by CqItem
 	var isDodging:Bool;
 	var dodgeDir:Int;
 	var dodgeCounter:Float;
@@ -128,14 +126,6 @@ class CqActor extends CqObject, implements Actor {
 		
 		damage = null;
 		
-		var es:CqSpell = null;
-		while (equippedSpells.length > 0){
-			es = equippedSpells.pop();
-			if(es!=null)
-				es.destroy();
-			es = null;
-		}
-		
 		specialEffects = null;
 		
 		if(timers!=null)
@@ -144,35 +134,26 @@ class CqActor extends CqObject, implements Actor {
 		
 		visibleEffects = null;
 		
-		if (equippedWeapon != null) {
-			equippedWeapon.destroy();
-			equippedWeapon = null;
-		}
-		
 		if(onAttackMiss!=null)
 			onAttackMiss.clear();
-		if (onEquip != null)
-			onEquip.clear();
+
 		if (onInjure!= null)
 			onInjure.clear();
 		if (onKill!= null)
 			onKill.clear();
 		if (onMove!= null)
 			onMove.clear();
-		if (onUnequip!= null)
-			onUnequip.clear();
-		
 
 		onAttackMiss = null;
-		onEquip = null;
 		onInjure = null;
 		onKill = null;
 		onMove = null;
-		onUnequip = null;
 	}
 	
 	public function new(X:Float, Y:Float) {
 		super(X, Y);
+		
+		bag = new CqBag();
 
 		zIndex = 3;
 
@@ -188,16 +169,12 @@ class CqActor extends CqObject, implements Actor {
 		maxHp = vitality;
 		hp = maxHp;
 		
-		equippedSpells = new Array<CqSpell>();
-		
 		initBuffs();
 		visibleEffects = new Array<String>();
 		timers = new Array<CqTimer>();
 
 		onInjure = new List();
 		onKill = new List();
-		onEquip = new List();
-		onUnequip = new List();
 		onAttackMiss = new List();
 		onMove = new List();
 
@@ -229,14 +206,6 @@ class CqActor extends CqObject, implements Actor {
 
 	public function addOnKill(Callback:Dynamic) {
 		onKill.add(Callback);
-	}
-
-	public function addOnEquip(Callback:Dynamic) {
-		onEquip.add(Callback);
-	}
-
-	public function addOnUnequip(Callback:Dynamic) {
-		onUnequip.add(Callback);
 	}
 
 	public function addOnAttackMiss(Callback:Dynamic) {
@@ -280,10 +249,6 @@ class CqActor extends CqObject, implements Actor {
 	public function doGhost(?dmgTotal:Int = 0) {
 		isGhost = true;
 	}
-	
-	function ghostActor(state:HxlState, other:CqActor, dmgTotal:Int) {
-		other.doGhost(dmgTotal);
-	}
 
 	public function doInjure(?dmgTotal:Int=0) {
 		for ( Callback in onInjure ) 
@@ -293,7 +258,7 @@ class CqActor extends CqObject, implements Actor {
 		removeEffect("fear");
 	}
 
-	function injureActor(state:HxlState, other:CqActor, dmgTotal:Int) {
+	public function injureActor(state:HxlState, other:CqActor, dmgTotal:Int) {
 		if (this == Registery.player) {
 			HxlLog.append("You hit");
 			PtPlayer.hits();
@@ -310,7 +275,8 @@ class CqActor extends CqObject, implements Actor {
 			Callback();
 	}
 	
-	function killActor(state:HxlState, other:CqActor, dmgTotal:Int) {
+	// make this private & call it from injureActor?  Could be much simpler
+	public function killActor(state:HxlState, other:CqActor, dmgTotal:Int) {
 		other.doKill(dmgTotal);
 		// todo
 		if (Std.is(this, CqPlayer)) {
@@ -452,9 +418,8 @@ class CqActor extends CqObject, implements Actor {
 			// do an extra 100% damage if stealthy!
 			if (stealthy) dmgMultiplier += 1;
 			
-			// determine whether we're using a weapon
-			var damageRange = (equippedWeapon != null) ? new Range(equippedWeapon.damage.start, equippedWeapon.damage.end) : damage;
-			
+			// get our equipped weapon from our bag
+			var damageRange = bag.equippedDamage();
 			
 			if (Std.is(this, CqPlayer)) {
 				SoundEffectsManager.play(EnemyHit);	
@@ -670,288 +635,28 @@ class CqActor extends CqObject, implements Actor {
 
 	function updateSprite(){ }
 	
-	public function equipItem(item:CqItem) {
-		if (CqEquipSlot.WEAPON == item.equipSlot) {
-			equippedWeapon = item;
-			updateSprite();
-		}
-
-		// add buffs
-		if(item.buffs != null) {
-			for (buff in item.buffs.keys()) {
-				buffs.set(buff, buffs.get(buff) + item.buffs.get(buff));
-				if (buff == "life") {
-					if (Std.is(this, CqPlayer)) {
-						var player = Registery.player;
-						player.updatePlayerHealthBars();
-					}
-				}
-			}
-		}
-	}
-
-	public function unequipItem(item:CqItem) {
-		if (item == equippedWeapon) {
-			equippedWeapon = null;
-			updateSprite();
-		}
-			
-		// remove buffs
-		if(item.buffs != null) {
-			for (buff in item.buffs.keys()) {
-				buffs.set(buff, buffs.get(buff) - item.buffs.get(buff));
-				if (buff == "life") {
-					if (this.hp < 1)
-						this.hp = 1;
-					if (Std.is(this, CqPlayer)) {
-						var player = Registery.player;
-						player.updatePlayerHealthBars();
-					}
-				}
-			}
-		}
+	public function doDeathEffect(delay:Float) {
+		angularVelocity = -225;
+		scaleVelocity.x = scaleVelocity.y = -1.3;
+		Actuate
+			.timer(delay)
+			.onComplete(deathEffectComplete);
 	}
 	
-	public function useAt(itemOrSpell:CqItem, tile:CqTile) {
-		var effectColorSource:BitmapData = itemOrSpell.pixels;
-		if(itemOrSpell.specialEffects != null){
-			for ( effect in itemOrSpell.specialEffects) {
-				applyEffectAt(effect, tile, itemOrSpell.duration);
-			}
-		}
-		//special effect
-		var pos:HxlPoint = Registery.level.getTilePos(tile.mapX, tile.mapY, true);
-		var eff:CqEffectSpell = new CqEffectSpell(pos.x, pos.y, effectColorSource);
-		eff.zIndex = 1000;
-		HxlGraphics.state.add(eff);
-		eff.start(true, 1.0, 10);
-	}
-	
-	public function use(itemOrSpell:CqItem, ?other:CqActor = null) {
-		if (Std.is(itemOrSpell, CqSpell) && cast(itemOrSpell, CqSpell).targetsOther && other != null) {
-			breakInvisible();
-			
-			// and now shoot
-			var colorSource:BitmapData;
-			
-			// Update spell damage.
-			var spellLevel:Int = 0;
-			if (Std.is(this, CqPlayer)) {
-				spellLevel = Registery.player.level;
-				colorSource = itemOrSpell.uiItem.pixels;
+	function deathEffectComplete() {
+		if(Std.is(this,CqPlayer)){
+			if (lives >= 0) {
+				cast(this, CqPlayer).respawn();
 			} else {
-				spellLevel = Math.ceil(2 + .5 * Registery.world.currentLevelIndex);
-				colorSource = this._framePixels;
+				cast(this,CqPlayer).gameOver();
 			}
-			
-			itemOrSpell.damage = CqSpellFactory.getSpellDamageByLevel(cast(itemOrSpell, CqSpell).id, spellLevel);
-			
-			useOn(itemOrSpell, this, other);
-			
-			// Fire off the effect.
-			GameUI.instance.shootXBall(this, other, colorSource, itemOrSpell);
-		}else {
-			useOn(itemOrSpell, this, other);
-			completeUseOn(itemOrSpell, this, other);
-		}
-	}
-	
-	static var tmpSpellSprite;
-	
-	public static function useOn(itemOrSpell:CqItem, actor:CqActor, victim:CqActor) {
-		if (itemOrSpell.equipSlot == POTION)
-			SoundEffectsManager.play(SpellEquipped);
-			
-		var effectColorSource:BitmapData;
-		if (itemOrSpell.uiItem == null) {
-			if (tmpSpellSprite == null )
-				tmpSpellSprite = new HxlSprite();
-				
-			// only happens when enemies try to use a spell
-			tmpSpellSprite.loadGraphic(SpriteSpells, true, false, Configuration.tileSize, Configuration.tileSize);
-			tmpSpellSprite.setFrame(SpriteSpells.instance.getSpriteIndex(itemOrSpell.spriteIndex));
-			effectColorSource = tmpSpellSprite.getFramePixels();
 		} else {
-			effectColorSource = itemOrSpell.uiItem.pixels;
-		}
-		
-		// add buffs
-		if(itemOrSpell.buffs != null) {
-			for (buff in itemOrSpell.buffs.keys()) {
-				var val = itemOrSpell.buffs.get(buff);
-				var text = (val > 0?"+":"") + val + " " + buff;
-
-				if (victim == null) {
-					// apply to self
-					actor.buffs.set(buff, actor.buffs.get(buff) + itemOrSpell.buffs.get(buff));
-					
-					// add timer
-					if (itemOrSpell.duration > -1) {
-						actor.addTimer(new CqTimer(itemOrSpell.duration, buff, itemOrSpell.buffs.get(buff),null));
-					}
-				} else {
-					// apply to victim
-					var delta:Int = itemOrSpell.buffs.get(buff);
-					victim.buffs.set(buff, victim.buffs.get(buff) + itemOrSpell.buffs.get(buff));
-					
-					// add timer
-					if (itemOrSpell.duration > -1) {
-						var bufftimer: CqTimer = new CqTimer(itemOrSpell.duration, buff, delta, null);
-						
-						victim.addTimer(bufftimer);
-					}
-				}
-			}
-		}
-		// apply special effect
-		if(itemOrSpell.specialEffects != null){
-			for (effect in itemOrSpell.specialEffects) {
-				actor.applyEffect(effect, victim);
-				
-				if (itemOrSpell.duration > -1) {
-					if (victim == null)
-						actor.addTimer(new CqTimer(itemOrSpell.duration, null, -1, effect));
-					else
-						victim.addTimer(new CqTimer(itemOrSpell.duration, null, -1, effect));
-				}
-			}
-		}
-		
-		// calculate damage
-		if (itemOrSpell.damage != null && itemOrSpell.damage.end>0 ) {
-			var dmg = biasedRandomInRange(itemOrSpell.damage.start, itemOrSpell.damage.end, 2);
-			itemOrSpell.lastDamage = dmg; // Stored for "completeUseOn" when spell visually hits.
-
-			// "Ghost" killed actors now so they can't act any more.
-			if (victim== null) {
-				var lif = actor.hp + actor.buffs.get("life");
-				if (lif - dmg <= 0)
-					actor.ghostActor(HxlGraphics.state,actor,dmg);
-			} else {
-				var lif = victim.hp + victim.buffs.get("life");
-				if (lif - dmg <= 0)
-					actor.ghostActor(HxlGraphics.state, victim, dmg);
-			}
-		}
-		
-		// dispose of an enemy's tmp spell sprite, if we've made one
-		if (itemOrSpell.uiItem == null) {
-			effectColorSource.dispose();
-			tmpSpellSprite.destroy();
-			tmpSpellSprite = null;
-		}		
-	}
-
-	// Called when a spell hits, even though the effects are applied immediately.
-	public static function completeUseOn(itemOrSpell:CqItem, actor:CqActor, victim:CqActor) {
-		var effectColorSource:BitmapData;
-		if (itemOrSpell.uiItem == null) {
-			if (tmpSpellSprite == null )
-				tmpSpellSprite = new HxlSprite();
-				
-			// only happens when enemies try to use a spell
-			tmpSpellSprite.loadGraphic(SpriteSpells, true, false, Configuration.tileSize, Configuration.tileSize);
-			tmpSpellSprite.setFrame(SpriteSpells.instance.getSpriteIndex(itemOrSpell.spriteIndex));
-			effectColorSource = tmpSpellSprite.getFramePixels();
-		} else {
-			effectColorSource = itemOrSpell.uiItem.pixels;
-		}
-		
-		// show buffs
-		if(itemOrSpell.buffs != null) {
-			for (buff in itemOrSpell.buffs.keys()) {
-				var val = itemOrSpell.buffs.get(buff);
-				var text = (val > 0?"+":"") + val + " " + buff;
-
-				if (victim == null) {
-					var c:Int;
-					switch(buff) {
-						case "attack":
-							c = 0x4BE916;
-						case "defense":
-							c = 0x381AE6;
-						case "speed":
-							c = 0xEDD112;
-						default:
-							c = 0xFFFFFF;
-					}
-					
-					GameUI.showEffectText(actor, text, c);
-					
-					//special effect
-					var eff:CqEffectSpell = new CqEffectSpell(actor.x+actor.width/2, actor.y+actor.width/2, effectColorSource);
-					eff.zIndex = 1000;
-					HxlGraphics.state.add(eff);
-					eff.start(true, 1.0, 10);
-				} else {
-					// apply to victim
-					GameUI.showEffectText(victim, text, 0xff8822);
-				}
-			}
-		}
-		if (victim != null){
-			//special effect
-			var eff:CqEffectSpell = new CqEffectSpell(victim.x + victim.width/2, victim.y + victim.height/2, effectColorSource);
-			eff.zIndex = 1000;
-			HxlGraphics.state.add(eff);
-			eff.start(true, 1.0, 10);
-		}
-		
-		// apply damage
-		if (itemOrSpell.damage != null && itemOrSpell.damage.end>0 ) {
-			var dmg = itemOrSpell.lastDamage;
-			
-			if (victim== null) {
-				actor.hp -= dmg;
-				var lif = actor.hp + actor.buffs.get("life");
-				if (lif > 0 && !actor.isGhost)
-					actor.injureActor(HxlGraphics.state, actor, dmg);
-				else
-					actor.killActor(HxlGraphics.state,actor,dmg);
-			} else {
-				victim.hp -= dmg;
-				var lif = victim.hp + victim.buffs.get("life");
-				if (lif > 0 && !victim.isGhost)
-					actor.injureActor(HxlGraphics.state, victim, dmg);
-				else
-					actor.killActor(HxlGraphics.state, victim, dmg);
-			}
-		}
-		
-		// dispose of an enemy's tmp spell sprite, if we've made one
-		if (itemOrSpell.uiItem == null) {
-			effectColorSource.dispose();
-			tmpSpellSprite.destroy();
-			tmpSpellSprite = null;
-		}		
-	}
-	
-	function applyEffectAt(effect:CqSpecialEffectValue, tile:CqTile, ?duration:Int = -1) {
-		switch(effect.name){
-		
-		case "teleport":
-			var pixelLocation = Registery.level.getPixelPositionOfTile(tile.mapX,tile.mapY);
-			setTilePos(Std.int(tile.mapX), Std.int(tile.mapY));
-			moveToPixel(HxlGraphics.state, pixelLocation.x, pixelLocation.y);
-			Registery.level.updateFieldOfView(HxlGraphics.state, true);
-			
-			pixelLocation = null;
-		case "magic_mirror":
-			// note that the player's magic mirror sprite will actually be backwards!  Very cool.
-			var mob = Registery.level.createAndAddMirror(new HxlPoint(tile.mapX,tile.mapY), Registery.player.level, true, this);
-			mob.specialEffects.set(effect.name, effect);
-			Registery.level.updateFieldOfView(HxlGraphics.state, true);
-			
-			// if this is not after updateFieldOfView, we will not see the message
-			GameUI.showEffectText(mob, "Mirror", 0x2DB6D2);
-			
-			if (duration > -1) {
-				mob.addTimer(new CqTimer(duration, null, -1, effect));
-			}
+			HxlGraphics.state.remove(this);
+			destroy();
 		}
 	}
 	
-	function applyEffect(effect:CqSpecialEffectValue, other:CqActor) {
+	public function applyEffect(effect:CqSpecialEffectValue, other:CqActor) {
 		HxlLog.append("applied special effect: " + effect.name);
 		switch(effect.name){
 		
@@ -1047,30 +752,8 @@ class CqActor extends CqObject, implements Actor {
 			}
 		}
 		GameUI.instance.popups.setChildrenVisibility(false);
-	}
-	
-	public function doDeathEffect(delay:Float) {
-		angularVelocity = -225;
-		scaleVelocity.x = scaleVelocity.y = -1.3;
-		Actuate
-			.timer(delay)
-			.onComplete(deathEffectComplete);
-	}
-	
-	function deathEffectComplete() {
-		if(Std.is(this,CqPlayer)){
-			if (lives >= 0) {
-				cast(this, CqPlayer).respawn();
-			} else {
-				cast(this,CqPlayer).gameOver();
-			}
-		} else {
-			HxlGraphics.state.remove(this);
-			destroy();
-		}
-	}
-}
-
+	}	
+}	
 
 class CqPlayer extends CqActor, implements Player {
 	public static var faction:Int = 0;
@@ -1080,8 +763,6 @@ class CqPlayer extends CqActor, implements Player {
 	public var playerClassID:String;
 	public var playerClassName:String;
 	public var playerClassSprite:String;
-	
-	public var inventory:Array<CqItem>;
 	
 	public var infoViewHealthBar:CqHealthBar;
 	public var infoViewXpBar:CqXpBar;
@@ -1093,7 +774,6 @@ class CqPlayer extends CqActor, implements Player {
 	public var infoViewMoney:HxlText;
 	public var infoViewLevel:HxlText;
 	public var infoViewFloor:HxlText;
-
 	
 	public var xp:Int;
 	public var level:Int;
@@ -1101,7 +781,6 @@ class CqPlayer extends CqActor, implements Player {
 	
 	public var isDying:Bool;
 
-	var onPickup:List<Dynamic>;
 	var onGainXP:List<Dynamic>;
 
 	public var lastTile:HxlPoint;
@@ -1129,16 +808,12 @@ class CqPlayer extends CqActor, implements Player {
 		infoViewXpBar = null;
 		
 		var i:CqItem = null;
-		while (inventory.length > 0) {
-			i = inventory.pop();
-			i.destroy();
-			i = null;
-		}
+		
+		bag.destroy();
 		
 		lastTile = null;
 		
 		onGainXP.clear();
-		onPickup.clear();
 	}
 	
 	public function new(PlayerClass:String, ?X:Float = -1, ?Y:Float = -1) {
@@ -1177,8 +852,6 @@ class CqPlayer extends CqActor, implements Player {
 
 		lives = Configuration.playerLives;
 		money = 0;
-		for (s in 0...5)
-			equippedSpells[s] = null;
 		
 		maxHp = vitality * 2;
 		hp = maxHp;
@@ -1196,11 +869,9 @@ class CqPlayer extends CqActor, implements Player {
 		isDying = false;
 		
 		onGainXP = new List();
-		onPickup = new List();
 
 		loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 2.0, 2.0);
 		faction = CqPlayer.faction;
-		inventory = new Array<CqItem>();
 
 		play("idle");
 
@@ -1210,13 +881,21 @@ class CqPlayer extends CqActor, implements Player {
 	public function addOnGainXP(Callback:Dynamic) {
 		onGainXP.add(Callback);
 	}
-
-	public function addOnPickup(Callback:Dynamic) {
-		onPickup.add(Callback);
+	
+	public function getPrimaryWeapon() {
+		var bestWeapon:CqItem = null;
+		
+		for (weapon in bag.items(WEAPON, true)) {
+			if (bestWeapon == null || bestWeapon.damage.end + bestWeapon.damage.start < weapon.damage.end + weapon.damage.start) {
+				bestWeapon = weapon;
+			}
+		}
+		
+		return bestWeapon;
 	}
 
-	override function updateSprite() { 
-		
+	override function updateSprite() {
+		var equippedWeapon:CqItem = getPrimaryWeapon();
 		
 		if (equippedWeapon == null){
 			play("idle");
@@ -1235,51 +914,20 @@ class CqPlayer extends CqActor, implements Player {
 		}
 	}
 	
-	public function give(?item:CqItem, ?itemOrSpellID:String) {
+	public function give(?itemOrSpellID:String) {
+		var item:CqItem = CqLootFactory.newItem( -1, -1, itemOrSpellID);
 		if (item != null) {
-			// add to actor inventory
-			
-			// if this item has a max stack size greater than or less than 1, lets see if we already have the same item in inventory
-			var addedToExistingStack:Bool = false;
-			if ( item.stackSizeMax != 1 ) {
-				for ( i in 0 ... inventory.length ) {
-					if (inventory[i].spriteIndex == item.spriteIndex) {
-						addedToExistingStack = true;
-						inventory[i].stackSize += item.stackSize;
-						if ( inventory[i].stackSize > inventory[i].stackSizeMax && inventory[i].stackSizeMax > 1) {
-							addedToExistingStack = false;
-							var diff = inventory[i].stackSize - inventory[i].stackSizeMax;
-							inventory[i].stackSize = inventory[i].stackSizeMax;
-							item.stackSize = diff;
-						}
-						// perform pickup callback functions
-						for ( Callback in onPickup ) 
-							Callback(inventory[i]);
-						break;
-					}
-				}
-			}
-			if ( !addedToExistingStack ) {
-				inventory.push(item);
-				// perform pickup callback functions
-				for ( Callback in onPickup ) 
-					Callback(item);
-			}
-			return;
-		} else if (itemOrSpellID != null) {
-			var item:CqItem = CqLootFactory.newItem( -1, -1, itemOrSpellID);
-			if ( item != null ) {
-				give(item);
+			bag.grant(item);
+		} else {
+			var spell:CqSpell = CqSpellFactory.newSpell( -1, -1, itemOrSpellID);
+			if (spell != null) {
+				bag.grant(spell);
 			} else {
-				var spell:CqSpell = CqSpellFactory.newSpell( -1, -1, itemOrSpellID);
-				if ( spell != null ) {
-					give(spell);
-				} else {
-					throw( "Unknown item or spell \"" + itemOrSpellID + "\"." );
-				}
+				throw( "Unknown item or spell \"" + itemOrSpellID + "\"." );
 			}
 		}
 	}
+	
 	public function giveMoney(amount:Int) {
 		var plural:Bool = amount > 1;
 		GameUI.showEffectText(this, "+" + amount + (plural?" coins":" coin"), 0xC2881D);
@@ -1290,12 +938,7 @@ class CqPlayer extends CqActor, implements Player {
 	
 	//pickup item from map
 	public function pickup(state:HxlState, item:CqItem) {
-		// if inventory is full, don't give the item
-		if (GameUI.instance.invItemManager.getEmptyCell() == null && item.equipSlot != POTION ){
-			// todo - beep
-			GameUI.showTextNotification("Inventory is full!", 0xFF001A);
-			SoundEffectsManager.play(PotionEquipped);
-		} else {
+		if (bag.grant(item)){
 			// remove item from map
 			Registery.level.removeLootFromLevel(state, item);
 			
@@ -1303,18 +946,12 @@ class CqPlayer extends CqActor, implements Player {
 			SoundEffectsManager.play(Pickup);
 			item.doPickupEffect();
 			GameUI.showEffectText(this, item.name, 0x6699ff);
-			
-			// put the item in the player's inventory
-			give(item);
+		} else {
+			GameUI.showTextNotification("You need to make some room for it first!", 0xFF001A);
+			SoundEffectsManager.play(PotionEquipped);
 		}
-	}
-
-	public function removeInventory(item:CqItem) {
-		for ( i in 0 ... inventory.length ) {
-			if ( inventory[i] == item ) {
-				inventory.splice(i, 1);
-			}
-		}
+		
+		GameUI.instance.flashInventoryButton();
 	}
 
 	public function gainExperience(xpValue:Int) {
@@ -1394,10 +1031,8 @@ class CqPlayer extends CqActor, implements Player {
 	}
 	
 	public function rechargeSpells() {
-		for (spell in equippedSpells) {
-			if (spell != null) {
-				spell.statPoints = spell.statPointsRequired;
-			}
+		for (spell in bag.spells()) {
+			spell.statPoints = spell.statPointsRequired;
 		}
 	}
 	
@@ -1553,9 +1188,15 @@ class CqMob extends CqActor, implements Mob {
 	}
 	
 	
-	function getClosestEnemy():CqActor {
+	function getClosestEnemy(?afterThisOne:CqActor = null):CqActor {
 		var best:Float = Registery.level.widthInTiles;
 		var target:CqActor = null;
+		
+		var tooGood:Float = 0;
+		
+		if (afterThisOne != null) {
+			tooGood = Math.abs(tilePos.x - afterThisOne.tilePos.x) + Math.abs(tilePos.y - afterThisOne.tilePos.y);
+		}
 		
 		if (aware > 0 && faction != CqPlayer.faction) {
 			target = Registery.player;
@@ -1569,6 +1210,11 @@ class CqMob extends CqActor, implements Mob {
 			if (cqmob.faction != faction && !cqmob.specialEffects.exists("invisible")) {
 				var dist = Math.abs(tilePos.x - mob.tilePos.x) + Math.abs(tilePos.y - mob.tilePos.y);
 				if (dist < best) {
+					if (dist < tooGood) continue;
+					if (dist == tooGood && afterThisOne != null) {
+						if (cqmob == afterThisOne) afterThisOne = null;
+						continue;
+					}
 					best = dist;
 					target = cqmob;
 				}
@@ -1583,22 +1229,22 @@ class CqMob extends CqActor, implements Mob {
 	function tryToCastSpell(enemy:CqActor):Bool {
 		var spell:CqSpell = null;
 		var afraid = specialEffects.exists("fear");
-		if (Std.is(this, CqMob) && equippedSpells.length > 0 && Math.random() < 0.40) {
-			for (spell in equippedSpells) {
-				if (spell.statPoints >= spell.statPointsRequired) {
+		if (Std.is(this, CqMob) && Math.random() < 0.40) {
+			for (spell in bag.spells()) {
+				if (spell.isReadyToActivate) {
 					if (!(afraid && spell.targetsOther)) {
-						if(spell.targetsOther) {
-							use(spell, enemy);
+						if (spell.targetsOther) {
+							spell.activate(this, enemy);
 						} else if (spell.targetsEmptyTile) {
 							// we've got to find a nearby empty tile, then, at random!
 							var tile:HxlPoint = Registery.level.randomUnblockedTile(this.tilePos);
 							if (tile != null) {
-								useAt(spell, Registery.level.getTile(tile.x, tile.y));
+								spell.activate(this, null, tile);
 							} else {
 								continue;
 							}
 						} else {
-							use(spell, this);
+							spell.activate(this, this);
 						}
 						SoundEffectsManager.play(SpellCastNegative);
 						
@@ -1654,6 +1300,7 @@ class CqMob extends CqActor, implements Mob {
 		
 		// zap him with magic!  (die, die, die)
 		// (aware will be maxAware if we can presently see the player, so it's a good visibility test)
+		// -- todo: make awareness subject to the current preferred target (or targets)
 		if (aware == maxAware && tryToCastSpell(enemy)) return true;
 		
 		// fine.  walk towards him!

@@ -1,6 +1,6 @@
 package cq.ui;
 import cq.GameUI;
-import cq.ui.inventory.CqInventoryDialog;
+import cq.ui.bag.BagDialog;
 import data.Configuration;
 import haxel.HxlButton;
 import haxel.HxlGraphics;
@@ -14,27 +14,25 @@ class CqPanelContainer extends HxlGroup
 	public var currentPanel:HxlSlidingDialog;
 	// View state panels
 	public var panelMap:CqMapDialog;
-	public var panelInventory:CqInventoryDialog;
+	public var panelInventory:HxlSlidingDialog;
 	public var panelCharacter:CqCharacterDialog;
 	public var panelLog:CqMessageDialog;
 	
-	public function new() 
-	{
+	public function new() {
 		super();
 		instance = this;
 		currentPanel = null;
 		
 		panelMap = new CqMapDialog(84, 0, 472, 480);
 		// no map bg color (alpha=0)
-		panelMap.setBackgroundColor(0x00000000);
+		panelMap.setBackgroundColor(0xFF000000);
 		panelMap.zIndex = 2;
 		add(panelMap);
 
-		var panelInv_w:Int = 481;
-		panelInventory = new CqInventoryDialog(GameUI.instance, Configuration.app_width/2-panelInv_w/2-10, 0, panelInv_w, 403);
+		panelInventory = GameUI.instance.bagDialog.slidingPart;
 		panelInventory.zIndex = 2;
 		add(panelInventory);
-
+		
 		panelCharacter = new CqCharacterDialog(84, 0, 472, 480);
 		panelCharacter.zIndex = 2;
 		add(panelCharacter);
@@ -52,9 +50,7 @@ class CqPanelContainer extends HxlGroup
 		panelInventory.kill();
 		super.kill();
 	}
-	public function updateItems() {
-		panelInventory.updateItemPositions();
-	}
+	
 	public function hideCurrentPanel(?hideCallBack:Dynamic):Void
 	{
 		if (!active) 
@@ -70,13 +66,12 @@ class CqPanelContainer extends HxlGroup
 	}
 	public function showPanel(Panel:HxlSlidingDialog, ?Button:HxlButton = null, ?showCallback:Dynamic) {
 		if (!active) return;
-		if (Panel == panelInventory)
-			panelInventory.updateItemPositions();
-		if ( HxlGraphics.mouse.dragSprite != null ) 
+		
+		if (HxlGraphics.mouse.dragSprite != null)
 			return;
 		// If user was in targeting mode, cancel it
 		if ( GameUI.isTargeting ) 
-			GameUI.setTargeting(false);
+			GameUI.setTargeting(null);
 
 		if ( Button != null ) {
 			GameUI.instance.disableAllButtons();

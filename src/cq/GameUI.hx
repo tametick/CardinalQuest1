@@ -10,16 +10,22 @@ import cq.states.GameState;
 import cq.states.HelpState;
 import cq.ui.CqPanelContainer;
 import cq.ui.CqPopup;
-import cq.ui.CqPotionGrid;
-import cq.ui.inventory.CqInventoryDialog;
+
+// import cq.ui.CqPotionGrid;
+// import cq.ui.CqSpellGrid;
+// import cq.ui.inventory.InventoryDialog;
+// import cq.ui.inventory.CqInventoryItem;
+// import cq.ui.inventory.CqInventoryItemManager;
+
+import cq.ui.bag.BagGrid;
+import cq.ui.bag.BagDialog;
+
 import cq.CqActor;
 import cq.effects.CqEffectChest;
 import cq.effects.CqEffectInjure;
 import cq.ui.CqFloatText;
 import cq.CqItem;
-import cq.ui.CqPotionButton;
 import cq.CqSpell;
-import cq.ui.CqSpellButton;
 import cq.CqWorld;
 import cq.ui.CqVitalBar;
 import cq.effects.CqEffectSpell;
@@ -29,9 +35,6 @@ import cq.ui.CqCharacterDialog;
 import cq.ui.CqMapDialog;
 import cq.ui.CqMessageDialog;
 import cq.ui.CqTextNotification;
-import cq.ui.CqSpellGrid;
-import cq.ui.inventory.CqInventoryItem;
-import cq.ui.inventory.CqInventoryItemManager;
 import flash.display.BitmapData;
 import flash.display.Shape;
 import flash.events.Event;
@@ -80,9 +83,14 @@ class GameUI extends HxlDialog {
 
 	// Main UI containers
 	var leftButtons:HxlButtonContainer;
-	public var dlgSpellGrid:CqSpellGrid;
-	public var dlgPotionGrid:CqPotionGrid;
-	public var invItemManager:CqInventoryItemManager;
+	
+	// public var dlgSpellGrid:CqSpellGrid;
+	// public var dlgPotionGrid:CqPotionGrid;
+	
+	public var bagDialog:BagDialog;
+	
+	// public var invItemManager:CqInventoryItemManager;
+	
 	public var panels:CqPanelContainer;
 	public var doodads:HxlDialog;//spell charges
 	public var popups:HxlGroup;
@@ -109,11 +117,9 @@ class GameUI extends HxlDialog {
 	var targetSprite:HxlSprite;
 	var targetText:HxlText;
 
-	// State & helper vars
-	public static var isTargeting:Bool = false;
-	public static var isTargetingEmptyTile:Bool = false;
+	// State & helper vars -- really pretty messy junk
 	public static var targetString:String = "";
-	public static var targetSpell:CqSpellButton = null;
+	public static var targetSpell:CqItem = null;
 	public static var hasShownInv:Bool;
 	public static var showInvHelp:Bool;
 	public static var instance:GameUI = null;
@@ -122,8 +128,6 @@ class GameUI extends HxlDialog {
 	public override function new() {
 		super(0, 0, HxlGraphics.width, HxlGraphics.height);
 		//defaults
-		isTargeting = false;
-		isTargetingEmptyTile = false;
 		targetLastPos = new HxlPoint(0, 0);
 		hasShownInv = false;
 		showInvHelp = false;
@@ -157,33 +161,20 @@ class GameUI extends HxlDialog {
 		 * Create and init main containers
 		 **/
 		
+
+		var mainBtn = SpritePortrait.getIcon(Registery.player.playerClassSprite,64 ,1.0);
+		var infoBtn = new HxlSprite();
+		infoBtn.loadGraphic(SpriteInfo, false, false, 64, 64, true, 1, 1);				 
+		
 		// I've tried switching these -- it doesn't quite feel right.
 		var pop:CqPopup;
 		leftButtons = new HxlButtonContainer(0, 30, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
 		leftButtons.scrollFactor.x = leftButtons.scrollFactor.y = 0;
 		add(leftButtons);
-
-		dlgSpellGrid = new CqSpellGrid(HxlGraphics.width - 84, 30, 84, 380);
-		dlgSpellGrid.zIndex = 1;
-		add(dlgSpellGrid);
-
-		var potiongrid_w:Int = 460;
-		dlgPotionGrid = new CqPotionGrid(Configuration.app_width/2-potiongrid_w/2, Configuration.app_height - 77, potiongrid_w, 71);
-		add(dlgPotionGrid);
 		
 		notifications = new CqTextNotification(300, 0);
 		notifications.zIndex = 3;
 		add(notifications);
-		/**
-		 * View state panels
-		 **/
-		panels = new CqPanelContainer();	
-		add(panels);
-		panels.zIndex = 2;
-		var mainBtn = SpritePortrait.getIcon(Registery.player.playerClassSprite,64 ,1.0);
-		var infoBtn = new HxlSprite();
-		infoBtn.loadGraphic(SpriteInfo, false, false, 64, 64, true, 1, 1);
-		
 		
 		var mapBtn = new ButtonSprite();
 		var mapBtnHigh = new ButtonSprite();
@@ -268,25 +259,36 @@ class GameUI extends HxlDialog {
 		btnCharacterView.setPopup(pop);
 		popups.add(pop);
 		leftButtons.addButton(btnCharacterView);
-
-		panels.panelInventory.dlgSpellGrid = dlgSpellGrid;
-		panels.panelInventory.dlgPotionGrid = dlgPotionGrid;
 		
-		invItemManager = new CqInventoryItemManager(panels.panelInventory);
+		// invItemManager = new CqInventoryItemManager(panels.panelInventory);
+
+		// bagDialog = new BagDialog(this, 5, 5, 13, ["shoes", "gloves", "armor", "jewelry", "weapon", "hat"]);
+		bagDialog = new BagDialog(this, 4, 4, 13, ["shoes", "gloves", "armor", "jewelry", "weapon", "hat"]);
+		
+		panels = new CqPanelContainer();
+		add(panels);
+		panels.zIndex = 2;
+		
+		
+		updateAll();
+		update();
 		
 		
 		initSheets();
-		
-		super.update();
-		updateAll();
-		
 	}
+
 	override public function update() 
 	{
-		invItemManager.update();
+		//invItemManager.update();
 		popups.update();
+		
+		if (bagDialog != null) {
+			bagDialog.equippedSpells.update();
+		}
+		
 		super.update();
 	}
+
 	public function setActive(?toggle:Bool = false)
 	{
 		if (!toggle){
@@ -305,15 +307,11 @@ class GameUI extends HxlDialog {
 		clearEventListeners();
 
 		btnMainView.kill();
-		dlgPotionGrid.kill();
-		dlgSpellGrid.kill();
 		doodads.kill();
 		//invItemManager
 		notifications.kill();
 		panels.kill();
 		popups.kill();
-		if(targetSpell!=null)
-			targetSpell.kill();
 		btnCharacterView.kill();
 		btnInfoView.kill();
 		btnInventoryView.kill();
@@ -344,15 +342,11 @@ class GameUI extends HxlDialog {
 	override public function destroy() {
 		if (btnMainView == null) return; // getting destroyed twice sometimes
 		btnMainView.destroy();
-		dlgPotionGrid.destroy();
-		dlgSpellGrid.destroy();
 		doodads.destroy();
 		//invItemManager
 		notifications.destroy();
 		panels.destroy();
 		popups.destroy();
-		if(targetSpell!=null)
-			targetSpell.destroy();
 		btnCharacterView.destroy();
 		btnInfoView.destroy();
 		btnInventoryView.destroy();
@@ -378,14 +372,10 @@ class GameUI extends HxlDialog {
 		
 		
 		btnMainView=null;
-		dlgPotionGrid=null;
-		dlgSpellGrid=null;
 		doodads=null;
-		invItemManager = null;
 		notifications=null;
 		panels=null;
 		popups=null;
-		targetSpell=null;
 		btnCharacterView=null;
 		btnInfoView=null;
 		btnInventoryView=null;
@@ -436,8 +426,9 @@ class GameUI extends HxlDialog {
 	}
 	override public function overlapsPoint(X:Float, Y:Float, ?PerPixel:Bool = false):Bool {
 		return leftButtons.overlapsPoint(X, Y) ||
-		     dlgSpellGrid.overlapsPoint(X, Y) ||
-		     dlgPotionGrid.overlapsPoint(X, Y) ||
+		    //dlgSpellGrid.overlapsPoint(X, Y) ||
+		    //dlgPotionGrid.overlapsPoint(X, Y) ||
+			 bagDialog.overlapsPoint(X, Y) ||
 			 panels.panelInventory.overlapsPoint(X, Y) ||
 			 panels.panelCharacter.overlapsPoint(X, Y);
 	}
@@ -473,6 +464,14 @@ class GameUI extends HxlDialog {
 		
 		add(centralHealthBar);
 		add(centralXpBar);
+	}
+	
+	public function pressHelp(?playSound:Bool = true) {
+		bagDialog.equippedConsumables.pressHelp(playSound);
+	}
+	
+	public function pressMenu(?playSound:Bool = true) {
+		bagDialog.equippedConsumables.pressMenu(playSound);
 	}
 	
 	public function updateCentralBarsPosition() {
@@ -549,62 +548,16 @@ class GameUI extends HxlDialog {
 	}
 	public function updateCharges() {
 		var player = Registery.player;
-		for ( btn in dlgSpellGrid.buttons ){
+		/*for ( btn in dlgSpellGrid.buttons ){
 			if (btn.getSpell() != null) {		
 				updateCharge(btn);
 			}
+		}*/
+		for (spell in player.bag.spells(true)) {
+			if (spell.inventoryProxy != null) {
+				spell.inventoryProxy.updateCharge();
+			}
 		}
-	}
-
-	public function updateCharge(btn:CqSpellButton) {		
-		var chargeBmp:Bitmap = new Bitmap(GraphicCache.getBitmap(CqGraphicKey.EquipmentCellBG));
-		var chargeShape:Shape = new Shape();
-
-		var statPoints = 0;
-		var statPointsRequired = 1;
-		if(btn.getSpell()!=null){		
-			statPoints = btn.getSpell().statPoints;
-			statPointsRequired = btn.getSpell().statPointsRequired;
-		}
-
-		var start = -Math.PI / 2;
-		var end = 2*Math.PI * (3/4 - statPoints/statPointsRequired);
-			
-		var G = chargeShape.graphics;
-		G.clear();
-		G.beginFill(0x55000000);
-		drawChargeArc(G, 27, 27, start, end, 47, -1);
-		G.endFill();
-		G = null;
-
-		chargeShape.mask = chargeBmp;
-		
-		btn.updateChargeSprite(chargeShape);
-		
-		chargeBmp = null;
-		chargeShape = null;
-	}
-
-	public static function drawChargeArc(G:Graphics, centerX:Float, centerY:Float, startAngle:Float, endAngle:Float, radius:Float, direction:Int) {
-		var difference:Float = Math.abs(endAngle - startAngle);
-		var divisions:Int = Math.floor(difference / (Math.PI / 4))+1;
-		var span:Float = direction * difference / (2 * divisions);
-		var controlRadius:Float = radius / Math.cos(span);
-		//G.moveTo(centerX + (Math.cos(startAngle)*radius), centerY + Math.sin(startAngle)*radius);
-		G.moveTo(centerX, centerY);
-		G.lineTo(centerX + (Math.cos(startAngle)*radius), centerY + Math.sin(startAngle)*radius);
-		var controlPoint:Point;
-		var anchorPoint:Point;
-		for ( i in 0...divisions ) {
-			endAngle = startAngle + span;
-			startAngle = endAngle + span;
-			controlPoint = new Point(centerX+Math.cos(endAngle)*controlRadius, centerY+Math.sin(endAngle)*controlRadius);
-			anchorPoint = new Point(centerX+Math.cos(startAngle)*radius, centerY+Math.sin(startAngle)*radius);
-			G.curveTo( controlPoint.x, controlPoint.y, anchorPoint.x, anchorPoint.y );
-			controlPoint = null;
-			anchorPoint = null;
-		}
-		G.lineTo(centerX, centerY);
 	}
 
 	public function initGraphicsCache() {
@@ -675,30 +628,11 @@ class GameUI extends HxlDialog {
 		}
 	}
 	
-	private function initSheets():Void 
-	{
-		var itemSheet:HxlSpriteSheet;
-		var itemSprite:HxlSprite;
-		var spellSheet:HxlSpriteSheet;
-		var spellSprite:HxlSprite;
-		itemSheet = SpriteItems.instance;
-		var itemSheetKey:CqGraphicKey = CqGraphicKey.ItemIconSheet;
-		itemSprite = new HxlSprite(0, 0);
-		itemSprite.loadGraphic(SpriteItems, true, false, Configuration.tileSize, Configuration.tileSize, false, 3.0, 3.0);
-		panels.panelInventory.dlgInfo.itemSheet = itemSheet;
-		panels.panelInventory.dlgInfo.itemSprite = itemSprite;
-
-		spellSheet = SpriteSpells.instance;
-		var spellSheetKey:CqGraphicKey = CqGraphicKey.SpellIconSheet;
-		spellSprite = new HxlSprite(0, 0);
-		spellSprite.loadGraphic(SpriteSpells, true, false, Configuration.tileSize, Configuration.tileSize, false, 3.0, 3.0);
-		panels.panelInventory.dlgInfo.spellSheet = spellSheet;
-		panels.panelInventory.dlgInfo.spellSprite = spellSprite;
-		CqInventoryItem.spellSheet = spellSheet;
-		CqInventoryItem.spellSprite = spellSprite;
-		CqInventoryItem.itemSheet = itemSheet;
-		CqInventoryItem.itemSprite = itemSprite;
+	private function initSheets():Void {
+		CqSheets.itemSheet = SpriteItems.instance;
+		CqSheets.spellSheet = SpriteSpells.instance;
 	}
+	
 	public function disableAllButtons():Void
 	{
 		btnMainView.setActive(false);
@@ -729,10 +663,6 @@ class GameUI extends HxlDialog {
 	}
 	override public function onRemove(state:HxlState) {
 		super.onRemove(state);
-	}
-	public function itemPickup(Item:CqItem) {
-		if(invItemManager.itemPickup(Item))
-			btnInventoryView.doFlash();
 	}
 
 	public function initChests() {
@@ -832,36 +762,40 @@ class GameUI extends HxlDialog {
 	
 	// targeting module:
 	
+	
 	private var targetColor:UInt;
 	private static var hoveredEnemy:CqActor;
-	public static function setTargeting(Toggle:Bool, ?TargetText:String=null, ?TargetsEmptyTile=false) {
+
+	public static var isTargeting (get_isTargeting, never) : Bool;
+	
+	private static function get_isTargeting():Bool {
+		return targetSpell != null;
+	}	
+	
+	public static function setTargeting(spell:CqItem) {
+		targetSpell = spell;
+		
+		// clear the current enemy popup before moving the cursor or we might end up with two!
 		if (hoveredEnemy != null) {
 			if (hoveredEnemy.popup != null) hoveredEnemy.popup.mouseBound = true;
 			hoveredEnemy = null;
 		}
 		
-		isTargeting = Toggle;
-		isTargetingEmptyTile = TargetsEmptyTile; 
-		if ( TargetText != null ) {
-			if (TargetsEmptyTile) {
-				targetString = "Select a space for your " + TargetText + " spell";
+		if ( spell != null ) {
+			var itemTypeName:String = Std.is(spell, CqSpell) ? " spell" : " potion";
+			if (spell.targetsEmptyTile) {
+				targetString = "Select a space for your " + spell.name + itemTypeName;
 			} else {
-				targetString = "Select a target for your " + TargetText + " spell";
+				targetString = "Select a target for your " + spell.name + itemTypeName;
 			}
-		}
-		if ( !Toggle ) {
-			if ( instance.targetSprite != null ) 
-				instance.targetSprite.visible = false;
-			if ( instance.targetText != null ) 
-				instance.targetText.visible = false;
-			if ( targetSpell != null ) 
-				targetSpell = null;
+		} else {
+			if (instance.targetSprite != null) instance.targetSprite.visible = false;
+			if (instance.targetText != null) instance.targetText.visible = false;
 		}
 	}
 	public static function setTargetingPos(pos:HxlPoint):Void
 	{
-		if (isTargeting)
-		{
+		if (targetSpell != null) {
 			if (instance.targetLastPos == null) instance.targetLastPos = new HxlPoint();
 			instance.targetLastPos.x = pos.x;
 			instance.targetLastPos.y = pos.y;
@@ -872,9 +806,6 @@ class GameUI extends HxlDialog {
 				instance.targetSprite.y = wPos.y;
 			}
 		}
-	}
-	public static function setTargetingSpell(Spell:CqSpellButton) {
-		targetSpell = Spell;
 	}
 
 	private function setTargetColor(color:UInt) {
@@ -906,6 +837,7 @@ class GameUI extends HxlDialog {
 	}
 	
 	public function updateTargeting(mouse:Bool = true) {
+		// if we get called here, we are in targeting mode
 		if (targetSprite == null || targetSprite.visible == false) {
 			setTargetColor(0xffffff);
 		}
@@ -954,7 +886,7 @@ class GameUI extends HxlDialog {
 			Actuate.tween(targetSprite, if (mouse) .046 else .125, { x: worldPos.x, y: worldPos.y} );
 			
 			var tile:CqTile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)), CqTile);
-			if (isTargetingEmptyTile) {
+			if (targetSpell.targetsEmptyTile) {
 				if ( tile == null || tile.actors.length > 0 || tile.visibility != Visibility.IN_SIGHT) {
 					setTargetColor(0xff0000);
 				} else {
@@ -994,45 +926,40 @@ class GameUI extends HxlDialog {
 		}		
 		
 		if ( targetSpell == null ) {
-			GameUI.setTargeting(false);
+			GameUI.setTargeting(null);
 			return;
 		}
 		
+		
+		// a lot of redundancy here to clean up:
 		var tile:CqTile = null;
-		var targetX:Float;
-		var targetY:Float;
+		var targetX:Float, targetY:Float;
 		if (mouse) {
 			targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
 			targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
-			tile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)), CqTile);
 		}else {
-			tile = cast(Registery.level.getTile(Std.int(targetLastPos.x), Std.int(targetLastPos.y)), CqTile);
+			targetX = targetLastPos.x;
+			targetY = targetLastPos.y;
 		}
 		
+		tile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)), CqTile);
 		if (tile != null && tile.visibility == Visibility.IN_SIGHT) {
-			if (isTargetingEmptyTile) {
+			if (targetSpell.targetsEmptyTile) {
 				if ( tile.actors.length <= 0 && HxlUtil.contains(SpriteTiles.walkableAndSeeThroughTiles.iterator(), tile.getDataNum()) ) {
-					cast(Registery.player, CqActor).useAt(targetSpell.getSpell(), tile);
-					SoundEffectsManager.play(SpellCast);
-					targetSpell.getSpell().statPoints = 0;
-					updateCharge(targetSpell);
+					targetSpell.activate(Registery.player, null, new HxlPoint(targetX, targetY));
 					cast(HxlGraphics.state, GameState).passTurn();
 				}
 			} else {
 				if (tile.actors != null){
 					if ( tile.actors.length > 0 && cast(tile.actors[0], CqActor).faction != 0) {
-						var player = Registery.player;
-						player.use(targetSpell.getSpell(), cast(tile.actors[0], CqActor));
-						SoundEffectsManager.play(SpellCast);
-						targetSpell.getSpell().statPoints = 0;
-						updateCharge(targetSpell);
+						targetSpell.activate(Registery.player, cast(tile.actors[0], CqActor));
 						cast(HxlGraphics.state, GameState).passTurn();
 					}
 				}
 			}
 		}
 		
-		GameUI.setTargeting(false);
+		GameUI.setTargeting(null);
 	}
 	
 	public function removePopups(parents:Array<Dynamic>) {
@@ -1060,6 +987,10 @@ class GameUI extends HxlDialog {
 			cqMob.setPopup(pop);
 			popups.add(pop);
 		}
+	}
+	
+	public function flashInventoryButton() {
+		btnInventoryView.doFlash();
 	}
 	
 	private function getXBallGraphic(ball:HxlSprite, colorSource:BitmapData) {
@@ -1138,8 +1069,35 @@ class GameUI extends HxlDialog {
 			ball.pixels.dispose();
 			ball.pixels = null;
 		}
-		CqActor.completeUseOn(spell, actor, other);
+		
+		spell.completeUseOn(actor, other);
 	}
 }
 
 
+
+class CqSheets {
+	// I feel no love for this code here, but it's as clean a refactoring as I'm going to get to just yet
+	public static var itemSheet:HxlSpriteSheet;
+	public static var spellSheet:HxlSpriteSheet;
+	
+	public static function getSpellPixels(spriteIndex:String):BitmapData {
+		var spellSheetKey:CqGraphicKey = CqGraphicKey.SpellIconSheet;
+		var spellSprite = new HxlSprite(0, 0);
+		spellSprite.loadGraphic(SpriteSpells, true, false, Configuration.tileSize, Configuration.tileSize, false, 3.0, 3.0);
+		
+		spellSprite.setFrame(spellSheet.getSpriteIndex(spriteIndex));
+		
+		return spellSprite.getFramePixels();
+	}
+	
+	public static function getItemPixels(spriteIndex:String):BitmapData {
+		var itemSheetKey:CqGraphicKey = CqGraphicKey.ItemIconSheet;
+		var itemSprite = new HxlSprite(0, 0);
+		itemSprite.loadGraphic(SpriteItems, true, false, Configuration.tileSize, Configuration.tileSize, false, 3.0, 3.0);
+
+		itemSprite.setFrame(itemSheet.getSpriteIndex(spriteIndex));
+		
+		return itemSprite.getFramePixels();
+	}
+}

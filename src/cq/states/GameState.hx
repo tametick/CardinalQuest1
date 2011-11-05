@@ -9,9 +9,9 @@ import haxel.HxlGame;
 import data.Configuration;
 import data.Registery;
 
+
+import cq.ui.bag.BagGrid;
 import cq.ui.CqPopup;
-import cq.ui.CqPotionButton;
-import cq.ui.CqSpellButton;
 import cq.GameUI;
 import cq.ui.CqMapDialog;
 import cq.ui.CqTextScroller;
@@ -250,15 +250,19 @@ class GameState extends CqState {
 	}
 
 	private function checkSlotHotkeys():Bool {
-		var item = null;
-
+		// notice that these two blocks are identical and can and should be merged soon
+		
+		// this has to be run through the BagDialog if it is to be done correctly
+		
 		//potions
+		/*
 		for (i in 0...Configuration.bindings.potions.length) {
 			if (HxlGraphics.keys.justPressed(Configuration.bindings.potions[i])) {
-				item = gameUI.dlgPotionGrid.cells[i];
-				if (item != null) {
-					cast(item, CqPotionCell).potBtn.usePotion();
-					return true;
+				var cell = gameUI.dlgPotionGrid.cells[i];
+				if (cell != null && cell.proxy != null) {
+					if (cell.proxy.item.tryToActivate(true)) {
+						return true;
+					}
 				}
 			}
 		}
@@ -266,13 +270,15 @@ class GameState extends CqState {
 		//spells
 		for (i in 0...Configuration.bindings.spells.length) {
 			if (HxlGraphics.keys.justPressed(Configuration.bindings.spells[i])) {
-				item = gameUI.dlgSpellGrid.cells[i];
-				if (item != null) {
-					cast(item, CqSpellCell).btn.useSpell();
-					return true;
+				var cell = gameUI.dlgSpellGrid.cells[i];
+				if (cell != null) {
+					if (cell.proxy.item.tryToActivate(true)) {
+						return true;
+					}
 				}
 			}
 		}
+		*/
 
 		return false;
 	}
@@ -405,7 +411,8 @@ class GameState extends CqState {
 
 		add(cursor);
 
-		player.addOnPickup(gameUI.itemPickup);
+		// player.addOnPickup(gameUI.itemPickup);
+		
 		player.addOnInjure(gameUI.doPlayerInjureEffect);
 		player.addOnKill(gameUI.doPlayerInjureEffect);
 		player.addOnGainXP(gameUI.doPlayerGainXP);
@@ -413,12 +420,16 @@ class GameState extends CqState {
 
 		world.addOnNewLevel(onNewLevelCallBack);
 
+		// first add cells to the player's bag!  (can be improved, yet)
+		
+		gameUI.bagDialog.addSlotsToBag(player.bag);
+		
 		// Give player items specified in classes.txt.
 		var classes:StatsFile = Resources.statsFiles.get( "classes.txt" );
 		var classEntry:StatsFileEntry = classes.getEntry( "ID", chosenClass );
 		for ( i in 1 ... 7 ) {
 			if ( classEntry.getField( "Item" + i ) != "" ) {
-				player.give(null, classEntry.getField( "Item" + i ));
+				player.give(classEntry.getField( "Item" + i ));
 			}
 		}
 
@@ -461,7 +472,7 @@ class GameState extends CqState {
 		update();
 
 		if (!Configuration.debug) {
-			gameUI.dlgPotionGrid.pressHelp(false);
+			gameUI.pressHelp(false);
 		}
 
 		//Mouse cursor on mobile looks silly
@@ -510,17 +521,17 @@ class GameState extends CqState {
 		if ( HxlGraphics.keys.justReleased("F1") || HxlGraphics.keys.justReleased("ESCAPE")) {
 			// If user was in targeting mode, cancel it
 			if ( GameUI.isTargeting ) {
-				GameUI.setTargeting(false);
+				GameUI.setTargeting(null);
 			} else {
 				if (HxlGraphics.keys.justReleased("F1")){
 					gameUI.setActive();
-					gameUI.dlgPotionGrid.pressHelp(false);
+					gameUI.pressHelp(false);
 				}else {
 					if (GameUI.instance.panels.currentPanel != null) {
 						gameUI.panels.hideCurrentPanel();
 					}else{
 						gameUI.setActive();
-						gameUI.dlgPotionGrid.pressMenu(false);
+						gameUI.pressMenu(false);
 					}
 				}
 			}

@@ -1,6 +1,6 @@
 package cq;
 
-import cq.ui.CqSpellButton;
+import cq.ui.bag.BagGrid;
 import data.StatsFile;
 import haxel.HxlUtil;
 import playtomic.base.Data;
@@ -95,19 +95,10 @@ class CqSpellFactory {
 	}
 }
 
-class CqSpell extends CqItem {
-	public var targetsOther:Bool;
-	public var targetsEmptyTile:Bool;
-	public var id:String;
-	public var stat:String;
-	public var statPoints:Int;
-	public var statPointsRequired:Int;
+class CqSpell extends CqItem {	
 	public function new(X:Float, Y:Float, _id:String, _sprite:String) {
-		super(X, Y, _sprite);
-		id = _id;
-		equipSlot = SPELL;
-		visible = false;
+		super(X, Y, _id, _sprite);
 		stat = "spirit";
-		statPoints = 0;
-	}
+		equipSlot = SPELL;
+	}	
 }

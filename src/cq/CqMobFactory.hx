@@ -103,18 +103,22 @@ class CqMobFactory {
 			mob.spirit = entry.getField( "Spirit" );
 			mob.vitality = HxlUtil.randomIntInRange( entry.getField( "VitalityMin" ),
 													 entry.getField( "VitalityMax" ) );
-			mob.damage = new Range( entry.getField( "DamageMin" ),
-									entry.getField( "DamageMax" ) );
+			
+			mob.damage = new Range(
+				entry.getField("DamageMin"),
+				entry.getField("DamageMax")
+			);
+						
 			mob.xpValue = entry.getField( "XP" );
 			
 			var spell1:String = entry.getField( "Spell1" );
 			if ( spell1 != "" ) {
-				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, spell1 ) );
+				mob.bag.grantIntrinsic(CqSpellFactory.newSpell( -1, -1, spell1 ) );
 			}
 			
 			var spell2:String = entry.getField( "Spell2" );
 			if ( spell2 != "" ) {
-				mob.equippedSpells.push(CqSpellFactory.newSpell( -1, -1, spell2 ) );
+				mob.bag.grantIntrinsic(CqSpellFactory.newSpell( -1, -1, spell2 ) );
 			}
 		}
 		else

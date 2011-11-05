@@ -420,6 +420,7 @@ class CqLevel extends Level {
 		}
 	}
 	
+	// we need to move the bulk of this to CqActor
 	public override function tick(state:HxlState) {
 		var l:Float = mobs.length + 1;
 		var i:UInt = 0;
@@ -546,21 +547,19 @@ class CqLevel extends Level {
 			vitality += creature.buffs.get("vitality");
 			vitality = Std.int(Math.max(vitality, 0));
 			
-			// Charge action & spirit points
+			// Charge action & spirit points -- offload this into the creature tick
 			creature.actionPoints += speed;
 			if (!specialActive) {
-				for (s in creature.equippedSpells) {
-					if (s != null) {
-						var boost:Int = 0;
-						switch ( s.stat ) {
-							case "spirit": boost = spirit;
-							case "speed": boost = speed;
-							case "attack": boost = attack;
-							case "defense": boost = defense;
-							case "vitality": boost = vitality;
-						}
-						s.statPoints = Std.int(Math.min( s.statPointsRequired, s.statPoints + boost));
+				for (s in creature.bag.spells()) {
+					var boost:Int = 0;
+					switch ( s.stat ) {
+						case "spirit": boost = spirit;
+						case "speed": boost = speed;
+						case "attack": boost = attack;
+						case "defense": boost = defense;
+						case "vitality": boost = vitality;
 					}
+					s.statPoints = Std.int(Math.min( s.statPointsRequired, s.statPoints + boost));
 				}
 			}
 			
