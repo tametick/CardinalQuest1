@@ -1,0 +1,245 @@
+Field String ID
+Field String Data
+
+; Class names.
+
+FIGHTER         "Fighter"
+WIZARD          "Wizard"
+THIEF           "Thief"
+
+; Item names.
+
+BOOTS           "Boots of Escape"
+WINGED_SANDALS  "Hermes' Sandals"
+TUNDRA_BOOTS    "Tundra Lizard Boots"
+
+LEATHER_ARMOR   "Leather Armor"
+BREASTPLATE     "Breastplate"
+CLOAK           "Rogues' Cloak of Swiftness"
+FULL_PLATE_MAIL "Full Plate Armor"
+
+RING            "Ring of Wisdom"
+AMULET          "Amulet of Enlightenment"
+GEMMED_AMULET   "Supernatural Amulet"
+GEMMED_RING     "Ring of Rubies"
+
+CAP             "Cap of Endurance"
+HELM            "Helm of Hardiness"
+FULL_HELM       "Full Helmet of Vitality"
+GOLDEN_HELM     "King's Golden Helm"
+
+GLOVE           "Gloves of Dexterity"
+BRACELET        "Achilles' Bracer"
+GAUNTLET        "Gauntlets of Sturdiness"
+
+DAGGER          "Dagger"
+SHORT_SWORD     "Short Sword"
+STAFF           "Staff"
+LONG_SWORD      "Long Sword"
+AXE             "Axe"
+BATTLE_AXE      "Hardened Battle Axe"
+MACE            "Beastly Mace"
+CLAYMORE        "Broad Claymore"
+BROAD_SWORD     "Twin Bladed Katana"
+
+; Potions.
+
+GREEN_POTION    "Elixir of the Hawk"
+PURPLE_POTION   "Elixir of the Lion"
+BLUE_POTION     "Elixir of the Elephant"
+YELLOW_POTION   "Coca-leaf Cocktail"
+RED_POTION      "Healing Potion"
+
+; Spells.
+
+BERSERK         "Berserk"
+BLESS_WEAPON    "Bless Weapon"
+HASTE           "Haste"
+SHADOW_WALK     "Shadow Walk"
+STONE_SKIN      "Stone Skin"
+BLINK           "Blink"
+MAGIC_ARMOR     "Magic Armor"
+REVEAL_MAP      "Reveal Map"
+HEAL            "Heal"
+
+FREEZE          "Freeze"
+FIREBALL        "Fireball"
+ENFEEBLE_MONSTER "Enfeeble Monster"
+CHARM_MONSTER   "Charm Monster"
+POLYMORPH       "Polymorph"
+SLEEP           "Sleep"
+FEAR            "Fear"
+
+MAGIC_MIRROR    "Magic Mirror"
+TELEPORT        "Teleport"
+
+; Mobs.
+
+BANDIT_CAPTAIN  "Captain"
+BANDIT          "Bandit"
+
+KOBOLD_SPEAR    "Spearkobold"
+KOBOLD          "Kobold"
+KOBOLD_MAGE     "Kobold Trickster"
+
+SUCCUBUS        "Succubus"
+SUCCUBUS_WHIP   "Dominatrix"
+
+SPIDER          "Spider"
+SPIDER_RED      "Black Widow"
+SPIDER_GRAY     "Wolf Spider"
+
+APE             "Ape"
+APE_DEMONIC     "Demon Ape"
+
+ELEMENTAL_AIR     "Air Elemental"
+ELEMENTAL_NATURE  "Nature Elemental"
+ELEMENTAL_SORCERY "Sorcery Elemental"
+ELEMENTAL_CHAOS   "Chaos Elemental"
+
+WEREWOLF        "Werewolf"
+
+MINOTAUR        "Minotaur"
+
+; Misc.
+
+CHEST           "Chest"
+
+; Statistics
+"damage"        "damage"
+"attack"        "attack"
+"defense"       "defense"
+"life"          "life"
+"vitality"      "vitality"
+"speed"         "speed"
+"spirit"        "spirit"
+
+; Special effects
+"damage multiplier" "damage multiplier"
+"charm"             "charm"
+"fear"              "fear"
+"sleep"             "sleep"
+"heal"              "heal"
+
+; Ingame messages.
+STAT_HEALTH          "Health"
+STAT_ATTACK          "Attack"
+STAT_DEFENSE         "Defense"
+STAT_LIFE            "Life"
+STAT_VITALITY        "Vitality"
+STAT_SPEED           "Speed"
+STAT_SPIRIT          "Spirit"
+
+PREFIX_SUPERB        "Superb"
+PREFIX_WONDROUS      "Wondrous"
+PREFIX_MAGICAL       "Magical"
+
+UI_LEVEL             "Level"
+UI_TIMES             "x"
+UI_FLOOR             "Floor"
+UI_MAP               "Map"
+UI_INV               "Inv"
+UI_CHAR              "Char"
+UI_DAMAGE            "Damage"
+UI_DESTROY           "Destroy"
+
+POPUP_C              "[hotkey C]"
+POPUP_I              "[hotkey I]"
+POPUP_M              "[hotkey M]"
+POPUP_0              "[hotkey 0]"
+POPUP_1              "[hotkey 1]"
+POPUP_2              "[hotkey 2]"
+POPUP_3              "[hotkey 3]"
+POPUP_4              "[hotkey 4]"
+POPUP_5              "[hotkey 5]"
+POPUP_6              "[hotkey 6]"
+POPUP_7              "[hotkey 7]"
+POPUP_8              "[hotkey 8]"
+POPUP_9              "[hotkey 9]"
+POPUP_ENTER          "[hotkey enter]"
+POPUP_ESC            "[hotkey ESC]"
+POPUP_F1             "[hotkey F1]"
+
+POPUP_RECOVERED      "recovered"
+POPUP_EXPIRED        "wears off"
+POPUP_MIRROR         "Mirror"
+POPUP_MIRROR_EXPIRED "Shattered"
+POPUP_INVIS_EXPIRED  "Reappeared"
+POPUP_EFFECT_EXPIRED "runs out"
+POPUP_INVIS_BREAK1   "An invisible"
+POPUP_INVIS_BREAK2   "appears!"
+POPUP_INVIS_BROKEN   "You reappear"
+POPUP_BACKSTAB       "Backstab!"
+POPUP_BUMP1          "You stumble into an invisible"
+POPUP_BUMP2          "."
+POPUP_BUMPED         "You have been discovered!"
+POPUP_INVIS          "Vanished"
+POPUP_HEALED         "Healed"
+POPUP_CHARM          "Charm"
+POPUP_FEAR           "Fear"
+POPUP_SLEEP          "Sleep"
+POPUP_POLYMORPH      "Morph"
+POPUP_COIN           "coin"
+POPUP_COINS          "coins"
+
+NOTIFY_INV_FULL      "Inventory is full!"
+NOTIFY_STAIRS        "You have found the stairs!"
+NOTIFY_LATE_STAIRS   "At long last, the stairway down!"
+NOTIFY_EXPLORE       "Keep exploring!"
+NOTIFY_LATE_EXPLORE  "Head for the stairs!"
+NOTIFY_DOWNSTAIRS    "Click to go downstairs"
+NOTIFY_PICK_SPACE1   "Select a space for your"
+NOTIFY_PICK_SPACE2   "spell"
+NOTIFY_PICK_TARGET1  "Select a target for your"
+NOTIFY_PICK_TARGET2  "spell"
+NOTIFY_GET_FIRST     "I've been wanting one of these."
+NOTIFY_GET_DUPLICATE "I already have one just like this."
+NOTIFY_GET_SELLOLD1  "I will sell my old"
+NOTIFY_GET_SELLOLD2  " now."
+NOTIFY_GET_SELLNEW1  "Ha! Not half as good as my"
+NOTIFY_GET_SELLNEW2  "."
+NOTIFY_GET_STASHOLD1 "I'll keep my old"
+NOTIFY_GET_STASHOLD2 " in my bag."
+NOTIFY_GET_REDUNDANT "I've got better in my bag."
+NOTIFY_GET_STASHNEW1 "I'll put this"
+NOTIFY_GET_STASHNEW2 " in my bag."
+NOTIFY_EMPTYCELL     "Use an empty cell to swap items!"
+
+LOG_YOU_HIT          "You hit"
+LOG_HIT_YOU          "Hit you"
+LOG_YOU_KILL         "You kill"
+LOG_KILLS_YOU        "kills you"
+LOG_YOU_MISS         "You miss"
+LOG_MISS_YOU         "Misses you"
+LOG_EFFECT           "Applied special effect:"
+LOG_XP1              "gained"
+LOG_XP2              "xp"
+LOG_EXPIRED_TIMER    "removed expired timer:"
+LOG_POTION           "Using potion"
+
+; UI - Menu
+MENU_NEW_GAME        "New Game"
+MENU_RESUME_GAME     "Resume Game"
+MENU_CREDITS         "Credits"
+MENU_QUIT            "Quit"
+MENU_MUSIC           "Music"
+MENU_SOUND           "Sound"
+MENU_COPYRIGHT       "Copyright 2011"
+MENU_PORTEDBY        "Ported by"
+MENU_VERSION         "Version"
+MENU_STANDALONE      "Get stand-alone version at"
+
+MENU_HIGHSCORES      "Highscores"
+
+MENU_CREATECHARACTER "Create Character"
+MENU_START           "Start"
+MENU_MENU            "Menu"
+MENU_MAIN_MENU       "Main Menu"
+MENU_HELP            "Help"
+MENU_GAME_OVER       "Game over"
+
+PRELOADER1           "Hi there!  It looks like somebody copied this game without my permission.  Just click anywhere, or copy-paste this URL into your browser.\n\n"
+PRELOADER2           "\n\nto play the game at my site.  Thanks, and have fun!"
+
+DEMO_OVER            "Demo Over!"
+DEMO_OVER_MORE       "Want more?"

@@ -1,7 +1,7 @@
 Field String Class
 Field Int Weight
 Field String Sprite
-Field String Name
+Field String NameID
 Field Int Attack
 Field Int Defense
 Field Int Speed
@@ -14,47 +14,47 @@ Field Int XP
 Field String Spell1
 Field String Spell2
 
-; Class     Wgt Sprite                   Name               Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Bandit        1 bandit_long_swords       [Captain]            2   2   4  30  2  3  1  1   5
-Bandit        1 bandit_short_swords      [Bandit]             2   2   2  30  4  6  1  1   5
-Bandit        1 bandit_single_long_sword [Bandit]             2   2   3  30  2  3  1  1   5
-Bandit        1 bandit_knives            [Bandit]             2   2   3  30  2  3  1  1   5
+; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
+Bandit        1 bandit_long_swords       BANDIT_CAPTAIN       2   2   8  30  2  3  1  1   5
+Bandit        1 bandit_short_swords      BANDIT               2   2   5  30  4  6  1  1   5
+Bandit        1 bandit_single_long_sword BANDIT               2   2   6  30  2  3  1  1   5
+Bandit        1 bandit_knives            BANDIT               2   2   6  30  2  3  1  1   5
 
-; Class     Wgt Sprite                   Name               Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Kobold        1 kobold_spear             [Spearkobold]        4   3   3   3  1  4  2  4  10
-Kobold        1 kobold_knives            [Kobold]             4   3   3   3  1  4  1  3  10
-Kobold        1 kobold_mage              [Kobold Trickster]   4   3   3  12  1  4  1  3  10 TELEPORT
+; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
+Kobold        1 kobold_spear             KOBOLD_SPEAR         4   3   6   3  2  6  2  4  10
+Kobold        1 kobold_knives            KOBOLD               4   3   8   3  2  6  1  4  10
+Kobold        1 kobold_mage              KOBOLD_MAGE          4   3   6  12  2  6  1  3  10 TELEPORT
 
-; Class     Wgt Sprite                   Name               Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Succubus      1 succubus                 [Succubus]           3   4   4   4  2  8  2  4  25 ENFEEBLE_MONSTER
-Succubus      1 succubus_staff           [Succubus]           3   4   4   4  2  8  2  4  25 ENFEEBLE_MONSTER
-Succubus      1 succubus_whip            [Dominatrix]         3   4   6   2  2  8  2  4  25 ENFEEBLE_MONSTER
-Succubus      1 succubus_scepter         [Succubus]           3   4   4   8  2  8  2  4  25 ENFEEBLE_MONSTER SHADOW_WALK
+; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
+Succubus      1 succubus                 SUCCUBUS             3   2   8   4  2  8  2  5  25 ENFEEBLE_MONSTER
+Succubus      1 succubus_staff           SUCCUBUS             3   2   8   4  2  8  2  5  25 ENFEEBLE_MONSTER
+Succubus      1 succubus_whip            SUCCUBUS_WHIP        3   2  10   2  2  8  2  5  25 ENFEEBLE_MONSTER
+Succubus      1 succubus_scepter         SUCCUBUS             3   2   8   8  2  8  2  5  25 ENFEEBLE_MONSTER SHADOW_WALK
 
-; Class     Wgt Sprite                   Name               Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Spider        1 spider_yellow            [Spider]             5   3   3   4  3 12  2  6  50 FREEZE
-Spider        1 spider_red               [Black Widow]        5   1   4   7 10 19  2  6  50 FREEZE
-Spider        1 spider_gray              [Wolf Spider]        5   3   6   1  3 12  2  6  50 FREEZE
-Spider        1 spider_green             [Spider]             5   3   3   4  3 12  2  6  50 FREEZE
+; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
+Spider        1 spider_yellow            SPIDER               5   3   6   2  5 12  2  8  50 FREEZE
+Spider        1 spider_red               SPIDER_RED           5   1   6   4 10 19  2  6  50 FREEZE
+Spider        1 spider_gray              SPIDER_GRAY          5   2   9   1  5 12  2  6  50 FREEZE
+Spider        1 spider_green             SPIDER               5   3   6   2  5 12  2  8  50 FREEZE
 
-; Class     Wgt Sprite                   Name               Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Ape           1 ape_blue                 [Ape]                6   6   6   3  4 16  4  6 125
-Ape           1 ape_black                [Ape]                6   6   6   3  4 16  4  6 125
-Ape           1 ape_red                  [Demon Ape]          7   8   3   3  8 20  4  6 125
-Ape           1 ape_white                [Ape]                6   6   6   3  4 16  4  6 125
+; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
+Ape           1 ape_blue                 APE                  6   6  10   3  4 16  3  6 125
+Ape           1 ape_black                APE                  6   6  10   3  4 16  3  6 125
+Ape           1 ape_red                  APE_DEMONIC          7   8   7   3  8 20  3  6 125
+Ape           1 ape_white                APE                  6   6  10   3  4 16  3  6 125
 
-; Class     Wgt Sprite                   Name               Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Elemental     1 elemental_green          [Air Elemental]      4   4   8   6  8 26  4  8 275 FIREBALL         SHADOW_WALK
-Elemental     1 elemental_white          [Nature Elemental]   4   4   4   6 14 32  4  8 275 FIREBALL         STONE_SKIN
-Elemental     1 elemental_red            [Sorcery Elemental]  4   4   4  18  8 26  4  8 275 MAGIC_MIRROR     TELEPORT
-Elemental     1 elemental_blue           [Chaos Elemental]    4   4   4  12  8 26  4  8 275 FIREBALL
+; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
+Elemental     1 elemental_green          ELEMENTAL_AIR        4   4  12   6  8 26  4  8 275 FIREBALL         SHADOW_WALK
+Elemental     1 elemental_white          ELEMENTAL_NATURE     4   4   8   6 14 32  4  8 275 FIREBALL         STONE_SKIN
+Elemental     1 elemental_red            ELEMENTAL_SORCERY    4   4  10  18  8 26  4  8 275 MAGIC_MIRROR     TELEPORT
+Elemental     1 elemental_blue           ELEMENTAL_CHAOS      4   4   8  12  8 26  4  8 275 FIREBALL
 
-; Class     Wgt Sprite                   Name               Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Werewolf      1 werewolf_gray            [Werewolf]           5   5   8   4  8 32  4  8 500 HASTE
-Werewolf      1 werewolf_blue            [Werewolf]           5   5   8   4  8 32  4  8 500 HASTE
-Werewolf      1 werewolf_purple          [Werewolf]           5   5   8   4  8 32  4  8 500 HASTE
+; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
+Werewolf      1 werewolf_gray            WEREWOLF             5   5  12   4 12 32  4 10 500 HASTE
+Werewolf      1 werewolf_blue            WEREWOLF             5   5  12   4 12 32  4 10 500 HASTE
+Werewolf      1 werewolf_purple          WEREWOLF             5   5  12   4 12 32  4 10 500 HASTE
 
-; Class     Wgt Sprite                   Name               Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Minotaur      1 minotaur                 [Minotaur]           7   4   7   4 24 48 12 32 950 BERSERK
-Minotaur      1 minotaur_axe             [Minotaur]           7   4   7   4 24 48 12 32 950 BERSERK
-Minotaur      1 minotaur_sword           [Minotaur]           7   4   7   4 24 48 12 32 950 BERSERK
+; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
+Minotaur      1 minotaur                 MINOTAUR             7   6  12   4 48 72  8 14 950 BERSERK
+Minotaur      1 minotaur_axe             MINOTAUR             7   6  10   4 48 72 12 18 950 BERSERK
+Minotaur      1 minotaur_sword           MINOTAUR             7   6  10   4 48 72 12 18 950 BERSERK

@@ -35,6 +35,7 @@ import cq.ui.CqCharacterDialog;
 import cq.ui.CqMapDialog;
 import cq.ui.CqMessageDialog;
 import cq.ui.CqTextNotification;
+import data.Resources;
 import flash.display.BitmapData;
 import flash.display.Shape;
 import flash.events.Event;
@@ -227,11 +228,11 @@ class GameUI extends HxlDialog {
 		// map
 		btnMapView = new HxlButton(0, 0, btnSize, btnSize);
 		btnMapView.loadGraphic(mapBtn,mapBtnHigh);
-		btnMapView.loadText(new HxlText(0, 40, btnSize, "Map", true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
+		btnMapView.loadText(new HxlText(0, 40, btnSize, Resources.getString( "UI_MAP" ), true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
 		btnMapView.setCallback(showMapDlg);
 		btnMapView.configEvent(5, true, true);
 		leftButtons.addButton(btnMapView);
-		pop = new CqPopup(100, "\n[hotkey M]", popups);
+		pop = new CqPopup(100, "\n" + Resources.getString( "POPUP_M" ), popups);
 		pop.zIndex = 15;
 		btnMapView.setPopup(pop);
 		popups.add(pop);
@@ -239,22 +240,22 @@ class GameUI extends HxlDialog {
 		// inv
 		btnInventoryView = new HxlButton(0, 0, btnSize, btnSize);
 		btnInventoryView.loadGraphic(invBtn,invBtnHigh);
-		btnInventoryView.loadText(new HxlText(0, 40, btnSize, "Inv", true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
+		btnInventoryView.loadText(new HxlText(0, 40, btnSize, Resources.getString( "UI_INV" ), true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
 		btnInventoryView.setCallback(showInvDlg);
 		btnInventoryView.configEvent(5, true, true);
 		leftButtons.addButton(btnInventoryView);
-		pop = new CqPopup(100, "\n[hotkey I]", popups);
+		pop = new CqPopup(100, "\n" + Resources.getString( "POPUP_I" ), popups);
 		pop.zIndex = 15;
 		btnInventoryView.setPopup(pop);
 		popups.add(pop);
 		// stats
 		btnCharacterView = new HxlButton(0, 0, btnSize, btnSize);
 		btnCharacterView.loadGraphic(charBtn,charBtnHigh);
-		btnCharacterView.loadText(new HxlText(0, 40, btnSize, "Char", true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
+		btnCharacterView.loadText(new HxlText(0, 40, btnSize, Resources.getString( "UI_CHAR" ), true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
 		
 		btnCharacterView.setCallback(showCharDlg);
 		btnCharacterView.configEvent(5, true, true);
-		pop = new CqPopup(100, "\n[hotkey C]", popups);
+		pop = new CqPopup(100, "\n" + Resources.getString( "POPUP_C" ), popups);
 		pop.zIndex = 15;
 		btnCharacterView.setPopup(pop);
 		popups.add(pop);
@@ -498,7 +499,7 @@ class GameUI extends HxlDialog {
 		var heart = new HeartSprite();
 		heart.x -= 2;
 		heart.y += 3;
-		var lives = new HxlText(heart.x + heart.width-6, 0, Std.int(infoViewHearts.width - heart.width), "x" + player.lives, true, FontAnonymousPro.instance.fontName);
+		var lives = new HxlText(heart.x + heart.width-6, 0, Std.int(infoViewHearts.width - heart.width), Resources.getString( "UI_TIMES" ) + player.lives, true, FontAnonymousPro.instance.fontName);
 		player.infoViewLives = lives;
 		
 		//coins
@@ -518,14 +519,14 @@ class GameUI extends HxlDialog {
 		add(infoViewHearts);
 
 		//level info
-		infoViewLevel = new HxlText(infoViewXpBar.x, infoViewHearts.y + infoViewHearts.height - 2, Std.int(btnInfoView.width), "Level " + player.level, true, FontAnonymousPro.instance.fontName);
+		infoViewLevel = new HxlText(infoViewXpBar.x, infoViewHearts.y + infoViewHearts.height - 2, Std.int(btnInfoView.width), Resources.getString( "UI_LEVEL" ) + " " + player.level, true, FontAnonymousPro.instance.fontName);
 		infoViewLevel.zIndex = zIndex+1;
 		player.infoViewLevel = infoViewLevel;
 		infoViewLevel.setSize(fontSize);
 		infoViewLevel.scrollFactor.x = infoViewLevel.scrollFactor.y = 0;
 		add(infoViewLevel);
 		
-		infoViewFloor = new HxlText(infoViewXpBar.x, infoViewLevel.y + infoViewLevel.height-4, Std.int(btnInfoView.width), "Floor " + (level.index+1), true, FontAnonymousPro.instance.fontName);
+		infoViewFloor = new HxlText(infoViewXpBar.x, infoViewLevel.y + infoViewLevel.height-4, Std.int(btnInfoView.width), Resources.getString( "UI_FLOOR" ) + " " + (level.index+1), true, FontAnonymousPro.instance.fontName);
 		infoViewFloor.zIndex = zIndex+1;
 		player.infoViewFloor = infoViewFloor;
 		infoViewFloor.setSize(fontSize);
@@ -655,7 +656,9 @@ class GameUI extends HxlDialog {
 		
 		if ( curTile.loots.length > 0 ) {
 			var item = cast(curTile.loots[curTile.loots.length - 1], CqItem);
-			player.pickup(HxlGraphics.state, item);
+			if (!Std.is(item, CqChest)) {
+				player.pickup(HxlGraphics.state, item);
+			}
 		}
 	}
 	override public function onAdd(state:HxlState) {
@@ -724,31 +727,79 @@ class GameUI extends HxlDialog {
 	}
 
 	public static function showDamageText(Actor:CqActor, Damage:Int) {
-		showEffectText(Actor, ""+Damage, 0xff2222);
+		showEffectText(Actor, ""+Damage, 0xff2222, true);
 	}
-	
-	static function effectDone() {
-		effectQueue.shift();
-		if (effectQueue.length > 0)
-			startEffectText(effectQueue.shift());
-	}
+
+	static var effectsActive:Array<CqFloatText> = new Array<CqFloatText>();
 	static var effectQueue:Array<CqFloatText> = new Array<CqFloatText>();
+	
 	static function startEffectText(txt:CqFloatText)
 	{
 		txt.InitSemiCustomTween(0.6, { y: txt.y - 20,alpha:0.5 }, effectDone);
 		txt.zIndex = 4;
 		HxlGraphics.state.add(txt);
 	}
-	public static function showEffectText(actor:CqActor, text:String, color:Int) {
-		if (Std.is(HxlGraphics.state, GameState) && cast(HxlGraphics.state, GameState).started) {
-			if (actor.visible) {
-				var fltxt:CqFloatText = new CqFloatText(actor.x + (actor.width / 2), actor.y - 16, text, color, 24, false);
-				effectQueue.push(fltxt);
-				if (effectQueue.length == 1 || effectQueue.length >3)
-					startEffectText(fltxt);
+	
+	static function startAvailableEffects()
+	{
+		for ( e in effectQueue )
+		{
+			var matched:Bool = false;
+			for ( active in effectsActive ) {
+				if ( active.actor == e.actor && active.startX == e.startX && active.startY == e.startY ) {
+					matched = true;
+					break;
+				}
+			}
+			
+			if ( !matched ) {
+				startEffectText( e );
+				effectsActive.push( e );
+				effectQueue.remove( e );
 			}
 		}
 	}
+	
+	static function effectDone() {
+		for ( i in 0 ... effectsActive.length ) {
+			while ( i < effectsActive.length && effectsActive[i].dead ) {
+				effectsActive.remove( effectsActive[i] );
+			}
+		}
+
+		startAvailableEffects();
+	}
+	
+	public static function showEffectText(actor:CqActor, text:String, color:Int,immediate:Bool = false) {
+		if (Std.is(HxlGraphics.state, GameState) && cast(HxlGraphics.state, GameState).started) {
+			if (actor.visible) {
+				var fltxt:CqFloatText = new CqFloatText(actor, actor.x + (actor.width / 2), actor.y - 16, text, color, 24, false);
+				
+				if ( immediate ) {
+					startEffectText(fltxt); // Don't even *track* immediate texts. They'd block important ones.
+				} else {
+					effectQueue.push(fltxt);
+					startAvailableEffects();
+				}
+			}
+		}
+	}
+	
+	public static function clearEffectText() {
+		for ( e in effectsActive ) {
+			e.destroy();
+		}
+		
+		for ( e in effectQueue ) {
+			e.destroy();
+		}
+
+		effectsActive.splice( 0, effectsActive.length );
+		effectQueue.splice( 0, effectQueue.length );
+		
+		notifications.clear();
+	}
+
 	public static function showTextNotification(message:String, ?color:Int = 0xDE913A) {
 		if (Std.is(HxlGraphics.state, GameState) && cast(HxlGraphics.state, GameState).started) {
 			notifications.notify(message, color);
@@ -782,11 +833,13 @@ class GameUI extends HxlDialog {
 		}
 		
 		if ( spell != null ) {
-			var itemTypeName:String = Std.is(spell, CqSpell) ? " spell" : " potion";
+			var itemTypeName:String = Std.is(spell, CqSpell) ? " spell" : " potion"; // merge -- we've got to find a way to offload this better to resources
 			if (spell.targetsEmptyTile) {
-				targetString = "Select a space for your " + spell.name + itemTypeName;
+				// targetString = "Select a space for your " + spell.name + itemTypeName;
+				targetString = Resources.getString( "NOTIFY_PICK_SPACE1" ) + " " + spell.name + " " + Resources.getString( "NOTIFY_PICK_SPACE2" );
 			} else {
-				targetString = "Select a target for your " + spell.name + itemTypeName;
+				targetString = Resources.getString( "NOTIFY_PICK_TARGET1" ) + " " + spell.name + " " + Resources.getString( "NOTIFY_PICK_TARGET2" );
+				// targetString = "Select a target for your " + spell.name + itemTypeName;
 			}
 		} else {
 			if (instance.targetSprite != null) instance.targetSprite.visible = false;
@@ -805,6 +858,8 @@ class GameUI extends HxlDialog {
 				instance.targetSprite.x = wPos.x;
 				instance.targetSprite.y = wPos.y;
 			}
+			
+			instance.updateTargetingTarget(pos.x, pos.y);
 		}
 	}
 
@@ -833,6 +888,40 @@ class GameUI extends HxlDialog {
 		if (color != targetColor) {
 			targetSprite.fill(color);
 			targetColor = color;
+		}
+	}
+	
+	private function updateTargetingTarget( _tileX:Float, _tileY:Float ) {
+		if (hoveredEnemy != null) {
+			if (hoveredEnemy.popup != null) hoveredEnemy.popup.mouseBound = true;
+			hoveredEnemy = null;
+		}
+		
+		var tile:CqTile = cast(Registery.level.getTile(Std.int(_tileX), Std.int(_tileY)), CqTile);
+		if (targetSpell.targetsEmptyTile) {
+			if ( tile == null || tile.actors.length > 0 || tile.visibility != Visibility.IN_SIGHT) {
+				setTargetColor(0xff0000);
+			} else {
+				if (HxlUtil.contains(SpriteTiles.walkableAndSeeThroughTiles.iterator(), tile.getDataNum())) {
+					setTargetColor(0x00ff00);
+				} else {
+					setTargetColor(0xff0000);
+				}
+			}
+		} else {
+			if ( tile == null || tile.actors.length <= 0 || tile.visibility != Visibility.IN_SIGHT) {
+				setTargetColor(0xff0000);
+			} else {
+				var actor:CqActor = cast(tile.actors[0], CqActor);
+				if ( actor.faction != CqPlayer.faction && actor.visible && !actor.isAGhost() && !cast(tile.actors[0], CqActor).specialEffects.exists("invisible")) {
+					setTargetColor(0x00ff00);
+
+					hoveredEnemy = actor;
+					if (hoveredEnemy.popup != null) hoveredEnemy.popup.mouseBound = false;
+				} else {
+					setTargetColor(0xff0000);
+				}
+			}
 		}
 	}
 	
@@ -876,41 +965,11 @@ class GameUI extends HxlDialog {
 		}
 		
 		if (targetLastPos.x != targetX || targetLastPos.y != targetY ) {
-			if (hoveredEnemy != null) {
-				if (hoveredEnemy.popup != null) hoveredEnemy.popup.mouseBound = true;
-				hoveredEnemy = null;
-			}
+			updateTargetingTarget(targetX, targetY);
 			
 			var worldPos:HxlPoint = Registery.level.getPixelPositionOfTile(Std.int(targetX), Std.int(targetY));
-			
 			Actuate.tween(targetSprite, if (mouse) .046 else .125, { x: worldPos.x, y: worldPos.y} );
 			
-			var tile:CqTile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)), CqTile);
-			if (targetSpell.targetsEmptyTile) {
-				if ( tile == null || tile.actors.length > 0 || tile.visibility != Visibility.IN_SIGHT) {
-					setTargetColor(0xff0000);
-				} else {
-					if (HxlUtil.contains(SpriteTiles.walkableAndSeeThroughTiles.iterator(), tile.getDataNum())) {
-						setTargetColor(0x00ff00);
-					} else {
-						setTargetColor(0xff0000);
-					}
-				}
-			} else {
-				if ( tile == null || tile.actors.length <= 0 || tile.visibility != Visibility.IN_SIGHT) {
-					setTargetColor(0xff0000);
-				} else {
-					var actor:CqActor = cast(tile.actors[0], CqActor);
-					if ( actor.faction != CqPlayer.faction && actor.visible) {
-						setTargetColor(0x00ff00);
-
-						hoveredEnemy = actor;
-						if (hoveredEnemy.popup != null) hoveredEnemy.popup.mouseBound = false;
-					} else {
-						setTargetColor(0xff0000);
-					}
-				}
-			}
 			targetLastPos.x = targetX;
 			targetLastPos.y = targetY;
 		}
@@ -950,9 +1009,11 @@ class GameUI extends HxlDialog {
 					cast(HxlGraphics.state, GameState).passTurn();
 				}
 			} else {
-				if (tile.actors != null){
-					if ( tile.actors.length > 0 && cast(tile.actors[0], CqActor).faction != 0) {
-						targetSpell.activate(Registery.player, cast(tile.actors[0], CqActor));
+				if (tile.actors != null && tile.actors.length > 0) {
+					var victim:CqActor = cast(tile.actors[0], CqActor);
+					
+					if (victim.faction != 0 && !victim. && !victim.specialEffects.exists("invisible")) {
+						targetSpell.activate(Registery.player, victim);
 						cast(HxlGraphics.state, GameState).passTurn();
 					}
 				}

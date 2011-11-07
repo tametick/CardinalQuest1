@@ -2,6 +2,7 @@ package cq.ui;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;
+import cq.CqActor;
 
 import flash.text.TextField;
 import flash.text.TextFormat;
@@ -11,9 +12,17 @@ import haxel.HxlGraphics;
 import haxel.HxlText;
 
 class CqFloatText extends HxlText {
-
-	public function new(X:Float, Y:Float, Text:String=null, ?Color:Int=0xffffff,?Font:String, ?FontSize:Int=18,?Alignment:String = "center",?initDefaultTween:Bool = true) {
+	public var actor:CqActor;
+	public var startX:Float;
+	public var startY:Float;
+	
+	public function new(Actor:CqActor, X:Float, Y:Float, Text:String=null, ?Color:Int=0xffffff,?Font:String, ?FontSize:Int=18,?Alignment:String = "center",?initDefaultTween:Bool = true) {
 		super(X, Y, 500, Text);
+		
+		actor = Actor;
+		startX = X;
+		startY = Y;
+		
 		//note: hardcoded max width of 500
 		setProperties(false, false, false);
 		setFormat(Font, FontSize, Color, Alignment, 0x010101);

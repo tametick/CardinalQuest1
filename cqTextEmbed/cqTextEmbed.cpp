@@ -81,7 +81,20 @@ int main(int argc, char* argv[])
 				char buf[512];
 				while ( fgets( buf, 512, f_in ) )
 				{
-					strcat( output, buf );
+					char fixbuf[1024];
+					char *b = buf, *f = fixbuf;
+					while ( *b != '\0' )
+					{
+						if ( *b == '"' )
+						{
+							*f++ = '\\';
+						}
+
+						*f++ = *b++;
+					}
+					*f = '\0';
+
+					strcat( output, fixbuf );
 				}
 
 				fclose( f_in );

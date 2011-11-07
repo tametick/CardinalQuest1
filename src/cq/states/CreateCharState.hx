@@ -107,7 +107,7 @@ class CreateCharState extends CqState {
 		//paper bg
 		var bg:HxlSprite = new HxlSprite(40, 250, SpriteCharPaper);
 		add(bg);
-		var titleText:HxlText = new HxlText(0, 0, Configuration.app_width, "Create Character");
+		var titleText:HxlText = new HxlText(0, 0, Configuration.app_width, Resources.getString( "MENU_CREATECHARACTER" ));
 		titleText.setFormat(null, 72, 0xffffff, "center");
 		add(titleText);
 		
@@ -118,7 +118,7 @@ class CreateCharState extends CqState {
 		var btnStartHigh = new StartButtonSprite();
 		btnStartHigh.setAlpha(0.6);
 		btnStart.loadGraphic(new StartButtonSprite(),btnStartHigh);
-		btnStart.loadText(new HxlText(0, -7, 90, "Start", true, null).setFormat(null, 32, 0xffffff, "center", 0x010101));
+		btnStart.loadText(new HxlText(0, -7, 90, Resources.getString( "MENU_START" ), true, null).setFormat(null, 32, 0xffffff, "center", 0x010101));
 
 		btnStart.setCallback(function() {
 			gotoState(GameState);
@@ -148,24 +148,16 @@ class CreateCharState extends CqState {
 		
 		playerSprites = SpritePlayer.instance;
 
-		createChoice("Fighter", "fighter", 138, 95, pickFighter);
-		createChoice("Thief", "thief", 288, 245, pickThief);
-		createChoice("Wizard", "wizard", 438, 395, pickWizard);
+		createChoice(Resources.getString( "FIGHTER" ), "fighter", 138, 95, pickFighter);
+		createChoice(Resources.getString( "THIEF" ), "thief", 288, 245, pickThief);
+		createChoice(Resources.getString( "WIZARD" ), "wizard", 438, 395, pickWizard);
 		
 		txtDesc = new HxlText(160, 280, HxlGraphics.width - 220);
 		txtDesc.setFormat(FontAnonymousPro.instance.fontName, 16, 0x000000, "left", 0);
 		add(txtDesc);
-		
-		var descriptions:StatsFile = Resources.statsFiles.get( "descriptions.txt" );
-		var desc:StatsFileEntry = descriptions.getEntry( "Name", "Fighter" );
-		var descText:String = if (desc != null) desc.getField( "Description" ); else "???";
-		var descTextLines:Array<String> = descText.split( "\\n" );
-		descText = "";
-		for ( l in descTextLines ) {
-			descText += l + "\n";
-		}
 
-		txtDesc.text = descText;
+		// Initialise text.
+		txtDesc.text = Resources.getString( "FIGHTER", true );
 		
 		portrait = SpritePortraitPaper.getIcon("FIGHTER", 100 , 1.0);
 		portrait.x = 60;
@@ -203,7 +195,7 @@ class CreateCharState extends CqState {
 		if (!shownIntro) {
 			cursor.visible	= false;
 			scroller = new CqTextScroller(IntroScreen, 1);
-			var introText:String = "The dread minotaur Asterion fell upon the peaceful town of Hallemot late one balmy night.  The few townsfolk he did not kill, he made his slaves.  Their misery is his delight.\n\nYears have passed.  Deep in his underground den, he and his minions exult in the spoils of their wicked deeds.  They revel in human suffering.\n\nYou fled when you were young.  You grew strong.  The time has come to rid the land of his dominion.";
+			var introText:String = Resources.getString( "AsterionIntro", true );
 			//scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,30,0x000000,0x804040);
 			scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,28,0xFFCD55,0x2E170F);
 			//scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,28,0x443322,0x776633);
@@ -230,8 +222,6 @@ class CreateCharState extends CqState {
 		SoundEffectsManager.play(MenuItemMouseOver);
 
 		var classes:StatsFile = Resources.statsFiles.get( "classes.txt" );
-		var descriptions:StatsFile = Resources.statsFiles.get( "descriptions.txt" );
-
 		var classEntry:StatsFileEntry = classes.getEntry( "ID", TargetClass );
 		
 		curClass = TargetClass;
@@ -247,17 +237,8 @@ class CreateCharState extends CqState {
 		}
 
 		portrait.setFrame( classEntry.getField( "Portrait" ) );
-		
-		var desc:StatsFileEntry = descriptions.getEntry( "Name", curClass );
-		var descText:String = if (desc != null) desc.getField( "Description" ); else "???";
-		
-		var descTextLines:Array<String> = descText.split( "\\n" );
-		descText = "";
-		for ( l in descTextLines ) {
-			descText += l + "\n";
-		}
 
-		txtDesc.text = descText;
+		txtDesc.text = Resources.getString( curClass, true );
 		
 		Actuate.tween(selectBox, 0.25, { x: targetX }).ease(Cubic.easeOut);
 	}

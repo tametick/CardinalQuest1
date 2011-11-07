@@ -36,6 +36,7 @@ import cq.GameUI;
 import cq.CqBag;
 import cq.ui.CqVitalBar;
 import cq.CqMobFactory;
+import cq.effects.CqEffectSpell; // I'd like to get rid of this import here
 
 import com.baseoneonline.haxe.astar.AStar;
 import com.baseoneonline.haxe.geom.IntPoint;
@@ -75,6 +76,8 @@ class CqActor extends CqObject, implements Actor {
 	public var speed:Int;
 	public var spirit:Int;
 	public var vitality:Int;
+	
+	public var minHp:Int; // Minimum HP is the furthest the actor can currently be hurt.
 	
 	// natural damage without weapon
 	public var damage:Range;
@@ -166,8 +169,8 @@ class CqActor extends CqObject, implements Actor {
 		}
 		visionRadius = 8.2;
 		
-		maxHp = vitality;
 		hp = maxHp;
+		minHp = 0;
 		
 		initBuffs();
 		visibleEffects = new Array<String>();
@@ -197,7 +200,7 @@ class CqActor extends CqObject, implements Actor {
 		buffs.set("spirit", 0);
 		
 		specialEffects = new Hash<CqSpecialEffectValue>();
-		specialEffects.set("damage multipler", new CqSpecialEffectValue("damage multipler", "1"));
+		specialEffects.set("damage multiplier", new CqSpecialEffectValue("damage multiplier", "1"));
 	}
 
 	public function addOnInjure(Callback:Dynamic) {
@@ -246,6 +249,11 @@ class CqActor extends CqObject, implements Actor {
 		chest = null;
 	}
 	
+	public function isAGhost() : Bool
+	{
+		return isGhost;
+	}
+	
 	public function doGhost(?dmgTotal:Int = 0) {
 		isGhost = true;
 	}
@@ -253,17 +261,17 @@ class CqActor extends CqObject, implements Actor {
 	public function doInjure(?dmgTotal:Int=0) {
 		for ( Callback in onInjure ) 
 			Callback(dmgTotal);
-			
-		showHealthBar(hp > 0 && hp < maxHp && visible);
+
+		updateHealthBar();
 		removeEffect("fear");
 	}
 
 	public function injureActor(state:HxlState, other:CqActor, dmgTotal:Int) {
 		if (this == Registery.player) {
-			HxlLog.append("You hit");
+			HxlLog.append(Resources.getString( "LOG_YOU_HIT" ));
 			PtPlayer.hits();
 		} else {
-			HxlLog.append("Hit you");
+			HxlLog.append(Resources.getString( "LOG_HIT_YOU" ));
 			PtPlayer.isHit();
 		}
 		other.doInjure(dmgTotal);
@@ -282,7 +290,7 @@ class CqActor extends CqObject, implements Actor {
 		if (Std.is(this, CqPlayer)) {
 			var mob = cast(other, CqMob);
 			
-			HxlLog.append("You kill");
+			HxlLog.append(Resources.getString( "LOG_YOU_KILL" ));
 			PtPlayer.kills();
 			
 			// remove other
@@ -292,7 +300,7 @@ class CqActor extends CqObject, implements Actor {
 		} else {
 			if (Std.is(other, CqPlayer)) {
 				var player:CqPlayer = cast(other, CqPlayer);
-				HxlLog.append("kills you");
+				HxlLog.append(Resources.getString( "LOG_KILLS_YOU" ));
 				//It's ok to put it here, not perfect, but easier to test
 				//We will ping simply the kong server twice as often, which should be ok
 				Registery.getKong().SubmitScore( player.xp , "Normal" );
@@ -322,6 +330,64 @@ class CqActor extends CqObject, implements Actor {
 		timers.push(timer);
 	}
 	
+	public function applyTimerEffect(state:HxlState, t:CqTimer) {
+		if (dead) {
+			return;
+		}
+		
+		if (t.buffName != null) {
+			if (t.specialMessage != null) {
+				GameUI.showEffectText(this, t.specialMessage, t.messageColor);
+			} else {
+				if (t.buffValue < 0) {
+					GameUI.showEffectText(this, Resources.getString( "POPUP_RECOVERED" ) + " " + ( -t.buffValue) + " " + Resources.getString( t.buffName ), 0x00ff00);
+				} else {
+					GameUI.showEffectText(this, (t.buffValue) + " " + Resources.getString( t.buffName ) + " " + Resources.getString( "POPUP_EXPIRED" ), 0x909090);
+				}
+			}
+			
+			// remove buff effect
+			var newVal = buffs.get(t.buffName) - t.buffValue;
+			buffs.set(t.buffName, newVal);
+		} 
+		
+		if(HxlUtil.contains(visibleEffects.iterator(), t.buffName)) {
+			// remove visibleEffect
+			visibleEffects.remove(t.buffName);
+		}
+		
+		if (t.specialEffect != null && HxlUtil.contains(specialEffects.keys(), t.specialEffect.name)) {
+			var currentEffect = specialEffects.get(t.specialEffect.name);
+
+			if(t.specialEffect.name == "magic_mirror") GameUI.showEffectText(this, Resources.getString("POPUP_MIRROR_EXPIRED"), 0x909090);
+			else if (t.specialEffect.name == "invisible") GameUI.showEffectText(this, Resources.getString("POPUP_INVIS_EXPIRED"), 0x909090);
+			else GameUI.showEffectText(this, "" + Resources.getString(t.specialEffect.name) + " " + Resources.getString("POPUP_EFFECT_EXPIRED"), 0x909090);
+			
+			specialEffects.remove(t.specialEffect.name);
+			
+			switch(currentEffect.name){
+				case "charm":
+					this.faction = CqMob.FACTION;
+					this.isCharmed = false;
+				case "sleep":
+					this.speed = currentEffect.value;
+				case "invisible":
+					this.setAlpha(1.00);
+				case "magic_mirror":
+					// when a mirror "shatters", it spawns a particle effect -- it's purely aesthetic, of course
+					
+					var mob:Mob = cast(this, Mob);
+					var eff:CqEffectSpell = new CqEffectSpell(mob.x+mob.width/2, mob.y+mob.height/2, this._pixels);
+					eff.zIndex = 1000;
+					HxlGraphics.state.add(eff);
+					eff.start(true, 1.0, 10);
+					Registery.level.removeMobFromLevel(state, mob);
+					cast(this, CqMob).destroy();
+			}
+			currentEffect = null;
+		}		
+	}
+	
 	public function removeEffect(effectName:String) {
 		if (this.specialEffects != null && this.specialEffects.get(effectName) != null) {
 			if (this.timers != null) {
@@ -343,8 +409,10 @@ class CqActor extends CqObject, implements Actor {
 			removeEffect("invisible");
 			
 			setAlpha(1.00); // must set alpha before the message or the message won't show!
-			if (message == null) message = (Std.is(this, CqPlayer)) ? "You reappear" : "An invisible " + this.name + " appears!";
+			if (message == null) message = (Std.is(this, CqPlayer)) ? Resources.getString( "POPUP_INVIS_BROKEN" ) : Resources.getString( "POPUP_INVIS_BREAK1" ) + " " + this.name + " " + Resources.getString( "POPUP_INVIS_BREAK2" );
 			GameUI.showEffectText(this, message, 0x6699ff);
+			
+			updateHealthBar();
 		}
 	}
 	
@@ -383,7 +451,7 @@ class CqActor extends CqObject, implements Actor {
 			stealthy = true;
 			
 			if (Std.is(this, CqPlayer)) {
-				breakInvisible("Backstab!");
+				breakInvisible(Resources.getString( "POPUP_BACKSTAB" ));
 			} else {
 				breakInvisible();
 			}
@@ -396,12 +464,12 @@ class CqActor extends CqObject, implements Actor {
 
 			if (!Std.is(other, CqPlayer)) {
 				//// if a monster can be invisible, the player can make it visible by bumping it
-				other.breakInvisible("You stumble into an invisible " + cast(other, CqMob).name + ".");
+				other.breakInvisible(Resources.getString( "POPUP_BUMP1" ) + " " + cast(other, CqMob).name + Resources.getString( "POPUP_BUMP2" ));
 				return;
 			} else {
 				// monsters will sometimes pretend not to bump into you even when they should
 				if (Math.random() < .5) {
-					other.breakInvisible("You have been discovered!");
+					other.breakInvisible(Resources.getString( "POPUP_BUMPED" ));
 				}
 				return;
 			}
@@ -412,8 +480,8 @@ class CqActor extends CqObject, implements Actor {
 		if (Math.random() < atk / (atk + def)) {
 			// hit
 			var dmgMultiplier:Int = 1;
-			if(specialEffects.get("damage multipler")!=null)
-				dmgMultiplier =  Std.parseInt(specialEffects.get("damage multipler").value);
+			if(specialEffects.get("damage multiplier")!=null)
+				dmgMultiplier =  Std.parseInt(specialEffects.get("damage multiplier").value);
 				
 			// do an extra 100% damage if stealthy!
 			if (stealthy) dmgMultiplier += 1;
@@ -437,6 +505,11 @@ class CqActor extends CqObject, implements Actor {
 				// life buffs
 				var lif = other.hp + other.buffs.get("life");
 				
+				if ( lif < other.minHp ) {
+					other.hp += other.minHp - lif;
+					lif = other.minHp;
+				}
+				
 				if (lif <= 0 && stealthy && Std.is(other, CqPlayer)) {
 					dmgTotal = 1 - (other.hp + dmgTotal);
 					other.hp = lif = 1; // never die to an invisible enemy
@@ -458,26 +531,33 @@ class CqActor extends CqObject, implements Actor {
 				SoundEffectsManager.play(PlayerMiss);
 				
 			if (this == cast(Registery.player,CqPlayer)) {
-				HxlLog.append("You miss");
+				HxlLog.append(Resources.getString( "POPUP_LOG_YOU_MISS" ));
 				PtPlayer.misses();
 			} else {
-				HxlLog.append("Misses you");
+				HxlLog.append(Resources.getString( "POPUP_LOG_MISS_YOU" ));
 				PtPlayer.dodges();
 			}
 			for ( Callback in onAttackMiss ) Callback(this, other);
 		}
 	}
 	
-	public function showHealthBar(vis:Bool) {
-		if (healthBar != null) {
-			healthBar.visible = vis;
-			healthBar.setChildrenVisibility(vis);
-		}
+	public function setVisible(vis:Bool) {
+		visible = vis;
+		updateHealthBar();
 	}
 	
+	public function updateHealthBar() {
+		var healthBarVis:Bool = visible && hp > 0 && hp < maxHp && (!specialEffects.exists("invisible") || faction == CqPlayer.faction);
+
+		if (healthBar != null) {
+			healthBar.visible = healthBarVis;
+			healthBar.setChildrenVisibility(healthBarVis);
+		}
+	}
+
 	public override function setAlpha(alpha:Float):Float {
-		visible = (alpha > 0.0);
-		showHealthBar(hp < maxHp && visible);
+		setVisible(alpha > 0.0);
+		updateHealthBar();
 		
 		var old:Float = super.setAlpha(alpha);
 		calcFrame();
@@ -564,12 +644,9 @@ class CqActor extends CqObject, implements Actor {
 		// only show the mob if we can see it
 		var tile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)),HxlTile);
 		if (tile.visibility == Visibility.IN_SIGHT) {
-			visible = true;
-			// only show hp bar if mob is hurt
-			showHealthBar(hp < maxHp && visible);
+			setVisible(true);
 		} else {
-			visible = false;
-			showHealthBar(false);
+			setVisible(false);
 		}
 		
 		var positionOfTile:HxlPoint = level.getPixelPositionOfTile(Math.round(tilePos.x), Math.round(tilePos.y));
@@ -656,14 +733,69 @@ class CqActor extends CqObject, implements Actor {
 		}
 	}
 	
+// merge note: find the proper place for these lines!
+		
+// "Ghost" killed actors now so they can't act any more.
+//
+//			var injured:CqActor = (victim == null) ? actor : victim;
+//			var lif = injured.hp + injured.buffs.get("life");
+//			if (lif - dmg <= 0 && injured.minHp <= 0) {
+//				actor.ghostActor(HxlGraphics.state, injured, dmg);
+	public static function showWeaponDamage(actor:CqActor, damage:Range) {
+		var text = "" + damage.start + " - " + damage.end + " " + Resources.getString("damage");
+		GameUI.showEffectText(actor, text, 0xff4422);		
+	}
+	
+	// mergre note: make use of showBuff and showWeaponDamage
+	public static function showBuff(actor:CqActor, val:Int, buffName:String, col:Int=0 ) {
+		var text = (val > 0?"+":"") + val + " " + Resources.getString( buffName );
+		
+		var c:Int = col;
+		if ( c == 0 ) {
+			switch(buffName) {
+				case "attack":
+					c = 0x4BE916;
+				case "defense":
+					c = 0x381AE6;
+				case "speed":
+					c = 0xEDD112;
+				default:
+					c = 0xFFFFFF;
+			}
+		}
+		
+		GameUI.showEffectText(actor, text, c);		
+	}
+	
+				
+// merge note : after // apply to victim :					showBuff(victim, val, buff, 0xff8822);
+
+//  merge note: after // apply damage
+//			var injured:CqActor = (victim == null) ? actor : victim;
+//			
+//			injured.hp -= dmg;
+//			var lif = injured.hp + injured.buffs.get("life");
+//			if ( lif < injured.minHp ) {
+//				injured.hp += injured.minHp - lif;
+//				lif = injured.minHp;
+/////// later:
+//			}
+//			if (lif > 0 && !injured.isGhost) {
+//				actor.injureActor(HxlGraphics.state, injured, dmg);
+//		} else {
+
+// merge note : put this before updateFieldOfView in applyEffectAt (teleport)
+//			Registery.level.hideAll(HxlGraphics.state);
+// merge note:			GameUI.showEffectText(mob, Resources.getString( "POPUP_MIRROR" ), 0x2DB6D2);
+	
 	public function applyEffect(effect:CqSpecialEffectValue, other:CqActor) {
-		HxlLog.append("applied special effect: " + effect.name);
+		HxlLog.append(Resources.getString( "LOG_EFFECT" ) + " " + Resources.getString( effect.name ));
 		switch(effect.name){
 		
 		case "heal":
 			if (effect.value == "full"){
 				if (other == null) {
-					if (healthBar != null) showHealthBar(true);
+					updateHealthBar(); // was showHealthBar(true)
 					//As per Ido's suggestion :P
 					if ( hp == 1 )
 						Registery.getKong().SubmitStat( Registery.KONG_FULLHEALAT1 , 1 );
@@ -676,9 +808,9 @@ class CqActor extends CqObject, implements Actor {
 						var player = Registery.player;
 						player.updatePlayerHealthBars();
 					}
-					GameUI.showEffectText(this, "Healed", 0x0080FF);
+					GameUI.showEffectText(this, Resources.getString( "POPUP_HEALED" ), 0x0080FF);
 				} else {
-					showHealthBar(true);
+					other.updateHealthBar();
 					other.hp = other.maxHp;
 					
 					if (other.cqhealthBar != null)
@@ -688,7 +820,7 @@ class CqActor extends CqObject, implements Actor {
 						var player = Registery.player;
 						player.updatePlayerHealthBars();
 					}
-					GameUI.showEffectText(other, "Healed", 0x0080FF);
+					GameUI.showEffectText(other, Resources.getString( "POPUP_HEALED" ), 0x0080FF);
 				}
 			}
 		case "reveal":
@@ -698,28 +830,35 @@ class CqActor extends CqObject, implements Actor {
 			other.faction = faction;
 			other.isCharmed = true;
 			other.specialEffects.set(effect.name, effect);
-			GameUI.showEffectText(other, "Charm", 0xFF8040);
+			GameUI.showEffectText(other, Resources.getString( "POPUP_CHARM" ), 0xFF8040);
 		case "fear":
 			other.specialEffects.set(effect.name, effect);
-			GameUI.showEffectText(other, "Fear", 0x008080);
+			GameUI.showEffectText(other, Resources.getString( "POPUP_FEAR" ), 0x008080);
 		case "sleep":
 			effect.value = other.speed;
 			other.speed = 0;
 			other.specialEffects.set(effect.name, effect);
-			GameUI.showEffectText(other, "Sleep", 0xFFFF00);
+			GameUI.showEffectText(other, Resources.getString( "POPUP_SLEEP" ), 0xFFFF00);
 		case "blink":
 			var tileLocation = HxlUtil.getRandomTile(Configuration.getLevelWidth(), Configuration.getLevelHeight(), Registery.level.mapData, SpriteTiles.walkableAndSeeThroughTiles);
 			var pixelLocation = Registery.level.getPixelPositionOfTile(tileLocation.x,tileLocation.y);
 			setTilePos(Std.int(tileLocation.x), Std.int(tileLocation.y));
 			moveToPixel(HxlGraphics.state, pixelLocation.x, pixelLocation.y);
+			Registery.level.hideAll(HxlGraphics.state);
 			Registery.level.updateFieldOfView(HxlGraphics.state,true);
 		case "polymorph":
 			other.specialEffects.set(effect.name, effect);
-			GameUI.showEffectText(other, "Morph", 0xA81CE3);
+			GameUI.showEffectText(other, Resources.getString( "POPUP_POLYMORPH" ), 0xA81CE3);
 			var _se = other.specialEffects;
 			var hppart:Float = other.hp / other.maxHp;
 			var mob = Registery.level.createAndaddMob(other.getTilePos(), Std.int(Math.random() * Registery.player.level), true);
+			
+			if ( cast(other,CqMob).xpValue == 0 ) {
+				mob.xpValue = 0; // Polymorphing worthless monsters won't let you get XP.
+			}
+			
 			Registery.level.removeMobFromLevel(HxlGraphics.state, cast(other, CqMob));
+			cast(other, CqMob).destroy();
 			Registery.level.updateFieldOfView(HxlGraphics.state);
 			
 			// preserve the old monster's level of health
@@ -732,11 +871,15 @@ class CqActor extends CqObject, implements Actor {
 			casted.healthBar.setTween(false);
 			casted.cqhealthBar.updateValue(casted.hp);
 			casted.healthBar.setTween(true);
-			casted.showHealthBar(true);
+			casted.updateHealthBar();
 		default:
 			var text:String = effect.name;
 			
-			if (text == "invisible") text = "Vanished";
+			if (text == "invisible") {
+				text = Resources.getString( "POPUP_INVIS" );
+			} else {
+				text = Resources.getString( text );
+			}
 			
 			if (other == null) {
 				specialEffects.set(effect.name, effect);
@@ -750,6 +893,8 @@ class CqActor extends CqObject, implements Actor {
 				if (faction == CqPlayer.faction) setAlpha(0.40);
 				else setAlpha(0.00);
 			}
+			
+			updateHealthBar();
 		}
 		GameUI.instance.popups.setChildrenVisibility(false);
 	}	
@@ -775,6 +920,12 @@ class CqPlayer extends CqActor, implements Player {
 	public var infoViewLevel:HxlText;
 	public var infoViewFloor:HxlText;
 	
+	public var prefDamage:Int;	
+	public var prefAttack:Int;	
+	public var prefDefense:Int;	
+	public var prefSpeed:Int;	
+	public var prefSpirit:Int;	
+	public var prefLife:Int;	
 	public var xp:Int;
 	public var level:Int;
 	public var money:Int;
@@ -816,24 +967,59 @@ class CqPlayer extends CqActor, implements Player {
 		onGainXP.clear();
 	}
 	
+	public static function getStatsEntry(PlayerClass:String, Level:Int) : StatsFileEntry {
+		var classStats:StatsFile = Resources.statsFiles.get( "classStats.txt" );
+		
+		var entry:StatsFileEntry = null;
+		var bestLevel:Int = -1;
+		
+		for ( statsLine in classStats ) {
+			if ( statsLine.getField( "ID" ) == PlayerClass ) {
+				var statsLevel:Int = statsLine.getField( "Level" );
+				if ( statsLevel > bestLevel && statsLevel <= Level ) {
+					entry = statsLine;
+					bestLevel = statsLevel;
+				}
+			}
+		}
+		
+		return entry;
+	}
+	
 	public function new(PlayerClass:String, ?X:Float = -1, ?Y:Float = -1) {
+		super(X, Y);
+		
 		playerClassID = PlayerClass;
 		
 		var classes:StatsFile = Resources.statsFiles.get( "classes.txt" );
 		var classEntry:StatsFileEntry = classes.getEntry( "ID", PlayerClass );
+		var classStatsEntry:StatsFileEntry = getStatsEntry( PlayerClass, 1 );
 		
 		if ( classEntry != null ) {
-			playerClassName = classEntry.getField( "Name" );
+			playerClassName = Resources.getString( PlayerClass );
 			playerClassSprite = classEntry.getField( "Sprite" );
 			
-			attack = classEntry.getField( "Attack" );
-			defense = classEntry.getField( "Defense" );
-			speed = classEntry.getField( "Speed" );
-			spirit = classEntry.getField( "Spirit" );
-			vitality = classEntry.getField( "Vitality" );
-			damage = new Range(1, 1);
+			prefDamage = classEntry.getField( "DamagePref" );
+			prefAttack = classEntry.getField( "AttackPref" );
+			prefDefense = classEntry.getField( "DefensePref" );
+			prefSpeed = classEntry.getField( "SpeedPref" );
+			prefSpirit = classEntry.getField( "SpiritPref" );
+			prefLife = classEntry.getField( "LifePref" );
 		} else {
 			throw( "Unknown class." );
+		}
+			
+		if ( classStatsEntry != null ) {
+			
+			attack = classStatsEntry.getField( "Attack" );
+			defense = classStatsEntry.getField( "Defense" );
+			speed = classStatsEntry.getField( "Speed" );
+			spirit = classStatsEntry.getField( "Spirit" );
+			vitality = classStatsEntry.getField( "Vitality" );
+			hp = maxHp = classStatsEntry.getField( "HP" );
+			damage = new Range(1, 1);
+		} else {
+			throw( "Missing class stats entry for level 1." );
 		}
 		
 		//Let Kongregate know, for now we only deal with "Normal" mode
@@ -848,14 +1034,10 @@ class CqPlayer extends CqActor, implements Player {
 			spirit = 30;
 			Configuration.playerLives = 4;
 		}
-		super(X, Y);
 
 		lives = Configuration.playerLives;
 		money = 0;
 		
-		maxHp = vitality * 2;
-		hp = maxHp;
-
 		addAnimation("idle", [sprites.getSpriteIndex(playerClassSprite)], 0 );
 		addAnimation("idle_dagger", [sprites.getSpriteIndex(playerClassSprite + "_dagger")], 0 );
 		addAnimation("idle_short_sword", [sprites.getSpriteIndex(playerClassSprite + "_short_sword")], 0 );
@@ -914,7 +1096,21 @@ class CqPlayer extends CqActor, implements Player {
 		}
 	}
 	
-	public function give(?itemOrSpellID:String) {
+
+	// merge note: make use of valueItem !
+	public function valueItem(Item:CqItem) : Float {
+		var valueItem:Float = prefDamage * (Item.damage.start + Item.damage.end) / 2;
+		
+		valueItem += prefAttack * Item.buffs.get("attack");
+		valueItem += prefDefense * Item.buffs.get("defense");
+		valueItem += prefSpeed * Item.buffs.get("speed");
+		valueItem += prefSpirit * Item.buffs.get("spirit");
+		valueItem += prefLife * Item.buffs.get("life");
+		
+		return valueItem;
+	}
+	
+public function give(?itemOrSpellID:String) {
 		var item:CqItem = CqLootFactory.newItem( -1, -1, itemOrSpellID);
 		if (item != null) {
 			bag.grant(item);
@@ -930,7 +1126,7 @@ class CqPlayer extends CqActor, implements Player {
 	
 	public function giveMoney(amount:Int) {
 		var plural:Bool = amount > 1;
-		GameUI.showEffectText(this, "+" + amount + (plural?" coins":" coin"), 0xC2881D);
+		GameUI.showEffectText(this, "+" + amount + " " + Resources.getString( plural?"POPUP_COINS":"POPUP_COIN" ), 0xC2881D);
 		infoViewMoney.setText("" + (Std.parseInt(infoViewMoney.text) + amount));
 		//Let Kongregate know, for now we only deal with "Normal" mode
 		Registery.getKong().SubmitStat( Registery.KONG_MAXGOLD , Std.parseInt(infoViewMoney.text) );
@@ -947,6 +1143,7 @@ class CqPlayer extends CqActor, implements Player {
 			item.doPickupEffect();
 			GameUI.showEffectText(this, item.name, 0x6699ff);
 		} else {
+		// merge note : GameUI.showTextNotification(Resources.getString( "NOTIFY_INV_FULL" ), 0xFF001A);
 			GameUI.showTextNotification("You need to make some room for it first!", 0xFF001A);
 			SoundEffectsManager.play(PotionEquipped);
 		}
@@ -955,7 +1152,7 @@ class CqPlayer extends CqActor, implements Player {
 	}
 
 	public function gainExperience(xpValue:Int) {
-		HxlLog.append("gained " + xpValue + " xp");
+		HxlLog.append(Resources.getString( "LOG_XP1" ) + " " + xpValue + " " + Resources.getString( "LOG_XP2" ));
 		//move this??
 		cast(this, CqPlayer).xp += xpValue;
 		
@@ -978,11 +1175,42 @@ class CqPlayer extends CqActor, implements Player {
 	
 	function gainLevel() {
 		level++;
-		infoViewLevel.setText("Level " + level);
-		HxlLog.append("Level " + level);
-		GameUI.showEffectText(this, "Level " + level, 0xFFFF66);
+		infoViewLevel.setText(Resources.getString( "UI_LEVEL" ) + " " + level);
+		HxlLog.append(Resources.getString( "UI_LEVEL" ) + " " + level);
+		GameUI.showEffectText(this, Resources.getString( "UI_LEVEL" ) + " " + level, 0xFFFF66);
 		SoundEffectsManager.play(LevelUp);
-		maxHp += vitality;
+		
+		// Boost stats.
+		var oldStats:StatsFileEntry = getStatsEntry( playerClassID, level-1 );
+		var newStats:StatsFileEntry = getStatsEntry( playerClassID, level );
+
+		var attackBoost:Int = Std.int( newStats.getField( "Attack" ) - oldStats.getField( "Attack" ) );
+		var defenseBoost:Int = Std.int( newStats.getField( "Defense" ) - oldStats.getField( "Defense" ) );
+		var speedBoost:Int = Std.int( newStats.getField( "Speed" ) - oldStats.getField( "Speed" ) );
+		var spiritBoost:Int = Std.int( newStats.getField( "Spirit" ) - oldStats.getField( "Spirit" ) );
+		var hpBoost:Int = Std.int( newStats.getField( "HP" ) - oldStats.getField( "HP" ) );
+		
+		if ( attackBoost != 0 ) {
+			attack += attackBoost;
+			CqActor.showBuff( this, attackBoost, "attack" );
+		}
+		if ( defenseBoost != 0 ) {
+			defense += defenseBoost;
+			CqActor.showBuff( this, defenseBoost, "defense" );
+		}
+		if ( speedBoost != 0 ) {
+			speed += speedBoost;
+			CqActor.showBuff( this, speedBoost, "speed" );
+		}
+		if ( spiritBoost != 0 ) {
+			spirit += spiritBoost;
+			CqActor.showBuff( this, spiritBoost, "spirit" );
+		}
+		if ( hpBoost != 0 ) {
+			maxHp += hpBoost;
+			CqActor.showBuff( this, hpBoost, "life" );
+		}
+		
 		hp = maxHp;
 		updatePlayerHealthBars();
 	}
@@ -991,49 +1219,13 @@ class CqPlayer extends CqActor, implements Player {
 		infoViewHealthBar.updateValue();
 		centralHealthBar.updateValue();
 	}
-	
-	public override function actInDirection(state:HxlState, targetTile:HxlPoint):Bool {
-		var oldx = tilePos.x, oldy = tilePos.y;
-		var currentTile = getTile();
-		if ( currentTile.loots.length > 0 ) {
-			var item = cast(currentTile.loots[currentTile.loots.length - 1], CqItem);
-			item.setGlow(false);
-		}
-		if (super.actInDirection(state, targetTile)) {
-			lastTile = new HxlPoint(oldx, oldy);
-			return true;
-		} else {
-			return false;
-		}
-	}
 
-	public override function moveStop() {
-		super.moveStop();
-		var xx = Std.int(tilePos.x);
-		var yy = Std.int(tilePos.y);
-		var currentTile = cast(Registery.level.getTile(xx, yy), Tile);
-		if ( currentTile.loots.length > 0 ) {
-			var item = cast(currentTile.loots[currentTile.loots.length - 1], CqItem);
-			item.setGlow(true);
-		}
-	}
-
-	public override function moveToPixel(state:HxlState, X:Float, Y:Float) {
-		if ( lastTile != null ) {
-			if ( Registery.level.getTile(Std.int(lastTile.x), Std.int(lastTile.y)) != null ) {
-				var tile = cast(Registery.level.getTile(Std.int(lastTile.x), Std.int(lastTile.y)), Tile);
-				if ( tile.loots.length > 0 ) {
-					for ( item in tile.loots ) cast(item, CqItem).setGlow(false);
-				}
-			}
-		}
-		super.moveToPixel(state, X, Y);
-	}
-	
 	public function rechargeSpells() {
 		for (spell in bag.spells()) {
 			spell.statPoints = spell.statPointsRequired;
 		}
+		
+		// GameUI.instance.updateCharges();
 	}
 	
 	public function respawn() {
@@ -1055,8 +1247,10 @@ class CqPlayer extends CqActor, implements Player {
 		player.hp = player.maxHp;
 		player.updatePlayerHealthBars();
 				
-		// clear all buffs, debuffs, and timers
-		for (buff in player.buffs.keys()) player.buffs.remove(buff);
+		// Apply all timers to clear effects, etc.
+		for ( t in player.timers ) {
+			applyTimerEffect( null, t );
+		}
 		player.timers.splice(0, player.timers.length);
 		
 		player.setAlpha(1.0);
@@ -1069,9 +1263,11 @@ class CqPlayer extends CqActor, implements Player {
 		scaleVelocity.x = scaleVelocity.y = 0;
 		scale.x = scale.y = 1.0;
 		
+		level.hideAll(HxlGraphics.state);
 		level.updateFieldOfView(HxlGraphics.state, true);
 		level.restartExploration(1);
 		
+		isGhost = false;
 		isDying = false;
 	}
 	
@@ -1095,7 +1291,7 @@ class CqPlayer extends CqActor, implements Player {
 		if (alive) {
 			SoundEffectsManager.play(Death);
 			
-			player.infoViewLives.setText("x" + player.lives);
+			player.infoViewLives.setText(Resources.getString( "UI_TIMES" ) + player.lives);
 			Registery.level.protectRespawnPoint();
 		} else {
 			///todo: Playtomic recording	
@@ -1137,7 +1333,7 @@ class CqMob extends CqActor, implements Mob {
 		neverSeen = true;
 
 		this.typeName = typeName;
-		visible = false;
+		setVisible(false);
 		
 		var anim = new Array();
 		if(player)
@@ -1198,6 +1394,7 @@ class CqMob extends CqActor, implements Mob {
 			tooGood = Math.abs(tilePos.x - afterThisOne.tilePos.x) + Math.abs(tilePos.y - afterThisOne.tilePos.y);
 		}
 		
+		// note that this is used for ALL combat purposes, not just for ranged projectiles, so we don't need LOS
 		if (aware > 0 && faction != CqPlayer.faction) {
 			target = Registery.player;
 			best = Math.abs(tilePos.x - target.tilePos.x) + Math.abs(tilePos.y - target.tilePos.y);

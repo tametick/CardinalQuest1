@@ -1,0 +1,39 @@
+Field String ID
+Field Int Level
+Field Int Attack
+Field Int Defense
+Field Int Speed
+Field Int Spirit
+Field Int Vitality
+Field Int HP
+
+; ID    Lvl Atk Def Spd Spr Vit HP
+FIGHTER   1   5   3   5   1   4 12
+FIGHTER   2   5   3   5   1   4 16
+FIGHTER   3   5   3   5   1   4 20
+FIGHTER   4   5   3   5   1   4 24
+FIGHTER   5   5   3   5   1   4 28
+FIGHTER   6   5   3   5   1   4 32
+FIGHTER   7   5   3   5   1   4 36
+FIGHTER   8   5   3   5   1   4 40
+FIGHTER   9   5   3   5   1   4 44
+
+WIZARD    1   2   2   6   4   2  8
+WIZARD    2   2   2   6   4   2 10
+WIZARD    3   2   2   6   4   2 12
+WIZARD    4   2   2   6   4   2 14
+WIZARD    5   2   2   6   4   2 16
+WIZARD    6   2   2   6   4   2 18
+WIZARD    7   2   2   6   4   2 20
+WIZARD    8   2   2   6   4   2 22
+WIZARD    9   2   2   6   4   2 24
+
+THIEF     1   3   3  10   3   3  6
+THIEF     2   3   3  10   3   3  9
+THIEF     3   3   3  10   3   3 12
+THIEF     4   3   3  10   3   3 15
+THIEF     5   3   3  10   3   3 18
+THIEF     6   3   3  10   3   3 21
+THIEF     7   3   3  10   3   3 24
+THIEF     8   3   3  10   3   3 27
+THIEF     9   3   3  10   3   3 30

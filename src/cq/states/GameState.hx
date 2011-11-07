@@ -57,6 +57,7 @@ class GameState extends CqState {
 	var gameUI:GameUI;
 	public var chosenClass:String;
 	public var isPlayerActing:Bool;
+	public var justOpenedDoor:Bool;
 	public var resumeActingTime:Float;//time till when acting is blocked
 	public var started:Bool;
 	var lastMouse:Bool;
@@ -77,7 +78,7 @@ class GameState extends CqState {
 		super.create();
 		lastMouse = started = endingAnim = false;
 		chosenClass = "FIGHTER";
-		HxlGraphics.keys.onJustPressed = onKeyJustPressed;
+//		HxlGraphics.keys.onJustPressed = onKeyJustPressed;
 		HxlGraphics.fade.start(false, 0x00000000, 0.25);
 
 		//loadingBox = new HxlLoadingBox();
@@ -112,7 +113,7 @@ class GameState extends CqState {
 			//stairs popup
 			if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), currentTile.getDataNum())) {
 				Registery.player.popup.mouseBound = false;
-				Registery.player.popup.setText("Click to go downstairs\n[hotkey enter]");
+				Registery.player.popup.setText(Resources.getString( "NOTIFY_DOWNSTAIRS" ) + "\n" + Resources.getString( "POPUP_ENTER" ));
 			} else {
 				Registery.player.popup.setText("");
 			}
@@ -283,15 +284,23 @@ class GameState extends CqState {
 		return false;
 	}
 	
-	public function passTurn() {
+	public function passTurn( _halfTurn:Bool = false ) {
 		var player = Registery.player;
 		var level = Registery.level;
 
 		level.updateFieldOfView(this);
 		
+		// Update player minHP to prevent insta-kill.
+		var lifeBuff = player.buffs.get("life");
+		if ( player.hp + lifeBuff >= 0.5 * (player.maxHp + lifeBuff) ) {
+			player.minHp = HxlUtil.randomIntInRange( 1, Math.floor(0.25*(player.maxHp+lifeBuff)) );
+		} else {
+			player.minHp = 0;
+		}
+		
 		player.actionPoints = 0;
 
-		while (player.actionPoints < 60) {
+		while (player.actionPoints < (_halfTurn ? 30 : 60)) {
 			level.tick(this);
 		}
 		
@@ -327,20 +336,10 @@ class GameState extends CqState {
 
 		// Determine class intro.
 		var classes:StatsFile = Resources.statsFiles.get( "classes.txt" );
-		var descriptions:StatsFile = Resources.statsFiles.get( "descriptions.txt" );
-
 		var classEntry:StatsFileEntry = classes.getEntry( "ID", chosenClass );
 		var entrySprite:String = classEntry.getField( "EntryBG" );
 		
-		var desc:StatsFileEntry = descriptions.getEntry( "Name", entrySprite );
-		var descText:String = if (desc != null) desc.getField( "Description" ); else "???";
-		
-		// Reformat \ns in description text.
-		var descTextLines:Array<String> = descText.split( "\\n" );
-		descText = "";
-		for ( l in descTextLines ) {
-			descText += l + "\n";
-		}
+		var descText:String = Resources.getString( entrySprite, true );
 
 		// Pick background image.
 		var classBG:Class<Bitmap>;
@@ -537,7 +536,11 @@ class GameState extends CqState {
 			}
 		}
 
-		isPlayerActing = false;
+		if ( Registery.level.getTargetAccordingToKeyPress() == null )
+		{
+			isPlayerActing = false;
+		}
+		
 		if (Configuration.debug){
 			checkJumpKeys();
 			checkResetKeys();
@@ -592,9 +595,15 @@ class GameState extends CqState {
 
 		isPlayerActing = false;
 	}
-	function onKeyJustPressed(event:KeyboardEvent) {
-		if (!started || endingAnim || Timer.stamp() < resumeActingTime)
+
+	override function onKeyDown(event:KeyboardEvent) {
+		if (!started || endingAnim || Timer.stamp() < resumeActingTime) {
+			if ( Registery.level.getTargetAccordingToKeyPress() != null )
+			{
+				isPlayerActing = true;
+			}
 			return;
+		}
 		if(Registery.level != null && Timer.stamp() > resumeActingTime)
 			isPlayerActing = true;
 	}
@@ -605,6 +614,8 @@ class GameState extends CqState {
 		var player = Registery.player;
 		var tile = getPlayerTile(facing);
 
+		justOpenedDoor = false;
+		
 		if (tile == null) {
 			return false;
 		} else if ( !isBlockingMovement(facing) || (Configuration.debugMoveThroughWalls && Configuration.debug)) {
@@ -621,7 +632,8 @@ class GameState extends CqState {
 		} else if (HxlUtil.contains(SpriteTiles.doors.iterator(), tile.getDataNum())) {
 			// would be great to tell player to open the door, wouldn't it just?
 			openDoor(tile);
-			resumeActingTime = Timer.stamp() + player.moveSpeed;
+			justOpenedDoor = true;
+			resumeActingTime = Timer.stamp() + 1.5*player.moveSpeed;
 			
 			return true;
 		} else {
@@ -821,7 +833,9 @@ class GameState extends CqState {
 			if (tile.loots.length > 0) {
 				// there is an item here, so let's pick it up (this used to be manual?  crazy!)
 				var item = cast(tile.loots[tile.loots.length - 1], CqItem);
-				player.pickup(this, item);
+				if (!Std.is(item, CqChest)) {
+					player.pickup(this, item);
+				}
 				item = null;
 			} else if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tile.getDataNum())) {
 				// these are stairs!  time to descend -- but only if the key was JUST pressed
@@ -840,6 +854,7 @@ class GameState extends CqState {
 				if (!confirmed) {
 					return;
 				} else {
+					GameUI.clearEffectText();
 					Registery.world.goToNextLevel();
 					player.popup.setText("");
 				}
@@ -874,7 +889,7 @@ class GameState extends CqState {
 
 			isPlayerActing = moved;
 			if (moved) {
-				passTurn();
+				passTurn( justOpenedDoor );
 			}
 		}
 	}

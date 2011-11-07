@@ -49,7 +49,7 @@ class CqSpecialEffectValue {
 
 class CqLootFactory {
 	static function completeItem( _item:CqItem, _entry:StatsFileEntry ) {
-		_item.name = _entry.getField( "Name" );
+		_item.name = Resources.getString( _entry.getField( "ID" ) );
 		
 		var slot:String = _entry.getField( "Slot" );
 		_item.equipSlot =  Type.createEnum( CqEquipSlot, slot );
@@ -66,7 +66,7 @@ class CqLootFactory {
 	}
 	
 	static function completePotion( _item:CqItem, _entry:StatsFileEntry ) {
-		_item.name = _entry.getField( "Name" );
+		_item.name = Resources.getString( _entry.getField( "ID" ) );
 		_item.equipSlot = CqEquipSlot.POTION;
 		
 		_item.duration = _entry.getField( "Duration" );
@@ -94,13 +94,13 @@ class CqLootFactory {
 		if ( (entry = itemsFile.getEntry( "ID", id )) != null )
 		{
 			// Reading from ITEMS.TXT.
-			item = new CqItem(X, Y, null, entry.getField( "Sprite" ));
+			item = new CqItem(X, Y, id, entry.getField( "Sprite" ));
 			completeItem( item, entry );
 		}
 		else if ( (entry = potionsFile.getEntry( "ID", id )) != null )
 		{
 			// Reading from POTIONS.TXT.
-			item = new CqItem(X, Y, null, entry.getField( "Sprite" ));
+			item = new CqItem(X, Y, id, entry.getField( "Sprite" ));
 			completePotion( item, entry );
 		}
 
@@ -124,7 +124,7 @@ class CqLootFactory {
 		}
 
 		if ( entry != null ) {
-			var item = new CqItem(X, Y, null, entry.getField( "Sprite" ) );
+			var item = new CqItem(X, Y, entry.getField( "ID" ), entry.getField( "Sprite" ) );
 			
 			completeItem( item, entry );
 			
@@ -213,11 +213,15 @@ class CqLootFactory {
 }
 
 class CqItem extends GameObjectImpl, implements Loot {
+	public var id:String;
 	public var name:String;
 	public var fullName(computeFullName, null):String;	
 	public var isReadyToActivate (computeIsReadyToActivate, never):Bool;
 	public var isEnchanted(computeIsEnchanted, never):Bool;
 	public var monetaryValue(computeMonetaryValue, never):Int;
+			// merge: prefix += Resources.getString( "PREFIX_SUPERB" ) + " ";
+			// merge: prefix += Resources.getString( "PREFIX_WONDROUS" ) + " ";
+			// merge: prefix += Resources.getString( "PREFIX_MAGICAL" ) + " ";
 	
 	public var equipSlot:CqEquipSlot;
 	public var consumable:Bool;
@@ -252,13 +256,15 @@ class CqItem extends GameObjectImpl, implements Loot {
 	public var targetsEmptyTile:Bool;
 	
 	// recharging rules for spells and other similar equipment
-	public var id:String;
 	public var stat:String;
 	public var statPoints:Int;
 	public var statPointsRequired:Int;
 	
 	public function new(X:Float, Y:Float, _id:String, sprite:String) {
 		super(X, Y);
+		
+		spriteIndex = sprite.toLowerCase();
+		
 		zIndex = 1;
 		isSuperb = false;
 		isMagical = false;
@@ -269,7 +275,6 @@ class CqItem extends GameObjectImpl, implements Loot {
 		statPointsRequired = 0;
 		visible = false;
 		
-		spriteIndex = sprite.toLowerCase();
 		
 		targetsOther = false;
 		targetsEmptyTile = false;
@@ -321,12 +326,12 @@ class CqItem extends GameObjectImpl, implements Loot {
 	
 	function computeFullName():String {
 		var prefix = "";
-		if(isSuperb)
-			prefix += "Superb ";
+		if (isSuperb)
+			prefix += Resources.getString( "PREFIX_SUPERB" ) + " ";
 		if (isWondrous)
-			prefix += "Wondrous ";
+			prefix += Resources.getString( "PREFIX_WONDROUS" ) + " ";
 		if (isMagical)
-			prefix += "Magical ";
+			prefix += Resources.getString( "PREFIX_MAGICAL" ) + " ";
 			
 		return prefix + name;
 	}
@@ -404,6 +409,20 @@ class CqItem extends GameObjectImpl, implements Loot {
 	}
 	
 	public function equalTo(other:CqItem):Bool {
+		if ( other.buffs.get( "attack" ) == buffs.get( "attack" )
+		  && other.buffs.get( "defense" ) == buffs.get( "defense" )
+		  && other.buffs.get( "speed" ) == buffs.get( "speed" )
+		  && other.buffs.get( "spirit" ) == buffs.get( "spirit" )
+		  && other.buffs.get( "life" ) == buffs.get( "life" )
+		  && other.damage.start == damage.start
+		  && other.damage.end == damage.end )
+		{
+			return true;
+		}
+		
+		return false;
+		
+		/*
 		if (isSuperb != other.isSuperb || isWondrous != other.isWondrous || isMagical != other.isMagical)
 			return false;
 		if (spriteIndex != other.spriteIndex)
@@ -415,32 +434,27 @@ class CqItem extends GameObjectImpl, implements Loot {
 			if (other.buffs.get(key) != buffs.get(key))
 				return false;
 		}
-		return true;
+		return true;*/
 	}
-	/**
-	 * <1 other is worse 1 == equal, >1 other is better
-	 * */
 	
 	// this probably doesn't belong here, really
-	public function compareTo(other:CqItem):Float {
-		if (other.equipSlot != equipSlot)
-			return 0.0;
 		
-		var preference:Float = 0.0;
-		var sumBuffsThis:Float  = HxlUtil.sumHashInt(buffs);
-		var sumBuffsOther:Float = HxlUtil.sumHashInt(other.buffs);
+	public function makesRedundant(other:CqItem):Bool { // merge note: use this!
+		if ( other.buffs.get( "attack" ) > buffs.get( "attack" )
+		  || other.buffs.get( "defense" ) > buffs.get( "defense" )
+		  || other.buffs.get( "speed" ) > buffs.get( "speed" )
+		  || other.buffs.get( "spirit" ) > buffs.get( "spirit" )
+		  || other.buffs.get( "life" ) > buffs.get( "life" )
+		  || other.damage.start + other.damage.end > damage.start + damage.end )
+		{
+			return false;
+		}
+
+		if ( equalTo(other) ) {
+			return false;
+		}
 		
-		var dmgAvgThis:Float  = (damage.start + damage.end)/2;
-		var dmgAvgOther:Float = (other.damage.start + other.damage.end)/2;
-		if (dmgAvgThis > dmgAvgOther)
-			sumBuffsThis += dmgAvgThis-dmgAvgOther;
-		else if(dmgAvgThis < dmgAvgOther)
-			sumBuffsOther+=dmgAvgOther-dmgAvgThis;
-		//do nothing if damage is equal
-		if ( sumBuffsOther == 0) sumBuffsOther = 0.1;
-		preference = sumBuffsThis / sumBuffsOther;
-		
-		return preference;
+		return true;
 	}
 	
 	private function computeMonetaryValue():Int {
@@ -767,7 +781,7 @@ class CqChest extends CqItem {
 	var onBust:List<Dynamic>;
 
 	public function new(X:Float, Y:Float) {
-		super(X, Y, null, "CHEST");
+		super(X, Y, "CHEST", "CHEST");
 		onBust = new List();
 		visible = false;
 	}

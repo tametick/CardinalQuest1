@@ -146,7 +146,7 @@ class StatsFile
 							fields.push( Std.parseInt( curString ) );
 						} else {
 							// Reading a string.
-							while ( curString.charAt(0) == '[' && curString.indexOf( "]", 1 ) == -1 )
+							while ( curString.charAt(0) == '"' && curString.indexOf( "\"", 1 ) == -1 )
 							{
 								if ( words[wordIndex] != "" ) {
 									curString += " " + words[wordIndex];
@@ -154,7 +154,7 @@ class StatsFile
 								++wordIndex;
 							}
 							
-							if ( curString.charAt(0) == '[' ) {
+							if ( curString.charAt(0) == '"' ) {
 								fields.push( curString.substr( 1, curString.length - 2 ) );
 							} else {
 								fields.push( curString );

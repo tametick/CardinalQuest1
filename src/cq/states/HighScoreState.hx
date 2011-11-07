@@ -36,7 +36,7 @@ class HighScoreState extends CqState {
 		entryStamp = Timer.stamp();
 		
 		//Not sure whether we need this to fade in/out along
-		var highscoresText:HxlText = new HxlText(0, Configuration.app_height/7, Configuration.app_width,  "Highscores", true, null,42,0x0000000,"center");
+		var highscoresText:HxlText = new HxlText(0, Configuration.app_height/7, Configuration.app_width, Resources.getString("MENU_HIGHSCORES"), true, null,42,0x0000000,"center");
 		add( highscoresText );
 		
 		

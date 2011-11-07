@@ -66,7 +66,7 @@ class CqSpellFactory {
 		if ( entry != null ) {
 			spell = new CqSpell(X, Y, id, entry.getField( "Sprite" ) );
 			
-			spell.name = entry.getField( "Name" );
+			spell.name = Resources.getString( id );
 
 			switch ( entry.getField( "Target" ) ) {
 			case 1: spell.targetsOther = true;

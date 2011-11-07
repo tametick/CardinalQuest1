@@ -1,4 +1,5 @@
 package cq.ui.inventory;
+import cq.CqActor;
 import cq.CqGraphicKey;
 import cq.CqItem;
 import data.Registery;
@@ -9,6 +10,7 @@ import cq.ui.CqPotionGrid;
 import cq.ui.CqSpellGrid;
 import cq.ui.inventory.CqInventoryItem;
 import data.Configuration;
+import data.Resources;
 import data.SoundEffectsManager;
 import haxel.HxlGradient;
 import haxel.HxlGraphics;
@@ -79,7 +81,7 @@ class CqInventoryItemManager
 		// if an equivalent item already is in inventory, destory picked up item
 		for ( cell in dlgInvGrid.cells ) {
 			if ( cell.getCellObj() != null && cell.getCellObj().item.equalTo(Item) && Item.equipSlot != SPELL) {
-				GameUI.showTextNotification("I already have this.");
+				GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_DUPLICATE" ));
 				Registery.player.giveMoney( Item.getMonetaryValue() );
 				return false;
 			}
@@ -111,54 +113,107 @@ class CqInventoryItemManager
 				var cell:CqEquipmentCell = dlgEqGrid.getCellWithSlot(Item.equipSlot);
 				//if slot was empty - equip
 				if (cell.getCellObj() == null) {
-					GameUI.showTextNotification("I've been wanting one of these.", 0xBFE137);
+					GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_FIRST" ), 0xBFE137);
+					// Show buffs.
+					if ( Item.equipSlot == WEAPON ) {
+						CqActor.showWeaponDamage( Registery.player, Item.damage );
+					}
+					for ( buffName in Item.buffs.keys() ) {
+						CqActor.showBuff( Registery.player, Item.buffs.get(buffName), buffName );
+					}
 					uiItem = equipItem(cell, Item, uiItem);
 					cell.getCellObj().updateIcon();
 					dlgInfo.setItem(Item);
 					return true;
 				} else {
-					var hasMinusses:Bool = hasItemMinusBuffs(Item);
-					var preference:Float = shouldEquipItemInCell(cell, Item);
-					//equip if item is better
-					if (preference > 1)	{
-						var old:CqInventoryItem = equipItem(cell, Item, uiItem);
-						dlgInfo.setItem(Item);
-						if (old.item.isEnchanted) {
-							GameUI.showTextNotification("I'll keep my old " + old.item.name + " in my bag.", 0xBFE137);
-							uiItem = old;
-						} else {
-							// old is non plain, so just add to inv
-							
-							if (hasMinusses) {
-								// the new one is not necessarily better -- ?
-								GameUI.showTextNotification("I'll use it, but it's not perfect.", 0xBFE137);
-								uiItem = old;
-							} else {
-								// old is plain, so destroy
-								GameUI.showTextNotification("I will sell my old " + old.item.name + " now.", 0xBFE137);
-								destroyAndGiveMoney(old.item);
-								return true;
+					
+					if ( Item.equalTo( cell.getCellObj().item) ) {// && !Item.isEnchanted && !cell.getCellObj().item.isEnchanted) {
+						GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_DUPLICATE" ), 0xE1CC37);
+						destroyAndGiveMoney(Item);
+						return false;
+					}
+
+					if ( Item.makesRedundant( cell.getCellObj().item ) ) {
+						// Totally better than the old item.
+						// Show buffs.
+						if ( Item.equipSlot == WEAPON ) {
+							CqActor.showWeaponDamage( Registery.player, Item.damage );
+						}
+						for ( buffName in Item.buffs.keys() ) {
+							var buffAmt:Int = Item.buffs.get(buffName) - cell.getCellObj().item.buffs.get(buffName);
+							if ( buffAmt != 0 ) {
+								CqActor.showBuff( Registery.player, buffAmt, buffName );
 							}
 						}
-					} else if (preference < 1) {
-						//if new is worse than old, and is plain - destroy it
-						if (!Item.isEnchanted) {
-							GameUI.showTextNotification("Ha! Not half as good as my " + cell.getCellObj().item.name + "." );
-							destroyAndGiveMoney(Item);
-							return false;
-						}
-					} else {	
-						//item is the same & plain
-						if ( Item.equalTo( cell.getCellObj().item) && !Item.isEnchanted) {
-							GameUI.showTextNotification("I already have one just like this.", 0xE1CC37);
-							destroyAndGiveMoney(Item);
-							return false;
+						var old:CqInventoryItem = equipItem(cell, Item, uiItem);
+						dlgInfo.setItem(Item);
+						
+						GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_SELLOLD1" ) + " " + old.item.name + Resources.getString( "NOTIFY_GET_SELLOLD2" ), 0xBFE137);
+						destroyAndGiveMoney(old.item);
+						return true;
+					} else if ( cell.getCellObj().item.makesRedundant( Item ) ) {
+						// Old item is totally better than this one!
+						GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_SELLNEW1" ) + " " + cell.getCellObj().item.name + Resources.getString( "NOTIFY_GET_SELLNEW2" ) );
+						destroyAndGiveMoney(Item);
+						return false;
+					} else {
+						// It's a valid alternative. But do we want to use it right now?
+						var preference:Float = shouldEquipItemInCell(cell, Item);
+						
+						if ( preference > 1 ) {
+							// Yep, let's equip it!
+							// (Show buffs first.)
+							if ( Item.equipSlot == WEAPON ) {
+								CqActor.showWeaponDamage( Registery.player, Item.damage );
+							}
+							var oldItemBuffs:Hash<Int> = cell.getCellObj().item.buffs;
+							for ( buffName in oldItemBuffs.keys() ) {
+								var buffAmt:Int = Item.buffs.get(buffName) - oldItemBuffs.get(buffName);
+								if ( buffAmt != 0 ) {
+									CqActor.showBuff( Registery.player, buffAmt, buffName );
+								}
+							}
+							for ( buffName in Item.buffs.keys() ) {
+								if ( !oldItemBuffs.exists( buffName ) ) {
+									CqActor.showBuff( Registery.player, Item.buffs.get(buffName), buffName );
+								}
+							}
+							
+							var old:CqInventoryItem = equipItem(cell, Item, uiItem);
+							dlgInfo.setItem(Item);
+							
+							GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_STASHOLD1" ) + " " + old.item.name + Resources.getString( "NOTIFY_GET_STASHOLD2" ), 0xBFE137);
+							uiItem = old;
+						} else {
+							// Nope. Make sure it's not redundant.
+							for ( cell in dlgInvGrid.cells ) {
+								if ( cell.getCellObj() != null ) {
+									var cellUiItem:CqInventoryItem = cell.getCellObj();
+									var cellItem:CqItem = cellUiItem.item;
+
+									if ( cellItem.equipSlot == uiItem.item.equipSlot ) {
+										/*if ( uiItem.item.makesRedundant( cellItem ) ) {
+											// Sell the cell item.
+											mainDialog.remove(cell.getCellObj());
+											dlgInvGrid.remove(cell.getCellObj());
+											destroyAndGiveMoney(cellItem);
+										} else */if ( cellItem.makesRedundant( uiItem.item ) ) {
+											// Sell the item we just picked up.
+											GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_REDUNDANT" ), 0xBFE137);
+											destroyAndGiveMoney(uiItem.item);
+											return false;
+										}
+									}
+								}
+							}							
+							
+							GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_STASHNEW1" ) + " " + Item.name + Resources.getString( "NOTIFY_GET_STASHNEW2" ), 0xBFE137);
 						}
 					}
 				}
 			}
 		}
-		
+
 		var emptyCell:CqInventoryCell = getEmptyCell();
 		if (emptyCell != null ) {
 			// add to inventory
@@ -197,7 +252,7 @@ class CqInventoryItemManager
 		if (Cell.getCellObj() == null)
 			return 2.0;
 		
-		return Item.compareTo( Cell.getCellObj().item );
+		return Registery.player.valueItem( Item ) / Registery.player.valueItem( Cell.getCellObj().item );
 	}
 	
 	private function equipItem(Cell:CqInventoryCell, Item:CqItem, UiItem:CqInventoryItem):CqInventoryItem {

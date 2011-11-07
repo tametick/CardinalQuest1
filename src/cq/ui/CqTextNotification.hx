@@ -33,7 +33,7 @@ class CqTextNotification extends HxlGroup
 	{
 		if (message == null || message == "")
 			return;
-		var txt:CqFloatText = new CqFloatText(Xpos, Ypos , message, color,FontAnonymousPro.instance.fontName, textSize, false);
+		var txt:CqFloatText = new CqFloatText(null, Xpos, Ypos , message, color,FontAnonymousPro.instance.fontName, textSize, false);
 		notifications.unshift(txt);
 		txt.InitSemiCustomTween(1,{},onTween);
 		txt.scrollFactor = scrollFactor;
@@ -41,6 +41,15 @@ class CqTextNotification extends HxlGroup
 		add(txt);
 		
 	}
+	
+	public function clear()
+	{
+		for ( n in notifications ) {
+			remove(n);
+			n.destroy();
+		}
+	}
+	
 	function updatePositions()
 	{
 		for ( i in 0...notifications.length)

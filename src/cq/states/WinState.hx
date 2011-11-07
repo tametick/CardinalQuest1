@@ -6,6 +6,7 @@ import data.Registery;
 import cq.CqResources;
 import cq.ui.CqTextScroller;
 import data.Registery;
+import data.Resources;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import haxel.HxlGraphics;
@@ -33,7 +34,7 @@ class WinState extends CqState {
 			
 		cursor.visible = false;
 		scroller = new CqTextScroller(null, 5);
-		scroller.addColumn(80, 480, "As you slay the last of his servants, Asterion himself draws near, bellowing laughter, pleased by the show.  He intones an ancient incantation.\n\nA shimmering portal appears.  He steps inside.  You have driven the minotaur away!  There is peace again in Hallemot!\n\nYes, there is peace again.  For now.", false, FontDungeon.instance.fontName, 28);
+		scroller.addColumn(80, 480, Resources.getString( "AsterionDefeated", true ), false, FontDungeon.instance.fontName, 28);
 		Figurescale = new HxlPoint(2.0, 2.0);
 		figure = new HxlSprite(85, 40, VortexFigure, Figurescale.x, Figurescale.y);
 		bg = new HxlSprite(50, 50, VortexScreen);

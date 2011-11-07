@@ -5,6 +5,7 @@ import com.eclecticdesignstudio.motion.easing.Cubic;
 import cq.CqResources;
 import cq.ui.CqTextScroller;
 import data.Configuration;
+import data.Resources;
 import data.SoundEffectsManager;
 import flash.display.Loader;
 import flash.display.Sprite;
@@ -44,7 +45,7 @@ class GameOverState extends CqState {
 		
 		stackRender = true;
 		
-		scroller = new CqTextScroller(DeathScreen, 1, "Game over",0x657873,0x010101);
+		scroller = new CqTextScroller(DeathScreen, 1, Resources.getString( "MENU_GAME_OVER" ),0x657873,0x010101);
 		add(scroller);
 		scroller.startScroll();
 		scroller.onComplete(goToMenu);
@@ -74,7 +75,7 @@ class GameOverState extends CqState {
 		var textColor = 0x657873;
 		var textHighlight = 0x670000;
 		
-		var btnNewGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "New Game", true, null);
+		var btnNewGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, Resources.getString( "MENU_NEW_GAME" ), true, null);
 		btnNewGame.setNormalFormat(null, 35, textColor, "center");
 		btnNewGame.setHoverFormat(null, 35, textHighlight, "center");
 		menu.addItem(btnNewGame);
@@ -83,7 +84,7 @@ class GameOverState extends CqState {
 		});
 		buttonY += 50;
 
-		var btnMenu:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Main Menu", true, null);
+		var btnMenu:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, Resources.getString( "MENU_MAIN_MENU" ), true, null);
 		btnMenu.setNormalFormat(null, 35, textColor, "center");
 		btnMenu.setHoverFormat(null, 35, textHighlight, "center");
 		menu.addItem(btnMenu);

@@ -1,6 +1,6 @@
 package cq.states;
 
-import cq.CqResources;
+import data.Resources;
 import flash.net.URLRequest;
 import haxel.HxlText;
 
@@ -11,8 +11,8 @@ class DemoOverState extends GameOverState{
 		super.create();
 		
 		scroller.setSplash(BlankScreen);
-		scroller.setTitle("Demo Over!");		
-		var link:HxlText = new HxlText(0, 160, 640, "Want more?\nwww.cardinalquest.com", true, null, 50, 0xFFFFFF, "center");
+		scroller.setTitle(Resources.getString( "DEMO_OVER" ));		
+		var link:HxlText = new HxlText(0, 160, 640, Resources.getString( "DEMO_OVER_MORE" ) + "\nwww.cardinalquest.com", true, null, 50, 0xFFFFFF, "center");
 		add(link);
 	}
 	

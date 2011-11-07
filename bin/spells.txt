@@ -1,6 +1,5 @@
 Field String ID
 Field String Sprite
-Field String Name
 Field Int Target
 Field Int Duration
 Field String Stat
@@ -16,30 +15,30 @@ Field String EffectVal
 
 ; Targets self.
 
-; ID             Sprite           Name               Tr Dur Stat   Pts. (B1 B1V B2 B2V Ef EfV)
-BERSERK          berserk          [Berserk]           0  60 spirit  720 attack 3 speed 3
-BLESS_WEAPON     bless_weapon     [Bless Weapon]      0 120 spirit  720 attack 3
-HASTE            haste            [Haste]             0 120 spirit  720 speed  3
-SHADOW_WALK      shadow_walk      [Shadow Walk]       0 120 spirit  720 [] 0 [] 0 invisible
-STONE_SKIN       stone_skin       [Stone Skin]        0 120 spirit  720 defense 5 speed -1
-BLINK            blink            [Blink]             0   0 spirit  720 [] 0 [] 0 blink
-MAGIC_ARMOR      magic_armor      [Magic Armor]       0 120 spirit  720 defense 3
-REVEAL_MAP       reveal_map       [Reveal Map]        0   0 spirit 7200 [] 0 [] 0 reveal
-HEAL             heal             [Heal]              0   0 spirit 2880 [] 0 [] 0 heal full
+; ID             Sprite           Tr Dur Stat    Pts. (B1 B1V B2 B2V Ef EfV)
+BERSERK          berserk           0  45 attack  1080 attack 3 speed 3
+BLESS_WEAPON     bless_weapon      0  60 spirit   360 attack 3
+HASTE            haste             0  60 spirit   540 speed  5
+SHADOW_WALK      shadow_walk       0  60 speed   1200 "" 0 "" 0 invisible
+STONE_SKIN       stone_skin        0  60 spirit   480 defense 5 speed -1
+BLINK            blink             0   0 spirit   360 "" 0 "" 0 blink
+MAGIC_ARMOR      magic_armor       0  60 spirit   480 defense 3
+REVEAL_MAP       reveal_map        0   0 spirit  3600 "" 0 "" 0 reveal
+HEAL             heal              0   0 spirit  1440 "" 0 "" 0 heal full
 
 ; Targets enemy.
 
-; ID             Sprite           Name               Tr Dur Stat   Pts. (B1 B1V B2 B2V Ef EfV)
-FREEZE           freeze           [Freeze]            1 120 spirit 1440 speed -3
-FIREBALL         fireball         [Fireball]          1   0 spirit  720 
-ENFEEBLE_MONSTER enfeeble_monster [Enfeeble Monster]  1 120 spirit  720 attack -3
-CHARM_MONSTER    charm_monster    [Charm Monster]     1 120 spirit 1440 [] 0 [] 0 charm
-POLYMORPH        polymorph        [Polymorph]         1 180 spirit 2160 [] 0 [] 0 polymorph true
-SLEEP            sleep            [Sleep]             1  90 spirit 1440 [] 0 [] 0 sleep
-FEAR             fear             [Fear]              1 180 spirit  960 [] 0 [] 0 fear
+; ID             Sprite           Tr Dur Stat   Pts. (B1 B1V B2 B2V Ef EfV)
+FREEZE           freeze            1  60 spirit  360 speed -4
+FIREBALL         fireball          1   0 spirit  360 
+ENFEEBLE_MONSTER enfeeble_monster  1  60 spirit  360 attack -3
+CHARM_MONSTER    charm_monster     1  60 spirit  720 "" 0 "" 0 charm
+POLYMORPH        polymorph         1   0 spirit 1080 "" 0 "" 0 polymorph true
+SLEEP            sleep             1  45 spirit  720 "" 0 "" 0 sleep
+FEAR             fear              1   0 spirit  480 "" 0 "" 0 fear
 
 ; Targets empty square.
 
-; ID             Sprite           Name               Tr Dur Stat   Pts. (B1 B1V B2 B2V Ef EfV)
-MAGIC_MIRROR     magic_mirror     [Magic Mirror]      2 180 spirit 1440 [] 0 [] 0 magic_mirror
-TELEPORT         teleport         [Teleport]          2   0 spirit 1440 [] 0 [] 0 teleport
+; ID             Sprite           Tr Dur Stat   Pts. (B1 B1V B2 B2V Ef EfV)
+MAGIC_MIRROR     magic_mirror     2   90 spirit  720 "" 0 "" 0 magic_mirror
+TELEPORT         teleport         2    0 spirit  720 "" 0 "" 0 teleport

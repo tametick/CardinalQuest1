@@ -272,6 +272,33 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		return blocked;
 	}
 
+	public function hideAll(state:HxlState) {
+		// Reset previously seen tiles.
+		var tile:Tile;		
+		for ( x in 0...widthInTiles-1 ) {
+			for ( y in 0...heightInTiles - 1) {
+				tile = getTile(x, y);
+				if ( tile.visibility == Visibility.IN_SIGHT ) {
+					tile.visibility = Visibility.SEEN;
+					tile.visAmount = 0.0;
+				}
+			}
+		}		
+
+		// Hide all mobs and loot..
+		for ( m in mobs ) {
+			cast(m, CqActor).setVisible( false );
+			var pop = cast(m, HxlSprite).getPopup();
+			if (pop != null)
+				pop.visible = false;
+			pop = null;
+		}
+		
+		for (loot in loots) {
+			cast(loot, HxlSprite).visible = false;
+		}		
+	}
+	
 	public function showAll(state:HxlState) {
 		for ( x in 0...widthInTiles-1 ) {
 			for ( y in 0...heightInTiles - 1) {
@@ -285,7 +312,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 					for (loot in tile.loots)
 						cast(loot,HxlSprite).visible = true;
 					for (actor in tile.actors)
-						cast(actor,HxlSprite).visible = true;
+						cast(actor,CqActor).setVisible( true );
 				}
 			}
 		}
@@ -493,14 +520,11 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		
 		// Hide all mobs and loot..
 		for ( m in mobs ) {
+			cast(m, CqActor).setVisible( false );
 			var pop = cast(m, HxlSprite).getPopup();
-			var hpbar = m.healthBar;
-			if (hpbar != null)
-				hpbar.visible = false;
 			if (pop != null)
 				pop.visible = false;
 			pop = null;
-			hpbar = null;			
 		}
 		
 		for (loot in loots) {
@@ -540,10 +564,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 						for (loot in tile.loots)
 							cast(loot,HxlSprite).visible = true;
 						for (actor in tile.actors) {
-							cast(actor, HxlSprite).visible = true;
-							var hpbar = actor.healthBar;
-							if (hpbar != null && actor.hp != actor.maxHp)
-								hpbar.visible = true;
+							cast(actor, CqActor).setVisible( true );
 
 							if (Std.is(actor, CqMob)) {
 								var asmob = cast(actor, CqMob);
@@ -636,7 +657,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 						for (loot in Ttile.loots)
 							cast(loot,HxlSprite).visible = true;
 						for (actor in Ttile.actors) {
-							cast(actor, HxlSprite).visible = true;
+							cast(actor, CqActor).setVisible( true );
 						}
 						Ttile.colorTo(normColor, tweenSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(normColor, normColor, normColor));
@@ -646,7 +667,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 						for (loot in Ttile.loots)
 							cast(loot,HxlSprite).visible = false;
 						for (actor in Ttile.actors)
-							cast(actor,HxlSprite).visible = false;
+							cast(actor, CqActor).setVisible( false );
 
 						Ttile.colorTo(seenTween, tweenSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));
@@ -657,7 +678,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 						for (loot in Ttile.loots)
 							cast(loot,HxlSprite).visible = false;
 						for (actor in Ttile.actors)
-							cast(actor,HxlSprite).visible = false;
+							cast(actor, CqActor).setVisible( false );
 
 						Ttile.colorTo(seenTween, tweenSpeed);
 						//Ttile.setColor(HxlUtil.colorInt(seenTween, seenTween, seenTween));

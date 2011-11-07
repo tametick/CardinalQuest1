@@ -4,6 +4,7 @@ import cq.CqActor;
 import data.Registery;
 import cq.CqResources;
 import data.Configuration;
+import data.Resources;
 import haxel.HxlSprite;
 import haxel.HxlUtil;
 
@@ -42,7 +43,13 @@ class CqCharacterDialog extends HxlSlidingDialog {
 		
 		var textColor:Int = 0x6D564B;
 		var player_class:String = Registery.player.playerClassName;
-		var txt_string:Array<String> = [player_class, "Health:", "0", "Attack:", "0", "Defense:", "0", "Speed:", "0", "Spirit:", "0", "Vitality:", "0"];
+		var txt_string:Array<String> = [player_class,
+										Resources.getString( "STAT_HEALTH" ), "0",
+										Resources.getString( "STAT_ATTACK" ), "0",
+										Resources.getString( "STAT_DEFENSE" ), "0",
+										Resources.getString( "STAT_SPEED" ), "0",
+										Resources.getString( "STAT_SPIRIT" ), "0",
+										Resources.getString( "STAT_VITALITY" ), "0"];
 		
 		
 		for (i in 0...textBoxes.length)
