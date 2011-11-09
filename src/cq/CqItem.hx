@@ -536,7 +536,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 		if (consumable) {
 			stackSize--;
 			if (stackSize <= 0) {
-				itemSlot.swapItem(null);
+				itemSlot.item = null;
 			} else {
 				if (inventoryProxy != null) inventoryProxy.setIcon();
 			}
