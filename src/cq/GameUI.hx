@@ -263,8 +263,7 @@ class GameUI extends HxlDialog {
 		
 		// invItemManager = new CqInventoryItemManager(panels.panelInventory);
 
-		// bagDialog = new BagDialog(this, 5, 5, 13, ["shoes", "gloves", "armor", "jewelry", "weapon", "hat"]);
-		bagDialog = new BagDialog(this, 4, 4, 13, ["shoes", "gloves", "armor", "jewelry", "weapon", "hat"]);
+		bagDialog = new BagDialog(this, 5, 5, 13, ["shoes", "gloves", "armor", "jewelry", "weapon", "hat"]);
 		
 		panels = new CqPanelContainer();
 		add(panels);
@@ -1012,7 +1011,7 @@ class GameUI extends HxlDialog {
 				if (tile.actors != null && tile.actors.length > 0) {
 					var victim:CqActor = cast(tile.actors[0], CqActor);
 					
-					if (victim.faction != 0 && !victim. && !victim.specialEffects.exists("invisible")) {
+					if (victim.faction != 0 && !victim.isGhost && !victim.specialEffects.exists("invisible")) {
 						targetSpell.activate(Registery.player, victim);
 						cast(HxlGraphics.state, GameState).passTurn();
 					}

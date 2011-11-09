@@ -249,40 +249,6 @@ class GameState extends CqState {
 			gameUI.showCharDlg();
 		}
 	}
-
-	private function checkSlotHotkeys():Bool {
-		// notice that these two blocks are identical and can and should be merged soon
-		
-		// this has to be run through the BagDialog if it is to be done correctly
-		
-		//potions
-		/*
-		for (i in 0...Configuration.bindings.potions.length) {
-			if (HxlGraphics.keys.justPressed(Configuration.bindings.potions[i])) {
-				var cell = gameUI.dlgPotionGrid.cells[i];
-				if (cell != null && cell.proxy != null) {
-					if (cell.proxy.item.tryToActivate(true)) {
-						return true;
-					}
-				}
-			}
-		}
-
-		//spells
-		for (i in 0...Configuration.bindings.spells.length) {
-			if (HxlGraphics.keys.justPressed(Configuration.bindings.spells[i])) {
-				var cell = gameUI.dlgSpellGrid.cells[i];
-				if (cell != null) {
-					if (cell.proxy.item.tryToActivate(true)) {
-						return true;
-					}
-				}
-			}
-		}
-		*/
-
-		return false;
-	}
 	
 	public function passTurn( _halfTurn:Bool = false ) {
 		var player = Registery.player;
@@ -776,7 +742,7 @@ class GameState extends CqState {
 
 		mobileMoveAllowed = false;
 
-		if (checkSlotHotkeys()) {
+		if (gameUI.bagDialog.hotkeys()) {
 			// verify that this lines up with mouse behavior
 			// passTurn();
 			isPlayerActing = false;
