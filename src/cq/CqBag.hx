@@ -14,6 +14,12 @@ import data.SoundEffectsManager;
 import cq.CqResources;
 
 
+enum BagGrantResult {
+	SUCCEEDED;
+	SOLD;
+	NO_SPACE;
+}
+
 class CqBag {
 	var slots:Array<CqItemSlot>; // never make this public
 	
@@ -23,12 +29,12 @@ class CqBag {
 	
 	// grant returns TRUE if the item has been accepted (equipped, stowed in inventory, or cashed out for money)
 	// and FALSE if it must remain on the floor
-	public function grant(item:CqItem):Bool {
+	public function grant(item:CqItem):BagGrantResult {
 		// try to stack it, first, with a completely identical item (this applies only to potions at the moment)
 		if (item.stackSizeMax != 1) {
 			for (slot in slots) {
 				if (slot.stackItem(item)) {
-					return true;
+					return BagGrantResult.SUCCEEDED;
 				}
 			}
 		}
@@ -45,9 +51,9 @@ class CqBag {
 				if (i.equalTo(item)) {
 					// exactly the same as one we already have!
 					GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_DUPLICATE" ));
-					destroyAndGiveMoney(item);
+					giveMoney(item);
 					
-					return true;
+					return BagGrantResult.SOLD;
 				}
 			}
 			
@@ -55,18 +61,18 @@ class CqBag {
 				if (i.makesRedundant(item)) {
 					// this old item is absolutely better than the new one!
 					GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_SELLNEW1" ) + " " + item.name + Resources.getString( "NOTIFY_GET_SELLNEW2" ) );
-					destroyAndGiveMoney(item);
+					giveMoney(item);
 					
-					return true;
+					return BagGrantResult.SOLD;
 				}
 			}
 					
 			for (i in items(item.equipSlot, false)) {
 				if (i.makesRedundant(item)) {
 					GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_REDUNDANT" ), 0xBFE137);
-					destroyAndGiveMoney(item);
+					giveMoney(item);
 					
-					return true;
+					return BagGrantResult.SOLD;
 				}
 			}
 		}
@@ -127,7 +133,7 @@ class CqBag {
 				}
 				
 				worstSlot.item = item;
-				return true;
+				return BagGrantResult.SUCCEEDED;
 			} else {
 				// the complicated case -- we're replacing some old equipment
 				if (item.makesRedundant(worstSlot.item)) {
@@ -135,8 +141,9 @@ class CqBag {
 					worstSlot.item = item;
 					
 					GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_SELLOLD1" ) + " " + oldItem.name + Resources.getString( "NOTIFY_GET_SELLOLD2" ), 0xBFE137);
-					destroyAndGiveMoney(oldItem);
-					return true;
+					giveMoney(oldItem);
+					oldItem.destroy();
+					return BagGrantResult.SUCCEEDED;
 				} else {
 					// it's not strictly better, so we'd better see if we actually have somewhere to put the old one before switching
 					for (slot in slots) {
@@ -147,14 +154,14 @@ class CqBag {
 							slot.item = oldItem;
 							
 							GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_STASHOLD1" ) + " " + oldItem.name + Resources.getString( "NOTIFY_GET_STASHOLD2" ), 0xBFE137);
-							return true;
+							return BagGrantResult.SUCCEEDED;
 						}
 					}
 					
 					// we didn't find anywhere to put the old one, so we can't equip the new one -- I guess we could try to find something else to trash or drop,
 					// but let's just complain (yes, we've already put up the buffs -- we could scan first instead)
 					
-					return false;
+					return BagGrantResult.NO_SPACE;
 				}
 			}
 		}
@@ -166,12 +173,12 @@ class CqBag {
 				slot.item = item;
 				
 				GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_STASHNEW1" ) + " " + item.name + Resources.getString( "NOTIFY_GET_STASHNEW2" ), 0xBFE137);
-				return true;
+				return BagGrantResult.SUCCEEDED;
 			}
 		}		
 		
 		// nowhere to put it
-		return false;
+		return BagGrantResult.NO_SPACE;
 	}
 		
 	
@@ -185,9 +192,8 @@ class CqBag {
 		}
 	}
 	
-	private function destroyAndGiveMoney(item:CqItem) {
+	private function giveMoney(item:CqItem) {
 		Registery.player.giveMoney(item.monetaryValue);
-		item.destroy();
 	}
 		
 	public function grantIntrinsic(getThisItem:CqItem) {

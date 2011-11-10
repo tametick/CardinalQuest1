@@ -1127,7 +1127,9 @@ class CqPlayer extends CqActor, implements Player {
 	
 	//pickup item from map
 	public function pickup(state:HxlState, item:CqItem) {
-		if (bag.grant(item)){
+		var result = bag.grant(item);
+		
+		if ( result == BagGrantResult.SUCCEEDED || result == BagGrantResult.SOLD ) {
 			// remove item from map
 			Registery.level.removeLootFromLevel(state, item);
 			
@@ -1135,12 +1137,19 @@ class CqPlayer extends CqActor, implements Player {
 			SoundEffectsManager.play(Pickup);
 			item.doPickupEffect();
 			GameUI.showEffectText(this, item.name, 0x6699ff);
+
+			if ( result == BagGrantResult.SOLD ) { 
+				//Destroy the item.
+				item.destroy();
+			}
 		} else {
 			GameUI.showTextNotification(Resources.getString( "NOTIFY_INV_FULL" ), 0xFF001A);
 			SoundEffectsManager.play(PotionEquipped); // why play this sound?  weird.
 		}
 		
-		GameUI.instance.flashInventoryButton();
+		if ( result != BagGrantResult.SOLD ) {
+			GameUI.instance.flashInventoryButton();
+		}
 	}
 	
 	public override function actInDirection(state:HxlState, targetTile:HxlPoint):Bool {
