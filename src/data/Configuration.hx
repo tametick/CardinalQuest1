@@ -69,6 +69,7 @@ class Configuration {
 		compasses: [["W", "A", "S", "D"], ["K", "H", "J", "L"], ["UP", "LEFT", "DOWN", "RIGHT"]],
 		waitkeys: ["PERIOD", "NONUMLOCK_5", "ENTER", "SPACE"],
 		potions: ["SIX", "SEVEN", "EIGHT", "NINE", "ZERO"],
-		spells: ["ONE", "TWO", "THREE", "FOUR", "FIVE"]
+		spells: ["ONE", "TWO", "THREE", "FOUR", "FIVE"],
+		nexttarget: ["TAB", "NUMPAD_PLUS"]
 	}
 }

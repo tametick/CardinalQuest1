@@ -25,7 +25,7 @@ class CqPanelContainer extends HxlGroup
 		
 		panelMap = new CqMapDialog(84, 0, 472, 480);
 		// no map bg color (alpha=0)
-		panelMap.setBackgroundColor(0xFF000000);
+		panelMap.setBackgroundColor(0x00000000);
 		panelMap.zIndex = 2;
 		add(panelMap);
 
