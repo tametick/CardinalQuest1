@@ -1082,6 +1082,8 @@ class CqPlayer extends CqActor, implements Player {
 					weaponName = "axe";
 				case "claymore","broad_sword":
 					weaponName = "long_sword";
+				case "rune_sword":
+					weaponName = "short_sword";
 			}
 			
 			play("idle_" + weaponName);

@@ -116,6 +116,7 @@ STAFF            \"A sturdy shaft of hardwood with metal tips.\"
 LONG_SWORD       \"Long swords have long cruciform hilts with grips and double-edged blades over one meter long.\"
 AXE              \"A mighty axe, good for chopping both wood and flesh.\"
 BATTLE_AXE       \"Crafted from the finest of metals, this axe can deal lethal slashing, cleaving and slicing blows.\"
+RUNE_SWORD       \"This finely crafted sword pulses with mystical energy.\"
 MACE             \"A mighty huge and spiky mace made for fast swinging and powerful rips.\"
 CLAYMORE         \"An ancient weapon. Many bards have sung of glorious victories won with it.\"
 BROAD_SWORD      \"An elegant weapon for a more civilized age. It was crafted by a master blacksmith from the distant orient.\"
@@ -188,10 +189,11 @@ DAGGER          dagger          WEAPON    1   1 100    1    2
 SHORT_SWORD     short_sword     WEAPON    1   2 100    1    3
 STAFF           staff           WEAPON    2   3 100    1    3 spirit   1
 LONG_SWORD      long_sword      WEAPON    3   4 100    2    4
-AXE             axe             WEAPON    4   5 100    4    6
-BATTLE_AXE      battle_axe      WEAPON    5   6 100    5   12 speed   -2
-MACE            mace            WEAPON    5   6 100    4   11
-CLAYMORE        claymore        WEAPON    7  99 100    6   10 speed   -1
+MACE            mace            WEAPON    4   5 100    4    9 speed   -1
+AXE             axe             WEAPON    5   6 100    3    6
+BATTLE_AXE      battle_axe      WEAPON    6   7 100    4   12 speed   -2
+RUNE_SWORD      rune_sword      WEAPON    6   7  50    2    7 spirit   1
+CLAYMORE        claymore        WEAPON    7  99 100    6   11 speed   -1
 BROAD_SWORD     broad_sword     WEAPON    8  99 100    5   12 defense -2 speed    2
 ";		embedFile = StatsFile.loadFromString( "items.txt", embedText );		embedText = "Field String Class
 Field Int Weight
@@ -365,6 +367,7 @@ STAFF           \"Staff\"
 LONG_SWORD      \"Long Sword\"
 AXE             \"Axe\"
 BATTLE_AXE      \"Hardened Battle Axe\"
+RUNE_SWORD      \"Rune Sword\"
 MACE            \"Beastly Mace\"
 CLAYMORE        \"Broad Claymore\"
 BROAD_SWORD     \"Twin Bladed Katana\"
