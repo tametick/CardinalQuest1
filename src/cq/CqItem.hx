@@ -16,6 +16,7 @@ import haxel.HxlPoint;
 
 import world.Loot;
 import world.GameObject;
+import world.Mob;
 
 import data.Configuration;
 import cq.states.GameState;
@@ -455,7 +456,36 @@ class CqItem extends GameObjectImpl, implements Loot {
 		
 		if (!isReadyToActivate) return false;
 		
-		if ( targetsOther || targetsEmptyTile) {
+		if ( targetsOther ) {
+			GameUI.setTargeting(this);
+			
+			if (keyPress) {
+				// Look for a mob nearby to auto-target.
+				var nearestMob:Mob = null;
+				var nearestMobDist:Float = 1000000;
+				for ( m in Registery.level.mobs ) {
+					var cqmob:CqMob = cast(m, CqMob);
+					
+					if ( cqmob.visible && cqmob.faction != Registery.player.faction && !cqmob.isGhost && !cqmob.specialEffects.exists("invisible") ) {
+						var mobDistX:Float = m.x - Registery.player.x;
+						var mobDistY:Float = m.y - Registery.player.y;
+						var mobDist = Math.abs( mobDistX ) + Math.abs( mobDistY );
+						if ( mobDist < nearestMobDist ) {
+							nearestMobDist = mobDist;
+							nearestMob = m;
+						}
+					}
+				}
+				
+				if ( nearestMob != null ) {
+					GameUI.setTargetingPos(nearestMob.tilePos);
+				} else {
+					GameUI.setTargetingPos(Registery.player.tilePos);
+				}
+			}
+			
+			return true;
+		} else if ( targetsEmptyTile) {
 			GameUI.setTargeting(this);
 			if (keyPress) GameUI.setTargetingPos(Registery.player.tilePos);
 			
