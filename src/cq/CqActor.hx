@@ -460,15 +460,14 @@ class CqActor extends CqObject, implements Actor {
 		
 		if (other.specialEffects.get("invisible") != null) {
 			// attacking something that's invisible (probably the player) -- big boost to defense
-			def += 2 * atk;
 
 			if (!Std.is(other, CqPlayer)) {
-				//// if a monster can be invisible, the player can make it visible by bumping it
+				// if a monster can be invisible, the player can make it visible by bumping it
 				other.breakInvisible(Resources.getString( "POPUP_BUMP1" ) + " " + cast(other, CqMob).name + Resources.getString( "POPUP_BUMP2" ));
 				return;
 			} else {
-				// monsters will sometimes pretend not to bump into you even when they should
-				if (Math.random() < .5) {
+				// monsters will sometimes pretend not to bump into you even when they should, and the odds are based on your defense (i.e., evasion)
+				if (Math.random() < 6 / (6 + def)) {
 					other.breakInvisible(Resources.getString( "POPUP_BUMPED" ));
 				}
 				return;
@@ -480,7 +479,7 @@ class CqActor extends CqObject, implements Actor {
 		if (Math.random() < atk / (atk + def)) {
 			// hit
 			var dmgMultiplier:Int = 1;
-			if(specialEffects.get("damage multiplier")!=null)
+			if(specialEffects.get("damage multiplier") != null)
 				dmgMultiplier =  Std.parseInt(specialEffects.get("damage multiplier").value);
 				
 			// do an extra 100% damage if stealthy!
@@ -733,14 +732,15 @@ class CqActor extends CqObject, implements Actor {
 		}
 	}
 	
-// merge note: find the proper place for these lines!
-		
+// merge note : these lines got orphaned -- find out where they belong
 // "Ghost" killed actors now so they can't act any more.
 //
 //			var injured:CqActor = (victim == null) ? actor : victim;
 //			var lif = injured.hp + injured.buffs.get("life");
 //			if (lif - dmg <= 0 && injured.minHp <= 0) {
 //				actor.ghostActor(HxlGraphics.state, injured, dmg);
+
+
 	public static function showWeaponDamage(actor:CqActor, damage:Range) {
 		var text = "" + damage.start + " - " + damage.end + " " + Resources.getString("damage");
 		GameUI.showEffectText(actor, text, 0xff4422);		
@@ -784,10 +784,6 @@ class CqActor extends CqObject, implements Actor {
 //				actor.injureActor(HxlGraphics.state, injured, dmg);
 //		} else {
 
-// merge note : put this before updateFieldOfView in applyEffectAt (teleport)
-//			Registery.level.hideAll(HxlGraphics.state);
-// merge note:			GameUI.showEffectText(mob, Resources.getString( "POPUP_MIRROR" ), 0x2DB6D2);
-	
 	public function applyEffect(effect:CqSpecialEffectValue, other:CqActor) {
 		HxlLog.append(Resources.getString( "LOG_EFFECT" ) + " " + Resources.getString( effect.name ));
 		switch(effect.name){
@@ -962,8 +958,6 @@ class CqPlayer extends CqActor, implements Player {
 		
 		bag.destroy();
 		
-		lastTile = null;
-		
 		onGainXP.clear();
 	}
 	
@@ -1056,8 +1050,6 @@ class CqPlayer extends CqActor, implements Player {
 		faction = CqPlayer.faction;
 
 		play("idle");
-
-		lastTile = null;
 	}
 
 	public function addOnGainXP(Callback:Dynamic) {
@@ -1096,8 +1088,7 @@ class CqPlayer extends CqActor, implements Player {
 		}
 	}
 	
-
-	// merge note: make use of valueItem !
+	
 	public function valueItem(Item:CqItem) : Float {
 		var valueItem:Float = prefDamage * (Item.damage.start + Item.damage.end) / 2;
 		
@@ -1110,7 +1101,7 @@ class CqPlayer extends CqActor, implements Player {
 		return valueItem;
 	}
 	
-public function give(?itemOrSpellID:String) {
+	public function give(?itemOrSpellID:String) {
 		var item:CqItem = CqLootFactory.newItem( -1, -1, itemOrSpellID);
 		if (item != null) {
 			bag.grant(item);
@@ -1143,13 +1134,24 @@ public function give(?itemOrSpellID:String) {
 			item.doPickupEffect();
 			GameUI.showEffectText(this, item.name, 0x6699ff);
 		} else {
-		// merge note : GameUI.showTextNotification(Resources.getString( "NOTIFY_INV_FULL" ), 0xFF001A);
-			GameUI.showTextNotification("You need to make some room for it first!", 0xFF001A);
-			SoundEffectsManager.play(PotionEquipped);
+			GameUI.showTextNotification(Resources.getString( "NOTIFY_INV_FULL" ), 0xFF001A);
+			SoundEffectsManager.play(PotionEquipped); // why play this sound?  weird.
 		}
 		
 		GameUI.instance.flashInventoryButton();
 	}
+	
+	public override function actInDirection(state:HxlState, targetTile:HxlPoint):Bool {
+		var oldx = tilePos.x, oldy = tilePos.y;
+
+		if (super.actInDirection(state, targetTile)) {
+			// we track lastTile for wall sliding to work better
+			lastTile = new HxlPoint(oldx, oldy);
+			return true;
+		} else {
+			return false;
+		}
+	}	
 
 	public function gainExperience(xpValue:Int) {
 		HxlLog.append(Resources.getString( "LOG_XP1" ) + " " + xpValue + " " + Resources.getString( "LOG_XP2" ));
@@ -1221,6 +1223,8 @@ public function give(?itemOrSpellID:String) {
 	}
 
 	public function rechargeSpells() {
+		// we'll make a potion or scroll of recharging, too!
+		
 		for (spell in bag.spells()) {
 			spell.statPoints = spell.statPointsRequired;
 		}

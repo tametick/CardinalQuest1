@@ -219,9 +219,6 @@ class CqItem extends GameObjectImpl, implements Loot {
 	public var isReadyToActivate (computeIsReadyToActivate, never):Bool;
 	public var isEnchanted(computeIsEnchanted, never):Bool;
 	public var monetaryValue(computeMonetaryValue, never):Int;
-			// merge: prefix += Resources.getString( "PREFIX_SUPERB" ) + " ";
-			// merge: prefix += Resources.getString( "PREFIX_WONDROUS" ) + " ";
-			// merge: prefix += Resources.getString( "PREFIX_MAGICAL" ) + " ";
 	
 	public var equipSlot:CqEquipSlot;
 	public var consumable:Bool;
@@ -331,7 +328,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 		if (isWondrous)
 			prefix += Resources.getString( "PREFIX_WONDROUS" ) + " ";
 		if (isMagical)
-			prefix += Resources.getString( "PREFIX_MAGICAL" ) + " ";
+			prefix += Resources.getString( "PREFIX_MAGICAL" ) + " ";			
 			
 		return prefix + name;
 	}
@@ -409,52 +406,28 @@ class CqItem extends GameObjectImpl, implements Loot {
 	}
 	
 	public function equalTo(other:CqItem):Bool {
-		if ( other.buffs.get( "attack" ) == buffs.get( "attack" )
+		return (
+		     other.buffs.get( "attack" ) == buffs.get( "attack" )
 		  && other.buffs.get( "defense" ) == buffs.get( "defense" )
 		  && other.buffs.get( "speed" ) == buffs.get( "speed" )
 		  && other.buffs.get( "spirit" ) == buffs.get( "spirit" )
 		  && other.buffs.get( "life" ) == buffs.get( "life" )
 		  && other.damage.start == damage.start
-		  && other.damage.end == damage.end )
-		{
-			return true;
-		}
-		
-		return false;
-		
-		/*
-		if (isSuperb != other.isSuperb || isWondrous != other.isWondrous || isMagical != other.isMagical)
-			return false;
-		if (spriteIndex != other.spriteIndex)
-			return false;
-		var itr:Iterator<String> = buffs.keys();
-		while (itr.hasNext())
-		{
-			var key:String = itr.next();
-			if (other.buffs.get(key) != buffs.get(key))
-				return false;
-		}
-		return true;*/
+		  && other.damage.end == damage.end
+		);
 	}
 	
 	// this probably doesn't belong here, really
 		
 	public function makesRedundant(other:CqItem):Bool { // merge note: use this!
-		if ( other.buffs.get( "attack" ) > buffs.get( "attack" )
+		return !( other.buffs.get( "attack" ) > buffs.get( "attack" )
 		  || other.buffs.get( "defense" ) > buffs.get( "defense" )
 		  || other.buffs.get( "speed" ) > buffs.get( "speed" )
 		  || other.buffs.get( "spirit" ) > buffs.get( "spirit" )
 		  || other.buffs.get( "life" ) > buffs.get( "life" )
-		  || other.damage.start + other.damage.end > damage.start + damage.end )
-		{
-			return false;
-		}
-
-		if ( equalTo(other) ) {
-			return false;
-		}
-		
-		return true;
+		  || (other.damage.start + other.damage.end > damage.start + damage.end )
+		  || equalTo(other)
+		  );
 	}
 	
 	private function computeMonetaryValue():Int {
@@ -751,9 +724,11 @@ class CqItem extends GameObjectImpl, implements Loot {
 		
 		case "teleport":
 			var pixelLocation = Registery.level.getPixelPositionOfTile(tile.mapX,tile.mapY);
-			setTilePos(Std.int(tile.mapX), Std.int(tile.mapY));
-			// movetoPixel should _never_ be called directly by _anything_, much less by an item
+			user.setTilePos(Std.int(tile.mapX), Std.int(tile.mapY));
+			// movetoPixel should _never_ be called directly by _anything_, much less by an item; setTilePos should handle this
 			user.moveToPixel(HxlGraphics.state, pixelLocation.x, pixelLocation.y);
+			
+			Registery.level.hideAll(HxlGraphics.state);
 			Registery.level.updateFieldOfView(HxlGraphics.state, true);
 			
 			pixelLocation = null;
@@ -763,8 +738,8 @@ class CqItem extends GameObjectImpl, implements Loot {
 			mob.specialEffects.set(effect.name, effect);
 			Registery.level.updateFieldOfView(HxlGraphics.state, true);
 			
-			// if this is not after updateFieldOfView, we will not see the message
-			GameUI.showEffectText(mob, "Mirror", 0x2DB6D2);
+			// if this were not after updateFieldOfView, we would not see the message
+			GameUI.showEffectText(mob, Resources.getString( "POPUP_MIRROR" ), 0x2DB6D2);
 			
 			if (duration > -1) {
 				mob.addTimer(new CqTimer(duration, null, -1, effect));
