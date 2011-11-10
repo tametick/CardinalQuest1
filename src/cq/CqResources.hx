@@ -228,7 +228,7 @@ class SpriteItems extends HxlSpriteSheet {
 				["amulet","boots","leather_armor","breastplate","chest","glove","cap","ring","bracelet","winged_sandals"],
 				["staff", "dagger", "short_sword", "long_sword"].concat(potions).concat(["helm"]),
 				["axe", "battle_axe", "claymore", "golden_helm", "mace", "broad_sword", "full_helm", "full_plate_mail", "cloak", "gauntlet"],
-				["gemmed_amulet","gemmed_ring","tundra_boots"]
+				["gemmed_amulet","gemmed_ring","tundra_boots","rune_sword"]
 			];
 			
 		spriteNames = _spriteNames;
