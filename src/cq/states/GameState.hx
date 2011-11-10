@@ -58,7 +58,8 @@ class GameState extends CqState {
 	public var chosenClass:String;
 	public var isPlayerActing:Bool;
 	public var justOpenedDoor:Bool;
-	public var resumeActingTime:Float;//time till when acting is blocked
+	public var resumeActingTime:Float;//time until which acting is blocked
+	public var resumeSlidingTime:Float;//time until which sliding is blocked
 	public var started:Bool;
 	var lastMouse:Bool;
 	var endingAnim:Bool;
@@ -83,7 +84,7 @@ class GameState extends CqState {
 
 		//loadingBox = new HxlLoadingBox();
 		//add(loadingBox);
-		resumeActingTime = msMoveStamp = Timer.stamp();
+		resumeSlidingTime = resumeActingTime = msMoveStamp = Timer.stamp();
 	}
 	public override function destroy() {
 		if (gameUI != null) {
@@ -615,6 +616,11 @@ class GameState extends CqState {
 			if (player.justAttacked) {
 				resumeActingTime = Timer.stamp() + player.moveSpeed;
 				isPlayerActing = true; // maybe?
+			} else {
+				// We just moved. Should we delay?
+				if (isBlockingMovement(facing)) {
+					resumeSlidingTime = Timer.stamp() + 1.75*player.moveSpeed;
+				}
 			}
 			
 			return true;
@@ -868,8 +874,14 @@ class GameState extends CqState {
 			if (facing.x == 0 || facing.y == 0) {
 				if (isMouseControl) {
 					moved = tryToActInDirection(facing) || tryToActInDirection(level.getTargetAccordingToMousePosition(true));
-				} else {
+				} else if (resumeSlidingTime <= Timer.stamp()) {
 					moved = tryToActInDirection(facing) || tryToActInDirection(pickBestSlide(facing));
+				} else {
+					moved = tryToActInDirection(facing);
+					if ( !moved ) {
+						isPlayerActing = true;
+						return; // Wait until we can slide.
+					}
 				}
 			} else {
 				// we need a way to indicate whether facing.x or facing.y should be tried first (maybe something like what the mouse case does)
