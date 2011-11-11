@@ -64,8 +64,6 @@ class CqInventoryProxy extends HxlSprite {
 	var background:BitmapData;
 	var icon:CqInventoryProxyBMPData;
 	
-	var idleZIndex:Int;
-	var dragZIndex:Int;
 	public var clearCharge:Bool;
 	
 	public static var backgroundKey:CqGraphicKey;
@@ -78,15 +76,17 @@ class CqInventoryProxy extends HxlSprite {
 	var glowSprite:CqInventoryProxyBMPData;
 	var glowRect:Rectangle;
 	
+	var chargeArcSprite:HxlSprite;
+	var chargeArcBitmap:CqInventoryProxyBMPData;
+	
+	var namePopup:CqPopup;
+	
 	public function new(Item:CqItem) {
 		if (Item == null || Item.inventoryProxy != null) throw "Cannot make two proxies for one inventory item";
 		
 		super(2, 2);
 		icon = null;
-		idleZIndex = 11;
-		dragZIndex = 11;
 		item = null;
-		zIndex = idleZIndex;
 		setSelected(false);
 		glowRect = new Rectangle(0, 0, 58, 58);
 		isGlowing = false;
@@ -103,9 +103,10 @@ class CqInventoryProxy extends HxlSprite {
 		}
 		
 		//popup
-		setPopup(new CqPopup(180, item.fullName, GameUI.instance.popups));
-		GameUI.instance.popups.add(popup);
-		popup.zIndex = 15;
+		namePopup = new CqPopup(180, item.fullName, GameUI.instance.popups);
+		setPopup(namePopup);
+		GameUI.instance.popups.add(namePopup);
+		namePopup.zIndex = 15;
 		
 		//make magical items glow
 		if (item.isSuperb && !item.isMagical && !item.isWondrous) {
@@ -120,7 +121,17 @@ class CqInventoryProxy extends HxlSprite {
 		} else if (item.isWondrous && item.isSuperb) {
 			customGlow(0xE7A918);
 			setGlow(true);
-		}		
+		}
+		
+		if (Std.is(Item, CqSpell)) {
+			chargeArcSprite = new HxlSprite(x + 5, y + 5);
+			chargeArcSprite.createGraphic(54, 54, 0x00010101);
+			GameUI.instance.doodads.add(chargeArcSprite);
+
+			chargeArcBitmap = new CqInventoryProxyBMPData(94, 94, true, 0x0);
+			
+			updateCharge();
+		}
 	}
 	
 	override public function destroy() {
@@ -142,13 +153,20 @@ class CqInventoryProxy extends HxlSprite {
 	override private function dragStart() {
 		// indicate that this is the item being dragged
 		CqInventoryProxy.theProxyBeingDragged = this;
-		zIndex = 0;
+		zIndex = 15;
+		
+		item.itemSlot.cell.remove(this);
+		GameUI.instance.doodads.add(this);
+		GameUI.instance.popups.remove(namePopup);
 		
 		// setting the zIndex doesn't suffice -- we need to attach this to the stage, instead
 	}
 	
 	override private function dragStop() {
-		if (CqInventoryCell.theCellBeingHoveredOver != null) {
+		GameUI.instance.doodads.remove(this);
+		GameUI.instance.popups.add(namePopup);
+		
+		if (CqInventoryCell.theCellBeingHoveredOver != null && CqInventoryCell.theCellBeingHoveredOver != item.itemSlot.cell) {
 			// type checking is done before CqInventoryCell.theCellBeingHoveredOver is ever set to non-null
 			// (if it were not, it would be possible to make items disappear)
 			
@@ -159,6 +177,8 @@ class CqInventoryProxy extends HxlSprite {
 			CqInventoryCell.theCellBeingHoveredOver.slot.item = myItem;
 			myOldSlot.item = itsItem;
 		} else {
+			item.itemSlot.cell.add(this);
+			
 			x = dragStartPoint.x;
 			y = dragStartPoint.y;
 		}
@@ -221,6 +241,9 @@ class CqInventoryProxy extends HxlSprite {
 			renderGlow();
 	}
 	
+	
+	// transferred from the old system directly -- pretty weak
+	
 	function renderGlow() {
 		getScreenXY(_point);
 		_flashPoint.x = _point.x - 8;
@@ -228,6 +251,21 @@ class CqInventoryProxy extends HxlSprite {
 		_pixels.copyPixels(glowSprite, glowRect, _flashPoint, null, null, true);
 		setPixels(glowSprite);
 	}
+
+	static var ctrans:ColorTransform;
+	private static var clearChargeRect = new Rectangle(0, 0, 94, 94);
+	public function updatechargeArcSprite(chargeShape:Shape) {
+		chargeArcBitmap.fillRect(clearChargeRect, 0x0);
+		chargeArcBitmap.draw(chargeShape, null, ctrans);
+
+		if (ctrans == null) {
+			ctrans = new ColorTransform();
+			ctrans.alphaMultiplier = 0.5;
+		}
+
+		chargeArcSprite.loadSuppliedGraphic(chargeArcBitmap);
+		chargeArcSprite.visible = true;
+	}	
 	
 	public function updateCharge() {
 		var chargeBmp:Bitmap = new Bitmap(GraphicCache.getBitmap(CqGraphicKey.EquipmentCellBG));
@@ -250,10 +288,18 @@ class CqInventoryProxy extends HxlSprite {
 
 		chargeShape.mask = chargeBmp;
 		
-		// btn.updateChargeSprite(chargeShape);
+		updatechargeArcSprite(chargeShape);
 		
 		chargeBmp = null;
 		chargeShape = null;
+	}
+	
+	public override function update() {
+		super.update();
+		if (chargeArcSprite != null) {
+			chargeArcSprite.x = x;
+			chargeArcSprite.y = y;
+		}
 	}
 
 	public static function drawChargeArc(G:Graphics, centerX:Float, centerY:Float, startAngle:Float, endAngle:Float, radius:Float, direction:Int) {
@@ -833,7 +879,7 @@ class CqSpellGrid extends CqInventoryGrid {
 		var button:CqTriggerButton = buttons[cellNumber];
 		if(button.cell.proxy != null && Std.is(button.cell.proxy.item, CqSpell)) {
 			cast(button.cell.proxy.item, CqSpell).statPoints = 0;
-			// button.updateChargeSprite
+			// button.updatechargeArcSprite
 		}
 		// GameUI.instance.updateCharge(buttons[Cell]);
 	}
@@ -866,99 +912,3 @@ class CqSpellGrid extends CqInventoryGrid {
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// this is all that was actually special about spells; roll it in when ready
-private class CqSpellButtonBMPData extends BitmapData {}
-private class CqSpellButton extends HxlDialog {
-	public static var clearChargeRect = new Rectangle(0, 0, 94, 94);
-	public var cell(default, null):CqInventoryCell;
-
-	var _initialized:Bool;
-	var chargeSprite:HxlSprite;
-	var chargeBmpData:CqSpellButtonBMPData;
-
-	public function new(X:Int,Y:Int,?Width:Int=100,?Height:Int=20,?Idx:Int=0) {
-		super(X, Y, Width, Height);
-
-		initialized = false;
-
-		//cell = new CqSpellCell(this,5, 5, 54, 54, Idx);
-		cell.setGraphicKeys(CqGraphicKey.EquipmentCellBG,CqGraphicKey.EqCellBGHighlight,CqGraphicKey.CellGlow);
-		cell.zIndex = 1;
-		add(cell);
-
-		chargeSprite = new HxlSprite(x + 5, y + 5);
-		chargeSprite.createGraphic(54, 54, 0x00010101);
-		GameUI.instance.doodads.add(chargeSprite);
-
-		chargeBmpData = new CqSpellButtonBMPData(94, 94, true, 0x0);
-	}
-
-	static var ctrans:ColorTransform;
-	public function updateChargeSprite(chargeShape:Shape) {
-		chargeBmpData.fillRect(clearChargeRect, 0x0);
-		chargeBmpData.draw(chargeShape, null, ctrans);
-
-		if (ctrans == null) {
-			ctrans = new ColorTransform();
-			ctrans.alphaMultiplier = 0.5;
-		}
-
-		if ( cell.proxy == null ) {
-			chargeSprite.visible = false;
-			return;
-		}
-
-		chargeSprite.loadSuppliedGraphic(chargeBmpData);
-		chargeSprite.visible = true;
-		chargeSprite.x = x + 5;
-		chargeSprite.y = y + 5;
-	}
-}
-

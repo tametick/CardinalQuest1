@@ -547,13 +547,7 @@ class GameUI extends HxlDialog {
 		return icon;
 	}
 	public function updateCharges() {
-		var player = Registery.player;
-		/*for ( btn in dlgSpellGrid.buttons ){
-			if (btn.getSpell() != null) {		
-				updateCharge(btn);
-			}
-		}*/
-		for (spell in player.bag.spells(true)) {
+		for (spell in Registery.player.bag.spells(true)) {
 			if (spell.inventoryProxy != null) {
 				spell.inventoryProxy.updateCharge();
 			}
