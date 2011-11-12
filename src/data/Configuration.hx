@@ -70,6 +70,6 @@ class Configuration {
 		waitkeys: ["PERIOD", "NONUMLOCK_5", "ENTER", "SPACE"],
 		potions: ["SIX", "SEVEN", "EIGHT", "NINE", "ZERO"],
 		spells: ["ONE", "TWO", "THREE", "FOUR", "FIVE"],
-		nexttarget: ["TAB", "NUMPAD_PLUS"]
+		nexttarget: ["TAB", "PLUS"]
 	}
 }

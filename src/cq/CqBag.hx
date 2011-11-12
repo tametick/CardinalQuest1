@@ -192,7 +192,7 @@ class CqBag {
 		}
 	}
 	
-	private function giveMoney(item:CqItem) {
+	public function giveMoney(item:CqItem) {
 		Registery.player.giveMoney(item.monetaryValue);
 	}
 		

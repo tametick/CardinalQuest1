@@ -940,16 +940,15 @@ class GameUI extends HxlDialog {
 			targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
 		} else {
 			var newPos:HxlPoint = Registery.level.getTargetAccordingToKeyPress(targetLastPos);
-			if (newPos != null)
-			{
+			if (newPos != null) {
 				if (newPos.x == 0 && newPos.y == 0) {
 					targetLastPos.x += newPos.x;
 					targetLastPos.y += newPos.y;
 					targetingExecute(false);
 					return;
 				} else {
-					targetX = targetLastPos.x+newPos.x;
-					targetY = targetLastPos.y+newPos.y;
+					targetX = targetLastPos.x + newPos.x;
+					targetY = targetLastPos.y + newPos.y;
 				}
 			} else {
 				targetX = targetLastPos.x;

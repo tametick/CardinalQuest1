@@ -893,6 +893,46 @@ class CqActor extends CqObject, implements Actor {
 			updateHealthBar();
 		}
 		GameUI.instance.popups.setChildrenVisibility(false);
+	}
+	
+	public function getClosestEnemy(?afterThisCell:HxlPoint = null):CqActor {
+		var best:Float = Registery.level.widthInTiles;
+		var target:CqActor = null;
+		
+		var tooGood:Float = 0;
+		
+		if (afterThisCell != null) {
+			tooGood = Math.abs(tilePos.x - afterThisCell.x) + Math.abs(tilePos.y - afterThisCell.y);
+		}
+		
+		// note that this is used for ALL combat purposes, not just for ranged projectiles, so we can't use LOS
+		if (Std.is(this, CqMob) && cast(this, CqMob).aware > 0 && faction != CqPlayer.faction) {
+			target = Registery.player;
+			best = Math.abs(tilePos.x - target.tilePos.x) + Math.abs(tilePos.y - target.tilePos.y);
+			
+			best -= 2; // chase a visible player even when a mirror or something else is a bit closer
+		}
+		
+		for (mob in Registery.level.mobs) {
+			var cqmob = cast(mob, CqActor);
+			if (cqmob.faction != faction && !cqmob.specialEffects.exists("invisible")) {
+				var dist = Math.abs(tilePos.x - mob.tilePos.x) + Math.abs(tilePos.y - mob.tilePos.y);
+				if (dist < best) {
+					if (dist < tooGood) continue;
+					if (dist == tooGood && afterThisCell != null) {
+						if (cqmob.tilePos.x == afterThisCell.x && cqmob.tilePos.y == afterThisCell.y) {
+							// this is exactly the mob we were using as a cutoff -- from now on, we can accept a monster at the same distance
+							afterThisCell = null;
+						}
+						continue;
+					}
+					best = dist;
+					target = cqmob;
+				}
+			}
+		}
+		
+		return target;
 	}	
 }	
 
@@ -1396,44 +1436,6 @@ class CqMob extends CqActor, implements Mob {
 	static function isBlocking(p:HxlPoint):Bool {
 		if ( p.x < 0 || p.y < 0 || p.x >= Registery.level.widthInTiles || p.y >= Registery.level.heightInTiles ) return true;
 		return Registery.level.getTile(Math.round(p.x), Math.round(p.y)).isBlockingView();
-	}
-	
-	
-	function getClosestEnemy(?afterThisOne:CqActor = null):CqActor {
-		var best:Float = Registery.level.widthInTiles;
-		var target:CqActor = null;
-		
-		var tooGood:Float = 0;
-		
-		if (afterThisOne != null) {
-			tooGood = Math.abs(tilePos.x - afterThisOne.tilePos.x) + Math.abs(tilePos.y - afterThisOne.tilePos.y);
-		}
-		
-		// note that this is used for ALL combat purposes, not just for ranged projectiles, so we don't need LOS
-		if (aware > 0 && faction != CqPlayer.faction) {
-			target = Registery.player;
-			best = Math.abs(tilePos.x - target.tilePos.x) + Math.abs(tilePos.y - target.tilePos.y);
-			
-			best -= 2; // chase a visible player even when a mirror or something else is a bit closer
-		}
-		
-		for (mob in Registery.level.mobs) {
-			var cqmob = cast(mob, CqActor);
-			if (cqmob.faction != faction && !cqmob.specialEffects.exists("invisible")) {
-				var dist = Math.abs(tilePos.x - mob.tilePos.x) + Math.abs(tilePos.y - mob.tilePos.y);
-				if (dist < best) {
-					if (dist < tooGood) continue;
-					if (dist == tooGood && afterThisOne != null) {
-						if (cqmob == afterThisOne) afterThisOne = null;
-						continue;
-					}
-					best = dist;
-					target = cqmob;
-				}
-			}
-		}
-		
-		return target;
 	}
 	
 	static var direction:HxlPoint;

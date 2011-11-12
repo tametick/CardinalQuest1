@@ -148,6 +148,15 @@ class CqInventoryProxy extends HxlSprite {
 			pixels.dispose();
 			pixels = null;
 		}
+		if (namePopup != null) {
+			GameUI.instance.doodads.remove(namePopup);
+			namePopup = null;
+		}
+		
+		if (chargeArcSprite != null) {
+			GameUI.instance.doodads.remove(chargeArcSprite);
+			chargeArcSprite = null;
+		}
 	}
 
 	override private function dragStart() {
@@ -170,12 +179,20 @@ class CqInventoryProxy extends HxlSprite {
 			// type checking is done before CqInventoryCell.theCellBeingHoveredOver is ever set to non-null
 			// (if it were not, it would be possible to make items disappear)
 			
-			var myOldSlot = item.itemSlot;
-			var myItem = myOldSlot.item;
-			var itsItem = CqInventoryCell.theCellBeingHoveredOver.slot.item;
-			
-			CqInventoryCell.theCellBeingHoveredOver.slot.item = myItem;
-			myOldSlot.item = itsItem;
+			if (CqInventoryCell.theCellBeingHoveredOver.isTrashCell) {
+				var bag = item.itemSlot.bag;
+				item.itemSlot.item = null;
+				// GameUI.instance.popups.remove(namePopup);
+				bag.giveMoney(item);
+				destroy();
+			} else {
+				var myOldSlot = item.itemSlot;
+				var myItem = myOldSlot.item;
+				var itsItem = CqInventoryCell.theCellBeingHoveredOver.slot.item;
+				
+				CqInventoryCell.theCellBeingHoveredOver.slot.item = myItem;
+				myOldSlot.item = itsItem;
+			}
 		} else {
 			item.itemSlot.cell.add(this);
 			
@@ -353,6 +370,12 @@ class CqInventoryCell extends HxlDialog {
 		isTrashCell = false;
 		
 		equipType = EquipType;
+		
+		if (HxlGraphics.stage != null) {
+			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, true, 6, true);
+		}
+		
+		add(new ButtonSprite());
 	}
 	
 	override public function destroy() {
@@ -407,10 +430,11 @@ class CqInventoryCell extends HxlDialog {
 		var icon = SpriteEquipmentIcons.getIcon("destroy", 16, 2.0);
 		icon.setAlpha(0.3);
 		add(icon);
-		icon.x += 13;
-		icon.y += 3;
+		icon.x += 19;
+		icon.y += 8;
 			
-		var droptext:HxlText = new HxlText(-5, 35, Std.int(width), "Destroy");
+		// this needs to be added to resources!
+		var droptext:HxlText = new HxlText(0, 37, Std.int(width), "Destroy");
 		droptext.setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101);
 		droptext.zIndex = 10;
 		droptext.setAlpha(0.3);
@@ -422,14 +446,16 @@ class CqInventoryCell extends HxlDialog {
 		
 		if (_proxy != null && CqInventoryProxy.theProxyBeingDragged != _proxy) {
 			// this is a workaround for a strange absolute/relative positioning bug in haxel
-			_proxy.x = x + 9;
+			_proxy.x = x + 8;
 			_proxy.y = y + 7;
 		}
 		
-		if (isDraggedItemAcceptable() && isDraggedItemHoveringHere()) {
+		var isAcceptable = isDraggedItemAcceptable();
+		
+		if (isAcceptable && isDraggedItemHoveringHere()) {
 			background.visible = false;
 			bgHighlight.visible = true;
-			
+		
 			CqInventoryCell.theCellBeingHoveredOver = this;
 		} else {
 			background.visible = true;
@@ -439,6 +465,8 @@ class CqInventoryCell extends HxlDialog {
 				CqInventoryCell.theCellBeingHoveredOver = null;
 			}
 		}
+		
+		bgGlow.visible = isAcceptable && slot != null && slot.equipmentType != null;
 	}
 	
 	function isDraggedItemAcceptable():Bool {
@@ -456,14 +484,13 @@ class CqInventoryCell extends HxlDialog {
 
 	function isDraggedItemHoveringHere():Bool {
 		if (visible && HxlGraphics.mouse.dragSprite != null) {
-			var myX = x + origin.x;
-			var myY = y + origin.y;
 			var objX = HxlGraphics.mouse.dragSprite.x;
 			var objY = HxlGraphics.mouse.dragSprite.y;
 			var objW = HxlGraphics.mouse.dragSprite.width;
 			var objH = HxlGraphics.mouse.dragSprite.height;
 			
-			if ((myX <= objX) || (myX >= objX + objW) || (myY <= objY) || (myY >= objY + objH) ) {
+			//if ((x + width <= objX) || (x >= objX + objW) || (y + height <= objY) || (y >= objY + objH) ) {
+			if ((x + width <= objX + .5 * objW) || (x >= objX + .5 * objW) || (y + height <= objY + .5 * objH) || (y >= objY + .5 * objH) ) {
 				return false;
 			} else {			
 				theCellBeingHoveredOver = this;
@@ -474,85 +501,8 @@ class CqInventoryCell extends HxlDialog {
 		}
 	}
 
-	public function setGlow(glow:Bool) {
-		bgGlow.visible = glow;
-	}
-	
-	var _proxy:CqInventoryProxy; // the proxy of the item in this cell's slot
-
-	private function setProxy(newProxy:CqInventoryProxy) {
-		if (_proxy != null) {
-			remove(_proxy);
-		}
-		
-		_proxy = newProxy;
-		
-		if (_proxy != null) {
-			add(_proxy);
-			update();
-		}
-		
-		return _proxy;
-	}
-
-	private function getProxy():CqInventoryProxy {
-		return _proxy;
-	}
-}
-
-class CqTriggerButton extends HxlDialog {
-	public var cell(default, null):CqInventoryCell;
-
-	var handlersAdded:Bool;
-
-	public function new(itemType:CqEquipSlot, X:Int, Y:Int, ?Width:Int = 100, ?Height:Int = 20) {
-		super(0, 0, Width, Height);
-		
-		var btnSprite = new ButtonSprite();
-		this.setBackgroundSprite(btnSprite);
-
-		handlersAdded = false;
-
-		cell = new CqInventoryCell(itemType, X, Y, 54, 54);
-		cell.setGraphicKeys(CqGraphicKey.EquipmentCellBG,CqGraphicKey.EqCellBGHighlight,CqGraphicKey.CellGlow);
-		
-		this.zIndex = 5;
-		cell.zIndex = 1;
-		
-		cell.add(this);
-	}
-
-	public override function update() {
-		if (!handlersAdded) {
-			if (HxlGraphics.stage != null) {
-				addEventListener(MouseEvent.MOUSE_DOWN, clickMouseDown, true, 6,true);
-				addEventListener(MouseEvent.MOUSE_UP, clickMouseUp, true, 6,true);
-				handlersAdded = true;
-			}
-		}
-
-		super.update();
-	}
-
-	override public function overlapsPoint(X:Float,Y:Float,?PerPixel:Bool = false):Bool {
-
-		//This is totally messed up, but it works..
-		//I suspect this is for the same reason that I cannot trust
-		//HxlGraphics.mouse.x/y to have the right value
-		if( !Configuration.mobile ) {
-			X += HxlUtil.floor(HxlGraphics.scroll.x);
-			Y += HxlUtil.floor(HxlGraphics.scroll.y);
-		}
-
-		getScreenXY(_point);
-		if ((X <= _point.x) || (X >= _point.x+width) || (Y <= _point.y) || (Y >= _point.y+height)) {
-			return false;
-		}
-		return true;
-	}
-
-	function clickMouseDown(event:MouseEvent) {
-		if (!exists || !visible || !active || !Std.is(HxlGraphics.state,GameState) ) {
+	private function onMouseDown(event:MouseEvent) {
+		if (!exists || !visible || !active || !Std.is(HxlGraphics.state, GameState) ) {
 			return;
 		}
 
@@ -572,11 +522,11 @@ class CqTriggerButton extends HxlDialog {
 				// instead of drag-n-drop, tap two cells to switch their contents
 			}
 		}
-	}
-	
-	public function activateItem() {
-		if (cell.proxy != null) {
-			var item:CqItem = cell.proxy.item;
+	}	
+
+	private function activateItem() {
+		if (proxy != null) {
+			var item:CqItem = proxy.item;
 			
 			if (item.isReadyToActivate) {
 				HxlLog.append("Using an item");
@@ -585,19 +535,29 @@ class CqTriggerButton extends HxlDialog {
 		}
 	}
 
-	function clickMouseUp(event:MouseEvent) {
-		if (!exists || !visible || !active || Std.is(GameUI.instance.panels.currentPanel, BagDialog) )
-			return;
-		
-		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
-			//if ( _callback != null ) _callback();
-			//if ( clickSound != null ) clickSound.play();
-			//if ( eventStopPropagate ) event.stopPropagation();
-			// event.stopPropagation();
+	var _proxy:CqInventoryProxy; // the proxy of the item in this cell's slot
+
+	private function setProxy(newProxy:CqInventoryProxy) {
+		if (_proxy != null) {
+			remove(_proxy);
 		}
+		
+		_proxy = newProxy;
+		
+		if (_proxy != null) {
+			add(_proxy);
+			update();
+		}
+		
+		if (icon != null) icon.visible = _proxy == null;
+		
+		return _proxy;
+	}
+
+	private function getProxy():CqInventoryProxy {
+		return _proxy;
 	}
 }
-
 
 class CqInventoryGrid extends HxlDialog {
 	public var cells:Array<CqInventoryCell>;
@@ -609,11 +569,13 @@ class CqInventoryGrid extends HxlDialog {
 	}
 	
 	override public function kill():Void {
-		for (cell in cells) {
-			if (cell.proxy != null) cell.proxy.destroy();
-			cell.kill();
+		if (cells != null) {
+			for (cell in cells) {
+				if (cell.proxy != null) cell.proxy.destroy();
+				cell.kill();
+			}
+			cells = null;
 		}
-		cells = null;
 		
 		super.destroy();
 		super.kill();
@@ -646,7 +608,7 @@ class CqBackpackGrid extends CqInventoryGrid {
 
 		var rows:Int = 2;
 		var cols:Int = Math.floor((numberOfCells + 1) / 2);
-		var btn:ButtonSprite;
+		
 		for ( row in 0...rows ) {
 			for ( col in 0...cols ) {
 				var idx:Int = cells.length;
@@ -654,9 +616,7 @@ class CqBackpackGrid extends CqInventoryGrid {
 				var _y:Int = ((row) * paddingY) + (row * cellSize);
 				
 				var cell:CqInventoryCell = new CqInventoryCell(null, _x, _y, cellSize, cellSize);
-				btn = new ButtonSprite();
 				
-				cell.add(btn);
 				cell.setGraphicKeys(CqGraphicKey.EquipmentCellBG, CqGraphicKey.EqCellBGHighlight, CqGraphicKey.CellGlow);
 				add(cell);
 				cells.push(cell);
@@ -724,11 +684,9 @@ class CqClothingGrid extends CqInventoryGrid {
 
 		var cell:CqInventoryCell;
 		
-		var btn:ButtonSprite;
 		for (idx in 0...equipSlots.length)	{
 			cell = new CqInventoryCell(getEquipmentTypeInfo(equipSlots[idx]).type, cell_positions[idx][0] - 5, cell_positions[idx][1] - 5, cellSize, cellSize);
-			btn = new ButtonSprite();
-			cell.add(btn);
+
 			cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
 			
 			var icon = getIcon(equipSlots[idx]);
@@ -738,16 +696,7 @@ class CqClothingGrid extends CqInventoryGrid {
 			cells.push(cell);
 			
 			icon = null;
-			btn = null;
 			cell = null;
-		}
-	}
-	
-	public function setGlowForSlot(equipType:CqEquipSlot, value:Bool) {
-		for (cell in cells) {
-			if ( equipType == cell.equipType ) {
-				cell.setGlow(value);
-			}
 		}
 	}
 }
@@ -774,13 +723,10 @@ class CqPotionGrid extends CqInventoryGrid {
 		var padding:Int = 18;		
 		
 		for ( i in 0...numberOfCells ) {
-			var btnCell:CqTriggerButton = new CqTriggerButton(POTION, offsetX + (i * (btnSize+10)), offsetY, btnSize, btnSize);
-			add(btnCell.cell);
-			cells.push(btnCell.cell);
-			
-			//var cell:CqInventoryCell = new CqInventoryCell(POTION, offsetX + (i * (btnSize + 10)), offsetY, btnSize, btnSize);
-			//add(cell);
-			//cells.push(cell);
+			var cell:CqInventoryCell = new CqInventoryCell(POTION, offsetX + (i * (btnSize + 10)), offsetY, btnSize, btnSize);
+			add(cell);
+			cell.setGraphicKeys(CqGraphicKey.EquipmentCellBG,CqGraphicKey.EqCellBGHighlight,CqGraphicKey.CellGlow);
+			cells.push(cell);
 		}
 		
 		initButtons();
@@ -872,18 +818,8 @@ class CqPotionGrid extends CqInventoryGrid {
 
 
 class CqSpellGrid extends CqInventoryGrid {
-	public var buttons:Array<CqTriggerButton>;	
 	var belt:HxlSprite;
 
-	public function clearCharge(cellNumber :Int) {
-		var button:CqTriggerButton = buttons[cellNumber];
-		if(button.cell.proxy != null && Std.is(button.cell.proxy.item, CqSpell)) {
-			cast(button.cell.proxy.item, CqSpell).statPoints = 0;
-			// button.updatechargeArcSprite
-		}
-		// GameUI.instance.updateCharge(buttons[Cell]);
-	}
-	
 	public function new(numberOfCells:Int, ?X:Int=0, ?Y:Int=0, ?Width:Int=100, ?Height:Int=100) {
 		super(X, Y, Width, Height);
 
@@ -892,7 +828,6 @@ class CqSpellGrid extends CqInventoryGrid {
 
 		var btnSize:Int = 64;
 		var padding:Int = 8;
-		buttons = [];
 		
 		belt = new HxlSprite(6, -13);
 		belt.zIndex = 0;
@@ -902,13 +837,13 @@ class CqSpellGrid extends CqInventoryGrid {
 		add(belt);
 		
 		for ( i in 0...numberOfCells ) {
-			var btnCell:CqTriggerButton = new CqTriggerButton(SPELL, 10, 10 + ((i * btnSize) + (i * 10)), btnSize, btnSize);
+			var cell:CqInventoryCell = new CqInventoryCell(SPELL, 10, 10 + ((i * btnSize) + (i * 10)), btnSize, btnSize);
 			
-			btnCell.zIndex = 1;
+			cell.zIndex = 1;
 			
-			add(btnCell.cell);
-			cells.push(btnCell.cell);
-			buttons.push(btnCell);
+			add(cell);
+			cell.setGraphicKeys(CqGraphicKey.EquipmentCellBG,CqGraphicKey.EqCellBGHighlight,CqGraphicKey.CellGlow);
+			cells.push(cell);
 		}
 	}
 }

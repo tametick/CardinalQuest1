@@ -734,6 +734,18 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		if (pos == null) pos = Registery.player.tilePos;
 
 		var facing:HxlPoint = new HxlPoint(0, 0);
+		
+		for (nextkey in Configuration.bindings.nexttarget) {
+			if (HxlGraphics.keys.pressed(nextkey)) {
+				var nextTargetMob = Registery.player.getClosestEnemy(pos);
+				
+				if (nextTargetMob == null) {
+					nextTargetMob = Registery.player;
+				}
+				
+				return new HxlPoint(nextTargetMob.tilePos.x - pos.x, nextTargetMob.tilePos.y  - pos.y);
+			}
+		}
 
 		for (compass in Configuration.bindings.compasses) {
 			if (HxlGraphics.keys.pressed(compass[0])) facing.y = -1;

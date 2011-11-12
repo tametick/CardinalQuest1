@@ -540,6 +540,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 			stackSize--;
 			if (stackSize <= 0) {
 				itemSlot.item = null;
+				inventoryProxy.destroy();
 			} else {
 				if (inventoryProxy != null) inventoryProxy.setIcon();
 			}
@@ -746,6 +747,8 @@ class CqItem extends GameObjectImpl, implements Loot {
 		eff.zIndex = 1000;
 		HxlGraphics.state.add(eff);
 		eff.start(true, 1.0, 10);
+		
+		isActive = false;
 	}
 	
 	// I don't like this method signature very well
