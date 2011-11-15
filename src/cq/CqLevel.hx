@@ -490,6 +490,7 @@ class CqLevel extends Level {
 			
 			// Charge action & spirit points -- offload this into the creature tick
 			creature.actionPoints += speed;
+
 			if (!specialActive) {
 				for (s in creature.bag.spells()) {
 					var boost:Int = 0;
@@ -501,6 +502,14 @@ class CqLevel extends Level {
 						case "life": boost = life;
 					}
 					s.statPoints = Std.int(Math.min( s.statPointsRequired, s.statPoints + boost));
+				}
+			}
+
+			// Null spell stat points on spells in inventory.
+			for (s in creature.bag.spells(false)) {
+				if (s.itemSlot.isPassive()) {
+					s.statPoints = 0;
+					s.inventoryProxy.updateCharge();
 				}
 			}
 			
