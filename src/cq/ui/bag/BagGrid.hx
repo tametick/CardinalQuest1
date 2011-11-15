@@ -126,6 +126,8 @@ class CqInventoryProxy extends HxlSprite {
 		
 		if (Std.is(Item, CqSpell)) {
 			chargeArcSprite = new HxlSprite(x + 5, y + 5);
+			chargeArcSprite.zIndex = 16;
+
 			chargeArcSprite.createGraphic(54, 54, 0x00010101);
 			GameUI.instance.doodads.add(chargeArcSprite);
 
