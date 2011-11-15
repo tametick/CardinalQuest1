@@ -148,13 +148,18 @@ class CqInventoryProxy extends HxlSprite {
 			pixels.dispose();
 			pixels = null;
 		}
+		
 		if (namePopup != null) {
-			GameUI.instance.doodads.remove(namePopup);
+			if (GameUI.instance != null) {
+				GameUI.instance.doodads.remove(namePopup);
+			}
 			namePopup = null;
 		}
 		
 		if (chargeArcSprite != null) {
-			GameUI.instance.doodads.remove(chargeArcSprite);
+			if (GameUI.instance != null) {
+				GameUI.instance.doodads.remove(chargeArcSprite);
+			}
 			chargeArcSprite = null;
 		}
 	}
