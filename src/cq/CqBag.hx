@@ -99,33 +99,28 @@ class CqBag {
 				CqActor.showWeaponDamage(Registery.player, item.damage);
 			}
 			
-			var oldBuffs:Hash<Int> = worstSlot.item != null ? worstSlot.item.buffs : null;
-			if (oldBuffs != null) {
-				for (buff in oldBuffs.keys()) {
-					var delta:Int = item.buffs.get(buff) - oldBuffs.get(buff);
-					if (delta != 0) {
-						CqActor.showBuff(Registery.player, delta, buff);
+			if (item.equipSlot != SPELL && item.equipSlot != POTION) {
+				var oldBuffs:Hash<Int> = worstSlot.item != null ? worstSlot.item.buffs : null;
+				if (oldBuffs != null) {
+					for (buff in oldBuffs.keys()) {
+						var delta:Int = item.buffs.get(buff) - oldBuffs.get(buff);
+						if (delta != 0) {
+							CqActor.showBuff(Registery.player, delta, buff);
+						}
+					}
+				}
+				for (buff in item.buffs.keys()) {
+					if (oldBuffs == null || !oldBuffs.exists(buff)) {
+						CqActor.showBuff(Registery.player, item.buffs.get(buff), buff);
 					}
 				}
 			}
-			for (buff in item.buffs.keys()) {
-				if (oldBuffs == null || !oldBuffs.exists(buff)) {
-					CqActor.showBuff(Registery.player, item.buffs.get(buff), buff);
-				}
-			}			
 			
 			// now explain why we took this new item
 			if (worstSlot.item == null) {
 				// the trivial case -- we put it here because we didn't have anything
 				if (item.equipSlot != SPELL && item.equipSlot != POTION) {
 					GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_FIRST" ), 0xBFE137);
-					
-					if ( item.equipSlot == WEAPON ) {
-						CqActor.showWeaponDamage( Registery.player, item.damage );
-					}
-					for ( buffName in item.buffs.keys() ) {
-						CqActor.showBuff( Registery.player, item.buffs.get(buffName), buffName );
-					}
 				}
 				
 				if (item.equipSlot == SPELL) {
