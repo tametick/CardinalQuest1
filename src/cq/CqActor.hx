@@ -86,7 +86,7 @@ class CqActor extends CqObject, implements Actor {
 	public var bag:CqBag;
 	
 	// changes to basic abilities (attack, defense, speed, spirit) caused by equipped items or spells
-	public var buffs:Hash<Int>;
+	private var buffs:Hash<Int>;
 	// special effects beyond changes to basic abilities, caused by magical items or spells
 	public var specialEffects:Hash<CqSpecialEffectValue>;
 	// visible effects from buffs & specialEffects
@@ -203,6 +203,14 @@ class CqActor extends CqObject, implements Actor {
 		specialEffects.set("damage multiplier", new CqSpecialEffectValue("damage multiplier", "1"));
 	}
 
+	public function addBuff(buff:String, delta:Int) {
+		buffs.set(buff, buffs.get(buff) + delta);
+	}
+	
+	public function getBuff(buff:String) : Int {
+		return buffs.get(buff) + bag.equippedBuff(buff);
+	}
+	
 	public function addOnInjure(Callback:Dynamic) {
 		onInjure.add(Callback);
 	}

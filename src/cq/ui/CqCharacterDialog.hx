@@ -88,30 +88,30 @@ class CqCharacterDialog extends HxlSlidingDialog {
 
 	public override function updateDialog() {
 		var _player:CqPlayer = Registery.player;
-		valHealth.text = "" + (_player.hp + _player.buffs.get("life")) +"/" + (_player.maxHp + _player.buffs.get("life"));
+		valHealth.text = "" + (_player.hp + _player.getBuff("life")) +"/" + (_player.maxHp + _player.getBuff("life"));
 		
-		if (_player.buffs.get("life") != 0) {
-			valHealth.text += " [" +(_player.buffs.get("life") < 0?"":"+")+ _player.buffs.get("life") + "]";
+		if (_player.getBuff("life") != 0) {
+			valHealth.text += " [" +(_player.getBuff("life") < 0?"":"+")+ _player.getBuff("life") + "]";
 		}
 		
-		valAttack.text = "" + (_player.attack+ _player.buffs.get("attack"));
-		if(_player.buffs.get("attack")!=0){
-			valAttack.text += " [" +(_player.buffs.get("attack") < 0?"":"+")+ _player.buffs.get("attack") + "]";
+		valAttack.text = "" + (_player.attack+ _player.getBuff("attack"));
+		if(_player.getBuff("attack")!=0){
+			valAttack.text += " [" +(_player.getBuff("attack") < 0?"":"+")+ _player.getBuff("attack") + "]";
 		}
 		
-		valDefense.text = "" + (_player.defense+ _player.buffs.get("defense"));
-		if(_player.buffs.get("defense")!=0){
-			valDefense.text += " [" +(_player.buffs.get("defense") < 0?"":"+")+ _player.buffs.get("defense") + "]";
+		valDefense.text = "" + (_player.defense+ _player.getBuff("defense"));
+		if(_player.getBuff("defense")!=0){
+			valDefense.text += " [" +(_player.getBuff("defense") < 0?"":"+")+ _player.getBuff("defense") + "]";
 		}
 		
-		valSpeed.text = "" + (_player.speed+ _player.buffs.get("speed"));
-		if(_player.buffs.get("speed")!=0){
-			valSpeed.text += " [" +(_player.buffs.get("speed") < 0?"":"+")+ _player.buffs.get("speed") + "]";
+		valSpeed.text = "" + (_player.speed+ _player.getBuff("speed"));
+		if(_player.getBuff("speed")!=0){
+			valSpeed.text += " [" +(_player.getBuff("speed") < 0?"":"+")+ _player.getBuff("speed") + "]";
 		}
 		
-		valSpirit.text = "" +(_player.spirit+ _player.buffs.get("spirit"));
-		if(_player.buffs.get("spirit")!=0){
-			valSpirit.text += " [" +(_player.buffs.get("spirit") < 0?"":"+")+ _player.buffs.get("spirit") + "]";
+		valSpirit.text = "" +(_player.spirit+ _player.getBuff("spirit"));
+		if(_player.getBuff("spirit")!=0){
+			valSpirit.text += " [" +(_player.getBuff("spirit") < 0?"":"+")+ _player.getBuff("spirit") + "]";
 		}
 		
 		valVitality.text = ""+_player.vitality;

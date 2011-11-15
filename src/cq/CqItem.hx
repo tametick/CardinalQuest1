@@ -582,7 +582,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 
 				if (victim == null) {
 					// apply to self
-					user.buffs.set(buff, user.buffs.get(buff) + itemOrSpell.buffs.get(buff));
+					user.addBuff(buff, itemOrSpell.buffs.get(buff));
 					
 					// add timer
 					if (itemOrSpell.duration > -1) {
@@ -591,7 +591,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 				} else {
 					// apply to victim
 					var delta:Int = itemOrSpell.buffs.get(buff);
-					victim.buffs.set(buff, victim.buffs.get(buff) + itemOrSpell.buffs.get(buff));
+					victim.addBuff(buff, itemOrSpell.buffs.get(buff));
 					
 					// add timer
 					if (itemOrSpell.duration > -1) {
@@ -624,11 +624,11 @@ class CqItem extends GameObjectImpl, implements Loot {
 
 			// "Ghost" killed actors now so they can't act any more (make this a parameter of damageActor?)
 			if (victim == null) {
-				var lif = user.hp + user.buffs.get("life");
+				var lif = user.hp + user.getBuff("life");
 				if (lif - dmg <= 0)
 					user.doGhost(dmg);
 			} else {
-				var lif = victim.hp + victim.buffs.get("life");
+				var lif = victim.hp + victim.getBuff("life");
 				if (lif - dmg <= 0)
 					victim.doGhost(dmg);
 			}
@@ -708,14 +708,14 @@ class CqItem extends GameObjectImpl, implements Loot {
 			// redundant and repetitive:
 			if (victim== null) {
 				user.hp -= dmg;
-				var lif = user.hp + user.buffs.get("life");
+				var lif = user.hp + user.getBuff("life");
 				if (lif > 0 && !user.isGhost)
 					user.injureActor(HxlGraphics.state, user, dmg);
 				else
 					user.killActor(HxlGraphics.state, user, dmg);
 			} else {
 				victim.hp -= dmg;
-				var lif = victim.hp + victim.buffs.get("life");
+				var lif = victim.hp + victim.getBuff("life");
 				if (lif > 0 && !victim.isGhost)
 					user.injureActor(HxlGraphics.state, victim, dmg);
 				else

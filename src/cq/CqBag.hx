@@ -229,7 +229,19 @@ class CqBag {
 		}
 		
 		return dmg;
-	}	
+	}
+	
+	public function equippedBuff(buff:String) {
+		var buffVal:Int = 0;
+		
+		for (item in items()) {
+			if (item.equipSlot != SPELL && item.equipSlot != POTION) {
+				buffVal += item.buffs.get(buff);
+			}
+		}
+		
+		return buffVal;
+	}
 
 	/*public function equipItem(item:CqItem) {
 		var equippedWeapon:CqItem;

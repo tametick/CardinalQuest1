@@ -466,26 +466,26 @@ class CqLevel extends Level {
 			
 			var speed = creature.speed;
 			// Apply speed buffs
-			speed += creature.buffs.get("speed");
+			speed += creature.getBuff("speed");
 			speed = Std.int(Math.max(speed, 0));
 			
 			// apply spirit buffs
 			var spirit = creature.spirit;
 			var specialActive = creature.visibleEffects.length >0;
-			spirit += creature.buffs.get("spirit");
+			spirit += creature.getBuff("spirit");
 			spirit = Std.int(Math.max(spirit, 1));
 			
 			// Calc attack, defense and vitality as well, for various spells
 			var attack = creature.attack;
-			attack += creature.buffs.get("attack");
+			attack += creature.getBuff("attack");
 			attack = Std.int(Math.max(attack, 0));
 			
 			var defense = creature.defense;
-			defense += creature.buffs.get("defense");
+			defense += creature.getBuff("defense");
 			defense = Std.int(Math.max(defense, 0));
 			
 			var life = creature.maxHp;
-			life += creature.buffs.get("life");
+			life += creature.getBuff("life");
 			life = Std.int(Math.max(life, 0));
 			
 			// Charge action & spirit points -- offload this into the creature tick

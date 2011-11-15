@@ -125,7 +125,7 @@ class CqHealthBar extends CqVitalBar {
 			}
 			
 			// if dead
-			if (actor.hp + actor.buffs.get("life") <= 0) {
+			if (actor.hp + actor.getBuff("life") <= 0) {
 				// fixme - should not happen
 				visible = false;
 			}
@@ -134,14 +134,14 @@ class CqHealthBar extends CqVitalBar {
 	
 	public function setPercentToHp() {
 		if(!Std.is(actor,Player)){
-			if (actor.hp + actor.buffs.get("life") <= 0) {
+			if (actor.hp + actor.getBuff("life") <= 0) {
 				// fixme - should not happen
 				visible = false;
 			}
 		}
 		
-		setPercent((actor.hp + actor.buffs.get("life")) / 
-				   (actor.maxHp + actor.buffs.get("life")));
+		setPercent((actor.hp + actor.getBuff("life")) / 
+				   (actor.maxHp + actor.getBuff("life")));
 	}
 	
 }
