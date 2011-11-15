@@ -895,7 +895,7 @@ class CqActor extends CqObject, implements Actor {
 		GameUI.instance.popups.setChildrenVisibility(false);
 	}
 	
-	public function getClosestEnemy(?afterThisCell:HxlPoint = null):CqActor {
+	public function getClosestEnemy(?afterThisCell:HxlPoint = null, ?losOnly:Bool = false):CqActor {
 		var best:Float = Registery.level.widthInTiles;
 		var target:CqActor = null;
 		
@@ -915,7 +915,7 @@ class CqActor extends CqObject, implements Actor {
 		
 		for (mob in Registery.level.mobs) {
 			var cqmob = cast(mob, CqActor);
-			if (cqmob.faction != faction && !cqmob.specialEffects.exists("invisible")) {
+			if (cqmob.faction != faction && !cqmob.specialEffects.exists("invisible") && (cqmob.visible || !losOnly) && !cqmob.isGhost) {
 				var dist = Math.abs(tilePos.x - mob.tilePos.x) + Math.abs(tilePos.y - mob.tilePos.y);
 				if (dist < best) {
 					if (dist < tooGood) continue;
