@@ -40,7 +40,7 @@ class BagDialog {
 	public var slidingPart:SlidingBagDialog;
 	
 	public var paperdollDialog(default, null):HxlDialog;
-	public var itemInfoDialog(default, null):CqItemInfoDialog;
+//	public var itemInfoDialog(default, null):CqItemInfoDialog;
 	
 	public var backpack(default, null):CqBackpackGrid;
 	public var clothingAndRings(default, null):CqClothingGrid;
@@ -162,6 +162,12 @@ class SlidingBagDialog extends HxlSlidingDialog {
 		
 		super.destroy();
 	}	
+	
+	public override function show(?ShowCallback:Dynamic=null) {
+		super.show(ShowCallback);
+		
+		itemInfoDialog.clearInfo();
+	}
 	
 	public override function hide(?HideCallback:Dynamic = null) {
 		super.hide(HideCallback);

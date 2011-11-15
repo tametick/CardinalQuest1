@@ -1,6 +1,7 @@
 package cq.ui.bag;
 
 import haxel.HxlDialog;
+import haxel.HxlMouse;
 import haxel.HxlPoint;
 import haxel.HxlSprite;
 
@@ -165,6 +166,8 @@ class CqInventoryProxy extends HxlSprite {
 	}
 
 	override private function dragStart() {
+		GameUI.instance.bagDialog.slidingPart.itemInfoDialog.setItem( this.item );
+		
 		// indicate that this is the item being dragged
 		CqInventoryProxy.theProxyBeingDragged = this;
 		zIndex = 15;
@@ -321,6 +324,13 @@ class CqInventoryProxy extends HxlSprite {
 		if (chargeArcSprite != null) {
 			chargeArcSprite.x = x;
 			chargeArcSprite.y = y;
+		}
+		
+		if ( CqInventoryProxy.theProxyBeingDragged == null ) {
+			var m:HxlMouse = HxlGraphics.mouse;
+			if ( visible && overlapsPoint(m.x, m.y, true) )	{
+				GameUI.instance.bagDialog.slidingPart.itemInfoDialog.setItem( this.item );
+			}
 		}
 	}
 
