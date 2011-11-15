@@ -292,12 +292,6 @@ class GameUI extends HxlDialog {
 	public function setActive(?toggle:Bool = false)
 	{
 		if (!toggle){
-			//later add ui button deactivation
-			for (doodad in doodads.members)
-			{
-				if (Std.is(doodad, HxlSprite))
-					cast(doodad, HxlSprite).visible = false;
-			}
 			btnCharacterView.setActive(false);
 			btnInventoryView.setActive(false);
 			btnMapView.setActive(false);
