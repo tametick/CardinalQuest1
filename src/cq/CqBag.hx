@@ -60,7 +60,7 @@ class CqBag {
 			for (i in items(item.equipSlot, true)) {
 				if (i.makesRedundant(item)) {
 					// this old item is absolutely better than the new one!
-					GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_SELLNEW1" ) + " " + item.name + Resources.getString( "NOTIFY_GET_SELLNEW2" ) );
+					GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_SELLNEW1" ) + " " + i.name + Resources.getString( "NOTIFY_GET_SELLNEW2" ) );
 					giveMoney(item);
 					
 					return BagGrantResult.SOLD;
