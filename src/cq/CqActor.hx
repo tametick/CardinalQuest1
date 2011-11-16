@@ -717,7 +717,7 @@ class CqActor extends CqObject, implements Actor {
 		super.update();
 	}
 
-	function updateSprite(){ }
+	public function updateSprite(){ }
 	
 	public function doDeathEffect(delay:Float) {
 		angularVelocity = -225;
@@ -1116,7 +1116,7 @@ class CqPlayer extends CqActor, implements Player {
 		return bestWeapon;
 	}
 
-	override function updateSprite() {
+	override public function updateSprite() {
 		var equippedWeapon:CqItem = getPrimaryWeapon();
 		
 		if (equippedWeapon == null){
@@ -1163,6 +1163,8 @@ class CqPlayer extends CqActor, implements Player {
 				throw( "Unknown item or spell \"" + itemOrSpellID + "\"." );
 			}
 		}
+		
+		updateSprite();
 	}
 	
 	public function giveMoney(amount:Int) {
@@ -1190,6 +1192,8 @@ class CqPlayer extends CqActor, implements Player {
 				//Destroy the item.
 				item.destroy();
 			}
+			
+			updateSprite();
 		} else {
 			GameUI.showTextNotification(Resources.getString( "NOTIFY_INV_FULL" ), 0xFF001A);
 			SoundEffectsManager.play(PotionEquipped); // why play this sound?  weird.

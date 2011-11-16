@@ -203,6 +203,8 @@ class CqInventoryProxy extends HxlSprite {
 				CqInventoryCell.theCellBeingHoveredOver.slot.item = myItem;
 				myOldSlot.item = itsItem;
 			}
+			
+			Registery.player.updateSprite();
 		} else {
 			item.itemSlot.cell.add(this);
 			
