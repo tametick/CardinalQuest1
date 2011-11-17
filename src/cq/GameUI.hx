@@ -933,7 +933,7 @@ class GameUI extends HxlDialog {
 			targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
 			targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
 		} else {
-			var newPos:HxlPoint = Registery.level.getTargetAccordingToKeyPress(targetLastPos);
+			var newPos:HxlPoint = Registery.level.getCursorTargetAccordingToKeyPress(targetLastPos);
 			if (newPos != null) {
 				if (newPos.x == 0 && newPos.y == 0) {
 					targetLastPos.x += newPos.x;

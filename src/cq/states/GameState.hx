@@ -181,7 +181,7 @@ class GameState extends CqState {
 		checkInvKeys();
 
 		if ( GameUI.isTargeting) {
-			if (Registery.level.getTargetAccordingToKeyPress()!=Registery.player.tilePos && Registery.level.getTargetAccordingToKeyPress()!=null)
+			if (Registery.level.getCursorTargetAccordingToKeyPress()!=Registery.player.tilePos && Registery.level.getCursorTargetAccordingToKeyPress()!=null)
 				lastMouse = false;
 
 			if (!lastMouse) {

@@ -735,26 +735,6 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 
 		var facing:HxlPoint = new HxlPoint(0, 0);
 		
-		for (nextkey in Configuration.bindings.nexttarget) {
-			if (HxlGraphics.keys.pressed(nextkey)) {
-				var nextTargetMob = Registery.player.getClosestEnemy(pos, true);
-
-				// If there are no mobs visible, do nothing.
-				// If there's one mob visible, move to it or do nothing.
-				// If there's more than one visible and we can't find a more distant mob than the current, cycle back to the nearest.
-				if (nextTargetMob == null) {
-					var firstTargetMob = Registery.player.getClosestEnemy(null, true);
-					if (firstTargetMob == null || firstTargetMob.getTilePos() == pos) {
-						return null;
-					} else {
-						nextTargetMob = firstTargetMob;
-					}
-				}
-				
-				return new HxlPoint(nextTargetMob.tilePos.x - pos.x, nextTargetMob.tilePos.y  - pos.y);
-			}
-		}
-
 		for (compass in Configuration.bindings.compasses) {
 			if (HxlGraphics.keys.pressed(compass[0])) facing.y = -1;
 			if (HxlGraphics.keys.pressed(compass[1])) facing.x = -1;
@@ -781,7 +761,38 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		return facing;
 	}
 
+	/**
+	 * checks the directional and wasd keys and tab, returns custompoint+direction of keys pressed
+	 * @param	?fromCustomPoint if not null uses this as starting point, otherwise uses players tilePos.
+	 * @return starting position + direction, or just starting position if enter is pressed, or null if nothing is pressed
+	 */
+	public function getCursorTargetAccordingToKeyPress(?fromCustomPoint:HxlPoint = null):HxlPoint {
+		var pos:HxlPoint = fromCustomPoint;
+		if (pos == null) pos = Registery.player.tilePos;
+	
+		for (nextkey in Configuration.bindings.nexttarget) {
+			if (HxlGraphics.keys.pressed(nextkey)) {
+				var nextTargetMob = Registery.player.getClosestEnemy(pos, true);
 
+				// If there are no mobs visible, do nothing.
+				// If there's one mob visible, move to it or do nothing.
+				// If there's more than one visible and we can't find a more distant mob than the current, cycle back to the nearest.
+				if (nextTargetMob == null) {
+					var firstTargetMob = Registery.player.getClosestEnemy(null, true);
+					if (firstTargetMob == null || firstTargetMob.getTilePos() == pos) {
+						return null;
+					} else {
+						nextTargetMob = firstTargetMob;
+					}
+				}
+				
+				return new HxlPoint(nextTargetMob.tilePos.x - pos.x, nextTargetMob.tilePos.y  - pos.y);
+			}
+		}
+		
+		return getTargetAccordingToKeyPress(fromCustomPoint);
+	}
+	
 	private inline static function sgn(x:Float):Int {
 		return if (x < 0) -1 else if (x > 0) 1 else 0;
 	}
