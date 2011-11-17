@@ -34,7 +34,8 @@ class WinState extends CqState {
 			
 		cursor.visible = false;
 		scroller = new CqTextScroller(null, 5);
-		scroller.addColumn(80, 480, Resources.getString( "AsterionDefeated", true ), false, FontDungeon.instance.fontName, 28);
+//		scroller.addColumn(80, 480, Resources.getString( "AsterionDefeated", true ), false, FontDungeon.instance.fontName, 28);
+		scroller.addColumn(60, 520, Resources.getString( "AsterionDefeated", true ), true, FontDungeon.instance.fontName, 32);
 		Figurescale = new HxlPoint(2.0, 2.0);
 		figure = new HxlSprite(85, 40, VortexFigure, Figurescale.x, Figurescale.y);
 		bg = new HxlSprite(50, 50, VortexScreen);

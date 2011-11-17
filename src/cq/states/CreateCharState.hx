@@ -196,9 +196,8 @@ class CreateCharState extends CqState {
 			cursor.visible	= false;
 			scroller = new CqTextScroller(IntroScreen, 1);
 			var introText:String = Resources.getString( "AsterionIntro", true );
-			//scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,30,0x000000,0x804040);
-			scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,28,0xFFCD55,0x2E170F);
-			//scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,28,0x443322,0x776633);
+//			scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,28,0xFFCD55,0x2E170F);
+			scroller.addColumn(50, 540, introText, true, FontDungeon.instance.fontName, 30, 0xFFCD55, 0x2E170F);
 			add(scroller);
 			scroller.startScroll(8);
 			//scroller.onComplete(removeScrollerAndFade);
