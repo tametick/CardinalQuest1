@@ -779,7 +779,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				// If there's more than one visible and we can't find a more distant mob than the current, cycle back to the nearest.
 				if (nextTargetMob == null) {
 					var firstTargetMob = Registery.player.getClosestEnemy(null, true);
-					if (firstTargetMob == null || firstTargetMob.getTilePos() == pos) {
+					if (firstTargetMob == null || firstTargetMob.tilePos.intEquals(pos)) {
 						return null;
 					} else {
 						nextTargetMob = firstTargetMob;
