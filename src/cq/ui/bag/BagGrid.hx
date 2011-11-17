@@ -293,9 +293,9 @@ class CqInventoryProxy extends HxlSprite {
 		}
 
 		chargeArcSprite.loadSuppliedGraphic(chargeArcBitmap);
-		chargeArcSprite.visible = true;
+//		chargeArcSprite.visible = true;
 	}	
-	
+
 	public function updateCharge() {
 		var chargeBmp:Bitmap = new Bitmap(GraphicCache.getBitmap(CqGraphicKey.EquipmentCellBG));
 		var chargeShape:Shape = new Shape();
@@ -321,6 +321,12 @@ class CqInventoryProxy extends HxlSprite {
 		
 		chargeBmp = null;
 		chargeShape = null;
+	}
+
+	public function setChargeArcVisible( _visible:Bool ) {
+		if ( chargeArcSprite != null ) {
+			chargeArcSprite.visible = _visible;
+		}
 	}
 	
 	public override function update() {

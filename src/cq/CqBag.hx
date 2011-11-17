@@ -83,7 +83,12 @@ class CqBag {
 		var worstSlot:CqItemSlot = null;
 		for (slot in slots) {
 			if (slot.equipmentType == item.equipSlot) {
-				if (shouldPreferItem(slot.item, item)) {
+				if (slot.item == null)
+				{
+					worstSlot = slot;
+					break;
+				}
+				else if (item.equipSlot != SPELL && item.equipSlot != POTION && shouldPreferItem(slot.item, item)) {
 					if (worstSlot == null || shouldPreferItem(slot.item, worstSlot.item)) {
 						worstSlot = slot;
 					}
@@ -290,6 +295,13 @@ class CqBag {
 		}
 	}*/
 	
+	public function setInventoryChargeArcsVisible( _visible:Bool ) {
+		for (slot in slots) {
+			if (slot.equipmentType == null && slot.item != null && slot.item.equipSlot == SPELL ) {
+				slot.item.inventoryProxy.setChargeArcVisible( _visible );
+			}
+		}
+	}
 	
 	public function destroy( ) { }
 }

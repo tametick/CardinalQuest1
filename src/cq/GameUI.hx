@@ -401,6 +401,9 @@ class GameUI extends HxlDialog {
 			return;
 			
 		SoundEffectsManager.play(MenuItemClick);
+
+		// Show inventory charge arcs now. Disable them again when we close the dialog.
+		Registery.player.bag.setInventoryChargeArcsVisible(true);
 		
 		if (!hasShownInv) {
 			hasShownInv = true;

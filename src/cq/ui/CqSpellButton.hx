@@ -106,7 +106,7 @@ class CqSpellButton extends HxlDialog {
 		}
 
 		chargeSprite.loadSuppliedGraphic(chargeBmpData);
-		chargeSprite.visible = true;
+//		chargeSprite.visible = true;
 		chargeSprite.x = x + 5;
 		chargeSprite.y = y + 5;
 	}

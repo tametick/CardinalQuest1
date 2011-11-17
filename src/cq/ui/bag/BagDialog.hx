@@ -164,6 +164,8 @@ class SlidingBagDialog extends HxlSlidingDialog {
 	}	
 	
 	public override function show(?ShowCallback:Dynamic=null) {
+		Registery.player.bag.setInventoryChargeArcsVisible(true);
+		
 		super.show(ShowCallback);
 		
 		itemInfoDialog.clearInfo();
@@ -177,5 +179,11 @@ class SlidingBagDialog extends HxlSlidingDialog {
 			CqInventoryItem.selectedItem = null;
 		}*/
 		itemInfoDialog.clearInfo();
+	}
+	
+	private override function hidden() {
+		super.hidden();
+		
+		Registery.player.bag.setInventoryChargeArcsVisible(false);
 	}
 }
