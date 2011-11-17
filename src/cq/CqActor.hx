@@ -740,15 +740,6 @@ class CqActor extends CqObject, implements Actor {
 		}
 	}
 	
-// merge note : these lines got orphaned -- find out where they belong
-// "Ghost" killed actors now so they can't act any more.
-//
-//			var injured:CqActor = (victim == null) ? actor : victim;
-//			var lif = injured.hp + injured.buffs.get("life");
-//			if (lif - dmg <= 0 && injured.minHp <= 0) {
-//				actor.ghostActor(HxlGraphics.state, injured, dmg);
-
-
 	public static function showWeaponDamage(actor:CqActor, damage:Range) {
 		var text = "" + damage.start + " - " + damage.end + " " + Resources.getString("damage");
 		GameUI.showEffectText(actor, text, 0xff4422);		
@@ -764,7 +755,7 @@ class CqActor extends CqObject, implements Actor {
 				case "attack":
 					c = 0x4BE916;
 				case "defense":
-					c = 0x381AE6;
+					c = 0x3C1CFF; // 0x381AE6;
 				case "speed":
 					c = 0xEDD112;
 				default:
