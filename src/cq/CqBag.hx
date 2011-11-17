@@ -207,7 +207,7 @@ class CqBag {
 	}
 
 	public function items(?equipType:CqEquipSlot, ?equippedOnly:Bool = true):ItemIterator {
-		return new ItemIterator(slots, true, equipType);
+		return new ItemIterator(slots, equippedOnly, equipType);
 	}
 	
 	public function spells(?equippedOnly:Bool = true):SpellIterator {
