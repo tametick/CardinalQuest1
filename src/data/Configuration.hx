@@ -8,7 +8,7 @@ import cq.CqActor;
  * */
 
 class Configuration {
-	public static inline var version = "1.1c";
+	public static inline var version = "1.2";
 
 	public static inline var debug = false;
 	public static inline var air = false;
