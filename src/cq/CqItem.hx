@@ -608,7 +608,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 				user.applyEffect(effect, victim);
 				
 				// this is ugly, and will be changed so we only have effects -- no buffs, no separate timers
-				if (itemOrSpell.duration > -1) {
+				if (itemOrSpell.duration > 0) {
 					if (victim == null)
 						user.addTimer(new CqTimer(itemOrSpell.duration, null, -1, effect));
 					else

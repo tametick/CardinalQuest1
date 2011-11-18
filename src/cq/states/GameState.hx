@@ -408,6 +408,7 @@ class GameState extends CqState {
 			player.give("FEAR");
 			player.give("CHARM_MONSTER");
 			player.give("REVEAL_MAP");
+			player.give("POLYMORPH");
 			player.give("MAGIC_MIRROR");
 
 			player.give("FULL_PLATE_MAIL");
