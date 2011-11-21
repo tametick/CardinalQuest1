@@ -171,6 +171,10 @@ class CqBag {
 			// check whether it's an empty backpack cell
 			if (slot.equipmentType == null && slot.item == null) {
 				slot.item = item;
+
+				if (item.equipSlot == SPELL ) {
+					slot.item.inventoryProxy.setChargeArcVisible( false );
+				}
 				
 				GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_STASHNEW1" ) + " " + item.name + Resources.getString( "NOTIFY_GET_STASHNEW2" ), 0xBFE137);
 				return BagGrantResult.SUCCEEDED;
