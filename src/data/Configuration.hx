@@ -51,11 +51,12 @@ class Configuration {
 	public static inline var lastLevel = 7;
 	public static inline var demoLastLevel = 2;
 
-	public static inline var dropPotionChance:Float = 0.4;
-	public static inline var betterItemChance:Float = 0.1;
+	public static inline var dropPotionChance:Float = 0.35;
+	public static inline var betterItemChance:Float = 0.15;
 	public static inline var EnchantItemChance:Float = 0.1;
-	public static inline var BetterEnchantItemChance:Float = 0.01;
+	public static inline var BetterEnchantItemChance:Float = 0.05;
 
+	public static inline var weakEnemyChance:Float = 0.05;
 	public static inline var strongerEnemyChance:Float = 0.7;
 
 	public static function getLevelWidth(?level:Int=0) {

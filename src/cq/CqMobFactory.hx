@@ -41,6 +41,10 @@ class CqMobFactory {
 		var specialname:String = null;
 		var weaktype, strongtype;
 		
+		if (Math.random() < Configuration.weakEnemyChance) {
+			level = 1 + Std.int( Math.random() * (level-1) );
+		}
+		
 		switch(level+1) {
 			case 1:
 				weaktype = "Bandit";
