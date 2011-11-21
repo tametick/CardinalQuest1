@@ -145,9 +145,6 @@ class GameState extends CqState {
 	public override function update() {
 		super.update();
 
-//		System.gc();
-//		System.gc();
-
 		if (endingAnim) {
 			if(gameUI!=null && gameUI.popups != null && gameUI.popups.members != null) {
 				gameUI.popups.setChildrenVisibility(false);
@@ -172,6 +169,7 @@ class GameState extends CqState {
 		//hide mouse after idle some time
 		if (endingAnim || Timer.stamp() - msMoveStamp > msHideDelay) {
 			cursor.visible = false;
+			gameUI.popups.setChildrenVisibility(false);
 		}
 
 		if (Registery.player.isDying) {
