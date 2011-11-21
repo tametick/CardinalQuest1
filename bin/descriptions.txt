@@ -16,11 +16,11 @@ Field String Data
 "SpriteThiefEntry"  "You slink silently down unlit stairs.  The minotaur's wicked servants suspect nothing.\n\nYou cannot help but grin at the thought of the bounteous treasure they will soon relinquish."
 
 ; Potions.
-GREEN_POTION     "This elixir temporarily grants ultra-human eyesight and reflexes."
-PURPLE_POTION    "This elixir temporarily increases the drinker's strength immensely."
+RED_POTION       "A small vial containing a fragrant, red salve. It restores life when applied."
+PURPLE_POTION    "A refreshing draught which charges spells and sets nerves tingling."
+GREEN_POTION     "This elixir temporarily grants ultra-human strength and reflexes."
 BLUE_POTION      "This elixir temporarily protects the drinker's body with a thick hide."
 YELLOW_POTION    "This mysterious beverage grants great speed when quaffed."
-RED_POTION       "A small vial containing a fragrant, red salve. It restores life when applied."
 
 ; Boots.
 BOOTS            "These finely crafted leather boots allow the wearer to run with great speed."

@@ -1,14 +1,15 @@
 Field String ID
 Field String Sprite
+Field Int Weight
 Field Int Duration
 Field String Buff
 Field Int BuffVal
 Field String Effect
 Field String EffectVal
 
-; ID          Sprite        Duration Buff      BV Effect              EV
-GREEN_POTION  green_potion  120      attack     3
-PURPLE_POTION purple_potion 120      ""         0 "damage multiplier" 2
-BLUE_POTION   blue_potion   120      defense    3
-YELLOW_POTION yellow_potion 120      speed      5
-RED_POTION    red_potion    0        ""         0 heal                full
+; ID          Sprite        Weight Duration Buff      BV Effect              EV
+RED_POTION    red_potion       100        0 ""         0 heal                full
+PURPLE_POTION purple_potion     80        0 ""         0 charge              full
+GREEN_POTION  green_potion      50       80 attack     3 "damage multiplier" 2
+BLUE_POTION   blue_potion       50      120 defense    6
+YELLOW_POTION yellow_potion     20       80 speed      6

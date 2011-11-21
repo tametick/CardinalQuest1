@@ -174,9 +174,10 @@ class CqBag {
 
 				if (item.equipSlot == SPELL ) {
 					slot.item.inventoryProxy.setChargeArcVisible( false );
+					GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_STASHSPELL1" ) + " " + item.name + Resources.getString( "NOTIFY_GET_STASHSPELL2" ), 0xBFE137);
+				} else {
+					GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_STASHNEW1" ) + " " + item.name + Resources.getString( "NOTIFY_GET_STASHNEW2" ), 0xBFE137);
 				}
-				
-				GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_STASHNEW1" ) + " " + item.name + Resources.getString( "NOTIFY_GET_STASHNEW2" ), 0xBFE137);
 				return BagGrantResult.SUCCEEDED;
 			}
 		}		

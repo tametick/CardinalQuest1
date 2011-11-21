@@ -16,8 +16,8 @@ Field String Item5
 Field String Item6
 
 ; ID    Sprite  Prt EntryBG            Dmg Atk Def Spd Spr Lif Items
-FIGHTER fighter   1 SpriteKnightEntry   80 100 100  90  25  50 SHORT_SWORD BERSERK     RED_POTION RED_POTION PURPLE_POTION
-WIZARD  wizard    2 SpriteWizardEntry   25  50  50 200 300 100 STAFF       FIREBALL    RED_POTION RED_POTION BLUE_POTION
+FIGHTER fighter   1 SpriteKnightEntry   80 100 100  90  25  50 SHORT_SWORD BERSERK     RED_POTION RED_POTION BLUE_POTION
+WIZARD  wizard    2 SpriteWizardEntry   25  50  50 200 300 100 STAFF       FIREBALL    RED_POTION PURPLE_POTION PURPLE_POTION
 THIEF   thief     0 SpriteThiefEntry    55 100  50 200  50  50 DAGGER      SHADOW_WALK RED_POTION RED_POTION YELLOW_POTION GREEN_POTION
 ";		embedFile = StatsFile.loadFromString( "classes.txt", embedText );		embedText = "Field String ID
 Field Int Level
@@ -75,11 +75,11 @@ Field String Data
 \"SpriteThiefEntry\"  \"You slink silently down unlit stairs.  The minotaur's wicked servants suspect nothing.\n\nYou cannot help but grin at the thought of the bounteous treasure they will soon relinquish.\"
 
 ; Potions.
-GREEN_POTION     \"This elixir temporarily grants ultra-human eyesight and reflexes.\"
-PURPLE_POTION    \"This elixir temporarily increases the drinker's strength immensely.\"
+RED_POTION       \"A small vial containing a fragrant, red salve. It restores life when applied.\"
+PURPLE_POTION    \"A refreshing draught which charges spells and sets nerves tingling.\"
+GREEN_POTION     \"This elixir temporarily grants ultra-human strength and reflexes.\"
 BLUE_POTION      \"This elixir temporarily protects the drinker's body with a thick hide.\"
 YELLOW_POTION    \"This mysterious beverage grants great speed when quaffed.\"
-RED_POTION       \"A small vial containing a fragrant, red salve. It restores life when applied.\"
 
 ; Boots.
 BOOTS            \"These finely crafted leather boots allow the wearer to run with great speed.\"
@@ -257,18 +257,19 @@ Minotaur      1 minotaur_axe             MINOTAUR             7   6  10   4 48 7
 Minotaur      1 minotaur_sword           MINOTAUR             7   6  10   4 48 72 12 18 950 BERSERK
 ";		embedFile = StatsFile.loadFromString( "mobs.txt", embedText );		embedText = "Field String ID
 Field String Sprite
+Field Int Weight
 Field Int Duration
 Field String Buff
 Field Int BuffVal
 Field String Effect
 Field String EffectVal
 
-; ID          Sprite        Duration Buff      BV Effect              EV
-GREEN_POTION  green_potion  120      attack     3
-PURPLE_POTION purple_potion 120      \"\"         0 \"damage multiplier\" 2
-BLUE_POTION   blue_potion   120      defense    3
-YELLOW_POTION yellow_potion 120      speed      5
-RED_POTION    red_potion    0        \"\"         0 heal                full
+; ID          Sprite        Weight Duration Buff      BV Effect              EV
+RED_POTION    red_potion       100        0 \"\"         0 heal                full
+PURPLE_POTION purple_potion     80        0 \"\"         0 charge              full
+GREEN_POTION  green_potion      50      120 attack     3 \"damage multiplier\" 2
+BLUE_POTION   blue_potion       50      120 defense    6
+YELLOW_POTION yellow_potion     20      120 speed      8
 ";		embedFile = StatsFile.loadFromString( "potions.txt", embedText );		embedText = "Field String ID
 Field Int Level
 Field Int DamageMin
@@ -374,11 +375,11 @@ BROAD_SWORD     \"Twin Bladed Katana\"
 
 ; Potions.
 
-GREEN_POTION    \"Elixir of the Hawk\"
-PURPLE_POTION   \"Elixir of the Lion\"
-BLUE_POTION     \"Elixir of the Elephant\"
-YELLOW_POTION   \"Coca-leaf Cocktail\"
 RED_POTION      \"Healing Potion\"
+PURPLE_POTION   \"Mana Potion\"
+BLUE_POTION     \"Elixir of the Elephant\"
+GREEN_POTION    \"Elixir of the Tiger\"
+YELLOW_POTION   \"Coca-leaf Cocktail\"
 
 ; Spells.
 
@@ -450,6 +451,7 @@ CHEST           \"Chest\"
 \"fear\"              \"fear\"
 \"sleep\"             \"sleep\"
 \"heal\"              \"heal\"
+\"charge\"            \"charge\"
 
 ; Ingame messages.
 STAT_HEALTH          \"Health\"
@@ -499,12 +501,14 @@ POPUP_EFFECT_EXPIRED \"runs out\"
 POPUP_INVIS_BREAK1   \"An invisible\"
 POPUP_INVIS_BREAK2   \"appears!\"
 POPUP_INVIS_BROKEN   \"You reappear\"
+POPUP_FEAR_BREAK     \"Fear broken!\"
 POPUP_BACKSTAB       \"Backstab!\"
 POPUP_BUMP1          \"You stumble into an invisible\"
 POPUP_BUMP2          \".\"
 POPUP_BUMPED         \"You have been discovered!\"
 POPUP_INVIS          \"Vanished\"
 POPUP_HEALED         \"Healed\"
+POPUP_CHARGED        \"Charged\"
 POPUP_CHARM          \"Charm\"
 POPUP_FEAR           \"Fear\"
 POPUP_SLEEP          \"Sleep\"
@@ -533,6 +537,8 @@ NOTIFY_GET_STASHOLD2 \" in my bag.\"
 NOTIFY_GET_REDUNDANT \"I've got better in my bag.\"
 NOTIFY_GET_STASHNEW1 \"I'll put this\"
 NOTIFY_GET_STASHNEW2 \" in my bag.\"
+NOTIFY_GET_STASHSPELL1 \"I'll put this\"
+NOTIFY_GET_STASHSPELL2 \" spell in my bag.\"
 NOTIFY_EMPTYCELL     \"Use an empty cell to swap items!\"
 
 LOG_YOU_HIT          \"You hit\"

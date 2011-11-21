@@ -45,11 +45,11 @@ BROAD_SWORD     "Twin Bladed Katana"
 
 ; Potions.
 
-GREEN_POTION    "Elixir of the Hawk"
-PURPLE_POTION   "Elixir of the Lion"
-BLUE_POTION     "Elixir of the Elephant"
-YELLOW_POTION   "Coca-leaf Cocktail"
 RED_POTION      "Healing Potion"
+PURPLE_POTION   "Mana Potion"
+BLUE_POTION     "Elixir of the Elephant"
+GREEN_POTION    "Elixir of the Tiger"
+YELLOW_POTION   "Coca-leaf Cocktail"
 
 ; Spells.
 
@@ -121,6 +121,7 @@ CHEST           "Chest"
 "fear"              "fear"
 "sleep"             "sleep"
 "heal"              "heal"
+"charge"            "charge"
 
 ; Ingame messages.
 STAT_HEALTH          "Health"
@@ -170,12 +171,14 @@ POPUP_EFFECT_EXPIRED "runs out"
 POPUP_INVIS_BREAK1   "An invisible"
 POPUP_INVIS_BREAK2   "appears!"
 POPUP_INVIS_BROKEN   "You reappear"
+POPUP_FEAR_BREAK     "Fear broken!"
 POPUP_BACKSTAB       "Backstab!"
 POPUP_BUMP1          "You stumble into an invisible"
 POPUP_BUMP2          "."
 POPUP_BUMPED         "You have been discovered!"
 POPUP_INVIS          "Vanished"
 POPUP_HEALED         "Healed"
+POPUP_CHARGED        "Charged"
 POPUP_CHARM          "Charm"
 POPUP_FEAR           "Fear"
 POPUP_SLEEP          "Sleep"
@@ -204,6 +207,8 @@ NOTIFY_GET_STASHOLD2 " in my bag."
 NOTIFY_GET_REDUNDANT "I've got better in my bag."
 NOTIFY_GET_STASHNEW1 "I'll put this"
 NOTIFY_GET_STASHNEW2 " in my bag."
+NOTIFY_GET_STASHSPELL1 "I'll put this"
+NOTIFY_GET_STASHSPELL2 " spell in my bag."
 NOTIFY_EMPTYCELL     "Use an empty cell to swap items!"
 
 LOG_YOU_HIT          "You hit"

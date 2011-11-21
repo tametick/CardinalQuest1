@@ -135,6 +135,31 @@ class CqLootFactory {
 		}
 	}
 	
+	public static function newRandomPotion(X:Float, Y:Float):CqItem {
+		// Search through potions.txt for appropriate items.
+		var itemsFile:StatsFile = Resources.statsFiles.get( "potions.txt" );
+		
+		var entry:StatsFileEntry = null;
+		var weightSoFar:Int = 0;
+		for ( m in itemsFile ) {
+			var weight = m.getField( "Weight" );
+			if ( Math.random() > (weightSoFar / (weightSoFar + weight)) ) {
+				entry = m;
+			}
+			weightSoFar += weight;
+		}
+
+		if ( entry != null ) {
+			var item = new CqItem(X, Y, entry.getField( "ID" ), entry.getField( "Sprite" ) );
+			
+			completePotion( item, entry );
+			
+			return item;
+		} else {
+			throw( "Failed to generate random potion!" );
+		}
+	}
+	
 	public static function enchantItem(Item:CqItem, DungeonLevel:Int) {
 		if (Item.equipSlot == CqEquipSlot.SPELL || Item.equipSlot == CqEquipSlot.POTION)
 			// sorry, not enchanting potions & spells!
@@ -807,8 +832,7 @@ class CqChest extends CqItem {
 		
 		// chance of getting a potion
 		if (Math.random() < Configuration.dropPotionChance){
-			typeName = HxlUtil.getRandomElement(SpriteItems.potions).toUpperCase();
-			var item = CqLootFactory.newItem(x, y, typeName);
+			var item = CqLootFactory.newRandomPotion(x, y);
 			
 			// add item to level
 			Registery.level.addLootToLevel(state, item);

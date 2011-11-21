@@ -271,7 +271,12 @@ class CqActor extends CqObject, implements Actor {
 			Callback(dmgTotal);
 
 		updateHealthBar();
-		removeEffect("fear");
+		
+		var afraid = specialEffects.exists("fear");
+		if ( afraid ) {
+			removeEffect("fear");
+			GameUI.showEffectText(this, Resources.getString("POPUP_FEAR_BREAK"), 0x909090);
+		}
 	}
 
 	public function injureActor(state:HxlState, other:CqActor, dmgTotal:Int) {
@@ -816,6 +821,19 @@ class CqActor extends CqObject, implements Actor {
 						player.updatePlayerHealthBars();
 					}
 					GameUI.showEffectText(other, Resources.getString( "POPUP_HEALED" ), 0x0080FF);
+				}
+			}
+		case "charge":
+			if (effect.value == "full") {
+				if (other == null) {
+					for (s in bag.spells()) {
+						s.statPoints = s.statPointsRequired;
+						if ( s.inventoryProxy != null ) {
+							s.inventoryProxy.updateCharge();
+						}
+					}
+
+					GameUI.showEffectText(this, Resources.getString( "POPUP_CHARGED" ), 0xFFFF00);
 				}
 			}
 		case "reveal":
