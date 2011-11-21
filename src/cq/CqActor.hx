@@ -1212,6 +1212,15 @@ class CqPlayer extends CqActor, implements Player {
 		//move this??
 		cast(this, CqPlayer).xp += xpValue;
 		
+		// Update spells powered by XP.
+		for (s in bag.spells()) {
+			if ( s.stat == "xp" ) {
+				var boost:Int = Std.int( 3200 * xpValue / (nextLevel() - currentLevel()) );
+				s.statPoints = Std.int(Math.min( s.statPointsRequired, s.statPoints + boost));
+				s.inventoryProxy.updateCharge();
+			}
+		}
+		
 		while (xp >= nextLevel())
 			gainLevel();
 

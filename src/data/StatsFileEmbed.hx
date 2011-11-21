@@ -131,7 +131,7 @@ BLINK            \"Transports you to a random location.\"
 MAGIC_ARMOR      \"Engulfs you in a magical protective aura.\"
 PASS_WALL        \"Enables walking through walls as if they were thin air.\"
 REVEAL_MAP       \"Reveals the layout of the current floor.\"
-HEAL             \"Restores health and vigor.\"
+HEAL             \"Restores health and vigor.\n\nCharge this spell by defeating foes.\"
 
 FREEZE           \"Freezes a monster in place for a short duration.\"
 FIREBALL         \"Hurls a ball of fire that explodes on impact.\"
@@ -264,10 +264,10 @@ Field String Effect
 Field String EffectVal
 
 ; ID          Sprite        Duration Buff      BV Effect              EV
-GREEN_POTION  green_potion  60       attack     3
-PURPLE_POTION purple_potion 60       \"\"         0 \"damage multiplier\" 2
-BLUE_POTION   blue_potion   60       defense    3
-YELLOW_POTION yellow_potion 60       speed      5
+GREEN_POTION  green_potion  120      attack     3
+PURPLE_POTION purple_potion 120      \"\"         0 \"damage multiplier\" 2
+BLUE_POTION   blue_potion   120      defense    3
+YELLOW_POTION yellow_potion 120      speed      5
 RED_POTION    red_potion    0        \"\"         0 heal                full
 ";		embedFile = StatsFile.loadFromString( "potions.txt", embedText );		embedText = "Field String ID
 Field Int Level
@@ -309,7 +309,7 @@ STONE_SKIN       stone_skin        0  60 spirit   480 defense 5 speed -1
 BLINK            blink             0   0 spirit   360 \"\" 0 \"\" 0 blink
 MAGIC_ARMOR      magic_armor       0  60 spirit   480 defense 3
 REVEAL_MAP       reveal_map        0   0 spirit  3600 \"\" 0 \"\" 0 reveal
-HEAL             heal              0   0 spirit  1440 \"\" 0 \"\" 0 heal full
+HEAL             heal              0  60 xp      1600 defense -3 \"\" 0 heal full
 
 ; Targets enemy.
 
