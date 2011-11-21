@@ -19,6 +19,7 @@ import cq.CqGraphicKey;
 
 import data.SoundEffectsManager;
 import data.Configuration;
+import data.Resources;
 import data.Registery;
 
 import flash.display.BitmapData;
@@ -206,6 +207,7 @@ class CqInventoryProxy extends HxlSprite {
 			
 			Registery.player.updateSprite();
 		} else {
+			// Return to the slot we started in.
 			item.itemSlot.cell.add(this);
 			
 			x = dragStartPoint.x;
@@ -215,6 +217,15 @@ class CqInventoryProxy extends HxlSprite {
 		zIndex = 5;
 		
 		CqInventoryProxy.theProxyBeingDragged = null;
+	}
+	
+	public function updatePopupText() {
+		// Set popup text.
+		if ( item.itemSlot.cell.popupHint != -1 ) {
+			namePopup.setText( item.fullName + "\n" + Resources.getString( "POPUP_" + item.itemSlot.cell.popupHint ) );
+		} else {
+			namePopup.setText( item.fullName );
+		}
 	}
 	
 	// here on out is just transferred, uncorrected:
@@ -376,6 +387,7 @@ class CqInventoryCell extends HxlDialog {
 	
 	public var associatedButton(default, null):HxlButton;  // temporary ?
 	public var equipType(default, null):CqEquipSlot;
+	public var popupHint:Int;
 	
 	public static var theCellBeingHoveredOver:CqInventoryCell;
 	
@@ -395,12 +407,17 @@ class CqInventoryCell extends HxlDialog {
 		isTrashCell = false;
 		
 		equipType = EquipType;
+		popupHint = -1;
 		
 		if (HxlGraphics.stage != null) {
 			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, true, 6, true);
 		}
 		
 		add(new ButtonSprite());
+	}
+	
+	public function setPopupHint( Hint:Int ) {
+		popupHint = Hint;
 	}
 	
 	override public function destroy() {
@@ -750,7 +767,8 @@ class CqPotionGrid extends CqInventoryGrid {
 		for ( i in 0...numberOfCells ) {
 			var cell:CqInventoryCell = new CqInventoryCell(POTION, offsetX + (i * (btnSize + 10)), offsetY, btnSize, btnSize);
 			add(cell);
-			cell.setGraphicKeys(CqGraphicKey.EquipmentCellBG,CqGraphicKey.EqCellBGHighlight,CqGraphicKey.CellGlow);
+			cell.setGraphicKeys(CqGraphicKey.EquipmentCellBG, CqGraphicKey.EqCellBGHighlight, CqGraphicKey.CellGlow);
+			cell.setPopupHint( (6+i)%10 );
 			cells.push(cell);
 		}
 		
@@ -867,7 +885,8 @@ class CqSpellGrid extends CqInventoryGrid {
 			cell.zIndex = 1;
 			
 			add(cell);
-			cell.setGraphicKeys(CqGraphicKey.EquipmentCellBG,CqGraphicKey.EqCellBGHighlight,CqGraphicKey.CellGlow);
+			cell.setGraphicKeys(CqGraphicKey.EquipmentCellBG, CqGraphicKey.EqCellBGHighlight, CqGraphicKey.CellGlow);
+			cell.setPopupHint( 1+i );
 			cells.push(cell);
 		}
 	}

@@ -440,6 +440,11 @@ class CqItemSlot {
 			// bag.removeSlot(this);
 		}
 		
+		// Update popups text.
+		if ( otherItem != null && otherItem.inventoryProxy != null ) {
+			otherItem.inventoryProxy.updatePopupText();
+		}
+		
 		return item;
 	}
 }
