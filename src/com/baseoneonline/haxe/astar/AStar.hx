@@ -187,37 +187,73 @@ class AStar
 		var a:Array<AStarNode> = new Array<AStarNode>();
 		
 		if ( allowCardinal ) {
-			// N
-			if (x > 0) {
-				
-				n = map.getNode(x-1, y);
-				if (n.walkable) {
-					n.cost = COST_ORTHOGONAL;
-					a.push(n);
+			if ( Math.random() < 0.5 ) {
+				// W
+				if (x > 0) {
+					
+					n = map.getNode(x-1, y);
+					if (n.walkable) {
+						n.cost = COST_ORTHOGONAL;
+						a.push(n);
+					}
 				}
-			}
-			// E
-			if (x < width-1) {
-				n = map.getNode(x+1, y);
-				if (n.walkable) {
-					n.cost = COST_ORTHOGONAL;
-					a.push(n);
+				// E
+				if (x < width-1) {
+					n = map.getNode(x+1, y);
+					if (n.walkable) {
+						n.cost = COST_ORTHOGONAL;
+						a.push(n);
+					}
+				} 
+				// N
+				if (y > 0) {
+					n = map.getNode(x, y-1);
+					if (n.walkable) {
+						n.cost = COST_ORTHOGONAL;
+						a.push(n);
+					}
 				}
-			} 
-			// N
-			if (y > 0) {
-				n = map.getNode(x, y-1);
-				if (n.walkable) {
-					n.cost = COST_ORTHOGONAL;
-					a.push(n);
+				// S
+				if (y < height-1) {
+					n = map.getNode(x, y+1);
+					if (n.walkable) {
+						n.cost = COST_ORTHOGONAL;
+						a.push(n);
+					}
 				}
-			}
-			// S
-			if (y < height-1) {
-				n = map.getNode(x, y+1);
-				if (n.walkable) {
-					n.cost = COST_ORTHOGONAL;
-					a.push(n);
+			} else {
+				// S
+				if (y < height-1) {
+					n = map.getNode(x, y+1);
+					if (n.walkable) {
+						n.cost = COST_ORTHOGONAL;
+						a.push(n);
+					}
+				}
+				// N
+				if (y > 0) {
+					n = map.getNode(x, y-1);
+					if (n.walkable) {
+						n.cost = COST_ORTHOGONAL;
+						a.push(n);
+					}
+				}
+				// E
+				if (x < width-1) {
+					n = map.getNode(x+1, y);
+					if (n.walkable) {
+						n.cost = COST_ORTHOGONAL;
+						a.push(n);
+					}
+				} 
+				// W
+				if (x > 0) {
+					
+					n = map.getNode(x-1, y);
+					if (n.walkable) {
+						n.cost = COST_ORTHOGONAL;
+						a.push(n);
+					}
 				}
 			}
 		}
