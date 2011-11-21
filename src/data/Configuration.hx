@@ -45,13 +45,13 @@ class Configuration {
 	public static inline var startWithMusic:Bool = true;
 	public static inline var startWithSound:Bool = true;
 
-	public static inline var chestsPerLevel = 12;
+	public static inline var chestsPerLevel = 10;
 
 	public static inline var mobsPerLevel = 18;
 	public static inline var lastLevel = 7;
 	public static inline var demoLastLevel = 2;
 
-	public static inline var dropPotionChance:Float = 0.35;
+	public static inline var dropPotionChance:Float = 0.3;
 	public static inline var betterItemChance:Float = 0.15;
 	public static inline var EnchantItemChance:Float = 0.1;
 	public static inline var BetterEnchantItemChance:Float = 0.05;

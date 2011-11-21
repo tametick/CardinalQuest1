@@ -266,10 +266,10 @@ Field String EffectVal
 
 ; ID          Sprite        Weight Duration Buff      BV Effect              EV
 RED_POTION    red_potion       100        0 \"\"         0 heal                full
-PURPLE_POTION purple_potion     80        0 \"\"         0 charge              full
-GREEN_POTION  green_potion      50      120 attack     3 \"damage multiplier\" 2
+PURPLE_POTION purple_potion     65        0 \"\"         0 charge              full
+GREEN_POTION  green_potion      50       80 attack     3 \"damage multiplier\" 2
 BLUE_POTION   blue_potion       50      120 defense    6
-YELLOW_POTION yellow_potion     20      120 speed      8
+YELLOW_POTION yellow_potion     35       80 speed      6
 ";		embedFile = StatsFile.loadFromString( "potions.txt", embedText );		embedText = "Field String ID
 Field Int Level
 Field Int DamageMin
