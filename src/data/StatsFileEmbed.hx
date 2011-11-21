@@ -320,7 +320,7 @@ ENFEEBLE_MONSTER enfeeble_monster  1  60 spirit  360 attack -3
 CHARM_MONSTER    charm_monster     1  60 spirit  720 \"\" 0 \"\" 0 charm
 POLYMORPH        polymorph         1   0 spirit 1080 \"\" 0 \"\" 0 polymorph true
 SLEEP            sleep             1  45 spirit  720 \"\" 0 \"\" 0 sleep
-FEAR             fear              1   0 spirit  480 \"\" 0 \"\" 0 fear
+FEAR             fear              1  90 spirit  480 \"\" 0 \"\" 0 fear
 
 ; Targets empty square.
 
