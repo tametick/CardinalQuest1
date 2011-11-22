@@ -1195,7 +1195,6 @@ class CqPlayer extends CqActor, implements Player {
 			// perform the special effects (this can't be part of give())
 			SoundEffectsManager.play(Pickup);
 			item.doPickupEffect();
-			GameUI.showEffectText(this, item.name, 0x6699ff);
 
 			if ( result == BagGrantResult.SOLD ) { 
 				//Destroy the item.

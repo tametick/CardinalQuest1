@@ -34,6 +34,7 @@ class CqBag {
 		if (item.stackSizeMax != 1) {
 			for (slot in slots) {
 				if (slot.stackItem(item)) {
+					GameUI.showEffectText(Registery.player, item.name, 0x6699ff);
 					return BagGrantResult.SUCCEEDED;
 				}
 			}
@@ -53,9 +54,10 @@ class CqBag {
 					if ( i.name == item.name ) {
 						GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_DUPLICATE" ));
 					} else {
-						GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_KEEP1" ) + i.name + Resources.getString( "NOTIFY_GET_KEEP2" ));
+						GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_EQUAL1" ) + " " + i.name + Resources.getString( "NOTIFY_GET_EQUAL2" ) );
 					}
 					
+					GameUI.showEffectText(Registery.player, item.name, 0x6699ff);
 					giveMoney(item);
 					
 					return BagGrantResult.SOLD;
@@ -66,10 +68,12 @@ class CqBag {
 				if (i.makesRedundant(item)) {
 					// this old item is absolutely better than the new one!
 					if ( i.name == item.name ) {
-						GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_KEEP1" ) + i.name + Resources.getString( "NOTIFY_GET_KEEP2" ));
+						GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_DUPLICATE" ));
 					} else {
 						GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_SELLNEW1" ) + " " + i.name + Resources.getString( "NOTIFY_GET_SELLNEW2" ) );
 					}
+
+					GameUI.showEffectText(Registery.player, item.name, 0x6699ff);
 					giveMoney(item);
 					
 					return BagGrantResult.SOLD;
@@ -79,6 +83,8 @@ class CqBag {
 			for (i in items(item.equipSlot, false)) {
 				if (i.makesRedundant(item)) {
 					GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_REDUNDANT" ), 0xBFE137);
+
+					GameUI.showEffectText(Registery.player, item.name, 0x6699ff);
 					giveMoney(item);
 					
 					return BagGrantResult.SOLD;
@@ -107,6 +113,24 @@ class CqBag {
 				
 		if (worstSlot != null) {
 			// we found somewhere to equip it, so let's put it there and explain why.
+
+			// Verify we can actually put it somewhere first...
+			if (worstSlot.item != null && !item.makesRedundant(worstSlot.item)) {
+				// Check whether there's an empty backpack cell for the old item.
+				var canStoreOldItem:Bool = false;
+				for (slot in slots) {
+					if (slot.equipmentType == null && slot.item == null) {
+						canStoreOldItem = true;
+					}
+				}
+				
+				if ( !canStoreOldItem ) {
+					return BagGrantResult.NO_SPACE;
+				}
+			}
+			
+			// What did we pick up?
+			GameUI.showEffectText(Registery.player, item.name, 0x6699ff);
 			
 			// start by showing the player just what is changing in terms of buffs:
 			if ( item.equipSlot == WEAPON ) {
@@ -166,9 +190,10 @@ class CqBag {
 							return BagGrantResult.SUCCEEDED;
 						}
 					}
-					
-					// we didn't find anywhere to put the old one, so we can't equip the new one -- I guess we could try to find something else to trash or drop,
-					// but let's just complain (yes, we've already put up the buffs -- we could scan first instead)
+
+					// we didn't find anywhere to put the old one, so we can't equip the new one.
+					// We should never get here - we scan for these circumstances above.
+					throw( "Inventory logic failed!" );
 					
 					return BagGrantResult.NO_SPACE;
 				}
@@ -176,7 +201,7 @@ class CqBag {
 		}
 
 		// fine.  put it in the backpack, then.
-		for (slot in slots) {
+		for (slot in slots) {	
 			// check whether it's an empty backpack cell
 			if (slot.equipmentType == null && slot.item == null) {
 				slot.item = item;
@@ -187,6 +212,8 @@ class CqBag {
 				} else {
 					GameUI.showTextNotification(Resources.getString( "NOTIFY_GET_STASHNEW1" ) + " " + item.name + Resources.getString( "NOTIFY_GET_STASHNEW2" ), 0xBFE137);
 				}
+
+				GameUI.showEffectText(Registery.player, item.name, 0x6699ff);
 				return BagGrantResult.SUCCEEDED;
 			}
 		}		
