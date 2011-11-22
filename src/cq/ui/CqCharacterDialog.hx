@@ -5,9 +5,10 @@ import data.Registery;
 import cq.CqResources;
 import data.Configuration;
 import data.Resources;
+import haxel.HxlGraphics;
 import haxel.HxlSprite;
 import haxel.HxlUtil;
-
+import haxel.HxlMouse;
 
 import haxel.HxlSlidingDialog;
 import haxel.HxlText;
@@ -28,9 +29,11 @@ class CqCharacterDialog extends HxlSlidingDialog {
 	var valSpirit:HxlText;
 	var valVitality:HxlText;
 	var valHealth:HxlText;
+	
+	var txtDescription:HxlText;
 
-	static inline var textBoxes:Array<String> = ["txtCharName", "txtHealthLabel", "valHealth", "txtAttackLabel", "valAttack", "txtDefenseLabel", "valDefense", "txtSpeedLabel", "valSpeed", "txtSpiritLabel", "valSpirit", "txtVitalityLabel", "valVitality"];
-	static inline var pos:Array<Array<Int>> = [ [ 40, 40], [40, 100], [190, 100], [40, 130], [190, 130], [40, 160], [190, 160], [40, 190], [190, 190], [40, 220], [190, 220], [40, 250], [190, 250]];
+	static inline var textBoxes:Array<String> = ["txtCharName", "txtHealthLabel", "valHealth", "txtAttackLabel", "valAttack", "txtDefenseLabel", "valDefense", "txtSpeedLabel", "valSpeed", "txtSpiritLabel", "valSpirit", "txtVitalityLabel", "valVitality", "txtDescription"];
+	static inline var pos:Array<Array<Int>> = [ [ 40, 40], [40, 100], [190, 100], [40, 130], [190, 130], [40, 160], [190, 160], [40, 190], [190, 190], [40, 220], [190, 220], [40, 250], [190, 250], [40, 320]];
 		
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0)
 	{
@@ -114,7 +117,37 @@ class CqCharacterDialog extends HxlSlidingDialog {
 			valSpirit.text += " [" +(_player.getBuff("spirit") < 0?"":"+")+ _player.getBuff("spirit") + "]";
 		}
 		
-		valVitality.text = ""+_player.vitality;
+		valVitality.text = "" + _player.vitality;
+		
+		txtDescription.text = "(Mouse over attributes for info.)";
 	}
 
+	public override function update() {
+		super.update();
+		
+		// Handle mousing over stats.
+		var m:HxlMouse = HxlGraphics.mouse;
+		var x:Float = m.x + HxlUtil.floor(HxlGraphics.scroll.x);
+		var y:Float = m.y + HxlUtil.floor(HxlGraphics.scroll.y);
+		
+		if ( x > 90 && x < 400 && y >= 80 && y < 290 ) {
+			if ( y < 130 ) { // Health.
+				txtDescription.text = Resources.getString( "HEALTH", true );
+			} else if ( y < 160 ) { // Attack.
+				txtDescription.text = Resources.getString( "ATTACK", true );
+			} else if ( y < 190 ) { // Defense.
+				txtDescription.text = Resources.getString( "DEFENSE", true );
+			} else if ( y < 220 ) { // Speed.
+				txtDescription.text = Resources.getString( "SPEED", true );
+			} else if ( y < 250 ) { // Spirit.
+				txtDescription.text = Resources.getString( "SPIRIT", true );
+			} else if ( y < 280 ) { // Vitality.
+				txtDescription.text = Resources.getString( "VITALITY", true );
+			}
+		} else {
+			txtDescription.text = Resources.getString( "ATTRIBUTES", true );
+		}
+		
+	}
+	
 }

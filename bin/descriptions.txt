@@ -15,6 +15,15 @@ Field String Data
 "SpriteWizardEntry" "The unsettled souls of the anguished dead whisper of the minotaur's misdeeds.  On bended knee you swear to them that they will be avenged.\n\nArcane flames dance between your hands.  The minotaur's wretched minions will be the most delightful playthings."
 "SpriteThiefEntry"  "You slink silently down unlit stairs.  The minotaur's wicked servants suspect nothing.\n\nYou cannot help but grin at the thought of the bounteous treasure they will soon relinquish."
 
+; Stats.
+ATTRIBUTES  "(Mouse-over attributes for info.)"
+HEALTH      "HEALTH: Hit points."
+ATTACK      "ATTACK: Increases your chance to\nhit with wielded weapons."
+DEFENSE     "DEFENSE: Gives you a chance to\nresist physical damage."
+SPEED       "SPEED: How fast you can run and act\ncompared to enemies."
+SPIRIT      "SPIRIT: Your Spirit is the rate at\nwhich almost all spells recharge."
+VITALITY    "VITALITY: The increase in maximum\nhit points you gain when you level."
+
 ; Potions.
 RED_POTION       "A small vial containing a fragrant, red salve. It restores life when applied."
 PURPLE_POTION    "A refreshing draught which charges spells and sets nerves tingling."
@@ -63,16 +72,16 @@ CLAYMORE         "An ancient weapon. Many bards have sung of glorious victories 
 BROAD_SWORD      "An elegant weapon for a more civilized age. It was crafted by a master blacksmith from the distant orient."
 
 ; Spells.
-BERSERK          "Induces a berserked rage that greatly increases your strength and speed."
+BERSERK          "Induces a berserked rage that greatly increases your strength and speed.\n\nRecharged by your Attack stat."
 BLESS_WEAPON     "Blesses the currently wielded weapon, providing a temporary boost to its effectiveness."
 HASTE            "Makes you faster and more nimble."
-SHADOW_WALK      "Renders you invisible for a few seconds."
+SHADOW_WALK      "Renders you invisible for a few seconds.\n\nRecharged by your Speed stat."
 STONE_SKIN       "Hardens your skin, rendering you tough but slow."
 BLINK            "Transports you to a random location."
 MAGIC_ARMOR      "Engulfs you in a magical protective aura."
 PASS_WALL        "Enables walking through walls as if they were thin air."
 REVEAL_MAP       "Reveals the layout of the current floor."
-HEAL             "Restores health and vigor.\n\nCharge this spell by defeating foes."
+HEAL             "Restores health and vigor.\n\nRecharged by gaining XP."
 
 FREEZE           "Slows a monster down for a short duration."
 FIREBALL         "Hurls a ball of fire that explodes on impact."
