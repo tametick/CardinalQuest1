@@ -47,8 +47,8 @@ BROAD_SWORD     "Twin Bladed Katana"
 
 RED_POTION      "Healing Potion"
 PURPLE_POTION   "Mana Potion"
-BLUE_POTION     "Elixir of the Elephant"
-GREEN_POTION    "Elixir of the Tiger"
+BLUE_POTION     "Elixir of Elephant Hide"
+GREEN_POTION    "Elixir of Tiger Strike"
 YELLOW_POTION   "Coca-leaf Cocktail"
 
 ; Spells.
