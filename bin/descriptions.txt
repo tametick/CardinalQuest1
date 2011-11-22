@@ -74,7 +74,7 @@ PASS_WALL        "Enables walking through walls as if they were thin air."
 REVEAL_MAP       "Reveals the layout of the current floor."
 HEAL             "Restores health and vigor.\n\nCharge this spell by defeating foes."
 
-FREEZE           "Freezes a monster in place for a short duration."
+FREEZE           "Slows a monster down for a short duration."
 FIREBALL         "Hurls a ball of fire that explodes on impact."
 ENFEEBLE_MONSTER "Weakens monsters and renders them less dangerous."
 CHARM_MONSTER    "Charms a foe and temporarily brings them to your side."
