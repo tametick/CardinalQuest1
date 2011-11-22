@@ -173,7 +173,7 @@ class GameUI extends HxlDialog {
 		leftButtons.scrollFactor.x = leftButtons.scrollFactor.y = 0;
 		add(leftButtons);
 		
-		notifications = new CqTextNotification(300, 0);
+		notifications = new CqTextNotification(320, 60);// 12);
 		notifications.zIndex = 3;
 		add(notifications);
 		
