@@ -419,17 +419,21 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 					_mp.x = m.screenX; 
 					_mp.y = m.screenY;
 					popup.x = _mp.x - (popup.width / 2);
-					popup.y = _mp.y + 20;
+					if ( _mp.y <= HxlGraphics.stage.stageHeight - 70 ) {
+						popup.y = _mp.y + 20;
+					} else {
+						popup.y = _mp.y - 20 - popup.height;
+					}
 				} else {
 					popup.x = (HxlGraphics.stage.stageWidth - popup.width)/2;
 					popup.y = (HxlGraphics.stage.stageHeight - popup.height)/2;
 				}
-				if ( popup.x + popup.width > HxlGraphics.stage.stageWidth)	{
-					popup.x = HxlGraphics.stage.stageWidth - popup.width;
+				if ( popup.x > HxlGraphics.stage.stageWidth - popup.width - 5)	{
+					popup.x = HxlGraphics.stage.stageWidth - popup.width - 5;
 				} else if (popup.x < 5)
 					popup.x = 5;
-				if ( popup.y + popup.height > HxlGraphics.stage.stageHeight){
-					popup.y = HxlGraphics.stage.stageHeight - popup.height;
+				if ( popup.y > HxlGraphics.stage.stageHeight - popup.height - 5){
+					popup.y = HxlGraphics.stage.stageHeight - popup.height - 5;
 				} else if (popup.y < 5)
 					popup.y = 5;
 			}else {
