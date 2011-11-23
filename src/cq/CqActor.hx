@@ -1180,11 +1180,13 @@ class CqPlayer extends CqActor, implements Player {
 	}
 	
 	public function giveMoney(amount:Int) {
-		var plural:Bool = amount > 1;
-		GameUI.showEffectText(this, "+" + amount + " " + Resources.getString( plural?"POPUP_COINS":"POPUP_COIN" ), 0xC2881D);
-		infoViewMoney.setText("" + (Std.parseInt(infoViewMoney.text) + amount));
-		//Let Kongregate know, for now we only deal with "Normal" mode
-		Registery.getKong().SubmitStat( Registery.KONG_MAXGOLD , Std.parseInt(infoViewMoney.text) );
+		if ( amount > 0 ) {
+			var plural:Bool = amount > 1;
+			GameUI.showEffectText(this, "+" + amount + " " + Resources.getString( plural?"POPUP_COINS":"POPUP_COIN" ), 0xC2881D);
+			infoViewMoney.setText("" + (Std.parseInt(infoViewMoney.text) + amount));
+			//Let Kongregate know, for now we only deal with "Normal" mode
+			Registery.getKong().SubmitStat( Registery.KONG_MAXGOLD , Std.parseInt(infoViewMoney.text) );
+		}
 	}
 	
 	//pickup item from map
