@@ -807,6 +807,9 @@ class CqActor extends CqObject, implements Actor {
 					if (Std.is(this, CqPlayer)) {
 						var player = Registery.player;
 						player.updatePlayerHealthBars();
+						
+						// Update min HP.
+						player.minHp = HxlUtil.randomIntInRange( 1, Math.floor(0.25*(player.maxHp+player.getBuff("life"))) );
 					}
 					GameUI.showEffectText(this, Resources.getString( "POPUP_HEALED" ), 0x0080FF);
 				} else {
