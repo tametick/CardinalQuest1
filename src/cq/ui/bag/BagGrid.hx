@@ -295,6 +295,11 @@ class CqInventoryProxy extends HxlSprite {
 	static var ctrans:ColorTransform;
 	private static var clearChargeRect = new Rectangle(0, 0, 94, 94);
 	public function updatechargeArcSprite(chargeShape:Shape) {
+		if (chargeArcSprite != null) {
+			chargeArcSprite.x = x;
+			chargeArcSprite.y = y;
+		}
+		
 		chargeArcBitmap.fillRect(clearChargeRect, 0x0);
 		chargeArcBitmap.draw(chargeShape, null, ctrans);
 

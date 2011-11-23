@@ -472,6 +472,10 @@ class CqItemSlot {
 				
 				item.inventoryProxy.visible = true;
 				
+				if ( item.equipSlot == SPELL ) {
+					item.inventoryProxy.updateCharge();
+				}
+				
 				cell.proxy = item.inventoryProxy;
 			} else {
 				cell.proxy = null;
