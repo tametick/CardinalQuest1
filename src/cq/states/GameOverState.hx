@@ -10,6 +10,7 @@ import data.SoundEffectsManager;
 import flash.display.Loader;
 import flash.display.Sprite;
 import flash.events.Event;
+import flash.events.IOErrorEvent;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import flash.Lib;
@@ -56,6 +57,7 @@ class GameOverState extends CqState {
 			kongAdLoader = new Loader();
 			try{
 				kongAdLoader.load(new URLRequest("http://www.kongnet.net/www/delivery/avw.php?zoneid=11&cb=98732479&n=aab5b069"));
+				kongAdLoader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, kongAdFailed );
 			} catch( msg : String ) {
 				trace("1 Error message: " + msg );
 			} catch( errorCode : Int ) {
@@ -102,7 +104,13 @@ class GameOverState extends CqState {
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime, fadeCallBack );
 	}
 	
+	function kongAdFailed( e : IOErrorEvent ) {
+		kongAdLoader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, kongAdFailed);
+		kongAdLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, playKongAd);
+	}
+	
 	function playKongAd(e : Event) {
+		kongAdLoader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, kongAdFailed);
 		kongAdLoader.contentLoaderInfo.removeEventListener(Event.COMPLETE, playKongAd);
 		kongAd.addEventListener(MouseEvent.CLICK, clickOnKongAd, false, 0, true);
 		
