@@ -255,7 +255,7 @@ class MainMenuState extends CqState {
 			var portedBy = new HxlText(430, copyright.y-copyright.height, 260, Resources.getString( "MENU_PORTEDBY" ) + " Tom Demuyt", true, FontAnonymousPro.instance.fontName, 18);
 			add(portedBy);
 
-			var version = new HxlText(Configuration.app_width-130-2, portedBy.y-portedBy.height, 130, Resources.getString( "MENU_VERSION" ) + " " + Configuration.version, true, FontAnonymousPro.instance.fontName, 18);
+			var version = new HxlText(Configuration.app_width-150-10, portedBy.y-portedBy.height, 150, Resources.getString( "MENU_VERSION" ) + " " + Configuration.version, true, FontAnonymousPro.instance.fontName, 18, 0xffffff, "right" );
 			add(version);
 
 		} else {
@@ -264,7 +264,7 @@ class MainMenuState extends CqState {
 			copyrightLink.setUnderlined();
 			add(copyrightLink);
 
-			var version = new HxlText(Configuration.app_width-130-2, copyright.y-copyright.height, 130, Resources.getString( "MENU_VERSION" ) + " " + Configuration.version, true, FontAnonymousPro.instance.fontName, 18);
+			var version = new HxlText(Configuration.app_width-150-10, copyright.y-copyright.height, 150, Resources.getString( "MENU_VERSION" ) + " " + Configuration.version, true, FontAnonymousPro.instance.fontName, 18, 0xffffff, "right" );
 			add(version);
 		}
 
