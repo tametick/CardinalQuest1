@@ -322,15 +322,48 @@ class CqInventoryProxy extends HxlSprite {
 		var spell = cast(item, CqSpell);
 		
 		var start = -Math.PI / 2;
-		var end = 2*Math.PI * (3/4 - spell.statPoints / spell.statPointsRequired);
+		var end = start + 2 * Math.PI * (spell.statPoints / spell.statPointsRequired);
+
+		var G = chargeShape.graphics;
+		G.clear();
+		G.beginFill(0x000000, 1.0);
+		drawChargeArc(G, 27, 27, end, start + 2 * Math.PI, 47, 1);
+		G.endFill();
+		G = null;
+/*
+		// Alternative drawing code below - experimenting with things like showing the section
+		// that'll be cleared in the next turn.
+		var nextTurnBonus:Float = 0;
+		switch ( spell.stat ) {
+			case "spirit": nextTurnBonus = Math.max( Registery.player.spirit + Registery.player.getBuff("spirit"), 0 );
+			case "speed": nextTurnBonus = Math.max( Registery.player.speed + Registery.player.getBuff("speed"), 1 );
+			case "attack": nextTurnBonus = Math.max( Registery.player.attack + Registery.player.getBuff("attack"), 0 );
+			case "defense": nextTurnBonus = Math.max( Registery.player.defense + Registery.player.getBuff("defense"), 0 );
+			case "life": nextTurnBonus = Math.max( Registery.player.maxHp + Registery.player.getBuff("life"), 0 );
+		}
+		
+		nextTurnBonus *= 60 / Math.max( Registery.player.speed + Registery.player.getBuff("speed"), 1 );
+		
+		var nextTurnPoints = Math.min( spell.statPoints + nextTurnBonus, spell.statPointsRequired);
+
+		var endNext = start + 2 * Math.PI * (nextTurnPoints / spell.statPointsRequired);
 			
 		var G = chargeShape.graphics;
 		G.clear();
-		G.beginFill(0x55000000);
-		drawChargeArc(G, 27, 27, start, end, 47, -1);
+		
+		var midAngle = Math.min( end + 0.35 * (endNext - end), start + 2 * Math.PI );
+		
+		G.beginFill(0x000000, 1.0);
+		drawChargeArc(G, 27, 27, endNext, start + 2 * Math.PI, 47, 1);
+		G.endFill();
+		G.beginFill(0x000000, 1.0);
+		drawChargeArc(G, 27, 27, end, midAngle, 47, 1);
+		G.endFill();
+		G.beginFill(0x000000, 0.5);
+		drawChargeArc(G, 27, 27, midAngle, endNext, 47, 1);
 		G.endFill();
 		G = null;
-
+*/
 		chargeShape.mask = chargeBmp;
 		
 		updatechargeArcSprite(chargeShape);
@@ -360,24 +393,30 @@ class CqInventoryProxy extends HxlSprite {
 		}
 	}
 
+	static var s_controlPoint:Point = new Point();
+	static var s_anchorPoint:Point = new Point();
+	
 	public static function drawChargeArc(G:Graphics, centerX:Float, centerY:Float, startAngle:Float, endAngle:Float, radius:Float, direction:Int) {
 		var difference:Float = Math.abs(endAngle - startAngle);
 		var divisions:Int = Math.floor(difference / (Math.PI / 4))+1;
-		var span:Float = direction * difference / (2 * divisions);
+		var span:Float = direction * difference / divisions;
 		var controlRadius:Float = radius / Math.cos(span);
 		//G.moveTo(centerX + (Math.cos(startAngle)*radius), centerY + Math.sin(startAngle)*radius);
 		G.moveTo(centerX, centerY);
-		G.lineTo(centerX + (Math.cos(startAngle)*radius), centerY + Math.sin(startAngle)*radius);
-		var controlPoint:Point;
-		var anchorPoint:Point;
+		G.lineTo(centerX + (Math.cos(startAngle) * radius), centerY + Math.sin(startAngle) * radius);
+		
+		var controlAngle:Float;
+		var anchorAngle:Float;
 		for ( i in 0...divisions ) {
-			endAngle = startAngle + span;
-			startAngle = endAngle + span;
-			controlPoint = new Point(centerX+Math.cos(endAngle)*controlRadius, centerY+Math.sin(endAngle)*controlRadius);
-			anchorPoint = new Point(centerX+Math.cos(startAngle)*radius, centerY+Math.sin(startAngle)*radius);
-			G.curveTo( controlPoint.x, controlPoint.y, anchorPoint.x, anchorPoint.y );
-			controlPoint = null;
-			anchorPoint = null;
+			controlAngle = startAngle + (i+0.5) * span;
+			anchorAngle = startAngle + (i + 1) * span;
+			
+			s_controlPoint.x = centerX + Math.cos(controlAngle) * controlRadius;
+			s_controlPoint.y = centerY + Math.sin(controlAngle) * controlRadius;
+			s_anchorPoint.x = centerX + Math.cos(anchorAngle) * radius;
+			s_anchorPoint.y = centerY + Math.sin(anchorAngle) * radius;
+			
+			G.curveTo( s_controlPoint.x, s_controlPoint.y, s_anchorPoint.x, s_anchorPoint.y );
 		}
 		G.lineTo(centerX, centerY);
 	}
