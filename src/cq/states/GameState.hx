@@ -565,7 +565,7 @@ class GameState extends CqState {
 
 	override function onKeyDown(event:KeyboardEvent) {
 		if (!started || endingAnim || Timer.stamp() < resumeActingTime) {
-			if ( Registery.level.getTargetAccordingToKeyPress() != null )
+			if ( Registery.level != null && Registery.level.getTargetAccordingToKeyPress() != null )
 			{
 				isPlayerActing = true;
 			}
