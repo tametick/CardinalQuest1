@@ -170,6 +170,10 @@ class GameState extends CqState {
 		if (endingAnim || Timer.stamp() - msMoveStamp > msHideDelay) {
 			cursor.visible = false;
 			gameUI.popups.setChildrenVisibility(false);
+			
+			if ( Registery.player != null ) {
+				Registery.player.popup.visible = true; // Always show the player's popup.
+			}
 		}
 
 		if (Registery.player.isDying) {
