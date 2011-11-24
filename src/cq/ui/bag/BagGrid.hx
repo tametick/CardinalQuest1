@@ -598,7 +598,7 @@ class CqInventoryCell extends HxlDialog {
 		}		
 		
 		if (!Std.is(GameUI.instance.panels.currentPanel, SlidingBagDialog)) {
-			if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
+			if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y) && (equipType == SPELL || equipType == POTION)) {
 				event.stopPropagation();
 				activateItem();
 			}
