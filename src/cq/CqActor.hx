@@ -386,6 +386,11 @@ class CqActor extends CqObject, implements Actor {
 					this.speed = currentEffect.value;
 				case "invisible":
 					this.setAlpha(1.00);
+					
+					// Reset popup.
+					if ( Std.is(this, CqMob) ) {
+						popup.setText( name );
+					}
 				case "magic_mirror":
 					// when a mirror "shatters", it spawns a particle effect -- it's purely aesthetic, of course
 					
@@ -420,6 +425,11 @@ class CqActor extends CqObject, implements Actor {
 	public function breakInvisible(?message:String) {
 		if (this.specialEffects != null && this.specialEffects.get("invisible") != null) {
 			removeEffect("invisible");
+
+			// Reset popup.
+			if ( Std.is(this, CqMob) ) {
+				popup.setText( name );
+			}
 			
 			setAlpha(1.00); // must set alpha before the message or the message won't show!
 			if (message == null) message = (Std.is(this, CqPlayer)) ? Resources.getString( "POPUP_INVIS_BROKEN" ) : Resources.getString( "POPUP_INVIS_BREAK1" ) + " " + this.name + " " + Resources.getString( "POPUP_INVIS_BREAK2" );
@@ -906,8 +916,16 @@ class CqActor extends CqObject, implements Actor {
 			}
 			
 			if (effect.name == "invisible") {
-				if (faction == CqPlayer.faction) setAlpha(0.40);
-				else setAlpha(0.00);
+				if (faction == CqPlayer.faction) {
+					setAlpha(0.40);
+				} else {
+					setAlpha(0.00);
+					
+					// Clear popup.
+					if ( Std.is(this, CqMob) ) {
+						popup.setText( "" );
+					}
+				}
 			}
 			
 			updateHealthBar();
