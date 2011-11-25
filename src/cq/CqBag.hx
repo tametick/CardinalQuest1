@@ -270,8 +270,7 @@ class CqBag {
 		}
 		
 		if (dmg.start == 0 && dmg.end == 0) {
-			dmg.start = 1;
-			dmg.end = 1;
+			return null;
 		}
 		
 		return dmg;
