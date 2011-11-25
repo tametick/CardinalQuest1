@@ -477,6 +477,9 @@ class CqItemSlot {
 				}
 				
 				cell.proxy = item.inventoryProxy;
+				
+				// Hide newly created/assigned proxies offscreen. They're moved into location as required.
+				cell.proxy.y = -150;
 			} else {
 				cell.proxy = null;
 			}
