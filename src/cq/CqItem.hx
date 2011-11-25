@@ -540,10 +540,15 @@ class CqItem extends GameObjectImpl, implements Loot {
 			// Update spell damage.
 			var spellLevel:Int = 0;
 			if (Std.is(user, CqPlayer)) {
-				spellLevel = Registery.player.level;
+				if ( Registery.player.playerClassID == "WIZARD" ) {
+					spellLevel = Registery.player.level;
+				} else {
+					spellLevel = Math.ceil(.5 * Registery.world.currentLevelIndex);
+				}
+				
 				colorSource = item.inventoryProxy.pixels;
 			} else {
-				spellLevel = Math.ceil(2 + .5 * Registery.world.currentLevelIndex);
+				spellLevel = Math.ceil(.5 * Registery.world.currentLevelIndex);
 				colorSource = this._framePixels;
 			}
 			
