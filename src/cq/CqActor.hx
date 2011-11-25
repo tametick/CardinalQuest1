@@ -511,6 +511,11 @@ class CqActor extends CqObject, implements Actor {
 			// get our equipped weapon from our bag
 			var damageRange = bag.equippedDamage();
 			
+			// If no weapon equipped, use our standard melee damage.
+			if ( damageRange == null ) {
+				damageRange = this.damage;
+			}
+			
 			if (Std.is(this, CqPlayer)) {
 				SoundEffectsManager.play(EnemyHit);	
 			} else {
