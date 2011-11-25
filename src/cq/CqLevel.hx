@@ -465,9 +465,12 @@ class CqLevel extends Level {
 			
 			
 			var speed = creature.speed;
+			
 			// Apply speed buffs
-			speed += creature.getBuff("speed");
-			speed = Std.int(Math.max(speed, 0));
+			if ( speed != 0 ) { // ...unless it's asleep!
+				speed += creature.getBuff("speed");
+				speed = Std.int(Math.max(speed, 0));
+			}
 			
 			// apply spirit buffs
 			var spirit = creature.spirit;
