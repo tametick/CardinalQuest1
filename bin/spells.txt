@@ -24,7 +24,7 @@ STONE_SKIN       stone_skin        0  60 spirit   480 defense 5 speed -1
 BLINK            blink             0   0 spirit   360 "" 0 "" 0 blink
 MAGIC_ARMOR      magic_armor       0  60 spirit   480 defense 3
 REVEAL_MAP       reveal_map        0   0 spirit  3600 "" 0 "" 0 reveal
-HEAL             heal              0  60 xp      1050 defense -3 "" 0 heal full
+HEAL             heal              0  60 xp      1600 defense -3 "" 0 heal full
 
 ; Targets enemy.
 
