@@ -8,7 +8,11 @@ import cq.Main;
 import data.Resources;
 import data.SoundEffectsManager;
 import data.Configuration;
+import flash.events.Event;
+import flash.events.IOErrorEvent;
 import flash.events.MouseEvent;
+import flash.net.URLLoader;
+import flash.net.URLLoaderDataFormat;
 import flash.net.URLRequest;
 import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
@@ -75,6 +79,11 @@ class MainMenuState extends CqState {
 	var buttonsAreUp:Bool;
 	var finishedAddingGuiElements:Bool;
 
+	var updateLoader:URLLoader;
+	var updateVersion:String;
+	var updateUrl:String;
+	var showingUpdate:Bool;
+
 	public function new()
 	{
 		super();
@@ -82,11 +91,38 @@ class MainMenuState extends CqState {
 		stillSplashing = false;
 		buttonsAreUp = false;
 		finishedAddingGuiElements = false;
+		
+		updateVersion = Configuration.version;
+		updateUrl = null;
+		showingUpdate = false;
+		if ( Configuration.standAlone ) {
+			updateLoader = new URLLoader();  
+			updateLoader.dataFormat = URLLoaderDataFormat.VARIABLES;  
+			updateLoader.addEventListener( Event.COMPLETE, loadedUpdateInfo );  
+			updateLoader.addEventListener( IOErrorEvent.IO_ERROR, failedUpdateInfo );
+			updateLoader.load(new URLRequest("http://cardinalquest.com/cq_update/cq.txt"));  
+		}
+	}
+
+	function loadedUpdateInfo( event:Event ) {  
+		updateVersion = updateLoader.data.version;
+		updateUrl = updateLoader.data.url;
+		
+		updateLoader.removeEventListener( Event.COMPLETE, loadedUpdateInfo );
+		updateLoader.removeEventListener( IOErrorEvent.IO_ERROR, failedUpdateInfo );
+	}
+	
+	function failedUpdateInfo( event:Event ) {
+		updateLoader.removeEventListener( Event.COMPLETE, loadedUpdateInfo );
+		updateLoader.removeEventListener( IOErrorEvent.IO_ERROR, failedUpdateInfo );
 	}
 
 	override public function destroy() {
 		super.destroy();
 
+		updateLoader.removeEventListener( Event.COMPLETE, loadedUpdateInfo );
+		updateLoader.removeEventListener( IOErrorEvent.IO_ERROR, failedUpdateInfo );
+		
 		//instance = null;
 		// todo
 	}
@@ -362,7 +398,11 @@ class MainMenuState extends CqState {
 			}
 
 			if (gamePageLink != null && gamePageLink.overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
-				Lib.getURL(gamePageRequest);
+				if ( Configuration.standAlone ) {
+					Lib.getURL(new URLRequest( updateUrl ));
+				} else {
+					Lib.getURL(gamePageRequest);
+				}
 			}
 		} else {
 			showAdditionalButtons();
@@ -422,6 +462,18 @@ class MainMenuState extends CqState {
 	public override function update() {
 		super.update();
 		setDiagonalCursor();
+		
+		if (Configuration.standAlone) {
+			if ( !showingUpdate && updateVersion != Configuration.version && updateVersion != null ) {
+//				var findOut = new HxlText(0, 0, 260 , "Version " + updateVersion + " available!", true, FontAnonymousPro.instance.fontName, 18);
+//				add(findOut);
+				gamePageLink = new HxlText(10, 0, 260, Resources.getString( "MENU_UPGRADE1" ) + updateVersion + Resources.getString( "MENU_UPGRADE2" ), true, FontAnonymousPro.instance.fontName, 18, 0x77D2FF);
+				gamePageLink.setUnderlined();
+				add(gamePageLink);
+				
+				showingUpdate = true;
+			}
+		}
 	}
 
 	override function onKeyUp(event:KeyboardEvent) {

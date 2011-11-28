@@ -221,49 +221,49 @@ Field String Spell1
 Field String Spell2
 
 ; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Bandit        1 bandit_long_swords       BANDIT_CAPTAIN       2   2   8  30  2  3  1  1   5
-Bandit        1 bandit_short_swords      BANDIT               2   2   5  30  4  6  1  1   5
-Bandit        1 bandit_single_long_sword BANDIT               2   2   6  30  2  3  1  1   5
-Bandit        1 bandit_knives            BANDIT               2   2   6  30  2  3  1  1   5
+Bandit        1 bandit_long_swords       BANDIT_CAPTAIN       1   2   8  30  2  3  1  2   5
+Bandit        1 bandit_short_swords      BANDIT               1   2   5  30  4  6  1  2   5
+Bandit        1 bandit_single_long_sword BANDIT               1   2   6  30  2  3  1  2   5
+Bandit        1 bandit_knives            BANDIT               1   2   6  30  2  3  1  2   5
 
 ; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Kobold        1 kobold_spear             KOBOLD_SPEAR         4   3   6   3  2  6  2  4  10
-Kobold        1 kobold_knives            KOBOLD               4   3   8   3  2  6  1  4  10
-Kobold        1 kobold_mage              KOBOLD_MAGE          4   3   6  12  2  6  1  3  10 TELEPORT
+Kobold        1 kobold_spear             KOBOLD_SPEAR         2   3   6   3  2  6  2  3  10
+Kobold        1 kobold_knives            KOBOLD               2   3   8   3  2  6  1  3  10
+Kobold        1 kobold_mage              KOBOLD_MAGE          2   3   6  12  2  6  1  2  10 TELEPORT
 
 ; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Succubus      1 succubus                 SUCCUBUS             3   2   8   4  2  8  2  5  25 ENFEEBLE_MONSTER
-Succubus      1 succubus_staff           SUCCUBUS             3   2   8   4  2  8  2  5  25 ENFEEBLE_MONSTER
-Succubus      1 succubus_whip            SUCCUBUS_WHIP        3   2  10   2  2  8  2  5  25 ENFEEBLE_MONSTER
-Succubus      1 succubus_scepter         SUCCUBUS             3   2   8   8  2  8  2  5  25 ENFEEBLE_MONSTER SHADOW_WALK
+Succubus      1 succubus                 SUCCUBUS             2   2   8   4  2  8  2  5  25 ENFEEBLE_MONSTER
+Succubus      1 succubus_staff           SUCCUBUS             2   2   8   4  2  8  2  5  25 ENFEEBLE_MONSTER
+Succubus      1 succubus_whip            SUCCUBUS_WHIP        2   2  10   2  2  8  2  5  25 ENFEEBLE_MONSTER
+Succubus      1 succubus_scepter         SUCCUBUS             2   2   8   8  2  8  2  5  25 ENFEEBLE_MONSTER SHADOW_WALK
 
 ; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Spider        1 spider_yellow            SPIDER               5   3   6   2  5 12  2  8  50 FREEZE
-Spider        1 spider_red               SPIDER_RED           5   1   6   4 10 19  2  6  50 FREEZE
-Spider        1 spider_gray              SPIDER_GRAY          5   2   9   1  5 12  2  6  50 FREEZE
-Spider        1 spider_green             SPIDER               5   3   6   2  5 12  2  8  50 FREEZE
+Spider        1 spider_yellow            SPIDER               5   3   6   2  5 12  2  6  50 FREEZE
+Spider        1 spider_red               SPIDER_RED           5   1   6   4 10 19  2  4  50 FREEZE
+Spider        1 spider_gray              SPIDER_GRAY          5   2   9   1  5 12  2  4  50 FREEZE
+Spider        1 spider_green             SPIDER               5   3   6   2  5 12  2  6  50 FREEZE
 
 ; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Ape           1 ape_blue                 APE                  6   6  10   3  4 16  3  6 125
-Ape           1 ape_black                APE                  6   6  10   3  4 16  3  6 125
-Ape           1 ape_red                  APE_DEMONIC          7   8   7   3  8 20  3  6 125
-Ape           1 ape_white                APE                  6   6  10   3  4 16  3  6 125
+Ape           1 ape_blue                 APE                  5   6  10   3  4 16  2  6 125
+Ape           1 ape_black                APE                  5   6  10   3  4 16  2  6 125
+Ape           1 ape_red                  APE_DEMONIC          6   8   7   3  8 20  2  6 125
+Ape           1 ape_white                APE                  5   6  10   3  4 16  2  6 125
 
 ; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Elemental     1 elemental_green          ELEMENTAL_AIR        4   4  12   6  8 26  4  8 275 FIREBALL         SHADOW_WALK
-Elemental     1 elemental_white          ELEMENTAL_NATURE     4   4   8   6 14 32  4  8 275 FIREBALL         STONE_SKIN
-Elemental     1 elemental_red            ELEMENTAL_SORCERY    4   4  10  18  8 26  4  8 275 MAGIC_MIRROR     TELEPORT
-Elemental     1 elemental_blue           ELEMENTAL_CHAOS      4   4   8  12  8 26  4  8 275 FIREBALL
+Elemental     1 elemental_green          ELEMENTAL_AIR        3   4  12   6  8 26  2  8 275 FIREBALL         SHADOW_WALK
+Elemental     1 elemental_white          ELEMENTAL_NATURE     3   4   8   6 14 32  2  8 275 FIREBALL         STONE_SKIN
+Elemental     1 elemental_red            ELEMENTAL_SORCERY    3   4  10  18  8 26  2  8 275 MAGIC_MIRROR     TELEPORT
+Elemental     1 elemental_blue           ELEMENTAL_CHAOS      3   4   8  12  8 26  2  8 275 FIREBALL
 
 ; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Werewolf      1 werewolf_gray            WEREWOLF             5   5  12   4 12 32  4 10 500 HASTE
-Werewolf      1 werewolf_blue            WEREWOLF             5   5  12   4 12 32  4 10 500 HASTE
-Werewolf      1 werewolf_purple          WEREWOLF             5   5  12   4 12 32  4 10 500 HASTE
+Werewolf      1 werewolf_gray            WEREWOLF             4   5  12   4 12 32  3  8 500 HASTE
+Werewolf      1 werewolf_blue            WEREWOLF             4   5  12   4 12 32  3  8 500 HASTE
+Werewolf      1 werewolf_purple          WEREWOLF             4   5  12   4 12 32  3  8 500 HASTE
 
 ; Class     Wgt Sprite                   NameID             Atk Def Spd Spr V- V+ D- D+  XP Spell1           Spell2
-Minotaur      1 minotaur                 MINOTAUR             7   6  12   4 48 72  8 14 950 BERSERK
-Minotaur      1 minotaur_axe             MINOTAUR             7   6  10   4 48 72 12 18 950 BERSERK
-Minotaur      1 minotaur_sword           MINOTAUR             7   6  10   4 48 72 12 18 950 BERSERK
+Minotaur      1 minotaur                 MINOTAUR             3   6  10   4 48 72  2 16 950 BERSERK
+Minotaur      1 minotaur_axe             MINOTAUR             3   6   8   4 48 72  2 22 950 BERSERK
+Minotaur      1 minotaur_sword           MINOTAUR             3   6   8   4 48 72  2 22 950 BERSERK
 ";		embedFile = StatsFile.loadFromString( "mobs.txt", embedText );		embedText = "Field String ID
 Field String Sprite
 Field Int Weight
@@ -319,7 +319,7 @@ STONE_SKIN       stone_skin        0  60 spirit   480 defense 5 speed -1
 BLINK            blink             0   0 spirit   360 \"\" 0 \"\" 0 blink
 MAGIC_ARMOR      magic_armor       0  60 spirit   480 defense 3
 REVEAL_MAP       reveal_map        0   0 spirit  3600 \"\" 0 \"\" 0 reveal
-HEAL             heal              0  60 xp      1050 defense -3 \"\" 0 heal full
+HEAL             heal              0  60 xp      1600 defense -3 \"\" 0 heal full
 
 ; Targets enemy.
 
@@ -575,6 +575,8 @@ MENU_COPYRIGHT       \"Copyright 2011\"
 MENU_PORTEDBY        \"Ported by\"
 MENU_VERSION         \"Version\"
 MENU_STANDALONE      \"Get stand-alone version at\"
+MENU_UPGRADE1        \"Upgrade to version \"
+MENU_UPGRADE2        \"!\"
 
 MENU_HIGHSCORES      \"Highscores\"
 

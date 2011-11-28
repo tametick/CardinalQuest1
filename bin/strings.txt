@@ -236,6 +236,8 @@ MENU_COPYRIGHT       "Copyright 2011"
 MENU_PORTEDBY        "Ported by"
 MENU_VERSION         "Version"
 MENU_STANDALONE      "Get stand-alone version at"
+MENU_UPGRADE1        "Upgrade to version "
+MENU_UPGRADE2        "!"
 
 MENU_HIGHSCORES      "Highscores"
 
