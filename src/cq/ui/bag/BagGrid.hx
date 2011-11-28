@@ -727,9 +727,9 @@ class CqClothingGrid extends CqInventoryGrid {
 	];
 	
 	static var cell_positions = [
-		[8, 183], [8, 100],
-		[8, 12], [159, 183],
-		[159, 100], [159, 12]
+		[4, 176], [4, 94],
+		[4, 7], [155, 176],
+		[155, 94], [155, 7]
 	];
 	
 	static var cellSize:Int = 54;
