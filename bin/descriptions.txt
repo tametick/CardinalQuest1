@@ -18,11 +18,11 @@ Field String Data
 ; Stats.
 ATTRIBUTES  "(Mouse-over attributes for info.)"
 HEALTH      "HEALTH: Hit points."
-ATTACK      "ATTACK: Increases your chance to\nhit with wielded weapons."
-DEFENSE     "DEFENSE: Gives you a chance to\nresist physical damage."
+ATTACK      "ATTACK: Increases your chance to hit\nwith wielded weapons."
+DEFENSE     "DEFENSE: Gives you a chance to resist\nphysical damage."
 SPEED       "SPEED: How fast you can run and act\ncompared to enemies."
-SPIRIT      "SPIRIT: Your Spirit is the rate at\nwhich almost all spells recharge."
-VITALITY    "VITALITY: The increase in maximum\nhit points you gain when you level."
+SPIRIT      "SPIRIT: Your Spirit is the rate at which\nalmost all spells recharge."
+VITALITY    "VITALITY: The increase in maximum\nhit points you gain when you level up."
 
 ; Potions.
 RED_POTION       "A small vial containing a fragrant, red salve. It restores life when applied."

@@ -33,7 +33,7 @@ class CqCharacterDialog extends HxlSlidingDialog {
 	var txtDescription:HxlText;
 
 	static inline var textBoxes:Array<String> = ["txtCharName", "txtHealthLabel", "valHealth", "txtAttackLabel", "valAttack", "txtDefenseLabel", "valDefense", "txtSpeedLabel", "valSpeed", "txtSpiritLabel", "valSpirit", "txtVitalityLabel", "valVitality", "txtDescription"];
-	static inline var pos:Array<Array<Int>> = [ [ 40, 40], [40, 100], [190, 100], [40, 130], [190, 130], [40, 160], [190, 160], [40, 190], [190, 190], [40, 220], [190, 220], [40, 250], [190, 250], [40, 320]];
+	static inline var pos:Array<Array<Int>> = [ [ 55, 40], [55, 115], [205, 115], [55, 145], [205, 145], [55, 175], [205, 175], [55, 205], [205, 205], [55, 235], [205, 235], [55, 265], [205, 265], [55, 325]];
 		
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0)
 	{
@@ -60,10 +60,17 @@ class CqCharacterDialog extends HxlSlidingDialog {
 			var box:HxlText = new HxlText(pos[i][0], pos[i][1], 430, txt_string[i]);
 			Reflect.setField(this, textBoxes[i], box);
 			add(box);
-			if (i == 0)
-				box.setFormat(null, 48, textColor, "left", 0x010101);
-			else
-				box.setFormat(FontAnonymousPro.instance.fontName, 20, textColor, "left", 0x010101);
+			if (i == 0) {
+//				box.setFormat(null, 48, textColor, "left", 0x010101);
+//				box.setFormat(null, 56, 0x372B26, "left", 0x000000);
+				box.setFormat(null, 56, 0x000000, "left", 0x6D564B);
+			} else {
+//				box.setFormat(FontAnonymousPro.instance.fontName, 20, textColor, "left", 0x010101);
+//				box.setFormat(null, 32, textColor, "left", 0x372B26);
+//				box.setFormat(null, 32, textColor, "left", 0x181513);
+//				box.setFormat(null, 32, 0x4F4139, "left", 0x000000);
+				box.setFormat(null, 32, 0x372B26, "left", 0x000000);
+			}
 		}
 		//char icon
 		var player = new HxlSprite(0, 0);
@@ -94,27 +101,27 @@ class CqCharacterDialog extends HxlSlidingDialog {
 		valHealth.text = "" + (_player.hp + _player.getBuff("life")) +"/" + (_player.maxHp + _player.getBuff("life"));
 		
 		if (_player.getBuff("life") != 0) {
-			valHealth.text += " [" +(_player.getBuff("life") < 0?"":"+")+ _player.getBuff("life") + "]";
+			valHealth.text += " (" +(_player.getBuff("life") < 0?"":"+")+ _player.getBuff("life") + ")";
 		}
 		
 		valAttack.text = "" + (_player.attack+ _player.getBuff("attack"));
 		if(_player.getBuff("attack")!=0){
-			valAttack.text += " [" +(_player.getBuff("attack") < 0?"":"+")+ _player.getBuff("attack") + "]";
+			valAttack.text += " (" +(_player.getBuff("attack") < 0?"":"+")+ _player.getBuff("attack") + ")";
 		}
 		
 		valDefense.text = "" + (_player.defense+ _player.getBuff("defense"));
 		if(_player.getBuff("defense")!=0){
-			valDefense.text += " [" +(_player.getBuff("defense") < 0?"":"+")+ _player.getBuff("defense") + "]";
+			valDefense.text += " (" +(_player.getBuff("defense") < 0?"":"+")+ _player.getBuff("defense") + ")";
 		}
 		
 		valSpeed.text = "" + (_player.speed+ _player.getBuff("speed"));
 		if(_player.getBuff("speed")!=0){
-			valSpeed.text += " [" +(_player.getBuff("speed") < 0?"":"+")+ _player.getBuff("speed") + "]";
+			valSpeed.text += " (" +(_player.getBuff("speed") < 0?"":"+")+ _player.getBuff("speed") + ")";
 		}
 		
 		valSpirit.text = "" +(_player.spirit+ _player.getBuff("spirit"));
 		if(_player.getBuff("spirit")!=0){
-			valSpirit.text += " [" +(_player.getBuff("spirit") < 0?"":"+")+ _player.getBuff("spirit") + "]";
+			valSpirit.text += " (" +(_player.getBuff("spirit") < 0?"":"+")+ _player.getBuff("spirit") + ")";
 		}
 		
 		valVitality.text = "" + _player.vitality;
@@ -130,18 +137,18 @@ class CqCharacterDialog extends HxlSlidingDialog {
 		var x:Float = m.x + HxlUtil.floor(HxlGraphics.scroll.x);
 		var y:Float = m.y + HxlUtil.floor(HxlGraphics.scroll.y);
 		
-		if ( x > 90 && x < 400 && y >= 80 && y < 290 ) {
-			if ( y < 130 ) { // Health.
+		if ( x > 90 && x < 400 && y >= 95 && y < 305 ) {
+			if ( y < 145 ) { // Health.
 				txtDescription.text = Resources.getString( "HEALTH", true );
-			} else if ( y < 160 ) { // Attack.
+			} else if ( y < 175 ) { // Attack.
 				txtDescription.text = Resources.getString( "ATTACK", true );
-			} else if ( y < 190 ) { // Defense.
+			} else if ( y < 205 ) { // Defense.
 				txtDescription.text = Resources.getString( "DEFENSE", true );
-			} else if ( y < 220 ) { // Speed.
+			} else if ( y < 235 ) { // Speed.
 				txtDescription.text = Resources.getString( "SPEED", true );
-			} else if ( y < 250 ) { // Spirit.
+			} else if ( y < 265 ) { // Spirit.
 				txtDescription.text = Resources.getString( "SPIRIT", true );
-			} else if ( y < 280 ) { // Vitality.
+			} else if ( y < 295 ) { // Vitality.
 				txtDescription.text = Resources.getString( "VITALITY", true );
 			}
 		} else {
