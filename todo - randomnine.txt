@@ -1,0 +1,32 @@
+UPDATE STUFF:
+* move relevant strings into strings.txt
+
+FULLSCREEN:
+- add fullscreen toggle button on menu
+- add to-fullscreen icon
+- add to-windowed icon
+  http://laptop.org/8.2.0/manual/Browse/BrowsingWeb/fullscreen.png
+
+CREDITS:
+* move Joris to the top of the contributors-programming section
+* add Stephen Challener to the main graphics category after Jagosh
+* move Music into Contributors
+
+CHARM:
+- make charmed monster legitimate target for spells
+- make charmed monster legitimate target for melee
+- break charm on do damage.
+
+USABILITY:
+- let people know spell descriptions are in the inventory screen
+
+INVENTORY SCREEN:
+* move gear buttons up and left a bit to place them properly against the leather background
+* adjust mouseover icon (http://i.imgur.com/BvYmI.jpg)
+
+CHAR SCREEN:
+- use fancy font
+
+DESTROY BUTTON:
+- reinstate sound effect
+  - SoundEffectsManager.play(CqResources.blah);
