@@ -67,10 +67,13 @@ class MainMenuState extends CqState {
 
 	var btnToggleMusic:HxlButton;
 	var btnToggleSFX:HxlButton;
+	var btnToggleFullscreen:HxlButton;
 	var musicText:HxlText;
 	var sfxText:HxlText;
+	var fullscreenText:HxlText;
 	var tglMusicIcon:HxlSprite;
 	var tglSFXIcon:HxlSprite;
+	var tglFullscreenIcon:HxlSprite;
 
 	var copyrightLink:HxlText;
 	var gamePageLink:HxlText;
@@ -257,29 +260,44 @@ class MainMenuState extends CqState {
 		buttonsAreUp = true;
 		finishedAddingGuiElements = false;
 
-		tglMusicIcon = new HxlSprite(45,0);
+		tglMusicIcon = new HxlSprite(125,0);
 		tglMusicIcon.loadGraphic(SpriteSoundToggle, true, false, 48, 48,false,0.5,0.5);
 		tglMusicIcon.setFrame(1);
 
-		var musicWidth = 70;
-		btnToggleMusic = new HxlButton(Configuration.app_width-musicWidth, 0,musicWidth, 20, toggleMusic, 0, 0);
+		var buttonsWidth = 150;
+		var textWidth = 123;
+		var textYOffset = 4;
+		
+		btnToggleMusic = new HxlButton(Configuration.app_width-buttonsWidth, 0, buttonsWidth, 20, toggleMusic, 0, 0);
 		btnToggleMusic.add(tglMusicIcon);
-		musicText = new HxlText(0, 3, 100, Resources.getString( "MENU_MUSIC" ), true, FontAnonymousPro.instance.fontName, 14);
-		btnToggleMusic.loadText(musicText);
+		musicText = new HxlText(btnToggleMusic.x, btnToggleMusic.y+textYOffset, textWidth, Resources.getString( "MENU_MUSIC" ), true, FontAnonymousPro.instance.fontName, 14, 0xffffff, "right" );
+		add(musicText);
 		setMusic(HxlState.musicOn);
 		add(btnToggleMusic);
 
-		tglSFXIcon = new HxlSprite(45,0);
+		tglSFXIcon = new HxlSprite(125,0);
 		tglSFXIcon.loadGraphic(SpriteSoundToggle, true, false, 48, 48,false,0.5,0.5);
 		tglSFXIcon.setFrame(1);
 
-		btnToggleSFX = new HxlButton(Std.int(btnToggleMusic.x), Std.int(btnToggleMusic.y+btnToggleMusic.height), musicWidth, 20, toggleSFX, 0, 0);
+		btnToggleSFX = new HxlButton(Std.int(btnToggleMusic.x), Std.int(btnToggleMusic.y+btnToggleMusic.height), buttonsWidth, 20, toggleSFX, 0, 0);
 		btnToggleSFX.add(tglSFXIcon);
-		sfxText = new HxlText(0, 3, 100, Resources.getString( "MENU_SOUND" ), true, FontAnonymousPro.instance.fontName, 14);
-		btnToggleSFX.loadText(sfxText);
+		sfxText = new HxlText(btnToggleSFX.x, btnToggleSFX.y+textYOffset, textWidth, Resources.getString( "MENU_SOUND" ), true, FontAnonymousPro.instance.fontName, 14, 0xffffff, "right" );
+		add(sfxText);
 		setSFX(HxlState.sfxOn);
 		add(btnToggleSFX);
 
+		tglFullscreenIcon = new HxlSprite(125,0);
+		tglFullscreenIcon.loadGraphic(SpriteSoundToggle, true, false, 48, 48,false,0.5,0.5);
+		tglFullscreenIcon.setFrame(1);
+		
+		var fullscreenWidth = 100;
+		btnToggleFullscreen = new HxlButton(Std.int(btnToggleMusic.x), Std.int(btnToggleSFX.y + btnToggleSFX.height) + 10, buttonsWidth, 20, toggleFullscreen, 0, 0);
+		btnToggleFullscreen.add(tglFullscreenIcon);
+		fullscreenText = new HxlText(btnToggleFullscreen.x, btnToggleFullscreen.y+textYOffset, textWidth, Resources.getString( "MENU_FULLSCREEN" ), true, FontAnonymousPro.instance.fontName, 14, 0xffffff, "right" );
+		add(fullscreenText);
+		add(btnToggleFullscreen);
+		updateFullscreen();
+		
 		var copyright = new HxlText(375, 459, Configuration.app_width - 375 - 123, Resources.getString( "MENU_COPYRIGHT" ), true, FontAnonymousPro.instance.fontName, 18);
 		add(copyright);
 
@@ -432,6 +450,20 @@ class MainMenuState extends CqState {
 		tglSFXIcon.setFrame((_on?1:0));
 	}
 
+	private function updateFullscreen():Void
+	{
+		var isFullscreen:Bool = (Lib.current.stage.displayState != StageDisplayState.NORMAL);
+		
+		btnToggleFullscreen.setOn(isFullscreen);
+		tglFullscreenIcon.setFrame(isFullscreen?1:0);
+		
+		if ( isFullscreen ) {
+			fullscreenText.setText( Resources.getString( "MENU_WINDOWED" ) );
+		} else {
+			fullscreenText.setText( Resources.getString( "MENU_FULLSCREEN" ) );
+		}
+	}
+	
 	private function toggleMusic():Void
 	{
 		setMusic(!btnToggleMusic.getOn());
@@ -440,6 +472,18 @@ class MainMenuState extends CqState {
 	private function toggleSFX():Void
 	{
 		setSFX(!btnToggleSFX.getOn());
+	}
+
+	private function toggleFullscreen():Void
+	{
+		if(Lib.current.stage.displayState==StageDisplayState.NORMAL){
+			Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+			Lib.current.stage.fullScreenSourceRect = new Rectangle(0, 0, Configuration.app_width, Configuration.app_height);
+		} else{
+			Lib.current.stage.displayState = StageDisplayState.NORMAL;
+			Lib.current.stage.fullScreenSourceRect = null;
+		}
+		updateFullscreen();
 	}
 	
 	var TargetState:Class<HxlState>;
