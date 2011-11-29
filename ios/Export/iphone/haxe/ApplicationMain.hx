@@ -503,6 +503,13 @@ class ApplicationMain
             return nme.display.BitmapData.load(inName);
          
       }
+
+      if (inName=="assets/cq/fullscreenToggle.png")
+      {
+         
+            return nme.display.BitmapData.load(inName);
+         
+      }
       
       if (inName=="assets/cq/spells.png")
       {

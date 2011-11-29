@@ -42,6 +42,7 @@
 		<bitmap id="cq.SpriteHelpOverlay" import="HelpOverlay.png"/>
 		<bitmap id="cq.SpriteInvHelpOverlay" import="inventoryHelpOverlay.png"/>
 		<bitmap id="cq.SpriteSoundToggle" import="soundToggle.png"/>
+		<bitmap id="cq.SpriteFullscreenToggle" import="fullscreenToggle.png"/>
 		
 		<sound id="cq.MainThemeOne" name="MainThemeOne" import="main1.mp3"/>
 		<sound id="cq.MainThemeTwo" name="MainThemeTwo" import="main2.mp3"/>

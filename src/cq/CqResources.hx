@@ -214,6 +214,18 @@ class SpriteSoundToggle extends HxlSpriteSheet {
 		super(0);
 	} 
 }
+class SpriteFullscreenToggle extends HxlSpriteSheet { 
+	public static var instance = new SpriteFullscreenToggle();
+	static var _spriteNames:Array<Array<String>>;
+	public function new() {
+		if (_spriteNames ==null)
+			_spriteNames = [
+				["on","off"]
+			];
+		spriteNames = _spriteNames;
+		super(0);
+	} 
+}
 class SpriteItems extends HxlSpriteSheet { 
 	public static var instance = new SpriteItems();
 	static var _spriteNames:Array<Array<String>>;

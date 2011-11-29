@@ -138,6 +138,8 @@ class Assets
    public static inline var assets_cq_sounds_win_mp3 = "assets/cq/sounds/win.mp3";
    
    public static inline var assets_cq_soundtoggle_png = "assets/cq/soundToggle.png";
+
+   public static inline var assets_cq_fullscreentoggle_png = "assets/cq/fullscreenToggle.png";
    
    public static inline var assets_cq_spells_png = "assets/cq/spells.png";
    

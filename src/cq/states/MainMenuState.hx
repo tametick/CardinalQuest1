@@ -287,7 +287,7 @@ class MainMenuState extends CqState {
 		add(btnToggleSFX);
 
 		tglFullscreenIcon = new HxlSprite(125,0);
-		tglFullscreenIcon.loadGraphic(SpriteSoundToggle, true, false, 48, 48,false,0.5,0.5);
+		tglFullscreenIcon.loadGraphic(SpriteFullscreenToggle, true, false, 48, 48,false,0.5,0.5);
 		tglFullscreenIcon.setFrame(1);
 		
 		var fullscreenWidth = 100;
