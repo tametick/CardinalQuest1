@@ -120,8 +120,10 @@ class MainMenuState extends CqState {
 	override public function destroy() {
 		super.destroy();
 
-		updateLoader.removeEventListener( Event.COMPLETE, loadedUpdateInfo );
-		updateLoader.removeEventListener( IOErrorEvent.IO_ERROR, failedUpdateInfo );
+		if ( updateLoader != null ) {
+			updateLoader.removeEventListener( Event.COMPLETE, loadedUpdateInfo );
+			updateLoader.removeEventListener( IOErrorEvent.IO_ERROR, failedUpdateInfo );
+		}
 		
 		//instance = null;
 		// todo
