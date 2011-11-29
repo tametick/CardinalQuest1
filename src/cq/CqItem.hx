@@ -801,6 +801,8 @@ class CqItem extends GameObjectImpl, implements Loot {
 			mob.specialEffects.set(effect.name, effect);
 			Registery.level.updateFieldOfView(HxlGraphics.state, true);
 			
+			GameUI.instance.addHealthBar(cast(mob, CqActor));
+			
 			// if this were not after updateFieldOfView, we would not see the message
 			GameUI.showEffectText(mob, Resources.getString( "POPUP_MIRROR" ), 0x2DB6D2);
 			
