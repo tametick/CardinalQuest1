@@ -903,8 +903,12 @@ class GameUI extends HxlDialog {
 				setTargetColor(0xff0000);
 			} else {
 				var actor:CqActor = cast(tile.actors[0], CqActor);
-				if ( actor.faction != CqPlayer.faction && actor.visible && !actor.isAGhost() && !cast(tile.actors[0], CqActor).specialEffects.exists("invisible")) {
-					setTargetColor(0x00ff00);
+				if ( actor.visible && actor != Registery.player && (actor.faction == CqPlayer.faction || !actor.specialEffects.exists("invisible")) && !actor.isAGhost()) {
+					if ( actor.faction != CqPlayer.faction ) {
+						setTargetColor(0x00ff00);
+					} else {
+						setTargetColor(0xffff00);
+					}
 
 					hoveredEnemy = actor;
 					if (hoveredEnemy.popup != null) hoveredEnemy.popup.mouseBound = false;
@@ -1001,7 +1005,7 @@ class GameUI extends HxlDialog {
 				if (tile.actors != null && tile.actors.length > 0) {
 					var victim:CqActor = cast(tile.actors[0], CqActor);
 					
-					if (victim.faction != 0 && !victim.isGhost && !victim.specialEffects.exists("invisible")) {
+					if (victim != Registery.player && !victim.isGhost && (victim.faction == 0 || !victim.specialEffects.exists("invisible"))) {
 						targetSpell.activate(Registery.player, victim);
 						cast(HxlGraphics.state, GameState).passTurn();
 					}

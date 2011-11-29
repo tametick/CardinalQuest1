@@ -277,6 +277,14 @@ class CqActor extends CqObject, implements Actor {
 			removeEffect("fear");
 			GameUI.showEffectText(this, Resources.getString("POPUP_FEAR_BREAK"), 0x909090);
 		}
+		
+		if ( specialEffects.exists("charm") ) {
+			this.faction = CqMob.FACTION;
+			this.isCharmed = false;
+			
+			removeEffect("charm");
+			GameUI.showEffectText(this, Resources.getString("POPUP_CHARM_BREAK"), 0x909090);
+		}
 	}
 
 	public function injureActor(state:HxlState, other:CqActor, dmgTotal:Int) {
@@ -465,8 +473,8 @@ class CqActor extends CqObject, implements Actor {
 		var other = cast(other, CqActor);
 		
 		// attack & defense buffs
-		var atk = Math.max(attack + buffs.get("attack"), 1);
-		var def = Math.max(other.defense + other.buffs.get("defense"), 1);
+		var atk = Math.max(attack + getBuff("attack"), 1);
+		var def = Math.max(other.defense + other.getBuff("defense"), 1);
 		
 		if (this.specialEffects.get("invisible") != null) {
 			// always hit if we're invisible, but become visible
@@ -530,7 +538,7 @@ class CqActor extends CqObject, implements Actor {
 				other.hp -= dmgTotal;
 				
 				// life buffs
-				var lif = other.hp + other.buffs.get("life");
+				var lif = other.hp + other.getBuff("life");
 				
 				if ( lif < other.minHp ) {
 					other.hp += other.minHp - lif;
@@ -591,6 +599,10 @@ class CqActor extends CqObject, implements Actor {
 		return old;
 	}
 	
+	public function canAttackOther(other:CqActor) {
+		return other.faction != faction && !other.isGhost;
+	}
+	
 	public function actInDirection(state:HxlState, targetTile:HxlPoint):Bool {
 		justAttacked = false;
 		
@@ -623,7 +635,7 @@ class CqActor extends CqObject, implements Actor {
 			var other = cast(tile.actors[tile.actors.length - 1],CqActor);
 		
 			// attack enemy actor
-			if(other.faction != faction && !other.isGhost) {
+			if(canAttackOther(other)) {
 				attackOther(state, other);
 				justAttacked = true;
 				// end turn
@@ -793,7 +805,7 @@ class CqActor extends CqObject, implements Actor {
 //			var injured:CqActor = (victim == null) ? actor : victim;
 //			
 //			injured.hp -= dmg;
-//			var lif = injured.hp + injured.buffs.get("life");
+//			var lif = injured.hp + injured.getBuff("life");
 //			if ( lif < injured.minHp ) {
 //				injured.hp += injured.minHp - lif;
 //				lif = injured.minHp;
@@ -958,7 +970,7 @@ class CqActor extends CqObject, implements Actor {
 		
 		for (mob in Registery.level.mobs) {
 			var cqmob = cast(mob, CqActor);
-			if (cqmob.faction != faction && !cqmob.specialEffects.exists("invisible") && (cqmob.visible || !losOnly) && !cqmob.isGhost) {
+			if (canAttackOther(cqmob) && !cqmob.specialEffects.exists("invisible") && (cqmob.visible || !losOnly)) {
 				var dist = Math.abs(tilePos.x - mob.tilePos.x) + Math.abs(tilePos.y - mob.tilePos.y);
 				if (dist < best) {
 					if (dist < tooGood) continue;
@@ -1238,6 +1250,11 @@ class CqPlayer extends CqActor, implements Player {
 		if ( result != BagGrantResult.SOLD ) {
 			GameUI.instance.flashInventoryButton();
 		}
+	}
+	
+	public override function canAttackOther(other:CqActor) {
+		// Players can attack EVERYTHING.
+		return true;
 	}
 	
 	public override function actInDirection(state:HxlState, targetTile:HxlPoint):Bool {
