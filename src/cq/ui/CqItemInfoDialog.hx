@@ -40,13 +40,13 @@ class CqItemInfoDialog extends HxlDialog {
 
 		_icon = new HxlSprite(Width - 34, Height - 99);
 		_icon.visible = false;
-		_itemName = new HxlText(8, 10, Std.int(Width - 10));
+		_itemName = new HxlText(8, 18, Std.int(Width - 10));
 		_itemName.setFormat(null, 26, 0xffffff, "left", 0x010101);
 		_itemName.visible = false;
-		_itemDesc = new HxlText(7, 30, Std.int(Width-10));
+		_itemDesc = new HxlText(7, 38, Std.int(Width-10));
 		_itemDesc.setFormat(FontAnonymousPro.instance.fontName, 15, 0xdddddd, "left", 0x010101);
 		_itemDesc.visible = false;
-		_itemStats = new HxlText(7, 45, Std.int(Width-48-10));
+		_itemStats = new HxlText(7, 53, Std.int(Width-48-10));
 		_itemStats.setFormat(FontAnonymousPro.instance.fontName, 15, 0x4DE16B, "left", 0x010101);
 		_itemStats.visible = false;
 
@@ -62,6 +62,8 @@ class CqItemInfoDialog extends HxlDialog {
 		var spellSheetKey:CqGraphicKey = CqGraphicKey.SpellIconSheet;
 		spellSprite = new HxlSprite(0, 0);
 		spellSprite.loadGraphic(SpriteSpells, true, false, Configuration.tileSize, Configuration.tileSize, false, 3.0, 3.0);
+		
+		clearInfo();
 	}
 
 	public function setItem(Item:CqItem) {
@@ -71,6 +73,8 @@ class CqItemInfoDialog extends HxlDialog {
 		_itemDesc.text = Resources.getString( Item.id, true );
 
 		_itemDesc.y = _itemName.y + _itemName.height - 2;
+		_itemDesc.setColor( 0xffffff );
+
 		if ( Std.is(Item, CqSpell) ) {
 			spellSprite.setFrame(CqSheets.spellSheet.getSpriteIndex(Item.spriteIndex));
 			_icon.pixels = spellSprite.getFramePixels();
@@ -82,13 +86,13 @@ class CqItemInfoDialog extends HxlDialog {
 			var statStr:String = "";
 			// display weapon damage
 			if ( _item.damage.end > 0 ) {
-        statStr += "" + _item.damage.start + " - " + _item.damage.end + " " + Resources.getString( "UI_DAMAGE" ) + "\n";
+				statStr += "" + _item.damage.start + " - " + _item.damage.end + " " + Resources.getString( "UI_DAMAGE" ) + "\n";
 			}
 			// display special effects
 			if ( _item.specialEffects.length > 0 ) {
 				var str = "";
 				for ( effect in _item.specialEffects ) {
-          str += "" + effect.value + " " + Resources.getString( effect.name ) + "\n";
+					str += "" + effect.value + " " + Resources.getString( effect.name ) + "\n";
 				}
 				statStr += str;
 			}
@@ -97,7 +101,7 @@ class CqItemInfoDialog extends HxlDialog {
 				var str = "";
 				for ( key in _item.buffs.keys() ) {
 					if ( _item.buffs.get(key) > 0 ) str += "+";
-          var keyname:String = Resources.getString( "STAT_" + key.toUpperCase() );
+					var keyname:String = Resources.getString( "STAT_" + key.toUpperCase() );
 					str += "" + _item.buffs.get(key) + " " + keyname + "\n";
 				}
 				statStr += str;
@@ -119,5 +123,10 @@ class CqItemInfoDialog extends HxlDialog {
 		_itemDesc.visible = false;
 		_itemStats.visible = false;
 		_icon.visible = false;
+
+		_itemDesc.visible = true;
+		_itemDesc.y = this.y + 18;
+		_itemDesc.setText( Resources.getString( "INVENTORY_HINT" ) );
+		_itemDesc.setColor( 0xa0a0a0 );
 	}
 }

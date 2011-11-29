@@ -594,4 +594,6 @@ PRELOADER1           \"Hi there!  It looks like somebody copied this game withou
 PRELOADER2           \"\n\nto play the game at my site.  Thanks, and have fun!\"
 
 DEMO_OVER            \"Demo Over!\"
-DEMO_OVER_MORE       \"Want more?\"";		embedFile = StatsFile.loadFromString( "strings.txt", embedText );	}}
+DEMO_OVER_MORE       \"Want more?\"
+
+INVENTORY_HINT       \"Mouse-over items, spells and potions to see their attributes and effects.\"";		embedFile = StatsFile.loadFromString( "strings.txt", embedText );	}}
