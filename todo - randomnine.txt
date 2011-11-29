@@ -2,7 +2,7 @@ UPDATE STUFF:
 * move relevant strings into strings.txt
 
 FULLSCREEN:
-- add fullscreen toggle button on menu
+* add fullscreen toggle button on menu
 - add to-fullscreen icon
 - add to-windowed icon
   http://laptop.org/8.2.0/manual/Browse/BrowsingWeb/fullscreen.png
@@ -13,12 +13,14 @@ CREDITS:
 * move Music into Contributors
 
 CHARM:
-- make charmed monster legitimate target for spells
-- make charmed monster legitimate target for melee
-- break charm on do damage.
+* make charmed monster legitimate target for spells
+* make charmed monster legitimate target for melee
+* break charm on do damage.
+* check XP isn't gained twice for charmed monsters
+- magic mirror should show hp bars
 
 USABILITY:
-- let people know spell descriptions are in the inventory screen
+* let people know spell descriptions are in the inventory screen
 
 INVENTORY SCREEN:
 * move gear buttons up and left a bit to place them properly against the leather background
