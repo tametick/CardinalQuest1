@@ -196,6 +196,7 @@ class CqInventoryProxy extends HxlSprite {
 				// GameUI.instance.popups.remove(namePopup);
 				bag.giveMoney(item);
 				destroy();
+				SoundEffectsManager.play(EnemyHit);	
 			} else {
 				var myOldSlot = item.itemSlot;
 				var myItem = myOldSlot.item;
