@@ -279,7 +279,7 @@ class MainMenuState extends CqState {
 		tglSFXIcon.loadGraphic(SpriteSoundToggle, true, false, 48, 48,false,0.5,0.5);
 		tglSFXIcon.setFrame(1);
 
-		btnToggleSFX = new HxlButton(Std.int(btnToggleMusic.x), Std.int(btnToggleMusic.y+btnToggleMusic.height), buttonsWidth, 20, toggleSFX, 0, 0);
+		btnToggleSFX = new HxlButton(Std.int(btnToggleMusic.x), Std.int(btnToggleMusic.y+btnToggleMusic.height), buttonsWidth, 24, toggleSFX, 0, 0);
 		btnToggleSFX.add(tglSFXIcon);
 		sfxText = new HxlText(btnToggleSFX.x, btnToggleSFX.y+textYOffset, textWidth, Resources.getString( "MENU_SOUND" ), true, FontAnonymousPro.instance.fontName, 14, 0xffffff, "right" );
 		add(sfxText);
@@ -291,7 +291,7 @@ class MainMenuState extends CqState {
 		tglFullscreenIcon.setFrame(1);
 		
 		var fullscreenWidth = 100;
-		btnToggleFullscreen = new HxlButton(Std.int(btnToggleMusic.x), Std.int(btnToggleSFX.y + btnToggleSFX.height) + 10, buttonsWidth, 20, toggleFullscreen, 0, 0);
+		btnToggleFullscreen = new HxlButton(Std.int(btnToggleMusic.x), Std.int(btnToggleSFX.y + btnToggleSFX.height) + 6, buttonsWidth, 24, toggleFullscreen, 0, 0);
 		btnToggleFullscreen.add(tglFullscreenIcon);
 		fullscreenText = new HxlText(btnToggleFullscreen.x, btnToggleFullscreen.y+textYOffset, textWidth, Resources.getString( "MENU_FULLSCREEN" ), true, FontAnonymousPro.instance.fontName, 14, 0xffffff, "right" );
 		add(fullscreenText);
