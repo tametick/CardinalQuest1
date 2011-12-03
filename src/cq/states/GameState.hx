@@ -174,6 +174,18 @@ class GameState extends CqState {
 			if ( Registery.player != null ) {
 				Registery.player.popup.visible = true; // Always show the player's popup.
 			}
+			
+			// Show hovered-over monster popups as well.
+			if ( GameUI.isTargeting ) {
+				var tile:CqTile = cast(Registery.level.getTile(Std.int(gameUI.getTargetingPos().x), Std.int(gameUI.getTargetingPos().y)), CqTile);
+				if ( tile != null && tile.actors.length > 0 && tile.visibility == Visibility.IN_SIGHT) {
+					var actor:CqActor = cast(tile.actors[0], CqActor);
+					
+					if ( actor != null ) {
+						actor.popup.visible = true;
+					}
+				}
+			}
 		}
 
 		if (Registery.player.isDying) {

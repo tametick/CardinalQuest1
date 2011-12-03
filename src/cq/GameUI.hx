@@ -1016,6 +1016,10 @@ class GameUI extends HxlDialog {
 		GameUI.setTargeting(null);
 	}
 	
+	public function getTargetingPos() : HxlPoint {
+		return targetLastPos;
+	}
+	
 	public function removePopups(parents:Array<Dynamic>) {
 		var popup:HxlText = null;
 		for (p in parents) {
