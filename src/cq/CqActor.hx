@@ -1293,11 +1293,11 @@ class CqPlayer extends CqActor, implements Player {
 		if (level == 1)
 			return 0;
 		else 
-			return 50 * Math.pow(2, level-1);
+			return 50 * Math.pow(2, level-1) - 25;
 	}
 	
 	public function nextLevel():Float {
-		return 50 * Math.pow(2, level);
+		return 50 * Math.pow(2, level) - 25;
 	}
 	
 	function gainLevel() {
