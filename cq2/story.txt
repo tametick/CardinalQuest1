@@ -1,0 +1,63 @@
+= CARDINAL QUEST 2 =
+
+--- First chapter: The Return.
+
+(Card art: an army approaching)
+
+Asterion has returned to the area and his minions are invading under
+his banner. You are either a local or just a passing traveller, and
+you take up the good fight to defend these people...
+
+Setting: town, fields and castle. Open doors to continue, etc.
+
+BOSS FIGHT: KILL ASTERION'S LIEUTENANT
+
+You may have won this battle... but Asterion's forces will swarm forth
+from ______ and crush you! YOU WILL RUE THIS DAY
+
+
+
+--- Second chapter: The Fortress.
+
+(Card art: tonally similar to The Tower, but buried into a mountain)
+
+You've travelled long and hard to reach Asterion's fortress. His minions
+are without number. The only way to stem the tide is to slaughter your
+way in and kill him.
+
+Setting: similar to CQ classic dungeon, also more open caves.
+
+BOSS FIGHT: KILL ASTERION
+
+Asterion is dead!
+
+The portal twists and unfolds, opening to a distant Hell... the demon
+beyond, the personification of greed and domination, accords you 
+respect. It grants you freedom and dominion of its land for now, but promises that in one hundred years it will return. With that, the
+portal snaps shut.
+
+
+
+--- Final chapter: planes, KILL DEMON
+
+(Card art: the demon's form)
+
+The barricade is hammered shut behind you. The fortress is silent.
+
+You wait.
+
+All of your life, you've trained for this moment. You grip the hilt of your blade. Soon the pain, the training, the brutal tests of endurance will be worth it. You will finish the fight your ancestor started.
+
+The portal winks open.
+
+The kobold on the other side barely has time to register surprise before you bury your blade in its skull.
+
+Setting: hell, lava, the castle at the end of the world, dimensional planes made of clouds, etc.
+
+BOSS FIGHT: KILL THE DEMON
+
+The ground shudders. The demon is dead.
+
+You reach down and pick up [demon]'s sceptre. It feels warm to the touch.
+
+This domain and its denizens are yours.
