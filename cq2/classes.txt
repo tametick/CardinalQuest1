@@ -1,0 +1,51 @@
+STAT CHANGES:
+- SPEED will give a chance to dodge attacks.
+- DEFENCE will reduce the damage from attacks.
+- SPELL DAMAGE will increase spell damage (Fireball, etc.).
+- SPELL RESIST will give a chance to resist spells.
+
+THIEF
+speed: Fast
+melee: Moderate
+defense: Low
+spirit: Medium
+skills: Shadow Walk, Poison, Smoke Cloud?
+passive: more gold, % to disarm traps
+
+FIGHTER
+speed: Slow
+melee: Tough
+defense: Tough
+spirit: Low
+skills: Berserk, Intimidating Shout, Charge, Stun
+
+WIZARD
+speed: Moderate
+melee: Weak
+defense: Low
+spirit: High
+passive: % resist to magic
+skills: Fireball, Ice Bolt, Silence, Blink, Sleep, Magic Mirror
+
+RANGER
+speed: Fast
+melee: Moderate
+defense: Low
+spirit: Moderate
+passive: spots + disarms traps, has a pet dog
+skills: Bow, Set Trap, Charm Beast, Sense Danger, Order Pet
+
+PUGILIST
+speed: Moderate
+melee: Tough (but doesn't use weapons!)
+defense: Moderate
+spirit: Low
+passive: +% to dodge, can't use weapons
+skills: Disarm, Uppercut, Stun, Ten Fists (damages, moves enemy back + follows)
+
+CLERIC
+speed: Fast
+melee: Weak
+defense: Low
+spirit: High
+skills: Heal, Smite Demon, Bless Weapon, Holy Armour, Sense Danger, Fear, Confuse

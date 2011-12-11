@@ -1,0 +1,27 @@
+Monsters will be *slightly* less rigidly organised than before, with eg. different Elementals appearing at different stages in the game.
+
+Old monster types:
+
+Bandit (armed)
+Kobold (armed)
+Spider (beast)
+Succubus (armed?, demonic)
+Elemental (demonic)
+Golem (demonic)
+Werewolf (beast)
+Minotaur (armed)
+
+New 'physical' monster types:
+
+Cyclops (beast)
+Goblin (armed, demonic)
+Gnoll (armed)
+Bear People (armed)
+
+New 'special' monster types:
+
+Troll () - run and heal on low health
+Mages () - be magey
+Bats (beast) - summon other stuff
+Spectres (demonic) - turn invisible
+Chimeras (beast, demonic) - stone/fire breath
