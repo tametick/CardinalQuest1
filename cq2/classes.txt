@@ -48,4 +48,6 @@ speed: Fast
 melee: Weak
 defense: Low
 spirit: High
-skills: Heal, Smite Demon, Bless Weapon, Holy Armour, Sense Danger, Fear, Confuse
+skills: Pray, Heal, Smite Demon, Bless Weapon, Holy Armour, Sense Danger, Fear, Confuse
+
+(Pray recharges as you gain XP and gives a powerful, random effect based on need)
