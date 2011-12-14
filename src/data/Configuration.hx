@@ -15,6 +15,10 @@ class Configuration {
 	public static inline var standAlone = false;
 	public static inline var useProductionPlaytomic = true;
 
+	public static inline var allowKongregateAds = false;
+	public static inline var allowKongregateAPI = false;
+	public static inline var isArmorSponsored = true;
+	
 	//I am not going to go off air, we will assume air is Desktop air
 	//for iOS we are now assuming not NME but air
 	//A copy of this Configuration.hx will be stored in air ios

@@ -24,6 +24,8 @@ Fix:
 2. replace the 'Play more games at Kongregate' GIF
 3. Kongregate ad that shows after the startup animation
 4. Kongregate ad that shows on gameover
+5. Change link in preloader to stop pointing at kongregate.
+6. Change links in main game to stop pointing at kongregate.
 
 Armor wants the ads replaced with their logo.
 

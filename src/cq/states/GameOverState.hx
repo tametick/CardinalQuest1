@@ -7,6 +7,7 @@ import cq.ui.CqTextScroller;
 import data.Configuration;
 import data.Resources;
 import data.SoundEffectsManager;
+import flash.display.Bitmap;
 import flash.display.Loader;
 import flash.display.Sprite;
 import flash.events.Event;
@@ -19,6 +20,7 @@ import haxe.Timer;
 import haxel.HxlGraphics;
 import haxel.HxlMenu;
 import haxel.HxlMenuItem;
+import haxel.HxlSprite;
 import haxel.HxlState;
 import haxel.HxlText;
 import haxel.HxlTimer;
@@ -30,6 +32,9 @@ class GameOverState extends CqState {
 	
 	var menu:HxlMenu;
 	var btnClicked:Bool;
+	
+	var sponsorSplash : HxlSprite;
+	var sponsorFade : Bool;
 	
 	public var kongAd : Sprite;
 	var kongAdLoader : Loader;
@@ -52,7 +57,7 @@ class GameOverState extends CqState {
 		scroller.onComplete(goToMenu);
 		scroller.zIndex--;
 		
-		if (!Configuration.standAlone) {
+		if (!Configuration.standAlone && Configuration.allowKongregateAds) {
 			kongAd = new Sprite();
 			kongAdLoader = new Loader();
 			try{
@@ -67,6 +72,18 @@ class GameOverState extends CqState {
 			}
 			
 			kongAdLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, playKongAd, false, 0, true);	
+		}
+		
+		sponsorSplash = null;
+		if (!Configuration.standAlone && Configuration.isArmorSponsored) {
+			sponsorSplash = new HxlSprite( 0, 0, ArmorGames );
+			sponsorSplash.alpha = 1.0;
+			add(sponsorSplash);
+			sponsorSplash.alpha = 0.0;
+			sponsorFade = false;
+
+			Actuate.timer(1.2).onComplete(beginSponsorFade);
+		//	Actuate.update(
 		}
 		
 		menu = new HxlMenu(200, Configuration.app_width, 240, 200);
@@ -149,12 +166,32 @@ class GameOverState extends CqState {
 		complete = true;
 	}
 
+	function beginSponsorFade():Void
+	{
+		sponsorFade	= true;
+	}
+	
 	public override function update() {
 		super.update();	
+		
+		if ( sponsorSplash != null && sponsorFade ) {
+			sponsorSplash.alpha = Math.min( 1.0, sponsorSplash.alpha + 1.5*HxlGraphics.elapsed );
+		}
+
 		setDiagonalCursor();
 		if ( HxlGraphics.keys.justReleased("ESCAPE") )
 			nextScreen("menu");
 	}
+	
+	override function onMouseDown(event:MouseEvent) {
+		if ( sponsorSplash != null && sponsorSplash.overlapsPoint( HxlGraphics.mouse.x, HxlGraphics.mouse.y) ) {
+			if ( Configuration.isArmorSponsored ) {
+				var request : URLRequest = new URLRequest("http://armorgames.com/");
+				Lib.getURL(request);
+				request = null;
+			}
+		}
+	}	
 	/*
 	override private function onKeyUp(event:KeyboardEvent) {
 		super.onKeyUp(event);

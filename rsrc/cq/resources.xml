@@ -83,5 +83,7 @@
 		<bitmap id="cq.SpriteMainmenuBg" import="mainmenuBg.png"/>
 		<bitmap id="cq.BlankScreen" import="BlankOverlay.png"/>
 		
+		<bitmap id="cq.ArmorGames" import="armorgames.png"/>
+		
 	</library>
 </movie>
