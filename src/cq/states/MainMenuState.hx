@@ -347,17 +347,6 @@ class MainMenuState extends CqState {
 
 		Mouse.hide();
 
-		if (Configuration.standAlone) {
-			Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
-
-		  #if flash
-			if (!StringTools.startsWith(Capabilities.os, "Mac")) {
-				// for windows
-				//Lib.fscommand("trapallkeys", "true");
-				Lib.current.stage.showDefaultContextMenu = false;
-			}
-		  #end
-		}
 		var bg = new HxlSprite(0, 0, SpriteMainmenuBg);
 		add(bg);
 
