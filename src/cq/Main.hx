@@ -90,7 +90,7 @@ class Main extends HxlGame {
 		// Load data files (if applicable).
 		StatsFileEmbed.loadEmbeddedFiles();
 		
-		if( !Configuration.mobile ) {
+		if( !Configuration.mobile && Configuration.standAlone ) {
 			StatsFile.loadFile( "classes.txt" );
 			StatsFile.loadFile( "classStats.txt" );
 			StatsFile.loadFile( "descriptions.txt" );
@@ -115,7 +115,7 @@ class Main extends HxlGame {
 			super(Configuration.app_width, Configuration.app_height, GameState, 1, FontDungeon.instance.fontName);
 			//super(Configuration.app_width, Configuration.app_height, GameOverState, 1, FontDungeon.instance.fontName);
 		else
-			super(Configuration.app_width,Configuration.app_height, MainMenuState, 1, FontDungeon.instance.fontName);		
+			super(Configuration.app_width,Configuration.app_height, MainMenuState, 1, FontDungeon.instance.fontName);
 		
 		pause = new CqPause();
 		useDefaultHotKeys = false;
