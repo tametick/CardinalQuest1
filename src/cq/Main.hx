@@ -29,7 +29,24 @@ import playtomic.Playtomic;
 	import flash.ui.ContextMenu;
 #end
 
+// For newgrounds...
+#if newgrounds
+import flash.display.Bitmap;
+import flash.display.Sprite;
+import flash.text.TextField;
+import flash.text.TextFormat;
+import flash.events.MouseEvent;
+import flash.net.URLRequest;
+import flash.text.TextFieldAutoSize;
+
+class MoreNewgrounds extends Bitmap { public function new() { super(); } }
+#end
+
 class Main extends HxlGame {
+#if newgrounds
+	var m_newgroundsSprite : Sprite;
+#end
+	
 	public static function main() {
 		Lib.current.addChild(new Main());
 	}
@@ -123,5 +140,59 @@ class Main extends HxlGame {
 		if (!Configuration.standAlone) {
 			addEventListener(Event.ENTER_FRAME, checkOnLogoOrAd, false, 0, true);
 		}
+		
+#if newgrounds
+		m_newgroundsSprite = new Sprite();
+		m_newgroundsSprite.buttonMode = true;
+		m_newgroundsSprite.mouseChildren = false;
+		m_newgroundsSprite.addEventListener(MouseEvent.CLICK, clickOnNewgrounds, false, 0, true);
+		
+		var label = new TextField();
+		var format = new TextFormat();
+		
+		format.font = "Georgia";
+		format.color = 0xFFFFFF;
+		format.size = 15;
+		label.defaultTextFormat = format;
+		label.selectable = false;
+		
+		label.autoSize = TextFieldAutoSize.LEFT;
+		label.text = "more games:";
+		
+		label.textColor = 0xFFFFFF;
+
+		m_newgroundsSprite.addChild(label);		
+		
+		var logo = new MoreNewgrounds();
+//			logo.x = label.x+2;
+		logo.y = label.y + label.height + 1;
+//			logo.width -= 2;
+		m_newgroundsSprite.addChild(logo);
+		
+		addChild(m_newgroundsSprite);
+		
+		m_newgroundsSprite.x = 0;
+		m_newgroundsSprite.y = 480 - m_newgroundsSprite.height -1;
+
+		label = null;
+		format = null;
+		logo = null;
+#end
 	}
+
+#if newgrounds
+	function clickOnNewgrounds(e : Event) : Void
+	{
+		var request : URLRequest = new URLRequest("http://newgrounds.com/");
+		Lib.getURL(request);
+		request = null;
+	}
+	
+	public override function update(event:Event) : Void {
+		super.update(event);
+		
+		removeChild(m_newgroundsSprite);
+		addChild(m_newgroundsSprite);
+	}
+#end	
 }
