@@ -396,13 +396,14 @@ class MainMenuState extends CqState {
 		}
 	}
 
-	static var homePageRequest:URLRequest = new URLRequest("http://www.tametick.com/");
-	static var gamePageRequest:URLRequest = new URLRequest("http://www.cardinalquest.com/");
 	override private function onMouseDown(event:MouseEvent) {
 		super.onMouseDown(event);
 
 		nextScreen();
 
+		var homePageRequest:URLRequest = new URLRequest("http://www.tametick.com/");
+		var gamePageRequest:URLRequest = new URLRequest("http://www.cardinalquest.com/");
+		
 		if (buttonsAreUp) {
 			if (copyrightLink!=null && copyrightLink.overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
 				Lib.getURL(homePageRequest);

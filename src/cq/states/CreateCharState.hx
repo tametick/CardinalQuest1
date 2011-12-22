@@ -63,7 +63,9 @@ class CreateCharState extends CqState {
 		txtDesc.destroy();
 		selectBox.destroy();
 		portrait.destroy();
-		playerSprites.bitmapData.dispose();
+		if ( playerSprites.bitmapData != null ) {
+			playerSprites.bitmapData.dispose();
+		}
 
 		txtDesc = null;
 		selectBox = null;
