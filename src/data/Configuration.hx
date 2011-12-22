@@ -1,5 +1,4 @@
 package data;
-import cq.CqActor;
 
 /*
  *  Please put in comments what the value should be during in release time
@@ -12,12 +11,13 @@ class Configuration {
 
 	public static inline var debug = false;
 	public static inline var air = false;
-	public static inline var standAlone = false;
+	public static inline var standAlone = true;
 	public static inline var useProductionPlaytomic = true;
 
 	public static inline var allowKongregateAds = false;
+	public static inline var allowNewgroundsAds = false;
 	public static inline var allowKongregateAPI = false;
-	public static inline var isArmorSponsored = true;
+	public static inline var isArmorSponsored = false;
 	
 	//I am not going to go off air, we will assume air is Desktop air
 	//for iOS we are now assuming not NME but air

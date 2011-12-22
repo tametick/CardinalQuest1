@@ -42,3 +42,6 @@ CQ2:
 - look at different generators
   - cave: src\generators\CellularAutomata.hx
   - town: http://yehieli.info/fotf/fotf.jar
+
+music:
+http://wblackall.bandcamp.com/album/cardinal-quest-original-soundtrack

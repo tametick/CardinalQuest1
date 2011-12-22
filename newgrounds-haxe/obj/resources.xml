@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shx:resources version="9" compress="false" w="640" h="480" fps="30"
+	xmlns:shx="http://mindless-labs.com/samhaxe"
+	xmlns:img="http://mindless-labs.com/samhaxe/modules/Image"
+	xmlns:snd="http://mindless-labs.com/samhaxe/modules/Sound"
+	xmlns:swf="http://mindless-labs.com/samhaxe/modules/Swf"
+	xmlns:font="http://mindless-labs.com/samhaxe/modules/Font" >
+
+	<shx:frame>
+		<swf:library import="newgrounds-haxe/obj/Code.swf" symbols="true" />
+		
+		<swf:library import="lib/newgrounds.swf" symbols="true" />
+		<swf:library import="lib/playtomic.swf" symbols="true" />
+	</shx:frame>
+	
+	<shx:frame>
+
+		<font:ttf import="rsrc/cq/Dungeon.ttf" class="cq.FontDungeon" name="FontDungeon" />
+		<font:ttf import="rsrc/cq/AnonymousPro-Regular.ttf" class="cq.FontAnonymousPro" name="FontAnonymousPro" />
+		<font:ttf import="rsrc/cq/Anonymous-Pro-B.ttf" class="cq.FontAnonymousProB" name="FontAnonymousProB" />
+			
+		<img:image import="rsrc/cq/logo.png" class="cq.SpriteLogo" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/heart.png" class="cq.SpriteHeart" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/coin.png" class="cq.SpriteCoin" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/portrait_slots.png" class="cq.SpritePortrait" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/portrait_slots_on_paper.png" class="cq.SpritePortraitPaper" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/info_slot.png" class="cq.SpriteInfo" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/cursor.png" class="cq.SpriteCursor" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/Start_button.png" class="cq.SpriteStartButton" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/button_bg.png" class="cq.SpriteButtonBg" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/Item_slot_01.png" class="cq.SpriteItemSlot1" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/Item_slot_02.png" class="cq.SpriteItemSlot2" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/buttons.png" class="cq.SpriteIcons" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/equipment_icons.png" class="cq.SpriteEquipmentIcons" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/corpses.png" class="cq.SpriteCorpses" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/effects.png" class="cq.SpriteEffects" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/items.png" class="cq.SpriteItems" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/monsters.png" class="cq.SpriteMonsters" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/player.png" class="cq.SpritePlayer" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/tiles.png" class="cq.SpriteTiles" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/spells.png" class="cq.SpriteSpells" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/map_paper.png" class="cq.SpriteMapPaper" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/Ch_selection_box_01.png" class="cq.SpriteCharPaper" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/decorations.png" class="cq.SpriteDecorations" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/Belt_vert_metal.png" class="cq.UiBeltVertical" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/Belt_horiz_leather.png" class="cq.UiBeltHorizontal" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/inv_box_02.png" class="cq.UiInventoryBox" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/Minator_intro_02.png" class="cq.IntroScreen" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/death.png" class="cq.DeathScreen" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/Vortex_swirl.png" class="cq.VortexScreen" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/Vortex_lights.png" class="cq.VortexLightsScreen" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/vortex_figure.png" class="cq.VortexFigure" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/White.png" class="cq.White" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/Knight_entry_03.png" class="cq.SpriteKnightEntry" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/Wizard_entry_03.png" class="cq.SpriteWizardEntry" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/Thief_entry_03.png" class="cq.SpriteThiefEntry" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/HelpOverlay.png" class="cq.SpriteHelpOverlay" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/inventoryHelpOverlay.png" class="cq.SpriteInvHelpOverlay" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/soundToggle.png" class="cq.SpriteSoundToggle" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/fullscreenToggle.png" class="cq.SpriteFullscreenToggle" genclass="symbolOnly" />
+
+		<img:image import="rsrc/cq/Credits.png" class="cq.SpriteCredits" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/HighscoresBg.png" class="cq.SpriteHighScoresBg" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/mainmenuBg.png" class="cq.SpriteMainmenuBg" genclass="symbolOnly" />
+		<img:image import="rsrc/cq/BlankOverlay.png" class="cq.BlankScreen" genclass="symbolOnly" />
+
+		<img:image import="newgrounds-haxe/lib/newgrounds.png" class="cq.MoreNewgrounds" genclass="symbolOnly" />
+		
+		<snd:sound import="rsrc/cq/main1.mp3" class="cq.MainThemeOne" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/main2.mp3" class="cq.MainThemeTwo" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/menu.mp3" class="cq.MenuTheme" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/boss.mp3" class="cq.BossTheme" genclass="symbolOnly" />
+
+		<snd:sound import="rsrc/cq/sounds/enemyHit.mp3" class="cq.EnemyHit" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/fortressGate.mp3" class="cq.FortressGate" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/itemEquipped.mp3" class="cq.ItemEquipped" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/levelUp.mp3" class="cq.LevelUp" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/menuItemClick.mp3" class="cq.MenuItemClick" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/menuItemMouseOver.mp3" class="cq.MenuItemMouseOver" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/playerHit.mp3" class="cq.PlayerHit" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/potionEquipped.mp3" class="cq.PotionEquipped" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/potionQuaffed.mp3" class="cq.PotionQuaffed" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/spellCast.mp3" class="cq.SpellCast" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/spellCastNegative.mp3" class="cq.SpellCastNegative" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/spellEquipped.mp3" class="cq.SpellEquipped" genclass="symbolOnly" />
+
+		<snd:sound import="rsrc/cq/sounds/Footstep1.mp3" class="cq.Footstep1" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/Footstep2.mp3" class="cq.Footstep2" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/Footstep3.mp3" class="cq.Footstep3" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/Footstep4.mp3" class="cq.Footstep4" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/Footstep5.mp3" class="cq.Footstep5" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/Footstep6.mp3" class="cq.Footstep6" genclass="symbolOnly" />
+
+		<snd:sound import="rsrc/cq/sounds/enemyMiss.mp3" class="cq.EnemyMiss" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/playerMiss.mp3" class="cq.PlayerMiss" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/chestBusted.mp3" class="cq.ChestBusted" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/pickup.mp3" class="cq.Pickup" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/doorOpen.mp3" class="cq.DoorOpen" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/death.mp3" class="cq.Death" genclass="symbolOnly" />
+		
+		<snd:sound import="rsrc/cq/sounds/lose.mp3" class="cq.Lose" genclass="symbolOnly" />
+		<snd:sound import="rsrc/cq/sounds/win.mp3" class="cq.Win" genclass="symbolOnly" />
+
+	</shx:frame>
+
+</shx:resources>	

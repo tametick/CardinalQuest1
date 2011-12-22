@@ -1,5 +1,6 @@
 package kongloader;
 
+import flash.errors.Error;
 import flash.external.ExternalInterface;
 import flash.display.DisplayObject;
 import flash.display.Loader;
@@ -14,11 +15,13 @@ import flash.events.IOErrorEvent;
 import flash.events.MouseEvent;
 import flash.Lib;
 import flash.net.URLRequest;
+import flash.system.Security;
 import flash.system.System;
 import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.utils.ByteArray;
 import haxe.Timer;
+
 
 class Preloader extends MovieClip {
 	var progressBarBG : Shape;
@@ -46,14 +49,15 @@ class Preloader extends MovieClip {
 		var sitelock:Bool = true;
 		if ( ExternalInterface.available ) {
 			// Site lock check.
-			var browserurl = flash.external.ExternalInterface.call("function(){return window.location.href}").toString();	
+			var browserurl:String = Lib.current.root.loaderInfo.url;
 			
 			var firstSplit = browserurl.split("://");
-			var domain1 = firstSplit[0];
-			var domain2 = firstSplit[1].split("/")[0];
+			var domain = (firstSplit[1] != null) ? firstSplit[1] : firstSplit[0];
+
+			var domain2:String = domain.split("/")[0];
 			
-			if ( domain1 == "armorgames.com" || domain1 == "www.armorgames.com" || domain2 == "armorgames.com" || domain2 == "www.armorgames.com" )
-//			if ( domain1 == "wootfu.com" || domain1 == "www.wootfu.com" || domain2 == "wootfu.com" || domain2 == "www.wootfu.com" )
+			if ( domain2 == "armorgames.com" || domain2.substr( domain2.length - 15 ) == ".armorgames.com"
+			  || domain2 == "wootfu.com" || domain2.substr( domain2.length - 11 ) == ".wootfu.com" )
 			{
 				sitelock = false;
 			}

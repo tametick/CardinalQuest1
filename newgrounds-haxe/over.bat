@@ -1,0 +1,1 @@
+copy /Y newgrounds-haxe\bin\cq.swf newgrounds-haxe\obj\code.swf

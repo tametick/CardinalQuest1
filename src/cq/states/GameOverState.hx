@@ -2,6 +2,7 @@ package cq.states;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;
+import com.newgrounds.components.FlashAd;
 import cq.CqResources;
 import cq.ui.CqTextScroller;
 import data.Configuration;
@@ -36,6 +37,8 @@ class GameOverState extends CqState {
 	var sponsorSplash : HxlSprite;
 	var sponsorFade : Bool;
 	
+	var newgroundsAd : FlashAd;
+	
 	public var kongAd : Sprite;
 	var kongAdLoader : Loader;
 	
@@ -57,33 +60,42 @@ class GameOverState extends CqState {
 		scroller.onComplete(goToMenu);
 		scroller.zIndex--;
 		
-		if (!Configuration.standAlone && Configuration.allowKongregateAds) {
-			kongAd = new Sprite();
-			kongAdLoader = new Loader();
-			try{
-				kongAdLoader.load(new URLRequest("http://www.kongnet.net/www/delivery/avw.php?zoneid=11&cb=98732479&n=aab5b069"));
-				kongAdLoader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, kongAdFailed );
-			} catch( msg : String ) {
-				trace("1 Error message: " + msg );
-			} catch( errorCode : Int ) {
-				trace("1 Error #"+errorCode);
-			} catch( unknown : Dynamic ) {
-				trace("1 Unknown exception: " + Std.string(unknown));
-			}
-			
-			kongAdLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, playKongAd, false, 0, true);	
-		}
-		
+		newgroundsAd = null;
 		sponsorSplash = null;
-		if (!Configuration.standAlone && Configuration.isArmorSponsored) {
-			sponsorSplash = new HxlSprite( 0, 0, ArmorGames );
-			sponsorSplash.alpha = 1.0;
-			add(sponsorSplash);
-			sponsorSplash.alpha = 0.0;
-			sponsorFade = false;
+		
+		if (!Configuration.standAlone)
+		{
+			if ( Configuration.allowKongregateAds) {
+				kongAd = new Sprite();
+				kongAdLoader = new Loader();
+				try{
+					kongAdLoader.load(new URLRequest("http://www.kongnet.net/www/delivery/avw.php?zoneid=11&cb=98732479&n=aab5b069"));
+					kongAdLoader.contentLoaderInfo.addEventListener( IOErrorEvent.IO_ERROR, kongAdFailed );
+				} catch( msg : String ) {
+					trace("1 Error message: " + msg );
+				} catch( errorCode : Int ) {
+					trace("1 Error #"+errorCode);
+				} catch( unknown : Dynamic ) {
+					trace("1 Unknown exception: " + Std.string(unknown));
+				}
+				
+				kongAdLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, playKongAd, false, 0, true);	
+			} else if ( Configuration.allowNewgroundsAds ) {
+				newgroundsAd = new FlashAd();
+				newgroundsAd.fullScreen = false;
+				newgroundsAd.x = 320 - 0.5 * newgroundsAd.width;
+				newgroundsAd.y = 70;
+				addChild(newgroundsAd);
+			} else if ( Configuration.isArmorSponsored ) {
+				sponsorSplash = new HxlSprite( 0, 0, ArmorGames );
+				sponsorSplash.alpha = 1.0;
+				add(sponsorSplash);
+				sponsorSplash.alpha = 0.0;
+				sponsorFade = false;
 
-			Actuate.timer(1.2).onComplete(beginSponsorFade);
-		//	Actuate.update(
+				Actuate.timer(1.2).onComplete(beginSponsorFade);
+			//	Actuate.update(
+			}
 		}
 		
 		menu = new HxlMenu(200, Configuration.app_width, 240, 200);
@@ -114,7 +126,13 @@ class GameOverState extends CqState {
 		
 		menu.setScrollSound(MenuItemMouseOver);
 		menu.setSelectSound(MenuItemClick);
-		Actuate.tween(menu, 1, { targetY: 325 } ).ease(Cubic.easeOut);
+		
+		var menuY:Int = 325;
+		if ( !Configuration.standAlone && Configuration.allowNewgroundsAds ) {
+			menuY = 365;
+		}
+		
+		Actuate.tween(menu, 1, { targetY: menuY } ).ease(Cubic.easeOut);
 		
 		update();
 		
@@ -207,7 +225,13 @@ class GameOverState extends CqState {
 			nextScreen("menu");		
 	}*/
 	
-	public static function nextScreen(state:String) {
+	public function nextScreen(state:String) {
+		if ( newgroundsAd != null ) {
+			newgroundsAd.removeAd();
+			removeChild( newgroundsAd );
+			newgroundsAd = null;
+		}
+		
 		switch(state) {
 			case "menu":
 				HxlGraphics.fade.start(true, 0xff000000, fadeTime, menuFadeCallback, true);
@@ -217,6 +241,12 @@ class GameOverState extends CqState {
 	}
 	
 	function goToMenu() {
+		if ( newgroundsAd != null ) {
+			newgroundsAd.removeAd();
+			removeChild( newgroundsAd );
+			newgroundsAd = null;
+		}
+		
 		HxlGraphics.fade.start(true, 0xff000000, fadeTime, menuFadeCallback, true);
 	}
 	

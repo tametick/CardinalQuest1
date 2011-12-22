@@ -277,7 +277,9 @@ class CqActor extends CqObject, implements Actor {
 			removeEffect("fear");
 			GameUI.showEffectText(this, Resources.getString("POPUP_FEAR_BREAK"), 0x909090);
 		}
-		
+	}
+
+	public function breakCharm() {
 		if ( specialEffects.exists("charm") ) {
 			this.faction = CqMob.FACTION;
 			this.isCharmed = false;
@@ -286,11 +288,12 @@ class CqActor extends CqObject, implements Actor {
 			GameUI.showEffectText(this, Resources.getString("POPUP_CHARM_BREAK"), 0x909090);
 		}
 	}
-
+	
 	public function injureActor(state:HxlState, other:CqActor, dmgTotal:Int) {
 		if (this == Registery.player) {
 			HxlLog.append(Resources.getString( "LOG_YOU_HIT" ));
 			PtPlayer.hits();
+			other.breakCharm();
 		} else {
 			HxlLog.append(Resources.getString( "LOG_HIT_YOU" ));
 			PtPlayer.isHit();
