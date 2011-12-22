@@ -56,8 +56,7 @@ import haxel.HxlSprite;
 
 
 
-// the inventory proxy is really ugly and not rewritten at all -- no, seriously, terrible.  fix it.
-// this is certainly still necessary -- but it will take a little more work to refine it thoroughly
+// wait -- the inventory proxy is ugly, but it was definitely rewritten.  (the comment claiming otherwise should have been cut)
 
 class CqInventoryProxyBMPData extends BitmapData { }
 class CqInventoryProxy extends HxlSprite {
@@ -182,10 +181,7 @@ class CqInventoryProxy extends HxlSprite {
 		// setting the zIndex doesn't suffice -- we need to attach this to the stage, instead
 	}
 	
-	override private function dragStop() {
-		GameUI.instance.doodads.remove(this);
-		GameUI.instance.popups.add(namePopup);
-		
+	public function triggerUserInvokedSwap() {
 		if (CqInventoryCell.theCellBeingHoveredOver != null && CqInventoryCell.theCellBeingHoveredOver != item.itemSlot.cell) {
 			// type checking is done before CqInventoryCell.theCellBeingHoveredOver is ever set to non-null
 			// (if it were not, it would be possible to make items disappear)
@@ -215,9 +211,16 @@ class CqInventoryProxy extends HxlSprite {
 			y = dragStartPoint.y;
 		}
 		
-		zIndex = 5;
-		
 		CqInventoryProxy.theProxyBeingDragged = null;
+	}
+	
+	override private function dragStop() {
+		GameUI.instance.doodads.remove(this);
+		GameUI.instance.popups.add(namePopup);
+		
+		triggerUserInvokedSwap();
+		
+		zIndex = 5;
 	}
 	
 	public function updatePopupText() {
@@ -553,6 +556,11 @@ class CqInventoryCell extends HxlDialog {
 			}
 		}
 		
+		if (Configuration.mobile && this.proxy != null && this.proxy == CqInventoryProxy.theProxyBeingDragged) {
+			background.visible = false;
+			bgHighlight.visible = true;
+		}
+		
 		bgGlow.visible = isAcceptable && slot != null && slot.equipmentType != null;
 	}
 	
@@ -592,13 +600,13 @@ class CqInventoryCell extends HxlDialog {
 		if (!exists || !visible || !active || !Std.is(HxlGraphics.state, GameState) ) {
 			return;
 		}
-
-		if (Configuration.mobile) {
+		
+		if (Configuration.mobile && !Configuration.desktopPretendingToBeMobile) {
 			HxlGraphics.mouse.x = Std.int(event.localX);
 			HxlGraphics.mouse.y = Std.int(event.localY);
-		}		
+		}
 		
-		if (!Std.is(GameUI.instance.panels.currentPanel, SlidingBagDialog)) {
+		if (GameUI.instance.panels.currentPanel != GameUI.instance.panels.panelInventory) {
 			if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y) && (equipType == SPELL || equipType == POTION)) {
 				event.stopPropagation();
 				activateItem();
@@ -606,7 +614,21 @@ class CqInventoryCell extends HxlDialog {
 		} else {
 			// we are in the inventory screen
 			if (Configuration.mobile) {
-				// instead of drag-n-drop, tap two cells to switch their contents
+				if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
+					// instead of drag-n-drop, tap two cells to switch their contents
+					if (CqInventoryProxy.theProxyBeingDragged != null) {
+						if (isDraggedItemAcceptable() && proxy != CqInventoryProxy.theProxyBeingDragged) {
+							CqInventoryCell.theCellBeingHoveredOver = this;
+							CqInventoryProxy.theProxyBeingDragged.triggerUserInvokedSwap();
+							CqInventoryCell.theCellBeingHoveredOver = null;
+						} else {
+							CqInventoryProxy.theProxyBeingDragged = null;
+						}
+					} else {
+						CqInventoryProxy.theProxyBeingDragged = this.proxy;
+					}
+					event.stopPropagation();
+				}
 			}
 		}
 	}	
