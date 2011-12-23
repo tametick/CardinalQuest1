@@ -82,7 +82,7 @@ class GameOverState extends CqState {
 				kongAdLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, playKongAd, false, 0, true);	
 			} else if ( Configuration.allowNewgroundsAds ) {
 				newgroundsAd = new FlashAd();
-				newgroundsAd.fullScreen = false;
+				newgroundsAd.adType = "Simple";
 				newgroundsAd.x = 320 - 0.5 * newgroundsAd.width;
 				newgroundsAd.y = 70;
 				addChild(newgroundsAd);

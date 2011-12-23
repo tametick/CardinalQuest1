@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shx:resources version="9" compress="false" w="640" h="480" fps="30"
+<shx:resources version="10" compress="false" w="640" h="480" fps="30"
 	xmlns:shx="http://mindless-labs.com/samhaxe"
 	xmlns:img="http://mindless-labs.com/samhaxe/modules/Image"
 	xmlns:snd="http://mindless-labs.com/samhaxe/modules/Sound"

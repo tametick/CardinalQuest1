@@ -11,13 +11,24 @@ class Configuration {
 
 	public static inline var debug = false;
 	public static inline var air = false;
+
+#if newgrounds
+	public static inline var standAlone = false;
+	public static inline var useProductionPlaytomic = true;
+	
+	public static inline var allowKongregateAds = false;
+	public static inline var allowNewgroundsAds = true;
+	public static inline var allowKongregateAPI = false;
+	public static inline var isArmorSponsored = false;
+#else
 	public static inline var standAlone = true;
 	public static inline var useProductionPlaytomic = true;
-
+	
 	public static inline var allowKongregateAds = false;
 	public static inline var allowNewgroundsAds = false;
 	public static inline var allowKongregateAPI = false;
 	public static inline var isArmorSponsored = false;
+#end
 	
 	//I am not going to go off air, we will assume air is Desktop air
 	//for iOS we are now assuming not NME but air
