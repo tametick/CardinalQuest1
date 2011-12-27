@@ -179,6 +179,8 @@ class SlidingBagDialog extends HxlSlidingDialog {
 			CqInventoryItem.selectedItem = null;
 		}*/
 		itemInfoDialog.clearInfo();
+		
+		CqInventoryProxy.theProxyBeingDragged = null;
 	}
 	
 	private override function hidden() {
