@@ -115,6 +115,7 @@ class GameState extends CqState {
 			//stairs popup
 			if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), currentTile.getDataNum())) {
 				Registery.player.popup.mouseBound = false;
+				Registery.player.popup.customBound = new HxlPoint(Registery.player.width / 2, Registery.player.height);
 				Registery.player.popup.setText(Resources.getString( "NOTIFY_DOWNSTAIRS" ) + "\n" + Resources.getString( "POPUP_ENTER" ));
 			} else {
 				Registery.player.popup.setText("");
