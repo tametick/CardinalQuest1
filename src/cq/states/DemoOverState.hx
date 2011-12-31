@@ -6,13 +6,15 @@ import haxel.HxlText;
 
 import flash.Lib;
 
+import data.Configuration;
+
 class DemoOverState extends GameOverState{
 	public override function create() {
 		super.create();
 		
 		scroller.setSplash(BlankScreen);
 		scroller.setTitle(Resources.getString( "DEMO_OVER" ));		
-		var link:HxlText = new HxlText(0, 160, 640, Resources.getString( "DEMO_OVER_MORE" ) + "\nwww.cardinalquest.com", true, null, 50, 0xFFFFFF, "center");
+		var link:HxlText = new HxlText(0, 160, Configuration.app_width, Resources.getString( "DEMO_OVER_MORE" ) + "\nwww.cardinalquest.com", true, null, 50, 0xFFFFFF, "center");
 		add(link);
 	}
 	

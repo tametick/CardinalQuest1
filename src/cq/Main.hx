@@ -75,12 +75,9 @@ class Main extends HxlGame {
 	public function new() {
 		var _mochiads_game_id:String = "f7594e4c18588dca";
 		
-		Configuration.app_width = 640;//Lib.current.stage.stageWidth;
-		Configuration.app_height = 480;//Lib.current.stage.stageHeight;
-
 		// Initialise fullscreen.
 		if (Configuration.standAlone) {
-			Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+			// Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 
 		  #if flash
 			if (!StringTools.startsWith(Capabilities.os, "Mac")) {
@@ -90,6 +87,9 @@ class Main extends HxlGame {
 			}
 		  #end
 		}
+		
+		Configuration.app_width = Lib.current.stage.stageWidth; //640
+		Configuration.app_height = Lib.current.stage.stageHeight; //480		
 		
 		// Initialise sound/music.
 		HxlState.musicOn = Configuration.startWithMusic;

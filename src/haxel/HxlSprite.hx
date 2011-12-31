@@ -239,6 +239,22 @@ class HxlSprite extends HxlObject {
 		return recalculateAttributesAccordingToBitmapData(Animated, Width, Height);
 	}
 	
+	public function scaleFullscreen(?percentOfScreen:Float = 1.0) {
+		var sx:Float = percentOfScreen * HxlGraphics.stage.stageWidth / width;
+		var sy:Float = percentOfScreen * HxlGraphics.stage.stageHeight / height;
+		
+		if (sx < sy) {
+			sy = sx;
+		} else {
+			sy = sx;
+		}
+		
+		x = .5 * ((width * sx) - width);
+		y = .5 * ((height * sy) - height);
+		
+		scale = new HxlPoint(sx, sy);
+	}
+	
 	function recalculateAttributesAccordingToBitmapData(?Animated:Bool = false, ?Width:Int = 0, ?Height:Int = 0) {
 		if (Animated) {
 			Width = _pixels.height;

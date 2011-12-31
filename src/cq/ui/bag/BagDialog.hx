@@ -59,7 +59,7 @@ class BagDialog {
 		gameui.add(equippedSpells);
 
 		var potiongrid_w:Int = 460;
-		equippedConsumables = new CqPotionGrid(potions, Configuration.app_width/2-potiongrid_w/2, Configuration.app_height - 73, potiongrid_w, 71);
+		equippedConsumables = new CqPotionGrid(potions, Configuration.app_width/2-potiongrid_w/2, Configuration.app_height - 72, potiongrid_w, 71);
 		gameui.add(equippedConsumables);
 		
 		slidingPart = new SlidingBagDialog(gameui, packsize, equipSlots);

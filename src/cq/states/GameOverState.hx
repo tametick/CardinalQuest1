@@ -159,8 +159,8 @@ class GameOverState extends CqState {
 		kongAd.mouseChildren = false;
 		kongAdLoader.width *= 1.1;
 		kongAd.width = kongAdLoader.width;
-		kongAd.x = (640 - kongAdLoader.width) / 2;
-		kongAd.y = (410 - kongAdLoader.height) / 2;
+		kongAd.x = (Configuration.app_width - kongAdLoader.width) / 2;
+		kongAd.y = (Configuration.app_height - 70 - kongAdLoader.height) / 2;
 	}
 	
 	function clickOnKongAd(e : Event) {

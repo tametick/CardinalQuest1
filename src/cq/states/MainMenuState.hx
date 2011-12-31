@@ -300,7 +300,7 @@ class MainMenuState extends CqState {
 			updateFullscreen();
 		}
 		
-		var copyright = new HxlText(375, 459, Configuration.app_width - 375 - 123, Resources.getString( "MENU_COPYRIGHT" ), true, FontAnonymousPro.instance.fontName, 18);
+		var copyright = new HxlText(375, 459, 142, Resources.getString( "MENU_COPYRIGHT" ), true, FontAnonymousPro.instance.fontName, 18);
 		add(copyright);
 
 		//Adding porter for ios, I guess android will want to do the same
@@ -349,6 +349,7 @@ class MainMenuState extends CqState {
 
 		var bg = new HxlSprite(0, 0, SpriteMainmenuBg);
 		add(bg);
+		bg.scaleFullscreen();
 
 		SoundEffectsManager.play(FortressGate);
 
@@ -378,6 +379,7 @@ class MainMenuState extends CqState {
 
 			var bg = new HxlSprite(0, 0, SpriteMainmenuBg);
 			add(bg);
+			bg.scaleFullscreen();
 			bg.zIndex--;
 
 			titleText = new LogoSprite((Configuration.app_width - 345) / 2, - 55);
