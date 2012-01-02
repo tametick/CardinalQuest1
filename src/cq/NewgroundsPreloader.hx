@@ -11,11 +11,16 @@ import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 
 import flash.events.Event;
+import flash.events.MouseEvent;
 
 import flash.external.ExternalInterface;
 
 import flash.text.TextField;
 import flash.text.TextFormat;
+import flash.text.TextFormatAlign;
+
+import flash.ui.Mouse;
+import flash.ui.MouseCursor;
 
 import flash.Lib;
 
@@ -27,6 +32,7 @@ import com.newgrounds.components.FlashAd;
 	import flash.ui.ContextMenu;
 #end
 
+import CqResources.FontDungeon;
 /**
  * ...
  * @author randomnine
@@ -37,6 +43,8 @@ class NewgroundsPreloader extends MovieClip
 	var m_progress:Float;
 	var m_progressBarBG : Shape;
 	var m_progressBar : Shape;
+	
+	var m_clicky : TextField;
 	
 	var m_newgroundsAd : FlashAd;
 	
@@ -136,6 +144,8 @@ class NewgroundsPreloader extends MovieClip
 			m_newgroundsAd.x = 320 - 0.5 * m_newgroundsAd.width;
 			m_newgroundsAd.y = 70;
 			addChild(m_newgroundsAd);
+			
+			m_clicky = null;
 		}
 	}
 	
@@ -151,17 +161,62 @@ class NewgroundsPreloader extends MovieClip
 		  && Lib.current.root.loaderInfo.bytesLoaded >= Lib.current.root.loaderInfo.bytesTotal
 		  && timeLine.currentFrame == timeLine.totalFrames )
 		{
-			removeChild( m_progressBarBG );
-			removeChild( m_progressBar );
-			
 			Lib.current.gotoAndStop( 2 );
 			Lib.current.removeEventListener( Event.ENTER_FRAME, checkFrame, false );
 
-			m_newgroundsAd.removeAd();
-			removeChild( m_newgroundsAd );
-			m_newgroundsAd = null;
+			m_progressBarBG.alpha = 0.2;
+			m_progressBar.alpha = 0.4;
+
+			var clickyFormat:TextFormat = new TextFormat();
+			clickyFormat.align = TextFormatAlign.CENTER;
+			clickyFormat.font = "FontDungeon";
+			clickyFormat.bold = true;
+			clickyFormat.color = 0xffffff;
+			clickyFormat.size = 40;
 			
-			Main.main();
+			m_clicky = new TextField();
+			m_clicky.x = (640 - 400) / 2;
+			m_clicky.y = 386;
+			m_clicky.width = 400;
+			m_clicky.height = 100;
+			m_clicky.text = "Play!";
+			m_clicky.embedFonts = true;
+			m_clicky.setTextFormat( clickyFormat );
+			
+			// Add click listener.
+			m_clicky.addEventListener( MouseEvent.CLICK, onClickPlay );
+			m_clicky.addEventListener( MouseEvent.ROLL_OVER, overClicky );
+			m_clicky.addEventListener( MouseEvent.ROLL_OUT, outClicky );
+			addChild( m_clicky );
 		}
 	}
+	
+	public function onClickPlay( e:Event ) : Void
+	{
+		m_clicky.removeEventListener( MouseEvent.CLICK, onClickPlay );
+		m_clicky.removeEventListener( MouseEvent.ROLL_OVER, overClicky );
+		m_clicky.removeEventListener( MouseEvent.ROLL_OUT, outClicky );
+		
+		Mouse.cursor = "auto";
+		
+		removeChild( m_clicky );
+		removeChild( m_progressBarBG );
+		removeChild( m_progressBar );
+		
+		m_newgroundsAd.removeAd();
+		removeChild( m_newgroundsAd );
+		m_newgroundsAd = null;
+		
+		Main.main();
+	}
+	
+	function overClicky( e:MouseEvent ) : Void
+	{
+		Mouse.cursor = "button";
+	}
+	 
+	function outClicky( e:MouseEvent ) : Void
+	{
+		Mouse.cursor = "auto";
+	}	
 }
