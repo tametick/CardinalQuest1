@@ -58,8 +58,8 @@ class Configuration {
 	public static var playerLives = 1;
 	public static var spellsPerLevel = 2;
 
-	public static inline var startWithMusic:Bool = false;
-	public static inline var startWithSound:Bool = false;
+	public static inline var startWithMusic:Bool = true;
+	public static inline var startWithSound:Bool = true;
 
 	public static inline var chestsPerLevel = 10;
 

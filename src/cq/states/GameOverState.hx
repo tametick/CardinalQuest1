@@ -2,7 +2,9 @@ package cq.states;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Cubic;
+#if newgrounds
 import com.newgrounds.components.FlashAd;
+#end
 import cq.CqResources;
 import cq.ui.CqTextScroller;
 import data.Configuration;
@@ -37,8 +39,10 @@ class GameOverState extends CqState {
 	var sponsorSplash : HxlSprite;
 	var sponsorFade : Bool;
 	
+#if newgrounds
 	var newgroundsAd : FlashAd;
-	
+#end
+
 	public var kongAd : Sprite;
 	var kongAdLoader : Loader;
 	
@@ -60,7 +64,9 @@ class GameOverState extends CqState {
 		scroller.onComplete(goToMenu);
 		scroller.zIndex--;
 		
+#if newgrounds
 		newgroundsAd = null;
+#end
 		sponsorSplash = null;
 		
 		if (!Configuration.standAlone)
@@ -80,12 +86,14 @@ class GameOverState extends CqState {
 				}
 				
 				kongAdLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, playKongAd, false, 0, true);	
+#if newgrounds
 			} else if ( Configuration.allowNewgroundsAds ) {
 				newgroundsAd = new FlashAd();
 				newgroundsAd.adType = "Simple";
 				newgroundsAd.x = 320 - 0.5 * newgroundsAd.width;
 				newgroundsAd.y = 70;
 				addChild(newgroundsAd);
+#end
 			} else if ( Configuration.isArmorSponsored ) {
 				sponsorSplash = new HxlSprite( 0, 0, ArmorGames );
 				sponsorSplash.alpha = 1.0;
@@ -226,12 +234,14 @@ class GameOverState extends CqState {
 	}*/
 	
 	public function nextScreen(state:String) {
+#if newgrounds
 		if ( newgroundsAd != null ) {
 			newgroundsAd.removeAd();
 			removeChild( newgroundsAd );
 			newgroundsAd = null;
 		}
-		
+#end
+
 		switch(state) {
 			case "menu":
 				HxlGraphics.fade.start(true, 0xff000000, fadeTime, menuFadeCallback, true);
@@ -241,12 +251,13 @@ class GameOverState extends CqState {
 	}
 	
 	function goToMenu() {
+#if newgrounds
 		if ( newgroundsAd != null ) {
 			newgroundsAd.removeAd();
 			removeChild( newgroundsAd );
 			newgroundsAd = null;
 		}
-		
+#end		
 		HxlGraphics.fade.start(true, 0xff000000, fadeTime, menuFadeCallback, true);
 	}
 	
