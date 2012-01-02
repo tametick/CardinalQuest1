@@ -13,6 +13,8 @@ import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.actuators.GenericActuator;
 import haxel.HxlText;
 
+import data.Configuration;
+
 
 class CqTextScroller extends HxlGroup {
 	static var Duration:Int = 10;
@@ -67,12 +69,7 @@ class CqTextScroller extends HxlGroup {
 		if(bg != null){
 			splash = new HxlSprite(0, 0, bg);
 			add(splash);
-			//fullscreen stretch
-			var sx:Float = scale * HxlGraphics.stage.stageWidth/splash.width;
-			var sy:Float = scale * HxlGraphics.stage.stageHeight/splash.height;
-			//( sx > sy ) ? sy = sx : sy = sx; //proportional scaling
-			splash.x = scale*((splash.width*sx)-splash.width);
-			splash.scale = new HxlPoint(sx * 1.1, sy * 1.1);
+			splash.scaleFullscreen();
 		}
 	}
 	
@@ -81,7 +78,7 @@ class CqTextScroller extends HxlGroup {
 			remove(titleText);
 		
 		if (Title.length > 0) {
-			titleText = new HxlText(0, 0, 640, Title);
+			titleText = new HxlText(0, 0, Configuration.app_width, Title);
 			titleText.setFormat(null, 72, TitleColor, "center", ShadowColor);
 			
 			add(titleText);

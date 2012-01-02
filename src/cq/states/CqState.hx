@@ -21,10 +21,6 @@ class CqState extends HxlState {
 		}
 
 		setDiagonalCursor();
-
-		//Mouse cursor on mobile looks silly
-		cursor.visible = !Configuration.mobile;
-
 		super.create();
 	}
 
@@ -33,6 +29,11 @@ class CqState extends HxlState {
 		if(cursor!=null) {
 			cursor.x = HxlGraphics.mouse.screenX - cursor.origin.x;
 			cursor.y = HxlGraphics.mouse.screenY - cursor.origin.y;
+			
+			//Mouse cursor on mobile looks silly
+			if (Configuration.mobile && !Configuration.desktopPretendingToBeMobile) {
+				cursor.visible = false;
+			}
 		}
 	}
 
@@ -41,9 +42,7 @@ class CqState extends HxlState {
 
 		if (facing == null || (facing.x == 0 && facing.y == 0)) {
 			var diagonal = SpriteCursor.instance.getSpriteIndex("diagonal");
-
-			// cursor rotation will set angle and the cursor origin
-
+			
 			cursor.angle = 0;
 			cursor.origin.x = 4;
 			cursor.origin.y = 2;

@@ -42,6 +42,9 @@ class CreateCharState extends CqState {
 	var portrait:HxlSprite;
 	var playerSprites:HxlSpriteSheet;
 	
+	var recenter:Int;
+	var shiftup:Int;
+	
 	var scroller:CqTextScroller;
 	
 	public override function create() {
@@ -51,6 +54,9 @@ class CreateCharState extends CqState {
 		state = 0;
 		storyScreen = true;
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime, fadeCallBack);
+		
+		recenter = Math.floor((Configuration.app_width - 640) / 2); // the adjustment needed for the three sprites will be centered no matter the screen size
+		shiftup = Math.floor(Math.max(Configuration.app_height - 480, -50));
 	}
 	
 	function fadeCallBack():Void {
@@ -87,14 +93,15 @@ class CreateCharState extends CqState {
 		var sprite = new HxlSprite(0, 0);
 		sprite.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 4.0, 4.0);
 		sprite.setFrame(playerSprites.getSpriteIndex(spriteName));
-		sprite.x = btnX;
-		sprite.y = class_buttons_y;
+		
+		sprite.x = btnX + recenter;
+		sprite.y = class_buttons_y + shiftup ;
 		add(sprite);
 		
-		var button = new HxlButton(btnX - 30, class_buttons_y - 20, Std.int(selectBox.width), Std.int(selectBox.height), cb, 0.0, 0.0);
+		var button = new HxlButton(btnX - 30 + recenter, class_buttons_y - 20 + shiftup , Std.int(selectBox.width), Std.int(selectBox.height), cb, 0.0, 0.0);
 		add(button);
 		
-		var text = new HxlText(textX, class_buttons_y + sprite.height, 150, className);
+		var text = new HxlText(textX + recenter, class_buttons_y + sprite.height + shiftup , 150, className);
 		text.setFormat(null, 32, 0xffffff, "center", 0x010101); 
 		add(text);
 	}
@@ -107,13 +114,13 @@ class CreateCharState extends CqState {
 		storyScreen = false;
 		
 		//paper bg
-		var bg:HxlSprite = new HxlSprite(40, 250, SpriteCharPaper);
+		var bg:HxlSprite = new HxlSprite(40, 250 + shiftup, SpriteCharPaper);
 		add(bg);
 		var titleText:HxlText = new HxlText(0, 0, Configuration.app_width, Resources.getString( "MENU_CREATECHARACTER" ));
 		titleText.setFormat(null, 72, 0xffffff, "center");
 		add(titleText);
 		
-		var btnStart:HxlButton = new HxlButton(490, 390, 90, 28);
+		var btnStart:HxlButton = new HxlButton(490, 390 + shiftup, 90, 28);
 		btnStart.setEventUseCapture(true);
 		var btnStartBg:HxlSprite = new HxlSprite(btnStart.x, btnStart.y);
 		btnStartBg.loadGraphic(SpriteButtonBg, false, false, 90, 26);
@@ -128,7 +135,7 @@ class CreateCharState extends CqState {
 		});
 
 		
-		selectBox = new HxlSprite(105, class_buttons_y-20);
+		selectBox = new HxlSprite(105 + recenter, class_buttons_y-20 + shiftup);
 		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.CharCreateSelector) ) {
 			var target:Shape = new Shape();
 			target.graphics.lineStyle(5, 0xffffff00);
@@ -154,7 +161,7 @@ class CreateCharState extends CqState {
 		createChoice(Resources.getString( "THIEF" ), "thief", 288, 245, pickThief);
 		createChoice(Resources.getString( "WIZARD" ), "wizard", 438, 395, pickWizard);
 		
-		txtDesc = new HxlText(160, 280, HxlGraphics.width - 220);
+		txtDesc = new HxlText(160, 280 + shiftup, HxlGraphics.width - 220);
 		txtDesc.setFormat(FontAnonymousPro.instance.fontName, 16, 0x000000, "left", 0);
 		add(txtDesc);
 
@@ -163,7 +170,7 @@ class CreateCharState extends CqState {
 		
 		portrait = SpritePortraitPaper.getIcon("FIGHTER", 100 , 1.0);
 		portrait.x = 60;
-		portrait.y = 290;
+		portrait.y = 290 + shiftup;
 		add(portrait);
 		add(btnStartBg);
 		add(btnStart);
@@ -230,11 +237,11 @@ class CreateCharState extends CqState {
 		var targetX:Float = 0;
 		
 		if ( curClass == "FIGHTER" ) {
-			targetX = 105;
+			targetX = 105 + recenter;
 		} else if ( curClass == "THIEF" ) {
-			targetX = 255;
+			targetX = 255 + recenter;
 		} else if ( curClass == "WIZARD" ) {
-			targetX = 405;
+			targetX = 405 + recenter;
 		}
 
 		portrait.setFrame( classEntry.getField( "Portrait" ) );

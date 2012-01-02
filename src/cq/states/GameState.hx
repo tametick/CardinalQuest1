@@ -5,6 +5,7 @@ import data.Resources;
 import data.StatsFile;
 import flash.system.System;
 import haxel.HxlGame;
+import haxel.HxlSlidingDialog;
 
 import data.Configuration;
 import data.Registery;
@@ -114,6 +115,7 @@ class GameState extends CqState {
 			//stairs popup
 			if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), currentTile.getDataNum())) {
 				Registery.player.popup.mouseBound = false;
+				Registery.player.popup.customBound = new HxlPoint(Registery.player.width / 2, Registery.player.height);
 				Registery.player.popup.setText(Resources.getString( "NOTIFY_DOWNSTAIRS" ) + "\n" + Resources.getString( "POPUP_ENTER" ));
 			} else {
 				Registery.player.popup.setText("");
@@ -457,9 +459,6 @@ class GameState extends CqState {
 			gameUI.pressHelp(false);
 		}
 
-		//Mouse cursor on mobile looks silly
-		cursor.visible = !Configuration.mobile;
-
 		Actuate.timer(.1).onComplete(cast(world.currentLevel, CqLevel).startMusic);
 
 		world = null;
@@ -532,6 +531,7 @@ class GameState extends CqState {
 			}
 		}
 	}
+	
 	var msMoveStamp:Float;
 	override function onMouseMove(event:MouseEvent)
 	{
@@ -541,8 +541,8 @@ class GameState extends CqState {
 		cursor.visible = true;
 		lastMouse = true;
 	}
+	
 	override function onMouseDown(event:MouseEvent) {
-
 		updateTouchLocation( event );
 
 		if (HxlGraphics.justUnpaused) {
@@ -550,21 +550,27 @@ class GameState extends CqState {
 			return;
 		}
 
-		if( Configuration.mobile ){
-			isPlayerActing = true;
-			HxlGraphics.updateInput();
-			act();
-			isPlayerActing = false;
-		}
-
-		if (!started || endingAnim || Timer.stamp() < resumeActingTime)
-			return;
-		if ( GameUI.isTargeting ) {
-			gameUI.targetingExecute(true);
+		if (!started || endingAnim) {
 			return;
 		}
 
-		isPlayerActing = true;
+		if (GameUI.instance.panels.currentPanel != GameUI.instance.panels.panelInventory) {
+			if (Configuration.mobile) {
+				HxlGraphics.updateInput();
+			}
+		
+			if ( GameUI.isTargeting ) {
+				gameUI.targetingExecute(true);
+				return;
+			}
+				
+			if ( Configuration.mobile) {
+				isPlayerActing = true;
+				act();
+			} else {
+				isPlayerActing = true;
+			}
+		}
 	}
 
 	override function onMouseUp(event:MouseEvent) {

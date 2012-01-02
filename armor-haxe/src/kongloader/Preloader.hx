@@ -107,7 +107,7 @@ class Preloader extends MovieClip {
 			g.drawRect(0, 0, 400, 20);
 			addChild(progressBarBG);
 			g = null;
-			progressBarBG.x = (640 - 400) / 2;
+			progressBarBG.x = (Configuration.app_width - 400) / 2;  // 640 - 400
 			progressBarBG.y = 400;
 			progressBar = new Shape();
 			g = progressBar.graphics;
