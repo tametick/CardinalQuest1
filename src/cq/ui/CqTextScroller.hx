@@ -113,9 +113,21 @@ class CqTextScroller extends HxlGroup {
 		clicks++;
 	}
 
-	public function addColumn(X:Int, W:Int, text:String,?embeddedfont:Bool = true,?fontName:String = "",?fontSize:Int = 16,?color:Int = 0xFFFFFF, ?shadowColor:Int = 0x010101) {
+	public function addColumn(X:Int, W:Int, text:String, ?embeddedfont:Bool = true, ?fontName:String = "", ?fontSize:Int = 16, ?color:Int = 0xFFFFFF, ?shadowColor:Int = 0x010101) {
+		if (HxlGraphics.width != 640) {
+			X = Math.floor(X * HxlGraphics.width / 640);
+			W = Math.floor(W * HxlGraphics.width / 640);
+			
+			if (HxlGraphics.width <= 480) {
+				fontSize -= 2; // for small screens, shrink the font and make some extra room!
+				
+				X -= 25;
+				W += 50;
+			}
+		}
+		
 		var text:HxlText = new HxlText(X, initial_y, W, text, embeddedfont, fontName);
-		text.setFormat(fontName, fontSize, color, "left", shadowColor);		
+		text.setFormat(fontName, fontSize, color, "left", shadowColor);
 		
 		if (text.height > columns_height) {
 			columns_height = Std.int(text.height);
