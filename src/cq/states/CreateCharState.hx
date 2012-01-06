@@ -45,6 +45,7 @@ class CreateCharState extends CqState {
 	var recenter:Int;
 	var smallScreen:Bool;
 	var shiftup:Int;
+	var paperShiftup:Int;
 	
 	var scroller:CqTextScroller;
 	
@@ -59,6 +60,7 @@ class CreateCharState extends CqState {
 		recenter = Math.floor((Configuration.app_width - 640) / 2); // the adjustment needed for the three sprites to be centered no matter the screen size
 		smallScreen = HxlGraphics.width < 500;
 		shiftup = smallScreen ? -68 : 0;
+		paperShiftup = smallScreen ? -90 : 0;
 	}
 	
 	function fadeCallBack():Void {
@@ -116,7 +118,7 @@ class CreateCharState extends CqState {
 		storyScreen = false;
 		
 		//paper bg
-		var bg:HxlSprite = new HxlSprite(smallScreen ? -20 : 40, 250 + shiftup, SpriteCharPaper);
+		var bg:HxlSprite = new HxlSprite(smallScreen ? -25 : 40, 250 + paperShiftup + (smallScreen ? 10 : 0), SpriteCharPaper);
 		add(bg);
 		
 		var titleText:HxlText = new HxlText(0, smallScreen ? -8 : 0, Configuration.app_width, Resources.getString( "MENU_CREATECHARACTER" ));
@@ -124,7 +126,7 @@ class CreateCharState extends CqState {
 		titleText.setFormat(null, smallScreen ? 56 : 72, 0xffffff, "center");
 		add(titleText);
 		
-		var btnStart:HxlButton = new HxlButton(490, 390 + shiftup, 90, 28);
+		var btnStart:HxlButton = new HxlButton(Math.floor((490 / 640) * HxlGraphics.width), 390 + paperShiftup - (smallScreen ? 6 : 0), 90, 28);
 		btnStart.setEventUseCapture(true);
 		var btnStartBg:HxlSprite = new HxlSprite(btnStart.x, btnStart.y);
 		btnStartBg.loadGraphic(SpriteButtonBg, false, false, 90, 26);
@@ -165,16 +167,16 @@ class CreateCharState extends CqState {
 		createChoice(Resources.getString( "THIEF" ), "thief", 288, 245, pickThief);
 		createChoice(Resources.getString( "WIZARD" ), "wizard", 438, 395, pickWizard);
 		
-		txtDesc = new HxlText(160, 280 + shiftup, HxlGraphics.width - 220);
+		txtDesc = new HxlText(smallScreen ? 110 : 160, 280 + paperShiftup, smallScreen ? HxlGraphics.width - 120 : HxlGraphics.width - 220);
 		txtDesc.setFormat(FontAnonymousPro.instance.fontName, 16, 0x000000, "left", 0);
 		add(txtDesc);
 
 		// Initialise text.
 		txtDesc.text = Resources.getString( "FIGHTER", true );
 		
-		portrait = SpritePortrait.getIcon("FIGHTER", 100 , 1.0);
-		portrait.x = 60;
-		portrait.y = 290 + shiftup;
+		portrait = SpritePortraitPaper.getIcon("FIGHTER", 100 , 1.0);
+		portrait.x = smallScreen ? 20 : 60 ;
+		portrait.y = 290 + paperShiftup;
 		add(portrait);
 		add(btnStartBg);
 		add(btnStart);
