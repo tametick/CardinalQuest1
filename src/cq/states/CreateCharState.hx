@@ -43,6 +43,7 @@ class CreateCharState extends CqState {
 	var playerSprites:HxlSpriteSheet;
 	
 	var recenter:Int;
+	var smallScreen:Bool;
 	var shiftup:Int;
 	
 	var scroller:CqTextScroller;
@@ -55,8 +56,9 @@ class CreateCharState extends CqState {
 		storyScreen = true;
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime, fadeCallBack);
 		
-		recenter = Math.floor((Configuration.app_width - 640) / 2); // the adjustment needed for the three sprites will be centered no matter the screen size
-		shiftup = Math.floor(Math.max(Configuration.app_height - 480, -50));
+		recenter = Math.floor((Configuration.app_width - 640) / 2); // the adjustment needed for the three sprites to be centered no matter the screen size
+		smallScreen = HxlGraphics.width < 500;
+		shiftup = smallScreen ? -68 : 0;
 	}
 	
 	function fadeCallBack():Void {
@@ -114,10 +116,12 @@ class CreateCharState extends CqState {
 		storyScreen = false;
 		
 		//paper bg
-		var bg:HxlSprite = new HxlSprite(40, 250 + shiftup, SpriteCharPaper);
+		var bg:HxlSprite = new HxlSprite(smallScreen ? -20 : 40, 250 + shiftup, SpriteCharPaper);
 		add(bg);
-		var titleText:HxlText = new HxlText(0, 0, Configuration.app_width, Resources.getString( "MENU_CREATECHARACTER" ));
-		titleText.setFormat(null, 72, 0xffffff, "center");
+		
+		var titleText:HxlText = new HxlText(0, smallScreen ? -8 : 0, Configuration.app_width, Resources.getString( "MENU_CREATECHARACTER" ));
+		
+		titleText.setFormat(null, smallScreen ? 56 : 72, 0xffffff, "center");
 		add(titleText);
 		
 		var btnStart:HxlButton = new HxlButton(490, 390 + shiftup, 90, 28);
@@ -168,7 +172,7 @@ class CreateCharState extends CqState {
 		// Initialise text.
 		txtDesc.text = Resources.getString( "FIGHTER", true );
 		
-		portrait = SpritePortraitPaper.getIcon("FIGHTER", 100 , 1.0);
+		portrait = SpritePortrait.getIcon("FIGHTER", 100 , 1.0);
 		portrait.x = 60;
 		portrait.y = 290 + shiftup;
 		add(portrait);
