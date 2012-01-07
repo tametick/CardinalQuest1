@@ -123,6 +123,7 @@ class GameUI extends HxlDialog {
 	public static var targetSpell:CqItem = null;
 	public static var hasShownInv:Bool;
 	public static var showInvHelp:Bool;
+	var smallScreen:Bool;
 	public static var instance:GameUI = null;
 	var targetLastPos:HxlPoint;
 	
@@ -162,6 +163,7 @@ class GameUI extends HxlDialog {
 		 * Create and init main containers
 		 **/
 		
+		smallScreen = HxlGraphics.height < 400;
 
 		var mainBtn = SpritePortrait.getIcon(Registery.player.playerClassSprite,64 ,1.0);
 		var infoBtn = new HxlSprite();
@@ -173,8 +175,9 @@ class GameUI extends HxlDialog {
 		leftButtons.scrollFactor.x = leftButtons.scrollFactor.y = 0;
 		add(leftButtons);
 		
-		notifications = new CqTextNotification(320, 60);
+		notifications = new CqTextNotification(Math.floor(HxlGraphics.width / 2), smallScreen ? 20 : 60);
 		notifications.zIndex = 3;
+		
 		add(notifications);
 		
 		var mapBtn = new ButtonSprite();
