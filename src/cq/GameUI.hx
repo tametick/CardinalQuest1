@@ -123,7 +123,6 @@ class GameUI extends HxlDialog {
 	public static var targetSpell:CqItem = null;
 	public static var hasShownInv:Bool;
 	public static var showInvHelp:Bool;
-	var smallScreen:Bool;
 	public static var instance:GameUI = null;
 	var targetLastPos:HxlPoint;
 	
@@ -163,19 +162,16 @@ class GameUI extends HxlDialog {
 		 * Create and init main containers
 		 **/
 		
-		smallScreen = HxlGraphics.height < 400;
-
 		var mainBtn = SpritePortrait.getIcon(Registery.player.playerClassSprite,64 ,1.0);
 		var infoBtn = new HxlSprite();
 		infoBtn.loadGraphic(SpriteInfo, false, false, 64, 64, true, 1, 1);				 
 		
-		// I've tried switching these -- it doesn't quite feel right.
 		var pop:CqPopup;
-		leftButtons = new HxlButtonContainer(0, 30, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
+		leftButtons = new HxlButtonContainer(0, HxlGraphics.smallScreen ? 10 : 30, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
 		leftButtons.scrollFactor.x = leftButtons.scrollFactor.y = 0;
 		add(leftButtons);
 		
-		notifications = new CqTextNotification(Math.floor(HxlGraphics.width / 2), smallScreen ? 20 : 60);
+		notifications = new CqTextNotification(Math.floor(HxlGraphics.width / 2), HxlGraphics.smallScreen ? 20 : 60);
 		notifications.zIndex = 3;
 		
 		add(notifications);

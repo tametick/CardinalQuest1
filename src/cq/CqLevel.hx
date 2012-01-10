@@ -186,7 +186,7 @@ class CqLevel extends Level {
 			}
 		}
 	
-		loadMap(newMapData, SpriteTiles, SpriteDecorations, Configuration.tileSize, Configuration.tileSize, 2.0, 2.0);
+		loadMap(newMapData, SpriteTiles, SpriteDecorations, Configuration.tileSize, Configuration.tileSize, Configuration.zoom, Configuration.zoom);
 	
 		// mark as visible in fov
 		markInvisible();

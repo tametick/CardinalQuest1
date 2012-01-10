@@ -830,11 +830,11 @@ class CqPotionGrid extends CqInventoryGrid {
 		var offsetX:Int = 50;
 		var offsetY:Int = 2;
 		var btnSize:Int = 64;
-		var padding:Int = 18;		
+		var halfPadding:Int = HxlGraphics.smallScreen ? 1 : 5;
 		
 		for ( i in 0...numberOfCells ) {
-			var cell:CqInventoryCell = new CqInventoryCell(POTION, offsetX + (i * (btnSize + 10)), offsetY, btnSize, btnSize);
-			cell.extendOverlap = new HxlRect( -5, -9, 5, 100); // the 100 is arbitrary -- it just means "to the bottom edge"
+			var cell:CqInventoryCell = new CqInventoryCell(POTION, offsetX + (i * (btnSize + 2 * halfPadding)), offsetY, btnSize, btnSize);
+			cell.extendOverlap = new HxlRect( -halfPadding, -9, halfPadding, 100); // the 100 is arbitrary -- it just means "to the bottom edge"
 			
 			add(cell);
 			cell.setGraphicKeys(CqGraphicKey.EquipmentCellBG, CqGraphicKey.EqCellBGHighlight, CqGraphicKey.CellGlow);
@@ -942,7 +942,7 @@ class CqSpellGrid extends CqInventoryGrid {
 		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.EqCellBGHighlight;
 
 		var btnSize:Int = 64;
-		var padding:Int = 8;
+		var halfPadding:Int = HxlGraphics.smallScreen ? -3 : 5;
 		
 		belt = new HxlSprite(6, -13);
 		belt.zIndex = 0;
@@ -952,8 +952,8 @@ class CqSpellGrid extends CqInventoryGrid {
 		add(belt);
 		
 		for ( i in 0...numberOfCells ) {
-			var cell:CqInventoryCell = new CqInventoryCell(SPELL, 10, 10 + ((i * btnSize) + (i * 10)), btnSize, btnSize);
-			cell.extendOverlap = new HxlRect( -9, -5, 100, 5); // the 100 is arbitrary -- it just means "to the right edge"
+			var cell:CqInventoryCell = new CqInventoryCell(SPELL, 10, 10 + i * (btnSize + 2 * halfPadding), btnSize, btnSize);
+			cell.extendOverlap = new HxlRect( -9, -halfPadding, 100, halfPadding); // the 100 is arbitrary -- it just means "to the right edge"
 			
 			cell.zIndex = 1;
 			

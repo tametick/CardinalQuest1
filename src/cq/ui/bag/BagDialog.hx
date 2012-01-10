@@ -54,7 +54,7 @@ class BagDialog {
 	public function new(gameUI:GameUI, spells:Int, potions:Int, packsize:Int, equipSlots:Array<String>) {
 		gameui = gameUI;
 		
-		equippedSpells = new CqSpellGrid(spells, HxlGraphics.width - 84, 30, 84, 380);
+		equippedSpells = new CqSpellGrid(spells, HxlGraphics.width - 84, HxlGraphics.smallScreen ? 10 : 30, 84, 380);
 		equippedSpells.zIndex = 1;
 		gameui.add(equippedSpells);
 

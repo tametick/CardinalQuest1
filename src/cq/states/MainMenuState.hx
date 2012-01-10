@@ -86,14 +86,10 @@ class MainMenuState extends CqState {
 	var updateVersion:String;
 	var updateUrl:String;
 	var showingUpdate:Bool;
-	
-	var smallScreen:Bool;
 
 	public function new()
 	{
 		super();
-		
-		smallScreen = HxlGraphics.height < 400;
 		
 		stillSplashing = false;
 		buttonsAreUp = false;
@@ -146,7 +142,7 @@ class MainMenuState extends CqState {
 		var fadeTime = 0.5;
 
 		var menu = makeMenu();
-		Actuate.tween(menu, 1.00, { targetY: smallScreen ? 140 : 220 } )
+		Actuate.tween(menu, 1.00, { targetY: HxlGraphics.smallScreen ? 140 : 220 } )
 			.ease(Cubic.easeOut)
 			.onComplete(showAdditionalButtons);
 	}
@@ -173,7 +169,7 @@ class MainMenuState extends CqState {
 		add(menu);
 
 		var buttonY:Int = 0;
-		var spacing = smallScreen ? 40 : 50;
+		var spacing = HxlGraphics.smallScreen ? 40 : 50;
 
 		var textColor = 0x000000;
 		var textHighlight = 0x670000;
@@ -408,7 +404,7 @@ class MainMenuState extends CqState {
 	private var titlePosition(getTitlePosition, never):Float;
 	
 	private function getTitlePosition() {
-		return (480 - 50) / 2 - 55 - (smallScreen ? 80 : 0);
+		return (480 - 50) / 2 - 55 - (HxlGraphics.smallScreen ? 80 : 0);
 	}
 
 	override private function onMouseDown(event:MouseEvent) {
