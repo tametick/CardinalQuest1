@@ -444,7 +444,7 @@ class GameUI extends HxlDialog {
 	}
 	
 	function addCentralBars() {
-		var width = 32;
+		var width = 16 * Configuration.zoom;
 		var height = 4;
 		
 		var xShift = Registery.player.getScreenXY().x+2;
@@ -681,7 +681,7 @@ class GameUI extends HxlDialog {
 		if (Std.is(Actor, CqPlayer))
 			return;
 		
-		var bar:CqHealthBar = new CqHealthBar(Actor, Actor.x, Actor.y + Actor.height + 2, 32, 4);
+		var bar:CqHealthBar = new CqHealthBar(Actor, Actor.x, Actor.y + Actor.height + 2, 16 * Configuration.zoom, 4);
 		HxlGraphics.state.add(bar);
 		bar = null;
 		

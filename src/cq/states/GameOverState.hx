@@ -50,6 +50,8 @@ class GameOverState extends CqState {
 	static var complete;
 
 	public override function create() {
+		var spacing = HxlGraphics.smallScreen ? 40 : 50;
+		
 		super.create();
 
 		addedKong = false;
@@ -106,7 +108,7 @@ class GameOverState extends CqState {
 			}
 		}
 		
-		menu = new HxlMenu(200, Configuration.app_width, 240, 200);
+		menu = new HxlMenu(Math.floor(.5 * (Configuration.app_width - 240)), Configuration.app_width, 240, 200);
 		add(menu);
 		
 		var buttonY:Int = 0;
@@ -121,7 +123,7 @@ class GameOverState extends CqState {
 		btnNewGame.setCallback(function() {
 			nextScreen("game");
 		});
-		buttonY += 50;
+		buttonY += spacing;
 
 		var btnMenu:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, Resources.getString( "MENU_MAIN_MENU" ), true, null);
 		btnMenu.setNormalFormat(null, 35, textColor, "center");
@@ -130,7 +132,7 @@ class GameOverState extends CqState {
 		btnMenu.setCallback(function() {
 			nextScreen("menu");
 		});
-		buttonY += 50;
+		buttonY += spacing;
 		
 		menu.setScrollSound(MenuItemMouseOver);
 		menu.setSelectSound(MenuItemClick);
@@ -138,6 +140,10 @@ class GameOverState extends CqState {
 		var menuY:Int = 325;
 		if ( !Configuration.standAlone && Configuration.allowNewgroundsAds ) {
 			menuY = 365;
+		}
+		
+		if (HxlGraphics.smallScreen) {
+			menuY -= 100;
 		}
 		
 		Actuate.tween(menu, 1, { targetY: menuY } ).ease(Cubic.easeOut);

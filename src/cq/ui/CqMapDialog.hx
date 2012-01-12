@@ -16,6 +16,7 @@ import haxel.HxlSlidingDialog;
 import haxel.HxlSprite;
 import haxel.HxlTilemap;
 import haxel.HxlUtil;
+import haxel.HxlGraphics;
 class CqMapDialogBMPData extends BitmapData {}
 
 class CqMapDialog extends HxlSlidingDialog {
@@ -52,6 +53,13 @@ class CqMapDialog extends HxlSlidingDialog {
 		mapShape = new Shape();
 		mapBitmap = new Bitmap(new CqMapDialogBMPData(Std.int(mapSize.x), Std.int(mapSize.y), true, 0x0));
 		mapSprite.pixels = mapBitmap.bitmapData;
+		
+		if (HxlGraphics.smallScreen) {
+			mapSprite.scale.x = .5;
+			mapSprite.scale.y = .5;
+			mapSprite.x -= .5 * (1.0 - mapSprite.scale.x) * mapSprite.width;
+			mapSprite.y -= .5 * (1.0 - mapSprite.scale.y) * mapSprite.height;
+		}
 
 		init();
 		updateDialog();

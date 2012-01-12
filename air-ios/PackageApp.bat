@@ -1,3 +1,5 @@
+@ECHO OFF
+
 set PAUSE_ERRORS=1
 
 copy ..\bin\cq.swf bin\cq.swf

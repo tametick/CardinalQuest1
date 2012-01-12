@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <application xmlns="http://ns.adobe.com/air/application/2.6">
-  <id>net.demuyt.cq</id>
+  <id>com.tametick.CardinalQuest</id>
   <versionNumber>1.1.1</versionNumber>
   <filename>cardinalquest</filename>
   <name>Cardinal Quest</name>
