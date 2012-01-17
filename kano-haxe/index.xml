@@ -3,14 +3,14 @@
 	<FileAttributes/>
 	<SetBackgroundColor color="0x000000" />
 	
-	<DefineBitsJPEG id="1" file="lib/kanogames-splash.png" />
-	<SymbolClass id="1" class="kongloader.KongLogo" base="flash.display.Bitmap"/>
+	<DefineBitsJPEG id="1" file="lib/kanogames-splash.jpeg" />
+	<SymbolClass id="1" class="kanoloader.KanoLogo" base="flash.display.Bitmap"/>
 	
 	<DefineABC file="./bin/preloader.swf" isBoot="true" />
 	<ShowFrame/>
 
 	<DefineBinaryData id="2" file="../bin/cq.swf" />
-	<SymbolClass id="2" class="kongloader.GameData" base="flash.utils.ByteArray"/>
+	<SymbolClass id="2" class="kanoloader.GameData" base="flash.utils.ByteArray"/>
 	
 	<ShowFrame/>
 </swf>
