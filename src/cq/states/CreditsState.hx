@@ -22,6 +22,15 @@ class CreditsState extends CqState {
 		super.create();
 		var bg = new HxlSprite(0, 0, SpriteCredits);
 		add(bg);
+		
+		// we don't want to downscale the credits if we're on a smaller screen --
+		// if we center them, they should fit fine.
+		
+		bg.x = (HxlGraphics.width - bg.width) / 2;
+		bg.y = (HxlGraphics.height - bg.height) / 2;
+		
+		if (HxlGraphics.height < 400) bg.y -= 11; // shift it up a little more on small screens
+		
 		state = 0;
 		minimumTime = 1;
 		entryStamp = Timer.stamp();

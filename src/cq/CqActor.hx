@@ -1144,7 +1144,7 @@ class CqPlayer extends CqActor, implements Player {
 		
 		onGainXP = new List();
 
-		loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 2.0, 2.0);
+		loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, Configuration.zoom, Configuration.zoom);
 		faction = CqPlayer.faction;
 
 		play("idle");

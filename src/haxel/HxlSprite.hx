@@ -243,14 +243,17 @@ class HxlSprite extends HxlObject {
 		var sx:Float = percentOfScreen * HxlGraphics.stage.stageWidth / width;
 		var sy:Float = percentOfScreen * HxlGraphics.stage.stageHeight / height;
 		
-		if (sx < sy) {
+		if (sx > sy) {
 			sy = sx;
 		} else {
 			sy = sx;
 		}
 		
-		x = .5 * ((width * sx) - width);
-		y = .5 * ((height * sy) - height);
+		x = .5 * (HxlGraphics.stage.stageWidth - (width));
+		y = .5 * (HxlGraphics.stage.stageHeight - (height));
+		
+		//x = -50;
+		//y = 0;
 		
 		scale = new HxlPoint(sx, sy);
 	}

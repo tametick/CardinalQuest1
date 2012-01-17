@@ -57,6 +57,12 @@ class HxlGraphics {
 	 * Height of the screen in game pixels.
 	 */
 	public static var height:Int;
+	
+	/**
+	 * An indicator declaring whether the current screen should be treated as "small" for fluid layouts
+	 */
+	public static var smallScreen:Bool;
+	
 	/**
 	 * <code>HxlGraphics.levels</code> and <code>HxlGraphics.scores</code> are generic
 	 * global variables that can be used for various cross-state stuff.
@@ -203,6 +209,7 @@ class HxlGraphics {
 		_game = Game;
 		width = Width;
 		height = Height;
+		smallScreen = height < 400;
 		scroll = null;
 		_scrollTarget = null;
 		unfollow();

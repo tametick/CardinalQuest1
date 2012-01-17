@@ -142,7 +142,7 @@ class MainMenuState extends CqState {
 		var fadeTime = 0.5;
 
 		var menu = makeMenu();
-		Actuate.tween(menu, 1.00, { targetY: 220 } )
+		Actuate.tween(menu, 1.00, { targetY: HxlGraphics.smallScreen ? 140 : 220 } )
 			.ease(Cubic.easeOut)
 			.onComplete(showAdditionalButtons);
 	}
@@ -165,10 +165,11 @@ class MainMenuState extends CqState {
 
 
 	private function makeMenu():HxlMenu {
-		menu = new HxlMenu(200, Configuration.app_width, 240, 200);
+		menu = new HxlMenu((HxlGraphics.width - 240) / 2, Configuration.app_width, 240, 200);
 		add(menu);
 
 		var buttonY:Int = 0;
+		var spacing = HxlGraphics.smallScreen ? 40 : 50;
 
 		var textColor = 0x000000;
 		var textHighlight = 0x670000;
@@ -181,7 +182,7 @@ class MainMenuState extends CqState {
 			btnResumeGame.setHoverFormat(null, 35, textHighlight, "center");
 			menu.addItem(btnResumeGame);
 			btnResumeGame.setCallback(resumeGame);
-			buttonY += 50;
+			buttonY += spacing;
 		}
 
 		var mouseOver= function() {
@@ -193,7 +194,7 @@ class MainMenuState extends CqState {
 		btnNewGame.setHoverFormat(null, 35, textHighlight, "center");
 		menu.addItem(btnNewGame);
 		btnNewGame.setCallback(gotoCharState);
-		buttonY += 50;
+		buttonY += spacing;
 
 
 		if ( stackId == 0 ) {
@@ -203,7 +204,7 @@ class MainMenuState extends CqState {
 			btnCredits.setHoverFormat(null, 35, textHighlight, "center");
 			menu.addItem(btnCredits);
 			btnCredits.setCallback(gotoCreditState);
-			buttonY += 50;
+			buttonY += spacing;
 
 /*			var btnHiscores:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Highscores", true, null);
 			btnHiscores.setNormalFormat(null, 35, textColor, "center");
@@ -228,7 +229,7 @@ class MainMenuState extends CqState {
 						GameUI.instance.kill();
 					self.changeState(GameState);
 				});
-				buttonY += 50;
+				buttonY += spacing;
 			} */
 		}
 		if (Configuration.standAlone) {
@@ -245,7 +246,7 @@ class MainMenuState extends CqState {
 				btnQuit.setCallback(function() { Lib.fscommand("quit"); } );
 			}
 
-			buttonY += 50;
+			buttonY += spacing;
 		}
 
 		menu.setScrollSound(MenuItemMouseOver);
@@ -300,7 +301,7 @@ class MainMenuState extends CqState {
 			updateFullscreen();
 		}
 		
-		var copyright = new HxlText(375, 459, 142, Resources.getString( "MENU_COPYRIGHT" ), true, FontAnonymousPro.instance.fontName, 18);
+		var copyright = new HxlText((HxlGraphics.width - 150), 459 + (HxlGraphics.height - 480), 142, Resources.getString( "MENU_COPYRIGHT" ), true, FontAnonymousPro.instance.fontName, 18);
 		add(copyright);
 
 		//Adding porter for ios, I guess android will want to do the same
@@ -358,7 +359,9 @@ class MainMenuState extends CqState {
 		waitTime = 0;
 
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
-		Actuate.tween(titleText, fadeTime, { y: (480 - 50) / 2 - 55 } ).ease(Cubic.easeOut);
+		
+		
+		Actuate.tween(titleText, fadeTime, { y: titlePosition} ).ease(Cubic.easeOut);
 
 		Actuate.timer(.30).onComplete(finishSplashing);
 	}
@@ -382,20 +385,26 @@ class MainMenuState extends CqState {
 			bg.scaleFullscreen();
 			bg.zIndex--;
 
-			titleText = new LogoSprite((Configuration.app_width - 345) / 2, - 55);
+			titleText = new LogoSprite((Configuration.app_width - 345) / 2, -55);
 			add(titleText);
 
 			startSplashing();
 		} else {
 			//blur gamestate
 			super.create();
-			titleText = new LogoSprite((Configuration.app_width - 345) / 2, (480 - 50) / 2 - 55);
+			titleText = new LogoSprite((Configuration.app_width - 345) / 2, titlePosition);
 			add(titleText);
 
 			stillSplashing = true;
 			finishSplashing();
 			showAdditionalButtons();
 		}
+	}
+	
+	private var titlePosition(getTitlePosition, never):Float;
+	
+	private function getTitlePosition() {
+		return (480 - 50) / 2 - 55 - (HxlGraphics.smallScreen ? 80 : 0);
 	}
 
 	override private function onMouseDown(event:MouseEvent) {

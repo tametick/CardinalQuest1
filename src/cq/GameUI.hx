@@ -162,19 +162,18 @@ class GameUI extends HxlDialog {
 		 * Create and init main containers
 		 **/
 		
-
 		var mainBtn = SpritePortrait.getIcon(Registery.player.playerClassSprite,64 ,1.0);
 		var infoBtn = new HxlSprite();
 		infoBtn.loadGraphic(SpriteInfo, false, false, 64, 64, true, 1, 1);				 
 		
-		// I've tried switching these -- it doesn't quite feel right.
 		var pop:CqPopup;
-		leftButtons = new HxlButtonContainer(0, 30, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
+		leftButtons = new HxlButtonContainer(0, HxlGraphics.smallScreen ? 10 : 30, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
 		leftButtons.scrollFactor.x = leftButtons.scrollFactor.y = 0;
 		add(leftButtons);
 		
-		notifications = new CqTextNotification(320, 60);
+		notifications = new CqTextNotification(Math.floor(HxlGraphics.width / 2), HxlGraphics.smallScreen ? 20 : 60);
 		notifications.zIndex = 3;
+		
 		add(notifications);
 		
 		var mapBtn = new ButtonSprite();
@@ -445,7 +444,7 @@ class GameUI extends HxlDialog {
 	}
 	
 	function addCentralBars() {
-		var width = 32;
+		var width = 16 * Configuration.zoom;
 		var height = 4;
 		
 		var xShift = Registery.player.getScreenXY().x+2;
@@ -682,7 +681,7 @@ class GameUI extends HxlDialog {
 		if (Std.is(Actor, CqPlayer))
 			return;
 		
-		var bar:CqHealthBar = new CqHealthBar(Actor, Actor.x, Actor.y + Actor.height + 2, 32, 4);
+		var bar:CqHealthBar = new CqHealthBar(Actor, Actor.x, Actor.y + Actor.height + 2, 16 * Configuration.zoom, 4);
 		HxlGraphics.state.add(bar);
 		bar = null;
 		
