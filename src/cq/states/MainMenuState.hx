@@ -301,7 +301,7 @@ class MainMenuState extends CqState {
 			updateFullscreen();
 		}
 		
-		var copyright = new HxlText((HxlGraphics.width - 150), 459 + (HxlGraphics.height - 480), 142, Resources.getString( "MENU_COPYRIGHT" ), true, FontAnonymousPro.instance.fontName, 18);
+		var copyright = new HxlText(HxlGraphics.width - 265, 459 + (HxlGraphics.height - 480), 142, Resources.getString( "MENU_COPYRIGHT" ), true, FontAnonymousPro.instance.fontName, 18);
 		add(copyright);
 
 		//Adding porter for ios, I guess android will want to do the same
