@@ -3,12 +3,15 @@ if not exist %CERT_FILE% goto certificate
 
 :: AIR output
 if not exist %AIR_PATH% md %AIR_PATH%
-set OUTPUT=-target native %AIR_PATH%\%AIR_NAME%%AIR_TARGET%.exe
+rem set OUTPUT=-target native %AIR_PATH%\%AIR_NAME%%AIR_TARGET%.exe
+set OUTPUT=-target apk
+set OUTPUT_FILE=%AIR_PATH%\%AIR_NAME%%AIR_TARGET%.apk
 rem set OUTPUT= %AIR_PATH%\%AIR_NAME%%AIR_TARGET%.air
 :: Package
 echo.
 echo Packaging %AIR_NAME%%AIR_TARGET%.air using certificate %CERT_FILE%...
-call adt -package %OPTIONS% %SIGNING_OPTIONS% %OUTPUT% %APP_XML% %FILE_OR_DIR%
+echo call adt -package %OPTIONS% %OUTPUT% %SIGNING_OPTIONS% %OUTPUT_FILE% %APP_XML% %FILE_OR_DIR%
+call adt -package %OPTIONS% %OUTPUT% %SIGNING_OPTIONS% %OUTPUT_FILE% %APP_XML% %FILE_OR_DIR%
 if errorlevel 1 goto failed
 goto end
 

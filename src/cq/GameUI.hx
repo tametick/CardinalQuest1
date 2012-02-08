@@ -167,7 +167,7 @@ class GameUI extends HxlDialog {
 		infoBtn.loadGraphic(SpriteInfo, false, false, 64, 64, true, 1, 1);				 
 		
 		var pop:CqPopup;
-		leftButtons = new HxlButtonContainer(0, HxlGraphics.smallScreen ? 10 : 30, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
+		leftButtons = new HxlButtonContainer(HxlGraphics.smallScreen ? -6 : 0, HxlGraphics.smallScreen ? 10 : 30, 84, 380, HxlButtonContainer.VERTICAL, HxlButtonContainer.TOP_TO_BOTTOM, 10, 10);
 		leftButtons.scrollFactor.x = leftButtons.scrollFactor.y = 0;
 		add(leftButtons);
 		
@@ -202,21 +202,30 @@ class GameUI extends HxlDialog {
 		 * Left side panel buttons
 		 **/
 
-		var btnSize:Int = 64;
-		menuBelt = new HxlSprite(6, -13);
-		menuBelt.zIndex = 0;
-		menuBelt.loadGraphic(UiBeltVertical, true, false, 71, 406, false);
-		menuBelt.setFrame(1);
-		leftButtons.add(menuBelt);
+		var btnWidth:Int = 64;
+		var btnHeight:Int = 64;
 		
-		// main
-		btnMainView = new HxlButton(0, 0, btnSize, btnSize);
+		menuBelt = HxlGraphics.smallScreen ? new HxlSprite(6, -10) : new HxlSprite(6, -13);
+		menuBelt.zIndex = 0;
+		
+		if (HxlGraphics.smallScreen) {
+			menuBelt.loadGraphic(MobileUiBeltVertical, true, false, 71, 320, false);
+		} else {
+			menuBelt.loadGraphic(UiBeltVertical, true, false, 71, 406, false);
+		}
+		
+		
+		menuBelt.setFrame(1);
+		leftButtons.add(menuBelt);						
+		
+			// main
+		btnMainView = new HxlButton(0, 0, btnWidth, btnHeight);
 		btnMainView.loadGraphic(mainBtn);
 		btnMainView.configEvent(5, true, true);
 		leftButtons.addButton(btnMainView);
 		
 		// info
-		btnInfoView = new HxlButton(0, 0, btnSize, btnSize);
+		btnInfoView = new HxlButton(0, 0, btnWidth, btnHeight);
 		btnInfoView.loadGraphic(infoBtn);
 		btnInfoView.configEvent(5, true, true);
 		leftButtons.addButton(btnInfoView);
@@ -225,9 +234,9 @@ class GameUI extends HxlDialog {
 		addCentralBars();
 		
 		// map
-		btnMapView = new HxlButton(0, 0, btnSize, btnSize);
-		btnMapView.loadGraphic(mapBtn,mapBtnHigh);
-		btnMapView.loadText(new HxlText(0, 40, btnSize, Resources.getString( "UI_MAP" ), true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
+		btnMapView = new HxlButton(0, 0, btnWidth, btnHeight);
+		btnMapView.loadGraphic(mapBtn, mapBtnHigh);
+		btnMapView.loadText(new HxlText(0, 40, btnWidth, Resources.getString( "UI_MAP" ), true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
 		btnMapView.setCallback(showMapDlg);
 		btnMapView.configEvent(5, true, true);
 		leftButtons.addButton(btnMapView);
@@ -237,9 +246,9 @@ class GameUI extends HxlDialog {
 		popups.add(pop);
 
 		// inv
-		btnInventoryView = new HxlButton(0, 0, btnSize, btnSize);
+		btnInventoryView = new HxlButton(0, 0, btnWidth, btnHeight);
 		btnInventoryView.loadGraphic(invBtn,invBtnHigh);
-		btnInventoryView.loadText(new HxlText(0, 40, btnSize, Resources.getString( "UI_INV" ), true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
+		btnInventoryView.loadText(new HxlText(0, 40, btnWidth, Resources.getString( "UI_INV" ), true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
 		btnInventoryView.setCallback(showInvDlg);
 		btnInventoryView.configEvent(5, true, true);
 		leftButtons.addButton(btnInventoryView);
@@ -247,10 +256,11 @@ class GameUI extends HxlDialog {
 		pop.zIndex = 15;
 		btnInventoryView.setPopup(pop);
 		popups.add(pop);
+		
 		// stats
-		btnCharacterView = new HxlButton(0, 0, btnSize, btnSize);
+		btnCharacterView = new HxlButton(0, 0, btnWidth, btnHeight);
 		btnCharacterView.loadGraphic(charBtn,charBtnHigh);
-		btnCharacterView.loadText(new HxlText(0, 40, btnSize, Resources.getString( "UI_CHAR" ), true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
+		btnCharacterView.loadText(new HxlText(0, 40, btnWidth, Resources.getString( "UI_CHAR" ), true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
 		
 		btnCharacterView.setCallback(showCharDlg);
 		btnCharacterView.configEvent(5, true, true);
@@ -258,11 +268,16 @@ class GameUI extends HxlDialog {
 		pop.zIndex = 15;
 		btnCharacterView.setPopup(pop);
 		popups.add(pop);
-		leftButtons.addButton(btnCharacterView);
 		
-		// invItemManager = new CqInventoryItemManager(panels.panelInventory);
+		if (!HxlGraphics.smallScreen) {
+			leftButtons.addButton(btnCharacterView);
+		} else {
+			btnMainView.setCallback(showCharDlg);
+		}
+		
+			
 
-		bagDialog = new BagDialog(this, 5, 5, 13, ["shoes", "gloves", "armor", "jewelry", "weapon", "hat"]);
+		bagDialog = new BagDialog(this, 5, 5, HxlGraphics.smallScreen ? 9 : 13, ["shoes", "gloves", "armor", "jewelry", "weapon", "hat"]);
 		
 		panels = new CqPanelContainer();
 		add(panels);
@@ -439,8 +454,12 @@ class GameUI extends HxlDialog {
 		infoViewXpBar = new CqXpBar(Registery.player, infoViewHpBar.x, infoViewHpBar.y+infoViewHpBar.height, width, height, BarType.INFO);
 		infoViewHpBar.scrollFactor.x = infoViewHpBar.scrollFactor.y = 0;
 		infoViewXpBar.scrollFactor.x = infoViewXpBar.scrollFactor.y = 0;
-		add(infoViewHpBar);
-		add(infoViewXpBar);
+		
+		
+		if (!HxlGraphics.smallScreen) {
+			add(infoViewHpBar);
+			add(infoViewXpBar);
+		}
 	}
 	
 	function addCentralBars() {
@@ -489,7 +508,7 @@ class GameUI extends HxlDialog {
 		infoViewHearts.width = 50;
 		infoViewHearts.height = 20;
 		infoViewHearts.x = infoViewXpBar.x;
-		infoViewHearts.y = infoViewXpBar.y + infoViewXpBar.height + 3;
+		infoViewHearts.y = HxlGraphics.smallScreen ? btnMainView.y + btnMainView.height + 9 : infoViewXpBar.y + infoViewXpBar.height + 3;
 		//lives
 		var heart = new HeartSprite();
 		heart.x -= 2;
@@ -1051,14 +1070,15 @@ class GameUI extends HxlDialog {
 	}
 	
 	private function getXBallGraphic(ball:HxlSprite, colorSource:BitmapData) {
-		var w = 27, h = 27;
+		var size = Math.floor(Configuration.zoomedTileSize() * (27.0 / 32.0));
+		var w = size, h = size;
 		var halfdiagonal = .5 * Math.sqrt(w * w + h * h);
 		
 		var tmp:GameUIBMPData = new GameUIBMPData(w, h, true, 0x0);
 		var s:Shape = new Shape();
 		var g:Graphics = s.graphics;
 		
-		for (i in 1...71) {
+		for (i in 1...Math.ceil(.09 * w * h)) {
 			// this is just a start, but I think it's coming along ok
 			var x:Int, y:Int;
 			do {

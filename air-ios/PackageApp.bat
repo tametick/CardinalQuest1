@@ -2,7 +2,7 @@
 
 set PAUSE_ERRORS=1
 
-copy ..\bin\cq.swf bin\cq.swf
+copy ..\bin\cq.swf bin\package\cq.swf
 
 call bat\SetupSDK.bat
 call bat\SetupApplication.bat

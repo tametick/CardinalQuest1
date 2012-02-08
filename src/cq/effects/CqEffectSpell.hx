@@ -8,6 +8,7 @@ import haxel.HxlGradient;
 import haxel.GraphicCache;
 import haxel.HxlSprite;
 import haxel.HxlUtil;
+import data.Configuration;
 
 import cq.CqGraphicKey;
 
@@ -54,7 +55,7 @@ class CqEffectSpell extends HxlEmitter {
 	/*
 	 * We can remove this and just use sprites when we have them..
 	 */
-	function makeSprites(colorSource:BitmapData, ?Quantity:Int=50, ?BakedRotations:Int=16, ?Multiple:Bool=true, ?Collide:Float=0):HxlEmitter {
+	function makeSprites(colorSource:BitmapData, ?Quantity:Int=-1, ?BakedRotations:Int=16, ?Multiple:Bool=true, ?Collide:Float=0):HxlEmitter {
 
 		members = new Array();
 		var r:Int;
@@ -62,6 +63,10 @@ class CqEffectSpell extends HxlEmitter {
 		var tf:Int = 1;
 		var sw:Float;
 		var sh:Float;
+		
+		if (Quantity < 0) {
+			Quantity = Configuration.mobile ? 20 : 50;
+		}
 		
 		if (Multiple) {
 			s = new HxlSprite(0,0);

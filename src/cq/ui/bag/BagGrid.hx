@@ -434,7 +434,6 @@ class CqInventoryCell extends HxlDialog {
 	public var proxy (getProxy, setProxy):CqInventoryProxy;
 	public var slot (default, default):CqItemSlot; // this is managed by CqBag and is only set when the cell (which is a ui element) is associated with a slot (which is a logical location in the player's bag)
 	
-	public var associatedButton(default, null):HxlButton;  // temporary ?
 	public var equipType(default, null):CqEquipSlot;
 	public var popupHint:Int;
 	
@@ -462,7 +461,11 @@ class CqInventoryCell extends HxlDialog {
 			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, true, 6, true);
 		}
 		
-		add(new ButtonSprite());
+		if (Width >= 58) {
+			add(new ButtonSprite());
+		} else {
+			add(new ButtonSprite_48());
+		}
 	}
 	
 	public function setPopupHint( Hint:Int ) {
@@ -602,9 +605,8 @@ class CqInventoryCell extends HxlDialog {
 			return;
 		}
 		
-		if (Configuration.mobile && !Configuration.desktopPretendingToBeMobile) {
-			HxlGraphics.mouse.x = Std.int(event.localX);
-			HxlGraphics.mouse.y = Std.int(event.localY);
+		if (Configuration.mobile) {
+			HxlGraphics.updateInput();
 		}
 		
 		if (GameUI.instance.panels.currentPanel != GameUI.instance.panels.panelInventory) {
@@ -711,10 +713,11 @@ class CqBackpackGrid extends CqInventoryGrid {
 	public function new(numberOfCells:Int, ?X:Int=0, ?Y:Int=0, ?Width:Float=100, ?Height:Float=100) {
 		super(X, Y, Width, Height);
 	
-		var paddingX:Int = 3;
-		var paddingY:Int = 10;
+		var paddingX:Int = 1;
+		var paddingY:Int = HxlGraphics.smallScreen ? -6 : 10;
 		var cellSize:Int = 64;
 		var offsetX:Int = 0;
+		var offsetY:Int = HxlGraphics.smallScreen ? -3 : 0;
 
 		var rows:Int = 2;
 		var cols:Int = Math.floor((numberOfCells + 1) / 2);
@@ -723,7 +726,7 @@ class CqBackpackGrid extends CqInventoryGrid {
 			for ( col in 0...cols ) {
 				var idx:Int = cells.length;
 				var _x:Int = offsetX + ((col) * paddingX) + (col * cellSize);
-				var _y:Int = ((row) * paddingY) + (row * cellSize);
+				var _y:Int = offsetY + ((row) * paddingY) + (row * cellSize);
 				
 				var cell:CqInventoryCell = new CqInventoryCell(null, _x, _y, cellSize, cellSize);
 				
@@ -750,13 +753,14 @@ class CqClothingGrid extends CqInventoryGrid {
 		{ icon: "hat", type: HAT }
 	];
 	
-	static var cell_positions = [
-		[4, 176], [4, 94],
-		[4, 7], [155, 176],
-		[155, 94], [155, 7]
-	];
+	static var cell_positions = [[
+		[0, 108], [0, 55], [0, 2],
+		[67, 108], [67, 55], [67, 2]
+	], [
+		[4, 176], [4, 94], [4, 7],
+		[155, 176], [155, 94], [155, 7]
+	]];
 	
-	static var cellSize:Int = 54;
 	static var padding:Int = 8;	
 	
 	
@@ -770,7 +774,13 @@ class CqClothingGrid extends CqInventoryGrid {
 		return null;
 	}
 	
+	private function getCellSize():Int {
+		return HxlGraphics.smallScreen ? 40 : 54;
+	}
+	
 	public function getIcon(typeName:String):HxlSprite {
+		var cellSize:Int = getCellSize();
+		
 		var icons_size:Int = 16;
 		var icons_x:Int = Std.int((cellSize / 2) - (icons_size / 2)) - 3;
 		var icons_y:Int = icons_x;
@@ -794,8 +804,10 @@ class CqClothingGrid extends CqInventoryGrid {
 
 		var cell:CqInventoryCell;
 		
+		var cellSize:Int = getCellSize();
+		
 		for (idx in 0...equipSlots.length)	{
-			cell = new CqInventoryCell(getEquipmentTypeInfo(equipSlots[idx]).type, cell_positions[idx][0] - 5, cell_positions[idx][1] - 5, cellSize, cellSize);
+			cell = new CqInventoryCell(getEquipmentTypeInfo(equipSlots[idx]).type, cell_positions[HxlGraphics.smallScreen ? 0 : 1][idx][0] - 5, cell_positions[HxlGraphics.smallScreen ? 0 : 1][idx][1] - 5, cellSize, cellSize);
 
 			cell.setGraphicKeys(cellBgKey, cellBgHighlightKey, cellGlowKey);
 			
@@ -820,14 +832,19 @@ class CqPotionGrid extends CqInventoryGrid {
 		
 		belt = new HxlSprite(0, 0);
 		belt.zIndex = -1;
-		belt.loadGraphic(UiBeltHorizontal, false, false, 460, 71);
+		
+		if (HxlGraphics.smallScreen) {
+			belt.loadGraphic(MobileUiBeltHorizontal, false, false, 340, 37);
+		} else {
+			belt.loadGraphic(UiBeltHorizontal, false, false, 460, 71);
+		}
 		
 		add(belt);
 
 		var cellBgKey:CqGraphicKey = CqGraphicKey.EquipmentCellBG;
 		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.EqCellBGHighlight;
 
-		var offsetX:Int = 50;
+		var offsetX:Int = HxlGraphics.smallScreen ? 0 : 50;
 		var offsetY:Int = 2;
 		var btnSize:Int = 64;
 		var halfPadding:Int = HxlGraphics.smallScreen ? 1 : 5;
@@ -842,7 +859,9 @@ class CqPotionGrid extends CqInventoryGrid {
 			cells.push(cell);
 		}
 		
-		initButtons();
+		if (!HxlGraphics.smallScreen) {
+			initButtons();
+		}
 		
 		extendOverlap = new HxlRect( 0, 0, 0, 100);
 	}
@@ -944,9 +963,15 @@ class CqSpellGrid extends CqInventoryGrid {
 		var btnSize:Int = 64;
 		var halfPadding:Int = HxlGraphics.smallScreen ? -3 : 5;
 		
-		belt = new HxlSprite(6, -13);
-		belt.zIndex = 0;
-		belt.loadGraphic(UiBeltVertical, true, false, 71, 406, false);
+		if (HxlGraphics.smallScreen) {
+			belt = new HxlSprite(6, -10);
+			belt.zIndex = 0;
+			belt.loadGraphic(MobileUiBeltVertical, true, false, 71, 320, false);
+		} else {
+			belt = new HxlSprite(6, -13);
+			belt.zIndex = 0;
+			belt.loadGraphic(UiBeltVertical, true, false, 71, 406, false);
+		}
 		belt.setFrame(0);
 		
 		add(belt);

@@ -55,7 +55,7 @@
   <!-- Other project options -->
   <options>
     <option showHiddenPaths="False" />
-    <option testMovie="ExternalPlayer" />
+    <option testMovie="Unknown" />
   </options>
   <!-- Plugin storage -->
   <storage />

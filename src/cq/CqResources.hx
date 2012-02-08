@@ -66,10 +66,14 @@ class SpriteCoin extends Bitmap { public function new() { super(); } }
 class SpriteStartButton extends Bitmap { public function new() { super(); } }
 class SpriteButtonBg extends Bitmap { public function new() { super(); } }
 class SpriteItemSlot1 extends Bitmap { public function new() { super(); } }
+class SpriteItemSlot1_32 extends Bitmap { public function new() { super(); } }
+class SpriteItemSlot1_48 extends Bitmap { public function new() { super(); } }
 class SpriteItemSlot2 extends Bitmap { public function new() { super(); } }
 class SpriteInfo extends Bitmap { public function new() { super(); } }
 class UiBeltHorizontal extends Bitmap { public function new() { super(); } }
+class MobileUiBeltHorizontal extends Bitmap { public function new() { super(); } }
 class UiInventoryBox extends Bitmap { public function new() { super(); } }
+class MobileUiInventoryBox extends Bitmap { public function new() { super(); } }
 class SpriteMapPaper extends Bitmap { public function new() { super(); } }
 class SpriteCharPaper extends Bitmap { public function new() { super(); } }
 class IntroScreen extends Bitmap { public function new() { super(); } }
@@ -119,6 +123,12 @@ class ButtonSprite extends HxlSprite {
 	public function new(?X:Float=0, ?Y:Float=0) {
 		super(X,Y);
 		loadGraphic(SpriteItemSlot1, false, false, 64, 64);
+	}
+}
+class ButtonSprite_48 extends HxlSprite {
+	public function new(?X:Float=0, ?Y:Float=0) {
+		super(X,Y);
+		loadGraphic(SpriteItemSlot1_48, false, false, 48, 48);
 	}
 }
 class HeartSprite extends HxlSprite {
@@ -423,6 +433,20 @@ class UiBeltVertical extends HxlSpriteSheet {
 		super(0);
 	}
 }
+
+class MobileUiBeltVertical extends HxlSpriteSheet {
+	static var _spriteNames:Array<Array<String>>;
+	public static var instance = new MobileUiBeltVertical();
+	public function new() {
+		if (_spriteNames ==null)
+			_spriteNames = [
+				["belt_vert_metal","belt_vert_metal_leather"]
+			];
+		spriteNames = _spriteNames;
+		super(0);
+	}
+}
+
 class SpriteCursor extends HxlSpriteSheet { 
 	static var _spriteNames:Array<Array<String>>;
 	public static var instance = new SpriteCursor();

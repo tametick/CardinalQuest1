@@ -5,6 +5,7 @@ import haxel.HxlTilemap;
 import haxel.HxlUtil;
 
 import data.Resources;
+import data.Configuration;
 
 import flash.geom.Point;
 import flash.geom.Rectangle;
@@ -40,7 +41,7 @@ class Tile extends HxlTile {
 		var FromColor:Int = HxlUtil.colorRGB(_color)[0];
 		
 		if ( FromColor != ToColor ) {
-			if ( Math.abs( FromColor - ToColor ) < 5 ) {
+			if ( Configuration.mobile || Math.abs( FromColor - ToColor ) < 5 ) {
 				setColor(HxlUtil.colorInt(ToColor, ToColor, ToColor));
 			} else {
 				Actuate.update(colorTween, Speed, [FromColor], [ToColor]);

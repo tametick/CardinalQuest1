@@ -120,7 +120,7 @@ class Main extends HxlGame {
 		}
 		
 		Configuration.tileSize = 16;
-		Configuration.zoom = Lib.current.stage.stageHeight < 400 ? 1.0 : 2.0;
+		Configuration.zoom = Lib.current.stage.stageHeight < 400 ? 2.0 : 2.0;
 		HxlState.bgColor = 0xFF000000;
 		
 		//Initialize Kongregate score API

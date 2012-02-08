@@ -54,12 +54,14 @@ class BagDialog {
 	public function new(gameUI:GameUI, spells:Int, potions:Int, packsize:Int, equipSlots:Array<String>) {
 		gameui = gameUI;
 		
-		equippedSpells = new CqSpellGrid(spells, HxlGraphics.width - 84, HxlGraphics.smallScreen ? 10 : 30, 84, 380);
+		equippedSpells = new CqSpellGrid(spells, HxlGraphics.width - (HxlGraphics.smallScreen ? 77 : 84), HxlGraphics.smallScreen ? 10 : 30, 84, 380);
 		equippedSpells.zIndex = 1;
 		gameui.add(equippedSpells);
 
-		var potiongrid_w:Int = 460;
-		equippedConsumables = new CqPotionGrid(potions, Configuration.app_width/2-potiongrid_w/2, Configuration.app_height - 72, potiongrid_w, 71);
+		var potiongrid_w:Int = HxlGraphics.smallScreen ? 340 : 460;
+		var potiongrid_h:Int = HxlGraphics.smallScreen ? 37 : 71;
+		
+		equippedConsumables = new CqPotionGrid(potions, Configuration.app_width/2-potiongrid_w/2, Configuration.app_height - (HxlGraphics.smallScreen ? potiongrid_h : 72), potiongrid_w, potiongrid_h);
 		gameui.add(equippedConsumables);
 		
 		slidingPart = new SlidingBagDialog(gameui, packsize, equipSlots);
@@ -116,12 +118,13 @@ class SlidingBagDialog extends HxlSlidingDialog {
 	
 	public function new(_GameUI:GameUI, packsize:Int, equipSlots:Array<String>) {
 		// Size: 481 x 480
+		// Mobile size: 338 x 283
 		
-		var panelInv_w:Int = 481;
+		var panelInv_w:Int = HxlGraphics.smallScreen ? 480 - 142 : 481;
 		var X = Configuration.app_width / 2 - panelInv_w / 2 - 10;
 		var Y = 4;
 		var Width = panelInv_w;
-		var Height = 403;
+		var Height = HxlGraphics.smallScreen ? 320 - 37: 403;
 		var Direction = 0;
 		super(X, Y, Width, Height, Direction);
 		
@@ -134,7 +137,12 @@ class SlidingBagDialog extends HxlSlidingDialog {
 		
 		paperdollDialog = new HxlDialog(OUTER_BORDER, TOP_BORDER, div_l - OUTER_BORDER, div_u - OUTER_BORDER);
 		add(paperdollDialog);
-		paperdollDialog.setBackgroundGraphic(UiInventoryBox);
+		
+		if (HxlGraphics.smallScreen ) {
+			paperdollDialog.setBackgroundGraphic(MobileUiInventoryBox);
+		} else {
+			paperdollDialog.setBackgroundGraphic(UiInventoryBox);
+		}
 		
 		clothingAndRings = new CqClothingGrid(equipSlots, 14, 10, paperdollDialog.width, paperdollDialog.height);
 		paperdollDialog.add(clothingAndRings);

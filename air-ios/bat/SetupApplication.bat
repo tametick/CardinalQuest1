@@ -8,8 +8,8 @@
 
 :: Your certificate information
 set CERT_NAME="cq"
-set CERT_PASS=allmyapps
-set CERT_FILE="bat\Iphone_Dev_Cert_TjD.p12"
+set CERT_PASS=
+set CERT_FILE="bat\iphone_dev_cert_jday.p12"
 set SIGNING_OPTIONS=-storetype pkcs12 -keystore %CERT_FILE% -storepass %CERT_PASS% -provisioning-profile "bat\Windows_Machine_Cardinal_Quest.mobileprovision"
 
 :: Application descriptor
@@ -20,7 +20,7 @@ set APP_DIR=bin
 set FILE_OR_DIR=-C %APP_DIR% .
 
 :: Your application ID (must match <id> of Application descriptor)
-set APP_ID=com.tametick.CardinalQuest
+set APP_ID=com.tametick.cardinalquest
 
 :: Output
 set AIR_PATH=air

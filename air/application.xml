@@ -6,7 +6,7 @@
   <name>Cardinal Quest</name>
   <description>Hack and slash your way through a randomly generated dungeon:  a new adventure awaits every time!</description>
   <copyright>Copyright 2011 Ido Yehieli.</copyright>
-  <supportedProfiles>desktop extendedDesktop</supportedProfiles>
+  <supportedProfiles>desktop extendedDesktop mobileDevice</supportedProfiles>
   <initialWindow>
     <title>Cardinal Quest</title>
     <content>cq.swf</content>

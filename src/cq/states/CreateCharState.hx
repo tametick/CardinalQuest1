@@ -124,7 +124,7 @@ class CreateCharState extends CqState {
 		titleText.setFormat(null, HxlGraphics.smallScreen ? 56 : 72, 0xffffff, "center");
 		add(titleText);
 		
-		var btnStart:HxlButton = new HxlButton(Math.floor((490 / 640) * HxlGraphics.width), 390 + paperShiftup - (HxlGraphics.smallScreen ? 6 : 0), 90, 28);
+		var btnStart:HxlButton = new HxlButton(Math.floor((490 / 640) * HxlGraphics.width), 390 + paperShiftup - (HxlGraphics.smallScreen ? 10 : 0), 90, 28);
 		btnStart.setEventUseCapture(true);
 		var btnStartBg:HxlSprite = new HxlSprite(btnStart.x, btnStart.y);
 		btnStartBg.loadGraphic(SpriteButtonBg, false, false, 90, 26);

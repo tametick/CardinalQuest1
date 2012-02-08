@@ -533,9 +533,8 @@ class GameState extends CqState {
 	}
 	
 	var msMoveStamp:Float;
-	override function onMouseMove(event:MouseEvent)
-	{
-		updateTouchLocation( event );
+	override function onMouseMove(event:MouseEvent) {
+		updateTouchLocation(event.localX, event.localY);
 
 		msMoveStamp = Timer.stamp();
 		cursor.visible = true;
@@ -543,7 +542,7 @@ class GameState extends CqState {
 	}
 	
 	override function onMouseDown(event:MouseEvent) {
-		updateTouchLocation( event );
+		updateTouchLocation(event.localX, event.localY);
 
 		if (HxlGraphics.justUnpaused) {
 			HxlGraphics.justUnpaused = false;
@@ -574,8 +573,7 @@ class GameState extends CqState {
 	}
 
 	override function onMouseUp(event:MouseEvent) {
-
-		updateTouchLocation( event );
+		updateTouchLocation(event.localX, event.localY);
 
 		mobileMoveAllowed = true;
 

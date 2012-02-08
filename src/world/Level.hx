@@ -78,8 +78,8 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		addAllActors(state);
 		addAllLoots(state);
 		ptLevel.start();
-		//follow();
-		HxlGraphics.follow(Registery.player, 10);
+		
+		HxlGraphics.follow(Registery.player, Configuration.mobile ? 15 : 10);
 	}
 
 	override public function destroy() {
@@ -552,7 +552,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				switch (tile.visibility) {
 					case Visibility.IN_SIGHT:
 						tile.visible = true;
-
+						
 						// Light tile.
 						var lightColor:Int = Std.int( seenTween + (inSightTween - seenTween) * tile.visAmount );
 						var normColor:Int = normalizeColor(dist, actor.visionRadius, seenTween, lightColor);

@@ -5,31 +5,28 @@ import flash.media.Sound;
 import haxel.HxlSound;
 
 class MusicManager {
-	static var tracks:Hash<HxlSound> = new Hash<HxlSound>();
 	static var currentlyPlaying:HxlSound;
+	static var currentlyPlayingName:String;
 	static var paused:Bool = false;
 	
-	public static function play(track:Class<Sound>) {
+	public static function play(track:Class<Dynamic>) {
 		//plays a new one, or if paused,only sets the current track to the new one
 		var name = Type.getClassName(track);
 		
 		if (currentlyPlaying != null) {
-			if (currentlyPlaying == tracks.get(name)){
+			if (currentlyPlayingName == name){
 				// already playing chosen tune
-				name = null;
 				return;
 			}
 			currentlyPlaying.stop();
+			currentlyPlayingName = null;
 		}
 		
-		if (tracks.get(name) == null){
-			var newTrack = new HxlSound();
-			newTrack.loadEmbedded(track, true);
-			tracks.set(name, newTrack);
-			newTrack = null;
-		}
 		
-		currentlyPlaying = tracks.get(name);
+		currentlyPlaying = new HxlSound();
+		currentlyPlaying.loadEmbedded(track, true);
+		currentlyPlayingName = name;
+		
 		if (!paused)
 			currentlyPlaying.play();
 			

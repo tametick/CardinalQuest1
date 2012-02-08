@@ -185,26 +185,30 @@ class HxlState extends Sprite {
 			}
 		#end
 	}
-	function onTap(event: TouchEvent){ }
-	function onMouseDown(event:MouseEvent) { updateTouchLocation( event ); }
+	
+	// a silly multiplication of different handlers -- purely historical
+	function onTap(event: TouchEvent){ updateTouchLocation(event.localX, event.localY);  }
+	function onMouseDown(event:MouseEvent) { updateTouchLocation(event.localX, event.localY); }
 	function onRightMouseDown(event:MouseEvent) {
 		//No right clicking on mobile
 		#if flash
 			event.preventDefault();
 			Mouse.hide();
 		#end
-		 updateTouchLocation( event );
+		updateTouchLocation(event.localX, event.localY);
 	}
-	function onMouseUp(event:MouseEvent) { updateTouchLocation( event ); }
-	function onMouseOver(event:MouseEvent) { updateTouchLocation( event ); }
-	function onMouseMove(event:MouseEvent) { updateTouchLocation( event ); }
-	function updateTouchLocation(event:MouseEvent) {
-		//This due to bug in air..
-		//I am hoping all mobile devices have resolutions below 2000 :P
-		if( Configuration.mobile && event.localX < 2000 && event.localY < 2000) {
-
-			touchX = Std.int( event.localX );
-			touchY = Std.int( event.localY );
+	function onMouseUp(event:MouseEvent) { updateTouchLocation(event.localX, event.localY); }
+	function onMouseOver(event:MouseEvent) { updateTouchLocation(event.localX, event.localY); }
+	function onMouseMove(event:MouseEvent) { updateTouchLocation(event.localX, event.localY); }
+	
+	function updateTouchLocation(x:Float, y:Float) {
+		if (Configuration.mobile && x < 6000 && y < 6000) {
+			touchX = Std.int(x);
+			touchY = Std.int(y);
+			
+			// I need this logic to work, though:
+			// mouseX = touchX;
+			// mouseY = touchY;
 		}
 	}
 

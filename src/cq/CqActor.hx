@@ -161,13 +161,14 @@ class CqActor extends CqObject, implements Actor {
 		zIndex = 3;
 
 		actionPoints = 0;
-		//Bobbing is painful
-		if( Configuration.mobile ) {
-			moveSpeed = 0;
+		
+		if (Configuration.mobile) {
+			// speeding up movement just slightly on mobile helps keep things smooth
+			moveSpeed = 0.15;
 		} else {
 			moveSpeed = 0.2;
 		}
-		visionRadius = 8.2;
+		visionRadius = HxlGraphics.smallScreen ? 5.33 : 8.2;
 		
 		hp = maxHp;
 		minHp = 0;
@@ -235,7 +236,7 @@ class CqActor extends CqObject, implements Actor {
 		// so this is where we can add bobbing for waiting !
 		isMoving = true;
 		bobCounter = 0.0;
-		if ( Configuration.mobile ) {
+		if (false && Configuration.mobile && Std.is(this, CqPlayer)) {
 			this.x = X;
 			this.y = Y;
 			isMoving = false;

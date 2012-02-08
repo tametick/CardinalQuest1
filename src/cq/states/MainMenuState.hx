@@ -232,7 +232,7 @@ class MainMenuState extends CqState {
 				buttonY += spacing;
 			} */
 		}
-		if (Configuration.standAlone) {
+		if (Configuration.standAlone && !Configuration.mobile) {
 			var btnQuit:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, Resources.getString( "MENU_QUIT" ), true, null);
 			btnQuit.setNormalFormat(null, 35, textColor, "center");
 			btnQuit.setHoverFormat(null, 35, textHighlight, "center");

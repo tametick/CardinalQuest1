@@ -16,7 +16,7 @@ class CKongregate
         kongregate = null;
 		
 		//Dont do kongregate in standalone or mobile version
-		if ( Configuration.mobile || Configuration.standAlone || !Configuration.allowKongregateAPI ) {
+		if (Configuration.mobile || Configuration.standAlone || !Configuration.allowKongregateAPI) {
 			return;
 		}		
 

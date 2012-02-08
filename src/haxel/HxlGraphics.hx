@@ -338,8 +338,14 @@ class HxlGraphics {
 				_scrollTarget.x -= (cast( followTarget, HxlSprite)).velocity.x*followLead.x;
 				_scrollTarget.y -= (cast( followTarget, HxlSprite)).velocity.y*followLead.y;
 			}
-			scroll.x += makeEven((_scrollTarget.x-scroll.x)*followLerp*HxlGraphics.elapsed);
-			scroll.y += makeEven((_scrollTarget.y-scroll.y)*followLerp*HxlGraphics.elapsed);
+			
+			if (followLerp > 0) {
+				scroll.x += makeEven((_scrollTarget.x-scroll.x)*followLerp*HxlGraphics.elapsed);
+				scroll.y += makeEven((_scrollTarget.y-scroll.y)*followLerp*HxlGraphics.elapsed);
+			} else {
+				scroll.x = _scrollTarget.x;
+				scroll.y = _scrollTarget.y;
+			}
 
 			if (followMin != null) {
 				if (scroll.x > followMin.x) {
