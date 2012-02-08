@@ -54,8 +54,17 @@ class Main extends HxlGame {
 	static var kongWidth = 88;
 	static var kongHeight = 31;
 	static var kongX = 0;
-	static var kongY = 480 -kongHeight -1;
+	static var kongY = 480 - kongHeight - 1;
+	
 	function checkOnLogoOrAd(e : Event) {
+		if ( Configuration.isAndKonAd )
+		{
+			kongWidth = 60;
+			kongHeight = 56;
+			kongX = 14;
+			kongY = 480 - kongHeight;
+		}
+		
 		if (mouseX > kongX && mouseX < kongX+kongWidth && mouseY > kongY && mouseY < kongY+kongHeight)
 			Mouse.show();
 		else
