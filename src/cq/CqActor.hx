@@ -168,7 +168,7 @@ class CqActor extends CqObject, implements Actor {
 		} else {
 			moveSpeed = 0.2;
 		}
-		visionRadius = HxlGraphics.smallScreen ? 5.33 : 8.2;
+		visionRadius = HxlGraphics.smallScreen ? 4.77 : 8.2;
 		
 		hp = maxHp;
 		minHp = 0;

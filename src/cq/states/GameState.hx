@@ -637,7 +637,7 @@ class GameState extends CqState {
 		return tile == null || (tile.isBlockingMovement() && !(HxlUtil.contains(SpriteTiles.doors.iterator(), tile.getDataNum())));
 	}
 
-	private function pickBestSlide(facing:HxlPoint):HxlPoint {
+	private function pickBestSlide(facing:HxlPoint, ?secondaryFacing:HxlPoint = null):HxlPoint {
 		// treating 'facing' as forward, we hold a little competition between 'left' and 'right'
 		// -- we want to find which of those two directions gets us in place to move forward soonest.
 		// -- and if they tie on that test, we want to pick the one that lets us move forward furthest.
@@ -651,11 +651,22 @@ class GameState extends CqState {
 
 		var left = new HxlPoint(-facing.y, -facing.x);
 		var right = new HxlPoint(facing.y, facing.x);
-
+		
 		// you can't move backward, though!
 		if (player.lastTile != null) {
 			left_back = (player.lastTile.x == left.x + player.tilePos.x && player.lastTile.y == left.y + player.tilePos.y);
 			right_back = (player.lastTile.x == right.x + player.tilePos.x && player.lastTile.y == right.y + player.tilePos.y);
+		}
+		
+		// and you can't move against your secondary facing! (maybe use left_back / right_back logic instead?)
+		if (secondaryFacing != null) {
+			if (left.x == secondaryFacing.x && left.y == secondaryFacing.y) {
+				right_ok = false;
+			} else if (right.x == secondaryFacing.x && right.y == secondaryFacing.y) {
+				left_ok = false;
+			}
+			
+			return null;
 		}
 
 		// get set
@@ -870,7 +881,11 @@ class GameState extends CqState {
 			var moved:Bool = false;
 			if (facing.x == 0 || facing.y == 0) {
 				if (isMouseControl) {
-					moved = tryToActInDirection(facing) || tryToActInDirection(level.getTargetAccordingToMousePosition(true));
+					if (Configuration.mobile) {
+						moved = tryToActInDirection(facing) || tryToActInDirection(pickBestSlide(facing, level.getTargetAccordingToMousePosition(true, true))) || tryToActInDirection(level.getTargetAccordingToMousePosition(true));
+					} else {
+						moved = tryToActInDirection(facing) || tryToActInDirection(level.getTargetAccordingToMousePosition(true));
+					}
 				} else if (resumeSlidingTime <= Timer.stamp()) {
 					moved = tryToActInDirection(facing) || tryToActInDirection(pickBestSlide(facing));
 				} else {
