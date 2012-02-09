@@ -44,6 +44,9 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 
 	var ptLevel:PtLevel;
 
+	private var fovTileAngleReach:Int;
+	private var fovTileAngles:Array<Float>;	
+	
 	public function new(index:Int,tileW:Int,tileH:Int) {
 		super(tileW,tileH);
 
@@ -56,6 +59,9 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		stairsAreFound = false;
 		
 		aStarNodes = null;
+		
+		fovTileAngleReach = 11;
+		generateFOVTileAngles();		
 	}
 
 	public function isBlockingMovement(X:Int, Y:Int, ?CheckActor:Bool=false):Bool {
@@ -99,6 +105,11 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		HxlGraphics.unfollow();
 
 		Actuate.reset();
+
+		while (fovTileAngles.length > 0) {
+			fovTileAngles.pop();
+		}
+		fovTileAngles = null;
 
 		super.destroy();
 	}
@@ -281,6 +292,8 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				if ( tile.visibility == Visibility.IN_SIGHT ) {
 					tile.visibility = Visibility.SEEN;
 					tile.visAmount = 0.0;
+					
+					tile.setColor(0xff404040);
 				}
 			}
 		}		
@@ -367,6 +380,59 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		}
 	}
 
+	private function generateFOVTileAngles() {
+		var centre:Int = fovTileAngleReach;
+		var width:Int = fovTileAngleReach * 2 + 1;
+		
+		fovTileAngles = new Array();
+		
+		for ( y in 0 ... width ) {
+			for ( x in 0 ... width ) {
+				var minTileAngle:Float = 0;
+				var maxTileAngle:Float = 0;
+				
+				var distance:Float = Math.sqrt( Math.pow(x - centre, 2) + Math.pow(y - centre, 2) );
+				
+				// Check the max. and min. angles of the tiles observed.
+				if ( x < centre ) {
+					if ( y < centre ) {
+						minTileAngle = Math.atan2( x + 0.5 - centre, y - 0.5 - centre );
+						maxTileAngle = Math.atan2( x - 0.5 - centre, y + 0.5 - centre );
+					} else if ( y > centre ) {
+						minTileAngle = Math.atan2( x - 0.5 - centre, y - 0.5 - centre );
+						maxTileAngle = Math.atan2( x + 0.5 - centre, y + 0.5 - centre );
+					} else {
+						minTileAngle = Math.atan2( x + 0.5 - centre, y - 0.5 - centre );
+						maxTileAngle = Math.atan2( x + 0.5 - centre, y + 0.5 - centre );
+					}
+				} else if ( x > centre ) {
+					if ( y < centre ) {
+						minTileAngle = Math.atan2( x + 0.5 - centre, y + 0.5 - centre );
+						maxTileAngle = Math.atan2( x - 0.5 - centre, y - 0.5 - centre );
+					} else if ( y > centre ) {
+						minTileAngle = Math.atan2( x - 0.5 - centre, y + 0.5 - centre );
+						maxTileAngle = Math.atan2( x + 0.5 - centre, y - 0.5 - centre );
+					} else {
+						minTileAngle = Math.atan2( x - 0.5 - centre, y + 0.5 - centre );
+						maxTileAngle = Math.atan2( x - 0.5 - centre, y - 0.5 - centre );
+					}
+				} else {
+					if ( y < centre ) {
+						minTileAngle = Math.atan2( x + 0.5 - centre, y + 0.5 - centre );
+						maxTileAngle = Math.atan2( x - 0.5 - centre, y + 0.5 - centre ) + 2 * Math.PI;
+					} else {
+						minTileAngle = Math.atan2( x - 0.5 - centre, y - 0.5 - centre );
+						maxTileAngle = Math.atan2( x + 0.5 - centre, y - 0.5 - centre );
+					}
+				}
+				
+				fovTileAngles.push( minTileAngle );
+				fovTileAngles.push( maxTileAngle );
+				fovTileAngles.push( distance );
+			}
+		}
+	}
+	
 	// Brand spanky new field-of-view test.
 	private function updateFieldOfViewAtRange( _state:HxlState, _centreX:Int, _centreY:Int, _range:Int, _maxRange:Int, _radMin:Float, _radMax:Float ) {
 		var hxlPoint:HxlPoint = new HxlPoint(0, 0);
@@ -404,46 +470,18 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		
 		// Loop round all tiles at this distance, finding those in our range.
 		while (true) {
-			var minTileAngle:Float = 0;
-			var maxTileAngle:Float = 0;
+			var offsetX:Int = testX - _centreX;
+			var offsetY:Int = testY - _centreY;
+			var arrayOffset:Int = ((offsetY + fovTileAngleReach) * (2 * fovTileAngleReach + 1) + (offsetX + fovTileAngleReach)) * 3;
 			
-			// Check the max. and min. angles of the tiles observed.
-			if ( testX < _centreX ) {
-				if ( testY < _centreY ) {
-					minTileAngle = Math.atan2( testX + 0.5 - _centreX, testY - 0.5 - _centreY );
-					maxTileAngle = Math.atan2( testX - 0.5 - _centreX, testY + 0.5 - _centreY );
-				} else if ( testY > _centreY ) {
-					minTileAngle = Math.atan2( testX - 0.5 - _centreX, testY - 0.5 - _centreY );
-					maxTileAngle = Math.atan2( testX + 0.5 - _centreX, testY + 0.5 - _centreY );
-				} else {
-					minTileAngle = Math.atan2( testX + 0.5 - _centreX, testY - 0.5 - _centreY );
-					maxTileAngle = Math.atan2( testX + 0.5 - _centreX, testY + 0.5 - _centreY );
-				}
-			} else if ( testX > _centreX ) {
-				if ( testY < _centreY ) {
-					minTileAngle = Math.atan2( testX + 0.5 - _centreX, testY + 0.5 - _centreY );
-					maxTileAngle = Math.atan2( testX - 0.5 - _centreX, testY - 0.5 - _centreY );
-				} else if ( testY > _centreY ) {
-					minTileAngle = Math.atan2( testX - 0.5 - _centreX, testY + 0.5 - _centreY );
-					maxTileAngle = Math.atan2( testX + 0.5 - _centreX, testY - 0.5 - _centreY );
-				} else {
-					minTileAngle = Math.atan2( testX - 0.5 - _centreX, testY + 0.5 - _centreY );
-					maxTileAngle = Math.atan2( testX - 0.5 - _centreX, testY - 0.5 - _centreY );
-				}
-			} else {
-				if ( testY < _centreY ) {
-					if ( firstTile ) {
-						minTileAngle = Math.atan2( testX + 0.5 - _centreX, testY + 0.5 - _centreY ) - 2 * Math.PI;
-						maxTileAngle = Math.atan2( testX - 0.5 - _centreX, testY + 0.5 - _centreY );
-					} else {
-						minTileAngle = Math.atan2( testX + 0.5 - _centreX, testY + 0.5 - _centreY );
-						maxTileAngle = Math.atan2( testX - 0.5 - _centreX, testY + 0.5 - _centreY ) + 2 * Math.PI;
-					}
-				} else {
-					minTileAngle = Math.atan2( testX - 0.5 - _centreX, testY - 0.5 - _centreY );
-					maxTileAngle = Math.atan2( testX + 0.5 - _centreX, testY - 0.5 - _centreY );
-				}
-			}
+			var minTileAngle:Float = fovTileAngles[arrayOffset];
+			var maxTileAngle:Float = fovTileAngles[arrayOffset+1];
+			var distance:Float = fovTileAngles[arrayOffset+2];
+
+			if ( firstTile && offsetX == 0 && offsetY < 0 ) {
+				minTileAngle -= 2 * Math.PI;
+				maxTileAngle -= 2 * Math.PI;
+			}			
 			
 			// Is this tile inside the range?
 			if ( maxTileAngle > _radMin && minTileAngle < _radMax ) {
@@ -454,7 +492,10 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 					// Blocking tiles are always visible if we can see any of them.
 					hxlPoint.x = testX;
 					hxlPoint.y = testY;
-					firstSeen(_state, this, hxlPoint, Visibility.IN_SIGHT, 0.5+visibleFraction);
+
+					if ( distance < _maxRange + 0.2 ) {
+						firstSeen(_state, this, hxlPoint, Visibility.IN_SIGHT, 0.5 + visibleFraction);
+					}
 					
 					// If the previous *wasn't* blocking, scan deeper on the range prior to this tile.
 					if ( !prevWasBlocking ) {
@@ -468,7 +509,10 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				} else {
 					hxlPoint.x = testX;
 					hxlPoint.y = testY;
-					firstSeen(_state, this, hxlPoint, Visibility.IN_SIGHT, 0.3 + 0.7 * visibleFraction);
+
+					if ( distance < _maxRange + 0.2 ) {
+						firstSeen(_state, this, hxlPoint, Visibility.IN_SIGHT, 0.3 + 0.7 * visibleFraction);
+					}
 					
 					prevWasBlocking = false;
 				}
