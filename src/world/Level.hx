@@ -368,7 +368,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	}
 
 	// Brand spanky new field-of-view test.
-	private function updateFieldOfViewAtRange( _state:HxlState, _centreX:Int, _centreY:Int, _range:Int, _maxRange:Int, _radMin:Float, _radMax:Float ) {
+	private function updateFieldOfViewAtRange( _state:HxlState, _centreX:Int, _centreY:Int, _range:Int, _maxRange:Float, _radMin:Float, _radMax:Float ) {
 		var hxlPoint:HxlPoint = new HxlPoint(0, 0);
 		var testX:Int = _centreX;
 		var testY:Int = _centreY - _range;
@@ -378,7 +378,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		var prevWasBlocking:Bool = true;
 		var subRadMin:Float = _radMin;
 
-		if ( _range >= _maxRange ) {
+		if ( _range > _maxRange ) {
 			return;
 		}
 
@@ -406,6 +406,8 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		while (true) {
 			var minTileAngle:Float = 0;
 			var maxTileAngle:Float = 0;
+			
+			var distance:Float = Math.sqrt( Math.pow(testX - _centreX, 2) + Math.pow(testY - _centreY, 2) );
 			
 			// Check the max. and min. angles of the tiles observed.
 			if ( testX < _centreX ) {
@@ -444,7 +446,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 					maxTileAngle = Math.atan2( testX + 0.5 - _centreX, testY - 0.5 - _centreY );
 				}
 			}
-			
+		
 			// Is this tile inside the range?
 			if ( maxTileAngle > _radMin && minTileAngle < _radMax ) {
 				var blocking:Bool = isBlockingView(testX, testY);
@@ -454,7 +456,10 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 					// Blocking tiles are always visible if we can see any of them.
 					hxlPoint.x = testX;
 					hxlPoint.y = testY;
-					firstSeen(_state, this, hxlPoint, Visibility.IN_SIGHT, 0.5+visibleFraction);
+					
+					if ( distance < _maxRange ) {
+						firstSeen(_state, this, hxlPoint, Visibility.IN_SIGHT, 0.5 + visibleFraction);
+					}
 					
 					// If the previous *wasn't* blocking, scan deeper on the range prior to this tile.
 					if ( !prevWasBlocking ) {
@@ -468,7 +473,10 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				} else {
 					hxlPoint.x = testX;
 					hxlPoint.y = testY;
-					firstSeen(_state, this, hxlPoint, Visibility.IN_SIGHT, 0.3 + 0.7 * visibleFraction);
+					
+					if ( distance < _maxRange + 0.2 ) {
+						firstSeen(_state, this, hxlPoint, Visibility.IN_SIGHT, 0.3 + 0.7 * visibleFraction);
+					}
 					
 					prevWasBlocking = false;
 				}
@@ -797,7 +805,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		return if (x < 0) -1 else if (x > 0) 1 else 0;
 	}
 
-	public function getTargetAccordingToMousePosition(?secondChoice:Bool = false):HxlPoint {
+	public function getTargetAccordingToMousePosition(?secondChoice:Bool = false, ?demurIfShallow:Bool = false):HxlPoint {
 		// if you don't like grabbing the player from the registry here, change it to an argument
 		var player = Registery.player;
 
@@ -815,13 +823,21 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 */
 
 
-		var give:Float = 0.75; // exactly .5 means that you have to point at yourself precisely to wait; higher values make it fuzzier
+		var give:Float = 0.85; // exactly .5 means that you have to point at yourself precisely to wait; higher values make it fuzzier
 		if (absdx < give && absdy < give) return new HxlPoint(0, 0);
 
 		// here it would be nice to track more info about angle than this
 		if ((absdx > absdy && !secondChoice) || (absdx < absdy && secondChoice)) {
+			if (secondChoice && demurIfShallow) {
+				if (absdx < absdy * 3) return null;
+			}
+			
 			return new HxlPoint(sgn(dx), 0);
 		} else {
+			if (secondChoice && demurIfShallow) {
+				if (absdy < absdx * 3) return null;
+			}
+			
 			return new HxlPoint(0, sgn(dy));
 		}
 	}
