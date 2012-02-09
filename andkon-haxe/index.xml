@@ -12,7 +12,7 @@
 	<DefineBinaryData id="2" file="../bin/cq.swf" />
 	<SymbolClass id="2" class="kongloader.GameData" base="flash.utils.ByteArray"/>
 	
-	<DefineBitsJPEG id="3" file="lib/andkon_tab.png" />
+	<DefineBitsJPEG id="3" file="lib/andkon_tab_2.png" />
 	<SymbolClass id="3" class="kongloader.AndKonTab" base="flash.display.Bitmap"/>
 	
 	<ShowFrame/>
