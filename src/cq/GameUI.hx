@@ -260,8 +260,12 @@ class GameUI extends HxlDialog {
 		// stats
 		btnCharacterView = new HxlButton(0, 0, btnWidth, btnHeight);
 		btnCharacterView.loadGraphic(charBtn,charBtnHigh);
+#if japanese
+		btnCharacterView.loadText(new HxlText(0, 40, btnWidth, Resources.getString( "UI_CHAR" ), true).setFormat(FontAnonymousPro.instance.fontName, 10, 0xffffff, "center", 0x010101));
+#else
 		btnCharacterView.loadText(new HxlText(0, 40, btnWidth, Resources.getString( "UI_CHAR" ), true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
-		
+#end
+
 		btnCharacterView.setCallback(showCharDlg);
 		btnCharacterView.configEvent(5, true, true);
 		pop = new CqPopup(100, "\n" + Resources.getString( "POPUP_C" ), popups);
@@ -513,7 +517,11 @@ class GameUI extends HxlDialog {
 		var heart = new HeartSprite();
 		heart.x -= 2;
 		heart.y += 3;
-		var lives = new HxlText(heart.x + heart.width-6, 0, Std.int(infoViewHearts.width - heart.width), Resources.getString( "UI_TIMES" ) + player.lives, true, FontAnonymousPro.instance.fontName);
+#if japanese		
+		var lives = new HxlText(heart.x + heart.width - 6, 0, Std.int(infoViewHearts.width - heart.width), "" + player.lives, true, FontAnonymousPro.instance.fontName);
+#else
+		var lives = new HxlText(heart.x + heart.width - 6, 0, Std.int(infoViewHearts.width - heart.width), Resources.getString( "UI_TIMES" ) + player.lives, true, FontAnonymousPro.instance.fontName);
+#end
 		player.infoViewLives = lives;
 		
 		//coins
@@ -533,17 +541,27 @@ class GameUI extends HxlDialog {
 		add(infoViewHearts);
 
 		//level info
-		infoViewLevel = new HxlText(infoViewXpBar.x, infoViewHearts.y + infoViewHearts.height - 2, Std.int(btnInfoView.width), Resources.getString( "UI_LEVEL" ) + " " + player.level, true, FontAnonymousPro.instance.fontName);
+		var viewLevelY:Float = infoViewHearts.y + infoViewHearts.height - 2;
+		var viewTextSize:Int = fontSize;
+#if japanese
+		viewLevelY += 2;
+		viewTextSize -= 2;
+#end
+		infoViewLevel = new HxlText(infoViewXpBar.x, viewLevelY, Std.int(btnInfoView.width), Resources.getString( "UI_LEVEL" ) + " " + player.level, true, FontAnonymousPro.instance.fontName);
 		infoViewLevel.zIndex = zIndex+1;
 		player.infoViewLevel = infoViewLevel;
-		infoViewLevel.setSize(fontSize);
+		infoViewLevel.setSize(viewTextSize);
 		infoViewLevel.scrollFactor.x = infoViewLevel.scrollFactor.y = 0;
 		add(infoViewLevel);
 		
-		infoViewFloor = new HxlText(infoViewXpBar.x, infoViewLevel.y + infoViewLevel.height-4, Std.int(btnInfoView.width), Resources.getString( "UI_FLOOR" ) + " " + (level.index+1), true, FontAnonymousPro.instance.fontName);
+		var viewFloorY:Float = infoViewLevel.y + infoViewLevel.height - 4;
+#if japanese
+		viewFloorY += 2;
+#end
+		infoViewFloor = new HxlText(infoViewXpBar.x, viewFloorY, Std.int(btnInfoView.width), Resources.getString( "UI_FLOOR" ) + " " + (level.index + 1), true, FontAnonymousPro.instance.fontName);
 		infoViewFloor.zIndex = zIndex+1;
 		player.infoViewFloor = infoViewFloor;
-		infoViewFloor.setSize(fontSize);
+		infoViewFloor.setSize(viewTextSize);
 		infoViewFloor.scrollFactor.x = infoViewFloor.scrollFactor.y = 0;
 		add(infoViewFloor);
 		

@@ -21,6 +21,15 @@ class Configuration {
 	public static inline var allowKongregateAPI = false;
 	public static inline var isArmorSponsored = false;
 	public static inline var isAndKonAd = false;
+#elseif japanese
+	public static inline var standAlone = true;
+	public static inline var useProductionPlaytomic = true;
+	
+	public static inline var allowKongregateAds = false;
+	public static inline var allowNewgroundsAds = false;
+	public static inline var allowKongregateAPI = false;
+	public static inline var isArmorSponsored = false;
+	public static inline var isAndKonAd = false;
 #else
 	public static inline var standAlone = false;
 	public static inline var useProductionPlaytomic = true;

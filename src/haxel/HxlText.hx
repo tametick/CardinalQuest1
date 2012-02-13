@@ -7,6 +7,8 @@ import flash.text.TextFormatAlign;
 
 import haxel.HxlSprite;
 
+import cq.CqResources.JapaneseFontScaling;
+
 #if flash9
 import flash.text.AntiAliasType;
 import flash.text.GridFitType;
@@ -123,6 +125,15 @@ class HxlText extends HxlSprite {
     if (Font == null) {
       Font = "";
     }
+	
+#if japanese	
+	if ( Font == "FontAnonymousPro" ) {
+		Size = Math.floor( Size * JapaneseFontScaling.c_anonymousScale );
+	} else if ( Font == "FontDungeon" || Font == "" ) {
+		Size = Math.floor( Size * JapaneseFontScaling.c_dungeonScale );
+	}
+#end
+
     var tf:TextFormat = dtfCopy();
     tf.font = Font;
     tf.size = Size;
@@ -179,6 +190,15 @@ class HxlText extends HxlSprite {
    */
   public function setSize(Size:Float):Float {
     var tf:TextFormat = dtfCopy();
+	
+#if japanese	
+	if ( tf.font == "FontAnonymousPro" ) {
+		Size = Math.floor( Size * JapaneseFontScaling.c_anonymousScale );
+	} else if ( tf.font == "FontDungeon" || tf.font == "" ) {
+		Size = Math.floor( Size * JapaneseFontScaling.c_dungeonScale );
+	}
+#end
+	
     tf.size = Size;
     _tf.defaultTextFormat = tf;
     _tf.setTextFormat(tf);

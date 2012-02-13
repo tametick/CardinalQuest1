@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project>
+  <!-- Output SWF options -->
+  <output>
+    <movie disabled="False" />
+    <movie input="" />
+    <movie path="bin.jp\cq.swf" />
+    <movie fps="30" />
+    <movie width="640" />
+    <movie height="480" />
+    <movie version="10" />
+    <movie background="#000000" />
+  </output>
+  <!-- Other classes to be compiled into your SWF -->
+  <classpaths>
+    <class path="src" />
+  </classpaths>
+  <!-- Build options -->
+  <build>
+    <option directives="ndemo&#xA;japanese" />
+    <option flashStrict="True" />
+    <option mainClass="cq.Main" />
+    <option enabledebug="True" />
+    <option additional="-swf-lib lib/playtomic.swf&#xA;-swf-version 10.1" />
+  </build>
+  <!-- haxelib libraries -->
+  <haxelib>
+    <library name="air2" />
+  </haxelib>
+  <!-- Class files to compile (other referenced classes will automatically be included) -->
+  <compileTargets>
+    <compile path="src\world\Actor.hx" />
+    <compile path="src\world\GameObject.hx" />
+    <compile path="src\world\Level.hx" />
+    <compile path="src\world\Mob.hx" />
+    <compile path="src\world\Tile.hx" />
+    <compile path="src\world\World.hx" />
+    <compile path="src\cq\states\GameState.hx" />
+    <compile path="src\cq\Main.hx" />
+  </compileTargets>
+  <!-- Assets to embed into the output SWF -->
+  <library>
+    <asset path="rsrc\cq\resources - japanese.swf" />
+  </library>
+  <!-- Paths to exclude from the Project Explorer tree -->
+  <hiddenPaths>
+    <!-- example: <hidden path="..." /> -->
+  </hiddenPaths>
+  <!-- Executed before build -->
+  <preBuildCommand />
+  <!-- Executed after build -->
+  <postBuildCommand alwaysRun="False" />
+  <!-- Other project options -->
+  <options>
+    <option showHiddenPaths="False" />
+    <option testMovie="ExternalPlayer" />
+  </options>
+</project>

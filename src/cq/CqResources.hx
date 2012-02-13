@@ -23,10 +23,18 @@ class FontAnonymousPro extends Font {
 	public static var instance = new FontAnonymousPro();
 	public function new() { super(); } 
 }
+#if japanese
+class JapaneseFontScaling {
+	public static inline var c_dungeonScale:Float = 0.6;
+	public static inline var c_anonymousScale:Float = 1;
+}
+#else
 class FontAnonymousProB extends Font { 
 	public static var instance = new FontAnonymousProB();
 	public function new() { super(); } 
 }
+#end
+
 class MainThemeOne extends Sound { public function new() { super(); } }
 class MainThemeTwo extends Sound { public function new() { super(); } }
 class MenuTheme extends Sound { public function new() { super(); } }

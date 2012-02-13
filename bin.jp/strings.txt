@@ -1,0 +1,260 @@
+﻿Field String ID
+Field String Data
+
+; Class names.
+
+FIGHTER         "ファイター"
+WIZARD          "ウィザード"
+THIEF           "シーフ"
+
+; Item names.
+
+BOOTS           "逃走のブーツ"
+WINGED_SANDALS  "エルメスのサンダル"
+TUNDRA_BOOTS    "ツンドラトカゲのブーツ"
+
+LEATHER_ARMOR   "レザーアーマー"
+BREASTPLATE     "胸当て"
+CLOAK           "敏捷な悪党のマント"
+FULL_PLATE_MAIL "フルプレートメイル"
+
+RING            "知性のリング"
+AMULET          "悟りのアミュレット"
+GEMMED_AMULET   "神秘のアミュレット"
+GEMMED_RING     "ルビーのリング"
+
+CAP             "忍耐のキャップ"
+HELM            "頑丈なヘルム"
+FULL_HELM       "活力のフルヘルム"
+GOLDEN_HELM     "黄金のキングヘルム"
+
+GLOVE           "機敏のグローブ"
+BRACELET        "アキレスのブレスレット"
+GAUNTLET        "頑強なガントレット"
+
+DAGGER          "ダガー"
+SHORT_SWORD     "ショートソード"
+STAFF           "スタッフ"
+LONG_SWORD      "ロングソード"
+AXE             "アックス"
+BATTLE_AXE      "強靭な戦斧"
+RUNE_SWORD      "ルーンソード"
+MACE            "野獣のメイス"
+CLAYMORE        "クレイモア"
+BROAD_SWORD     "マサムネ"
+
+; Potions.
+
+RED_POTION      "ポーション"
+PURPLE_POTION   "マナポーション"
+BLUE_POTION     "エレファントD"
+GREEN_POTION    "タイガー一発"
+YELLOW_POTION   "コカカクテル"
+
+; Spells.
+
+BERSERK         "バーサク"
+BLESS_WEAPON    "ブレスウェポン"
+HASTE           "ヘイスト"
+SHADOW_WALK     "シャドウウォーク"
+STONE_SKIN      "ストーンスキン"
+BLINK           "ブリンク"
+MAGIC_ARMOR     "マジックアーマー"
+REVEAL_MAP      "マップ"
+HEAL            "ヒール"
+
+FREEZE          "フリーズ"
+FIREBALL        "ファイヤーボール"
+ENFEEBLE_MONSTER "ウィーク"
+CHARM_MONSTER   "チャーム"
+POLYMORPH       "トランスフォーム"
+SLEEP           "スリープ"
+FEAR            "フィアー"
+
+MAGIC_MIRROR    "マジックミラー"
+TELEPORT        "テレポート"
+
+; Mobs.
+
+BANDIT_CAPTAIN  "キャプテン"
+BANDIT          "バンディット"
+
+KOBOLD_SPEAR    "スピア・コボルト"
+KOBOLD          "コボルト"
+KOBOLD_MAGE     "コボルト・トリックスター"
+
+SUCCUBUS        "サキュバス"
+SUCCUBUS_WHIP   "ドミナトリックス"
+
+SPIDER          "スパイダー"
+SPIDER_RED      "ブラック・ウィドウ"
+SPIDER_GRAY     "ウルフ・スパイダー"
+
+APE             "エイプ"
+APE_DEMONIC     "デーモン・エイプ"
+
+ELEMENTAL_AIR     "エア・エレメンタル"
+ELEMENTAL_NATURE  "ネイチャー・エレメンタル"
+ELEMENTAL_SORCERY "ソーサリー・エレメンタル"
+ELEMENTAL_CHAOS   "カオス・エレメンタル"
+
+WEREWOLF        "ウェアウルフ"
+
+MINOTAUR        "ミノタウロス"
+
+; Misc.
+
+CHEST           "宝箱"
+
+; Statistics
+"damage"         "ダメージ"
+"attack"          "攻撃"
+"defense"           "防御"
+"life"           "ライフ"
+"vitality"           "活力"
+"speed"         "スピード"
+"spirit"           "精神"
+
+; Special effects
+"damage multiplier" "クリティカル"
+"charm"                "チャーム"
+"fear"              "フィアー"
+"sleep"              "スリープ"
+"heal"                "ヒール"
+"charge"              "チャージ"
+
+; Ingame messages.
+STAT_HEALTH          "体力"
+STAT_ATTACK          "攻撃力"
+STAT_DEFENSE         "防御力"
+STAT_LIFE            "生命"
+STAT_VITALITY        "活力"
+STAT_SPEED           "スピード"
+STAT_SPIRIT          "精神"
+
+PREFIX_SUPERB        "上級の"
+PREFIX_WONDROUS      "とびきりの"
+PREFIX_MAGICAL       "魔法の"
+
+UI_LEVEL             "レベル"
+UI_TIMES             "x"
+UI_FLOOR             "フロア"
+UI_MAP               "マップ"
+UI_INV               "持ち物"
+UI_CHAR              "ステータス"
+UI_DAMAGE            "ダメージ"
+UI_DESTROY           "破壊"
+
+POPUP_C              "[ショートカットキー C]"
+POPUP_I              "[ショートカットキー I]"
+POPUP_M              "[ショートカットキー M]"
+POPUP_0              "[ショートカットキー 0]"
+POPUP_1              "[ショートカットキー 1]"
+POPUP_2              "[ショートカットキー 2]"
+POPUP_3              "[ショートカットキー 3]"
+POPUP_4              "[ショートカットキー 4]"
+POPUP_5              "[ショートカットキー 5]"
+POPUP_6              "[ショートカットキー 6]"
+POPUP_7              "[ショートカットキー 7]"
+POPUP_8              "[ショートカットキー 8]"
+POPUP_9              "[ショートカットキー 9]"
+POPUP_ENTER          "[ショートカットキー enter]"
+POPUP_ESC            "[ショートカットキー ESC]"
+POPUP_F1             "[ショートカットキー F1]"
+
+POPUP_RECOVERED      "回復"
+POPUP_EXPIRED        "すり減る"
+POPUP_MIRROR         "ミラー"
+POPUP_MIRROR_EXPIRED "粉々になった"
+POPUP_INVIS_EXPIRED  "再出現した"
+POPUP_EFFECT_EXPIRED "尽きる"
+POPUP_INVIS_BREAK1   "透明な"
+POPUP_INVIS_BREAK2   "出現！"
+POPUP_INVIS_BROKEN   "あなたが再出現"
+POPUP_CHARM_BREAK    "チャームが破られた！"
+POPUP_FEAR_BREAK     "フィアーが破られた！"
+POPUP_BACKSTAB       "裏切り！"
+POPUP_BUMP1          "あなたがぶつかったのは透明な"
+POPUP_BUMP2          "。"
+POPUP_BUMPED         "見つかった！"
+POPUP_INVIS          "消えた"
+POPUP_HEALED         "回復した"
+POPUP_CHARGED        "チャージされた"
+POPUP_CHARM          "チャーム"
+POPUP_FEAR           "フィアー"
+POPUP_SLEEP          "スリープ"
+POPUP_POLYMORPH      "モーフ"
+POPUP_COIN           "コイン"
+POPUP_COINS          "コイン"
+
+NOTIFY_INV_FULL      "袋がいっぱい！"
+NOTIFY_STAIRS        "階段を発見！"
+NOTIFY_LATE_STAIRS   "とうとう、下へ行く階段が！"
+NOTIFY_EXPLORE       "探索を続行！"
+NOTIFY_LATE_EXPLORE  "階段に向かって進行！"
+NOTIFY_DOWNSTAIRS    "クリックして下の階へ"
+NOTIFY_PICK_SPACE1   "スペースを選択してください"
+NOTIFY_PICK_SPACE2   "を唱えるための"
+NOTIFY_PICK_TARGET1  "対象を選択してください"
+NOTIFY_PICK_TARGET2  "を唱えるための"
+NOTIFY_GET_FIRST     "ずっとこれが欲しかったんだ。"
+NOTIFY_GET_DUPLICATE "これと同じものを既に持っている。"
+NOTIFY_GET_EQUAL1    "自分の"
+NOTIFY_GET_EQUAL2    " はこれと同じものだ。"
+NOTIFY_GET_SELLOLD1  "今まで使っていた"
+NOTIFY_GET_SELLOLD2  " は今すぐ売る。"
+NOTIFY_GET_SELLNEW1  "はは！今使っているものの半分以下の"
+NOTIFY_GET_SELLNEW2  "だ。"
+NOTIFY_GET_STASHOLD1 "今まで使っていた"
+NOTIFY_GET_STASHOLD2 " は袋に入れておこう。"
+NOTIFY_GET_REDUNDANT "袋の中にもっといいのがある。"
+NOTIFY_GET_STASHNEW1 "この"
+NOTIFY_GET_STASHNEW2 " は袋に入れておこう。"
+NOTIFY_GET_STASHSPELL1 "この"
+NOTIFY_GET_STASHSPELL2 " 呪文は袋に入れておこう。"
+NOTIFY_EMPTYCELL     "空のセルを使ってアイテムを交換する！"
+
+LOG_YOU_HIT          "アタック！"
+LOG_HIT_YOU          "くらった！"
+LOG_YOU_KILL         "倒した！"
+LOG_KILLS_YOU        "倒された…"
+LOG_YOU_MISS         "ミス！"
+LOG_MISS_YOU         "かわした！"
+LOG_EFFECT           "特別効果を適用："
+LOG_XP1              "獲得"
+LOG_XP2              "経験値"
+LOG_EXPIRED_TIMER    "タイムリミットを解除："
+LOG_POTION           "ポーション使用"
+
+; UI - Menu
+MENU_NEW_GAME        "ニューゲーム"
+MENU_RESUME_GAME     "ゲーム再開"
+MENU_CREDITS         "クレジット"
+MENU_QUIT            "終了"
+MENU_MUSIC           "音楽"
+MENU_SOUND           "サウンド"
+MENU_FULLSCREEN      "リサイズ"
+MENU_WINDOWED        "リサイズ"
+MENU_COPYRIGHT       "Copyright 2011"
+MENU_PORTEDBY        "Ported by"
+MENU_VERSION         "バージョン"
+MENU_STANDALONE      "単体バージョンをゲット："
+MENU_UPGRADE1        "バージョンをアップグレード："
+MENU_UPGRADE2        "！"
+
+MENU_HIGHSCORES      "ハイスコア"
+
+MENU_CREATECHARACTER "キャラクター作成"
+MENU_START           "スタート"
+MENU_MENU            "メニュー"
+MENU_MAIN_MENU       "メインメニュー"
+MENU_HELP            "ヘルプ"
+MENU_GAME_OVER       "ゲームオーバー"
+
+PRELOADER1           "やあこんにちは！ 誰かがこのゲームを私の許可なくコピーしたようだ。  どこかをクリックするか、このURLをブラウザーにコピペしてください。\n\n"
+PRELOADER2           "\n\n私のウェブサイトでこのゲームをプレイするために。  ありがとう、そして楽しんで！"
+
+DEMO_OVER            "デモはここまで！"
+DEMO_OVER_MORE       "もっとしたい？"
+
+INVENTORY_HINT       "アイテム、呪文、ポーションにマウスオーバーしてそれぞれのパラメータや効果を確認。"

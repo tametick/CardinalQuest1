@@ -695,7 +695,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 		if(itemOrSpell.buffs != null) {
 			for (buff in itemOrSpell.buffs.keys()) {
 				var val = itemOrSpell.buffs.get(buff);
-				var text = (val > 0?"+":"") + val + " " + buff;
+				var text = (val > 0?"+":"") + val + " " + Resources.getString( buff );
 
 				if (victim == null) {
 					var c:Int;

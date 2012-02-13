@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<movie width="360" height="240" framerate="12" as3="1">
+	<library>
+		<font id="cq.FontDungeon" import="gomarice_mukasi_mukasi.TTF" name="FontDungeon" /> 
+		<font id="cq.FontAnonymousPro" import="msgothic.ttc" name="FontAnonymousPro" /> 
+<!--		<font id="cq.FontAnonymousProB" import="../../bin.jp/msgothic.ttc" name="FontAnonymousProB" />  -->
+		
+		<bitmap id="cq.SpriteLogo" import="logo.png"/>
+		<bitmap id="cq.SpriteHeart" import="heart.png"/>
+		<bitmap id="cq.SpriteCoin" import="coin.png"/>
+		<bitmap id="cq.SpritePortrait" import="portrait_slots.png"/>
+		<bitmap id="cq.SpritePortraitPaper" import="portrait_slots_on_paper.png"/>
+		<bitmap id="cq.SpriteInfo" import="info_slot.png"/>
+		<bitmap id="cq.SpriteCursor" import="cursor.png"/>
+		<bitmap id="cq.SpriteStartButton" import="Start_button.png"/>
+		<bitmap id="cq.SpriteButtonBg" import="button_bg.png"/>
+		<bitmap id="cq.SpriteItemSlot1" import="Item_slot_01.png"/>
+		<bitmap id="cq.SpriteItemSlot2" import="Item_slot_02.png"/>
+		<bitmap id="cq.SpriteItemSlot1_48" import="Item_slot_01_48.png"/>
+		<bitmap id="cq.SpriteItemSlot1_32" import="Item_slot_01_32.png"/>
+		<bitmap id="cq.SpriteIcons" import="buttons.png"/>
+		<bitmap id="cq.SpriteEquipmentIcons" import="equipment_icons.png"/>
+		<bitmap id="cq.SpriteCorpses" import="corpses.png"/>
+		<bitmap id="cq.SpriteEffects" import="effects.png"/>
+		<bitmap id="cq.SpriteItems" import="items.png"/>
+		<bitmap id="cq.SpriteMonsters" import="monsters.png"/>
+		<bitmap id="cq.SpritePlayer" import="player.png"/>
+		<bitmap id="cq.SpriteTiles" import="tiles.png"/>
+		<bitmap id="cq.SpriteSpells" import="spells.png"/>
+		<bitmap id="cq.SpriteMapPaper" import="map_paper.png"/>
+		<bitmap id="cq.SpriteCharPaper" import="Ch_selection_box_01.png"/>
+		<bitmap id="cq.SpriteDecorations" import="decorations.png"/>
+		<bitmap id="cq.UiBeltVertical" import="Belt_vert_metal.png"/>
+		<bitmap id="cq.UiBeltHorizontal" import="Belt_horiz_leather.png"/>
+		<bitmap id="cq.MobileUiBeltVertical" import="Mobile_Belt_vert_metal.png"/>
+		<bitmap id="cq.MobileUiBeltHorizontal" import="Mobile_Belt_horiz_leather.png"/>
+		<bitmap id="cq.UiInventoryBox" import="inv_box_02.png"/>
+		<bitmap id="cq.MobileUiInventoryBox" import="Mobile_inv_box_02.png"/>
+		<bitmap id="cq.IntroScreen" import="Minator_intro_02.png"/>
+		<bitmap id="cq.DeathScreen" import="death.png"/>
+		<bitmap id="cq.VortexScreen" import="Vortex_swirl.png"/>
+		<bitmap id="cq.VortexLightsScreen" import="Vortex_lights.png"/>
+		<bitmap id="cq.VortexFigure" import="vortex_figure.png"/>
+		<bitmap id="cq.White" import="White.png"/>
+		<bitmap id="cq.SpriteKnightEntry" import="Knight_entry_03.png"/>
+		<bitmap id="cq.SpriteWizardEntry" import="Wizard_entry_03.png"/>
+		<bitmap id="cq.SpriteThiefEntry" import="Thief_entry_03.png"/>
+		<bitmap id="cq.SpriteHelpOverlay" import="HelpOverlay.png"/>
+		<bitmap id="cq.SpriteInvHelpOverlay" import="inventoryHelpOverlay.png"/>
+		<bitmap id="cq.SpriteSoundToggle" import="soundToggle.png"/>
+		<bitmap id="cq.SpriteFullscreenToggle" import="fullscreenToggle.png"/>
+		
+		<sound id="cq.MainThemeOne" name="MainThemeOne" import="main1.mp3"/>
+		<sound id="cq.MainThemeTwo" name="MainThemeTwo" import="main2.mp3"/>
+		<sound id="cq.MenuTheme" name="MenuTheme" import="menu.mp3"/>
+		<sound id="cq.BossTheme" name="BossTheme" import="boss.mp3"/>
+		
+		<sound id="cq.EnemyHit" name="EnemyHit" import="sounds/enemyHit.mp3"/>
+		<sound id="cq.FortressGate" name="FortressGate" import="sounds/fortressGate.mp3"/>
+		<sound id="cq.ItemEquipped" name="ItemEquipped" import="sounds/itemEquipped.mp3"/>
+		<sound id="cq.LevelUp" name="LevelUp" import="sounds/levelUp.mp3"/>
+		<sound id="cq.MenuItemClick" name="MenuItemClick" import="sounds/menuItemClick.mp3"/>
+		<sound id="cq.MenuItemMouseOver" name="MenuItemMouseOver" import="sounds/menuItemMouseOver.mp3"/>
+		<sound id="cq.PlayerHit" name="PlayerHit" import="sounds/playerHit.mp3"/>
+		<sound id="cq.PotionEquipped" name="PotionEquipped" import="sounds/potionEquipped.mp3"/>
+		<sound id="cq.PotionQuaffed" name="PotionQuaffed" import="sounds/potionQuaffed.mp3"/>
+		<sound id="cq.SpellCast" name="SpellCast" import="sounds/spellCast.mp3"/>
+		<sound id="cq.SpellCastNegative" name="SpellCastNegative" import="sounds/spellCastNegative.mp3"/>
+		<sound id="cq.SpellEquipped" name="SpellEquipped" import="sounds/spellEquipped.mp3"/>
+		
+		<sound id="cq.Footstep1" name="Footstep1" import="sounds/Footstep1.mp3"/>
+		<sound id="cq.Footstep2" name="Footstep2" import="sounds/Footstep2.mp3"/>
+		<sound id="cq.Footstep3" name="Footstep3" import="sounds/Footstep3.mp3"/>
+		<sound id="cq.Footstep4" name="Footstep4" import="sounds/Footstep4.mp3"/>
+		<sound id="cq.Footstep5" name="Footstep5" import="sounds/Footstep5.mp3"/>
+		<sound id="cq.Footstep6" name="Footstep6" import="sounds/Footstep6.mp3"/>
+		<sound id="cq.EnemyMiss" name="EnemyMiss" import="sounds/enemyMiss.mp3"/>
+		<sound id="cq.PlayerMiss" name="PlayerMiss" import="sounds/playerMiss.mp3"/>
+		<sound id="cq.ChestBusted" name="ChestBusted" import="sounds/chestBusted.mp3"/>
+		<sound id="cq.Pickup" name="Pickup" import="sounds/pickup.mp3"/>
+		<sound id="cq.DoorOpen" name="DoorOpen" import="sounds/doorOpen.mp3"/>
+		<sound id="cq.Death" name="Death" import="sounds/death.mp3"/>
+		
+		<sound id="cq.Lose" name="Death" import="sounds/lose.mp3"/>
+		<sound id="cq.Win" name="Win" import="sounds/win.mp3"/>
+		
+		<bitmap id="cq.SpriteCredits" import="Credits.png"/>
+		<bitmap id="cq.SpriteHighScoresBg" import="HighscoresBg.png"/>
+		<bitmap id="cq.SpriteMainmenuBg" import="mainmenuBg.png"/>
+		<bitmap id="cq.BlankScreen" import="BlankOverlay.png"/>
+	</library>
+</movie>

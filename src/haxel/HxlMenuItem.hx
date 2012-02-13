@@ -6,6 +6,8 @@ import flash.text.TextFormatAlign;
 
 import haxel.HxlGraphics;
 
+import cq.CqResources.JapaneseFontScaling;
+
 #if flash9
 import flash.text.AntiAliasType;
 import flash.text.GridFitType;
@@ -47,6 +49,15 @@ class HxlMenuItem extends HxlText
 
 	public function setNormalFormat(?Font:String=null,?Size:Int=8,?Color:Int=0xffffff,?Alignment:String=null,?ShadowColor:Int=0) {
 		if ( Font == null ) Font = "";
+		
+#if japanese	
+		if ( Font == "FontAnonymousPro" ) {
+			Size = Math.floor( Size * JapaneseFontScaling.c_anonymousScale );
+		} else if ( Font == "FontDungeon" || Font == "" ) {
+			Size = Math.floor( Size * JapaneseFontScaling.c_dungeonScale );
+		}
+#end
+		
 		normalFormat.font = Font;
 		normalFormat.size = Size;
 		normalFormat.color = Color;
@@ -57,6 +68,15 @@ class HxlMenuItem extends HxlText
 
 	public function setHoverFormat(?Font:String=null,?Size:Int=8,?Color:Int=0xffffff,?Alignment:String=null,?ShadowColor:Int=0) {
 		if ( Font == null ) Font = "";
+		
+#if japanese	
+		if ( Font == "FontAnonymousPro" ) {
+			Size = Math.floor( Size * JapaneseFontScaling.c_anonymousScale );
+		} else if ( Font == "FontDungeon" || Font == "" ) {
+			Size = Math.floor( Size * JapaneseFontScaling.c_dungeonScale );
+		}
+#end
+		
 		hoverFormat.font = Font;
 		hoverFormat.size = Size;
 		hoverFormat.color = Color;

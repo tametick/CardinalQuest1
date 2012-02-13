@@ -461,7 +461,7 @@ class CqInventoryCell extends HxlDialog {
 			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, true, 6, true);
 		}
 		
-		if (Width >= 58) {
+		if (Width >= 58 || !HxlGraphics.smallScreen) {
 			add(new ButtonSprite());
 		} else {
 			add(new ButtonSprite_48());
@@ -528,7 +528,7 @@ class CqInventoryCell extends HxlDialog {
 		icon.y += 8;
 			
 		// this needs to be added to resources!
-		var droptext:HxlText = new HxlText(0, 37, Std.int(width), "Destroy");
+		var droptext:HxlText = new HxlText(0, 37, Std.int(width), Resources.getString( "UI_DESTROY" ) );
 		droptext.setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101);
 		droptext.zIndex = 10;
 		droptext.setAlpha(0.3);
@@ -713,11 +713,11 @@ class CqBackpackGrid extends CqInventoryGrid {
 	public function new(numberOfCells:Int, ?X:Int=0, ?Y:Int=0, ?Width:Float=100, ?Height:Float=100) {
 		super(X, Y, Width, Height);
 	
-		var paddingX:Int = 1;
+		var paddingX:Int = HxlGraphics.smallScreen ? 1 : 3;
 		var paddingY:Int = HxlGraphics.smallScreen ? -6 : 10;
 		var cellSize:Int = 64;
 		var offsetX:Int = 0;
-		var offsetY:Int = HxlGraphics.smallScreen ? -3 : 0;
+		var offsetY:Int = HxlGraphics.smallScreen ? -3 : -5;
 
 		var rows:Int = 2;
 		var cols:Int = Math.floor((numberOfCells + 1) / 2);
@@ -889,18 +889,22 @@ class CqPotionGrid extends CqInventoryGrid {
 		helpButton.configEvent(5, true, true);
 		menuButton.configEvent(5, true, true);
 		
-		helpButton.loadText(new HxlText(15, 32, btnSize, "Help", true).setFormat(FontDungeon.instance.fontName, 23, 0xffffff, "center", 0x010101));
+#if japanese		
+		helpButton.loadText(new HxlText( 8, 32, btnSize, Resources.getString( "MENU_HELP" ), true).setFormat(FontDungeon.instance.fontName, 23, 0xffffff, "center", 0x010101));
+		menuButton.loadText(new HxlText( -8, 32, btnSize, Resources.getString( "MENU_MENU" ), true).setFormat(FontDungeon.instance.fontName, 23, 0xffffff, "center", 0x010101));
+#else
+		helpButton.loadText(new HxlText(15, 32, btnSize, Resources.getString( "MENU_HELP" ), true).setFormat(FontDungeon.instance.fontName, 23, 0xffffff, "center", 0x010101));
+		menuButton.loadText(new HxlText( -14, 32, btnSize, Resources.getString( "MENU_MENU" ), true).setFormat(FontDungeon.instance.fontName, 23, 0xffffff, "center", 0x010101));
+#end
 		helpButton.getText().angle = 90;
-		
-		menuButton.loadText(new HxlText(-14, 32, btnSize, "Menu", true).setFormat(FontDungeon.instance.fontName, 23, 0xffffff, "center", 0x010101));
 		menuButton.getText().angle = -90;
 		
 		var pop:CqPopup;
-		pop = new CqPopup(150,"[hotkey ESC]", GameUI.instance.popups);
+		pop = new CqPopup(150, Resources.getString("POPUP_ESC"), GameUI.instance.popups);
 		pop.zIndex = 15;
 		menuButton.setPopup(pop);
 		GameUI.instance.popups.add(pop);
-		pop = new CqPopup(150,"[hotkey F1]", GameUI.instance.popups);
+		pop = new CqPopup(150, Resources.getString("POPUP_F1"), GameUI.instance.popups);
 		pop.zIndex = 15;
 		helpButton.setPopup(pop);
 		GameUI.instance.popups.add(pop);

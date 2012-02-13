@@ -102,8 +102,12 @@ class CreateCharState extends CqState {
 		
 		var button = new HxlButton(btnX - 30 + recenter, class_buttons_y - 20 + shiftup , Std.int(selectBox.width), Std.int(selectBox.height), cb, 0.0, 0.0);
 		add(button);
-		
-		var text = new HxlText(textX + recenter, class_buttons_y + sprite.height + shiftup , 150, className);
+
+		var textY:Float = class_buttons_y + sprite.height + shiftup;
+#if japanese
+		textY += 8;
+#end
+		var text = new HxlText(textX + recenter, textY , 150, className);
 		text.setFormat(null, 32, 0xffffff, "center", 0x010101); 
 		add(text);
 	}
@@ -119,8 +123,12 @@ class CreateCharState extends CqState {
 		var bg:HxlSprite = new HxlSprite(HxlGraphics.smallScreen ? -25 : 40, 250 + paperShiftup + (HxlGraphics.smallScreen ? 10 : 0), SpriteCharPaper);
 		add(bg);
 		
+#if japanese
+		var titleText:HxlText = new HxlText(0, HxlGraphics.smallScreen ? 0 : 8, Configuration.app_width, Resources.getString( "MENU_CREATECHARACTER" ));
+#else
 		var titleText:HxlText = new HxlText(0, HxlGraphics.smallScreen ? -8 : 0, Configuration.app_width, Resources.getString( "MENU_CREATECHARACTER" ));
-		
+#end
+
 		titleText.setFormat(null, HxlGraphics.smallScreen ? 56 : 72, 0xffffff, "center");
 		add(titleText);
 		

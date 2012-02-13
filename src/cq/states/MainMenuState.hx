@@ -301,7 +301,11 @@ class MainMenuState extends CqState {
 			updateFullscreen();
 		}
 		
+#if japanese
+		var copyright = new HxlText(160, 459 + (HxlGraphics.height - 480), Std.int(0.5*(HxlGraphics.width - 100)), Resources.getString( "MENU_COPYRIGHT" ), true, FontAnonymousPro.instance.fontName, 18);
+#else
 		var copyright = new HxlText(HxlGraphics.width - 265, 459 + (HxlGraphics.height - 480), 142, Resources.getString( "MENU_COPYRIGHT" ), true, FontAnonymousPro.instance.fontName, 18);
+#end
 		add(copyright);
 
 		//Adding porter for ios, I guess android will want to do the same
@@ -318,13 +322,21 @@ class MainMenuState extends CqState {
 			add(version);
 
 		} else {
+#if japanese
+			copyrightLink = new HxlText(430, 459, 210, "Ido Yehieli", true, FontAnonymousPro.instance.fontName, 18,0x77D2FF);
+			copyrightLink.setUnderlined();
+			add(copyrightLink);
 
+			var version = new HxlText(Configuration.app_width-250-10, copyright.y-copyright.height, 250, Resources.getString( "MENU_VERSION" ) + " " + Configuration.version, true, FontAnonymousPro.instance.fontName, 18, 0xffffff, "right" );
+			add(version);
+#else
 			copyrightLink = new HxlText(copyright.x+copyright.width, 459, 123, "Ido Yehieli", true, FontAnonymousPro.instance.fontName, 18,0x77D2FF);
 			copyrightLink.setUnderlined();
 			add(copyrightLink);
 
 			var version = new HxlText(Configuration.app_width-150-10, copyright.y-copyright.height, 150, Resources.getString( "MENU_VERSION" ) + " " + Configuration.version, true, FontAnonymousPro.instance.fontName, 18, 0xffffff, "right" );
 			add(version);
+#end
 		}
 
 		if(!Configuration.standAlone && !Configuration.mobile){
@@ -337,9 +349,13 @@ class MainMenuState extends CqState {
 
 		update();
 
+#if japanese
+		if (message != null)
+			HxlGraphics.state.add(new HxlText(0, 0, 500, message, true, FontAnonymousPro.instance.fontName, 16));
+#else
 		if (message != null)
 			HxlGraphics.state.add(new HxlText(0, 0, 500, message, true, FontAnonymousProB.instance.fontName, 16));
-
+#end
 		finishedAddingGuiElements = true;
 	}
 
