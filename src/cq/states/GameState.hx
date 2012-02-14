@@ -121,8 +121,14 @@ class GameState extends CqState {
 				Registery.player.popup.setText("");
 			}
 			currentTile = null;
+			
+			if (GameUI.instance.panels.currentPanel != null) {
+				Registery.level.visible = GameUI.instance.panels.currentPanel.isDropping;
+			} else {
+				Registery.level.visible = true;
+			}
 		}
-
+		
 		super.render();
 	}
 
@@ -459,7 +465,7 @@ class GameState extends CqState {
 		started = true;
 		update();
 
-		if (!Configuration.debug) {
+		if (!Configuration.debug && !Configuration.mobile) {
 			gameUI.pressHelp(false);
 		}
 
@@ -496,7 +502,6 @@ class GameState extends CqState {
 	}
 
 	override function onKeyUp(event:KeyboardEvent) {
-
 		//A cookie if you discover the raison d'etre
 		mobileMoveAllowed = true;
 
@@ -557,7 +562,7 @@ class GameState extends CqState {
 			return;
 		}
 
-		if (GameUI.instance.panels.currentPanel != GameUI.instance.panels.panelInventory) {
+		if (GameUI.instance.panels.currentPanel == null || Std.is(GameUI.instance.panels.currentPanel,CqMapDialog)) {
 			if (Configuration.mobile) {
 				HxlGraphics.updateInput();
 			}
@@ -641,7 +646,7 @@ class GameState extends CqState {
 		return tile == null || (tile.isBlockingMovement() && !(HxlUtil.contains(SpriteTiles.doors.iterator(), tile.getDataNum())));
 	}
 
-	private function pickBestSlide(facing:HxlPoint):HxlPoint {
+	private function pickBestSlide(facing:HxlPoint, ?secondaryFacing:HxlPoint = null):HxlPoint {
 		// treating 'facing' as forward, we hold a little competition between 'left' and 'right'
 		// -- we want to find which of those two directions gets us in place to move forward soonest.
 		// -- and if they tie on that test, we want to pick the one that lets us move forward furthest.
@@ -655,11 +660,22 @@ class GameState extends CqState {
 
 		var left = new HxlPoint(-facing.y, -facing.x);
 		var right = new HxlPoint(facing.y, facing.x);
-
+		
 		// you can't move backward, though!
 		if (player.lastTile != null) {
 			left_back = (player.lastTile.x == left.x + player.tilePos.x && player.lastTile.y == left.y + player.tilePos.y);
 			right_back = (player.lastTile.x == right.x + player.tilePos.x && player.lastTile.y == right.y + player.tilePos.y);
+		}
+		
+		// and you can't move against your secondary facing! (maybe use left_back / right_back logic instead?)
+		if (secondaryFacing != null) {
+			if (left.x == secondaryFacing.x && left.y == secondaryFacing.y) {
+				right_ok = false;
+			} else if (right.x == secondaryFacing.x && right.y == secondaryFacing.y) {
+				left_ok = false;
+			}
+			
+			return null;
 		}
 
 		// get set
@@ -809,10 +825,11 @@ class GameState extends CqState {
 
 			// first, make sure the key was JUST pressed, if this is a key command
 			// (otherwise we'll go down stairs or wait after targeting)
-			var confirmed = true;
+			var confirmed = false;
 
-			if (!isMouseControl) {
-				confirmed = false;
+			if (isMouseControl) {
+				confirmed = HxlGraphics.mouse.justPressed();
+			} else {
 				for (k in Configuration.bindings.waitkeys) {
 					if (HxlGraphics.keys.justPressed(k)) {
 						confirmed = true;
@@ -835,25 +852,10 @@ class GameState extends CqState {
 				item = null;
 			} else if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tile.getDataNum())) {
 				// these are stairs!  time to descend -- but only if the key was JUST pressed
-
-				var confirmed = true;
-
-				if (!isMouseControl) {
-					confirmed = false;
-					for (k in Configuration.bindings.waitkeys) {
-						if (HxlGraphics.keys.justPressed(k)) {
-							confirmed = true;
-						}
-					}
-				}
-
-				if (!confirmed) {
-					return;
-				} else {
-					GameUI.clearEffectText();
-					Registery.world.goToNextLevel();
-					player.popup.setText("");
-				}
+				
+				GameUI.clearEffectText();
+				Registery.world.goToNextLevel();
+				player.popup.setText("");
 
 				#if demo
 				if (Configuration.demoLastLevel == Registery.world.currentLevelIndex-1) {
@@ -870,11 +872,15 @@ class GameState extends CqState {
 			return;
 		} else {
 			// motion has been requested.  try first, second, and possibly third choices for movement
-			// (this is pretty ok sliding -- there's still room to improve it by considering previous motion)
 			var moved:Bool = false;
 			if (facing.x == 0 || facing.y == 0) {
 				if (isMouseControl) {
-					moved = tryToActInDirection(facing) || tryToActInDirection(level.getTargetAccordingToMousePosition(true));
+					if (Configuration.mobile) {
+						moved = tryToActInDirection(facing) || tryToActInDirection(pickBestSlide(facing, level.getTargetAccordingToMousePosition(true, true))) || tryToActInDirection(level.getTargetAccordingToMousePosition(true));
+						//moved = tryToActInDirection(facing) || tryToActInDirection(level.getTargetAccordingToMousePosition(true, true));
+					} else {
+						moved = tryToActInDirection(facing) || tryToActInDirection(level.getTargetAccordingToMousePosition(true));
+					}
 				} else if (resumeSlidingTime <= Timer.stamp()) {
 					moved = tryToActInDirection(facing) || tryToActInDirection(pickBestSlide(facing));
 				} else {
@@ -889,7 +895,8 @@ class GameState extends CqState {
 				moved = tryToActInDirection(new HxlPoint(facing.x, 0)) || tryToActInDirection(new HxlPoint(0, facing.y));
 			}
 
-			isPlayerActing = moved;
+			isPlayerActing = moved || isMouseControl;
+			
 			if (moved) {
 				passTurn( justOpenedDoor );
 			}

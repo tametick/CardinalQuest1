@@ -2,7 +2,7 @@ package haxel;
 
 import cq.ui.CqPopup;
 import flash.geom.Point;
-
+import data.Configuration;
 
 /**
  * Base class for which most display objects.
@@ -407,7 +407,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 			x = mountObject.x + mountOffsetX;
 			y = mountObject.y + mountOffsetY;
 		}
-		if ( popup != null)
+		if ( popup != null && !Configuration.mobile)
 		{
 			var m:HxlMouse = HxlGraphics.mouse;
 			if ( visible && (overlapsPoint(m.x, m.y, true) || !popup.mouseBound) )	{

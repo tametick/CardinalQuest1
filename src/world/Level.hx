@@ -434,7 +434,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	}
 	
 	// Brand spanky new field-of-view test.
-	private function updateFieldOfViewAtRange( _state:HxlState, _centreX:Int, _centreY:Int, _range:Int, _maxRange:Int, _radMin:Float, _radMax:Float ) {
+	private function updateFieldOfViewAtRange( _state:HxlState, _centreX:Int, _centreY:Int, _range:Int, _maxRange:Float, _radMin:Float, _radMax:Float ) {
 		var hxlPoint:HxlPoint = new HxlPoint(0, 0);
 		var testX:Int = _centreX;
 		var testY:Int = _centreY - _range;
@@ -444,7 +444,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		var prevWasBlocking:Bool = true;
 		var subRadMin:Float = _radMin;
 
-		if ( _range >= _maxRange ) {
+		if ( _range > _maxRange ) {
 			return;
 		}
 
@@ -482,7 +482,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				minTileAngle -= 2 * Math.PI;
 				maxTileAngle -= 2 * Math.PI;
 			}			
-			
+		
 			// Is this tile inside the range?
 			if ( maxTileAngle > _radMin && minTileAngle < _radMax ) {
 				var blocking:Bool = isBlockingView(testX, testY);
@@ -841,7 +841,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		return if (x < 0) -1 else if (x > 0) 1 else 0;
 	}
 
-	public function getTargetAccordingToMousePosition(?secondChoice:Bool = false):HxlPoint {
+	public function getTargetAccordingToMousePosition(?secondChoice:Bool = false, ?demurIfShallow:Bool = false):HxlPoint {
 		// if you don't like grabbing the player from the registry here, change it to an argument
 		var player = Registery.player;
 
@@ -859,13 +859,21 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 */
 
 
-		var give:Float = 0.75; // exactly .5 means that you have to point at yourself precisely to wait; higher values make it fuzzier
+		var give:Float = 0.85; // exactly .5 means that you have to point at yourself precisely to wait; higher values make it fuzzier
 		if (absdx < give && absdy < give) return new HxlPoint(0, 0);
 
 		// here it would be nice to track more info about angle than this
 		if ((absdx > absdy && !secondChoice) || (absdx < absdy && secondChoice)) {
+			if (secondChoice && demurIfShallow) {
+				if (3.6 * absdx < absdy) return null;
+			}
+			
 			return new HxlPoint(sgn(dx), 0);
 		} else {
+			if (secondChoice && demurIfShallow) {
+				if (3.6 * absdy < absdx) return null;
+			}
+			
 			return new HxlPoint(0, sgn(dy));
 		}
 	}

@@ -126,13 +126,13 @@ class CreateCharState extends CqState {
 #if japanese
 		var titleText:HxlText = new HxlText(0, HxlGraphics.smallScreen ? 0 : 8, Configuration.app_width, Resources.getString( "MENU_CREATECHARACTER" ), true, "FontAnonymousPro" );
 #else
-		var titleText:HxlText = new HxlText(0, HxlGraphics.smallScreen ? -8 : 0, Configuration.app_width, Resources.getString( "MENU_CREATECHARACTER" ));
+		var titleText:HxlText = new HxlText(0, HxlGraphics.smallScreen ? -3 : 0, Configuration.app_width, Resources.getString( "MENU_CREATECHARACTER" ));
 #end
 
 		titleText.setFormat(null, HxlGraphics.smallScreen ? 56 : 72, 0xffffff, "center");
 		add(titleText);
 		
-		var btnStart:HxlButton = new HxlButton(Math.floor((490 / 640) * HxlGraphics.width), 390 + paperShiftup - (HxlGraphics.smallScreen ? 10 : 0), 90, 28);
+		var btnStart:HxlButton = new HxlButton(490, 390 + paperShiftup - (HxlGraphics.smallScreen ? 10 : 0), 90, 28);
 		btnStart.setEventUseCapture(true);
 		var btnStartBg:HxlSprite = new HxlSprite(btnStart.x, btnStart.y);
 		btnStartBg.loadGraphic(SpriteButtonBg, false, false, 90, 26);
@@ -144,6 +144,7 @@ class CreateCharState extends CqState {
 #else
 		btnStart.loadText(new HxlText(0, -7, 90, Resources.getString( "MENU_START" ), true, null).setFormat(null, 32, 0xffffff, "center", 0x010101));
 #end
+    if (HxlGraphics.smallScreen) btnStart.x = 200;
 
 		btnStart.setCallback(function() {
 			gotoState(GameState);
