@@ -41,7 +41,11 @@ class CqItemInfoDialog extends HxlDialog {
 		_icon = new HxlSprite(Width - 34, Height - 99);
 		_icon.visible = false;
 		_itemName = new HxlText(8, 18, Std.int(Width - 10));
+#if japanese
+		_itemName.setFormat(FontAnonymousPro.instance.fontName, 20, 0xffffff, "left", 0x010101);
+#else
 		_itemName.setFormat(null, 26, 0xffffff, "left", 0x010101);
+#end
 		_itemName.visible = false;
 		_itemDesc = new HxlText(7, 38, Std.int(Width-10));
 		_itemDesc.setFormat(FontAnonymousPro.instance.fontName, 15, 0xdddddd, "left", 0x010101);
@@ -92,7 +96,15 @@ class CqItemInfoDialog extends HxlDialog {
 			if ( _item.specialEffects.length > 0 ) {
 				var str = "";
 				for ( effect in _item.specialEffects ) {
+#if japanese
+					if ( effect.value == "full" ) {
+						str += "" + Resources.getString( effect.name ) + "\n";
+					} else {
+						str += "" + effect.value + " " + Resources.getString( effect.name ) + "\n";
+					}
+#else
 					str += "" + effect.value + " " + Resources.getString( effect.name ) + "\n";
+#end
 				}
 				statStr += str;
 			}

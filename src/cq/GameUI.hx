@@ -261,7 +261,7 @@ class GameUI extends HxlDialog {
 		btnCharacterView = new HxlButton(0, 0, btnWidth, btnHeight);
 		btnCharacterView.loadGraphic(charBtn,charBtnHigh);
 #if japanese
-		btnCharacterView.loadText(new HxlText(0, 40, btnWidth, Resources.getString( "UI_CHAR" ), true).setFormat(FontAnonymousPro.instance.fontName, 10, 0xffffff, "center", 0x010101));
+		btnCharacterView.loadText(new HxlText(0, 40, btnWidth, Resources.getString( "UI_CHAR" ), true, FontAnonymousPro.instance.fontName).setFormat(FontAnonymousPro.instance.fontName, 10, 0xffffff, "center", 0x010101));
 #else
 		btnCharacterView.loadText(new HxlText(0, 40, btnWidth, Resources.getString( "UI_CHAR" ), true).setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101));
 #end
@@ -799,7 +799,11 @@ class GameUI extends HxlDialog {
 	public static function showEffectText(actor:CqActor, text:String, color:Int,immediate:Bool = false) {
 		if (Std.is(HxlGraphics.state, GameState) && cast(HxlGraphics.state, GameState).started) {
 			if (actor.visible) {
+#if japanese
+				var fltxt:CqFloatText = new CqFloatText(actor, actor.x + (actor.width / 2), actor.y - 16, text, color, FontAnonymousPro.instance.fontName, 18, false);
+#else
 				var fltxt:CqFloatText = new CqFloatText(actor, actor.x + (actor.width / 2), actor.y - 16, text, color, 24, false);
+#end
 				
 				if ( immediate ) {
 					startEffectText(fltxt); // Don't even *track* immediate texts. They'd block important ones.
@@ -963,7 +967,11 @@ class GameUI extends HxlDialog {
 		
 		if ( targetText == null && GameUI.targetString != "" ) {
 			targetText = new HxlText( 80, HxlGraphics.height - 130, HxlGraphics.width - 160, GameUI.targetString );
+#if japanese
+			targetText.setFormat(FontAnonymousPro.instance.fontName, 18, 0xffffff, "center", 0x010101);
+#else
 			targetText.setFormat(null, 24, 0xffffff, "center", 0x010101);
+#end
 			add(targetText);
 		} else if ( targetText.visible == false ) {
 			targetText.visible = true;

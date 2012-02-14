@@ -17,7 +17,7 @@ class CqFloatText extends HxlText {
 	public var startY:Float;
 	
 	public function new(Actor:CqActor, X:Float, Y:Float, Text:String=null, ?Color:Int=0xffffff,?Font:String, ?FontSize:Int=18,?Alignment:String = "center",?initDefaultTween:Bool = true) {
-		super(X, Y, 500, Text);
+		super(X, Y, 500, Text, true, Font);
 		
 		actor = Actor;
 		startX = X;

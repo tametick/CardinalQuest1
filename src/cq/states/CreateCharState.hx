@@ -124,7 +124,7 @@ class CreateCharState extends CqState {
 		add(bg);
 		
 #if japanese
-		var titleText:HxlText = new HxlText(0, HxlGraphics.smallScreen ? 0 : 8, Configuration.app_width, Resources.getString( "MENU_CREATECHARACTER" ));
+		var titleText:HxlText = new HxlText(0, HxlGraphics.smallScreen ? 0 : 8, Configuration.app_width, Resources.getString( "MENU_CREATECHARACTER" ), true, "FontAnonymousPro" );
 #else
 		var titleText:HxlText = new HxlText(0, HxlGraphics.smallScreen ? -8 : 0, Configuration.app_width, Resources.getString( "MENU_CREATECHARACTER" ));
 #end
@@ -139,7 +139,11 @@ class CreateCharState extends CqState {
 		var btnStartHigh = new StartButtonSprite();
 		btnStartHigh.setAlpha(0.6);
 		btnStart.loadGraphic(new StartButtonSprite(),btnStartHigh);
+#if japanese
+		btnStart.loadText(new HxlText(0, 4, 90, Resources.getString( "MENU_START" ), true, null).setFormat(null, 26, 0xffffff, "center", 0x010101));
+#else
 		btnStart.loadText(new HxlText(0, -7, 90, Resources.getString( "MENU_START" ), true, null).setFormat(null, 32, 0xffffff, "center", 0x010101));
+#end
 
 		btnStart.setCallback(function() {
 			gotoState(GameState);
@@ -218,7 +222,11 @@ class CreateCharState extends CqState {
 			scroller = new CqTextScroller(IntroScreen, 1);
 			var introText:String = Resources.getString( "AsterionIntro", true );
 //			scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,28,0xFFCD55,0x2E170F);
+#if japanese
+			scroller.addColumn(50, 540, introText, true, FontAnonymousPro.instance.fontName, 26, 0xFFCD55, 0x2E170F);
+#else
 			scroller.addColumn(50, 540, introText, true, FontDungeon.instance.fontName, 30, 0xFFCD55, 0x2E170F);
+#end
 			add(scroller);
 			scroller.startScroll(8);
 			//scroller.onComplete(removeScrollerAndFade);

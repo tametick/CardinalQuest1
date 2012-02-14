@@ -183,7 +183,7 @@ class GameState extends CqState {
 				if ( tile != null && tile.actors.length > 0 && tile.visibility == Visibility.IN_SIGHT) {
 					var actor:CqActor = cast(tile.actors[0], CqActor);
 					
-					if ( actor != null ) {
+					if ( actor != null && actor.popup != null ) {
 						actor.popup.visible = true;
 					}
 				}
@@ -337,7 +337,11 @@ class GameState extends CqState {
 		remove(cursor); // actually get rid of the cursor (hiding it doesn't seem to help)
 		scroller = new CqTextScroller(classBG, 1);
 //		scroller.addColumn(80, 480, introText, false, FontAnonymous.instance.fontName, 26);
+#if japanese
+		scroller.addColumn(60, 520, introText, true, FontAnonymousPro.instance.fontName, 32);
+#else
 		scroller.addColumn(60, 520, introText, true, FontDungeon.instance.fontName, 32);
+#end
 		add(scroller);
 
 		// continue this in a timer so that we refresh with the image before starting playtomic and generating the level

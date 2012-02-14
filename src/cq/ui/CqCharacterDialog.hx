@@ -33,8 +33,12 @@ class CqCharacterDialog extends HxlSlidingDialog {
 	var txtDescription:HxlText;
 
 	static inline var textBoxes:Array<String> = ["txtCharName", "txtHealthLabel", "valHealth", "txtAttackLabel", "valAttack", "txtDefenseLabel", "valDefense", "txtSpeedLabel", "valSpeed", "txtSpiritLabel", "valSpirit", "txtVitalityLabel", "valVitality", "txtDescription"];
+#if japanese	
+	static inline var pos:Array<Array<Int>> = [ [ 55, 40], [55, 115], [165, 115], [55, 145], [165, 145], [55, 175], [165, 175], [55, 205], [165, 205], [55, 235], [165, 235], [55, 265], [165, 265], [55, 325]];
+#else
 	static inline var pos:Array<Array<Int>> = [ [ 55, 40], [55, 115], [205, 115], [55, 145], [205, 145], [55, 175], [205, 175], [55, 205], [205, 205], [55, 235], [205, 235], [55, 265], [205, 265], [55, 325]];
-		
+#end
+
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0)
 	{
 		// Size: 472 x 480
@@ -69,7 +73,11 @@ class CqCharacterDialog extends HxlSlidingDialog {
 //				box.setFormat(null, 32, textColor, "left", 0x372B26);
 //				box.setFormat(null, 32, textColor, "left", 0x181513);
 //				box.setFormat(null, 32, 0x4F4139, "left", 0x000000);
+#if japanese
+				box.setFormat(FontAnonymousPro.instance.fontName, 22, 0x372B26, "left", 0x000000);
+#else
 				box.setFormat(null, 32, 0x372B26, "left", 0x000000);
+#end
 			}
 		}
 		//char icon

@@ -1,6 +1,8 @@
 package haxel;
 
+import cq.CqResources;
 import flash.display.BitmapData;
+import flash.geom.Rectangle;
 import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
@@ -143,6 +145,16 @@ class HxlText extends HxlSprite {
     _tf.setTextFormat(tf);
     _shadow = ShadowColor;
     _regen = true;
+
+#if japanese
+	// Check to make sure we can actually display every glyph.
+	if ( Font == "FontDungeon" || Font == "" ) {
+		if ( !FontDungeon.instance.hasGlyphs( _tf.text ) ) {
+			throw ( "missing glyphs" );
+		}
+	}
+#end
+	
     calcFrame();
     return this;
   }
@@ -169,6 +181,15 @@ class HxlText extends HxlSprite {
     if (Text == null)
       Text = "";
 
+#if japanese
+	// Check to make sure we can actually display every glyph.
+	if ( getFont() == "FontDungeon" || getFont() == "" ) {
+		if ( !FontDungeon.instance.hasGlyphs( _tf.text ) ) {
+			throw ( "missing glyphs" );
+		}
+	}
+#end
+	  
     var ot:String = _tf.text;
     _tf.text = Text;
     if (_tf.text != ot) {
