@@ -10,6 +10,8 @@ import haxel.HxlUtil;
 
 import cq.CqGraphicKey;
 
+import data.Configuration;
+
 class CqEffectChest extends HxlEmitter {
 
 	public function new(?X:Float=0, ?Y:Float=0) {
@@ -22,7 +24,7 @@ class CqEffectChest extends HxlEmitter {
 		}
 		setAlphaVelocity(-5, -2);
 		gravity = 0.0;
-		makeSprites();
+		makeSprites(Configuration.mobile ? 12 : 50);
 	}
 
 	/*

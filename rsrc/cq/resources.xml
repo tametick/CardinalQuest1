@@ -15,8 +15,6 @@
 		<bitmap id="cq.SpriteButtonBg" import="button_bg.png"/>
 		<bitmap id="cq.SpriteItemSlot1" import="Item_slot_01.png"/>
 		<bitmap id="cq.SpriteItemSlot2" import="Item_slot_02.png"/>
-		<bitmap id="cq.SpriteItemSlot1_48" import="Item_slot_01_48.png"/>
-		<bitmap id="cq.SpriteItemSlot1_32" import="Item_slot_01_32.png"/>
 		<bitmap id="cq.SpriteIcons" import="buttons.png"/>
 		<bitmap id="cq.SpriteEquipmentIcons" import="equipment_icons.png"/>
 		<bitmap id="cq.SpriteCorpses" import="corpses.png"/>
@@ -27,6 +25,7 @@
 		<bitmap id="cq.SpriteTiles" import="tiles.png"/>
 		<bitmap id="cq.SpriteSpells" import="spells.png"/>
 		<bitmap id="cq.SpriteMapPaper" import="map_paper.png"/>
+		<bitmap id="cq.MobileSpriteMapPaper" import="Mobile_map_paper.png"/>
 		<bitmap id="cq.SpriteCharPaper" import="Ch_selection_box_01.png"/>
 		<bitmap id="cq.SpriteDecorations" import="decorations.png"/>
 		<bitmap id="cq.UiBeltVertical" import="Belt_vert_metal.png"/>

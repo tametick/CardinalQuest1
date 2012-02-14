@@ -574,7 +574,7 @@ MENU_MUSIC           \"Music\"
 MENU_SOUND           \"Sound\"
 MENU_FULLSCREEN      \"Resize\"
 MENU_WINDOWED        \"Resize\"
-MENU_COPYRIGHT       \"Copyright 2011\"
+MENU_COPYRIGHT       \"Copyright 2012\"
 MENU_PORTEDBY        \"Ported by\"
 MENU_VERSION         \"Version\"
 MENU_STANDALONE      \"Get stand-alone version at\"
@@ -596,4 +596,5 @@ PRELOADER2           \"\n\nto play the game at my site.  Thanks, and have fun!\"
 DEMO_OVER            \"Demo Over!\"
 DEMO_OVER_MORE       \"Want more?\"
 
-INVENTORY_HINT       \"Mouse-over items, spells and potions to see their attributes and effects.\"";		embedFile = StatsFile.loadFromString( "strings.txt", embedText );	}}
+INVENTORY_HINT       \"Mouse-over items, spells and potions to see their attributes and effects.\"
+MOBILE_INVENTORY_HINT       \"Tap an item twice to see its attributes and effects.  Tap an item and then another cell to move it.\"";		embedFile = StatsFile.loadFromString( "strings.txt", embedText );	}}

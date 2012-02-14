@@ -1,6 +1,7 @@
 package data;
 
 import data.StatsFile;
+import data.Configuration;
 
 class Resources {
 	public static var walkableTiles:Array<Int>;
@@ -14,7 +15,15 @@ class Resources {
 	public static function getString( _id:String, _description:Bool = false ) : String {
 		var strings:StatsFile = Resources.statsFiles.get( if ( _description ) "descriptions.txt" else "strings.txt" );
 		
-		var desc:StatsFileEntry = strings.getEntry( "ID", _id );
+		var desc:StatsFileEntry;
+		
+		if (Configuration.mobile) {
+			desc = strings.getEntry( "ID", "MOBILE_" + _id );
+			if (desc == null) desc = strings.getEntry( "ID", _id );
+		} else {
+			desc = strings.getEntry( "ID", _id );
+		}
+		
 		var descText:String = if (desc != null) desc.getField( "Data" ); else "???";
 
 		var descTextLines:Array<String> = descText.split( "\\n" );

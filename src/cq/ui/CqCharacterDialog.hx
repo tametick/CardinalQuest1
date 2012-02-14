@@ -38,10 +38,11 @@ class CqCharacterDialog extends HxlSlidingDialog {
 	public function new(?X:Float=0, ?Y:Float=0, ?Width:Float=100, ?Height:Float=100, ?Direction:Int=0)
 	{
 		// Size: 472 x 480
+		// Mobile Size: 338 x 283
 		super(X, Y, Width, Height, Direction);
 		
-		var bg:HxlSprite = new HxlSprite(0, 0, SpriteMapPaper);
-		bg.zIndex = -5;
+		var bg:HxlSprite = HxlGraphics.smallScreen ? new HxlSprite(-22, 0, MobileSpriteMapPaper) : new HxlSprite(0, 0, SpriteMapPaper);
+		bg.zIndex = -1;
 		add(bg);
 		
 		var textColor:Int = 0x6D564B;
@@ -54,10 +55,12 @@ class CqCharacterDialog extends HxlSlidingDialog {
 										Resources.getString( "STAT_SPIRIT" ), "0",
 										Resources.getString( "STAT_VITALITY" ), "0"];
 		
+		var xshift = HxlGraphics.smallScreen ? -45 : 0;
+		var yshift = HxlGraphics.smallScreen ? -30 : 0;
 		
 		for (i in 0...textBoxes.length)
 		{
-			var box:HxlText = new HxlText(pos[i][0], pos[i][1], 430, txt_string[i]);
+			var box:HxlText = new HxlText(pos[i][0] + xshift, pos[i][1] + yshift, 430, txt_string[i]);
 			Reflect.setField(this, textBoxes[i], box);
 			add(box);
 			if (i == 0) {
@@ -75,20 +78,24 @@ class CqCharacterDialog extends HxlSlidingDialog {
 		//char icon
 		var player = new HxlSprite(0, 0);
 		var shadow = new HxlSprite(0, 0);
-		player.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 8.0, 8.0);
-		shadow.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, 8.0, 8.0);
+		var scale = HxlGraphics.smallScreen ? 6 : 8;
+		player.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, scale, scale);
+		shadow.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, scale, scale);
 		player.setFrame(SpritePlayer.instance.getSpriteIndex(Registery.player.playerClassSprite));
 		shadow.setFrame(SpritePlayer.instance.getSpriteIndex(Registery.player.playerClassSprite));
 		//shadow.
 		shadow.setAlpha(0.7);
 		shadow.setColor(1);
-		add(shadow);
 		add(player);
-		shadow.x = player.x = 300;
-		shadow.y = player.y = 150;
+		if (!HxlGraphics.smallScreen) add(shadow);
+		shadow.x = player.x = HxlGraphics.smallScreen ? 218 : 300;
+		shadow.y = player.y = HxlGraphics.smallScreen ? 161 : 150;
 		shadow.x += 5;
 		shadow.y += 5;
 		
+		if (Configuration.mobile) {
+			remove(txtDescription);
+		}
 	}
 
 	public override function show(?ShowCallback:Dynamic=null) {
@@ -133,28 +140,28 @@ class CqCharacterDialog extends HxlSlidingDialog {
 		super.update();
 		
 		// Handle mousing over stats.
-		var m:HxlMouse = HxlGraphics.mouse;
-		var x:Float = m.x + HxlUtil.floor(HxlGraphics.scroll.x);
-		var y:Float = m.y + HxlUtil.floor(HxlGraphics.scroll.y);
-		
-		if ( x > 90 && x < 400 && y >= 95 && y < 305 ) {
-			if ( y < 145 ) { // Health.
-				txtDescription.text = Resources.getString( "HEALTH", true );
-			} else if ( y < 175 ) { // Attack.
-				txtDescription.text = Resources.getString( "ATTACK", true );
-			} else if ( y < 205 ) { // Defense.
-				txtDescription.text = Resources.getString( "DEFENSE", true );
-			} else if ( y < 235 ) { // Speed.
-				txtDescription.text = Resources.getString( "SPEED", true );
-			} else if ( y < 265 ) { // Spirit.
-				txtDescription.text = Resources.getString( "SPIRIT", true );
-			} else if ( y < 295 ) { // Vitality.
-				txtDescription.text = Resources.getString( "VITALITY", true );
+		if (!Configuration.mobile) {
+			var m:HxlMouse = HxlGraphics.mouse;
+			var x:Float = m.x + HxlUtil.floor(HxlGraphics.scroll.x);
+			var y:Float = m.y + HxlUtil.floor(HxlGraphics.scroll.y);
+			
+			if ( x > 90 && x < 400 && y >= 95 && y < 305 ) {
+				if ( y < 145 ) { // Health.
+					txtDescription.text = Resources.getString( "HEALTH", true );
+				} else if ( y < 175 ) { // Attack.
+					txtDescription.text = Resources.getString( "ATTACK", true );
+				} else if ( y < 205 ) { // Defense.
+					txtDescription.text = Resources.getString( "DEFENSE", true );
+				} else if ( y < 235 ) { // Speed.
+					txtDescription.text = Resources.getString( "SPEED", true );
+				} else if ( y < 265 ) { // Spirit.
+					txtDescription.text = Resources.getString( "SPIRIT", true );
+				} else if ( y < 295 ) { // Vitality.
+					txtDescription.text = Resources.getString( "VITALITY", true );
+				}
+			} else {
+				txtDescription.text = Resources.getString( "ATTRIBUTES", true );
 			}
-		} else {
-			txtDescription.text = Resources.getString( "ATTRIBUTES", true );
 		}
-		
 	}
-	
 }

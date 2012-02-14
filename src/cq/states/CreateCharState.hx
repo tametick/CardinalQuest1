@@ -119,19 +119,21 @@ class CreateCharState extends CqState {
 		var bg:HxlSprite = new HxlSprite(HxlGraphics.smallScreen ? -25 : 40, 250 + paperShiftup + (HxlGraphics.smallScreen ? 10 : 0), SpriteCharPaper);
 		add(bg);
 		
-		var titleText:HxlText = new HxlText(0, HxlGraphics.smallScreen ? -8 : 0, Configuration.app_width, Resources.getString( "MENU_CREATECHARACTER" ));
+		var titleText:HxlText = new HxlText(0, HxlGraphics.smallScreen ? -3 : 0, Configuration.app_width, Resources.getString( "MENU_CREATECHARACTER" ));
 		
 		titleText.setFormat(null, HxlGraphics.smallScreen ? 56 : 72, 0xffffff, "center");
 		add(titleText);
 		
-		var btnStart:HxlButton = new HxlButton(Math.floor((490 / 640) * HxlGraphics.width), 390 + paperShiftup - (HxlGraphics.smallScreen ? 10 : 0), 90, 28);
+		var btnStart:HxlButton = new HxlButton(490, 390 + paperShiftup - (HxlGraphics.smallScreen ? 10 : 0), 90, 28);
 		btnStart.setEventUseCapture(true);
 		var btnStartBg:HxlSprite = new HxlSprite(btnStart.x, btnStart.y);
 		btnStartBg.loadGraphic(SpriteButtonBg, false, false, 90, 26);
 		var btnStartHigh = new StartButtonSprite();
 		btnStartHigh.setAlpha(0.6);
 		btnStart.loadGraphic(new StartButtonSprite(),btnStartHigh);
-		btnStart.loadText(new HxlText(0, -7, 90, Resources.getString( "MENU_START" ), true, null).setFormat(null, 32, 0xffffff, "center", 0x010101));
+		btnStart.loadText(new HxlText(0, HxlGraphics.smallScreen ? -1 : -7, 90, Resources.getString( "MENU_START" ), true, null).setFormat(null, 32, 0xffffff, "center", 0x010101));
+		
+		if (HxlGraphics.smallScreen) btnStart.x = 200;
 
 		btnStart.setCallback(function() {
 			gotoState(GameState);

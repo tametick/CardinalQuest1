@@ -13,6 +13,7 @@ import haxel.HxlSprite;
 import haxel.HxlUtil;
 
 import cq.CqGraphicKey;
+import data.Configuration;
 
 class CqEffectInjure extends HxlEmitter {
 
@@ -27,7 +28,7 @@ class CqEffectInjure extends HxlEmitter {
 		}
 		setAlphaVelocity(-5, -2);
 		gravity = 0.0;
-		makeSprites();
+		makeSprites(Configuration.mobile ? 9 : 50);
 	}
 
 	/*

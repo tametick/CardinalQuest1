@@ -865,13 +865,13 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		// here it would be nice to track more info about angle than this
 		if ((absdx > absdy && !secondChoice) || (absdx < absdy && secondChoice)) {
 			if (secondChoice && demurIfShallow) {
-				if (absdx < absdy * 3) return null;
+				if (3.6 * absdx < absdy) return null;
 			}
 			
 			return new HxlPoint(sgn(dx), 0);
 		} else {
 			if (secondChoice && demurIfShallow) {
-				if (absdy < absdx * 3) return null;
+				if (3.6 * absdy < absdx) return null;
 			}
 			
 			return new HxlPoint(0, sgn(dy));

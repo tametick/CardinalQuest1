@@ -41,7 +41,7 @@ class Configuration {
 	public static inline var iOS = false; //air-ios
 	public static inline var android = false;
 	public static inline var mobile = true; //air-ios
-	public static inline var desktopPretendingToBeMobile = true; //gives you normal mouse behavior so you can see where you're "tapping"
+	public static inline var desktopPretendingToBeMobile = false; //gives you normal mouse behavior so you can see where you're "tapping"
 	public static inline var noCache = false;
 
 	public static inline var debugStartingLevel:Int = 0;

@@ -169,7 +169,7 @@ class MainMenuState extends CqState {
 		add(menu);
 
 		var buttonY:Int = 0;
-		var spacing = HxlGraphics.smallScreen ? 40 : 50;
+		var spacing = HxlGraphics.smallScreen ? 50 : 50;
 
 		var textColor = 0x000000;
 		var textHighlight = 0x670000;

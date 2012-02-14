@@ -14,7 +14,7 @@ class HxlSlidingDialog extends HxlDialog
 	
 	var direction:Int;
 	var dropSpeed:Float;
-	var isDropping:Bool;
+	public var isDropping(default, null):Bool;
 	var isDropped:Bool;
 	var showCallback:Dynamic;
 	var hideCallback:Dynamic;
