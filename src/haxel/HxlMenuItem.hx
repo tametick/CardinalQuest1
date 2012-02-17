@@ -6,7 +6,9 @@ import flash.text.TextFormatAlign;
 
 import haxel.HxlGraphics;
 
+#if japanese
 import cq.CqResources.JapaneseFontScaling;
+#end
 
 #if flash9
 import flash.text.AntiAliasType;
