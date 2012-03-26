@@ -28,6 +28,11 @@ class JapaneseFontScaling {
 	public static inline var c_dungeonScale:Float = 0.6;
 	public static inline var c_anonymousScale:Float = 1;
 }
+
+class FontTheatre16 extends Font {
+	public static var instance = new FontTheatre16();
+	public function new() { super(); } 
+}
 #else
 class FontAnonymousProB extends Font { 
 	public static var instance = new FontAnonymousProB();

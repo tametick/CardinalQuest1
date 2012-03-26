@@ -223,7 +223,8 @@ class CreateCharState extends CqState {
 			var introText:String = Resources.getString( "AsterionIntro", true );
 //			scroller.addColumn(80, 480, introText, false, FontAnonymousPro.instance.fontName,28,0xFFCD55,0x2E170F);
 #if japanese
-			scroller.addColumn(50, 540, introText, true, FontAnonymousPro.instance.fontName, 26, 0xFFCD55, 0x2E170F);
+//			scroller.addColumn(50, 540, introText, true, FontAnonymousPro.instance.fontName, 26, 0xFFCD55, 0x2E170F);
+			scroller.addColumn(50, 540, introText, true, FontTheatre16.instance.fontName, 26, 0xFFCD55, 0x2E170F);
 #else
 			scroller.addColumn(50, 540, introText, true, FontDungeon.instance.fontName, 30, 0xFFCD55, 0x2E170F);
 #end
