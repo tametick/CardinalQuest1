@@ -19,7 +19,7 @@
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="japanese" />
+    <option directives="ndemo" />
     <option flashStrict="True" />
     <option mainClass="cq.Main" />
     <option enabledebug="True" />
