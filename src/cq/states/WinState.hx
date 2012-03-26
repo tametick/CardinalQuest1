@@ -36,7 +36,8 @@ class WinState extends CqState {
 		scroller = new CqTextScroller(null, 5);
 //		scroller.addColumn(80, 480, Resources.getString( "AsterionDefeated", true ), false, FontDungeon.instance.fontName, 28);
 #if japanese
-		scroller.addColumn(60, 520, Resources.getString( "AsterionDefeated", true ), true, FontAnonymousPro.instance.fontName, 28);
+//		scroller.addColumn(60, 520, Resources.getString( "AsterionDefeated", true ), true, FontAnonymousPro.instance.fontName, 28);
+		scroller.addColumn(60, 520, Resources.getString( "AsterionDefeated", true ), true, FontTheatre16.instance.fontName, 28);
 #else
 		scroller.addColumn(60, 520, Resources.getString( "AsterionDefeated", true ), true, FontDungeon.instance.fontName, 32);
 #end

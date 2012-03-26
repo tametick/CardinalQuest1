@@ -86,19 +86,26 @@ class Main extends HxlGame {
 		
 		// Initialise fullscreen.
 		if (Configuration.standAlone) {
-			// Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+			if ( Configuration.startFullscreen ) {
+				Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 
-		  #if flash
-			if (!StringTools.startsWith(Capabilities.os, "Mac")) {
-				// for windows
-				//Lib.fscommand("trapallkeys", "true");
-				Lib.current.stage.showDefaultContextMenu = false;
+				#if flash
+				if (!StringTools.startsWith(Capabilities.os, "Mac")) {
+					// for windows
+					//Lib.fscommand("trapallkeys", "true");
+					Lib.current.stage.showDefaultContextMenu = false;
+				}
+				#end
 			}
-		  #end
 		}
 		
-		Configuration.app_width = Lib.current.stage.stageWidth; //640
-		Configuration.app_height = Lib.current.stage.stageHeight; //480		
+		#if mobile
+			Configuration.app_width = Lib.current.stage.stageWidth; //640
+			Configuration.app_height = Lib.current.stage.stageHeight; //480		
+		#else
+			Configuration.app_width = 640;
+			Configuration.app_height = 480;		
+		#end
 		
 		// Initialise sound/music.
 		HxlState.musicOn = Configuration.startWithMusic;

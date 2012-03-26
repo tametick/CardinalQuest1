@@ -1,0 +1,6 @@
+-archive=CardinalQuest
+-platform=win32
+-out=.\
+-ftp=
+-case=sensitive
+-files=product.xml,cq_crop.png,icon32.png,fighter.png,thief.png,wizard.png,setup.xml

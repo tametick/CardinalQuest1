@@ -1,0 +1,30 @@
+<?xml version = "1.0" encoding="ISO-8859-1" ?>
+<product name = "ogresamples" encryption = "none" default = "en">
+	<icon image = "ogresamples.png"/>
+	<view language = "en" default = "true">
+		<title>OGRE Samples [Rev.02]</title>
+		<subline>A collection of OGRE samples.</subline>
+		<preview>
+			<primary image = "ogrelogo.png" />
+			<rollover image = "mainmenu.png" duration = "1000" effect = "fade:50" />
+			<rollover image = "posteffects.png" duration = "1000" effect = "fade:50" />
+			<rollover image = "facial.png" duration = "1000" effect = "fade:50" />
+			<rollover image = "jadeds.png" duration = "1000" effect = "fade:50" />
+		</preview>
+	</view>
+	<view language = "de">
+		<title>OGRE Beispiele [Rev.02]</title>
+		<subline>Eine Sammlung von OGRE-Beispielen.</subline>
+		<preview>
+			<primary image = "ogrelogo.png" />
+			<rollover image = "mainmenu.png" duration = "1000" effect = "fade:50" />
+			<rollover image = "posteffects.png" duration = "1000" effect = "fade:50" />
+			<rollover image = "facial.png" duration = "1000" effect = "fade:50" />
+			<rollover image = "jadeds.png" duration = "1000" effect = "fade:50" />
+		</preview>
+	</view>
+	<launch platform = "win32" bin = "ogresamples/SampleBrowser.exe" path = "ogresamples/" />
+	<archive platform = "generic" name = "difftest" mount = "difftest/" />
+	<archive platform = "generic" name = "ogreassets" />
+	<archive platform = "win32" name = "ogrewin32binaries" nomount = "true" />
+</product>

@@ -3,6 +3,7 @@
 	<library>
 		<font id="cq.FontDungeon" import="gomarice_mukasi_mukasi.TTF" name="FontDungeon" /> 
 		<font id="cq.FontAnonymousPro" import="msgothic.ttc" name="FontAnonymousPro" /> 
+		<font id="cq.FontTheatre16" import="Theatre16.TTF" name="FontTheatre16" /> 
 <!--		<font id="cq.FontAnonymousProB" import="../../bin.jp/msgothic.ttc" name="FontAnonymousProB" />  -->
 		
 		<bitmap id="cq.SpriteLogo" import="logo.png"/>
@@ -45,8 +46,8 @@
 		<bitmap id="cq.SpriteKnightEntry" import="Knight_entry_03.png"/>
 		<bitmap id="cq.SpriteWizardEntry" import="Wizard_entry_03.png"/>
 		<bitmap id="cq.SpriteThiefEntry" import="Thief_entry_03.png"/>
-		<bitmap id="cq.SpriteHelpOverlay" import="HelpOverlay.png"/>
-		<bitmap id="cq.SpriteInvHelpOverlay" import="inventoryHelpOverlay.png"/>
+		<bitmap id="cq.SpriteHelpOverlay" import="HelpOverlayJP.png"/>
+		<bitmap id="cq.SpriteInvHelpOverlay" import="inventoryHelpOverlayJP.png"/>
 		<bitmap id="cq.SpriteSoundToggle" import="soundToggle.png"/>
 		<bitmap id="cq.SpriteFullscreenToggle" import="fullscreenToggle.png"/>
 		

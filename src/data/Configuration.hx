@@ -10,7 +10,7 @@ class Configuration {
 	public static inline var version = "1.2";
 
 	public static inline var debug = false;
-	public static inline var air = false;
+	public static inline var air = true;
 
 #if newgrounds
 	public static inline var standAlone = false;
@@ -31,7 +31,7 @@ class Configuration {
 	public static inline var isArmorSponsored = false;
 	public static inline var isAndKonAd = false;
 #else
-	public static inline var standAlone = false;
+	public static inline var standAlone = true;
 	public static inline var useProductionPlaytomic = true;
 	
 	public static inline var allowKongregateAds = false;
@@ -49,7 +49,7 @@ class Configuration {
 	//I use the air ios comments as a check in my build script
 	public static inline var iOS = false; //air-ios
 	public static inline var android = false;
-	public static inline var mobile = true; //air-ios
+	public static inline var mobile = false; //air-ios
 	public static inline var desktopPretendingToBeMobile = false; //gives you normal mouse behavior so you can see where you're "tapping"
 	public static inline var noCache = false;
 
@@ -71,6 +71,7 @@ class Configuration {
 
 	public static inline var startWithMusic:Bool = true;
 	public static inline var startWithSound:Bool = true;
+	public static inline var startFullscreen:Bool = true;
 
 	public static inline var chestsPerLevel = 10;
 

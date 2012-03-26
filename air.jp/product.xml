@@ -1,0 +1,15 @@
+<?xml version = "1.0" encoding="ISO-8859-1" ?>
+<product name = "CardinalQuest" encryption = "none" default = "en">
+	<icon image = "icon32.png"/>
+	<view language = "en">
+		<title>Cardinal Quest</title>
+		<subline>Hack and slash your way through a randomly generated dungeon!</subline>
+		<preview>
+			<primary image = "cq_crop.png" />
+			<rollover image = "fighter.png" duration = "1000" effect = "fade:50" />
+			<rollover image = "thief.png" duration = "1000" effect = "fade:50" />
+			<rollover image = "wizard.png" duration = "1000" effect = "fade:50" />
+		</preview>
+	</view>
+	<launch platform = "win32" bin = "air/CardinalQuest.exe" path = "air/" />
+</product>

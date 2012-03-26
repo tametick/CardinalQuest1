@@ -338,7 +338,8 @@ class GameState extends CqState {
 		scroller = new CqTextScroller(classBG, 1);
 //		scroller.addColumn(80, 480, introText, false, FontAnonymous.instance.fontName, 26);
 #if japanese
-		scroller.addColumn(60, 520, introText, true, FontAnonymousPro.instance.fontName, 32);
+//		scroller.addColumn(60, 520, introText, true, FontAnonymousPro.instance.fontName, 32);
+		scroller.addColumn(60, 520, introText, true, FontTheatre16.instance.fontName, 32);
 #else
 		scroller.addColumn(60, 520, introText, true, FontDungeon.instance.fontName, 32);
 #end
