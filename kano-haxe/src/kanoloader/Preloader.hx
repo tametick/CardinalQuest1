@@ -26,6 +26,8 @@ class Preloader extends MovieClip {
 	
 	var logo : Bitmap;
 	
+	var isDone: Bool;
+	
 	public static function main()
 	{
 		Lib.current.addChild(new Preloader());
@@ -70,9 +72,10 @@ class Preloader extends MovieClip {
 		progressBar.scaleX = root.loaderInfo.bytesLoaded / root.loaderInfo.bytesTotal;
 		
 		var timeLine = cast(this.parent, MovieClip);
-		if(timeLine.currentFrame  == timeLine.totalFrames)
+		if(!isDone && timeLine.currentFrame  == timeLine.totalFrames)
 		{
-			loadingFinished();
+			isDone = true;
+			Timer.delay(loadingFinished, 2000);
 		}
 		timeLine = null;
 	}
