@@ -81,7 +81,12 @@ class HxlGraphics {
 	/**
 	 * References the active graphics buffer.
 	 **/
+	
+	#if useHxlMobileDisplay
+	public static var buffer:HxlMobileDisplay;
+	#else
 	public static var buffer:HxlGraphicsBMPData;
+	#end
 	/**
 	 * Tells the camera to follow this <code>FlxCore</code> object around.
 	 */
@@ -102,6 +107,12 @@ class HxlGraphics {
 	 * Stores the bottom and right edges of the camera area.
 	 */
 	public static var followMax:Point;
+	
+	/**
+	 * Stores the center point of the camera area.
+	 */
+	public static var followCenter:Point;
+	
 	/**
 	 * Internal, used to assist camera and scrolling.
 	 */
@@ -124,8 +135,13 @@ class HxlGraphics {
 	/**
 	 * Essentially locks the framerate to a minimum value - any slower and you'll get slowdown instead of frameskip; default is 1/30th of a second.
 	 */
-
 	public static var maxElapsed:Float;
+
+	/**
+	 * An attempt to fix evil behaviors on air (where it locks out rendering if we take too long to update -- only it's not documented how long that is.)
+	 */
+	public static var wayTooLong:Float;	
+	
 	/**
 	 * How fast or slow time should pass in the game; default is 1.0.
 	 */
@@ -182,6 +198,9 @@ class HxlGraphics {
 	 * If set to true, objects which are not currently on screen will skip rendering.
 	 **/
 	public static var autoVisible:Bool = true;
+	
+	// force all baked HxlGroups to rebake:
+	public static var rebakeAll:Bool = false;
 
 	/**
 	 * If set to true, whenever an object is added to or removed from an HxlGroup, that group
@@ -217,7 +236,8 @@ class HxlGraphics {
 		//framerate = 60;
 		framerate = 30;
 		frameratePaused = 10;
-		maxElapsed = 0.0333333;
+		maxElapsed = 0.033333;
+		wayTooLong = 0.250;
 		HxlGraphics.elapsed = 0;
 		_showBounds = false;
 		HxlObject._refreshBounds = false;
@@ -277,6 +297,11 @@ class HxlGraphics {
 		_scrollTarget.y = (Math.floor(height)>>1)-followTarget.y-(Math.floor(followTarget.height)>>1);
 		scroll.x = _scrollTarget.x;
 		scroll.y = _scrollTarget.y;
+		
+		if (followCenter == null) {
+			followCenter = new Point(Math.floor(width) >> 1, Math.floor(height) >> 1);
+		}
+		
 		doFollow();
 	}
 
@@ -332,8 +357,9 @@ class HxlGraphics {
 	public static function doFollow() {
 		// TODO: Port me!
 		if (followTarget != null) {
-			_scrollTarget.x = (Math.floor(width)>>1)-followTarget.x-(Math.floor(followTarget.width)>>1);
-			_scrollTarget.y = (Math.floor(height)>>1)-followTarget.y-(Math.floor(followTarget.height)>>1);
+			_scrollTarget.x = followCenter.x - followTarget.x - (Math.floor(followTarget.width)>>1);
+			_scrollTarget.y = followCenter.y - followTarget.y - (Math.floor(followTarget.height)>>1);
+			
 			if ((followLead != null) && (Std.is( followTarget, HxlSprite))) {
 				_scrollTarget.x -= (cast( followTarget, HxlSprite)).velocity.x*followLead.x;
 				_scrollTarget.y -= (cast( followTarget, HxlSprite)).velocity.y*followLead.y;
@@ -381,11 +407,15 @@ class HxlGraphics {
 	 * @return	A Flash <code>MovieClip</code> object.
 	 */
 	public static function getStage():Stage {
+		#if !useHxlMobileDisplay
 		if ((_game.state != null)  && (_game.state.parent != null)) {
 			return _game.state.parent.stage;
 		}
 
 		return null;
+		#else
+			return buffer.stage;
+		#end
 	}
 
 	/**

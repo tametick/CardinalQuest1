@@ -94,10 +94,6 @@ class Main extends HxlGame {
 				//Lib.fscommand("trapallkeys", "true");
 				Lib.current.stage.showDefaultContextMenu = false;
 			}
-			
-			if (Configuration.mobile) {
-				Lib.current.stage.quality = LOW;
-			}
 		  #end
 		}
 		

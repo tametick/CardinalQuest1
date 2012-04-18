@@ -49,8 +49,15 @@ class Configuration {
 	//I use the air ios comments as a check in my build script
 	public static inline var iOS = false; //air-ios
 	public static inline var android = false;
+	
+#if flashmobile	
 	public static inline var mobile = true; //air-ios
 	public static inline var desktopPretendingToBeMobile = false; //gives you normal mouse behavior so you can see where you're "tapping"
+#else
+	public static inline var mobile = false; //air-ios
+	public static inline var desktopPretendingToBeMobile = false; //gives you normal mouse behavior so you can see where you're "tapping"
+
+#end
 	public static inline var noCache = false;
 
 	public static inline var debugStartingLevel:Int = 0;

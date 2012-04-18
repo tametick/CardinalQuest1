@@ -19,15 +19,10 @@ class AStar
 //	var map:Array<Array<AStarNode>>;
 	
 	// open set: nodes to be considered
-	public var open:Array<AStarNode>;
+	public var open:NodeSet;
 	
 	// closed set: nodes not to consider anymore
-	public var closed:Array<AStarNode>;
-	
-	// This variable is not necessary,
-	// it's just for debugging purposes,
-	// delete it and all references to it.
-	public var visited:Array<AStarNode>;
+	public var closed:NodeSet;
 	
 	// Euclidian is better, but slower 
 	//dynamic function dist(){} //= distEuclidian;
@@ -73,9 +68,8 @@ class AStar
 	public function solve(?allowCardinal:Bool=true, ?allowDiagonal:Bool=true):Array<IntPoint>
 	{
 		//trace("Starting to solve: "+start+" to "+goal);
-		open = new Array<AStarNode>();
-		closed = new Array<AStarNode>();
-		visited = new Array<AStarNode>();
+		open = new NodeSet(width);
+		closed = new NodeSet(width);
 		
 		var node:AStarNode = start;
 		node.h = dist(goal);
@@ -92,8 +86,9 @@ class AStar
 			//if (i++ > 10000) throw new Error("Overflow");
 			if (open.length <= 0) break;
 			
-			// Sort open list by cost
-			QuickSortNodes.run(open);
+			// Sort open list by cost.  This is NOT an algorithmically appropriate way to handle this problem.
+			// We should use a priority queue instead.
+			open.sort();
 			
 			if (open.length <= 0) break;
 			node = open.shift();
@@ -121,7 +116,6 @@ class AStar
 						n.g = node.g + n.cost;
 					}
 				}
-				//visit (n);
 			}
 			
 			
@@ -318,30 +312,63 @@ class AStar
 	 * 
 	 * Checks if a given array contains the object specified.
 	 */
-	static function hasElement(a:Array<AStarNode>, e:AStarNode):Bool
+	static function hasElement(a:NodeSet, e:AStarNode):Bool
 	{
-		var o:AStarNode;
-		for (o in a) {
-			if (o == e) return true;
-		}
-		return false;
+		return a.exists(e);
 	}
+}
 
-	/**
-	 * 		REMOVE FROM ARRAY
-	 * 
-	 * Remove an element from an array
-	 */
-	static function removeFromArray(a:Array<AStarNode>, e:AStarNode):Bool
-	{
-		var i:Int;
-		for (i in 0...a.length) {
-			if (a[i] == e) {
-				a.splice(i,1);
-				return true;
-			}
-		}
-		return false;
+
+
+private class NodeSet {
+	var list:Array<AStarNode>;
+	var set:IntHash<Bool>;
+	var width:Int;
+	
+	public var length(default, null):Int;
+	
+	private inline function index(node:AStarNode) {
+		return node.x + width * node.y;
 	}
 	
+	public function new(mapWidth:Int) {
+		list = new Array<AStarNode>();
+		set = new IntHash<Bool>();
+		
+		width = mapWidth;
+		length = 0;
+	}
+	
+	public function push(node:AStarNode) {
+		list.push(node);
+		set.set(index(node), true);
+		length++;
+	}
+	
+	public function pop():AStarNode {
+		var curNode = list.pop();
+		if (curNode != null) {
+			set.remove(index(curNode));
+			length--;
+		}
+		return curNode;
+	}
+	
+	public function shift():AStarNode {
+		var curNode = list.shift();
+		if (curNode != null) {
+			set.remove(index(curNode));
+			length--;
+		}
+		return curNode;
+	}
+	
+	public function exists(node:AStarNode):Bool {
+		return set.exists(index(node));
+	}
+	
+	public function sort() {
+		// see the comment where this is used -- it is not an acceptable way of writing A*.
+		QuickSortNodes.run(list);
+	}
 }

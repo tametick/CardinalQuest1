@@ -83,6 +83,8 @@ class CqInventoryProxy extends HxlSprite {
 	
 	var namePopup:CqPopup;
 	
+	var lastArcEnd:Float;
+	
 	public function new(Item:CqItem) {
 		if (Item == null || Item.inventoryProxy != null) throw "Cannot make two proxies for one inventory item";
 		
@@ -97,6 +99,8 @@ class CqInventoryProxy extends HxlSprite {
 		
 		zIndex = 5;
 		item = Item;
+		
+		lastArcEnd = 4.0; // an absurd value that will never match
 		
 		if (Std.is(item, CqSpell)) {
 			setIcon(CqSheets.getSpellPixels(item.spriteIndex));
@@ -252,6 +256,8 @@ class CqInventoryProxy extends HxlSprite {
 		// this is largely unchanged, mind, so actually read it
 		Icon = if (Icon == null) icon else Icon;
 		
+		HxlGraphics.rebakeAll = true;
+		
 		icon = new CqInventoryProxyBMPData(Icon.width, Icon.height, true, 0x0);
 		icon.copyPixels(Icon, new Rectangle(0, 0, Icon.width, Icon.height), new Point(0,0), null, null, true);
 		var X:Int = Std.int((width / 2) - (icon.width / 2));
@@ -329,6 +335,9 @@ class CqInventoryProxy extends HxlSprite {
 		var start = -Math.PI / 2;
 		var end = start + 2 * Math.PI * (spell.statPoints / spell.statPointsRequired);
 
+		if (lastArcEnd == end) return;
+		lastArcEnd = end;
+		
 		var G = chargeShape.graphics;
 		G.clear();
 		G.beginFill(0x000000, 1.0);
@@ -523,11 +532,13 @@ class CqInventoryCell extends HxlDialog {
 		icon.x += 19;
 		icon.y += 8;
 			
-		// this needs to be added to resources!
 		var droptext:HxlText = new HxlText(0, 37, Std.int(width), Resources.getString( "UI_DESTROY" ) );
 		droptext.setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101);
 		droptext.zIndex = 10;
 		droptext.setAlpha(0.3);
+		if (Configuration.mobile) {
+			droptext.x += 5;
+		}
 		add(droptext);
 	}
 	
@@ -608,6 +619,8 @@ class CqInventoryCell extends HxlDialog {
 		if (GameUI.instance.panels.currentPanel != GameUI.instance.panels.panelInventory) {
 			if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y) && (equipType == SPELL || equipType == POTION)) {
 				event.stopPropagation();
+				
+				HxlGraphics.rebakeAll = true;
 				activateItem();
 			}
 		} else {
@@ -626,6 +639,8 @@ class CqInventoryCell extends HxlDialog {
 					} else {
 						CqInventoryProxy.theProxyBeingDragged = this.proxy;
 					}
+		
+					HxlGraphics.rebakeAll = true;
 					event.stopPropagation();
 				}
 			}
@@ -658,6 +673,8 @@ class CqInventoryCell extends HxlDialog {
 		}
 		
 		if (icon != null) icon.visible = _proxy == null;
+		
+		HxlGraphics.rebakeAll = true;
 		
 		return _proxy;
 	}
@@ -750,8 +767,8 @@ class CqClothingGrid extends CqInventoryGrid {
 	];
 	
 	static var cell_positions = [[
-		[0, 108], [0, 55], [0, 2],
-		[67, 108], [67, 55], [67, 2]
+		[-1, 108], [-1, 54], [-1, 2],
+		[65, 108], [65, 54], [65, 2]
 	], [
 		[4, 176], [4, 94], [4, 7],
 		[155, 176], [155, 94], [155, 7]

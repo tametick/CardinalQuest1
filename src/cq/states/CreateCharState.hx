@@ -142,7 +142,7 @@ class CreateCharState extends CqState {
 #if japanese
 		btnStart.loadText(new HxlText(0, 4, 90, Resources.getString( "MENU_START" ), true, null).setFormat(null, 26, 0xffffff, "center", 0x010101));
 #else
-		btnStart.loadText(new HxlText(0, -7, 90, Resources.getString( "MENU_START" ), true, null).setFormat(null, 32, 0xffffff, "center", 0x010101));
+		btnStart.loadText(new HxlText(0, -2, 90, Resources.getString( "MENU_START" ), true, null).setFormat(null, 32, 0xffffff, "center", 0x010101));
 #end
     if (HxlGraphics.smallScreen) btnStart.x = 200;
 
@@ -194,7 +194,7 @@ class CreateCharState extends CqState {
 		
 		pickFighter();
 		
-/*		// todo: remove later
+/*		// todo: remove later 
 		var sponsored= new HxlText(10, 10, 135, "Sponsored by",true,FontAnonymousPro.instance.fontName,18);
 		add(sponsored);
 		var kongLogo = KongLogoSprite.instance;

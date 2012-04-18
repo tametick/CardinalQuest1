@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<application xmlns="http://ns.adobe.com/air/application/2.6">
+<application xmlns="http://ns.adobe.com/air/application/3.0">
   <id>com.tametick.cardinalquest</id>
   <versionNumber>2.2.1</versionNumber>
   <filename>cardinalquest</filename>
-  <name>CQ TEST 1b</name>
+  <name>Cardinal Quest</name>
   <description>Hack and slash your way through a randomly generated dungeon:  a new adventure awaits every time!</description>
   <copyright>Copyright 2012 Ido Yehieli.</copyright>
   <supportedProfiles>extendedDesktop mobileDevice</supportedProfiles>

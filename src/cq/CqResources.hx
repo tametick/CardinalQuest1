@@ -75,6 +75,7 @@ class SpriteStartButton extends Bitmap { public function new() { super(); } }
 class SpriteButtonBg extends Bitmap { public function new() { super(); } }
 class SpriteItemSlot1 extends Bitmap { public function new() { super(); } }
 class SpriteItemSlot2 extends Bitmap { public function new() { super(); } }
+class SpriteItemSlot3 extends Bitmap { public function new() { super(); } }
 class SpriteInfo extends Bitmap { public function new() { super(); } }
 class UiBeltHorizontal extends Bitmap { public function new() { super(); } }
 class MobileUiBeltHorizontal extends Bitmap { public function new() { super(); } }
@@ -128,10 +129,16 @@ class StartButtonSprite extends HxlSprite {
 }
 class ButtonSprite extends HxlSprite {
 	public function new(?X:Float=0, ?Y:Float=0) {
-		super(X,Y);
+		super(X, Y);
+		
+		#if flashmobile
+		loadGraphic(SpriteItemSlot3, false, false, 64, 64);
+		#else
 		loadGraphic(SpriteItemSlot1, false, false, 64, 64);
+		#end
 	}
 }
+
 class HeartSprite extends HxlSprite {
 	public function new(?X:Float=0, ?Y:Float=0) {
 		super(X,Y);

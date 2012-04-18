@@ -111,16 +111,22 @@ class GameState extends CqState {
 		if (gameUI != null){
 			gameUI.updateCentralBarsPosition();
 
-			var currentTile = cast(Registery.level.getTile(Std.int(Registery.player.tilePos.x), Std.int(Registery.player.tilePos.y)), CqTile);
-			//stairs popup
-			if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), currentTile.getDataNum())) {
-				Registery.player.popup.mouseBound = false;
-				Registery.player.popup.customBound = new HxlPoint(Registery.player.width / 2, Registery.player.height);
-				Registery.player.popup.setText(Resources.getString( "NOTIFY_DOWNSTAIRS" ) + "\n" + Resources.getString( "POPUP_ENTER" ));
-			} else {
-				Registery.player.popup.setText("");
+			if (HxlGame.tookATurn) {
+				var currentTile = cast(Registery.level.getTile(Std.int(Registery.player.tilePos.x), Std.int(Registery.player.tilePos.y)), CqTile);
+				//stairs popup
+				if (currentTile.isStairs) {
+					if (!Configuration.mobile) {
+						Registery.player.popup.mouseBound = false;
+						Registery.player.popup.customBound = new HxlPoint(Registery.player.width / 2, Registery.player.height);
+						Registery.player.popup.setText(Resources.getString( "NOTIFY_DOWNSTAIRS" ) + "\n" + Resources.getString( "POPUP_ENTER" ));
+					} else {
+						GameUI.showTextNotification(Resources.getString( "NOTIFY_DOWNSTAIRS" ), 0xFFFFFF);
+					}
+				} else {
+					Registery.player.popup.setText("");
+				}
+				currentTile = null;
 			}
-			currentTile = null;
 			
 			if (GameUI.instance.panels.currentPanel != null) {
 				Registery.level.visible = GameUI.instance.panels.currentPanel.isDropping;
@@ -277,6 +283,7 @@ class GameState extends CqState {
 		var player = Registery.player;
 		var level = Registery.level;
 
+		HxlGame.tookATurn = true;
 		level.updateFieldOfView(this);
 		
 		// Update player minHP to prevent insta-kill.
@@ -287,17 +294,22 @@ class GameState extends CqState {
 			player.minHp = 0;
 		}
 		
-		player.actionPoints = 0;
+		player.actionPoints = _halfTurn ? 30 : 0;
+		level.ticks(this, player);
 
-		while (player.actionPoints < (_halfTurn ? 30 : 60)) {
-			level.tick(this);
+		// Null spell stat points on spells in inventory.
+		for (s in player.bag.spells(false)) {
+			if (s.statPoints > 0 && s.itemSlot.isPassive()) {
+				s.statPoints = 0;
+				s.inventoryProxy.updateCharge(); // updateCharges doesn't touch spells that aren't in the inventory
+			}
 		}
 		
 		level.tryToSpawnEncouragingMonster();
 
 		gameUI.updateCharges();
 
-		// now redraw the map -- but only after all monsters have moved!
+		// now redraw the map dialog -- since all the monsters have moved!
 		if (Std.is(GameUI.instance.panels.currentPanel,CqMapDialog)) {
 			GameUI.instance.panels.currentPanel.updateDialog();
 		}
@@ -376,6 +388,10 @@ class GameState extends CqState {
 			var world = Registery.world;
 			var player = Registery.player;
 
+			#if flashmobile
+			HxlGraphics.stage.quality = HIGH;
+			#end
+			
 			// create and init the game gui
 			gameUI = new GameUI();
 
@@ -630,7 +646,7 @@ class GameState extends CqState {
 			}
 			
 			return true;
-		} else if (HxlUtil.contains(SpriteTiles.doors.iterator(), tile.getDataNum())) {
+		} else if (tile.isDoor) {
 			// would be great to tell player to open the door, wouldn't it just?
 			openDoor(tile);
 			justOpenedDoor = true;
@@ -643,7 +659,7 @@ class GameState extends CqState {
 	}
 
 	private function tileBlocksPlayer(tile:CqTile):Bool {
-		return tile == null || (tile.isBlockingMovement() && !(HxlUtil.contains(SpriteTiles.doors.iterator(), tile.getDataNum())));
+		return tile == null || (tile.blocksMovement && !tile.isDoor);
 	}
 
 	private function pickBestSlide(facing:HxlPoint, ?secondaryFacing:HxlPoint = null):HxlPoint {
@@ -766,13 +782,19 @@ class GameState extends CqState {
 	}
 
 	private function act() {
-		var level = Registery.level, player = Registery.player;
+		var level = Registery.level;
+		var player:CqPlayer = Registery.player;
 
 		if ( GameUI.isTargeting || !started || endingAnim) {
 			isPlayerActing = false;
 			return;
 		}
-
+		
+		if (HxlGame.noTurnTaking || player.isDying) {
+			// we can't take a turn -- the game is performing badly right now
+			return;
+		}
+		
 		//Should we take the input ?
 		if ( (player.isMoving || Timer.stamp() < resumeActingTime ) ) {
 			//if the player is being animated presently,
@@ -850,7 +872,7 @@ class GameState extends CqState {
 					player.pickup(this, item);
 				}
 				item = null;
-			} else if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tile.getDataNum())) {
+			} else if (tile.isStairs) {
 				// these are stairs!  time to descend -- but only if the key was JUST pressed
 				
 				GameUI.clearEffectText();

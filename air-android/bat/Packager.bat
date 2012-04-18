@@ -18,7 +18,7 @@ time /T
 
 set PACKAGE=cq3.swf icon128.png icon16.png icon32.png icon48.png icon57.png icon72.png
 
-call c:\haxe\air3\bin\adt -package -target ipa-test -provisioning-profile "bat\Cardinal_Quest_Beta_2.mobileprovision" -storetype pkcs12 -keystore "bat\iphone_dev_cert_jday.p12" -storepass cqdev ./bin/CQ.ipa application.xml -C ./bin/package .
+call c:\haxe\air3\bin\adt -package -target apk-captive-runtime -storetype pkcs12 -keystore "bat\cq.p12" -storepass idoidoido ./bin/CQ.apk application.xml -C ./bin/package .
 time /T
 
 if errorlevel 1 goto failed

@@ -40,7 +40,7 @@ class CqItemInfoDialog extends HxlDialog {
 
 		_icon = new HxlSprite(Width - 34, Height - 99);
 		_icon.visible = false;
-		_itemName = new HxlText(8, 18, Std.int(Width - 10));
+		_itemName = new HxlText(8, HxlGraphics.smallScreen ? 12 : 18, Std.int(Width - 10));
 #if japanese
 		_itemName.setFormat(FontAnonymousPro.instance.fontName, 20, 0xffffff, "left", 0x010101);
 #else
@@ -77,6 +77,8 @@ class CqItemInfoDialog extends HxlDialog {
 		_itemDesc.text = Resources.getString( Item.id, true );
 
 		_itemDesc.y = _itemName.y + _itemName.height - 2;
+		
+		
 		_itemDesc.setColor( 0xffffff );
 
 		if ( Std.is(Item, CqSpell) ) {
@@ -137,7 +139,7 @@ class CqItemInfoDialog extends HxlDialog {
 		_icon.visible = false;
 
 		_itemDesc.visible = true;
-		_itemDesc.y = this.y + 18;
+		_itemDesc.y = this.y + 24;
 		_itemDesc.setText( Resources.getString( "INVENTORY_HINT" ) );
 		_itemDesc.setColor( 0xa0a0a0 );
 	}
