@@ -13,20 +13,14 @@ import flash.geom.Rectangle;
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.actuators.MethodActuator;
 
+import cq.CqResources;
+
 class Tile extends HxlTile {
 	public var actors:Array<Actor>;
 	public var loots:Array<Loot>;
 	public var level:Level;
 	public var timesUncovered:Int;
 	public var visAmount:Float;
-	
-	override public function isBlockingMovement():Bool {
-		return !HxlUtil.contains(Resources.walkableTiles.iterator(), dataNum);
-	}
-	
-	override public function isBlockingView():Bool {
-		return !HxlUtil.contains(Resources.seeThroughTiles.iterator(), dataNum);
-	}
 	
 	public function new(?X:Int = 0, ?Y:Int = 0, ?Rect:Rectangle = null) {
 		super(X, Y, Rect);
@@ -35,6 +29,17 @@ class Tile extends HxlTile {
 		loots = new Array<Loot>();
 		timesUncovered = 0;
 		visAmount = 0.0;
+	}
+	
+	public override function setDataNum(DataNum:Int):Int {
+		var ret = super.setDataNum(DataNum);
+	
+		blocksMovement = !HxlUtil.contains(Resources.walkableTiles.iterator(), dataNum);
+		blocksView = !HxlUtil.contains(Resources.seeThroughTiles.iterator(), dataNum);
+		isStairs = HxlUtil.contains(SpriteTiles.stairsDown.iterator(), dataNum);
+		isDoor = HxlUtil.contains(SpriteTiles.doors.iterator(), dataNum);
+		
+		return ret;
 	}
 	
 	public function colorTo(ToColor:Int, Speed:Float) {

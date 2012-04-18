@@ -36,7 +36,6 @@ class SimpleActuator extends GenericActuator {
 	private var startTime:Float;
 	private var toggleVisible:Bool;
 	
-	
 	public function new (target:Dynamic, duration:Float, properties:Dynamic) {
 		
 		active = true;
@@ -52,12 +51,14 @@ class SimpleActuator extends GenericActuator {
 		super (target, duration, properties);
 		
 		if (shape == null) {
-			
 			shape = new Shape ();
-			Lib.current.stage.addEventListener (Event.ENTER_FRAME, shape_onEnterFrame,false,0,true);
-			
-		}
-		
+			Lib.current.stage.addEventListener (Event.ENTER_FRAME, shape_onEnterFrame,false,0,true);	
+		}	
+	}
+	
+	
+	public static function isActive():Bool {
+		return actuatorsLength > 0;
 	}
 	
 	

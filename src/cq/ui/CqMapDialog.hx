@@ -17,6 +17,7 @@ import haxel.HxlSprite;
 import haxel.HxlTilemap;
 import haxel.HxlUtil;
 import haxel.HxlGraphics;
+import data.Configuration;
 class CqMapDialogBMPData extends BitmapData {}
 
 class CqMapDialog extends HxlSlidingDialog {
@@ -36,30 +37,44 @@ class CqMapDialog extends HxlSlidingDialog {
 		// map pos: 36, 40
 		super(X, Y, Width, Height, Direction,false);
 
-		mapDialog = new HxlDialog(36, 40, 400, 400);
-		mapDialog.setBackgroundColor(0, 15.0);
-		mapDialog.setBackgroundAlpha(0);
+		if (!HxlGraphics.smallScreen) {
+			mapDialog = new HxlDialog(36, 40, 400, 400);
+			mapDialog.setBackgroundColor(0, 15.0);
+			mapDialog.setBackgroundAlpha(0);
+			mapSprite = new HxlSprite(20, 20);
+			
+			// map draw area size: 380x380
+			// map draw area offset: 20x20
+			// map draw area pos: 20x20
+			mapSize = new HxlPoint(380, 380);
+			clearRect = new Rectangle(0, 0, 380, 380);
+		} else {
+			mapDialog = new HxlDialog(0, 0, 338, 283);
+			mapDialog.setBackgroundColor(0);
+			mapDialog.setBackgroundAlpha(0);
+			mapSprite = new HxlSprite((338 - 224) / 2, (283 - 244) / 2);
+			
+			mapSize = new HxlPoint(224, 224); // at this size, tiles will be 7x7
+			clearRect = new Rectangle(0, 0, 224, 224);
+			
+			var bg:HxlSprite = new HxlSprite(-22, 0, MobileSpriteMapPaper);
+			bg.zIndex = -1;
+			add(bg);
+		}
 		add(mapDialog);
-		
-		// map draw area size: 380x380
-		// map draw area offset: 20x20
-		// map draw area pos: 20x20
-		mapSize = new HxlPoint(380, 380);
-		clearRect = new Rectangle(0, 0, 380, 380);
 
-		mapSprite = new HxlSprite(20, 20);
 		mapDialog.add(mapSprite);
 
 		mapShape = new Shape();
 		mapBitmap = new Bitmap(new CqMapDialogBMPData(Std.int(mapSize.x), Std.int(mapSize.y), true, 0x0));
 		mapSprite.pixels = mapBitmap.bitmapData;
 		
-		if (HxlGraphics.smallScreen) {
+		/*if (HxlGraphics.smallScreen) {
 			mapSprite.scale.x = .5;
 			mapSprite.scale.y = .5;
 			mapSprite.x -= .5 * (1.0 - mapSprite.scale.x) * mapSprite.width;
 			mapSprite.y -= .5 * (1.0 - mapSprite.scale.y) * mapSprite.height;
-		}
+		}*/
 
 		init();
 		updateDialog();
@@ -141,7 +156,7 @@ class CqMapDialog extends HxlSlidingDialog {
 					var scheme = schemes[scheme_number];
 					
 					if (level.isBlockingMovement(X, Y)) {
-						if ( HxlUtil.contains(SpriteTiles.doors.iterator(), tiles[Y][X].getDataNum()) ) { 
+						if (tiles[Y][X].isDoor) { 
 							Color = scheme.door;
 						} else {
 							Color = scheme.wall;
@@ -155,7 +170,7 @@ class CqMapDialog extends HxlSlidingDialog {
 					graph.endFill();
 					
 					// render stairs and loot:
-					if ( HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tiles[Y][X].getDataNum()) ) {
+					if ( tiles[Y][X].isStairs ) {
 						var dx:Float = X * cellSize.x;
 						var dy:Float = Y * cellSize.y;
 						

@@ -186,7 +186,7 @@ class CqLevel extends Level {
 			}
 		}
 	
-		loadMap(newMapData, SpriteTiles, SpriteDecorations, Configuration.tileSize, Configuration.tileSize, Configuration.zoom, Configuration.zoom);
+		loadMap(GameUI.getMapFrame(), newMapData, SpriteTiles, SpriteDecorations, Configuration.tileSize, Configuration.tileSize, Configuration.zoom, Configuration.zoom);
 	
 		// mark as visible in fov
 		markInvisible();
@@ -361,9 +361,9 @@ class CqLevel extends Level {
 		super.foundStairs(magically);
 		if (!magically) {
 			if (getExplorationProgress() > .8) {
-				GameUI.showTextNotification(Resources.getString( "NOTIFY_LATE_STAIRS" ), 0xFFFFFF);
+				GameUI.showTextNotification(Resources.getString( "NOTIFY_LATE_STAIRS" ), 0xFCF8F8);
 			} else {
-				GameUI.showTextNotification(Resources.getString( "NOTIFY_STAIRS" ), 0xFFFFFF);
+				GameUI.showTextNotification(Resources.getString( "NOTIFY_STAIRS" ), 0xFCF8F8);
 			}
 		}
 	}
@@ -420,112 +420,83 @@ class CqLevel extends Level {
 	}
 	
 	// we need to move the bulk of this to CqActor
-	public override function tick(state:HxlState) {
-		var l:Float = mobs.length + 1;
-		var i:UInt = 0;
+	
+	public override function ticks(state:HxlState, player:CqActor) {
+		var expired:Array<CqTimer> = [];
 		
-		if (ticksSinceNewDiscovery < 0) ticksSinceNewDiscovery = 0;
-		ticksSinceNewDiscovery += 1.0;
-		
-		while(i < l) {
-			var creature:CqActor;
-			if (i == 0)
-				creature = Registery.player;
-			else
-				creature = cast(mobs[i - 1],CqActor);
-		
-			if (creature == null)
-				continue;
-				
-			// remove timed out buffs & visibleEffects
-			var timers = creature.timers;
-			if (timers.length>0) {
-				var expired = new Array();
-				
-				for (t in timers) {
-					t.ticks--;
-					if (t.ticks == 0) {
-						creature.applyTimerEffect(state, t);
-						expired.push(t);
-					}
+		while (player.actionPoints < 60) {
+			var l:Int = mobs.length + 1;
+			var i:Int = 0;
+			
+			if (ticksSinceNewDiscovery < 0) ticksSinceNewDiscovery = 0;
+			ticksSinceNewDiscovery += 1.0;
+			
+			while (i < l) {
+				var creature:CqActor;
+				if (i == 0) {
+					creature = Registery.player;
+				} else {
+					creature = cast(mobs[i - 1], CqActor);
 				}
-				
-				// remove expired timers
-				for (t in expired) {
-					timers.remove(t);
-					HxlLog.append(Resources.getString( "LOG_EXPIRED_TIMER" ) + " " + t.buffName);
-				}
-				
-				expired = null;
-				if (creature.dead) {
-					l--;
+			
+				if (creature == null)
 					continue;
-				}
-			}
-			
-			
-			var speed = creature.speed;
-			
-			// Apply speed buffs
-			if ( speed != 0 ) { // ...unless it's asleep!
-				speed += creature.getBuff("speed");
-				speed = Std.int(Math.max(speed, 0));
-			}
-			
-			// apply spirit buffs
-			var spirit = creature.spirit;
-			var specialActive = creature.visibleEffects.length >0;
-			spirit += creature.getBuff("spirit");
-			spirit = Std.int(Math.max(spirit, 1));
-			
-			// Calc attack, defense and vitality as well, for various spells
-			var attack = creature.attack;
-			attack += creature.getBuff("attack");
-			attack = Std.int(Math.max(attack, 0));
-			
-			var defense = creature.defense;
-			defense += creature.getBuff("defense");
-			defense = Std.int(Math.max(defense, 0));
-			
-			var life = creature.maxHp;
-			life += creature.getBuff("life");
-			life = Std.int(Math.max(life, 0));
-			
-			// Charge action & spirit points -- offload this into the creature tick
-			creature.actionPoints += speed;
-
-			if (!specialActive) {
-				for (s in creature.bag.spells()) {
-					var boost:Int = 0;
-					switch ( s.stat ) {
-						case "spirit": boost = spirit;
-						case "speed": boost = speed;
-						case "attack": boost = attack;
-						case "defense": boost = defense;
-						case "life": boost = life;
+				
+				// remove timed out buffs & visibleEffects
+				var timers = creature.timers;
+				if (timers.length>0) {
+					for (t in timers) {
+						t.ticks--;
+						if (t.ticks == 0) {
+							creature.applyTimerEffect(state, t);
+							expired.push(t);
+						}
 					}
-					s.statPoints = Std.int(Math.min( s.statPointsRequired, s.statPoints + boost));
+					
+					// remove expired timers
+					for (t in expired) {
+						timers.remove(t);
+						HxlLog.append(Resources.getString( "LOG_EXPIRED_TIMER" ) + " " + t.buffName);
+					}
+					
+					expired.splice(0, expired.length);
+					
+					if (creature.dead) {
+						l--;
+						continue;
+					}
 				}
-			}
+				
 
-			// Null spell stat points on spells in inventory.
-			for (s in creature.bag.spells(false)) {
-				if (s.itemSlot.isPassive()) {
-					s.statPoints = 0;
-					s.inventoryProxy.updateCharge();
+				// Charge action & spirit points -- offload this into the creature tick
+
+				if (!creature.stats.specialActive) {
+					for (s in creature.bag.spells()) {
+						var boost:Int = 0;
+						switch ( s.stat ) {
+							case "spirit": boost = creature.stats.spirit;
+							case "speed": boost = creature.stats.speed;
+							case "attack": boost = creature.stats.attack;
+							case "defense": boost = creature.stats.defense;
+							case "life": boost = creature.stats.life;
+						}
+						s.statPoints = Std.int(Math.min( s.statPointsRequired, s.statPoints + boost));
+					}
 				}
-			}
-			
-			// Move mob if charged
-			if ( !Std.is(creature,CqPlayer)  &&  creature.actionPoints>=60 ) {
-				if (cast(creature,Mob).act(state)) {
-					creature.actionPoints = 0;
-					// update l in case creature killed another creature
-					l = mobs.length + 1;
+
+				creature.actionPoints += creature.stats.speed;
+				
+				// Move mob if charged
+				if (creature.actionPoints>=60 && !Std.is(creature,CqPlayer)) {
+					if (cast(creature,Mob).act(state)) {
+						creature.actionPoints = 0;
+						// update l in case creature killed another creature
+						l = mobs.length + 1;
+					}
 				}
+				
+				i++;
 			}
-			
-			i++;
 		}
 	}
 }

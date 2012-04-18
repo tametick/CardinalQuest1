@@ -111,18 +111,30 @@ class GameState extends CqState {
 		if (gameUI != null){
 			gameUI.updateCentralBarsPosition();
 
-			var currentTile = cast(Registery.level.getTile(Std.int(Registery.player.tilePos.x), Std.int(Registery.player.tilePos.y)), CqTile);
-			//stairs popup
-			if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), currentTile.getDataNum())) {
-				Registery.player.popup.mouseBound = false;
-				Registery.player.popup.customBound = new HxlPoint(Registery.player.width / 2, Registery.player.height);
-				Registery.player.popup.setText(Resources.getString( "NOTIFY_DOWNSTAIRS" ) + "\n" + Resources.getString( "POPUP_ENTER" ));
-			} else {
-				Registery.player.popup.setText("");
+			if (HxlGame.tookATurn) {
+				var currentTile = cast(Registery.level.getTile(Std.int(Registery.player.tilePos.x), Std.int(Registery.player.tilePos.y)), CqTile);
+				//stairs popup
+				if (currentTile.isStairs) {
+					if (!Configuration.mobile) {
+						Registery.player.popup.mouseBound = false;
+						Registery.player.popup.customBound = new HxlPoint(Registery.player.width / 2, Registery.player.height);
+						Registery.player.popup.setText(Resources.getString( "NOTIFY_DOWNSTAIRS" ) + "\n" + Resources.getString( "POPUP_ENTER" ));
+					} else {
+						GameUI.showTextNotification(Resources.getString( "NOTIFY_DOWNSTAIRS" ), 0xFFFFFF);
+					}
+				} else {
+					Registery.player.popup.setText("");
+				}
+				currentTile = null;
 			}
-			currentTile = null;
+			
+			if (GameUI.instance.panels.currentPanel != null) {
+				Registery.level.visible = GameUI.instance.panels.currentPanel.isDropping;
+			} else {
+				Registery.level.visible = true;
+			}
 		}
-
+		
 		super.render();
 	}
 
@@ -271,6 +283,7 @@ class GameState extends CqState {
 		var player = Registery.player;
 		var level = Registery.level;
 
+		HxlGame.tookATurn = true;
 		level.updateFieldOfView(this);
 		
 		// Update player minHP to prevent insta-kill.
@@ -281,17 +294,22 @@ class GameState extends CqState {
 			player.minHp = 0;
 		}
 		
-		player.actionPoints = 0;
+		player.actionPoints = _halfTurn ? 30 : 0;
+		level.ticks(this, player);
 
-		while (player.actionPoints < (_halfTurn ? 30 : 60)) {
-			level.tick(this);
+		// Null spell stat points on spells in inventory.
+		for (s in player.bag.spells(false)) {
+			if (s.statPoints > 0 && s.itemSlot.isPassive()) {
+				s.statPoints = 0;
+				s.inventoryProxy.updateCharge(); // updateCharges doesn't touch spells that aren't in the inventory
+			}
 		}
 		
 		level.tryToSpawnEncouragingMonster();
 
 		gameUI.updateCharges();
 
-		// now redraw the map -- but only after all monsters have moved!
+		// now redraw the map dialog -- since all the monsters have moved!
 		if (Std.is(GameUI.instance.panels.currentPanel,CqMapDialog)) {
 			GameUI.instance.panels.currentPanel.updateDialog();
 		}
@@ -371,6 +389,10 @@ class GameState extends CqState {
 			var world = Registery.world;
 			var player = Registery.player;
 
+			#if flashmobile
+			HxlGraphics.stage.quality = HIGH;
+			#end
+			
 			// create and init the game gui
 			gameUI = new GameUI();
 
@@ -460,7 +482,7 @@ class GameState extends CqState {
 		started = true;
 		update();
 
-		if (!Configuration.debug) {
+		if (!Configuration.debug && !Configuration.mobile) {
 			gameUI.pressHelp(false);
 		}
 
@@ -497,7 +519,6 @@ class GameState extends CqState {
 	}
 
 	override function onKeyUp(event:KeyboardEvent) {
-
 		//A cookie if you discover the raison d'etre
 		mobileMoveAllowed = true;
 
@@ -558,7 +579,7 @@ class GameState extends CqState {
 			return;
 		}
 
-		if (GameUI.instance.panels.currentPanel != GameUI.instance.panels.panelInventory) {
+		if (GameUI.instance.panels.currentPanel == null || Std.is(GameUI.instance.panels.currentPanel,CqMapDialog)) {
 			if (Configuration.mobile) {
 				HxlGraphics.updateInput();
 			}
@@ -626,7 +647,7 @@ class GameState extends CqState {
 			}
 			
 			return true;
-		} else if (HxlUtil.contains(SpriteTiles.doors.iterator(), tile.getDataNum())) {
+		} else if (tile.isDoor) {
 			// would be great to tell player to open the door, wouldn't it just?
 			openDoor(tile);
 			justOpenedDoor = true;
@@ -639,10 +660,10 @@ class GameState extends CqState {
 	}
 
 	private function tileBlocksPlayer(tile:CqTile):Bool {
-		return tile == null || (tile.isBlockingMovement() && !(HxlUtil.contains(SpriteTiles.doors.iterator(), tile.getDataNum())));
+		return tile == null || (tile.blocksMovement && !tile.isDoor);
 	}
 
-	private function pickBestSlide(facing:HxlPoint):HxlPoint {
+	private function pickBestSlide(facing:HxlPoint, ?secondaryFacing:HxlPoint = null):HxlPoint {
 		// treating 'facing' as forward, we hold a little competition between 'left' and 'right'
 		// -- we want to find which of those two directions gets us in place to move forward soonest.
 		// -- and if they tie on that test, we want to pick the one that lets us move forward furthest.
@@ -656,11 +677,22 @@ class GameState extends CqState {
 
 		var left = new HxlPoint(-facing.y, -facing.x);
 		var right = new HxlPoint(facing.y, facing.x);
-
+		
 		// you can't move backward, though!
 		if (player.lastTile != null) {
 			left_back = (player.lastTile.x == left.x + player.tilePos.x && player.lastTile.y == left.y + player.tilePos.y);
 			right_back = (player.lastTile.x == right.x + player.tilePos.x && player.lastTile.y == right.y + player.tilePos.y);
+		}
+		
+		// and you can't move against your secondary facing! (maybe use left_back / right_back logic instead?)
+		if (secondaryFacing != null) {
+			if (left.x == secondaryFacing.x && left.y == secondaryFacing.y) {
+				right_ok = false;
+			} else if (right.x == secondaryFacing.x && right.y == secondaryFacing.y) {
+				left_ok = false;
+			}
+			
+			return null;
 		}
 
 		// get set
@@ -751,13 +783,19 @@ class GameState extends CqState {
 	}
 
 	private function act() {
-		var level = Registery.level, player = Registery.player;
+		var level = Registery.level;
+		var player:CqPlayer = Registery.player;
 
 		if ( GameUI.isTargeting || !started || endingAnim) {
 			isPlayerActing = false;
 			return;
 		}
-
+		
+		if (HxlGame.noTurnTaking || player.isDying) {
+			// we can't take a turn -- the game is performing badly right now
+			return;
+		}
+		
 		//Should we take the input ?
 		if ( (player.isMoving || Timer.stamp() < resumeActingTime ) ) {
 			//if the player is being animated presently,
@@ -810,10 +848,11 @@ class GameState extends CqState {
 
 			// first, make sure the key was JUST pressed, if this is a key command
 			// (otherwise we'll go down stairs or wait after targeting)
-			var confirmed = true;
+			var confirmed = false;
 
-			if (!isMouseControl) {
-				confirmed = false;
+			if (isMouseControl) {
+				confirmed = HxlGraphics.mouse.justPressed();
+			} else {
 				for (k in Configuration.bindings.waitkeys) {
 					if (HxlGraphics.keys.justPressed(k)) {
 						confirmed = true;
@@ -834,27 +873,12 @@ class GameState extends CqState {
 					player.pickup(this, item);
 				}
 				item = null;
-			} else if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), tile.getDataNum())) {
+			} else if (tile.isStairs) {
 				// these are stairs!  time to descend -- but only if the key was JUST pressed
-
-				var confirmed = true;
-
-				if (!isMouseControl) {
-					confirmed = false;
-					for (k in Configuration.bindings.waitkeys) {
-						if (HxlGraphics.keys.justPressed(k)) {
-							confirmed = true;
-						}
-					}
-				}
-
-				if (!confirmed) {
-					return;
-				} else {
-					GameUI.clearEffectText();
-					Registery.world.goToNextLevel();
-					player.popup.setText("");
-				}
+				
+				GameUI.clearEffectText();
+				Registery.world.goToNextLevel();
+				player.popup.setText("");
 
 				#if demo
 				if (Configuration.demoLastLevel == Registery.world.currentLevelIndex-1) {
@@ -871,11 +895,15 @@ class GameState extends CqState {
 			return;
 		} else {
 			// motion has been requested.  try first, second, and possibly third choices for movement
-			// (this is pretty ok sliding -- there's still room to improve it by considering previous motion)
 			var moved:Bool = false;
 			if (facing.x == 0 || facing.y == 0) {
 				if (isMouseControl) {
-					moved = tryToActInDirection(facing) || tryToActInDirection(level.getTargetAccordingToMousePosition(true));
+					if (Configuration.mobile) {
+						moved = tryToActInDirection(facing) || tryToActInDirection(pickBestSlide(facing, level.getTargetAccordingToMousePosition(true, true))) || tryToActInDirection(level.getTargetAccordingToMousePosition(true));
+						//moved = tryToActInDirection(facing) || tryToActInDirection(level.getTargetAccordingToMousePosition(true, true));
+					} else {
+						moved = tryToActInDirection(facing) || tryToActInDirection(level.getTargetAccordingToMousePosition(true));
+					}
 				} else if (resumeSlidingTime <= Timer.stamp()) {
 					moved = tryToActInDirection(facing) || tryToActInDirection(pickBestSlide(facing));
 				} else {
@@ -890,7 +918,8 @@ class GameState extends CqState {
 				moved = tryToActInDirection(new HxlPoint(facing.x, 0)) || tryToActInDirection(new HxlPoint(0, facing.y));
 			}
 
-			isPlayerActing = moved;
+			isPlayerActing = moved || isMouseControl;
+			
 			if (moved) {
 				passTurn( justOpenedDoor );
 			}

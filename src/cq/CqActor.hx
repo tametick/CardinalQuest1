@@ -79,6 +79,9 @@ class CqActor extends CqObject, implements Actor {
 	
 	public var minHp:Int; // Minimum HP is the furthest the actor can currently be hurt.
 	
+	// to avoid recomputing these every tick
+	public var stats:EffectiveStats;
+	
 	// natural damage without weapon
 	public var damage:Range;
 	
@@ -168,7 +171,7 @@ class CqActor extends CqObject, implements Actor {
 		} else {
 			moveSpeed = 0.2;
 		}
-		visionRadius = HxlGraphics.smallScreen ? 5.33 : 8.2;
+		visionRadius = HxlGraphics.smallScreen ? 4.77 : 8.2;
 		
 		hp = maxHp;
 		minHp = 0;
@@ -190,6 +193,8 @@ class CqActor extends CqObject, implements Actor {
 		bobCounterInc = 0.1;
 		bobMult = 5.0;
 		isCharmed = false;
+		
+		stats = new EffectiveStats(this);
 	}
 	
 	function initBuffs(){
@@ -206,6 +211,7 @@ class CqActor extends CqObject, implements Actor {
 
 	public function addBuff(buff:String, delta:Int) {
 		buffs.set(buff, buffs.get(buff) + delta);
+		stats.recompute();
 	}
 	
 	public function getBuff(buff:String) : Int {
@@ -413,9 +419,13 @@ class CqActor extends CqObject, implements Actor {
 					eff.start(true, 1.0, 10);
 					Registery.level.removeMobFromLevel(state, mob);
 					cast(this, CqMob).destroy();
+					
+					return;
 			}
 			currentEffect = null;
-		}		
+		}
+		
+		stats.recompute();
 	}
 	
 	public function removeEffect(effectName:String) {
@@ -616,7 +626,7 @@ class CqActor extends CqObject, implements Actor {
 		var level = Registery.level;
 		var tile:CqTile = cast(level.getTile(targetX,  targetY), CqTile);
 		
-		if (tile == null || (tile.isBlockingMovement() && (!Configuration.debugMoveThroughWalls))) {
+		if (tile == null || (tile.blocksMovement && (!Configuration.debugMoveThroughWalls))) {
 			level = null;
 			tile = null;
 			return false;
@@ -1149,6 +1159,8 @@ class CqPlayer extends CqActor, implements Player {
 		faction = CqPlayer.faction;
 
 		play("idle");
+		
+		stats.recompute();
 	}
 
 	public function addOnGainXP(Callback:Dynamic) {
@@ -1257,8 +1269,8 @@ class CqPlayer extends CqActor, implements Player {
 	}
 	
 	public override function canAttackOther(other:CqActor) {
-		// Players can attack EVERYTHING.
-		return true;
+		// Players can attack EVERYTHING. (except, in case of bugginess, themselves.)
+		return other != this;
 	}
 	
 	public override function actInDirection(state:HxlState, targetTile:HxlPoint):Bool {
@@ -1344,6 +1356,8 @@ class CqPlayer extends CqActor, implements Player {
 		
 		hp = maxHp;
 		updatePlayerHealthBars();
+		
+		stats.recompute();
 	}
 	
 	public function updatePlayerHealthBars() {
@@ -1625,5 +1639,52 @@ class CqMob extends CqActor, implements Mob {
 		}
 		
 		return true;
+	}
+}
+
+class EffectiveStats {
+	public var spirit(default, null):Int;
+	public var speed(default, null):Int;
+	public var attack(default, null):Int;
+	public var defense(default, null):Int;
+	public var life(default, null):Int;
+	
+	public var specialActive(default, null):Bool;
+	
+	public var creature(default, null):CqActor;
+	
+	public function new(actor:CqActor) {
+		creature = actor;
+		recompute();
+	}
+	
+	public function recompute() {
+		speed = creature.speed;
+		
+		// Apply speed buffs
+		if ( speed != 0 ) { // ...unless it's asleep!
+			speed += creature.getBuff("speed");
+			speed = speed < 0 ? 0 : speed;
+		}
+		
+		// apply spirit buffs
+		spirit = creature.spirit;
+		spirit += creature.getBuff("spirit");
+		spirit = spirit < 1 ? 1 : spirit;
+		
+		// Calc attack, defense and vitality as well, for various spells
+		attack = creature.attack;
+		attack += creature.getBuff("attack");
+		attack = attack < 0 ? 0 : attack;
+		
+		defense = creature.defense;
+		defense += creature.getBuff("defense");
+		defense = defense < 0 ? 0 : defense;
+		
+		life = creature.maxHp;
+		life += creature.getBuff("life");
+		life = life < 0 ? 0 : life;
+		
+		specialActive = creature.visibleEffects.length > 0;
 	}
 }

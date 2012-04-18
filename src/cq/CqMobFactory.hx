@@ -35,6 +35,9 @@ class CqMobFactory {
 			mob.damage = cloneOf.damage;
 			mob.xpValue = 0;
 			mob.name = "Mirror";
+			
+			mob.stats.recompute();
+			
 			return mob;
 		}
 		
@@ -133,6 +136,8 @@ class CqMobFactory {
 		mob.hp = mob.maxHp = mob.vitality;
 		
 		if (specialname != null) mob.name = specialname;
+		
+		mob.stats.recompute();
 		
 		return mob;
 	}

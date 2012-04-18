@@ -3,6 +3,7 @@ package haxel;
 import cq.CqResources;
 import flash.display.BitmapData;
 import flash.geom.Rectangle;
+import flash.Lib;
 import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
@@ -40,7 +41,7 @@ class HxlText extends HxlSprite {
   var _tf:TextField;
   var _regen:Bool;
   var _shadow:Int;
-
+ 
   //added boldness support
   var AddBold:Bool;
   var boldStart:Int;
@@ -72,7 +73,7 @@ class HxlText extends HxlSprite {
    * @param	EmbeddedFont	Whether this text field uses embedded fonts or not
    * @param 	FontName 		Name of the font to use
    */
-  public function new(X:Float, Y:Float, Width:Int, ?Text:String=null, ?EmbeddedFont:Bool=true, ?FontName:String=null,?Size:Int=12,?Color:Int=0xffffff,?Alignment:String=null) {
+  public function new(X:Float, Y:Float, Width:Int, ?Text:String = null, ?EmbeddedFont:Bool = true, ?FontName:String = null, ?Size:Int = 12, ?Color:Int = 0xffffff, ?Alignment:String = null) {
     super(Math.floor(X),Math.floor(Y));
     createGraphic(Width,1,0);
     //antialiasing = false;
@@ -164,7 +165,7 @@ class HxlText extends HxlSprite {
    * The text being displayed.
    */
   public function getText():String {
-    return _tf.text;
+    return _tf == null ? null : _tf.text;
   }
 
   public function setUnderlined() {
@@ -331,6 +332,12 @@ class HxlText extends HxlSprite {
    * Internal function to update the current animation frame.
    */
   override function calcFrame() {
+	#if flashmobile
+	// render all text in high quality
+	var oldQuality = Lib.current.stage.quality;
+	Lib.current.stage.quality = HIGH;
+	#end	  
+	  
     if (_regen) {
       //Need to generate a new buffer to store the text graphic
       height = 0;
@@ -414,6 +421,10 @@ class HxlText extends HxlSprite {
       refreshHulls();
     }
     */
+	
+	#if flashmobile
+	Lib.current.stage.quality = oldQuality;
+	#end
   }
 
   /**
