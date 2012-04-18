@@ -39,6 +39,7 @@ import cq.CqMobFactory;
 import cq.effects.CqEffectSpell; // I'd like to get rid of this import here
 
 import com.baseoneonline.haxe.astar.AStar;
+import com.baseoneonline.haxe.astar.AStarNode;
 import com.baseoneonline.haxe.geom.IntPoint;
 
 import playtomic.PtPlayer;
@@ -1610,11 +1611,13 @@ class CqMob extends CqActor, implements Mob {
 		if (aware == maxAware && tryToCastSpell(enemy)) return true;
 		
 		// fine.  walk towards him!
-		var astar:AStar = new AStar(Registery.level, new IntPoint(Std.int(tilePos.x), Std.int(tilePos.y)), new IntPoint(Std.int(enemy.tilePos.x), Std.int(enemy.tilePos.y)));
-		var line:Array<IntPoint> = astar.solve(true, false);
-		var dest = null;
-		if (line != null && line.length > 0) 
-			dest = line[line.length - 1];
+		var astar:AStar = Registery.level.aStar;
+		
+		// var astar:AStar = new AStar(Registery.level, new IntPoint(Std.int(tilePos.x), Std.int(tilePos.y)), new IntPoint(Std.int(enemy.tilePos.x), Std.int(enemy.tilePos.y)));
+		var path:AStarNode = astar.solve(Std.int(tilePos.x), Std.int(tilePos.y), Std.int(enemy.tilePos.x), Std.int(enemy.tilePos.y));
+		var dest:AStarNode = null;
+		if (path != null) 
+			dest = path.child;
 		
 		if (dest == null) {
 			// no path?  let's become unaware and consume a turn

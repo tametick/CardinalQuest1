@@ -99,9 +99,9 @@ class Main extends HxlGame {
 			}
 		}
 		
-		#if mobile
-			Configuration.app_width = Lib.current.stage.stageWidth; //640
-			Configuration.app_height = Lib.current.stage.stageHeight; //480		
+		#if flashmobile
+			Configuration.app_width = Lib.current.stage.stageWidth; //not 640
+			Configuration.app_height = Lib.current.stage.stageHeight; //not 480		
 		#else
 			Configuration.app_width = 640;
 			Configuration.app_height = 480;		

@@ -7,7 +7,6 @@ import cq.CqResources;
 import data.Registery;
 import data.Resources;
 import flash.display.Bitmap;
-import com.baseoneonline.haxe.astar.AStarNode;
 import flash.system.System;
 import haxel.GraphicCache;
 import haxel.HxlSpriteSheet;
@@ -29,7 +28,10 @@ import playtomic.PtLevel;
 import data.Configuration;
 import cq.states.WinState;
 
+import com.baseoneonline.haxe.astar.AStar;
 import com.baseoneonline.haxe.astar.IAStarSearchable;
+import com.baseoneonline.haxe.astar.AStarNode;
+
 import cq.GameUI;
 
 class Level extends HxlTilemap, implements IAStarSearchable {
@@ -41,6 +43,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	public var stairsAreFound:Bool;
 
 	var aStarNodes:Array<AStarNode>;
+	public var aStar(default, null):AStar;
 	
 	public static inline var CHANCE_DECORATION:Float = 0.2;
 
@@ -61,6 +64,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		stairsAreFound = false;
 		
 		aStarNodes = null;
+		aStar = null;
 		
 		fovTileAngleReach = 11;
 		generateFOVTileAngles();		
@@ -254,6 +258,8 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 			var y:Int = Std.int( i / map.widthInTiles );
 			aStarNodes.push( new AStarNode( x, y, this.isWalkable( x, y ) ) );
 		}
+		
+		aStar = new AStar( this );
 		
 		return map;
 	}
@@ -891,12 +897,13 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	public function ticks(state:HxlState, player:CqActor) { }
 
 	// implement IAStarSearchable (isWalkable, getWidth, getHeight)
-	public function getNode(x:Int, y:Int):AStarNode {
-		return aStarNodes[y * getWidth() + x];
+	public function getAStarNodes():Array<AStarNode> {
+		return aStarNodes;
 	}
 	
 	public function updateWalkable(x:Int, y:Int) {
 		aStarNodes[y * getWidth() + x].walkable = !isBlockingMovement(x, y, false);
+		aStarNodes[y * getWidth() + x].cost = 1;
 	}
 	
 	private function isWalkable(x:Int, y:Int):Bool {
