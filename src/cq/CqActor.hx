@@ -1424,7 +1424,11 @@ class CqPlayer extends CqActor, implements Player {
 		if (alive) {
 			SoundEffectsManager.play(Death);
 			
+#if japanese
+			player.infoViewLives.setText("" + player.lives);
+#else
 			player.infoViewLives.setText(Resources.getString( "UI_TIMES" ) + player.lives);
+#end
 			Registery.level.protectRespawnPoint();
 		} else {
 			///todo: Playtomic recording	

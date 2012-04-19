@@ -1,14 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<project>
+<project version="2">
   <!-- Output SWF options -->
   <output>
-    <movie disabled="False" />
+    <movie outputType="Application" />
     <movie input="" />
     <movie path="bin.jp\cq.swf" />
     <movie fps="30" />
     <movie width="640" />
     <movie height="480" />
     <movie version="10" />
+    <movie minorVersion="0" />
+    <movie platform="Flash Player" />
     <movie background="#000000" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
@@ -55,4 +57,6 @@
     <option showHiddenPaths="False" />
     <option testMovie="ExternalPlayer" />
   </options>
+  <!-- Plugin storage -->
+  <storage />
 </project>
