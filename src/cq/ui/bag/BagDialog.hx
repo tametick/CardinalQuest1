@@ -65,6 +65,9 @@ class BagDialog {
 		gameui.add(equippedConsumables);
 		
 		slidingPart = new SlidingBagDialog(gameui, packsize, equipSlots);
+		
+		equippedSpells.bakeInBounds(HxlGraphics.width - 70, 0, equippedSpells.width, equippedSpells.height, false);
+		equippedConsumables.bakeInBounds(70, HxlGraphics.height - 56, equippedConsumables.width, 56, true);
 	}
 	
 	public function addSlotsToBag(bag:CqBag) {
@@ -105,8 +108,6 @@ class SlidingBagDialog extends HxlSlidingDialog {
 	
 	public var backpack:CqBackpackGrid;
 	public var clothingAndRings:CqClothingGrid;
-	public var equippedSpells:CqSpellGrid;
-	public var equippedConsumables:CqPotionGrid;
 	
 	
 	//remove refs to any nonsliding dialogs from here
@@ -144,16 +145,30 @@ class SlidingBagDialog extends HxlSlidingDialog {
 			paperdollDialog.setBackgroundGraphic(UiInventoryBox);
 		}
 		
-		clothingAndRings = new CqClothingGrid(equipSlots, 14, 10, paperdollDialog.width, paperdollDialog.height);
-		paperdollDialog.add(clothingAndRings);
 
-		itemInfoDialog = new CqItemInfoDialog(div_l + GAP, TOP_BORDER, div_r, div_u - OUTER_BORDER);
-		itemInfoDialog.zIndex = 3;
-		add(itemInfoDialog);
+		if (HxlGraphics.smallScreen) {
+			backpack = new CqBackpackGrid(packsize, 13, div_u - 38 - 8, div_l + div_r, div_b);
+			backpack.zIndex = 2;
+			add(backpack);		
+			
+			clothingAndRings = new CqClothingGrid(equipSlots, 9, 2, paperdollDialog.width, paperdollDialog.height);
+			paperdollDialog.add(clothingAndRings);
 
-		backpack = new CqBackpackGrid(packsize, OUTER_BORDER + 5, div_u - 38, div_l + div_r, div_b);
-		backpack.zIndex = 2;
-		add(backpack);
+			itemInfoDialog = new CqItemInfoDialog(div_l + GAP - 27, -8, div_r + 50, 12 + div_u - OUTER_BORDER);
+			itemInfoDialog.zIndex = 3;
+			add(itemInfoDialog);
+		} else {
+			backpack = new CqBackpackGrid(packsize, OUTER_BORDER + 5, div_u - 38, div_l + div_r, div_b);
+			backpack.zIndex = 2;
+			add(backpack);
+			
+			clothingAndRings = new CqClothingGrid(equipSlots, 14, 10, paperdollDialog.width, paperdollDialog.height);
+			paperdollDialog.add(clothingAndRings);
+			
+			itemInfoDialog = new CqItemInfoDialog(div_l + GAP, TOP_BORDER, div_r, div_u - OUTER_BORDER);
+			itemInfoDialog.zIndex = 3;
+			add(itemInfoDialog);
+		}
 
 		// why the HELL is this HERE?
 		CqInventoryProxy.backgroundKey = CqGraphicKey.ItemBG;

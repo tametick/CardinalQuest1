@@ -14,7 +14,7 @@ class HxlSlidingDialog extends HxlDialog
 	
 	var direction:Int;
 	var dropSpeed:Float;
-	var isDropping:Bool;
+	public var isDropping(default, null):Bool;
 	var isDropped:Bool;
 	var showCallback:Dynamic;
 	var hideCallback:Dynamic;
@@ -91,6 +91,8 @@ class HxlSlidingDialog extends HxlDialog
 			.onComplete(shown)
 			.ease(Quad.easeOut);
 		if ( showSound != null ) showSound.play();
+		
+		HxlGraphics.rebakeAll = true;
 	}
 	
 	/** override this to do special updating before showing the dialog */
@@ -100,6 +102,9 @@ class HxlSlidingDialog extends HxlDialog
 	
 	public function hide(?HideCallback:Dynamic=null) {
 		if ( !visible ) return;
+		
+		HxlGraphics.rebakeAll = true;
+		
 		active = true;
 		var duration:Float = dropSpeed;
 		if ( isDropping ) {

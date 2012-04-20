@@ -79,15 +79,15 @@ class SpriteCoin extends Bitmap { public function new() { super(); } }
 class SpriteStartButton extends Bitmap { public function new() { super(); } }
 class SpriteButtonBg extends Bitmap { public function new() { super(); } }
 class SpriteItemSlot1 extends Bitmap { public function new() { super(); } }
-class SpriteItemSlot1_32 extends Bitmap { public function new() { super(); } }
-class SpriteItemSlot1_48 extends Bitmap { public function new() { super(); } }
 class SpriteItemSlot2 extends Bitmap { public function new() { super(); } }
+class SpriteItemSlot3 extends Bitmap { public function new() { super(); } }
 class SpriteInfo extends Bitmap { public function new() { super(); } }
 class UiBeltHorizontal extends Bitmap { public function new() { super(); } }
 class MobileUiBeltHorizontal extends Bitmap { public function new() { super(); } }
 class UiInventoryBox extends Bitmap { public function new() { super(); } }
 class MobileUiInventoryBox extends Bitmap { public function new() { super(); } }
 class SpriteMapPaper extends Bitmap { public function new() { super(); } }
+class MobileSpriteMapPaper extends Bitmap { public function new() { super(); } }
 class SpriteCharPaper extends Bitmap { public function new() { super(); } }
 class IntroScreen extends Bitmap { public function new() { super(); } }
 class BlankScreen extends Bitmap { public function new() { super(); } }
@@ -134,16 +134,16 @@ class StartButtonSprite extends HxlSprite {
 }
 class ButtonSprite extends HxlSprite {
 	public function new(?X:Float=0, ?Y:Float=0) {
-		super(X,Y);
+		super(X, Y);
+		
+		#if flashmobile
+		loadGraphic(SpriteItemSlot3, false, false, 64, 64);
+		#else
 		loadGraphic(SpriteItemSlot1, false, false, 64, 64);
+		#end
 	}
 }
-class ButtonSprite_48 extends HxlSprite {
-	public function new(?X:Float=0, ?Y:Float=0) {
-		super(X,Y);
-		loadGraphic(SpriteItemSlot1_48, false, false, 48, 48);
-	}
-}
+
 class HeartSprite extends HxlSprite {
 	public function new(?X:Float=0, ?Y:Float=0) {
 		super(X,Y);

@@ -6,6 +6,9 @@ import flash.geom.Matrix;
 import flash.geom.Rectangle;
 import flash.geom.Point;
 import flash.geom.ColorTransform;
+import flash.Lib;
+
+import data.Configuration;
 
 import haxel.GraphicCache;
 
@@ -51,6 +54,8 @@ class HxlTilemap extends HxlObject {
 
 	var _alpha:Float;
 	var _color:Int;
+	
+	private var mapFrame:HxlRect;
 
 	public var tileClass:Class<HxlTile>;
 
@@ -84,6 +89,9 @@ class HxlTilemap extends HxlObject {
 			tmpRect = new Rectangle(0, 0, _tileWidth, _tileHeight);
 
 		cachedTilemapBuffer = null;
+		
+		_lastTxMin = -1;
+		_lastTyMin = -1;
 	}
 
 	/**
@@ -99,8 +107,9 @@ class HxlTilemap extends HxlObject {
 	 * 
 	 * @return	A pointer this instance of HxlTilemap, for chaining as usual :)
 	 */
-	public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, Decorations:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {
+	public function loadMap(MapFrame:HxlRect, MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, Decorations:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {
 		mapData = MapData;
+		mapFrame = MapFrame;
 	
 		tileGraphicName = Type.getClassName(TileGraphic);
 
@@ -110,13 +119,6 @@ class HxlTilemap extends HxlObject {
 		var c:Int;
 		heightInTiles = MapData.length;
 		widthInTiles = MapData[0].length;
-
-		// Create buffer.
-		cachedTilemapBuffer = new BitmapData( _tileWidth * widthInTiles, _tileHeight * heightInTiles, false, 0x000000 );
-
-		//Pre-process the map data if it's auto-tiled
-		var i:Int;
-		totalTiles = widthInTiles*heightInTiles;
 
 		//Figure out the size of the tiles
 		_pixels = GraphicCache.addBitmap(TileGraphic, false, false, null, ScaleX, ScaleY);
@@ -130,6 +132,24 @@ class HxlTilemap extends HxlObject {
 		if (_tileHeight == 0) {
 			_tileHeight = _tileWidth;
 		}
+		
+		//Pre-set some helper variables for later
+		_screenRows = Math.ceil(mapFrame.height/_tileHeight) + 1;
+		if (_screenRows > heightInTiles) {
+			_screenRows = heightInTiles;
+		}
+		
+		_screenCols = Math.ceil(mapFrame.width / _tileWidth) + 1;
+		if (_screenCols > widthInTiles) {
+			_screenCols = widthInTiles;
+		}
+
+		// Create buffer.
+		cachedTilemapBuffer = new BitmapData( _tileWidth * _screenCols, _tileHeight * _screenRows, false, 0x000000 );
+
+		//Pre-process the map data if it's auto-tiled
+		var i:Int;
+		totalTiles = widthInTiles*heightInTiles;
 	
 		//Then go through and create the actual map
 		width = widthInTiles*_tileWidth;
@@ -146,15 +166,6 @@ class HxlTilemap extends HxlObject {
 			}
 		}
 		
-		//Pre-set some helper variables for later
-		_screenRows = Math.ceil(HxlGraphics.height/_tileHeight)+1;
-		if (_screenRows > heightInTiles) {
-			_screenRows = heightInTiles;
-		}
-		_screenCols = Math.ceil(HxlGraphics.width/_tileWidth)+1;
-		if (_screenCols > widthInTiles) {
-			_screenCols = widthInTiles;
-		}
 		//create splitted tile bmp array
 		tileBMPs = new Array<HxlTilemapBMPData>();
 		_flashPoint.x = 0; 
@@ -232,29 +243,39 @@ class HxlTilemap extends HxlObject {
 	static var tmpRect:Rectangle;
 	static var originPoint:Point = new Point(0, 0);
 
+	var _lastTxMin:Int;
+	var _lastTyMin:Int;
+	
     public override function render() {
 		getScreenXY(_point);
+		
+		_point.x -= mapFrame.left;
+		_point.y -= mapFrame.top;
+		
 		_flashPoint.x = _point.x;
 		_flashPoint.y = _point.y;
 		var txMin:Int = Math.floor( -_point.x / _tileWidth);
 		var txMax:Int = txMin + _screenCols;
 		var tyMin:Int = Math.floor( -_point.y / _tileHeight);
 		var tyMax:Int = tyMin + _screenRows;
+		
 		if (txMin < 0) txMin = 0;
 		if (txMax > widthInTiles) txMax = widthInTiles;
 		if (tyMin < 0) tyMin = 0;
 		if (tyMax > heightInTiles) tyMax = heightInTiles;
 		
-		_flashPoint.x = txMin * _tileWidth;
-		_flashPoint.y = tyMin * _tileHeight;
+		_flashPoint.x = 0; // txMin * _tileWidtsh;
+		_flashPoint.y = 0; // tyMin * _tileHeight;
 		var opx:Int = Std.int(_flashPoint.x);
+		
+		var alldirty = (txMin != _lastTxMin) || (tyMin != _lastTyMin);
 		
 		var tile:HxlTile;
 		for (r in tyMin...tyMax) {
 			for (c in txMin...txMax) {
 				tile = _tiles[r][c];
 				
-				if ( tile.visible && tile.dirty ) {
+				if ( alldirty || tile.visible && tile.dirty ) {
 					tmpRect = tileBMPs[0].rect;
 					cachedTilemapBuffer.copyPixels(tileBMPs[(tile.getDataNum()-startingIndex)], tmpRect, _flashPoint, null, null, false);
 					
@@ -287,15 +308,20 @@ class HxlTilemap extends HxlObject {
 		}
 
 		tile = null;	
-
-		tmpRect.left = -_point.x;
-		tmpRect.right = -_point.x + _screenCols * _tileWidth;
-		tmpRect.top = -_point.y;
-		tmpRect.bottom = -_point.y + _screenRows * _tileHeight;
-		_flashPoint.x = 0;
-		_flashPoint.y = 0;
+		
+		tmpRect.left = 0;
+		tmpRect.right = _screenCols * _tileWidth;
+		tmpRect.top = 0;
+		tmpRect.bottom = _screenRows * _tileHeight;
+		
+		_flashPoint.x = _point.x + txMin * _tileWidth + mapFrame.left;
+		_flashPoint.y = _point.y + tyMin * _tileHeight + mapFrame.top;
+		
 		HxlGraphics.buffer.copyPixels(cachedTilemapBuffer, tmpRect, _flashPoint, null, null, false);
 		HxlGraphics.numRenders++;
+		
+		_lastTyMin = tyMin;
+		_lastTxMin = txMin;
 	}
 
 	/**
@@ -341,7 +367,7 @@ class HxlTilemap extends HxlObject {
 	 * 
 	 * @param	Border		Adjusts the camera follow boundary by whatever number of tiles you specify here.  Handy for blocking off deadends that are offscreen, etc.  Use a negative number to add padding instead of hiding the edges.
 	 */
-	public function follow(?Border:Int=0) {
+	public function follow(?Border:Int = 0) {
 		HxlGraphics.followBounds(Std.int(x+Border*_tileWidth),Std.int(y+Border*_tileHeight),Std.int(width-Border*_tileWidth),Std.int(height-Border*_tileHeight));
 	}
 	/**
@@ -393,10 +419,12 @@ class HxlTile {
 	public var visibility:Visibility;
 
 	// override these
-	public function isBlockingView():Bool {	return false; }
-	public function isBlockingMovement():Bool {	return false;}	
 	
-
+	public var blocksMovement(default, null):Bool;
+	public var blocksView(default, null):Bool;
+	public var isStairs(default, null):Bool;
+	public var isDoor(default, null):Bool;
+	
 	/**
 	 * The coordinates of this tile within the HxlTilemap.
 	 **/
@@ -427,6 +455,11 @@ class HxlTile {
 		dirty = true;
 		
 		decorationIndices = new Array<Int>();
+		
+		blocksMovement = false;
+		blocksView = false;
+		isStairs = false;
+		isDoor = false;
 	}
 
 	public function destroy() {

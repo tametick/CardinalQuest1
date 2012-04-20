@@ -11,6 +11,8 @@ import cq.states.HelpState;
 import cq.ui.CqPanelContainer;
 import cq.ui.CqPopup;
 
+import haxel.HxlRect;
+
 // import cq.ui.CqPotionGrid;
 // import cq.ui.CqSpellGrid;
 // import cq.ui.inventory.InventoryDialog;
@@ -95,6 +97,7 @@ class GameUI extends HxlDialog {
 	public var panels:CqPanelContainer;
 	public var doodads:HxlDialog;//spell charges
 	public var popups:HxlGroup;
+	
 	// Notification area
 	public static var notifications:CqTextNotification;
 
@@ -138,7 +141,6 @@ class GameUI extends HxlDialog {
 		targetText = null;
 		GameUI.instance = this;
 		var self = this;
-
 		
 		//container for spell charges and notifications
 		doodads = new HxlDialog();
@@ -214,9 +216,10 @@ class GameUI extends HxlDialog {
 			menuBelt.loadGraphic(UiBeltVertical, true, false, 71, 406, false);
 		}
 		
-		
 		menuBelt.setFrame(1);
-		leftButtons.add(menuBelt);						
+		leftButtons.add(menuBelt);
+
+		leftButtons.bakeInBounds(0, 0, menuBelt.width, menuBelt.height, false);
 		
 			// main
 		btnMainView = new HxlButton(0, 0, btnWidth, btnHeight);
@@ -276,10 +279,15 @@ class GameUI extends HxlDialog {
 		if (!HxlGraphics.smallScreen) {
 			leftButtons.addButton(btnCharacterView);
 		} else {
+			addMainMenuButton();
+			remove(btnCharacterView);
+			
+			btnInfoView.y -= 13;
+			btnMapView.y -= 12;
+			btnInventoryView.y -= 24;
+			
 			btnMainView.setCallback(showCharDlg);
 		}
-		
-			
 
 		bagDialog = new BagDialog(this, 5, 5, HxlGraphics.smallScreen ? 9 : 13, ["shoes", "gloves", "armor", "jewelry", "weapon", "hat"]);
 		
@@ -293,6 +301,13 @@ class GameUI extends HxlDialog {
 		
 		
 		initSheets();
+		
+		
+		
+		targetText = new HxlText( 80, HxlGraphics.height - 130, HxlGraphics.width - 160, "" );
+		targetText.setFormat(null, 24, 0xffffff, "center", 0x010101);
+		targetText.visible = false;
+		add(targetText);
 	}
 
 	public function updatePlayerClass() {
@@ -320,6 +335,12 @@ class GameUI extends HxlDialog {
 			btnMapView.setActive(false);
 		}
 	}
+	
+	// the area where the map is visible (the full screen on the desktop version)
+	public static function getMapFrame():HxlRect {
+		return HxlGraphics.smallScreen ? new HxlRect(70, 0, HxlGraphics.width - 70 * 2, HxlGraphics.height - 40) : new HxlRect(0, 0, HxlGraphics.width, HxlGraphics.height);
+	}
+	
 	override public function kill() {
 		clearEventListeners();
 
@@ -428,7 +449,7 @@ class GameUI extends HxlDialog {
 		// Show inventory charge arcs now. Disable them again when we close the dialog.
 		Registery.player.bag.setInventoryChargeArcsVisible(true);
 		
-		if (!hasShownInv) {
+		if (!hasShownInv && !Configuration.mobile) {
 			hasShownInv = true;
 			showInvHelp = true;
 			panels.showPanel(panels.panelInventory, btnInventoryView, function() {
@@ -452,6 +473,36 @@ class GameUI extends HxlDialog {
 			 panels.panelInventory.overlapsPoint(X, Y) ||
 			 panels.panelCharacter.overlapsPoint(X, Y);
 	}
+	
+
+	
+	private function addMainMenuButton():Void  {
+		//menu/help
+		var MenuSprite = new ButtonSprite();
+		var MenuSpriteH = new ButtonSprite();
+		
+		MenuSprite.scale = new HxlPoint(1.0, 0.44);
+		MenuSpriteH.scale = new HxlPoint(1.0, 0.44);
+		
+		MenuSpriteH.setAlpha(0.6);
+		
+		MenuSprite.bakeCurrent();
+		MenuSpriteH.bakeCurrent();
+		
+		var btnSize:Int = 64;
+		var menuButton:HxlButton = new HxlButton(4, 200, Math.floor(MenuSprite.width), Math.floor(MenuSprite.height), pressMenu);
+		menuButton.loadGraphic(MenuSprite, MenuSpriteH);
+		menuButton.configEvent(5, true, true);
+		
+		menuButton.loadText(new HxlText(0, HxlGraphics.smallScreen ? 3 : 22, btnSize, "Menu", true).setFormat(FontDungeon.instance.fontName, 23, 0xffffff, "center", 0x010101));
+		
+		menuButton.extendOverlap.y = -8;
+		menuButton.extendOverlap.height = 8;
+
+		leftButtons.addButton(menuButton);
+		
+		menuButton.y -= 27; // undo the magic that leftButtons does to menuButton's position (grr)
+	}	
 	
 	function addInfoButtonBars() {
 		var width = 50;
@@ -531,7 +582,9 @@ class GameUI extends HxlDialog {
 		
 		//coins
 		var coin = new CoinSprite(23, -2);
-		coin.scale = new HxlPoint(0.8,0.8);
+		coin.scale = new HxlPoint(0.8, 0.8);
+		coin.bakeCurrent();
+		
 		var coins = new HxlText(coin.x + coin.width-2, 0, Std.int(infoViewHearts.width - coin.width), ""+player.money, true, FontAnonymousPro.instance.fontName);
 		player.infoViewMoney = coins;
 		
@@ -899,30 +952,32 @@ class GameUI extends HxlDialog {
 	}
 
 	private function setTargetColor(color:UInt) {
-		if ( targetSprite == null ) {
-			targetSprite = new HxlSprite();
-			//targetSprite.setPixels(new GameUIBMPData(Configuration.tileSize, Configuration.tileSize, true, 0x0));
-			//targetSprite.scale.x = Configuration.zoom;
-			//targetSprite.scale.y = Configuration.zoom;
+		if (!Configuration.mobile) {
+			if ( targetSprite == null ) {
+				targetSprite = new HxlSprite();
+				//targetSprite.setPixels(new GameUIBMPData(Configuration.tileSize, Configuration.tileSize, true, 0x0));
+				//targetSprite.scale.x = Configuration.zoom;
+				//targetSprite.scale.y = Configuration.zoom;
+				
+				targetSprite.setPixels(new GameUIBMPData(Configuration.zoomedTileSize(), Configuration.zoomedTileSize(), true, 0x0));
+				
+				targetSprite.alpha = .5;
+				targetSprite.zIndex = 10;
+				// targetSprite.color = 0x00ff00;
+				HxlGraphics.state.add(targetSprite);
+				var wPos:HxlPoint = Registery.level.getPixelPositionOfTile(Std.int(targetLastPos.x), Std.int(targetLastPos.y));
+				
+				targetSprite.x = wPos.x;
+				targetSprite.y = wPos.y;
+			} else if ( targetSprite.visible == false ) {
+				targetSprite.visible = true;
+			}
 			
-			targetSprite.setPixels(new GameUIBMPData(Configuration.zoomedTileSize(), Configuration.zoomedTileSize(), true, 0x0));
-			
-			targetSprite.alpha = .5;
-			targetSprite.zIndex = 10;
-			// targetSprite.color = 0x00ff00;
-			HxlGraphics.state.add(targetSprite);
-			var wPos:HxlPoint = Registery.level.getPixelPositionOfTile(Std.int(targetLastPos.x), Std.int(targetLastPos.y));
-			
-			targetSprite.x = wPos.x;
-			targetSprite.y = wPos.y;
-		} else if ( targetSprite.visible == false ) {
-			targetSprite.visible = true;
-		}
-		
-		color |= 0xff000000;
-		if (color != targetColor) {
-			targetSprite.fill(color);
-			targetColor = color;
+			color |= 0xff000000;
+			if (color != targetColor) {
+				targetSprite.fill(color);
+				targetColor = color;
+			}
 		}
 	}
 	
@@ -937,7 +992,7 @@ class GameUI extends HxlDialog {
 			if ( tile == null || tile.actors.length > 0 || tile.visibility != Visibility.IN_SIGHT) {
 				setTargetColor(0xff0000);
 			} else {
-				if (HxlUtil.contains(SpriteTiles.walkableAndSeeThroughTiles.iterator(), tile.getDataNum())) {
+				if (!tile.blocksMovement) {
 					setTargetColor(0x00ff00);
 				} else {
 					setTargetColor(0xff0000);
@@ -964,21 +1019,53 @@ class GameUI extends HxlDialog {
 		}
 	}
 	
+
+	private function targetEnemyClosestToMouse(radius:Float):HxlPoint {
+		var mx:Float = (HxlGraphics.mouse.x / Configuration.zoomedTileSize());
+		var my:Float = (HxlGraphics.mouse.y / Configuration.zoomedTileSize());
+		
+		var x1 = Math.floor(mx);
+		var y1 = Math.floor(my);
+		
+		var bestDistance:Float = radius * radius; 
+		
+		var targetX:Float = x1;
+		var targetY:Float = y1;
+		
+		for (dx in -Math.ceil(radius) ... Math.ceil(radius) + 1) {
+			for (dy in -Math.ceil(radius) ... Math.ceil(radius) + 1) {
+				var tile:CqTile = Registery.level.getTile(x1 + dx, y1 + dy);
+				if (tile != null && tile.visibility == Visibility.IN_SIGHT && tile.actors.length > 0) {
+					var actor:CqActor = cast(tile.actors[0], CqActor);
+					if (actor.faction != CqPlayer.faction && !actor.isGhost && !actor.specialEffects.exists("invisible")) {
+						var x_dist:Float = (mx - (.5 + x1 + dx));
+						var y_dist:Float = (my - (.5 + y1 + dy));
+						var distance:Float = (x_dist * x_dist) + (y_dist * y_dist);
+						
+						if (distance < bestDistance) {
+							targetX = x1 + dx;
+							targetY = y1 + dy;
+							bestDistance = distance;
+						}
+					}
+				}
+			}
+		}
+		
+		return new HxlPoint(targetX, targetY);
+	}
+	
 	public function updateTargeting(mouse:Bool = true) {
 		// if we get called here, we are in targeting mode
 		if (targetSprite == null || targetSprite.visible == false) {
 			setTargetColor(0xffffff);
 		}
-		
-		if ( targetText == null && GameUI.targetString != "" ) {
-			targetText = new HxlText( 80, HxlGraphics.height - 130, HxlGraphics.width - 160, GameUI.targetString );
+			
+		if ( targetText.visible == false ) {
 #if japanese
 			targetText.setFormat(FontAnonymousPro.instance.fontName, 18, 0xffffff, "center", 0x010101);
 #else
-			targetText.setFormat(null, 24, 0xffffff, "center", 0x010101);
 #end
-			add(targetText);
-		} else if ( targetText.visible == false ) {
 			targetText.visible = true;
 			targetText.setText(GameUI.targetString);
 		}
@@ -986,8 +1073,14 @@ class GameUI extends HxlDialog {
 		var targetX:Float = 0;
 		var targetY:Float = 0;
 		if (mouse) {
-			targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
-			targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
+			if (Configuration.mobile && targetSpell.targetsOther) {
+				var t = targetEnemyClosestToMouse(1.7);
+				targetX = Math.floor(t.x);
+				targetY = Math.floor(t.y);
+			} else {
+				targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
+				targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
+			}
 		} else {
 			var newPos:HxlPoint = Registery.level.getCursorTargetAccordingToKeyPress(targetLastPos);
 			if (newPos != null) {
@@ -1010,7 +1103,9 @@ class GameUI extends HxlDialog {
 			updateTargetingTarget(targetX, targetY);
 			
 			var worldPos:HxlPoint = Registery.level.getPixelPositionOfTile(Std.int(targetX), Std.int(targetY));
-			Actuate.tween(targetSprite, if (mouse) .046 else .125, { x: worldPos.x, y: worldPos.y} );
+			if (!Configuration.mobile) {
+				Actuate.tween(targetSprite, if (mouse) .046 else .125, { x: worldPos.x, y: worldPos.y } );
+			}
 			
 			targetLastPos.x = targetX;
 			targetLastPos.y = targetY;
@@ -1036,8 +1131,14 @@ class GameUI extends HxlDialog {
 		var tile:CqTile = null;
 		var targetX:Float, targetY:Float;
 		if (mouse) {
-			targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
-			targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
+			if (Configuration.mobile && targetSpell.targetsOther) {
+				var t = targetEnemyClosestToMouse(1.7);
+				targetX = Math.floor(t.x);
+				targetY = Math.floor(t.y);
+			} else {
+				targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
+				targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
+			}
 		}else {
 			targetX = targetLastPos.x;
 			targetY = targetLastPos.y;
@@ -1046,7 +1147,7 @@ class GameUI extends HxlDialog {
 		tile = cast(Registery.level.getTile(Std.int(targetX), Std.int(targetY)), CqTile);
 		if (tile != null && tile.visibility == Visibility.IN_SIGHT) {
 			if (targetSpell.targetsEmptyTile) {
-				if ( tile.actors.length <= 0 && HxlUtil.contains(SpriteTiles.walkableAndSeeThroughTiles.iterator(), tile.getDataNum()) ) {
+				if ( tile.actors.length <= 0 && !tile.blocksMovement) {
 					targetSpell.activate(Registery.player, null, new HxlPoint(targetX, targetY));
 					cast(HxlGraphics.state, GameState).passTurn();
 				}

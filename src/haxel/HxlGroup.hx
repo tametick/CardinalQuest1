@@ -1,6 +1,10 @@
 package haxel;
 
+import flash.geom.Rectangle;
 import haxel.HxlObject;
+
+import haxel.HxlGraphics;
+import haxel.HxlGame;
 
 class HxlGroup extends HxlObject {
 
@@ -9,6 +13,7 @@ class HxlGroup extends HxlObject {
 	var _last:HxlPoint;
 	var _first:Bool;
 	public var initialized:Bool;
+	
 	public function new() {
 		super();
 		_group = true;
@@ -16,6 +21,8 @@ class HxlGroup extends HxlObject {
 		_last = new HxlPoint();
 		_first = true;
 		initialized = false;
+		
+		_dirtyBaked = false;
 	}
 	/**
 	 * Adds a new <code>HxlObject</code> subclass (HxlSprite, HxlBlock, etc) to the list of children
@@ -520,7 +527,11 @@ class HxlGroup extends HxlObject {
 	 * override this loop to control render order manually.
 	 */
 	public override function render() {
-		renderMembers();
+		if (bakedSprite != null) {
+			bakedRender();
+		} else {
+			renderMembers();
+		}
 	}
 
 	/**
@@ -597,4 +608,73 @@ class HxlGroup extends HxlObject {
 		}
 	}
 
+	/**
+	 *  baking stuff
+	 */
+	
+	private var bakedSprite:HxlSprite;
+	private var _bounds:HxlRect;
+	private var _dirtyBaked:Bool;
+	
+	private var _bakedPixels:HxlGameBMPData;
+	
+	public function makeDirty() {
+		_dirtyBaked = true;
+	}
+	
+	public function bakeInBounds(left:Float, top:Float, width:Float, height:Float, ?transparent:Bool = true) {
+		setBounds (new HxlRect(left, top, width, height), transparent);
+	}
+	
+	private function setBounds(bounds:HxlRect, ?transparent:Bool = true):HxlRect {
+		bakedSprite = new HxlSprite(bounds.left, bounds.top);
+		bakedSprite.scrollFactor = new HxlPoint(0, 0);
+		
+		_bakedPixels = new HxlGameBMPData(Math.ceil(bounds.width), Math.ceil(bounds.height), transparent, 0x00000000);
+		bakedSprite.lowLevelSetFramePixels(_bakedPixels);		
+		
+		// bakedSprite.setPixels(new HxlGameBMPData(HxlGraphics.width, HxlGraphics.height, true, 0x00000000));
+		
+		_dirtyBaked = true;
+		_bounds = bounds;
+		
+		return _bounds;
+	}
+	
+	private function bakedRender() {
+		if (_dirtyBaked || HxlGraphics.rebakeAll) {
+			var renders = HxlGraphics.numRenders;
+			
+			var oldx = x;
+			var oldy = y;
+			x -= _bounds.left;
+			y -= _bounds.top;
+			
+			updateMembers();
+			saveOldPosition();
+			
+			var oldBuffer = HxlGraphics.buffer;
+			HxlGraphics.buffer = _bakedPixels;
+			_bakedPixels.lock();
+			
+			if (_bakedPixels.transparent) {
+				// man, this just keeps getting more expensive
+				_bakedPixels.fillRect(new Rectangle(0, 0, _bounds.width, _bounds.height), 0x00000000);
+			}
+			
+			renderMembers();
+			_bakedPixels.unlock();
+			HxlGraphics.buffer = oldBuffer;
+			
+			_dirtyBaked = false;
+			
+			x = oldx;
+			y = oldy;
+			
+			updateMembers();
+			saveOldPosition();
+		}
+		
+		bakedSprite.render();
+	}
 }

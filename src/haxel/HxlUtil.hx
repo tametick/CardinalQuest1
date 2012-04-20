@@ -6,6 +6,8 @@ import flash.display.BitmapData;
 import flash.net.URLRequest;
 import flash.Lib;
 
+import cq.CqLevel;
+
 import haxel.HxlTilemap;
 
 class Range {
@@ -289,8 +291,11 @@ class HxlUtil {
 	static function checkIsBlocking(p:HxlPoint):Bool { 
 		if ( p.x < 0 || p.y < 0 || p.x >= currMap.widthInTiles || p.y >= currMap.heightInTiles ) 
 			return true;
-		return currMap.getTile(Math.round(p.x), Math.round(p.y)).isBlockingView();
+			
+		var level:CqLevel = cast(currMap, CqLevel);
+		return level.isBlockingView(Math.floor(p.x), Math.floor(p.y));
 	}
+	
 	static function setTileToInSight(p:HxlPoint) { 
 		currMap.getTile(Math.round(p.x), Math.round(p.y)).visibility = Visibility.IN_SIGHT; 
 	}

@@ -83,6 +83,8 @@ class CqInventoryProxy extends HxlSprite {
 	
 	var namePopup:CqPopup;
 	
+	var lastArcEnd:Float;
+	
 	public function new(Item:CqItem) {
 		if (Item == null || Item.inventoryProxy != null) throw "Cannot make two proxies for one inventory item";
 		
@@ -97,6 +99,8 @@ class CqInventoryProxy extends HxlSprite {
 		
 		zIndex = 5;
 		item = Item;
+		
+		lastArcEnd = 4.0; // an absurd value that will never match
 		
 		if (Std.is(item, CqSpell)) {
 			setIcon(CqSheets.getSpellPixels(item.spriteIndex));
@@ -252,6 +256,8 @@ class CqInventoryProxy extends HxlSprite {
 		// this is largely unchanged, mind, so actually read it
 		Icon = if (Icon == null) icon else Icon;
 		
+		HxlGraphics.rebakeAll = true;
+		
 		icon = new CqInventoryProxyBMPData(Icon.width, Icon.height, true, 0x0);
 		icon.copyPixels(Icon, new Rectangle(0, 0, Icon.width, Icon.height), new Point(0,0), null, null, true);
 		var X:Int = Std.int((width / 2) - (icon.width / 2));
@@ -329,6 +335,9 @@ class CqInventoryProxy extends HxlSprite {
 		var start = -Math.PI / 2;
 		var end = start + 2 * Math.PI * (spell.statPoints / spell.statPointsRequired);
 
+		if (lastArcEnd == end) return;
+		lastArcEnd = end;
+		
 		var G = chargeShape.graphics;
 		G.clear();
 		G.beginFill(0x000000, 1.0);
@@ -461,11 +470,7 @@ class CqInventoryCell extends HxlDialog {
 			addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown, true, 6, true);
 		}
 		
-		if (Width >= 58 || !HxlGraphics.smallScreen) {
-			add(new ButtonSprite());
-		} else {
-			add(new ButtonSprite_48());
-		}
+		add(new ButtonSprite());
 	}
 	
 	public function setPopupHint( Hint:Int ) {
@@ -527,11 +532,13 @@ class CqInventoryCell extends HxlDialog {
 		icon.x += 19;
 		icon.y += 8;
 			
-		// this needs to be added to resources!
 		var droptext:HxlText = new HxlText(0, 37, Std.int(width), Resources.getString( "UI_DESTROY" ) );
 		droptext.setFormat(FontAnonymousPro.instance.fontName, 12, 0xffffff, "center", 0x010101);
 		droptext.zIndex = 10;
 		droptext.setAlpha(0.3);
+		if (Configuration.mobile) {
+			droptext.x += 5;
+		}
 		add(droptext);
 	}
 	
@@ -612,6 +619,8 @@ class CqInventoryCell extends HxlDialog {
 		if (GameUI.instance.panels.currentPanel != GameUI.instance.panels.panelInventory) {
 			if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y) && (equipType == SPELL || equipType == POTION)) {
 				event.stopPropagation();
+				
+				HxlGraphics.rebakeAll = true;
 				activateItem();
 			}
 		} else {
@@ -630,6 +639,8 @@ class CqInventoryCell extends HxlDialog {
 					} else {
 						CqInventoryProxy.theProxyBeingDragged = this.proxy;
 					}
+		
+					HxlGraphics.rebakeAll = true;
 					event.stopPropagation();
 				}
 			}
@@ -662,6 +673,8 @@ class CqInventoryCell extends HxlDialog {
 		}
 		
 		if (icon != null) icon.visible = _proxy == null;
+		
+		HxlGraphics.rebakeAll = true;
 		
 		return _proxy;
 	}
@@ -713,9 +726,9 @@ class CqBackpackGrid extends CqInventoryGrid {
 	public function new(numberOfCells:Int, ?X:Int=0, ?Y:Int=0, ?Width:Float=100, ?Height:Float=100) {
 		super(X, Y, Width, Height);
 	
-		var paddingX:Int = HxlGraphics.smallScreen ? 1 : 3;
-		var paddingY:Int = HxlGraphics.smallScreen ? -6 : 10;
-		var cellSize:Int = 64;
+		var paddingX:Int = HxlGraphics.smallScreen ? 12 : 3;
+		var paddingY:Int = HxlGraphics.smallScreen ? -1 : 10;
+		var cellSize:Int = HxlGraphics.smallScreen ? 54 : 64;
 		var offsetX:Int = 0;
 		var offsetY:Int = HxlGraphics.smallScreen ? -3 : -5;
 
@@ -754,8 +767,8 @@ class CqClothingGrid extends CqInventoryGrid {
 	];
 	
 	static var cell_positions = [[
-		[0, 108], [0, 55], [0, 2],
-		[67, 108], [67, 55], [67, 2]
+		[-1, 108], [-1, 54], [-1, 2],
+		[65, 108], [65, 54], [65, 2]
 	], [
 		[4, 176], [4, 94], [4, 7],
 		[155, 176], [155, 94], [155, 7]
@@ -775,7 +788,7 @@ class CqClothingGrid extends CqInventoryGrid {
 	}
 	
 	private function getCellSize():Int {
-		return HxlGraphics.smallScreen ? 40 : 54;
+		return 54;
 	}
 	
 	public function getIcon(typeName:String):HxlSprite {
@@ -827,6 +840,20 @@ class CqClothingGrid extends CqInventoryGrid {
 class CqPotionGrid extends CqInventoryGrid {
 	var belt:HxlSprite;
 	
+	override public function overlapsPoint(X:Float, Y:Float, ?PerPixel:Bool = false):Bool 
+	{
+		if (super.overlapsPoint(X, Y, PerPixel)) {
+			return true;
+		} else {
+			for (cell in cells) {
+				if (cell.overlapsPoint(X, Y, PerPixel)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	public function new(numberOfCells:Int, ?X:Float = 0, ?Y:Float = 0, ?Width:Float = 100, ?Height:Float = 100) {
 		super(X, Y, Width, Height);
 		
@@ -844,20 +871,21 @@ class CqPotionGrid extends CqInventoryGrid {
 		var cellBgKey:CqGraphicKey = CqGraphicKey.EquipmentCellBG;
 		var cellBgHighlightKey:CqGraphicKey = CqGraphicKey.EqCellBGHighlight;
 
-		var offsetX:Int = HxlGraphics.smallScreen ? 0 : 50;
-		var offsetY:Int = 2;
+		var offsetX:Int = HxlGraphics.smallScreen ? 4 : 50;
+		var offsetY:Int = HxlGraphics.smallScreen ? -15 : 2;
 		var btnSize:Int = 64;
 		var halfPadding:Int = HxlGraphics.smallScreen ? 1 : 5;
 		
 		for ( i in 0...numberOfCells ) {
 			var cell:CqInventoryCell = new CqInventoryCell(POTION, offsetX + (i * (btnSize + 2 * halfPadding)), offsetY, btnSize, btnSize);
-			cell.extendOverlap = new HxlRect( -halfPadding, -9, halfPadding, 100); // the 100 is arbitrary -- it just means "to the bottom edge"
+			cell.extendOverlap = new HxlRect( -halfPadding, HxlGraphics.smallScreen ? 7 : -9, halfPadding, 100); // the 100 is arbitrary -- it just means "to the bottom edge"
 			
 			add(cell);
 			cell.setGraphicKeys(CqGraphicKey.EquipmentCellBG, CqGraphicKey.EqCellBGHighlight, CqGraphicKey.CellGlow);
 			cell.setPopupHint( (6+i)%10 );
 			cells.push(cell);
 		}
+		zIndex = 20;
 		
 		if (!HxlGraphics.smallScreen) {
 			initButtons();
@@ -983,6 +1011,8 @@ class CqSpellGrid extends CqInventoryGrid {
 		for ( i in 0...numberOfCells ) {
 			var cell:CqInventoryCell = new CqInventoryCell(SPELL, 10, 10 + i * (btnSize + 2 * halfPadding), btnSize, btnSize);
 			cell.extendOverlap = new HxlRect( -9, -halfPadding, 100, halfPadding); // the 100 is arbitrary -- it just means "to the right edge"
+		
+			if (i == 0) cell.extendOverlap.y = -100;
 			
 			cell.zIndex = 1;
 			
@@ -992,6 +1022,6 @@ class CqSpellGrid extends CqInventoryGrid {
 			cells.push(cell);
 		}
 		
-		extendOverlap = new HxlRect( 0, 0, 100, 0);
+		extendOverlap = new HxlRect( 0, -100, 100, 0);
 	}
 }

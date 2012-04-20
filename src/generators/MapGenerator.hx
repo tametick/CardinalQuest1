@@ -155,37 +155,37 @@ class MapGenerator
 		return new HxlPoint(num % width, Math.floor(num / width));
 	}
 	
-	static function isOpen(width:Int, height:Int, map:Array<Array<Int>>, openTiles:Array<Int>, x:Int, y:Int) {
+	static function isOpen(width:Int, height:Int, map:Array<Array<Int>>, openTiles:IntSet, x:Int, y:Int) {
 		if ( x < 1 || x > width-2 || y < 1 || y > height-2 ) return false;
-		if ( HxlUtil.contains(openTiles, map[y][x]) ) return true;
+		if ( openTiles.exists(map[y][x]) ) return true;
 		return false;
 	}
 	
-	static function isOpenArea(mapWidth:Int, mapHeight:Int, map:Array<Array<Int>>, openTiles:Array<Int>, x0:Int, y0:Int,x1:Int,y1:Int) {
+	static function isOpenArea(mapWidth:Int, mapHeight:Int, map:Array<Array<Int>>, openTiles:IntSet, x0:Int, y0:Int,x1:Int,y1:Int) {
 		if ( x0 < 1 || x1 > mapWidth-2 || y0 < 1 || y1 > mapHeight-2 ) return false;
 		for(yy in y0...y1)
 			for (xx in x0...x1)
-				if (!HxlUtil.contains(openTiles, map[yy][xx]))
+				if (!openTiles.exists(map[yy][xx]))
 					return false;
 		return true;
 	}
 	
-	static function getValidStairsUpLocation(mapWidth:Int, mapHeight:Int, map:Array<Array<Int>>, wallTile, openTiles:Array<Int>):HxlPoint {
+	static function getValidStairsUpLocation(mapWidth:Int, mapHeight:Int, map:Array<Array<Int>>, wallTile, openTiles:IntSet):HxlPoint {
 		for (y in 1...mapHeight-2)
 			for (x in 1...mapWidth - 2) {
-				if (map[y][x - 1] == wallTile && map[y][x] == wallTile && map[y][x + 1] == wallTile && HxlUtil.contains(openTiles, map[y + 1][x]) )
+				if (map[y][x - 1] == wallTile && map[y][x] == wallTile && map[y][x + 1] == wallTile && openTiles,exists(map[y + 1][x]))
 					return new HxlPoint(x, y);
 			}
 		return null;
 	}
 	
-	static function getValidStairsDownLocation(mapWidth:Int, mapHeight:Int, map:Array<Array<Int>>, wallTile, openTiles:Array<Int>):HxlPoint {
+	static function getValidStairsDownLocation(mapWidth:Int, mapHeight:Int, map:Array<Array<Int>>, wallTile, openTiles:IntSet):HxlPoint {
 		for (iy in 2...mapHeight-1)
 			for (ix in 2...mapWidth-1) {
 				var y = mapHeight - iy;
 				var x = mapWidth - ix;
 				
-				if (map[y][x - 1] == wallTile && map[y][x] == wallTile && map[y][x + 1] == wallTile && HxlUtil.contains(openTiles, map[y - 1][x]) )
+				if (map[y][x - 1] == wallTile && map[y][x] == wallTile && map[y][x + 1] == wallTile && openTiles.exists(map[y - 1][x]) )
 					return new HxlPoint(x, y);
 			}
 		return null;
@@ -202,8 +202,8 @@ class MapGenerator
 		}
 		
 		var openCount = HxlUtil.countTiles(width, height, map, tilesToCount);
-		var openList = new Array();
-		var closedList = new Array();
+		var openList:IntSet = new IntSet();
+		var closedList:IntSet = new IntSet();
 		var pass = false;
 		
 		// pick a random, valid starting location
@@ -211,6 +211,7 @@ class MapGenerator
 		
 		// add starting location to open list
 		openList.push(pointToNum(width, height, start));
+		
 		if (mapToMarkedDisconnectedAreas != null) 
 			mapToMarkedDisconnectedAreas[Std.int(start.y)][Std.int(start.x)] = map[Std.int(start.y)][Std.int(start.x)];
 		
@@ -229,7 +230,7 @@ class MapGenerator
 			// if that tile is open and not in either the open or closed list, add it to the open list
 			if ( isOpen(width,height,map,tilesToCount, Std.int(curPos.x), Std.int(curPos.y-1)) ) {
 				checkNum = pointToNum(width, height, N);
-				if ( !HxlUtil.contains(openList, checkNum) && !HxlUtil.contains(closedList, checkNum) ) {
+				if ( !openList.exists(checkNum) && !closedList.exists(checkNum) ) {
 					openList.push(checkNum);
 					if (mapToMarkedDisconnectedAreas != null) 
 						mapToMarkedDisconnectedAreas[Std.int(N.y)][Std.int(N.x)] = map[Std.int(N.y)][Std.int(N.x)];
@@ -237,7 +238,7 @@ class MapGenerator
 			}
 			if ( isOpen(width,height,map,tilesToCount, Std.int(curPos.x+1), Std.int(curPos.y)) ) {
 				checkNum = pointToNum(width, height, E);
-				if ( !HxlUtil.contains(openList, checkNum) && !HxlUtil.contains(closedList, checkNum) ) {
+				if ( !openList.exists(checkNum) && !closedList.exists(checkNum) ) {
 					openList.push(checkNum);
 					if (mapToMarkedDisconnectedAreas != null) 
 						mapToMarkedDisconnectedAreas[Std.int(E.y)][Std.int(E.x)] = map[Std.int(E.y)][Std.int(E.x)];
@@ -245,7 +246,7 @@ class MapGenerator
 			}
 			if ( isOpen(width,height,map,tilesToCount, Std.int(curPos.x), Std.int(curPos.y+1)) ) {
 				checkNum = pointToNum(width, height, S);
-				if ( !HxlUtil.contains(openList, checkNum) && !HxlUtil.contains(closedList, checkNum) ) {
+				if ( !openList.exists(checkNum) && !closedList.exists(checkNum) ) {
 					openList.push(checkNum);
 					if (mapToMarkedDisconnectedAreas != null) 
 						mapToMarkedDisconnectedAreas[Std.int(S.y)][Std.int(S.x)] = map[Std.int(S.y)][Std.int(S.x)];
@@ -253,7 +254,7 @@ class MapGenerator
 			}
 			if ( isOpen(width,height,map,tilesToCount, Std.int(curPos.x-1), Std.int(curPos.y)) ) {
 				checkNum = pointToNum(width, height, W);
-				if ( !HxlUtil.contains(openList, checkNum) && !HxlUtil.contains(closedList, checkNum) ) {
+				if ( !openList.exists(checkNum) && !closedList.exists(checkNum) ) {
 					openList.push(checkNum);
 					if (mapToMarkedDisconnectedAreas != null) 
 						mapToMarkedDisconnectedAreas[Std.int(W.y)][Std.int(W.x)] = map[Std.int(W.y)][Std.int(W.x)];
@@ -268,5 +269,31 @@ class MapGenerator
 		
 		return true;
 		
+	}
+}
+
+
+private class IntSet {
+	var list:Array<Int>;
+	var set:IntHash<Bool>;
+	
+	public function new() {
+		list = new Array<Int>();
+		set = new IntHash<Bool>();
+	}
+	
+	public function push(n:Int) {
+		list.push(n);
+		set.set(n, true);
+	}
+	
+	public function pop():Int {
+		var curNum = openList.pop();
+		set.remove(curNum);
+		return curNum;
+	}
+	
+	public function exists(n:Int):Bool {
+		return set.exists(n);
 	}
 }

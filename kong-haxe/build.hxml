@@ -1,1 +1,1 @@
--main kongloader.Preloader-cp src-swf9 ./bin/preloader.swf--next-cmd hxswfml xml2swf index.xml bin/cq.swf
+-main kongloader.Preloader-cp src-swf9 ./bin/preloader.swf--next-cmd c:\haxe\hxswfmlc xml2swf index.xml bin/cq.swf

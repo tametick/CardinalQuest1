@@ -256,6 +256,39 @@ class HxlSprite extends HxlObject {
 		//y = 0;
 		
 		scale = new HxlPoint(sx, sy);
+		
+		bakeCurrent();
+	}
+	
+	public function bakeCurrent() {
+		// ignores rotation, since it's only used for scale
+			
+		#if flashmobile
+		// render all baked graphics in high quality
+		var oldQuality = Lib.current.stage.quality;
+		Lib.current.stage.quality = HIGH;
+		#end	  
+		
+		var cache:HxlSprite = new HxlSprite(0, 0);
+		var oldwidth = pixels.width;
+		var oldheight = pixels.height;
+		
+		cache.setPixels(new BitmapData(Math.ceil(scale.x * oldwidth), Math.ceil(scale.y * oldheight), true, 0x00000000));
+		cache.draw(this, Math.floor(-width * .5 * (1.0 - scale.x)), Math.floor(-height * .5 * (1.0 - scale.y)));
+				
+		this.setPixels(cache.pixels);
+		
+		x += oldwidth * .5 * (1.0 - scale.x);
+		y += oldheight * .5 * (1.0 - scale.y);
+		
+		scale.x = 1.0;
+		scale.y = 1.0;
+		
+		alpha = 1.0;
+		
+		#if flashmobile
+		Lib.current.stage.quality = oldQuality;
+		#end	  
 	}
 	
 	function recalculateAttributesAccordingToBitmapData(?Animated:Bool = false, ?Width:Int = 0, ?Height:Int = 0) {
@@ -385,7 +418,12 @@ class HxlSprite extends HxlObject {
 		if(Brush.angle != 0) _mtx.rotate(Math.PI * 2 * (Brush.angle / 360));
 		_mtx.translate(X+Brush.origin.x,Y+Brush.origin.y);
 		#if flash9
-		var brushBlend:BlendMode = cast(Brush.blend, BlendMode);
+		var brushBlend:BlendMode;
+		if ( blend != null ) {
+			brushBlend = cast(blend, BlendMode);
+		} else {
+			brushBlend = null;
+		}
 		#else
 		var brushBlend:String = Brush.blend;
 		#end
@@ -410,7 +448,8 @@ class HxlSprite extends HxlObject {
 		
 		//Simple render
 		if (((angle == 0) || (_bakedRotation > 0)) && (scale.x == 1) && (scale.y == 1) && (blend == null)) {
-			HxlGraphics.buffer.copyPixels(_framePixels,_flashRect,_flashPoint,null,null,true);
+			HxlGraphics.buffer.copyPixels(_framePixels, _flashRect, _flashPoint, null, null, true);
+			
 			return;
 		}
 		//Advanced render
@@ -429,7 +468,8 @@ class HxlSprite extends HxlObject {
 		#else
 		var blendMode:String = blend;
 		#end
-		HxlGraphics.buffer.draw(_framePixels,_mtx,null,blendMode,null,antialiasing);
+
+		HxlGraphics.buffer.draw(_framePixels, _mtx, null, blendMode, null, antialiasing);
 	}
 
 	/**
@@ -605,6 +645,26 @@ class HxlSprite extends HxlObject {
 		if (HxlGraphics.showBounds) {
 			drawBounds();
 		}
+		_caf = 0;
+	}
+	
+	public function lowLevelSetFramePixels(Pixels:BitmapData) {
+		_pixels = Pixels;
+		_framePixels = Pixels;
+
+		width = frameWidth = _pixels.width;
+		height = frameHeight = _pixels.height;		
+		
+		_flashRect.x = 0;
+		_flashRect.y = 0;
+		_flashRect.width = frameWidth;
+		_flashRect.height = frameHeight;
+		_flashRect2.x = 0;
+		_flashRect2.y = 0;
+		_flashRect2.width = _pixels.width;
+		_flashRect2.height = _pixels.height;	
+		origin.x = frameWidth/2;
+		origin.y = frameHeight/2;	
 		_caf = 0;
 	}
 
@@ -894,11 +954,11 @@ class HxlSprite extends HxlObject {
 	public function toggleDrag(Toggle:Bool) {
 		if ( !dragEnabled && Toggle ) {
 			addEventListener(MouseEvent.MOUSE_DOWN, onDragMouseDown,false,0,true);
-			Lib.current.stage.addEventListener(MouseEvent.MOUSE_OUT, onDragMouseOutOfStage,false,0,true);
+			HxlGraphics.stage.addEventListener(MouseEvent.MOUSE_OUT, onDragMouseOutOfStage,false,0,true);
 			addEventListener(MouseEvent.MOUSE_UP, onDragMouseUp,false,0,true);
 		} else { //if ( dragEnabled && !Toggle ) {
 			removeEventListener(MouseEvent.MOUSE_DOWN, onDragMouseDown);
-			Lib.current.stage.removeEventListener(MouseEvent.MOUSE_OUT, onDragMouseOutOfStage);
+			HxlGraphics.stage.removeEventListener(MouseEvent.MOUSE_OUT, onDragMouseOutOfStage);
 			removeEventListener(MouseEvent.MOUSE_UP, onDragMouseUp);
 			if ( isDragging && HxlGraphics.mouse.dragSprite == this ) {
 				HxlGraphics.mouse.dragSprite = null;

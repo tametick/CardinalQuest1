@@ -33,6 +33,9 @@ class CqTextNotification extends HxlGroup
 	{
 		if (message == null || message == "")
 			return;
+		
+		if (notifications.length > 0 && notifications[0].text == message) return;
+		
 		var txt:CqFloatText = new CqFloatText(null, Xpos, Ypos , message, color,FontAnonymousPro.instance.fontName, textSize, false);
 		notifications.unshift(txt);
 		txt.InitSemiCustomTween(1.5,{},onTween);

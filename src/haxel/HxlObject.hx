@@ -2,7 +2,7 @@ package haxel;
 
 import cq.ui.CqPopup;
 import flash.geom.Point;
-
+import data.Configuration;
 
 /**
  * Base class for which most display objects.
@@ -225,7 +225,7 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 	public function getScreenXY(?Pt:HxlPoint=null):HxlPoint {
 		if (Pt == null) Pt = new HxlPoint();
 		if ( scrollFactor == null ) {	
-			var scrollFactor = new HxlPoint(1,1);
+			scrollFactor = new HxlPoint(1,1);
 		}
 		if (HxlGraphics.scroll == null ) {
 			HxlGraphics.scroll = new Point(0,0);
@@ -407,38 +407,41 @@ class HxlObject extends HxlRect, implements HxlObjectI {
 			x = mountObject.x + mountOffsetX;
 			y = mountObject.y + mountOffsetY;
 		}
-		if ( popup != null)
-		{
-			var m:HxlMouse = HxlGraphics.mouse;
-			if ( visible && (overlapsPoint(m.x, m.y, true) || !popup.mouseBound) )	{
-				popup.visible = true;
-				if (popup.customBound != null) {
-					popup.x = x + popup.customBound.x - (popup.width / 2) + scrollFactor.x * HxlGraphics.scroll.x;
-					popup.y = y + popup.customBound.y + scrollFactor.y * HxlGraphics.scroll.y;
-				} else if(popup.mouseBound){
-					_mp.x = m.screenX; 
-					_mp.y = m.screenY;
-					popup.x = _mp.x - (popup.width / 2);
-					if ( _mp.y <= HxlGraphics.stage.stageHeight - 70 ) {
-						popup.y = _mp.y + 20;
+		if ( popup != null) {
+			#if !flashmobile
+				var m:HxlMouse = HxlGraphics.mouse;
+				if ( visible && (overlapsPoint(m.x, m.y, true) || !popup.mouseBound) )	{
+					popup.visible = true;
+					if (popup.customBound != null) {
+						popup.x = x + popup.customBound.x - (popup.width / 2) + scrollFactor.x * HxlGraphics.scroll.x;
+						popup.y = y + popup.customBound.y + scrollFactor.y * HxlGraphics.scroll.y;
+					} else if(popup.mouseBound){
+						_mp.x = m.screenX; 
+						_mp.y = m.screenY;
+						popup.x = _mp.x - (popup.width / 2);
+						if ( _mp.y <= HxlGraphics.stage.stageHeight - 70 ) {
+							popup.y = _mp.y + 20;
+						} else {
+							popup.y = _mp.y - 20 - popup.height;
+						}
 					} else {
-						popup.y = _mp.y - 20 - popup.height;
+						popup.x = (HxlGraphics.stage.stageWidth - popup.width)/2;
+						popup.y = (HxlGraphics.stage.stageHeight - popup.height)/2;
 					}
-				} else {
-					popup.x = (HxlGraphics.stage.stageWidth - popup.width)/2;
-					popup.y = (HxlGraphics.stage.stageHeight - popup.height)/2;
+					if ( popup.x > HxlGraphics.stage.stageWidth - popup.width - 5)	{
+						popup.x = HxlGraphics.stage.stageWidth - popup.width - 5;
+					} else if (popup.x < 5)
+						popup.x = 5;
+					if ( popup.y > HxlGraphics.stage.stageHeight - popup.height - 5){
+						popup.y = HxlGraphics.stage.stageHeight - popup.height - 5;
+					} else if (popup.y < 5)
+						popup.y = 5;
+				}else {
+					popup.visible = false;
 				}
-				if ( popup.x > HxlGraphics.stage.stageWidth - popup.width - 5)	{
-					popup.x = HxlGraphics.stage.stageWidth - popup.width - 5;
-				} else if (popup.x < 5)
-					popup.x = 5;
-				if ( popup.y > HxlGraphics.stage.stageHeight - popup.height - 5){
-					popup.y = HxlGraphics.stage.stageHeight - popup.height - 5;
-				} else if (popup.y < 5)
-					popup.y = 5;
-			}else {
-				popup.visible = false;
-			}
+			#else
+				popup.visible = false; // I'd love for this to work, but it doesn't on air mobile
+			#end
 		}
 	}
 	

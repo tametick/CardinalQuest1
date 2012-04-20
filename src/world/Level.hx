@@ -7,7 +7,6 @@ import cq.CqResources;
 import data.Registery;
 import data.Resources;
 import flash.display.Bitmap;
-import com.baseoneonline.haxe.astar.AStarNode;
 import flash.system.System;
 import haxel.GraphicCache;
 import haxel.HxlSpriteSheet;
@@ -18,7 +17,9 @@ import haxel.HxlState;
 import haxel.HxlGraphics;
 import haxel.HxlUtil;
 import haxel.HxlSprite;
+import haxel.HxlRect;
 
+import flash.geom.Point;
 
 import data.Registery;
 
@@ -27,7 +28,10 @@ import playtomic.PtLevel;
 import data.Configuration;
 import cq.states.WinState;
 
+import com.baseoneonline.haxe.astar.AStar;
 import com.baseoneonline.haxe.astar.IAStarSearchable;
+import com.baseoneonline.haxe.astar.AStarNode;
+
 import cq.GameUI;
 
 class Level extends HxlTilemap, implements IAStarSearchable {
@@ -39,6 +43,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	public var stairsAreFound:Bool;
 
 	var aStarNodes:Array<AStarNode>;
+	public var aStar(default, null):AStar;
 	
 	public static inline var CHANCE_DECORATION:Float = 0.2;
 
@@ -59,6 +64,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		stairsAreFound = false;
 		
 		aStarNodes = null;
+		aStar = null;
 		
 		fovTileAngleReach = 11;
 		generateFOVTileAngles();		
@@ -69,13 +75,13 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 			return true;
 		if ( CheckActor && cast(_tiles[Y][X], Tile).actors.length>0 )
 			return true;
-		return _tiles[Y][X].isBlockingMovement();
+		return _tiles[Y][X].blocksMovement;
 	}
 
 	public function isBlockingView(X:Int, Y:Int):Bool {
 		if ( X < 0 || Y < 0 || X >= widthInTiles || Y >= heightInTiles )
 			return true;
-		return _tiles[Y][X].isBlockingView();
+		return _tiles[Y][X].blocksView;
 	}
 
 	public override function onAdd(state:HxlState) {
@@ -85,7 +91,11 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		addAllLoots(state);
 		ptLevel.start();
 		
-		HxlGraphics.follow(Registery.player, Configuration.mobile ? 15 : 10);
+		var frame:HxlRect = GameUI.getMapFrame();
+		HxlGraphics.followCenter = new Point(Math.floor(frame.left + frame.right) >> 1, Math.floor(frame.top + frame.bottom) >> 1);	
+		
+		HxlGraphics.follow(Registery.player, Configuration.mobile ? 15 : 10);		
+	
 	}
 
 	override public function destroy() {
@@ -103,6 +113,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		aStarNodes = null;
 
 		HxlGraphics.unfollow();
+		HxlGraphics.followCenter = null;
 
 		Actuate.reset();
 
@@ -224,8 +235,8 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	}
 	
 
-	override public function loadMap(MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, Decorations:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {
-		var map = super.loadMap(MapData, TileGraphic, Decorations, TileWidth, TileHeight, ScaleX, ScaleY);
+	override public function loadMap(MapFrame:HxlRect, MapData:Array<Array<Int>>, TileGraphic:Class<Bitmap>, Decorations:Class<Bitmap>, ?TileWidth:Int = 0, ?TileHeight:Int = 0, ?ScaleX:Float=1.0, ?ScaleY:Float=1.0):HxlTilemap {
+		var map = super.loadMap(MapFrame, MapData, TileGraphic, Decorations, TileWidth, TileHeight, ScaleX, ScaleY);
 
 		for (y in 0...map.heightInTiles) {
 			for (x in 0...map.widthInTiles) {
@@ -247,6 +258,8 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 			var y:Int = Std.int( i / map.widthInTiles );
 			aStarNodes.push( new AStarNode( x, y, this.isWalkable( x, y ) ) );
 		}
+		
+		aStar = new AStar( this );
 		
 		return map;
 	}
@@ -270,15 +283,15 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	}
 
 	inline function isBlockedFromAllSides(x:Int,y:Int):Bool {
-		var blocked = (x == 0 || getTile(x - 1, y).isBlockingMovement());
-		blocked = blocked && (x == widthInTiles - 1 || getTile(x + 1, y).isBlockingMovement());
-		blocked = blocked && (y == heightInTiles - 1 || getTile(x, y + 1).isBlockingMovement());
-		blocked = blocked && (y == 0 || getTile(x, y - 1).isBlockingMovement());
+		var blocked = (x == 0 || getTile(x - 1, y).blocksMovement);
+		blocked = blocked && (x == widthInTiles - 1 || getTile(x + 1, y).blocksMovement);
+		blocked = blocked && (y == heightInTiles - 1 || getTile(x, y + 1).blocksMovement);
+		blocked = blocked && (y == 0 || getTile(x, y - 1).blocksMovement);
 
-		blocked = blocked && ((x==0 || y==0)  ||  getTile(x - 1, y-1).isBlockingMovement());
-		blocked = blocked && ((x==widthInTiles-1 || y==heightInTiles-1)  ||  getTile(x + 1, y+1).isBlockingMovement());
-		blocked = blocked && ((x==0 || y==heightInTiles-1) ||  getTile(x-1, y + 1).isBlockingMovement());
-		blocked = blocked && ((x==widthInTiles-1 || y==0)  ||  getTile(x+1, y - 1).isBlockingMovement());
+		blocked = blocked && ((x==0 || y==0)  ||  getTile(x - 1, y-1).blocksMovement);
+		blocked = blocked && ((x==widthInTiles-1 || y==heightInTiles-1)  ||  getTile(x + 1, y+1).blocksMovement);
+		blocked = blocked && ((x==0 || y==heightInTiles-1) ||  getTile(x-1, y + 1).blocksMovement);
+		blocked = blocked && ((x==widthInTiles-1 || y==0)  ||  getTile(x+1, y - 1).blocksMovement);
 
 		return blocked;
 	}
@@ -313,12 +326,15 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	}
 	
 	public function showAll(state:HxlState) {
+		var p:HxlPoint = new HxlPoint(0, 0);
 		for ( x in 0...widthInTiles-1 ) {
 			for ( y in 0...heightInTiles - 1) {
 				if(!isBlockedFromAllSides(x,y)){
 					var tile = cast(getTile(x, y), Tile);
+					p.x = x;
+					p.y = y;
 
-					firstSeen(state, this, new HxlPoint(x, y), Visibility.SENSED);
+					firstSeen(state, this, p, Visibility.SENSED);
 					tile.visible = true;
 					tile.color = 0xffffff;
 
@@ -342,7 +358,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		if (map == null || p == null)
 			return;
 
-		var t:Tile = map.getTile(Math.round(p.x), Math.round(p.y));
+		var t:Tile = map.getTile(Math.floor(p.x), Math.floor(p.y));
 		if (t == null)
 			return;
 
@@ -355,7 +371,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				t.visibility = Visibility.SENSED;
 			}
 
-			if (HxlUtil.contains(SpriteTiles.stairsDown.iterator(), t.getDataNum())) {
+			if (t.isStairs) {
 				map.foundStairs(newvis == Visibility.SENSED);
 			}
 		}
@@ -434,7 +450,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	}
 	
 	// Brand spanky new field-of-view test.
-	private function updateFieldOfViewAtRange( _state:HxlState, _centreX:Int, _centreY:Int, _range:Int, _maxRange:Int, _radMin:Float, _radMax:Float ) {
+	private function updateFieldOfViewAtRange( _state:HxlState, _centreX:Int, _centreY:Int, _range:Int, _maxRange:Float, _radMin:Float, _radMax:Float ) {
 		var hxlPoint:HxlPoint = new HxlPoint(0, 0);
 		var testX:Int = _centreX;
 		var testY:Int = _centreY - _range;
@@ -444,7 +460,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		var prevWasBlocking:Bool = true;
 		var subRadMin:Float = _radMin;
 
-		if ( _range >= _maxRange ) {
+		if ( _range > _maxRange ) {
 			return;
 		}
 
@@ -482,7 +498,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 				minTileAngle -= 2 * Math.PI;
 				maxTileAngle -= 2 * Math.PI;
 			}			
-			
+		
 			// Is this tile inside the range?
 			if ( maxTileAngle > _radMin && minTileAngle < _radMax ) {
 				var blocking:Bool = isBlockingView(testX, testY);
@@ -748,7 +764,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		for (y in 0...heightInTiles) {
 			for (x in 0...widthInTiles) {
 				var t:Tile = cast(_tiles[y][x], Tile);
-				if (!t.isBlockingMovement()) {
+				if (!t.blocksMovement) {
 					total += 1.0;
 					if (t.timesUncovered > 0) explored += 1.0;
 				}
@@ -841,7 +857,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		return if (x < 0) -1 else if (x > 0) 1 else 0;
 	}
 
-	public function getTargetAccordingToMousePosition(?secondChoice:Bool = false):HxlPoint {
+	public function getTargetAccordingToMousePosition(?secondChoice:Bool = false, ?demurIfShallow:Bool = false):HxlPoint {
 		// if you don't like grabbing the player from the registry here, change it to an argument
 		var player = Registery.player;
 
@@ -859,26 +875,35 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 */
 
 
-		var give:Float = 0.75; // exactly .5 means that you have to point at yourself precisely to wait; higher values make it fuzzier
+		var give:Float = 0.85; // exactly .5 means that you have to point at yourself precisely to wait; higher values make it fuzzier
 		if (absdx < give && absdy < give) return new HxlPoint(0, 0);
 
 		// here it would be nice to track more info about angle than this
 		if ((absdx > absdy && !secondChoice) || (absdx < absdy && secondChoice)) {
+			if (secondChoice && demurIfShallow) {
+				if (3.6 * absdx < absdy) return null;
+			}
+			
 			return new HxlPoint(sgn(dx), 0);
 		} else {
+			if (secondChoice && demurIfShallow) {
+				if (3.6 * absdy < absdx) return null;
+			}
+			
 			return new HxlPoint(0, sgn(dy));
 		}
 	}
 
-	public function tick(state:HxlState) { }
+	public function ticks(state:HxlState, player:CqActor) { }
 
 	// implement IAStarSearchable (isWalkable, getWidth, getHeight)
-	public function getNode(x:Int, y:Int):AStarNode {
-		return aStarNodes[y * getWidth() + x];
+	public function getAStarNodes():Array<AStarNode> {
+		return aStarNodes;
 	}
 	
 	public function updateWalkable(x:Int, y:Int) {
 		aStarNodes[y * getWidth() + x].walkable = !isBlockingMovement(x, y, false);
+		aStarNodes[y * getWidth() + x].cost = 1;
 	}
 	
 	private function isWalkable(x:Int, y:Int):Bool {

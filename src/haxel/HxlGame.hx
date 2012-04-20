@@ -25,6 +25,8 @@ import haxel.HxlPause;
 import haxel.HxlGraphics;
 
 import com.eclecticdesignstudio.motion.Actuate;
+import com.eclecticdesignstudio.motion.actuators.SimpleActuator;
+
 
 #if flash9
 import flash.text.AntiAliasType;
@@ -63,7 +65,6 @@ class HxlGame extends Sprite {
 	// basic display stuff
 	public var state:HxlState;
 	var _screen:Sprite;
-	var _buffer:Bitmap;
 	var _zoom:Int;
 	var _gameXOffset:Int;
 	var _gameYOffset:Int;
@@ -108,6 +109,8 @@ class HxlGame extends Sprite {
 		paused = false;
 		_autoPause = true;
 		_created = false;
+		
+		lastTurnTime = 0;
 
 		// adding to this, not to stage
 		addEventListener(Event.ENTER_FRAME, create, false, 0, true);
@@ -216,8 +219,13 @@ class HxlGame extends Sprite {
 			stateStack.push(State);
 		}
 		state.scaleX = state.scaleY = _zoom;
-
+		
 		// Finally, create the new state
+
+		#if flashmobile
+		HxlGraphics.stage.quality = HIGH;
+		#end
+		
 		state.create();
 		state.isStacked = false;
 
@@ -352,15 +360,23 @@ class HxlGame extends Sprite {
 		stage.align = StageAlign.TOP_LEFT;
 		stage.frameRate = framerate;
 
+		var tmp:Bitmap;
+		
 		_screen = new Sprite();
 		addChild(_screen);
-		var tmp = new Bitmap(new HxlGameBMPData(HxlGraphics.width, HxlGraphics.height, true, HxlState.bgColor));
+
+		#if !useHxlMobileDisplay
+		tmp = new Bitmap(new HxlGameBMPData(HxlGraphics.width, HxlGraphics.height, false, HxlState.bgColor));
 		tmp.x = 0;
 		tmp.y = 0;
 		tmp.scaleX = tmp.scaleY = _zoom;
 		_screen.addChild(tmp);
-		HxlGraphics.buffer = cast(tmp.bitmapData,HxlGameBMPData);
+		HxlGraphics.buffer = cast(tmp.bitmapData, HxlGameBMPData);
 		tmp = null;
+		#else
+		// _screen.visible = false;
+		HxlGraphics.buffer = new HxlMobileDisplay();
+		#end
 
 		// Initialize console
 		console = new HxlConsole(0, 0, _zoom, _defaultFont);
@@ -445,7 +461,10 @@ class HxlGame extends Sprite {
 		args = null;
 		newState = null;
 
+		
+		#if !useHxlMobileDisplay
 		HxlState.screen.unsafeBind(HxlGraphics.buffer);
+		#end
 
 		_addEventListener(Event.ENTER_FRAME, update, false, 0, true);
 		//_addEventListener(Event.CLOSING, destroy, false, 0, true);
@@ -455,6 +474,13 @@ class HxlGame extends Sprite {
 		removeEventListener(Event.ENTER_FRAME, create);
 	}
 
+	
+	private var frameTimer:HxlText;
+	private var lastTurnTime:Int;
+	
+	static public var tookATurn:Bool;
+	static public var noTurnTaking:Bool;
+	
 	public function update(event:Event) : Void {
 		var i:Int;
 		var soundPrefs:HxlSave;
@@ -467,11 +493,30 @@ class HxlGame extends Sprite {
 		_total = mark;
 
 		HxlGraphics.elapsed = _elapsed;
+		noTurnTaking = false;
+		
 		if (HxlGraphics.elapsed > HxlGraphics.maxElapsed) {
-			HxlGraphics.elapsed = HxlGraphics.maxElapsed;
+			if (HxlGraphics.elapsed > HxlGraphics.wayTooLong) {
+				noTurnTaking = true;
+				return;
+			} else {
+				HxlGraphics.elapsed = HxlGraphics.maxElapsed;
+			}
 		}
+		
+		var activeTurn:Bool = tookATurn;
+		
+		if (tookATurn) {
+			lastTurnTime = ems;
+			tookATurn = false;
+		}
+		
 		HxlGraphics.elapsed *= HxlGraphics.timeScale;
 		HxlTimer._total += HxlGraphics.elapsed;
+		
+		#if flashmobile
+		HxlGraphics.stage.quality = MEDIUM;
+		#end
 
 		//Sound tray crap
 		if (_soundTray != null) {
@@ -547,14 +592,34 @@ class HxlGame extends Sprite {
 				}
 			}
 		}
+				
+		#if flashmobile
+		HxlGraphics.stage.quality = LOW;
+		#end
 
 		state.render();
 
+		#if debug_flashmobile
+		if (frameTimer == null) frameTimer = new HxlText(0, 0, 300, "", false, null, 20, 0xffffff);
+		frameTimer.scrollFactor.x = 0;
+		frameTimer.scrollFactor.y = 0;
+		
+		var timeString = ems + "ms";
+		
+		if (lastTurnTime > 0) timeString = lastTurnTime + "ms (" + timeString + ")";
+		
+		frameTimer.setText(timeString);
+		frameTimer.zIndex = 10000;
+		frameTimer.render();
+		#end
+
 		if ( HxlGraphics.flash.exists ) {
 			HxlGraphics.flash.render();
+			activeTurn = true;
 		}
 		if ( HxlGraphics.fade.exists ) {
 			HxlGraphics.fade.render();
+			activeTurn = true;
 		}
 
 		state.postProcess();
@@ -562,7 +627,9 @@ class HxlGame extends Sprite {
 			pause.render();
 		}
 		HxlGraphics.buffer.unlock();
-		console.mtrRender.add(Lib.getTimer()-updateMark);
+		console.mtrRender.add(Lib.getTimer() - updateMark);
+		
+		HxlGraphics.rebakeAll = false;
 	}
 
 
