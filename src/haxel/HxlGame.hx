@@ -599,7 +599,7 @@ class HxlGame extends Sprite {
 
 		state.render();
 
-		#if flashmobile
+		#if debug_flashmobile
 		if (frameTimer == null) frameTimer = new HxlText(0, 0, 300, "", false, null, 20, 0xffffff);
 		frameTimer.scrollFactor.x = 0;
 		frameTimer.scrollFactor.y = 0;

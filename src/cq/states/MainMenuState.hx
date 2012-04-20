@@ -304,7 +304,11 @@ class MainMenuState extends CqState {
 #if japanese
 		var copyright = new HxlText(160, 459 + (HxlGraphics.height - 480), Std.int(0.5*(HxlGraphics.width - 100)), Resources.getString( "MENU_COPYRIGHT" ), true, FontAnonymousPro.instance.fontName, 18);
 #else
+	#if flashmobile
+		var copyright = new HxlText(HxlGraphics.width - 151, 459 + (HxlGraphics.height - 480), 142, Resources.getString( "MENU_COPYRIGHT" ), true, FontAnonymousPro.instance.fontName, 18);
+	#else
 		var copyright = new HxlText(HxlGraphics.width - 265, 459 + (HxlGraphics.height - 480), 142, Resources.getString( "MENU_COPYRIGHT" ), true, FontAnonymousPro.instance.fontName, 18);
+	#end
 #end
 		add(copyright);
 

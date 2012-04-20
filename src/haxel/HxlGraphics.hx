@@ -228,7 +228,11 @@ class HxlGraphics {
 		_game = Game;
 		width = Width;
 		height = Height;
-		smallScreen = height < 400;
+		#if flashmobile
+		smallScreen = true;
+		#else
+		smallScreen = false;
+		#end
 		scroll = null;
 		_scrollTarget = null;
 		unfollow();

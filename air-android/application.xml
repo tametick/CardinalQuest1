@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <application xmlns="http://ns.adobe.com/air/application/3.0">
   <id>com.tametick.cardinalquest</id>
-  <versionNumber>2.2.1</versionNumber>
+  <versionNumber>1.2</versionNumber>
   <filename>cardinalquest</filename>
   <name>Cardinal Quest</name>
-  <description>Hack and slash your way through a randomly generated dungeon:  a new adventure awaits every time!</description>
+  <description>Hack and slash your way through a randomly generated dungeon: A new adventure awaits every time!</description>
   <copyright>Copyright 2012 Ido Yehieli.</copyright>
   <supportedProfiles>extendedDesktop mobileDevice</supportedProfiles>
   <initialWindow>
@@ -29,31 +29,4 @@
 	<image128x128>icon128.png</image128x128>
 	<image512x512>icon512.png</image512x512>
   </icon>
-  <iPhone>
-	<InfoAdditions>
-		<![CDATA[
-			<key>UIDeviceFamily</key>
-			<array>
-				<string>1</string>
-				<string>2</string>
-			</array>
-			
-			<key>UIStatusBarStyle</key>
-			<string>UIStatusBarStyleBlackOpaque</string>
-			
-			<key>UIRequiresPersistentWiFi</key>
-			<string>NO</string>
-			
-			<key>UIPrerenderedIcon</key>
-			<string>YES</string>
-			
-			<key>CFBundleIconFile</key>
-			<array>
-				<string>icon57.png</string>
-				<string>icon72.png</string>
-			</array>
-		]]>
-	</InfoAdditions>
-    <requestedDisplayResolution>standard</requestedDisplayResolution>
-  </iPhone>
 </application>
