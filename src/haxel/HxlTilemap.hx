@@ -193,6 +193,15 @@ class HxlTilemap extends HxlObject {
 		return this;
 	}
 
+	function resetBuffer() {
+		if ( cachedTilemapBuffer != null ) {
+			cachedTilemapBuffer.dispose();
+			cachedTilemapBuffer = null;
+		}
+		
+		cachedTilemapBuffer = new BitmapData( _tileWidth * widthInTiles, _tileHeight * heightInTiles, false, 0x000000 );
+	}
+	
 	public function getTiles():Array<Array<HxlTile>> {
 		return _tiles;
 	}

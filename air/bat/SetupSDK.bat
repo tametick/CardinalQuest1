@@ -1,9 +1,9 @@
 :user_configuration
 
 :: Path to Flex SDK
-set FLEX_SDK=C:\Program Files\FlashDevelop\Tools\flexsdk
+set FLEX_SDK=C:\Program Files (x86)\FlashDevelop\Tools\flexsdk
 rem set FLEX_SDK=C:\haxe\air3
-set JAVA_PATH=C:\program files\java\jre6
+set JAVA_PATH=C:\program files (x86)\java\jre6
 
 :validation
 if not exist "%FLEX_SDK%" goto flexsdk

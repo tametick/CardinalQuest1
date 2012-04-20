@@ -37,6 +37,8 @@ import flash.filters.GlowFilter;
 import flash.geom.Point;
 import flash.geom.Rectangle;
 
+import data.io.SaveGameIO;
+
 class CqItemBMPData extends BitmapData{}
 
 class CqSpecialEffectValue {
@@ -46,6 +48,31 @@ class CqSpecialEffectValue {
 		this.name = name;
 		this.value = value;
 	}
+	
+	public function save( _io:SaveGameIO ) {
+		_io.writeString( name );
+		
+		var effectValueIsString:Bool = Std.is( value, String );
+		_io.writeInt( effectValueIsString ? 1 : 0 );
+		
+		if ( effectValueIsString ) {
+			_io.writeString( value );
+		} else {
+			_io.writeInt( cast( value, Int ) );
+		}
+	}	
+
+	public function load( _io:SaveGameIO ) {
+		name = _io.readString();
+		
+		var effectValueIsString:Bool = (_io.readInt()==1);
+		
+		if ( effectValueIsString ) {
+			value = _io.readString();
+		} else {
+			value = _io.readInt();
+		}
+	}	
 }
 
 class CqLootFactory {
@@ -810,6 +837,131 @@ class CqItem extends GameObjectImpl, implements Loot {
 				mob.addTimer(new CqTimer(duration, null, -1, effect));
 			}
 		}
+	}
+	
+	public function save( _io:SaveGameIO, ?_writeBlock:Bool = true ) {
+		// Save this item, its stats, its buffs, etc.
+		if ( _writeBlock ) {
+			_io.startBlock( "Item" );
+		}
+		
+		// Tile X/Y.
+		_io.writeInt( Std.int(tilePos.x) );
+		_io.writeInt( Std.int(tilePos.y) );
+		
+		// ID (this is what lets us recreate it)
+		_io.writeString( id );
+		
+		// damage
+		_io.writeInt( damage.start );
+		_io.writeInt( damage.end );
+
+		// buffs + special effects
+		// save buffs, special effects and timers :(
+		var numBuffs:Int = Lambda.count( buffs );
+		_io.writeInt( numBuffs );
+		for ( k in buffs.keys() ) {
+			_io.writeString( k );
+			_io.writeInt( buffs.get(k) );
+		}
+		
+		var numSpecialEffects:Int = specialEffects.length;
+		_io.writeInt( numSpecialEffects );
+		for ( s in specialEffects ) {
+			s.save( _io );
+		}
+
+		// glow details + superb/magical/wondrous
+		_io.writeInt( isSuperb ? 1 : 0 );
+		_io.writeInt( isMagical ? 1 : 0 );
+		_io.writeInt( isWondrous ? 1 : 0 );
+		
+		// spell/potion stuff
+		_io.writeInt( duration );
+		_io.writeInt( stackSize );
+		_io.writeInt( stackSizeMax );
+		
+		_io.writeString( stat );
+		_io.writeInt( statPoints );
+		_io.writeInt( statPointsRequired );
+	}
+	
+	public static function loadItem( _io:SaveGameIO, ?_andAdd:Bool = true ) : CqItem {
+		var tileX:Int = _io.readInt();
+		var tileY:Int = _io.readInt();
+		
+		// get the ID...
+		var id:String = _io.readString();
+		
+		var pixelPos:HxlPoint = Registery.level.getPixelPositionOfTile(tileX, tileY);
+		var item:CqItem = CqLootFactory.newItem( pixelPos.x, pixelPos.y, id );
+		
+		if ( item == null ) {
+			item = CqSpellFactory.newSpell( pixelPos.x, pixelPos.y, id );
+		}
+		
+		// damage
+		item.damage.start = _io.readInt();
+		item.damage.end = _io.readInt();
+
+		// buffs + special effects
+		// read buffs
+		var numBuffs:Int = _io.readInt();
+		for ( i in 0 ... numBuffs ) {
+			var key:String = _io.readString();
+			var value:Int = _io.readInt();
+			
+			item.buffs.set( key, value );
+		}
+		
+		// special effects...
+		var numSpecialEffects:Int = _io.readInt();
+		for ( i in 0 ... numSpecialEffects ) {
+			var specialEffect:CqSpecialEffectValue = new CqSpecialEffectValue("");
+			specialEffect.load( _io );
+			
+			item.specialEffects.push( specialEffect );
+		}
+
+		// glow details + superb/magical/wondrous
+		item.isSuperb = (_io.readInt()==1);
+		item.isMagical = (_io.readInt()==1);
+		item.isWondrous = (_io.readInt()==1);
+
+		// spell/potion stuff
+		item.duration = _io.readInt();
+		item.stackSize = _io.readInt();
+		item.stackSizeMax = _io.readInt();
+		
+		item.stat = _io.readString();
+		item.statPoints = _io.readInt();
+		item.statPointsRequired = _io.readInt();
+		
+		// set up glow (+ full item name?)
+		if ( item.isMagical ) {
+			if ( item.isSuperb ) {
+				item.setGlow(true);
+				item.customGlow(0x1FE0D7);
+			} else {
+				item.setGlow(true);
+				item.customGlow(0x3CDA25);
+			}
+		} else if ( item.isSuperb ) {
+			if ( item.isWondrous ) {
+				item.setGlow(true);
+				item.customGlow(0xE7A918);
+			} else {
+				item.setGlow(true);
+				item.customGlow(0x206CDF);
+			}
+		}
+		
+		if ( _andAdd ) {
+			// add item to world
+			Registery.level.addLootToLevel( HxlGraphics.state, item );
+		}
+		
+		return item;
 	}
 }
 

@@ -312,6 +312,11 @@ class GameUI extends HxlDialog {
 		add(targetText);
 	}
 
+	public function updatePlayerClass() {
+		var mainBtn = SpritePortrait.getIcon(Registery.player.playerClassSprite,64 ,1.0);
+		btnMainView.loadGraphic(mainBtn);
+	}
+	
 	override public function update() 
 	{
 		//invItemManager.update();
