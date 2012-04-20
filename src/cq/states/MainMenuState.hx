@@ -6,6 +6,7 @@ import cq.CqWorld;
 import cq.GameUI;
 import cq.Main;
 import data.Resources;
+import data.SaveSystem;
 import data.SoundEffectsManager;
 import data.Configuration;
 import flash.events.Event;
@@ -153,7 +154,32 @@ class MainMenuState extends CqState {
 			HxlGraphics.popState();
 		}
 	}
+	
+	private function loadGame() {
+		if (finishedAddingGuiElements) {
+			GameState.loadingGame = true;
+			changeState(GameState);
+		}
+	}
 
+	private function quit() {
+		if (finishedAddingGuiElements) {
+			if (Configuration.air) {
+				NativeApplication.nativeApplication.exit();
+			} else {
+				Lib.fscommand("quit");
+			}
+		}
+	}
+	
+	private function saveAndQuit() {
+		if (finishedAddingGuiElements) {
+			SaveSystem.save();
+			changeState(GameState);
+			quit();
+		}
+	}
+	
 	private function gotoCharState( ) {
 		if(finishedAddingGuiElements)
 			changeState(CreateCharState);
@@ -168,20 +194,34 @@ class MainMenuState extends CqState {
 		menu = new HxlMenu((HxlGraphics.width - 240) / 2, Configuration.app_width, 240, 200);
 		add(menu);
 
+		var hasContinue:Bool = SaveSystem.getLoadIO().hasSave();
+		
 		var buttonY:Int = 0;
 		var spacing = HxlGraphics.smallScreen ? 50 : 50;
-
+/*
+		if ( hasContinue && stackId == 0 ) {
+			spacing -= 8;
+		}
+	*/	
 		var textColor = 0x000000;
 		var textHighlight = 0x670000;
 		if ( stackId != 0 ) {
 			textColor = 0xffffff;
 			textHighlight = 0xffff00;
-
+		}
+		
+		if ( stackId != 0 || hasContinue ) {
 			var btnResumeGame:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, Resources.getString( "MENU_RESUME_GAME" ) );
 			btnResumeGame.setNormalFormat(null, 35, textColor, "center");
 			btnResumeGame.setHoverFormat(null, 35, textHighlight, "center");
 			menu.addItem(btnResumeGame);
-			btnResumeGame.setCallback(resumeGame);
+			
+			if ( stackId == 0 ) {
+				btnResumeGame.setCallback(loadGame);
+			} else {
+				btnResumeGame.setCallback(resumeGame);
+			}
+			
 			buttonY += spacing;
 		}
 
@@ -234,16 +274,21 @@ class MainMenuState extends CqState {
 		}
 		if (Configuration.standAlone && !Configuration.mobile) {
 			var btnQuit:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, Resources.getString( "MENU_QUIT" ), true, null);
+
+			var canSave:Bool = (stackId != 0 && Registery.player != null && !Registery.player.isDying);
+			
+			if ( canSave ) { // Save & Quit
+				btnQuit.setText( Resources.getString( "MENU_SAVEQUIT" ) );
+			}
+			
 			btnQuit.setNormalFormat(null, 35, textColor, "center");
 			btnQuit.setHoverFormat(null, 35, textHighlight, "center");
 			menu.addItem(btnQuit);
 
-			if (Configuration.air) {
-				btnQuit.setCallback(function() {
-					NativeApplication.nativeApplication.exit();
-				} );
-			} else {
-				btnQuit.setCallback(function() { Lib.fscommand("quit"); } );
+			if ( canSave ) { // Save & Quit
+				btnQuit.setCallback( saveAndQuit );
+			} else { // Quit
+				btnQuit.setCallback( quit );
 			}
 
 			buttonY += spacing;

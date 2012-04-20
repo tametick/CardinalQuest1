@@ -1,5 +1,7 @@
 package cq;
 
+import com.eclecticdesignstudio.motion.Actuate;
+
 import cq.CqResources;
 import cq.CqItem;
 import cq.CqSpell;
@@ -27,6 +29,7 @@ import data.Registery;
 import data.Resources;
 import data.Configuration;
 import data.MusicManager;
+import data.SaveSystem;
 
 class CqWorld extends World {
 
@@ -96,9 +99,15 @@ class CqWorld extends World {
 
 		currentLevel.zIndex = -1;	
 		HxlGraphics.state.add(currentLevel);
-		currentLevel.updateFieldOfView(HxlGraphics.state,true);
+		currentLevel.updateFieldOfView(HxlGraphics.state, true);
+
+		// autosave on each new level.
+		Actuate.timer(0.2).onComplete(delayedSave);
 	}
 
+	private function delayedSave() {
+		SaveSystem.save();
+	}
 	static public function onActorAdded(Actor:CqActor) {
 		if ( actorAdded != null ) 
 			actorAdded();
