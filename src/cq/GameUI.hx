@@ -219,7 +219,9 @@ class GameUI extends HxlDialog {
 		menuBelt.setFrame(1);
 		leftButtons.add(menuBelt);
 
+		#if flashmobile
 		leftButtons.bakeInBounds(0, 0, menuBelt.width, menuBelt.height, false);
+		#end
 		
 			// main
 		btnMainView = new HxlButton(0, 0, btnWidth, btnHeight);

@@ -66,8 +66,10 @@ class BagDialog {
 		
 		slidingPart = new SlidingBagDialog(gameui, packsize, equipSlots);
 		
+		#if flashmobile
 		equippedSpells.bakeInBounds(HxlGraphics.width - 70, 0, equippedSpells.width, equippedSpells.height, false);
 		equippedConsumables.bakeInBounds(70, HxlGraphics.height - 56, equippedConsumables.width, 56, true);
+		#end
 	}
 	
 	public function addSlotsToBag(bag:CqBag) {
