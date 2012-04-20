@@ -471,18 +471,16 @@ class CqLevel extends Level {
 
 				// Charge action & spirit points -- offload this into the creature tick
 
-				if (!creature.stats.specialActive) {
-					for (s in creature.bag.spells()) {
-						var boost:Int = 0;
-						switch ( s.stat ) {
-							case "spirit": boost = creature.stats.spirit;
-							case "speed": boost = creature.stats.speed;
-							case "attack": boost = creature.stats.attack;
-							case "defense": boost = creature.stats.defense;
-							case "life": boost = creature.stats.life;
-						}
-						s.statPoints = Std.int(Math.min( s.statPointsRequired, s.statPoints + boost));
+				for (s in creature.bag.spells()) {
+					var boost:Int = 0;
+					switch ( s.stat ) {
+						case "spirit": boost = creature.stats.spirit;
+						case "speed": boost = creature.stats.speed;
+						case "attack": boost = creature.stats.attack;
+						case "defense": boost = creature.stats.defense;
+						case "life": boost = creature.stats.life;
 					}
+					s.statPoints = Std.int(Math.min( s.statPointsRequired, s.statPoints + boost));
 				}
 
 				creature.actionPoints += creature.stats.speed;
@@ -498,6 +496,7 @@ class CqLevel extends Level {
 				
 				i++;
 			}
+		}
 	}
 	
 	public function save( _io:SaveGameIO ) {
@@ -634,6 +633,5 @@ class CqLevel extends Level {
 		// Sort out everything's visibility and so forth.
 		resetBuffer();
 //		updateFieldOfView( HxlGraphics.state );
-		}
 	}
 }

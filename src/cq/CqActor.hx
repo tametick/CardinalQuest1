@@ -1987,8 +1987,6 @@ class EffectiveStats {
 	public var defense(default, null):Int;
 	public var life(default, null):Int;
 	
-	public var specialActive(default, null):Bool;
-	
 	public var creature(default, null):CqActor;
 	
 	public function new(actor:CqActor) {
@@ -2022,7 +2020,5 @@ class EffectiveStats {
 		life = creature.maxHp;
 		life += creature.getBuff("life");
 		life = life < 0 ? 0 : life;
-		
-		specialActive = creature.visibleEffects.length > 0;
 	}
 }

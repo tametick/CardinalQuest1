@@ -79,7 +79,6 @@ class Configuration {
 
 	public static inline var startWithMusic:Bool = false;
 	public static inline var startWithSound:Bool = true;
-	public static inline var startFullscreen:Bool = false;
 
 	public static inline var chestsPerLevel = 10;
 
