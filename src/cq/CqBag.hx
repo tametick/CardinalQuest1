@@ -13,6 +13,7 @@ import data.Registery; // doesn't really need this -- easy to factor out
 import data.SoundEffectsManager;
 import cq.CqResources;
 
+import data.io.SaveGameIO;
 
 enum BagGrantResult {
 	SUCCEEDED;
@@ -344,6 +345,49 @@ class CqBag {
 	}
 	
 	public function destroy( ) { }
+	
+	public function save( _io:SaveGameIO ) {
+		for ( i in 0 ... slots.length ) {
+			if ( slots[i].item == null ) {
+				_io.writeInt(0);
+			} else {
+				_io.writeInt(1);
+				
+				slots[i].item.save( _io, false );
+			}
+		}
+	}
+	
+	public function load( _io:SaveGameIO ) {
+		for ( i in 0 ... slots.length ) {
+			// Clean up.
+			if ( slots[i].item != null ) {
+				if ( slots[i].item.inventoryProxy != null ) {
+					slots[i].item.inventoryProxy.destroy();
+				}
+				slots[i].item.destroy();
+			}
+			slots[i].item = null;
+			
+			// Load new item.
+			var hasItem:Bool = (_io.readInt() == 1);
+			
+			if ( hasItem ) {
+				slots[i].item = CqItem.loadItem( _io, false );
+				
+				if ( slots[i].item.inventoryProxy != null ) {
+					if ( slots[i].item.equipSlot == SPELL ) {
+						if ( slots[i].equipmentType == SPELL ) {
+							slots[i].item.inventoryProxy.setChargeArcVisible( true );
+							slots[i].item.inventoryProxy.updateCharge();
+						} else {
+							slots[i].item.inventoryProxy.setChargeArcVisible( false );
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 class CqItemSlot {

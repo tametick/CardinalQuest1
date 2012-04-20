@@ -45,6 +45,8 @@ import playtomic.PtPlayer;
 
 import flash.media.Sound;
 
+import data.io.SaveGameIO;
+
 class CqTimer {
 	public var ticks:Int;
 	public var buffName:String;
@@ -58,6 +60,24 @@ class CqTimer {
 		this.buffName = buffName;
 		this.buffValue = buffValue;
 		this.specialEffect = specialEffect;
+	}
+
+	public function save( _io:SaveGameIO ) {
+		_io.writeInt( ticks );
+		_io.writeString( buffName );
+		_io.writeInt( buffValue );
+		specialEffect.save( _io );
+		_io.writeString( specialMessage );
+		_io.writeInt( messageColor );
+	}
+
+	public function load( _io:SaveGameIO ) {
+		ticks = _io.readInt();
+		buffName = _io.readString();
+		buffValue = _io.readInt();
+		specialEffect.load( _io );
+		specialMessage = _io.readString();
+		messageColor = _io.readInt();
 	}
 }
 
@@ -89,8 +109,6 @@ class CqActor extends CqObject, implements Actor {
 	private var buffs:Hash<Int>;
 	// special effects beyond changes to basic abilities, caused by magical items or spells
 	public var specialEffects:Hash<CqSpecialEffectValue>;
-	// visible effects from buffs & specialEffects
-	public var visibleEffects:Array<String>;
 	
 	public var timers:Array<CqTimer>;
 
@@ -135,8 +153,6 @@ class CqActor extends CqObject, implements Actor {
 			timers.slice(0, timers.length);
 		timers = null;
 		
-		visibleEffects = null;
-		
 		if(onAttackMiss!=null)
 			onAttackMiss.clear();
 
@@ -174,7 +190,6 @@ class CqActor extends CqObject, implements Actor {
 		minHp = 0;
 		
 		initBuffs();
-		visibleEffects = new Array<String>();
 		timers = new Array<CqTimer>();
 
 		onInjure = new List();
@@ -375,11 +390,6 @@ class CqActor extends CqObject, implements Actor {
 			var newVal = buffs.get(t.buffName) - t.buffValue;
 			buffs.set(t.buffName, newVal);
 		} 
-		
-		if(HxlUtil.contains(visibleEffects.iterator(), t.buffName)) {
-			// remove visibleEffect
-			visibleEffects.remove(t.buffName);
-		}
 		
 		if (t.specialEffect != null && HxlUtil.contains(specialEffects.keys(), t.specialEffect.name)) {
 			var currentEffect = specialEffects.get(t.specialEffect.name);
@@ -1439,6 +1449,195 @@ class CqPlayer extends CqActor, implements Player {
 		
 		super.doDeathEffect(delay);
 	}
+	
+	public function save( _io:SaveGameIO ) {
+		// Save this mob, its stats, its buffs, etc.
+		_io.startBlock( "Player" );
+		
+		// Tile X/Y.
+		_io.writeInt( Std.int(tilePos.x) );
+		_io.writeInt( Std.int(tilePos.y) );
+		
+		// thorough stats dump
+		_io.writeInt( lives );
+		
+		_io.writeInt( attack );
+		_io.writeInt( defense );
+		_io.writeInt( speed );
+		_io.writeInt( spirit );
+		_io.writeInt( vitality );
+	
+		_io.writeInt( minHp );
+	
+		_io.writeInt( damage.start );
+		_io.writeInt( damage.end );
+		
+		// player specific stuff
+		_io.writeString( playerClassID );
+		_io.writeString( playerClassName );
+		_io.writeString( playerClassSprite );
+	
+		_io.writeInt( prefDamage );
+		_io.writeInt( prefAttack );
+		_io.writeInt( prefDefense );
+		_io.writeInt( prefSpeed );
+		_io.writeInt( prefSpirit );
+		_io.writeInt( prefLife );
+		_io.writeInt( xp );
+		_io.writeInt( level );
+		_io.writeInt( Std.parseInt(infoViewMoney.text) );
+		
+		// save hp and max hp, as those vary
+		_io.writeInt( hp );
+		_io.writeInt( maxHp );
+		
+		// save facing
+		_io.writeInt( _facing );
+		
+		// save status
+		_io.writeInt( faction );
+	
+		_io.writeInt( actionPoints );
+
+		// save buffs, special effects and timers :(
+		var numBuffs:Int = Lambda.count( buffs );
+		_io.writeInt( numBuffs );
+		for ( k in buffs.keys() ) {
+			_io.writeString( k );
+			_io.writeInt( buffs.get(k) );
+		}
+		
+		// special effects...
+		var numSpecialEffects:Int = Lambda.count( specialEffects );
+		_io.writeInt( numSpecialEffects );
+		for ( k in specialEffects.keys() ) {
+			_io.writeString( k );
+			
+			var value:CqSpecialEffectValue = specialEffects.get(k);
+			value.save( _io );
+		}
+
+		// ...timers... :(
+		_io.writeInt( timers.length );
+		for ( t in timers ) {
+			t.save( _io );
+		}
+		
+		// ALL EQUIPMENT:
+		bag.save( _io );
+	}
+	
+	public function load( _io:SaveGameIO ) {
+		_io.seekToBlock( "Player" );
+		
+		var tileX:Int = _io.readInt();
+		var tileY:Int = _io.readInt();
+		
+		setTilePos(Std.int(tileX), Std.int(tileY));
+		var positionOfTile:HxlPoint = Registery.level.getPixelPositionOfTile(Math.round(tilePos.x), Math.round(tilePos.y));
+		x = positionOfTile.x;
+		y = positionOfTile.y;
+
+		// thorough stats dump
+		lives = _io.readInt();
+		
+		attack = _io.readInt();
+		defense = _io.readInt();
+		speed = _io.readInt();
+		spirit = _io.readInt();
+		vitality = _io.readInt();
+	
+		minHp = _io.readInt();
+	
+		damage.start = _io.readInt();
+		damage.end = _io.readInt();
+		
+		// player specific stuff
+		playerClassID = _io.readString();
+		playerClassName = _io.readString();
+		playerClassSprite = _io.readString();
+	
+		prefDamage = _io.readInt();
+		prefAttack = _io.readInt();
+		prefDefense = _io.readInt();
+		prefSpeed = _io.readInt();
+		prefSpirit = _io.readInt();
+		prefLife = _io.readInt();
+		xp = _io.readInt();
+		level = _io.readInt();
+		money = _io.readInt();
+		
+		// save hp and max hp, as those vary
+		hp = _io.readInt();
+		maxHp = _io.readInt();
+		
+		// save facing
+		_facing = _io.readInt();
+		
+		// save status
+		faction = _io.readInt();
+	
+		actionPoints = _io.readInt();
+		
+		// save buffs, special effects and timers :(
+		var numBuffs:Int = _io.readInt();
+		for ( i in 0 ... numBuffs ) {
+			var key:String = _io.readString();
+			var value:Int = _io.readInt();
+			
+			addBuff( key, value );
+		}
+		
+		// special effects...
+		var numSpecialEffects:Int = _io.readInt();
+		for ( i in 0 ... numSpecialEffects ) {
+			var key:String = _io.readString();
+			
+			var value:CqSpecialEffectValue = new CqSpecialEffectValue("");
+			value.load( _io );
+			
+			specialEffects.set( key, value );
+		}
+
+		// ...timers... :(
+		var numTimers:Int = _io.readInt();
+		for ( i in 0 ... numTimers ) {
+			var timer:CqTimer = new CqTimer(0, "", 0, new CqSpecialEffectValue(""));
+			timer.load(_io);
+		}
+		
+		// ALL EQUIPMENT:
+		bag.load( _io );
+
+		// Rewrite all animations.
+		clearAnimations();
+		addAnimation("idle", [sprites.getSpriteIndex(playerClassSprite)], 0 );
+		addAnimation("idle_dagger", [sprites.getSpriteIndex(playerClassSprite + "_dagger")], 0 );
+		addAnimation("idle_short_sword", [sprites.getSpriteIndex(playerClassSprite + "_short_sword")], 0 );
+		addAnimation("idle_long_sword", [sprites.getSpriteIndex(playerClassSprite + "_long_sword")], 0 );
+		addAnimation("idle_staff", [sprites.getSpriteIndex(playerClassSprite + "_staff")], 0 );
+		addAnimation("idle_axe", [sprites.getSpriteIndex(playerClassSprite + "_axe")], 0 );
+		
+		// Update stuff. Graphics:
+		updateSprite();
+		calcFrame();
+		
+		// UI: lives
+#if japanese
+		infoViewLives.setText("" + player.lives);
+#else
+		infoViewLives.setText(Resources.getString( "UI_TIMES" ) + lives);
+#end
+
+		// UI: money
+		infoViewMoney.setText("" + money);
+
+		// UI: floor
+		infoViewFloor.setText(Resources.getString( "UI_FLOOR" ) + " " +(Registery.world.currentLevelIndex + 1));
+		
+		// UI: level
+		infoViewLevel.setText(Resources.getString( "UI_LEVEL" ) + " " + level);
+	}	
 }
 
 class CqMob extends CqActor, implements Mob {
@@ -1629,5 +1828,137 @@ class CqMob extends CqActor, implements Mob {
 		}
 		
 		return true;
+	}
+
+	public function save( _io:SaveGameIO ) {
+		// Save this mob, its stats, its buffs, etc.
+		_io.startBlock( "Mob" );
+		
+		// Tile X/Y.
+		_io.writeInt( Std.int(tilePos.x) );
+		_io.writeInt( Std.int(tilePos.y) );
+		
+		// save the sprite index "typeName" (since that's a unique id per monster type)
+		_io.writeString( typeName );
+		
+		// save hp and max hp, as those vary
+		_io.writeInt( hp );
+		_io.writeInt( maxHp );
+		
+		// save facing
+		_io.writeInt( _facing );
+		
+		// save status
+		_io.writeInt( faction );
+		_io.writeInt( isCharmed ? 1 : 0 );
+	
+		_io.writeInt( actionPoints );
+		
+		// save AI status
+		_io.writeInt( aware );
+		_io.writeInt( neverSeen ? 1 : 0 );
+		
+		// save buffs, special effects and timers :(
+		var numBuffs:Int = Lambda.count( buffs );
+		_io.writeInt( numBuffs );
+		for ( k in buffs.keys() ) {
+			_io.writeString( k );
+			_io.writeInt( buffs.get(k) );
+		}
+		
+		// special effects...
+		var numSpecialEffects:Int = Lambda.count( specialEffects );
+		_io.writeInt( numSpecialEffects );
+		for ( k in specialEffects.keys() ) {
+			_io.writeString( k );
+			
+			var value:CqSpecialEffectValue = specialEffects.get(k);
+			value.save( _io );
+		}
+
+		// ...timers... :(
+		_io.writeInt( timers.length );
+		for ( t in timers ) {
+			t.save( _io );
+		}
+		
+		// ...spell stat points...
+		for ( s in bag.spells() ) {
+			_io.writeInt( s.statPoints );
+		}
+	}
+	
+	public static function loadActor( _io:SaveGameIO ) {
+		var tileX:Int = _io.readInt();
+		var tileY:Int = _io.readInt();
+		
+		// get the sprite index "typeName" (since that's a unique id per monster type)
+		var typeName:String = _io.readString();
+		
+		// Create the actor at this point.
+		var pixelPos:HxlPoint = Registery.level.getPixelPositionOfTile(tileX, tileY);
+		var mob:CqMob = CqMobFactory.newMobFromTypename( pixelPos.x, pixelPos.y, typeName );
+		
+		// save hp and max hp, as those vary
+		mob.hp = _io.readInt();
+		mob.maxHp = _io.readInt();
+		
+		// save facing
+		mob._facing = _io.readInt();
+		mob.calcFrame();
+		
+		// save status
+		mob.faction = _io.readInt();
+		mob.isCharmed = (_io.readInt()==1);
+	
+		mob.actionPoints = _io.readInt();
+		
+		// save AI status
+		mob.aware = _io.readInt();
+		mob.neverSeen = (_io.readInt()==1);
+		
+		// save buffs, special effects and timers :(
+		var numBuffs:Int = _io.readInt();
+		for ( i in 0 ... numBuffs ) {
+			var key:String = _io.readString();
+			var value:Int = _io.readInt();
+			
+			mob.addBuff( key, value );
+		}
+		
+		// special effects...
+		var numSpecialEffects:Int = _io.readInt();
+		for ( i in 0 ... numSpecialEffects ) {
+			var key:String = _io.readString();
+			
+			var value:CqSpecialEffectValue = new CqSpecialEffectValue("");
+			value.load( _io );
+			
+			mob.specialEffects.set( key, value );
+		}
+
+		// ...timers... :(
+		var numTimers:Int = _io.readInt();
+		for ( i in 0 ... numTimers ) {
+			var timer:CqTimer = new CqTimer(0, "", 0, new CqSpecialEffectValue(""));
+			timer.load(_io);
+			mob.timers.push(timer);
+		}
+		
+		// ...spell stat points...
+		for ( s in mob.bag.spells() ) {
+			s.statPoints = _io.readInt();
+		}
+		
+		// and now finish creating the mob
+		Registery.level.addMobToLevel( HxlGraphics.state, mob );
+/*		
+		if (additionalAdd)HxlGraphics.state.add(mob);
+		// add to tile actors list
+		cast(getTile(pos.x, pos.y), CqTile).actors.push(mob);
+		// call world's ActorAdded static method
+		CqWorld.onActorAdded(mob);*/
+		
+		GameUI.instance.addHealthBar(cast(mob, CqActor));
 	}
 }

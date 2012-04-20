@@ -98,32 +98,7 @@ class CqMobFactory {
 		}
 		
 		if ( entry != null ) {
-			mob = new CqMob(X, Y, entry.getField( "Sprite" ) );
-			
-			mob.name = Resources.getString( entry.getField( "NameID" ) );
-			mob.attack = entry.getField( "Attack" );
-			mob.defense = entry.getField( "Defense" );
-			mob.speed = entry.getField( "Speed" );
-			mob.spirit = entry.getField( "Spirit" );
-			mob.vitality = HxlUtil.randomIntInRange( entry.getField( "VitalityMin" ),
-													 entry.getField( "VitalityMax" ) );
-			
-			mob.damage = new Range(
-				entry.getField("DamageMin"),
-				entry.getField("DamageMax")
-			);
-						
-			mob.xpValue = entry.getField( "XP" );
-			
-			var spell1:String = entry.getField( "Spell1" );
-			if ( spell1 != "" ) {
-				mob.bag.grantIntrinsic(CqSpellFactory.newSpell( -1, -1, spell1 ) );
-			}
-			
-			var spell2:String = entry.getField( "Spell2" );
-			if ( spell2 != "" ) {
-				mob.bag.grantIntrinsic(CqSpellFactory.newSpell( -1, -1, spell2 ) );
-			}
+			mob = newMobFromEntry( X, Y, entry );
 		}
 		else
 		{
@@ -135,5 +110,54 @@ class CqMobFactory {
 		if (specialname != null) mob.name = specialname;
 		
 		return mob;
+	}
+	
+	private static function newMobFromEntry( X:Float, Y:Float, entry:StatsFileEntry ) : CqMob {
+		var mob:CqMob = new CqMob(X, Y, entry.getField( "Sprite" ) );
+		
+		mob.name = Resources.getString( entry.getField( "NameID" ) );
+		mob.attack = entry.getField( "Attack" );
+		mob.defense = entry.getField( "Defense" );
+		mob.speed = entry.getField( "Speed" );
+		mob.spirit = entry.getField( "Spirit" );
+		mob.vitality = HxlUtil.randomIntInRange( entry.getField( "VitalityMin" ),
+												 entry.getField( "VitalityMax" ) );
+		
+		mob.damage = new Range(
+			entry.getField("DamageMin"),
+			entry.getField("DamageMax")
+		);
+					
+		mob.xpValue = entry.getField( "XP" );
+		
+		var spell1:String = entry.getField( "Spell1" );
+		if ( spell1 != "" ) {
+			mob.bag.grantIntrinsic(CqSpellFactory.newSpell( -1, -1, spell1 ) );
+		}
+		
+		var spell2:String = entry.getField( "Spell2" );
+		if ( spell2 != "" ) {
+			mob.bag.grantIntrinsic(CqSpellFactory.newSpell( -1, -1, spell2 ) );
+		}
+		
+		return mob;
+	}
+	
+	public static function newMobFromTypename( X:Float, Y:Float, Sprite:String ) : CqMob {
+		var mobsFile:StatsFile = Resources.statsFiles.get( "mobs.txt" );
+		
+		var entry:StatsFileEntry = null;
+		var weightSoFar:Int = 0;
+		for ( m in mobsFile ) {
+			if ( m.getField( "Sprite" ) == Sprite ) {
+				entry = m;
+			}
+		}
+		
+		if ( entry == null ) {
+			return null;
+		}
+		
+		return newMobFromEntry( X, Y, entry );
 	}
 }

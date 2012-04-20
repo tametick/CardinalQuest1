@@ -7,10 +7,10 @@ package data;
  * */
 
 class Configuration {
-	public static inline var version = "1.2";
+	public static inline var version:String = "1.2";
 
 	public static inline var debug = false;
-	public static inline var air = true;
+	public static inline var air = false;
 
 #if newgrounds
 	public static inline var standAlone = false;
@@ -69,9 +69,9 @@ class Configuration {
 	public static var playerLives = 1;
 	public static var spellsPerLevel = 2;
 
-	public static inline var startWithMusic:Bool = true;
+	public static inline var startWithMusic:Bool = false;
 	public static inline var startWithSound:Bool = true;
-	public static inline var startFullscreen:Bool = true;
+	public static inline var startFullscreen:Bool = false;
 
 	public static inline var chestsPerLevel = 10;
 

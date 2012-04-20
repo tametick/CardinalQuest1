@@ -772,6 +772,11 @@ class HxlSprite extends HxlObject {
 		return Direction;
 	}
 
+	public function clearAnimations() {
+		while (_animations != null && _animations.length > 0)
+			_animations.pop();
+		_animations = new Array<HxlAnim>();
+	}
 	/**
 	 * Adds a new animation to the sprite.
 	 * 

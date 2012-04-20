@@ -7,6 +7,7 @@ import cq.CqActor;
 import cq.effects.CqEffectSpell;
 import cq.ui.CqDecoration;
 import cq.states.GameState;
+import data.io.SaveGameIO;
 import haxel.GraphicCache;
 
 import generators.BSP;
@@ -474,7 +475,6 @@ class CqLevel extends Level {
 			
 			// apply spirit buffs
 			var spirit = creature.spirit;
-			var specialActive = creature.visibleEffects.length >0;
 			spirit += creature.getBuff("spirit");
 			spirit = Std.int(Math.max(spirit, 1));
 			
@@ -494,18 +494,16 @@ class CqLevel extends Level {
 			// Charge action & spirit points -- offload this into the creature tick
 			creature.actionPoints += speed;
 
-			if (!specialActive) {
-				for (s in creature.bag.spells()) {
-					var boost:Int = 0;
-					switch ( s.stat ) {
-						case "spirit": boost = spirit;
-						case "speed": boost = speed;
-						case "attack": boost = attack;
-						case "defense": boost = defense;
-						case "life": boost = life;
-					}
-					s.statPoints = Std.int(Math.min( s.statPointsRequired, s.statPoints + boost));
+			for (s in creature.bag.spells()) {
+				var boost:Int = 0;
+				switch ( s.stat ) {
+					case "spirit": boost = spirit;
+					case "speed": boost = speed;
+					case "attack": boost = attack;
+					case "defense": boost = defense;
+					case "life": boost = life;
 				}
+				s.statPoints = Std.int(Math.min( s.statPointsRequired, s.statPoints + boost));
 			}
 
 			// Null spell stat points on spells in inventory.
@@ -527,5 +525,141 @@ class CqLevel extends Level {
 			
 			i++;
 		}
+	}
+	
+	public function save( _io:SaveGameIO ) {
+		// Save a 32x32 grid of tile data, plus seen status.
+		_io.startBlock( "Map" );
+		
+		_io.writeInt( index );
+		
+		for ( y in 0 ... Configuration.getLevelHeight() ) {
+			for ( x in 0 ... Configuration.getLevelWidth() ) {
+				var graphic:Int;
+				var decoration:Int;
+				var seen:Int;
+				
+				graphic = _tiles[y][x].getDataNum();
+				
+				if ( _tiles[y][x].decorationIndices.length > 0 ) {
+					decoration = _tiles[y][x].decorationIndices[0];
+				} else {
+					decoration = -1;
+				}
+				
+				var tile:CqTile = getTile(x, y);
+				switch ( tile.visibility ) {
+					case Visibility.UNSEEN: seen = 0;
+					case Visibility.SENSED: seen = 1;
+					case Visibility.SEEN: seen = 2;
+					case Visibility.IN_SIGHT: seen = 3;
+				}
+				
+				_io.writeInt( graphic );
+				_io.writeInt( decoration );
+				_io.writeInt( seen );
+			}
+		}
+		
+		// Save all loots.
+		for ( loot in loots ) {
+			if ( Std.is( loot, CqChest ) ) {
+				_io.startBlock( "Chest" );
+				_io.writeInt( Std.int(loot.getTilePos().x) );
+				_io.writeInt( Std.int(loot.getTilePos().y) );
+			} else {
+				cast( loot, CqItem ).save( _io );
+			}
+		}
+		
+		// Save all non-player actors, one by one.
+		for ( mob in mobs ) {
+			if ( Std.is( mob, CqMob ) ) {
+				cast( mob, CqMob ).save( _io );
+			}
+		}
+	}
+	
+	public function load( _io:SaveGameIO ) {
+		// Clear old state (destroy all mobs + loot).
+		while(mobs.length>0){
+			var m:CqMob = cast(mobs.pop(), CqMob);
+			removeMobFromLevel(HxlGraphics.state, m);
+			m.destroy();
+			m = null;
+		}
+		while(loots.length>0){
+			var l:CqItem = cast(loots.pop(), CqItem);
+			removeLootFromLevel(HxlGraphics.state, l);
+			l.destroy();
+			l = null;
+		}
+		
+		_io.seekToBlock( "Map" );
+
+		// Read & apply index...
+		index = _io.readInt();
+		Registery.world.currentLevelIndex = index;
+		
+		for ( y in 0 ... 32 ) {
+			for ( x in 0 ... 32 ) {
+				var graphic:Int = _io.readInt();
+				var decoration:Int = _io.readInt();
+				var seen:Int = _io.readInt();
+				
+				updateTileGraphic(x, y, graphic );
+				
+				_tiles[y][x].decorationIndices = new Array<Int>();
+				if ( decoration != -1 ) {
+					_tiles[y][x].decorationIndices.push( decoration );
+				}
+				
+				var tile:CqTile = getTile(x, y);
+				switch ( seen ) {
+					case 0: tile.visibility = Visibility.UNSEEN;
+					case 1: tile.visibility = Visibility.SENSED;
+					case 2: tile.visibility = Visibility.SEEN;
+					case 3: tile.visibility = Visibility.IN_SIGHT;
+				}
+				
+				if ( tile.visibility == Visibility.UNSEEN ) {
+					tile.visible = false;
+				} else {
+					tile.visible = true;
+				}
+
+				_alpha = 1;
+				_color = 0x00ffffff;
+				tile.dirty = true;
+			}
+		}
+
+		// Add chests.
+		var chestIdx:Int = -1;
+		while ( (chestIdx = _io.seekToBlock( "Chest", chestIdx )) != -1 ) {
+			var tileX:Int = _io.readInt();
+			var tileY:Int = _io.readInt();
+
+			var pixelPos = getPixelPositionOfTile(tileX, tileY);
+			var chest = new CqChest(pixelPos.x, pixelPos.y);
+			
+			addLootToLevel( HxlGraphics.state, chest );
+		}
+		
+		// Add non-chest items.
+		var itemIdx:Int = -1;
+		while ( (itemIdx = _io.seekToBlock( "Item", itemIdx )) != -1 ) {
+			CqItem.loadItem( _io );
+		}
+		
+		// Load actors.
+		var mobIdx:Int = -1;
+		while ( (mobIdx = _io.seekToBlock( "Mob", mobIdx )) != -1 ) {
+			CqMob.loadActor( _io );
+		}
+		
+		// Sort out everything's visibility and so forth.
+		resetBuffer();
+//		updateFieldOfView( HxlGraphics.state );
 	}
 }

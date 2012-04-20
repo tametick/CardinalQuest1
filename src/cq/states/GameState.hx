@@ -1,7 +1,9 @@
 package cq.states;
 
 import com.eclecticdesignstudio.motion.Actuate;
+import data.io.SaveGameIO;
 import data.Resources;
+import data.SaveSystem;
 import data.StatsFile;
 import flash.system.System;
 import haxel.HxlGame;
@@ -531,8 +533,34 @@ class GameState extends CqState {
 		if (Configuration.debug){
 			checkJumpKeys();
 			checkResetKeys();
+//			if (HxlGraphics.keys.justReleased("F5")) {
+//				HxlGraphics.pushState(WhiteState.instance);
+//			}
+		}
+		
+		if ( !Registery.player.isDying ) {
 			if (HxlGraphics.keys.justReleased("F5")) {
-				HxlGraphics.pushState(WhiteState.instance);
+				SaveSystem.save();
+			}
+			
+			if ( HxlGraphics.keys.justReleased("F8")) {
+				var io:SaveGameIO = SaveSystem.getLoadIO();
+				Registery.level.load( io );
+				Registery.player.load( io );
+				
+				Registery.level.updateFieldOfView(HxlGraphics.state, null, true);
+				Registery.player.updateHealthBar();
+				GameUI.instance.doPlayerGainXP();
+				Registery.player.updatePlayerHealthBars();
+				
+				GameUI.instance.updatePlayerClass();
+				GameUI.instance.updateCharges();
+				
+				// Instantly place camera.
+				HxlGraphics.follow(Registery.player, 0);
+				HxlGraphics.doFollow();
+				
+				HxlGraphics.follow(Registery.player, Configuration.mobile ? 15 : 10);
 			}
 		}
 	}
