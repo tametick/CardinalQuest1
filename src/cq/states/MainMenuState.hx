@@ -578,7 +578,7 @@ class MainMenuState extends CqState {
 		setDiagonalCursor();
 		
 		if (Configuration.standAlone) {
-			if ( !showingUpdate && updateVersion != Configuration.version && updateVersion != null ) {
+			if ( !showingUpdate && Std.parseFloat( updateVersion ) > Std.parseFloat( Configuration.version ) && updateVersion != null ) {
 //				var findOut = new HxlText(0, 0, 260 , "Version " + updateVersion + " available!", true, FontAnonymousPro.instance.fontName, 18);
 //				add(findOut);
 				gamePageLink = new HxlText(10, 0, 260, Resources.getString( "MENU_UPGRADE1" ) + updateVersion + Resources.getString( "MENU_UPGRADE2" ), true, FontAnonymousPro.instance.fontName, 18, 0x77D2FF);
