@@ -259,10 +259,13 @@ class HxlTilemap extends HxlObject {
 		var tyMin:Int = Math.floor( -_point.y / _tileHeight);
 		var tyMax:Int = tyMin + _screenRows;
 		
-		if (txMin < 0) txMin = 0;
-		if (txMax > widthInTiles) txMax = widthInTiles;
-		if (tyMin < 0) tyMin = 0;
-		if (tyMax > heightInTiles) tyMax = heightInTiles;
+		var xCrop:Int = 0;
+		var yCrop:Int = 0;
+		
+		if (txMin < 0) { xCrop += -txMin; txMin = 0; }
+		if (txMax > widthInTiles) { xCrop += txMax - widthInTiles; txMax = widthInTiles; }
+		if (tyMin < 0) { yCrop += -tyMin; tyMin = 0; }
+		if (tyMax > heightInTiles) { yCrop += tyMax - heightInTiles; tyMax = heightInTiles; }
 		
 		_flashPoint.x = 0; // txMin * _tileWidtsh;
 		_flashPoint.y = 0; // tyMin * _tileHeight;
@@ -306,16 +309,16 @@ class HxlTilemap extends HxlObject {
 			_flashPoint.x = opx;
 			_flashPoint.y += _tileHeight;
 		}
-
-		tile = null;	
 		
-		tmpRect.left = 0;
-		tmpRect.right = _screenCols * _tileWidth;
-		tmpRect.top = 0;
-		tmpRect.bottom = _screenRows * _tileHeight;
+		tile = null;	
 		
 		_flashPoint.x = _point.x + txMin * _tileWidth + mapFrame.left;
 		_flashPoint.y = _point.y + tyMin * _tileHeight + mapFrame.top;
+
+		tmpRect.left = 0;
+		tmpRect.right = (_screenCols - xCrop) * _tileWidth;
+		tmpRect.top = 0;
+		tmpRect.bottom = (_screenRows - yCrop) * _tileHeight;
 		
 		HxlGraphics.buffer.copyPixels(cachedTilemapBuffer, tmpRect, _flashPoint, null, null, false);
 		HxlGraphics.numRenders++;
