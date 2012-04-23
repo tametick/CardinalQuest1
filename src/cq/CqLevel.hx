@@ -8,6 +8,7 @@ import cq.effects.CqEffectSpell;
 import cq.ui.CqDecoration;
 import cq.states.GameState;
 import data.io.SaveGameIO;
+import data.SaveSystem;
 import haxel.GraphicCache;
 
 import generators.BSP;
@@ -53,8 +54,12 @@ class CqLevel extends Level {
 	
 	public function levelComplete() { 
 		ptLevel.finish();
-		if (index == Configuration.lastLevel)
+		if (index == Configuration.lastLevel) {
+			// Wipe the save.
+			SaveSystem.getLoadIO().clearSave();
+			
 			cast(HxlGraphics.state,GameState).startBossAnim();
+		}
 	}
 	
 	
@@ -192,9 +197,11 @@ class CqLevel extends Level {
 		// mark as visible in fov
 		markInvisible();
 
-		addChests(Configuration.chestsPerLevel,startingLocation);
-		addSpells(Configuration.spellsPerLevel);
-		addMobs(Configuration.mobsPerLevel);
+		if ( !GameState.loadingGame ) {
+			addChests(Configuration.chestsPerLevel,startingLocation);
+			addSpells(Configuration.spellsPerLevel);
+			addMobs(Configuration.mobsPerLevel);
+		}
 	}
 	
 	function markInvisible() {
@@ -505,6 +512,9 @@ class CqLevel extends Level {
 		
 		_io.writeInt( index );
 		
+		_io.writeInt( Std.int( startingLocation.x ) );
+		_io.writeInt( Std.int( startingLocation.y ) );
+		
 		for ( y in 0 ... Configuration.getLevelHeight() ) {
 			for ( x in 0 ... Configuration.getLevelWidth() ) {
 				var graphic:Int;
@@ -573,12 +583,16 @@ class CqLevel extends Level {
 		index = _io.readInt();
 		Registery.world.currentLevelIndex = index;
 		
+		startingLocation.x = _io.readInt();
+		startingLocation.y = _io.readInt();
+		
 		for ( y in 0 ... 32 ) {
 			for ( x in 0 ... 32 ) {
 				var graphic:Int = _io.readInt();
 				var decoration:Int = _io.readInt();
 				var seen:Int = _io.readInt();
 				
+				mapData[y][x] = graphic;
 				updateTileGraphic(x, y, graphic );
 				
 				_tiles[y][x].decorationIndices = new Array<Int>();
@@ -603,6 +617,9 @@ class CqLevel extends Level {
 				_alpha = 1;
 				_color = 0x00ffffff;
 				tile.dirty = true;
+				
+				// Update A*.
+				updateWalkable(x, y);
 			}
 		}
 

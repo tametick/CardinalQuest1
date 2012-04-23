@@ -2,6 +2,7 @@ package cq;
 
 import com.eclecticdesignstudio.motion.Actuate;
 import cq.states.GameOverState;
+import data.SaveSystem;
 import data.StatsFile;
 import flash.display.BitmapData;
 import haxe.Timer;
@@ -67,7 +68,14 @@ class CqTimer {
 		_io.writeInt( ticks );
 		_io.writeString( buffName );
 		_io.writeInt( buffValue );
-		specialEffect.save( _io );
+		
+		if ( specialEffect == null ) {
+			_io.writeInt( 0 );
+		} else {
+			_io.writeInt( 1 );
+			specialEffect.save( _io );
+		}
+		
 		_io.writeString( specialMessage );
 		_io.writeInt( messageColor );
 	}
@@ -76,7 +84,12 @@ class CqTimer {
 		ticks = _io.readInt();
 		buffName = _io.readString();
 		buffValue = _io.readInt();
-		specialEffect.load( _io );
+		
+		var hasSpecialEffect:Bool = (_io.readInt() == 1);
+		if ( hasSpecialEffect ) {
+			specialEffect.load( _io );
+		}
+		
 		specialMessage = _io.readString();
 		messageColor = _io.readInt();
 	}
@@ -1459,6 +1472,9 @@ class CqPlayer extends CqActor, implements Player {
 			///todo: Playtomic recording	
 			MusicManager.stop();
 			SoundEffectsManager.play(Lose);
+			
+			// Wipe the save.
+			SaveSystem.getLoadIO().clearSave();
 		}
 		player = null;
 		
@@ -1619,6 +1635,7 @@ class CqPlayer extends CqActor, implements Player {
 		for ( i in 0 ... numTimers ) {
 			var timer:CqTimer = new CqTimer(0, "", 0, new CqSpecialEffectValue(""));
 			timer.load(_io);
+			timers.push( timer );
 		}
 		
 		// ALL EQUIPMENT:
@@ -1976,7 +1993,7 @@ class CqMob extends CqActor, implements Mob {
 		// call world's ActorAdded static method
 		CqWorld.onActorAdded(mob);*/
 		
-		GameUI.instance.addHealthBar(cast(mob, CqActor));
+//		GameUI.instance.addHealthBar(cast(mob, CqActor));
 	}
 }
 

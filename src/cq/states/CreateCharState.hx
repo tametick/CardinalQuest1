@@ -311,6 +311,8 @@ class CreateCharState extends CqState {
 		if ( state != 1 ) 
 			return;
 			
+		GameState.loadingGame = false;
+			
 		SoundEffectsManager.play(MenuItemClick);
 		state = 0;
 		var cls = this.curClass;
