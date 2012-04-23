@@ -592,6 +592,7 @@ class CqLevel extends Level {
 				var decoration:Int = _io.readInt();
 				var seen:Int = _io.readInt();
 				
+				mapData[y][x] = graphic;
 				updateTileGraphic(x, y, graphic );
 				
 				_tiles[y][x].decorationIndices = new Array<Int>();
