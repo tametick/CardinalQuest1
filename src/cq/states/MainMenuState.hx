@@ -198,11 +198,13 @@ class MainMenuState extends CqState {
 		
 		var buttonY:Int = 0;
 		var spacing = HxlGraphics.smallScreen ? 50 : 50;
-/*
+
 		if ( hasContinue && stackId == 0 ) {
-			spacing -= 8;
+			// If we're doing a four item menu, compact it a bit.
+			buttonY -= 6;
+			spacing -= 4;
 		}
-	*/	
+
 		var textColor = 0x000000;
 		var textHighlight = 0x670000;
 		if ( stackId != 0 ) {
