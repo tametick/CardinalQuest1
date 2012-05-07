@@ -33,7 +33,6 @@ class HxlTextBMPData extends HxlSpriteBMPData {
 class HxlText extends HxlSprite {
 
   public var alignment(getAlignment, setAlignment) : String;
-  override public var color(getColor, setColor) : Int;
   public var font(getFont, setFont) : String;
   public var shadow(getShadow, setShadow) : Int;
   public var size(getSize, setSize) : Float;
