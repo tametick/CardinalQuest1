@@ -14,7 +14,7 @@ import haxel.HxlSprite;
 import cq.CqResources.JapaneseFontScaling;
 #end
 
-#if flash9
+#if flash
 import flash.text.AntiAliasType;
 import flash.text.GridFitType;
 #end
@@ -81,7 +81,7 @@ class HxlText extends HxlSprite {
     }
     _tf = new TextField();
     _tf.width = Width;
-    #if flash9
+    #if flash
     _tf.embedFonts = EmbeddedFont;
     _tf.antiAliasType = AntiAliasType.NORMAL;
     _tf.sharpness = 100;
@@ -340,7 +340,7 @@ class HxlText extends HxlSprite {
     if (_regen) {
       //Need to generate a new buffer to store the text graphic
       height = 0;
-      #if flash9
+      #if flash
       var nl:Int = _tf.numLines;
       for (i in 0 ... nl) {
         height += _tf.getLineMetrics(i).height;
@@ -370,7 +370,7 @@ class HxlText extends HxlSprite {
       var tfa:TextFormat = tf;
       _mtx.identity();
       //If it's a single, centered line of text, we center it ourselves so it doesn't blur to hell
-      #if flash9
+      #if flash
       if ((tf.align == TextFormatAlign.CENTER) && (_tf.numLines == 1))
       #else
       if (tf.align == TextFormatAlign.CENTER)
@@ -378,7 +378,7 @@ class HxlText extends HxlSprite {
       {
         tfa = new TextFormat(tf.font,tf.size,tf.color,null,null,null,null,null,TextFormatAlign.LEFT);
         _tf.setTextFormat(tfa);
-        #if flash9
+        #if flash
         _mtx.translate(Math.floor((width - _tf.getLineMetrics(0).width)/2),0);
         #else
         _mtx.translate(Math.floor((width - 0)/2),0);

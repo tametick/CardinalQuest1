@@ -4,6 +4,7 @@ import data.Configuration;
 import flash.events.Event;
 import flash.geom.Rectangle;
 import flash.net.URLRequest;
+import haxel.HxlGame;
 import haxel.HxlState;
 import haxel.HxlGraphics;
 import haxel.HxlPoint;
@@ -15,6 +16,8 @@ import flash.errors.TypeError;
 
 class CqState extends HxlState {
 	public override function create() {
+		HxlGame.disableEsc();
+		
 		if(cursor==null){
 			cursor = new CursorSprite();
 			cursor.scrollFactor.y = cursor.scrollFactor.x = 0;

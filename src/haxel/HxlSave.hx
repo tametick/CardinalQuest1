@@ -1,6 +1,6 @@
 package haxel;
 
-#if flash9
+#if flash
 import flash.net.SharedObject;
 import flash.net.SharedObjectFlushStatus;
 #else
@@ -25,7 +25,7 @@ class HxlSave  {
 	 * The local shared object itself.
 	 * @default null
 	 */
-	#if flash9
+	#if flash
 	var _so:SharedObject;
 	#else
 	var _so:Dynamic;
@@ -53,7 +53,7 @@ class HxlSave  {
 		data = null;
 		name = Name;
 		try {
-			#if flash9
+			#if flash
 			_so = SharedObject.getLocal(name);
 			#else
 			return false;
@@ -116,7 +116,7 @@ class HxlSave  {
 		}
 		var status:Dynamic = null;
 		try {
-			#if flash9
+			#if flash
 			status = _so.flush(MinFileSize);
 			#else
 			return false;
@@ -125,7 +125,7 @@ class HxlSave  {
 			HxlGraphics.log("WARNING: There was a problem flushing\nthe shared object data from HxlSave.");
 			return false;
 		}
-		#if flash9
+		#if flash
 		return status == SharedObjectFlushStatus.FLUSHED;
 		#else
 		return false;

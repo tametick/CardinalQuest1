@@ -10,7 +10,7 @@ import haxel.HxlGraphics;
 import cq.CqResources.JapaneseFontScaling;
 #end
 
-#if flash9
+#if flash
 import flash.text.AntiAliasType;
 import flash.text.GridFitType;
 #end

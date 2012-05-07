@@ -11,7 +11,7 @@ import flash.geom.ColorTransform;
 import flash.events.MouseEvent;
 import flash.Lib;
 
-#if flash9
+#if flash
 import flash.display.BlendMode;
 #end
 class HxlSpriteBMPData extends BitmapData {}
@@ -417,7 +417,7 @@ class HxlSprite extends HxlObject {
 		_mtx.scale(Brush.scale.x,Brush.scale.y);
 		if(Brush.angle != 0) _mtx.rotate(Math.PI * 2 * (Brush.angle / 360));
 		_mtx.translate(X+Brush.origin.x,Y+Brush.origin.y);
-		#if flash9
+		#if flash
 		var brushBlend:BlendMode;
 		if ( blend != null ) {
 			brushBlend = cast(blend, BlendMode);
@@ -458,7 +458,7 @@ class HxlSprite extends HxlObject {
 		_mtx.scale(scale.x,scale.y);
 		if (angle != 0) _mtx.rotate(Math.PI * 2 * (angle / 360));
 		_mtx.translate(_point.x+origin.x,_point.y+origin.y);
-		#if flash9
+		#if flash
 		var blendMode:BlendMode;
 		if ( blend != null ) {
 			blendMode = cast(blend, BlendMode);
@@ -747,7 +747,7 @@ class HxlSprite extends HxlObject {
 			_framePixels.draw(t, matrix);
 		}
 		_flashRect.x = _flashRect.y = 0;
-		#if flash9  //TODO: get color transform working in cpp
+		#if flash  //TODO: get color transform working in cpp
 		if (_ct != null)
 			_framePixels.colorTransform(_flashRect, _ct);
 		#else

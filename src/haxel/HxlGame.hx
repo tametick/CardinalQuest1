@@ -13,6 +13,7 @@ import flash.events.KeyboardEvent;
 import flash.events.MouseEvent;
 import flash.filters.BlurFilter;
 import flash.geom.Point;
+import flash.system.Capabilities;
 import flash.system.System;
 import flash.text.TextField;
 import flash.text.TextFormat;
@@ -28,12 +29,14 @@ import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.actuators.SimpleActuator;
 
 
-#if flash9
+#if flash
 import flash.text.AntiAliasType;
 import flash.text.GridFitType;
 import flash.ui.Mouse;
 import flash.utils.Timer;
+import flash.display.StageDisplayState;
 #end
+
 class HxlGameBMPData extends HxlGraphicsBMPData {
 	public function new(width : Int, height : Int, transparent : Bool = true, fillColor : UInt = 0xFFFFFFFF) {
 		super(width, height, transparent, fillColor);
@@ -226,6 +229,8 @@ class HxlGame extends Sprite {
 		HxlGraphics.stage.quality = HIGH;
 		#end
 		
+		disableEsc();
+		
 		state.create();
 		state.isStacked = false;
 
@@ -407,7 +412,7 @@ class HxlGame extends Sprite {
 		text.multiline = true;
 		text.wordWrap = true;
 		text.selectable = false;
-		#if flash9
+		#if flash
 		text.embedFonts = true;
 		text.antiAliasType = AntiAliasType.NORMAL;
 		text.gridFitType = GridFitType.PIXEL;
@@ -659,6 +664,23 @@ class HxlGame extends Sprite {
 			var i:Dynamic = eventListeners.pop();
 			stage.removeEventListener(i.Type, i.Listener);
 		}
+	}
+	
+	public static function disableEsc() {
+		#if flash
+		if (Configuration.standAlone) {
+			if ( Configuration.startFullscreen ) {
+				Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
+				#if flash
+				if (!StringTools.startsWith(Capabilities.os, "Mac")) {
+					// for windows
+					Lib.fscommand("trapallkeys", "true");
+					Lib.current.stage.showDefaultContextMenu = false;
+				}
+				#end
+			}
+		}
+		#end
 	}
 
 	public function destroy() {
