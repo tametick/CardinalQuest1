@@ -132,7 +132,7 @@ class GameState extends CqState {
 				currentTile = null;
 			}
 			
-			if (GameUI.instance.panels.currentPanel != null) {
+			if (GameUI.instance.panels.currentPanel != null && Configuration.mobile) {
 				Registery.level.visible = GameUI.instance.panels.currentPanel.isDropping;
 			} else {
 				Registery.level.visible = true;

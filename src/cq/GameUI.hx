@@ -34,7 +34,6 @@ import cq.effects.CqEffectSpell;
 import cq.CqResources;
 import cq.CqGraphicKey;
 import cq.ui.CqCharacterDialog;
-import cq.ui.CqMapDialog;
 import cq.ui.CqMessageDialog;
 import cq.ui.CqTextNotification;
 import data.Resources;
@@ -437,7 +436,8 @@ class GameUI extends HxlDialog {
 	}
 	
 	public function showMapDlg() {
-		if (!Std.is(HxlGraphics.getState(), GameState)) return;
+		if (!Std.is(HxlGraphics.getState(), GameState)) 
+			return;
 		SoundEffectsManager.play(MenuItemClick);
 		panels.showPanel(panels.panelMap, btnMapView);
 	}
