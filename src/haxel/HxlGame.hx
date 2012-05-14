@@ -669,7 +669,7 @@ class HxlGame extends Sprite {
 	public static function disableEsc() {
 		#if flash
 		if (Configuration.standAlone) {
-			if ( Configuration.startFullscreen ) {
+			if ( Configuration.fullscreen ) {
 				#if flash
 				if (!StringTools.startsWith(Capabilities.os, "Mac")) {
 					Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;

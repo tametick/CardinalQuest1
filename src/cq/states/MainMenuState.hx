@@ -521,7 +521,7 @@ class MainMenuState extends CqState {
 	}
 
 	private function updateFullscreen():Void
-	{
+	{		
 		var isFullscreen:Bool = (Lib.current.stage.displayState != StageDisplayState.NORMAL);
 		
 		btnToggleFullscreen.setOn(isFullscreen);
@@ -546,10 +546,12 @@ class MainMenuState extends CqState {
 
 	private function toggleFullscreen():Void
 	{
-		if(Lib.current.stage.displayState==StageDisplayState.NORMAL){
+		if (Lib.current.stage.displayState == StageDisplayState.NORMAL) {
+			Configuration.fullscreen = true;
 			Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 			Lib.current.stage.fullScreenSourceRect = new Rectangle(0, 0, Configuration.app_width, Configuration.app_height);
-		} else{
+		} else {
+			Configuration.fullscreen = false;
 			Lib.current.stage.displayState = StageDisplayState.NORMAL;
 			Lib.current.stage.fullScreenSourceRect = null;
 		}

@@ -10,7 +10,7 @@ class Configuration {
 	public static inline var version:String = "1.3";
 
 	public static inline var debug = false;
-	public static inline var air = false;
+	public static inline var air = true;
 
 #if newgrounds
 	public static inline var standAlone = false;
@@ -59,6 +59,8 @@ class Configuration {
 	public static inline var desktopPretendingToBeMobile = false; //gives you normal mouse behavior so you can see where you're "tapping"
 	public static inline var startFullscreen:Bool = true;
 #end
+	public static var fullscreen;
+
 	public static inline var noCache = false;
 
 	public static inline var debugStartingLevel:Int = 0;

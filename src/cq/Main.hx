@@ -85,6 +85,7 @@ class Main extends HxlGame {
 		var _mochiads_game_id:String = "f7594e4c18588dca";
 		
 		// Initialise fullscreen.
+		Configuration.fullscreen = Configuration.startFullscreen; 
 		HxlGame.disableEsc();
 		
 		#if flashmobile
