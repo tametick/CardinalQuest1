@@ -114,9 +114,9 @@ class CqTextScroller extends HxlGroup {
 	}
 
 	public function addColumn(X:Int, W:Int, text:String, ?embeddedfont:Bool = true, ?fontName:String = "", ?fontSize:Int = 16, ?color:Int = 0xFFFFFF, ?shadowColor:Int = 0x010101) {
-		if (HxlGraphics.width != 640) {
-			X = Math.floor(X * HxlGraphics.width / 640);
-			W = Math.floor(W * HxlGraphics.width / 640);
+		if (HxlGraphics.width != Configuration.app_width) {
+			X = Math.floor(X * HxlGraphics.width / Configuration.app_width);
+			W = Math.floor(W * HxlGraphics.width / Configuration.app_width);
 			
 			if (HxlGraphics.width <= 480) {
 				fontSize -= 2; // for small screens, shrink the font and make some extra room!

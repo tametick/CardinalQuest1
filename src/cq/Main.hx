@@ -92,7 +92,7 @@ class Main extends HxlGame {
 			Configuration.app_height = Lib.current.stage.stageHeight; //not 480		
 		#else
 			Configuration.app_width = 640;
-			Configuration.app_height = 480;		
+			Configuration.app_height = 480;
 		#end
 		
 		// Initialise sound/music.
