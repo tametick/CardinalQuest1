@@ -18,7 +18,8 @@ set OUTPUT_FILE=%AIR_PATH%\%AIR_NAME%%AIR_TARGET%.air
 echo.
 echo Packaging %AIR_NAME%%AIR_TARGET%.air using certificate %CERT_FILE%...
 echo call adt -package %OPTIONS% %OUTPUT% %SIGNING_OPTIONS% %OUTPUT_FILE% %APP_XML% %FILE_OR_DIR%
-call adt -package %OPTIONS% %OUTPUT% %SIGNING_OPTIONS% %OUTPUT_FILE% %APP_XML% %FILE_OR_DIR%
+rem call adt -package %OPTIONS% %OUTPUT% %SIGNING_OPTIONS% %OUTPUT_FILE% %APP_XML% %FILE_OR_DIR%
+call adt -package -tsa none %OPTIONS% %SIGNING_OPTIONS% %OUTPUT_FILE% %APP_XML% %FILE_OR_DIR%
 if errorlevel 1 goto failed
 goto end
 
