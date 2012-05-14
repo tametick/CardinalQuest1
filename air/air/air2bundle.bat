@@ -1,0 +1,1 @@
+C:\AdobeAIRSDK\bin\adt -package -target bundle CardinalQuest CardinalQuest.air
