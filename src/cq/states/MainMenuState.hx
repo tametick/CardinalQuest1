@@ -164,11 +164,11 @@ class MainMenuState extends CqState {
 
 	private function quit() {
 		if (finishedAddingGuiElements) {
-			if (Configuration.air) {
+			/*if (Configuration.air) {
 				NativeApplication.nativeApplication.exit();
-			} else {
+			} else {*/
 				Lib.fscommand("quit");
-			}
+			//}
 		}
 	}
 	

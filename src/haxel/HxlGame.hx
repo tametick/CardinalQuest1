@@ -670,9 +670,9 @@ class HxlGame extends Sprite {
 		#if flash
 		if (Configuration.standAlone) {
 			if ( Configuration.startFullscreen ) {
-				Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 				#if flash
 				if (!StringTools.startsWith(Capabilities.os, "Mac")) {
+					Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 					// for windows
 					Lib.fscommand("trapallkeys", "true");
 					Lib.current.stage.showDefaultContextMenu = false;
