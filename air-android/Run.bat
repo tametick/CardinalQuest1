@@ -16,7 +16,7 @@ ECHO 1) AIR3 TO BE USED
 ECHO 2) AIR3 TO BE IN A FOLDER UNDER HAXE
 echo.
 
-C:\AdobeAIRSDK\bin\adl -profile extendedDesktop "%APP_XML%" "%APP_DIR%"
+C:\AdobeAIRSDK\bin\adl -profile mobileDevice "%APP_XML%" "%APP_DIR%"
 if errorlevel 1 goto error
 goto end
 
