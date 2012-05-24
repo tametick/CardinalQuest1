@@ -361,8 +361,8 @@ class HxlGame extends Sprite {
 		var soundPrefs:HxlSave;
 
 		//Set up the view window and double buffering
-		stage.scaleMode = StageScaleMode.NO_SCALE;
-		stage.align = StageAlign.TOP_LEFT;
+		//stage.scaleMode = StageScaleMode.NO_SCALE;
+		//stage.align = StageAlign.TOP_LEFT;
 		stage.frameRate = framerate;
 
 		var tmp:Bitmap;
