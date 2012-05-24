@@ -19,7 +19,7 @@ echo.
 
 set PACKAGE=cq3.swf icon128.png icon16.png icon32.png icon48.png icon57.png icon72.png
 
-call c:\haxe\air3\bin\adt -package -target apk-captive-runtime -storetype pkcs12 -keystore "bat\cq.p12" -storepass idoidoido ./bin/CQ.apk application.xml -C ./bin/package .
+call C:\AdobeAIRSDK\bin\adt -package -target apk-captive-runtime -storetype pkcs12 -keystore "bat\cq.p12" -storepass idoidoido ./bin/CQ.apk application.xml -C ./bin/package .
 time /T
 echo.
 

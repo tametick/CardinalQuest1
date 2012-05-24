@@ -334,7 +334,7 @@ class MainMenuState extends CqState {
 		setSFX(HxlState.sfxOn);
 		add(btnToggleSFX);
 
-		if ( Configuration.standAlone ) {
+		if ( Configuration.standAlone  && !Configuration.mobile) {
 			tglFullscreenIcon = new HxlSprite(125,0);
 			tglFullscreenIcon.loadGraphic(SpriteFullscreenToggle, true, false, 48, 48,false,0.5,0.5);
 			tglFullscreenIcon.setFrame(1);

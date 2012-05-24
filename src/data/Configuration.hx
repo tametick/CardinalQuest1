@@ -10,7 +10,7 @@ class Configuration {
 	public static inline var version:String = "1.3";
 
 	public static inline var debug = false;
-	public static inline var air = true;
+	public static inline var air = false;
 
 #if newgrounds
 	public static inline var standAlone = false;
