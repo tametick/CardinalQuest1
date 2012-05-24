@@ -52,7 +52,7 @@
 		<fullScreen>true</fullScreen>
 		<autoOrients>false</autoOrients>
 		<aspectRatio>landscape</aspectRatio>
-		<renderMode>gpu</renderMode>
+		<renderMode>auto</renderMode>
 	</initialWindow>
 	
 	<icon>

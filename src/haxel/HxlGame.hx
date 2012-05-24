@@ -666,9 +666,9 @@ class HxlGame extends Sprite {
 		}
 	}
 	
-	public static function disableEsc() {
+	public static function disableEsc() {		
 		#if flash
-		if (Configuration.standAlone) {
+		if (Configuration.standAlone && !Configuration.mobile) {
 			if ( Configuration.fullscreen ) {
 				#if flash
 				if (!StringTools.startsWith(Capabilities.os, "Mac")) {
