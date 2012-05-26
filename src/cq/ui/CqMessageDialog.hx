@@ -19,7 +19,10 @@ class CqMessageDialog extends HxlSlidingDialog, implements HxlLogViewer {
 		textBox = new HxlTextContainer( 10, 10, 452, 460 );
 		
 		//fixme - don't create new color arrays every time
-		textBox.setBackgroundSprite(HxlGradient.Rect(452, 460, [0xd5d5d5, 0xcfcfcf, 0xbfbfbf, 0x505050, 0x333333], [0, 1, 2, 10, 255], null, Math.PI/2, 20));
+		
+		#if !flashmobile
+		textBox.setBackgroundSprite(HxlGradient.Rect(452, 460, [0xd5d5d5, 0xcfcfcf, 0xbfbfbf, 0x505050, 0x333333], [0, 1, 2, 10, 255], null, Math.PI / 2, 20));
+		#end
 
 		textBox.reverseOrder = false;
 		textBox.maxLines = 100;
@@ -32,5 +35,4 @@ class CqMessageDialog extends HxlSlidingDialog, implements HxlLogViewer {
 	public function append(message:String) {
 		textBox.addText(message);
 	}
-
 }
