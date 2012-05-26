@@ -8,7 +8,6 @@ import flash.events.KeyboardEvent;
 import flash.geom.Rectangle;
 import flash.Lib;
 import flash.ui.Mouse;
-import flash.display.StageScaleMode;
 import flash.display.StageAlign;
 import flash.display.StageDisplayState;
 

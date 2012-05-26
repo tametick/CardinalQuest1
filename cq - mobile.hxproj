@@ -8,8 +8,8 @@
     <movie fps="30" />
     <movie width="480" />
     <movie height="320" />
-    <movie version="10" />
-    <movie minorVersion="0" />
+    <movie version="11" />
+    <movie minorVersion="2" />
     <movie platform="Flash Player" />
     <movie background="#000000" />
   </output>
@@ -22,12 +22,12 @@
     <option directives="ndemo" />
     <option flashStrict="True" />
     <option mainClass="cq.Main" />
-    <option enabledebug="True" />
-    <option additional="-swf-lib lib/playtomic.swf&#xA;-swf-version 10.1&#xA;-D flashmobile" />
+    <option enabledebug="False" />
+    <option additional="-swf-lib lib/playtomic.swf&#xA;-D flashmobile" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
-    <library name="air2" />
+    <library name="air3" />
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>

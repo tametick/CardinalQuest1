@@ -85,26 +85,15 @@ class Main extends HxlGame {
 		var _mochiads_game_id:String = "f7594e4c18588dca";
 		
 		// Initialise fullscreen.
-		if (Configuration.standAlone) {
-			if ( Configuration.startFullscreen ) {
-				Lib.current.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
-
-				#if flash
-				if (!StringTools.startsWith(Capabilities.os, "Mac")) {
-					// for windows
-					//Lib.fscommand("trapallkeys", "true");
-					Lib.current.stage.showDefaultContextMenu = false;
-				}
-				#end
-			}
-		}
+		Configuration.fullscreen = Configuration.startFullscreen; 
+		HxlGame.disableEsc();
 		
 		#if flashmobile
 			Configuration.app_width = Lib.current.stage.stageWidth; //not 640
 			Configuration.app_height = Lib.current.stage.stageHeight; //not 480		
 		#else
 			Configuration.app_width = 640;
-			Configuration.app_height = 480;		
+			Configuration.app_height = 480;
 		#end
 		
 		// Initialise sound/music.

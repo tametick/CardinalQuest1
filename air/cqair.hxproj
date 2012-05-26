@@ -8,8 +8,8 @@
     <movie fps="30" />
     <movie width="640" />
     <movie height="480" />
-    <movie version="2" />
-    <movie minorVersion="6" />
+    <movie version="3" />
+    <movie minorVersion="2" />
     <movie platform="AIR" />
     <movie background="#000000" />
   </output>
@@ -27,7 +27,7 @@
   </build>
   <!-- haxelib libraries -->
   <haxelib>
-    <library name="air2" />
+    <library name="air3" />
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>

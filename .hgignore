@@ -1,0 +1,9 @@
+syntax: glob
+air/air/CardinalQuest.air
+air/air/CardinalQuest.exe
+air/air/CardinalQuest.zip
+air/air/CardinalQuest/*
+obj/*
+air/bin/cq.swf
+bin/cq.swf
+rsrc/cq/resources.swf

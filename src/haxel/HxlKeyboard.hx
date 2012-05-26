@@ -108,7 +108,7 @@ class HxlKeyboard {
 		
 		//LETTERS
 		var letterKeyRange:Int = 26;
-		#if flash9
+		#if flash
 		var letterKeyStart:Int = 65;
 		#elseif iphone
 		var letterKeyStart:Int = 97; //NOTE: these key inputs are kinda pointless for iphone

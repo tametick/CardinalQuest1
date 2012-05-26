@@ -1,7 +1,7 @@
 :user_configuration
 
 :: Path to Flex SDK
-set FLEX_SDK=C:\haxe\air3
+set FLEX_SDK=C:\AdobeAirSDK
 rem set FLEX_SDK=C:\flex
 
 :validation

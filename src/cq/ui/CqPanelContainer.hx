@@ -65,10 +65,12 @@ class CqPanelContainer extends HxlGroup
 		}
 	}
 	public function showPanel(Panel:HxlSlidingDialog, ?Button:HxlButton = null, ?showCallback:Dynamic) {
-		if (!active) return;
+		if (!active) 
+			return;
 		
 		if (HxlGraphics.mouse.dragSprite != null)
 			return;
+			
 		// If user was in targeting mode, cancel it
 		if ( GameUI.isTargeting ) 
 			GameUI.setTargeting(null);

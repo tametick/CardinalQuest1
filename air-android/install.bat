@@ -1,2 +1,2 @@
-"c:\program files\Android\android-sdk\platform-tools\adb.exe" install bin/CQ.apk
+"C:\Development\Android SDK\platform-tools\adb.exe" install bin/CQ.apk
 pause

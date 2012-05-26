@@ -8,7 +8,7 @@ import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 import flash.system.System;
 
-#if flash9
+#if flash
 import flash.text.AntiAliasType;
 import flash.text.GridFitType;
 #end
@@ -68,7 +68,7 @@ class HxlConsole extends Sprite {
 		_text.multiline = true;
 		_text.wordWrap = true;
 		_text.selectable = false;
-		#if flash9
+		#if flash
 		_text.embedFonts = true;
 		_text.antiAliasType = AntiAliasType.NORMAL;
 		_text.gridFitType = GridFitType.PIXEL;
@@ -84,7 +84,7 @@ class HxlConsole extends Sprite {
 		_fpsDisplay.multiline = true;
 		_fpsDisplay.wordWrap = true;
 		_fpsDisplay.selectable = false;
-		#if flash9
+		#if flash
 		_fpsDisplay.embedFonts = true;
 		_fpsDisplay.antiAliasType = AntiAliasType.NORMAL;
 		_fpsDisplay.gridFitType = GridFitType.PIXEL;
@@ -101,7 +101,7 @@ class HxlConsole extends Sprite {
 		_rendersDisplay.multiline = true;
 		_rendersDisplay.wordWrap = true;
 		_rendersDisplay.selectable = false;
-		#if flash9
+		#if flash
 		_rendersDisplay.embedFonts = true;
 		_rendersDisplay.antiAliasType = AntiAliasType.NORMAL;
 		_rendersDisplay.gridFitType = GridFitType.PIXEL;
@@ -118,7 +118,7 @@ class HxlConsole extends Sprite {
 		_updatesDisplay.multiline = true;
 		_updatesDisplay.wordWrap = true;
 		_updatesDisplay.selectable = false;
-		#if flash9
+		#if flash
 		_updatesDisplay.embedFonts = true;
 		_updatesDisplay.antiAliasType = AntiAliasType.NORMAL;
 		_updatesDisplay.gridFitType = GridFitType.PIXEL;
@@ -136,7 +136,7 @@ class HxlConsole extends Sprite {
 		_memDisplay.multiline = true;
 		_memDisplay.wordWrap = true;
 		_memDisplay.selectable = false;
-		#if flash9
+		#if flash
 		_memDisplay.embedFonts = true;
 		_memDisplay.antiAliasType = AntiAliasType.NORMAL;
 		_memDisplay.gridFitType = GridFitType.PIXEL;
@@ -154,7 +154,7 @@ class HxlConsole extends Sprite {
 		_extraDisplay.multiline = true;
 		_extraDisplay.wordWrap = true;
 		_extraDisplay.selectable = false;
-		#if flash9
+		#if flash
 		_extraDisplay.embedFonts = true;
 		_extraDisplay.antiAliasType = AntiAliasType.NORMAL;
 		_extraDisplay.gridFitType = GridFitType.PIXEL;
@@ -192,7 +192,7 @@ class HxlConsole extends Sprite {
 			}
 			_text.text = newText;
 		} else {
-			#if flash9
+			#if flash
 			_text.appendText(Text+"\n");
 			#else
 			_text.text = _text.text + Text + "\n";

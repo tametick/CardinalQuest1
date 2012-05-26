@@ -56,6 +56,8 @@ import flash.events.TouchEvent;
 import flash.events.Event;
 
 class GameState extends CqState {
+	static public var loadingGame:Bool = false;
+	
 	static private var msHideDelay:Float = 3;
 	var gameUI:GameUI;
 	public var chosenClass:String;
@@ -130,7 +132,7 @@ class GameState extends CqState {
 				currentTile = null;
 			}
 			
-			if (GameUI.instance.panels.currentPanel != null) {
+			if (GameUI.instance.panels.currentPanel != null && Configuration.mobile) {
 				Registery.level.visible = GameUI.instance.panels.currentPanel.isDropping;
 			} else {
 				Registery.level.visible = true;
@@ -367,6 +369,10 @@ class GameState extends CqState {
 
 		// continue this in a timer so that we refresh with the image before starting playtomic and generating the level
 		Actuate.timer(.01).onComplete(startScroller);
+		
+		if ( GameState.loadingGame ) {
+			scroller.visible = false;
+		}
 	}
 
 
@@ -374,16 +380,30 @@ class GameState extends CqState {
 		// do these two to get their imperceptible delay out of the way
 		initRegistry();
 		Playtomic.play();
+		
+		if ( GameState.loadingGame ) {
+			initGameUI();
 
-		// now start the text scrolling
-		scroller.startScroll(6);
+			// Wipe the scroller!
+			if (scroller != null){
+				remove(scroller);
+				scroller = null;
+			}
+			
+			gameUI.initHealthBars();
+			
+			Actuate.timer(.01).onComplete(finalInit);
+		} else {
+			// now start the text scrolling
+			scroller.startScroll(6);
 
-		// so the idea here is that we can actually start getting the gamestate ready before scrolling is complete.
-		// the tradeoff (if we turn this on in the TextScroller) is that the text is slightly jerky.  As it stands,
-		// the scroller will call all of these before the text registers its final click.
+			// so the idea here is that we can actually start getting the gamestate ready before scrolling is complete.
+			// the tradeoff (if we turn this on in the TextScroller) is that the text is slightly jerky.  As it stands,
+			// the scroller will call all of these before the text registers its final click.
 
-		scroller.whileScrolling([initGameUI]);
-		scroller.onComplete(finalInit);
+			scroller.whileScrolling([initGameUI]);
+			scroller.onComplete(finalInit);
+		}
 	}
 
 	function initGameUI() {
@@ -479,12 +499,14 @@ class GameState extends CqState {
 		add(gameUI);
 		add(world.currentLevel);
 
-		world.currentLevel.updateFieldOfView(this, true);
+		if ( !GameState.loadingGame ) {
+			world.currentLevel.updateFieldOfView(this, true);
+		}
 
 		started = true;
 		update();
 
-		if (!Configuration.debug && !Configuration.mobile) {
+		if ( !GameState.loadingGame && !Configuration.debug && !Configuration.mobile) {
 			gameUI.pressHelp(false);
 		}
 
@@ -492,6 +514,11 @@ class GameState extends CqState {
 
 		world = null;
 		player = null;
+		
+		if ( GameState.loadingGame ) {
+			GameState.loadingGame = false;
+			load();
+		}
 	}
 
 	function onNewLevelCallBack()
@@ -558,32 +585,42 @@ class GameState extends CqState {
 //				HxlGraphics.pushState(WhiteState.instance);
 //			}
 		}
-		
+
+/*		
 		if ( !Registery.player.isDying ) {
 			if (HxlGraphics.keys.justReleased("F5")) {
 				SaveSystem.save();
 			}
 			
 			if ( HxlGraphics.keys.justReleased("F8")) {
-				var io:SaveGameIO = SaveSystem.getLoadIO();
-				Registery.level.load( io );
-				Registery.player.load( io );
-				
-				Registery.level.updateFieldOfView(HxlGraphics.state, null, true);
-				Registery.player.updateHealthBar();
-				GameUI.instance.doPlayerGainXP();
-				Registery.player.updatePlayerHealthBars();
-				
-				GameUI.instance.updatePlayerClass();
-				GameUI.instance.updateCharges();
-				
-				// Instantly place camera.
-				HxlGraphics.follow(Registery.player, 0);
-				HxlGraphics.doFollow();
-				
-				HxlGraphics.follow(Registery.player, Configuration.mobile ? 15 : 10);
+				load();
 			}
 		}
+*/
+	}
+	
+	public function load() {
+		var io:SaveGameIO = SaveSystem.getLoadIO();
+		Registery.level.load( io );
+		Registery.player.load( io );
+		
+		Registery.level.updateFieldOfView(HxlGraphics.state, null, true);
+		Registery.player.updateHealthBar();
+		GameUI.instance.doPlayerGainXP();
+		Registery.player.updatePlayerHealthBars();
+		
+		GameUI.instance.updatePlayerClass();
+		GameUI.instance.updateCharges();
+		
+		GameUI.instance.initChests();
+		GameUI.instance.initPopups();
+		GameUI.instance.initHealthBars();
+		
+		// Instantly place camera.
+		HxlGraphics.follow(Registery.player, 0);
+		HxlGraphics.doFollow();
+		
+		HxlGraphics.follow(Registery.player, Configuration.mobile ? 15 : 10);		
 	}
 	
 	var msMoveStamp:Float;
