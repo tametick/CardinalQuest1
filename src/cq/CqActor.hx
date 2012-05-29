@@ -1669,6 +1669,9 @@ class CqPlayer extends CqActor, implements Player {
 		
 		// UI: level
 		infoViewLevel.setText(Resources.getString( "UI_LEVEL" ) + " " + level);
+		
+		// UI: character screen
+		GameUI.instance.panels.panelCharacter.onLoad();
 	}	
 }
 
