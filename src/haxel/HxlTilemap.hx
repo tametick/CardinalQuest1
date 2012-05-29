@@ -90,8 +90,8 @@ class HxlTilemap extends HxlObject {
 
 		cachedTilemapBuffer = null;
 		
-		_lastTxMin = -1;
-		_lastTyMin = -1;
+		_lastTxMin = -100;
+		_lastTyMin = -100;
 	}
 
 	/**
@@ -261,6 +261,9 @@ class HxlTilemap extends HxlObject {
 		
 		var xCrop:Int = 0;
 		var yCrop:Int = 0;
+
+		var realtxMin:Int = txMin;
+		var realtyMin:Int = tyMin;
 		
 		if (txMin < 0) { xCrop += -txMin; txMin = 0; }
 		if (txMax > widthInTiles) { xCrop += txMax - widthInTiles; txMax = widthInTiles; }
@@ -271,7 +274,7 @@ class HxlTilemap extends HxlObject {
 		_flashPoint.y = 0; // tyMin * _tileHeight;
 		var opx:Int = Std.int(_flashPoint.x);
 		
-		var alldirty = (txMin != _lastTxMin) || (tyMin != _lastTyMin);
+		var alldirty:Bool = (realtxMin != _lastTxMin) || (realtyMin != _lastTyMin);
 		
 		var tile:HxlTile;
 		for (r in tyMin...tyMax) {
@@ -323,8 +326,8 @@ class HxlTilemap extends HxlObject {
 		HxlGraphics.buffer.copyPixels(cachedTilemapBuffer, tmpRect, _flashPoint, null, null, false);
 		HxlGraphics.numRenders++;
 		
-		_lastTyMin = tyMin;
-		_lastTxMin = txMin;
+		_lastTyMin = realtyMin;
+		_lastTxMin = realtxMin;
 	}
 
 	/**
