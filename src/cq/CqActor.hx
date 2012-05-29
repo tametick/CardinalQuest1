@@ -426,6 +426,7 @@ class CqActor extends CqObject, implements Actor {
 					this.isCharmed = false;
 				case "sleep":
 					this.speed = currentEffect.value;
+					stats.recompute();
 				case "invisible":
 					this.setAlpha(1.00);
 					
@@ -918,6 +919,7 @@ class CqActor extends CqObject, implements Actor {
 		case "sleep":
 			effect.value = other.speed;
 			other.speed = 0;
+			other.stats.recompute();
 			other.specialEffects.set(effect.name, effect);
 			GameUI.showEffectText(other, Resources.getString( "POPUP_SLEEP" ), 0xFFFF00);
 		case "blink":
@@ -1651,6 +1653,7 @@ class CqPlayer extends CqActor, implements Player {
 		addAnimation("idle_axe", [sprites.getSpriteIndex(playerClassSprite + "_axe")], 0 );
 		
 		// Update stuff. Graphics:
+		play("idle", true); // force it to an animation to flush out the old sprite
 		updateSprite();
 		calcFrame();
 		
