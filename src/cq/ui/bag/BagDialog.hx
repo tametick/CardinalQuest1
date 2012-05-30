@@ -22,7 +22,6 @@ import world.Tile;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
-import flash.filters.GlowFilter;
 
 import haxel.HxlDialog;
 import haxel.HxlGradient;

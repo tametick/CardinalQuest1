@@ -1,5 +1,8 @@
 package cq.ui.bag;
 
+import flash.filters.GlowFilter;
+import cq.SoftGlowFilter;
+
 import haxel.HxlDialog;
 import haxel.HxlMouse;
 import haxel.HxlPoint;
@@ -42,7 +45,6 @@ import haxel.HxlSpriteSheet;
 import flash.display.Bitmap;
 import flash.display.Graphics;
 
-import flash.filters.GlowFilter;
 import haxel.HxlText;
 
 import haxel.GraphicCache;
@@ -281,8 +283,12 @@ class CqInventoryProxy extends HxlSprite {
 	public function customGlow(color:Int) {
 		var tmp:CqInventoryProxyBMPData = new CqInventoryProxyBMPData(48, 48, true, 0x0);
 		tmp.copyPixels(getFramePixels(), new Rectangle(0, 0, 48, 48), new Point(0, 0), null, null, true);
-		var glow:GlowFilter = new GlowFilter(color, 0.9, 16.0, 16.0, 1.6, 1, false, false);
-		tmp.applyFilter(tmp, glowRect, new Point(0, 0), glow);
+		
+		if ( !Configuration.mobile ) {
+	//		SoftGlowFilter.applyGlow( tmp, color, 6, 12.0 );
+			var glow:GlowFilter = new GlowFilter(color, 0.9, 16.0, 16.0, 1.6, 1, false, false);
+			tmp.applyFilter(tmp, glowRect, new Point(0, 0), glow);
+		}
 		glowSprite = tmp;
 	}
 	

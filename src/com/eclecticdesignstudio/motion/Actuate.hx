@@ -399,7 +399,7 @@ import com.eclecticdesignstudio.motion.actuators.GenericActuator;
 import com.eclecticdesignstudio.motion.actuators.TransformActuator;
 import com.eclecticdesignstudio.motion.Actuate;
 import flash.display.DisplayObject;
-import flash.filters.BitmapFilter;
+//import flash.filters.BitmapFilter;
 //import flash.filters.ColorMatrixFilter;
 import flash.geom.Matrix;
 

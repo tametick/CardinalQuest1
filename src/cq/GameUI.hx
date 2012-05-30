@@ -60,7 +60,6 @@ import world.World;
 
 import flash.display.Bitmap;
 import flash.display.Graphics;
-import flash.filters.GlowFilter;
 import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.geom.Rectangle;
@@ -78,6 +77,8 @@ import haxel.HxlText;
 import haxel.HxlTextContainer;
 import haxel.HxlUIBar;
 import haxel.GraphicCache;
+
+import flash.filters.GlowFilter;
 
 class GameUIBMPData extends GraphicCacheBMPData {} 
 
@@ -691,12 +692,15 @@ class GameUI extends HxlDialog {
 
 		var tmp:GameUIBMPData = new GameUIBMPData(79, 79, true, 0x0);
 		tmp.copyPixels(GraphicCache.getBitmap(CqGraphicKey.InventoryCellBG), new Rectangle(0, 0, size, size), new Point(19, 19), null, null, true);
-		var glow:GlowFilter = new GlowFilter(0x00ff00, 0.9, 15.0, 15.0, 1.6, 1, false, true);
-		tmp.applyFilter(tmp, new Rectangle(0, 0, 79, 79), new Point(0, 0), glow);
+		if ( !Configuration.mobile ) {
+//		SoftGlowFilter.applyGlow( tmp, 0x00ff00, 6, 12.0 );
+			var glow:GlowFilter = new GlowFilter(0x00ff00, 0.9, 15.0, 15.0, 1.6, 1, false, true);
+			tmp.applyFilter(tmp, new Rectangle(0, 0, 79, 79), new Point(0, 0), glow);
+		}
 		GraphicCache.addBitmapData(tmp, CqGraphicKey.CellGlow);
 		tmp.dispose();
 		tmp = null;
-		glow = null;
+//		glow = null;
 		
 		
 		if ( !GraphicCache.checkBitmapCache(CqGraphicKey.buttonSprite) ) {

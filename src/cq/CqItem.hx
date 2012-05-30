@@ -291,6 +291,7 @@ class CqItem extends GameObjectImpl, implements Loot {
 	public var stackSizeMax:Int;
 
 	var isGlowing:Bool;
+	var hasGlow:Bool;
 	var glowSpriteKey:CqGraphicKey;
 	var glowSprite:CqItemBMPData;
 	var glowRect:Rectangle;
@@ -353,21 +354,10 @@ class CqItem extends GameObjectImpl, implements Loot {
 		stackSizeMax = 1;
 
 		isGlowing = false;
+		hasGlow = false;
 //		glowSpriteKey = CqGraphicKey.ItemGlow(typeName);
-		//TODO: move to game ui, to be with the rest of graphic cache creation
+		//TODO: move to game ui, to be with the rest of graphic cache creation		
 		glowRect = new Rectangle(0, 0, 48, 48);
-/*		if ( GraphicCache.checkBitmapCache(glowSpriteKey) ) {
-			glowSprite = GraphicCache.getBitmap(glowSpriteKey);
-		} else {*/
-			var tmp:CqItemBMPData = new CqItemBMPData(48, 48, true, 0x0);
-			tmp.copyPixels(getFramePixels(), new Rectangle(0, 0, 32, 32), new Point(8, 8), null, null, true);
-			var glow:GlowFilter = new GlowFilter(0xffea00, 0.9, 16.0, 16.0, 1.6, 1, false, false);
-			tmp.applyFilter(tmp, glowRect, new Point(0, 0), glow);
-			//GraphicCache.addBitmapData(tmp, glowSpriteKey);
-			glowSprite = tmp;
-			glow = null;
-			tmp = null;
-		//}
 	}
 	
 	function computeIsEnchanted() {
@@ -389,15 +379,40 @@ class CqItem extends GameObjectImpl, implements Loot {
 	public function customGlow(color:Int) {
 		var tmp:CqItemBMPData = new CqItemBMPData(48, 48, true, 0x0);
 		tmp.copyPixels(getFramePixels(), new Rectangle(0, 0, 32, 32), new Point(8, 8), null, null, true);
-		var glow:GlowFilter = new GlowFilter(color, 0.9, 16.0, 16.0, 1.6, 1, false, false);
-		tmp.applyFilter(tmp, glowRect, new Point(0, 0), glow);
+		
+		if ( Configuration.mobile ) {
+	//		SoftGlowFilter.applyGlow( tmp, color, 6, 12.0 );
+			var glow:GlowFilter = new GlowFilter(color, 0.9, 16.0, 16.0, 1.6, 1, false, false);
+			tmp.applyFilter(tmp, glowRect, new Point(0, 0), glow);
+		}
 		//GraphicCache.addBitmapData(tmp, glowSpriteKey);
 		glowSprite = tmp;
-		glow = null;
+//		glow = null;
 		tmp = null;
 	}
 	public function setGlow(Toggle:Bool) {
 		isGlowing = Toggle;
+		
+		if ( isGlowing && !hasGlow ) {
+	/*		if ( GraphicCache.checkBitmapCache(glowSpriteKey) ) {
+				glowSprite = GraphicCache.getBitmap(glowSpriteKey);
+			} else {*/
+			
+			var tmp:CqItemBMPData = new CqItemBMPData(48, 48, true, 0x0);
+			tmp.copyPixels(getFramePixels(), new Rectangle(0, 0, 32, 32), new Point(8, 8), null, null, true);
+
+			if ( !Configuration.mobile ) {
+//				SoftGlowFilter.applyGlow( tmp, 0xffea00, 6, 12.0 );
+				var glow:GlowFilter = new GlowFilter(0xffea00, 0.9, 16.0, 16.0, 1.6, 1, false, false);
+				tmp.applyFilter(tmp, glowRect, new Point(0, 0), glow);
+			}
+			//GraphicCache.addBitmapData(tmp, glowSpriteKey);
+			glowSprite = tmp;
+//			glow = null;
+			tmp = null;
+			
+			hasGlow = true;
+		}
 	}
 
 	override function renderSprite() {
