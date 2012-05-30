@@ -51,23 +51,29 @@ class CqSpecialEffectValue {
 	
 	public function save( _io:SaveGameIO ) {
 		_io.writeString( name );
-		
-		var effectValueIsString:Bool = Std.is( value, String );
-		_io.writeInt( effectValueIsString ? 1 : 0 );
-		
-		if ( effectValueIsString ) {
-			_io.writeString( value );
+
+		if ( value == null ) {
+			_io.writeInt( -1 );
 		} else {
-			_io.writeInt( cast( value, Int ) );
+			var effectValueIsString:Bool = Std.is( value, String );
+			_io.writeInt( effectValueIsString ? 1 : 0 );
+			
+			if ( effectValueIsString ) {
+				_io.writeString( cast( value, String ) );
+			} else {
+				_io.writeInt( cast( value, Int ) );
+			}
 		}
 	}	
 
 	public function load( _io:SaveGameIO ) {
 		name = _io.readString();
 		
-		var effectValueIsString:Bool = (_io.readInt()==1);
+		var effectValueType:Int = _io.readInt();
 		
-		if ( effectValueIsString ) {
+		if ( effectValueType == -1 ) {
+			value = null;
+		} else if ( effectValueType == 1 ) {
 			value = _io.readString();
 		} else {
 			value = _io.readInt();
