@@ -2,8 +2,8 @@
 
 :: Path to Flex SDK
 set ANDROID_SDK="C:\Program Files (x86)\Android\android-sdk"
-set FLEX_SDK=C:\Coding\Tools\AirSDK3.2
-rem set FLEX_SDK=C:\AdobeAirSDK
+rem set FLEX_SDK=C:\Coding\Tools\AirSDK3.2
+set FLEX_SDK=C:\AdobeAirSDK
 rem set FLEX_SDK=C:\flex
 
 :validation
@@ -13,6 +13,7 @@ goto succeed
 :flexsdk
 echo.
 echo ERROR: incorrect path to Flex SDK in 'bat\SetupSDK.bat'
+echo (Attempting to continue...)
 echo.
 echo %FLEX_SDK%
 echo.
