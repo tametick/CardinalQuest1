@@ -164,7 +164,10 @@ class MainMenuState extends CqState {
 
 	private function quit() {
 		if (finishedAddingGuiElements) {
-			if (Configuration.air) {
+			if (Configuration.mobile) {
+				// go to main menu
+				changeState(MainMenuState);
+			} else if (Configuration.air) {
 				NativeApplication.nativeApplication.exit();
 			} else {
 				Lib.fscommand("quit");
@@ -175,7 +178,7 @@ class MainMenuState extends CqState {
 	private function saveAndQuit() {
 		if (finishedAddingGuiElements) {
 			SaveSystem.save();
-			changeState(GameState);
+//			changeState(GameState);
 			quit();
 		}
 	}
@@ -274,7 +277,7 @@ class MainMenuState extends CqState {
 				buttonY += spacing;
 			} */
 		}
-		if (Configuration.standAlone && !Configuration.mobile) {
+		if (Configuration.standAlone && (!Configuration.mobile || stackId != 0)) {
 			var btnQuit:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, Resources.getString( "MENU_QUIT" ), true, null);
 
 			var canSave:Bool = (stackId != 0 && Registery.player != null && !Registery.player.isDying);

@@ -1,3 +1,4 @@
+rem call SetupSDK.bat
 
 :: AIR output
 rem if not exist %AIR_PATH% md %AIR_PATH%
@@ -19,7 +20,7 @@ echo.
 
 set PACKAGE=cq3.swf icon128.png icon16.png icon32.png icon48.png icon57.png icon72.png
 
-call C:\AdobeAIRSDK\bin\adt -package -target apk-captive-runtime -storetype pkcs12 -keystore "bat\cq.p12" -storepass idoidoido ./bin/CQ.apk application.xml -C ./bin/package .
+call %FLEX_SDK%\bin\adt -package -target apk-captive-runtime -storetype pkcs12 -keystore "bat\cq.p12" -storepass idoidoido ./bin/CQ.apk application.xml -C ./bin/package .
 time /T
 echo.
 

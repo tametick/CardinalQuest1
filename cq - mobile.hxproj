@@ -22,7 +22,7 @@
     <option directives="ndemo" />
     <option flashStrict="True" />
     <option mainClass="cq.Main" />
-    <option enabledebug="False" />
+    <option enabledebug="True" />
     <option additional="-swf-lib lib/playtomic.swf&#xA;-D flashmobile" />
   </build>
   <!-- haxelib libraries -->

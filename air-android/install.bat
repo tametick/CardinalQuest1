@@ -1,2 +1,4 @@
-"C:\Development\Android SDK\platform-tools\adb.exe" install bin/CQ.apk
+call bat\SetupSDK.bat
+
+%ANDROID_SDK%\platform-tools\adb.exe install -r bin/CQ.apk
 pause

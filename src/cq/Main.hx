@@ -1,5 +1,7 @@
 package cq;
 
+import flash.desktop.NativeApplication;
+
 import cq.states.GameOverState;
 import cq.states.GameState;
 import cq.states.MainMenuState;
@@ -19,6 +21,7 @@ import data.Configuration;
 import data.MusicManager;
 import data.Registery;
 import data.SoundEffectsManager;
+import data.SaveSystem;
 
 import flash.Lib;
 
@@ -96,12 +99,17 @@ class Main extends HxlGame {
 			Configuration.app_height = 480;
 		#end
 		
+		if ( Configuration.mobile ) {
+			Lib.current.stage.addEventListener(Event.DEACTIVATE, deactivate);			
+		}
+		
 		// Initialise sound/music.
 		HxlState.musicOn = Configuration.startWithMusic;
 		if ( !HxlState.musicOn )
 		{
 			MusicManager.pause();
 		}
+		
 		
 		HxlState.sfxOn = Configuration.startWithSound;
 		if ( !HxlState.sfxOn )
@@ -200,4 +208,17 @@ class Main extends HxlGame {
 		addChild(m_newgroundsSprite);
 	}
 #end	
+
+	private function deactivate(e:Event) : Void {
+		// Save if we're currently in a game.
+		for ( s in this.stateStack ) {
+			if ( Std.is( s, GameState ) ) {
+				SaveSystem.save();
+				break;
+			}
+		}
+		
+		// auto-close
+		NativeApplication.nativeApplication.exit();
+	}
 }
