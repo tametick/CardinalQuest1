@@ -963,11 +963,13 @@ class GameState extends CqState {
 			var moved:Bool = false;
 			if (facing.x == 0 || facing.y == 0) {
 				if (isMouseControl) {
-					if (Configuration.mobile) {
-						moved = tryToActInDirection(facing) || tryToActInDirection(pickBestSlide(facing, level.getTargetAccordingToMousePosition(true, true))) || tryToActInDirection(level.getTargetAccordingToMousePosition(true, true));
-						//moved = tryToActInDirection(facing) || tryToActInDirection(level.getTargetAccordingToMousePosition(true, true));
-					} else {
-						moved = tryToActInDirection(facing) || tryToActInDirection(level.getTargetAccordingToMousePosition(true));
+					moved = tryToActInDirection(facing) || tryToActInDirection(pickBestSlide(facing, level.getTargetAccordingToMousePosition(true, true)));
+					
+					if (!moved) {
+						var lastTry = level.getTargetAccordingToMousePosition(true);
+						if (player.lastTile == null || lastTry.x + player.tilePos.x != player.lastTile.x || lastTry.y + player.tilePos.y != player.lastTile.y) {
+							moved = tryToActInDirection(lastTry);
+						}
 					}
 				} else if (resumeSlidingTime <= Timer.stamp()) {
 					moved = tryToActInDirection(facing) || tryToActInDirection(pickBestSlide(facing));
