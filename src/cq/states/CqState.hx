@@ -16,7 +16,7 @@ import flash.errors.TypeError;
 
 class CqState extends HxlState {
 	public override function create() {
-		HxlGame.disableEsc();
+//		HxlGame.disableEsc();
 		
 		if(cursor==null){
 			cursor = new CursorSprite();

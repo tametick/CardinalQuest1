@@ -31,6 +31,9 @@ class CqCharacterDialog extends HxlSlidingDialog {
 	var valHealth:HxlText;
 	
 	var txtDescription:HxlText;
+	
+	var sprPlayer:HxlSprite;
+	var sprShadow:HxlSprite;
 
 	static inline var textBoxes:Array<String> = ["txtCharName", "txtHealthLabel", "valHealth", "txtAttackLabel", "valAttack", "txtDefenseLabel", "valDefense", "txtSpeedLabel", "valSpeed", "txtSpiritLabel", "valSpirit", "txtVitalityLabel", "valVitality", "txtDescription"];
 #if japanese	
@@ -45,7 +48,7 @@ class CqCharacterDialog extends HxlSlidingDialog {
 		// Mobile Size: 338 x 283
 		super(X, Y, Width, Height, Direction);
 		
-		var bg:HxlSprite = HxlGraphics.smallScreen ? new HxlSprite(-22, 0, MobileSpriteMapPaper) : new HxlSprite(0, 0, SpriteMapPaper);
+		var bg:HxlSprite = HxlGraphics.smallScreen ? new HxlSprite(-22, 0, MobileSpriteMapPaper) : new HxlSprite(-5, -70, SpriteMapPaper);
 		bg.zIndex = -1;
 		add(bg);
 		
@@ -59,8 +62,8 @@ class CqCharacterDialog extends HxlSlidingDialog {
 										Resources.getString( "STAT_SPIRIT" ), "0",
 										Resources.getString( "STAT_VITALITY" ), "0"];
 		
-		var xshift = HxlGraphics.smallScreen ? -45 : 0;
-		var yshift = HxlGraphics.smallScreen ? -30 : 0;
+		var xshift = HxlGraphics.smallScreen ? -45 : -5;
+		var yshift = HxlGraphics.smallScreen ? -30 : -20;
 		
 		for (i in 0...textBoxes.length)
 		{
@@ -84,28 +87,40 @@ class CqCharacterDialog extends HxlSlidingDialog {
 			}
 		}
 		//char icon
-		var player = new HxlSprite(0, 0);
-		var shadow = new HxlSprite(0, 0);
+		sprPlayer = new HxlSprite(0, 0);
+		sprShadow = new HxlSprite(0, 0);
 		var scale = HxlGraphics.smallScreen ? 6 : 8;
-		player.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, scale, scale);
-		shadow.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, scale, scale);
-		player.setFrame(SpritePlayer.instance.getSpriteIndex(Registery.player.playerClassSprite));
-		shadow.setFrame(SpritePlayer.instance.getSpriteIndex(Registery.player.playerClassSprite));
+		sprPlayer.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, scale, scale);
+		sprShadow.loadGraphic(SpritePlayer, true, false, Configuration.tileSize, Configuration.tileSize, false, scale, scale);
+		sprPlayer.setFrame(SpritePlayer.instance.getSpriteIndex(Registery.player.playerClassSprite));
+		sprShadow.setFrame(SpritePlayer.instance.getSpriteIndex(Registery.player.playerClassSprite));
 		//shadow.
-		shadow.setAlpha(0.7);
-		shadow.setColor(1);
-		add(player);
-		if (!HxlGraphics.smallScreen) add(shadow);
-		shadow.x = player.x = HxlGraphics.smallScreen ? 218 : 300;
-		shadow.y = player.y = HxlGraphics.smallScreen ? 161 : 150;
-		shadow.x += 5;
-		shadow.y += 5;
+		sprShadow.setAlpha(0.7);
+		sprShadow.setColor(0);
+		
+		sprShadow.zIndex = 0;
+		sprPlayer.zIndex = 1;
+		add(sprPlayer);
+		if (!HxlGraphics.smallScreen) add(sprShadow);
+		sprShadow.x = sprPlayer.x = HxlGraphics.smallScreen ? 218 : 300;
+		sprShadow.y = sprPlayer.y = HxlGraphics.smallScreen ? 161 : 150;
+		sprShadow.x += 5;
+		sprShadow.y += 5;
 		
 		if (Configuration.mobile) {
 			remove(txtDescription);
 		}
 	}
 
+	public function onLoad() {
+		var player_class:String = Registery.player.playerClassName;
+		
+		txtCharName.setText( player_class );
+
+		sprPlayer.setFrame(SpritePlayer.instance.getSpriteIndex(Registery.player.playerClassSprite));
+		sprShadow.setFrame(SpritePlayer.instance.getSpriteIndex(Registery.player.playerClassSprite));
+	}
+	
 	public override function show(?ShowCallback:Dynamic=null) {
 		super.show(ShowCallback);
 		updateDialog();

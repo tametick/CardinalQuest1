@@ -800,7 +800,7 @@ class HxlSprite extends HxlObject {
 	 * @private
 	 */
 	public function setColor(Color:Int):Int {
-		return color;
+//		return color;
 		Color &= 0x00ffffff;
 		if (_color == Color) return Color;
 		_color = Color;
@@ -835,7 +835,6 @@ class HxlSprite extends HxlObject {
 	public function clearAnimations() {
 		while (_animations != null && _animations.length > 0)
 			_animations.pop();
-		_animations = new Array<HxlAnim>();
 	}
 	/**
 	 * Adds a new animation to the sprite.

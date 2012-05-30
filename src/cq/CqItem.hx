@@ -915,6 +915,8 @@ class CqItem extends GameObjectImpl, implements Loot {
 		}
 		
 		// special effects...
+		item.specialEffects.clear();
+		
 		var numSpecialEffects:Int = _io.readInt();
 		for ( i in 0 ... numSpecialEffects ) {
 			var specialEffect:CqSpecialEffectValue = new CqSpecialEffectValue("");

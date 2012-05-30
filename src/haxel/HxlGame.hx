@@ -229,7 +229,7 @@ class HxlGame extends Sprite {
 		HxlGraphics.stage.quality = HIGH;
 		#end
 		
-		disableEsc();
+//		disableEsc();
 		
 		state.create();
 		state.isStacked = false;
