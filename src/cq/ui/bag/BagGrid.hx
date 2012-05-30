@@ -95,7 +95,7 @@ class CqInventoryProxy extends HxlSprite {
 		glowRect = new Rectangle(0, 0, 58, 58);
 		isGlowing = false;
 		
-		toggleDrag(!Configuration.isMobile);
+		toggleDrag(!Configuration.mobile);
 		
 		zIndex = 5;
 		item = Item;
