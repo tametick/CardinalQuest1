@@ -440,6 +440,13 @@ class CqInventoryProxy extends HxlSprite {
 		}
 		G.lineTo(centerX, centerY);
 	}
+	
+	private override function onDragMouseDown(event:MouseEvent) {
+		// Block drag&drop unless the Inv panel is open.
+		if (GameUI.instance.panels.currentPanel == GameUI.instance.panels.panelInventory) {
+			super.onDragMouseDown(event);
+		}
+	}
 }
 
 
