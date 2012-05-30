@@ -644,7 +644,7 @@ class GameState extends CqState {
 			return;
 		}
 
-		if (GameUI.instance.panels.currentPanel == null || Std.is(GameUI.instance.panels.currentPanel,CqMapDialog)) {
+		if (GameUI.instance.panels.currentPanel == null || !GameUI.instance.panels.currentPanel.isBlockingInput) {
 			if (Configuration.mobile) {
 				HxlGraphics.updateInput();
 			}
