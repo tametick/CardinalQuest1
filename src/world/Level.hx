@@ -33,6 +33,7 @@ import com.baseoneonline.haxe.astar.IAStarSearchable;
 import com.baseoneonline.haxe.astar.AStarNode;
 
 import cq.GameUI;
+import cq.ui.CqMapDialog;
 
 class Level extends HxlTilemap, implements IAStarSearchable {
 	public var mobs:Array<Mob>;
@@ -860,9 +861,17 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	public function getTargetAccordingToMousePosition(?secondChoice:Bool = false, ?demurIfShallow:Bool = false):HxlPoint {
 		// if you don't like grabbing the player from the registry here, change it to an argument
 		var player = Registery.player;
-
-		var dx:Float = -.5 + (HxlGraphics.mouse.x - player.x) / Configuration.zoomedTileSize();
-		var dy:Float = -.5 + (HxlGraphics.mouse.y - player.y) / Configuration.zoomedTileSize();
+		var dx:Float;
+		var dy:Float;
+		
+		if (Std.is(GameUI.instance.panels.currentPanel, CqMapDialog)) {
+			var md:CqMapDialog = cast(GameUI.instance.panels.currentPanel, CqMapDialog);
+			dx = -.5 + (HxlGraphics.mouse.x - md.playerX) / md.cellSize.x;
+			dy = -.5 + (HxlGraphics.mouse.y - md.playerY) / md.cellSize.y;
+		} else {
+			dx = -.5 + (HxlGraphics.mouse.x - player.x) / Configuration.zoomedTileSize();
+			dy = -.5 + (HxlGraphics.mouse.y - player.y) / Configuration.zoomedTileSize();
+		}
 
 		var absdx:Float = Math.abs(dx);
 		var absdy:Float = Math.abs(dy);

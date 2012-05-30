@@ -21,13 +21,15 @@ import data.Configuration;
 class CqMapDialogBMPData extends BitmapData {}
 
 class CqMapDialog extends HxlSlidingDialog {
+	public var playerX(default, null):Float;
+	public var playerY(default, null):Float;
+	public var cellSize(default, null):HxlPoint;
 
 	var mapDialog:HxlDialog;
 	var mapSprite:HxlSprite;
 	var mapShape:Shape;
 	var mapBitmap:Bitmap;
 	var mapSize:HxlPoint;
-	var cellSize:HxlPoint;
 
 	var clearRect:Rectangle;
 	
@@ -76,6 +78,9 @@ class CqMapDialog extends HxlSlidingDialog {
 			mapSprite.y -= .5 * (1.0 - mapSprite.scale.y) * mapSprite.height;
 		}*/
 
+		playerX = 0;
+		playerY = 0;
+		
 		init();
 		updateDialog();
 	}
@@ -229,6 +234,9 @@ class CqMapDialog extends HxlSlidingDialog {
 		// draw the player
 		var px:Float = (player.tilePos.x * cellSize.x) + (cellSize.x / 2);
 		var py:Float = (player.tilePos.y * cellSize.y) + (cellSize.y / 2);
+		
+		playerX = px;
+		playerY = py;
 							
 		graph.beginFill(colors.friend, Alpha);
 		graph.drawCircle(px, py, (cellSize.x * .45) - 1); // make the player a little bigger (.70 instead of .5)
@@ -242,5 +250,4 @@ class CqMapDialog extends HxlSlidingDialog {
 		mapBitmap.bitmapData.draw(mapShape);
 		mapSprite.pixels = mapBitmap.bitmapData;
 	}
-
 }
