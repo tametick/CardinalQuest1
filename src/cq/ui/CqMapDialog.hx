@@ -35,7 +35,7 @@ class CqMapDialog extends HxlSlidingDialog {
 		// Size: 472 x 480
 		// map size: 400x400
 		// map pos: 36, 40
-		super(X, Y, Width, Height, Direction,false);
+		super(X, Y, Width, Height, Direction,true);
 
 		if (!HxlGraphics.smallScreen) {
 			mapDialog = new HxlDialog(36, 40, 400, 400);
