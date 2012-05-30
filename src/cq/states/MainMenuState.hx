@@ -83,11 +83,13 @@ class MainMenuState extends CqState {
 	var buttonsAreUp:Bool;
 	var finishedAddingGuiElements:Bool;
 
-	var updateLoader:URLLoader;
-	var updateVersion:String;
-	var updateUrl:String;
+	static var updateLoader:URLLoader;
 	var showingUpdate:Bool;
 
+	static var hasCheckedForUpdate:Bool = false;
+	static var updateVersion:String = Configuration.version;
+	static var updateUrl:String = null;
+	
 	public function new()
 	{
 		super();
@@ -96,19 +98,10 @@ class MainMenuState extends CqState {
 		buttonsAreUp = false;
 		finishedAddingGuiElements = false;
 		
-		updateVersion = Configuration.version;
-		updateUrl = null;
 		showingUpdate = false;
-		if ( Configuration.standAlone ) {
-			updateLoader = new URLLoader();  
-			updateLoader.dataFormat = URLLoaderDataFormat.VARIABLES;  
-			updateLoader.addEventListener( Event.COMPLETE, loadedUpdateInfo );  
-			updateLoader.addEventListener( IOErrorEvent.IO_ERROR, failedUpdateInfo );
-			updateLoader.load(new URLRequest("http://cardinalquest.com/cq_update/cq.txt"));  
-		}
 	}
 
-	function loadedUpdateInfo( event:Event ) {  
+	static function loadedUpdateInfo( event:Event ) {  
 		updateVersion = updateLoader.data.version;
 		updateUrl = updateLoader.data.url;
 		
@@ -116,18 +109,19 @@ class MainMenuState extends CqState {
 		updateLoader.removeEventListener( IOErrorEvent.IO_ERROR, failedUpdateInfo );
 	}
 	
-	function failedUpdateInfo( event:Event ) {
+	static function failedUpdateInfo( event:Event ) {
 		updateLoader.removeEventListener( Event.COMPLETE, loadedUpdateInfo );
 		updateLoader.removeEventListener( IOErrorEvent.IO_ERROR, failedUpdateInfo );
 	}
 
 	override public function destroy() {
 		super.destroy();
-
+/*
 		if ( updateLoader != null ) {
 			updateLoader.removeEventListener( Event.COMPLETE, loadedUpdateInfo );
 			updateLoader.removeEventListener( IOErrorEvent.IO_ERROR, failedUpdateInfo );
-		}
+			updateLoader.close();
+		}*/
 		
 		//instance = null;
 		// todo
@@ -440,6 +434,19 @@ class MainMenuState extends CqState {
 		btnClicked = false;
 
 
+		if ( stackId == 0 ) {
+			// Genuine main menu. Send version info request.
+			if ( Configuration.standAlone && !hasCheckedForUpdate ) {
+				updateLoader = new URLLoader();  
+				updateLoader.dataFormat = URLLoaderDataFormat.VARIABLES;  
+				updateLoader.addEventListener( Event.COMPLETE, loadedUpdateInfo );  
+				updateLoader.addEventListener( IOErrorEvent.IO_ERROR, failedUpdateInfo );
+				updateLoader.load(new URLRequest("http://cardinalquest.com/cq_update/cq.txt"));  
+				
+				hasCheckedForUpdate = true;
+			}
+		}
+		
 		if (stackId == 0) {
 			Lib.current.stage.scaleMode = StageScaleMode.SHOW_ALL;
 			if (Configuration.debug)
