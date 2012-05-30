@@ -66,6 +66,7 @@ Field String Data
 
 ; Classes.
 \"FIGHTER\"    \"A mighty warrior of unparalleled strength and vigor, honorable in battle, high master of hack-n-slash melee.\n\nThe best choice for new players.\"
+\"MOBILE_WIZARD\"     \"A wise sage, knower of secrets, worker of miracles, master of the arcane arts, fantastic barista.\n\nCan cast spells rapidly - use his mystic powers as often as possible.\"
 \"WIZARD\"     \"A wise sage, knower of secrets, worker of miracles, master of the arcane arts, maker of satisfactory mixed drinks.\n\nCan cast spells rapidly - use his mystic powers as often as possible.\"
 \"THIEF\"      \"A cunning and agile rogue whose one moral credo is this: Always get out alive.\n\nThe most challenging character - use his speed and skills to avoid taking damage.\"
 
@@ -389,6 +390,7 @@ PURPLE_POTION   \"Mana Potion\"
 BLUE_POTION     \"Elixir of Elephant Hide\"
 GREEN_POTION    \"Elixir of Tiger Strike\"
 YELLOW_POTION   \"Coca-leaf Cocktail\"
+MOBILE_YELLOW_POTION   \"Espresso Elixir\"
 
 ; Spells.
 

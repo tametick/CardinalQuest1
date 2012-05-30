@@ -50,6 +50,7 @@ PURPLE_POTION   "Mana Potion"
 BLUE_POTION     "Elixir of Elephant Hide"
 GREEN_POTION    "Elixir of Tiger Strike"
 YELLOW_POTION   "Coca-leaf Cocktail"
+MOBILE_YELLOW_POTION   "Espresso Elixir"
 
 ; Spells.
 

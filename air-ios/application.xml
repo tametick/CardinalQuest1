@@ -4,11 +4,11 @@
   <versionNumber>1.3</versionNumber>
   <filename>cardinalquest</filename>
   <name>Cardinal Quest</name>
-  <description>Hack and slash your way through a randomly generated dungeon:  a new adventure awaits every time!</description>
+  <description>Hack and slash your way through a randomly generated dungeon: A new adventure awaits every time!</description>
   <copyright>Copyright 2012 Ido Yehieli.</copyright>
   <supportedProfiles>extendedDesktop mobileDevice</supportedProfiles>
   <initialWindow>
-	<title>Cardinal Quest</title>
+	<title>CQ</title>
 	<content>cq.swf</content> 
 	<systemChrome>standard</systemChrome>
 	<transparent>false</transparent>
