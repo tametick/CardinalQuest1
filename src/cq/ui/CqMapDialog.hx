@@ -235,8 +235,8 @@ class CqMapDialog extends HxlSlidingDialog {
 		var px:Float = (player.tilePos.x * cellSize.x) + (cellSize.x / 2);
 		var py:Float = (player.tilePos.y * cellSize.y) + (cellSize.y / 2);
 		
-		playerX = px;
-		playerY = py;
+		playerX = px + mapSprite.x;
+		playerY = py + mapSprite.y;
 							
 		graph.beginFill(colors.friend, Alpha);
 		graph.drawCircle(px, py, (cellSize.x * .45) - 1); // make the player a little bigger (.70 instead of .5)
