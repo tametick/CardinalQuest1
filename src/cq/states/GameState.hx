@@ -675,6 +675,8 @@ class GameState extends CqState {
 	}
 
 	override function onKeyDown(event:KeyboardEvent) {
+		super.onKeyDown(event);
+		
 		if (!started || endingAnim || Timer.stamp() < resumeActingTime) {
 			if ( Registery.level != null && Registery.level.getTargetAccordingToKeyPress() != null )
 			{
