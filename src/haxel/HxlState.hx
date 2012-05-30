@@ -150,9 +150,9 @@ class HxlState extends Sprite {
 				if ( Configuration.mobile ) {
 					_addEventListener(TouchEvent.TOUCH_TAP , onTap,false,0,true);
 				}
-				if(Configuration.air) {
-					_addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, onRightMouseDown, false, 0, true);
-				}
+//				if(Configuration.air) {
+//					_addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, onRightMouseDown, false, 0, true);
+//				}
 			}
 			init();
 			initialized = 1;
