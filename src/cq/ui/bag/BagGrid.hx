@@ -618,8 +618,8 @@ class CqInventoryCell extends HxlDialog {
 		
 		if (GameUI.instance.panels.currentPanel != GameUI.instance.panels.panelInventory) {
 			if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
-				event.stopPropagation();
 				if (equipType == SPELL || equipType == POTION) {
+					event.stopPropagation();
 					HxlGraphics.rebakeAll = true;
 					activateItem();
 				}
