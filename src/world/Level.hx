@@ -866,14 +866,6 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 
 		var absdx:Float = Math.abs(dx);
 		var absdy:Float = Math.abs(dy);
-/*
-		var msg = "Comparing "; //TjD
-		msg = msg + "(" + Std.string( Std.int( dx ) ) +"," + Std.string( Std.int( dy ) ) + ") ";
-		msg = msg + "(" + Std.string( Std.int( player.x ) ) +"," + Std.string( Std.int( player.y ) ) + ") ";
-		msg = msg + "(" + Std.string( Std.int( HxlGraphics.mouse.x ) ) +"," + Std.string( Std.int( HxlGraphics.mouse.y ) ) + ") ";
-		GameUI.showTextNotification( msg );
-*/
-
 
 		var give:Float = 0.85; // exactly .5 means that you have to point at yourself precisely to wait; higher values make it fuzzier
 		if (absdx < give && absdy < give) return new HxlPoint(0, 0);
