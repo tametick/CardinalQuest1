@@ -10,6 +10,7 @@ import cq.states.GameState;
 import cq.states.HelpState;
 import cq.ui.CqPanelContainer;
 import cq.ui.CqPopup;
+import cq.ui.CqMapDialog;
 
 import haxel.HxlRect;
 
@@ -1025,10 +1026,37 @@ class GameUI extends HxlDialog {
 		}
 	}
 	
-
+	private static inline function getMouseTileX():Float {
+		#if flashmobile
+		if (Std.is(GameUI.instance.panels.currentPanel, CqMapDialog)) {
+			var md:CqMapDialog = cast(GameUI.instance.panels.currentPanel, CqMapDialog);
+			
+			return (HxlGraphics.mouse.x + HxlGraphics.scroll.x - md.originX -  GameUI.instance.panels.x) / md.cellSize.x;
+		} else {
+		#end
+			return (HxlGraphics.mouse.x / Configuration.zoomedTileSize());
+		#if flashmobile
+		}
+		#end
+	}
+	
+	private static inline function getMouseTileY():Float {
+		#if flashmobile
+		if (Std.is(GameUI.instance.panels.currentPanel, CqMapDialog)) {
+			var md:CqMapDialog = cast(GameUI.instance.panels.currentPanel, CqMapDialog);
+			
+			return (HxlGraphics.mouse.y + HxlGraphics.scroll.y - md.originY - GameUI.instance.panels.y) / md.cellSize.y;
+		} else {
+		#end
+			return (HxlGraphics.mouse.y / Configuration.zoomedTileSize());
+		#if flashmobile
+		}
+		#end
+	}
+	
 	private function targetEnemyClosestToMouse(radius:Float):HxlPoint {
-		var mx:Float = (HxlGraphics.mouse.x / Configuration.zoomedTileSize());
-		var my:Float = (HxlGraphics.mouse.y / Configuration.zoomedTileSize());
+		var mx:Float = getMouseTileX();
+		var my:Float = getMouseTileY();
 		
 		var x1 = Math.floor(mx);
 		var y1 = Math.floor(my);
@@ -1084,8 +1112,8 @@ class GameUI extends HxlDialog {
 				targetX = Math.floor(t.x);
 				targetY = Math.floor(t.y);
 			} else {
-				targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
-				targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
+				targetX = Math.floor(getMouseTileX());
+				targetY = Math.floor(getMouseTileY());
 			}
 		} else {
 			var newPos:HxlPoint = Registery.level.getCursorTargetAccordingToKeyPress(targetLastPos);
@@ -1142,8 +1170,8 @@ class GameUI extends HxlDialog {
 				targetX = Math.floor(t.x);
 				targetY = Math.floor(t.y);
 			} else {
-				targetX = Math.floor(HxlGraphics.mouse.x / Configuration.zoomedTileSize());
-				targetY = Math.floor(HxlGraphics.mouse.y / Configuration.zoomedTileSize());
+				targetX = Math.floor(getMouseTileX());
+				targetY = Math.floor(getMouseTileY());
 			}
 		}else {
 			targetX = targetLastPos.x;

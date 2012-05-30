@@ -23,6 +23,8 @@ class CqMapDialogBMPData extends BitmapData {}
 class CqMapDialog extends HxlSlidingDialog {
 	public var playerX(getPlayerX, null):Float;
 	public var playerY(getPlayerY, null):Float;
+	public var originX(getOriginX, null):Float;
+	public var originY(getOriginY, null):Float;
 	public var cellSize(default, null):HxlPoint;
 
 	var px:Float;
@@ -256,5 +258,13 @@ class CqMapDialog extends HxlSlidingDialog {
 	
 	private function getPlayerY():Float {
 		return py + mapSprite.y;
+	}
+	
+	private function getOriginX():Float {
+		return mapSprite.x;
+	}
+	
+	private function getOriginY():Float {
+		return mapSprite.y;
 	}
 }
