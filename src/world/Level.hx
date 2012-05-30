@@ -867,8 +867,9 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		#if flashmobile
 		if (Std.is(GameUI.instance.panels.currentPanel, CqMapDialog)) {
 			var md:CqMapDialog = cast(GameUI.instance.panels.currentPanel, CqMapDialog);
-			dx = -.5 + (HxlGraphics.mouse.x + HxlGraphics.scroll.x - md.playerX) / md.cellSize.x;
-			dy = -.5 + (HxlGraphics.mouse.y + HxlGraphics.scroll.y - md.playerY) / md.cellSize.y;
+			
+			dx = (HxlGraphics.mouse.x + HxlGraphics.scroll.x - md.playerX - GameUI.instance.panels.x) / md.cellSize.x;
+			dy = (HxlGraphics.mouse.y + HxlGraphics.scroll.y - md.playerY - GameUI.instance.panels.y) / md.cellSize.y;
 		} else {
 		#end
 			dx = -.5 + (HxlGraphics.mouse.x - player.x) / Configuration.zoomedTileSize();
