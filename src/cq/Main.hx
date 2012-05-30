@@ -1,6 +1,7 @@
 package cq;
 
 import flash.desktop.NativeApplication;
+import flash.events.MouseEvent;
 
 import cq.states.GameOverState;
 import cq.states.GameState;
@@ -101,6 +102,8 @@ class Main extends HxlGame {
 		
 		if ( Configuration.mobile ) {
 			Lib.current.stage.addEventListener(Event.DEACTIVATE, deactivate);			
+		} else {
+			Lib.current.addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, nothing);
 		}
 		
 		// Initialise sound/music.
@@ -220,5 +223,9 @@ class Main extends HxlGame {
 		
 		// auto-close
 		NativeApplication.nativeApplication.exit();
+	}
+	
+	private function nothing(e:Event) : Void {
+		
 	}
 }
