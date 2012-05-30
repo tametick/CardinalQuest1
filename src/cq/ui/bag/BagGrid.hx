@@ -95,7 +95,7 @@ class CqInventoryProxy extends HxlSprite {
 		glowRect = new Rectangle(0, 0, 58, 58);
 		isGlowing = false;
 		
-		toggleDrag(true);
+		toggleDrag(!Configuration.isMobile);
 		
 		zIndex = 5;
 		item = Item;
@@ -617,11 +617,12 @@ class CqInventoryCell extends HxlDialog {
 		}
 		
 		if (GameUI.instance.panels.currentPanel != GameUI.instance.panels.panelInventory) {
-			if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y) && (equipType == SPELL || equipType == POTION)) {
+			if (overlapsPoint(HxlGraphics.mouse.x, HxlGraphics.mouse.y)) {
 				event.stopPropagation();
-				
-				HxlGraphics.rebakeAll = true;
-				activateItem();
+				if (equipType == SPELL || equipType == POTION) {
+					HxlGraphics.rebakeAll = true;
+					activateItem();
+				}
 			}
 		} else {
 			// we are in the inventory screen
