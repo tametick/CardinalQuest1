@@ -19,7 +19,7 @@
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="ndemo" />
+    <option directives="ndemo&#xA;flashmobile" />
     <option flashStrict="True" />
     <option mainClass="cq.Main" />
     <option enabledebug="True" />
