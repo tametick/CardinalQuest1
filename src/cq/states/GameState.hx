@@ -238,7 +238,7 @@ class GameState extends CqState {
 
 
 		//set the actual graphical indicator of the cursor direction
-		var target:HxlPoint = Registery.level.getTargetAccordingToMousePosition();
+		var target:HxlPoint = Registery.level.getFacingAccordingToMousePosition();
 
 		if (gameUI.overlapsPoint( HxlGraphics.mouse.x, HxlGraphics.mouse.y) || target == null || (target.x == 0 && target.y == 0)) {
 			setDiagonalCursor();
@@ -573,7 +573,7 @@ class GameState extends CqState {
 			}
 		}
 
-		if ( Registery.level.getTargetAccordingToKeyPress() == null )
+		if ( Registery.level.getFacingAccordingToKeyPress() == null )
 		{
 			isPlayerActing = false;
 		}
@@ -678,7 +678,7 @@ class GameState extends CqState {
 		super.onKeyDown(event);
 		
 		if (!started || endingAnim || Timer.stamp() < resumeActingTime) {
-			if ( Registery.level != null && Registery.level.getTargetAccordingToKeyPress() != null )
+			if ( Registery.level != null && Registery.level.getFacingAccordingToKeyPress() != null )
 			{
 				isPlayerActing = true;
 			}
@@ -745,7 +745,7 @@ class GameState extends CqState {
 		var left = new HxlPoint(-facing.y, -facing.x);
 		var right = new HxlPoint(facing.y, facing.x);
 		
-		// you can't move backward, though!
+		// you can't slide backward, though!
 		if (player.lastTile != null) {
 			left_back = (player.lastTile.x == left.x + player.tilePos.x && player.lastTile.y == left.y + player.tilePos.y);
 			right_back = (player.lastTile.x == right.x + player.tilePos.x && player.lastTile.y == right.y + player.tilePos.y);
@@ -755,11 +755,11 @@ class GameState extends CqState {
 		if (secondaryFacing != null) {
 			if (left.x == secondaryFacing.x && left.y == secondaryFacing.y) {
 				right_ok = false;
+				left_back = false;
 			} else if (right.x == secondaryFacing.x && right.y == secondaryFacing.y) {
 				left_ok = false;
+				right_back = false;
 			}
-			
-			return null;
 		}
 
 		// get set
@@ -849,6 +849,40 @@ class GameState extends CqState {
 		return null;
 	}
 
+	private function playerActInPlace(confirmed:Bool) {
+		var player = Registery.player;
+		var tile:CqTile = getPlayerTile(new HxlPoint(0, 0));
+		
+		if (!confirmed) return;  // this logic used to be more subtle -- but it shouldn't be
+
+		if (tile.loots.length > 0) {
+			// there is an item here, so let's pick it up (this used to be manual?  crazy!)
+			var item = cast(tile.loots[tile.loots.length - 1], CqItem);
+			if (!Std.is(item, CqChest)) {
+				player.pickup(this, item);
+			}
+			item = null;
+		} else if (tile.isStairs) {
+			// these are stairs!  time to descend -- but only if the key was JUST pressed
+			
+			GameUI.clearEffectText();
+			Registery.world.goToNextLevel();
+			player.popup.setText("");
+
+			#if demo
+			if (Configuration.demoLastLevel == Registery.world.currentLevelIndex-1) {
+				MusicManager.stop();
+				SoundEffectsManager.play(Win);
+				HxlGraphics.pushState(new DemoOverState());
+			}
+			#end
+		}
+
+		// pass a turn
+		isPlayerActing = false;
+		passTurn();
+	}
+
 	private function act() {
 		var level = Registery.level;
 		var player:CqPlayer = Registery.player;
@@ -886,8 +920,8 @@ class GameState extends CqState {
 		}
 
 		var isMouseControl:Bool;
-		var facing:HxlPoint, tile:CqTile;
-		var keyFacing:HxlPoint = level.getTargetAccordingToKeyPress();
+		var facing:HxlPoint;
+		var keyFacing:HxlPoint = level.getFacingAccordingToKeyPress();
 
 		if (keyFacing != null ) {
 
@@ -900,7 +934,7 @@ class GameState extends CqState {
 				return;
 			}
 
-			facing = level.getTargetAccordingToMousePosition();
+			facing = level.getFacingAccordingToMousePosition();
 			isMouseControl = true;
 		}
 
@@ -927,67 +961,53 @@ class GameState extends CqState {
 				}
 			}
 
-			if (!confirmed) {
-				return;
-			}
-
-			tile = getPlayerTile(new HxlPoint(0, 0));
-
-			if (tile.loots.length > 0) {
-				// there is an item here, so let's pick it up (this used to be manual?  crazy!)
-				var item = cast(tile.loots[tile.loots.length - 1], CqItem);
-				if (!Std.is(item, CqChest)) {
-					player.pickup(this, item);
-				}
-				item = null;
-			} else if (tile.isStairs) {
-				// these are stairs!  time to descend -- but only if the key was JUST pressed
-				
-				GameUI.clearEffectText();
-				Registery.world.goToNextLevel();
-				player.popup.setText("");
-
-				#if demo
-				if (Configuration.demoLastLevel == Registery.world.currentLevelIndex-1) {
-					MusicManager.stop();
-					SoundEffectsManager.play(Win);
-					HxlGraphics.pushState(new DemoOverState());
-				}
-				#end
-			}
-
-			// pass a turn
-			isPlayerActing = false;
-			passTurn();
+			playerActInPlace(confirmed);
 			return;
 		} else {
-			// motion has been requested.  try first, second, and possibly third choices for movement
+			// motion has been requested
 			var moved:Bool = false;
-			if (facing.x == 0 || facing.y == 0) {
-				if (isMouseControl) {
-					moved = tryToActInDirection(facing) || tryToActInDirection(pickBestSlide(facing, level.getTargetAccordingToMousePosition(true, true)));
-					
-					if (!moved) {
-						var lastTry = level.getTargetAccordingToMousePosition(true);
-						if (player.lastTile == null || lastTry.x + player.tilePos.x != player.lastTile.x || lastTry.y + player.tilePos.y != player.lastTile.y) {
-							moved = tryToActInDirection(lastTry);
-						}
-					}
-				} else if (resumeSlidingTime <= Timer.stamp()) {
-					moved = tryToActInDirection(facing) || tryToActInDirection(pickBestSlide(facing));
+						
+			if ((facing.x == 1 || facing.x == -1) && (facing.y == 1 || facing.y == -1)) {
+				// motion has been requested, probably by diagonals on the number pad, that requires us to
+				// alternate between the two axes of our motion with no bias
+				
+				if ( player.lastTile != null && player.lastTile.y == player.tilePos.y ) {
+					moved = tryToActInDirection(new HxlPoint(0, facing.y)) || tryToActInDirection(new HxlPoint(facing.x, 0));
 				} else {
-					moved = tryToActInDirection(facing);
-					if ( !moved ) {
-						isPlayerActing = true;
-						return; // Wait until we can slide.
-					}
+					moved = tryToActInDirection(new HxlPoint(facing.x, 0)) || tryToActInDirection(new HxlPoint(0, facing.y));
 				}
 			} else {
-				// we need a way to indicate whether facing.x or facing.y should be tried first (maybe something like what the mouse case does)
-				moved = tryToActInDirection(new HxlPoint(facing.x, 0)) || tryToActInDirection(new HxlPoint(0, facing.y));
+				// motion has been requested, whether by mouse or by cardinals on the keyboard, that falls into one of two kinds:
+				// 1) some rotation of (1, 0), which tells us to step in a direction or pick the best slide in the 0 axis
+				// 2) some rotation of (1, .5), which tells us to step in the primary direction, or slide in the direction of the .5,
+				//    but never away from the .5
+				//
+				// to add slideless movement, consider making a (2, 0) case, but only if someone forces you.
+				
+				// ok, store the facing and clear out .5 elements, to try that first
+				var secondary:HxlPoint = null;
+				
+				if (facing.x == .5 || facing.x == -.5) {
+					secondary = new HxlPoint(facing.x * 2, 0);
+					facing.x = 0;
+				} else if (facing.y == .5 || facing.y == -.5) {
+					secondary = new HxlPoint(0, facing.y * 2);
+					facing.y = 0;
+				}
+				
+				moved = tryToActInDirection(facing);
+				
+				if (!moved && resumeSlidingTime <= Timer.stamp()) {
+					moved = tryToActInDirection(pickBestSlide(facing, secondary));
+				}
 			}
 
-			isPlayerActing = moved || isMouseControl;
+			// if the mouse is held down and isPlayerActing == false, act (this function)
+			// won't get called.  By setting it true here no matter what, we ensure that the
+			// player can keep moving by simply moving the mouse -- even if our best efforts
+			// couldn't translate the mouse position or keypress into an acceptable move.
+			// (If we wanted to block movement completely at this point, we could set it false.)
+			isPlayerActing = true;
 			
 			if (moved) {
 				passTurn( justOpenedDoor );

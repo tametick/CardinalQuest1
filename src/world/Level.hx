@@ -790,7 +790,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	 * @param	?fromCustomPoint if not null uses this as starting point, otherwise uses players tilePos.
 	 * @return starting position + direction, or just starting position if enter is pressed, or null if nothing is pressed
 	 */
-	public function getTargetAccordingToKeyPress(?fromCustomPoint:HxlPoint = null):HxlPoint {
+	public function getFacingAccordingToKeyPress(?fromCustomPoint:HxlPoint = null):HxlPoint {
 		var pos:HxlPoint = fromCustomPoint;
 		if (pos == null) pos = Registery.player.tilePos;
 
@@ -851,52 +851,48 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 			}
 		}
 		
-		return getTargetAccordingToKeyPress(fromCustomPoint);
+		return getFacingAccordingToKeyPress(fromCustomPoint);
 	}
 	
 	private inline static function sgn(x:Float):Int {
 		return if (x < 0) -1 else if (x > 0) 1 else 0;
 	}
 
-	public function getTargetAccordingToMousePosition(?secondChoice:Bool = false, ?demurIfShallow:Bool = false):HxlPoint {
+
+	// the slope determines how close to horizontal/vertical you have to get before the game treats it as perfectly
+	// vertical or perfectly horizontal
+	static inline var slope = Math.tan(Math.PI * 12.5 / 180); // 12.5 degrees
+	
+	// the value of give defines how close to the center of your character you have to click to stand still:
+	// exactly .5 means that you have to point at yourself precisely; higher values make it fuzzier.
+	static inline var give:Float = 0.85; // .85 is great on a small screen, .45 or less is better on an iPad -- oy, vey
+	
+	public function getFacingAccordingToMousePosition(?FourWayTargeting:Bool = false):HxlPoint {
 		// if you don't like grabbing the player from the registry here, change it to an argument
 		var player = Registery.player;
-		var dx:Float;
-		var dy:Float;
 		
-		#if flashmobile
-		if (Std.is(GameUI.instance.panels.currentPanel, CqMapDialog)) {
-			var md:CqMapDialog = cast(GameUI.instance.panels.currentPanel, CqMapDialog);
-			
-			dx = (HxlGraphics.mouse.x + HxlGraphics.scroll.x - md.playerX - GameUI.instance.panels.x) / md.cellSize.x;
-			dy = (HxlGraphics.mouse.y + HxlGraphics.scroll.y - md.playerY - GameUI.instance.panels.y) / md.cellSize.y;
-		} else {
-		#end
-			dx = -.5 + (HxlGraphics.mouse.x - player.x) / Configuration.zoomedTileSize();
-			dy = -.5 + (HxlGraphics.mouse.y - player.y) / Configuration.zoomedTileSize();
-		#if flashmobile
-		}
-		#end
+		var dx:Float = -.5 + (HxlGraphics.mouse.x - player.x) / Configuration.zoomedTileSize();
+		var dy:Float = -.5 + (HxlGraphics.mouse.y - player.y) / Configuration.zoomedTileSize();
 
 		var absdx:Float = Math.abs(dx);
 		var absdy:Float = Math.abs(dy);
 
-		var give:Float = 0.85; // exactly .5 means that you have to point at yourself precisely to wait; higher values make it fuzzier
-		if (absdx < give && absdy < give) return new HxlPoint(0, 0);
+		if (absdx < give && absdy < give) {
+			return new HxlPoint(0, 0);
+		}
 
-		// here it would be nice to track more info about angle than this
-		if ((absdx > absdy && !secondChoice) || (absdx < absdy && secondChoice)) {
-			if (secondChoice && demurIfShallow) {
-				if (3.6 * absdx < absdy) return null;
+		if (absdx > absdy) {
+			if (FourWayTargeting || slope * (absdx - give) > (absdy - give)) {
+				return new HxlPoint(sgn(dx), 0);
+			} else {
+				return new HxlPoint(sgn(dx), .5 * sgn(dy));
 			}
-			
-			return new HxlPoint(sgn(dx), 0);
 		} else {
-			if (secondChoice && demurIfShallow) {
-				if (3.6 * absdy < absdx) return null;
+			if (FourWayTargeting || slope * (absdy - give) > (absdx - give)) {
+				return return new HxlPoint(0, sgn(dy));
+			} else {
+				return new HxlPoint(.5 * sgn(dx), sgn(dy));
 			}
-			
-			return new HxlPoint(0, sgn(dy));
 		}
 	}
 
