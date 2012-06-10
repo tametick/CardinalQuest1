@@ -55,10 +55,10 @@ class CqState extends HxlState {
 			var up:Int = SpriteCursor.instance.getSpriteIndex("up");
 			var newAngle:Float = cursor.angle;
 
-			if (facing.x==0 && facing.y==1) newAngle = 180;
-			else if(facing.x==0 && facing.y==-1) newAngle = 0;
-			else if(facing.x==1 && facing.y==0) newAngle = 90
-			else if(facing.x==-1 && facing.y==0) newAngle = 270;
+			if (facing.y==1) newAngle = 180;
+			else if(facing.y==-1) newAngle = 0;
+			else if(facing.x==1) newAngle = 90
+			else if(facing.x==-1) newAngle = 270;
 
 			if (cursor.getFrame() != up) cursor.setFrame(up);
 			if (cursor.angle != newAngle) cursor.angle = newAngle;

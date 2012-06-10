@@ -18,7 +18,17 @@ time /T
 
 set PACKAGE=cq3.swf icon128.png icon16.png icon32.png icon48.png icon57.png icon72.png
 
+if %1==DISTRO goto distribute
 call c:\AdobeAIRSDK\bin\adt -package -target ipa-test -provisioning-profile "bat\Cardinal_Quest_Beta_2.mobileprovision" -storetype pkcs12 -keystore "bat\iphone_dev_cert_jday.p12" -storepass cqdev ./bin/CQ.ipa application.xml -C ./bin/package .
+goto done
+
+:distribute
+echo Preparing package for distribution
+call c:\AdobeAIRSDK\bin\adt -package -target ipa-app-store -provisioning-profile "bat\Cardinal_Quest.mobileprovision" -storetype pkcs12 -keystore "bat\itunes_cert_jday.p12" -storepass cqdev ./bin/CQ.ipa application.xml -C ./bin/package .
+goto done
+
+:done
+
 time /T
 
 if errorlevel 1 goto failed
