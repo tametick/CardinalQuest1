@@ -652,6 +652,10 @@ class CqInventoryCell extends HxlDialog {
 						}
 					} else {
 						CqInventoryProxy.theProxyBeingDragged = this.proxy;
+						
+						if (this.proxy != null && this.proxy.item != null) {
+							GameUI.instance.bagDialog.slidingPart.itemInfoDialog.setItem(this.proxy.item);
+						}
 					}
 		
 					HxlGraphics.rebakeAll = true;
