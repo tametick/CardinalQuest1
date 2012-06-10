@@ -4,8 +4,12 @@ set PAUSE_ERRORS=1
 call bat\SetupSDK.bat
 call bat\SetupApplication.bat
 
+set AND_CERT_NAME=cq
+set AND_CERT_PASS=idoidoido
+set AND_CERT_FILE=bat\cq.p12
+
 :: Generate
-echo.
+echo on
 echo Generating a self-signed certificate for Android packaging
 call adt -certificate -validityPeriod 25 -cn %AND_CERT_NAME% 1024-RSA "%AND_CERT_FILE%" %AND_CERT_PASS%
 if errorlevel 1 goto failed
