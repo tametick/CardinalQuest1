@@ -601,4 +601,4 @@ DEMO_OVER            \"Demo Over!\"
 DEMO_OVER_MORE       \"Want more?\"
 
 INVENTORY_HINT       \"Mouse-over items, spells and potions to see their attributes and effects.\"
-MOBILE_INVENTORY_HINT       \"Tap an item twice to see its attributes and effects.  Tap an item and then another cell to move it.\"";		embedFile = StatsFile.loadFromString( "strings.txt", embedText );	}}
+MOBILE_INVENTORY_HINT       \"Tap an item to see its attributes and effects.  Tap it again to deselect it, or tap another cell to move it.\"";		embedFile = StatsFile.loadFromString( "strings.txt", embedText );	}}
