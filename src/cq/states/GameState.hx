@@ -621,6 +621,8 @@ class GameState extends CqState {
 		HxlGraphics.doFollow();
 		
 		HxlGraphics.follow(Registery.player, Configuration.mobile ? 15 : 10);		
+		
+		CqLevel.playMusicByIndex(Registery.level.index);
 	}
 	
 	var msMoveStamp:Float;
