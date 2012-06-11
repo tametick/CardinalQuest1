@@ -139,7 +139,22 @@ class Main extends HxlGame {
 		Configuration.zoom = Lib.current.stage.stageHeight < 400 ? 2.0 : 2.0;
 		
 		var physical_display_width:Float = Capabilities.screenResolutionX / Capabilities.screenDPI;
-		Configuration.inchesPerTile = (Configuration.zoomedTileSize() / Configuration.app_width) * physical_display_width;
+		var physical_display_height:Float = Capabilities.screenResolutionY / Capabilities.screenDPI;
+		Configuration.inchesPerTile = Math.min(
+			(Configuration.zoomedTileSize() / Configuration.app_width) * physical_display_width,
+			(Configuration.zoomedTileSize() / Configuration.app_height) * physical_display_height
+		);
+		
+		if (Capabilities.os.toLowerCase().indexOf("ipad") >= 0) {
+			// yes, this is a hack.  it's a bloody wicked hack, and there's nothing we can do about that for now
+			//var blackBar:Float = .5 * ((Capabilities.screenResolutionY / Capabilities.screenResolutionX) * Configuration.app_width - Configuration.app_height);
+			
+			//if (blackBar > 0) {
+				//HxlGraphics.blackBarHeight = Math.floor(blackBar);
+			//}
+			
+			HxlGraphics.blackBarHeight = 20; // this is the correct figure -- don't know why Capabilities ends up reporting figures wrong
+		}
 		
 		HxlState.bgColor = 0xFF000000;
 		

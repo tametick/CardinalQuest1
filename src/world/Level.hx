@@ -883,8 +883,22 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		// if you don't like grabbing the player from the registry here, change it to an argument
 		var player = Registery.player;
 		
-		var dx:Float = -.5 + (HxlGraphics.mouse.x - player.x) / Configuration.zoomedTileSize();
-		var dy:Float = -.5 + (HxlGraphics.mouse.y - player.y) / Configuration.zoomedTileSize();
+		var dx:Float;
+		var dy:Float;
+ 		
+		#if flashmobile
+		if (Std.is(GameUI.instance.panels.currentPanel, CqMapDialog)) {
+			var md:CqMapDialog = cast(GameUI.instance.panels.currentPanel, CqMapDialog);
+			
+			dx = (HxlGraphics.mouse.x + HxlGraphics.scroll.x - md.playerX - GameUI.instance.panels.x) / md.cellSize.x;
+			dy = (HxlGraphics.mouse.y + HxlGraphics.scroll.y - md.playerY - GameUI.instance.panels.y) / md.cellSize.y;
+		} else {
+		#end
+			dx = -.5 + (HxlGraphics.mouse.x - player.x) / Configuration.zoomedTileSize();
+			dy = -.5 + (HxlGraphics.mouse.y - player.y) / Configuration.zoomedTileSize();
+		#if flashmobile
+		}
+		#end
 
 		var absdx:Float = Math.abs(dx);
 		var absdy:Float = Math.abs(dy);

@@ -221,6 +221,8 @@ class HxlGraphics {
 	public static var volume(getVolume, setVolume) : Float;
 	public static var state(getState, setState) : HxlState;
 	public static var pause(getPause, setPause) : Bool;
+	
+	public static var blackBarHeight : Int = 0;
 
 	/**
 	 * Called by HxlGame to set up HxlGraphics during game constructor.
@@ -706,11 +708,13 @@ class HxlGraphics {
 	 */
 	public static function updateInput() {
 		keys.update();
-		if( !Configuration.mobile ){
+		
+		#if flashmobile
+			// subtract the black bar, as necessary!  
+			mouse.update(Math.floor(state.touchX),Math.floor(state.touchY) - blackBarHeight,scroll.x,scroll.y);
+		#else
 			mouse.update(Math.floor(state.mouseX),Math.floor(state.mouseY),scroll.x,scroll.y);
-		} else {
-			mouse.update(Math.floor(state.touchX),Math.floor(state.touchY),scroll.x,scroll.y);
-		}
+		#end
 	}
 
 	/**
