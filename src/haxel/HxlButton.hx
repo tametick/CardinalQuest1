@@ -347,10 +347,6 @@ class HxlButton extends HxlGroup {
 		} else {
 			if (!exists || !visible || !active) return;
 		}
-		
-		#if flashmobile
-			HxlGraphics.updateInput();
-		#end
 
 		if (overlapsPoint(HxlGraphics.mouse.x,HxlGraphics.mouse.y)) {
 			if ( _callback != null ) 
