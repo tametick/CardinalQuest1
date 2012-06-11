@@ -69,6 +69,18 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 		
 		fovTileAngleReach = 11;
 		generateFOVTileAngles();		
+		
+		// give is static and initializing it every time we start on a new level is weird, but doesn't matter.
+		// ideally, 5/32" on each side of the center of the player character should be allocated to the wait zone;
+		// but we can't go much below one tile (.35 should do the trick) or above about .90 --
+		
+		#if flashmobile
+		give = (5 / 32) / Configuration.inchesPerTile;
+		if (give < .35) give = .35;
+		if (give > 0.90) give = .90;
+		#else
+		give = .85; // feels right on the desktop for lazy clicking
+		#end
 	}
 
 	public function isBlockingMovement(X:Int, Y:Int, ?CheckActor:Bool=false):Bool {
@@ -865,7 +877,7 @@ class Level extends HxlTilemap, implements IAStarSearchable {
 	
 	// the value of give defines how close to the center of your character you have to click to stand still:
 	// exactly .5 means that you have to point at yourself precisely; higher values make it fuzzier.
-	static inline var give:Float = 0.85; // .85 is great on a small screen, .45 or less is better on an iPad -- oy, vey
+	static var give:Float = 0.85; // .85 is great on a small screen, .45 or less is better on an iPad -- oy, vey
 	
 	public function getFacingAccordingToMousePosition(?FourWayTargeting:Bool = false):HxlPoint {
 		// if you don't like grabbing the player from the registry here, change it to an argument

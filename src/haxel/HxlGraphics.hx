@@ -6,6 +6,7 @@ import cq.states.GameState;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import flash.display.Stage;
+import flash.system.Capabilities;
 import flash.geom.Matrix;
 import flash.geom.Point;
 import flash.media.Sound;
@@ -242,6 +243,7 @@ class HxlGraphics {
 		frameratePaused = 10;
 		maxElapsed = 0.033333;
 		wayTooLong = 0.250;
+		
 		HxlGraphics.elapsed = 0;
 		_showBounds = false;
 		HxlObject._refreshBounds = false;

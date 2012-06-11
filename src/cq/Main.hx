@@ -137,6 +137,10 @@ class Main extends HxlGame {
 		
 		Configuration.tileSize = 16;
 		Configuration.zoom = Lib.current.stage.stageHeight < 400 ? 2.0 : 2.0;
+		
+		var physical_display_width:Float = Capabilities.screenResolutionX / Capabilities.screenDPI;
+		Configuration.inchesPerTile = (Configuration.zoomedTileSize() / Configuration.app_width) * physical_display_width;
+		
 		HxlState.bgColor = 0xFF000000;
 		
 		//Initialize Kongregate score API
