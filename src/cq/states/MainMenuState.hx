@@ -520,6 +520,9 @@ class MainMenuState extends CqState {
 			MusicManager.pause();
 			tglMusicIcon.setFrame(0);
 		}
+		
+		var settingStore = SaveSystem.getLoadIO();
+		settingStore.saveSetting("musicOn", HxlState.musicOn);
 	}
 	
 	private function setSFX(_on:Bool):Void
@@ -528,6 +531,9 @@ class MainMenuState extends CqState {
 		HxlState.sfxOn = _on;
 		SoundEffectsManager.enabled = _on;
 		tglSFXIcon.setFrame((_on?1:0));
+		
+		var settingStore = SaveSystem.getLoadIO();
+		settingStore.saveSetting("sfxOn", HxlState.sfxOn);
 	}
 
 	private function updateFullscreen():Void

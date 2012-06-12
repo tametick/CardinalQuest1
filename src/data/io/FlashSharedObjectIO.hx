@@ -39,7 +39,7 @@ class FlashSharedObjectIO implements SaveGameIO
 	
 	public function hasSave() : Bool {
 		if ( s_sharedObject != null && Reflect.hasField( s_sharedObject.data, "version" )  ) {
-			if ( s_sharedObject.data.version == Configuration.version ) {
+			if ( s_sharedObject.data.version == Configuration.saveVersion ) {
 				return true;
 			}
 		}
@@ -84,7 +84,7 @@ class FlashSharedObjectIO implements SaveGameIO
 	
 	// saving---
 	public function startWrite() {
-		s_sharedObject.data.version = Configuration.version;
+		s_sharedObject.data.version = Configuration.saveVersion;
 		
 		s_sharedObject.data.blockName = new Array<String>();
 		s_sharedObject.data.blockIntSeek = new Array<Int>();
@@ -112,5 +112,33 @@ class FlashSharedObjectIO implements SaveGameIO
 	
 	public function completeWrite() {
 		s_sharedObject.flush();
+	}
+	
+	// settings: adding here because it's probably the easiest place to change it in the future if something crops up
+	public function getSetting(key:String, ?defaultValue:Dynamic = null, ?type:Dynamic = null):Dynamic {
+		if ( s_sharedObject == null || !Reflect.hasField(s_sharedObject.data, "settings") || !Reflect.hasField(s_sharedObject.data.settings, key)) {
+			return defaultValue;
+		} else {
+			var v = Reflect.getProperty(s_sharedObject.data.settings, key);
+			
+			if (v == null || (type != null && !Std.is(v, type))) {
+				return defaultValue;
+			} else {
+				return v;
+			}
+		}
+	}
+	
+	public function saveSetting(key:String, value:Dynamic):Void {
+		if ( s_sharedObject == null) {
+			return;
+		}
+		if (!Reflect.hasField(s_sharedObject.data, "settings")) {
+			s_sharedObject.data.settings = { };
+		}
+		
+		Reflect.setField(s_sharedObject.data.settings, key, value);
+		
+		s_sharedObject.flush(); // yep!  this is bad, but settings save when we switch them
 	}
 }

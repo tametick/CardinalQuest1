@@ -107,14 +107,16 @@ class Main extends HxlGame {
 		}
 		
 		// Initialise sound/music.
-		HxlState.musicOn = Configuration.startWithMusic;
-		if ( !HxlState.musicOn )
-		{
+		
+		var settingStore = SaveSystem.getLoadIO();
+		
+		HxlState.musicOn = settingStore.getSetting("musicOn", Configuration.startWithMusic, Bool);
+		if ( !HxlState.musicOn ) {
 			MusicManager.pause();
 		}
 		
 		
-		HxlState.sfxOn = Configuration.startWithSound;
+		HxlState.sfxOn = settingStore.getSetting("sfxOn", Configuration.startWithSound, Bool);
 		if ( !HxlState.sfxOn )
 		{
 			SoundEffectsManager.enabled = false;

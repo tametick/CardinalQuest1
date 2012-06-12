@@ -7,7 +7,8 @@ package data;
  * */
 
 class Configuration {
-	public static inline var version:String = "1.3";
+	public static inline var version:String = "1.3.1";
+	public static inline var saveVersion:String = "1.3";
 
 	public static inline var debug = false;
 	public static inline var air = false;

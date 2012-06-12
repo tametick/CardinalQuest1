@@ -20,4 +20,7 @@ interface SaveGameIO
 	public function writeInt( _v:Int ):Void;
 	public function writeString( _s:String ):Void;
 	public function completeWrite():Void;
+
+	public function getSetting(_key:String, ?_defaultValue:Dynamic, ?_type:Dynamic = null):Dynamic;
+	public function saveSetting(_key:String, _value:Dynamic):Void;
 }

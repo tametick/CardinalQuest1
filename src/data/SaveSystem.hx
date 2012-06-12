@@ -26,5 +26,4 @@ class SaveSystem
 	public static function getLoadIO() : SaveGameIO {
 		return new FlashSharedObjectIO();
 	}
-	
 }
