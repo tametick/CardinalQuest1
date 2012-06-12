@@ -236,7 +236,7 @@ class Main extends HxlGame {
 	private function deactivate(e:Event) : Void {
 		// Save if we're currently in a game.
 		for ( s in this.stateStack ) {
-			if ( Std.is( s, GameState ) ) {
+			if ( Std.is( s, GameState ) && cast(s, GameState).started ) {				
 				SaveSystem.save();
 				break;
 			}
