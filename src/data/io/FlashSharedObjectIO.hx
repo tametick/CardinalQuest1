@@ -111,7 +111,11 @@ class FlashSharedObjectIO implements SaveGameIO
 	}
 	
 	public function completeWrite() {
-		s_sharedObject.flush();
+		try {
+			s_sharedObject.flush();
+		} catch (err:Dynamic) {
+			// this is allowed to fail, but it should never happen -- let's just not crash
+		}
 	}
 	
 	// settings: adding here because it's probably the easiest place to change it in the future if something crops up
@@ -139,6 +143,10 @@ class FlashSharedObjectIO implements SaveGameIO
 		
 		Reflect.setField(s_sharedObject.data.settings, key, value);
 		
-		s_sharedObject.flush(); // yep!  this is bad, but settings save when we switch them
+		try {
+			s_sharedObject.flush(); // yep!  this is bad, but settings save when we switch them
+		} catch (err:Dynamic) {
+			// this is allowed to fail, but it should never happen -- let's just not crash
+		}
 	}
 }
