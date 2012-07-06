@@ -68,9 +68,12 @@ class CreateCharState extends CqState {
 	override public function destroy(){
 		super.destroy();
 
+		#if !scouts
 		txtDesc.destroy();
-		selectBox.destroy();
 		portrait.destroy();
+		#end
+		
+		selectBox.destroy();
 		if ( playerSprites.bitmapData != null ) {
 			playerSprites.bitmapData.dispose();
 		}
@@ -112,6 +115,12 @@ class CreateCharState extends CqState {
 		add(text);
 	}
 	
+	#if scouts
+	var warriorBg:HxlSprite;
+	var wizardBg:HxlSprite;
+	var rogueBg:HxlSprite;
+	#end
+	
 	function realInit() {
 		add(cursor);
 		cursor.visible	= true;
@@ -119,9 +128,25 @@ class CreateCharState extends CqState {
 			remove(scroller);
 		storyScreen = false;
 		
+		
+		#if scouts
+		warriorBg = new HxlSprite(0, 0, ScoutsWarrior);
+		warriorBg.zIndex = -10;
+		wizardBg = new HxlSprite(0, 0, ScoutsWizard);
+		wizardBg.zIndex = -10;
+		rogueBg = new HxlSprite(0, 0, ScoutsRogue);
+		rogueBg.zIndex = -10;
+		add(warriorBg);
+		add(wizardBg);
+		add(rogueBg);	
+		wizardBg.visible = false;
+		rogueBg.visible = false;
+		#else
 		//paper bg
 		var bg:HxlSprite = new HxlSprite(HxlGraphics.smallScreen ? -25 : 40, 250 + paperShiftup + (HxlGraphics.smallScreen ? 10 : 0), SpriteCharPaper);
 		add(bg);
+		#end
+		
 		
 #if japanese
 		var titleText:HxlText = new HxlText(0, HxlGraphics.smallScreen ? 0 : 8, Configuration.app_width, Resources.getString( "MENU_CREATECHARACTER" ), true, "FontAnonymousPro" );
@@ -129,19 +154,31 @@ class CreateCharState extends CqState {
 		var titleText:HxlText = new HxlText(0, HxlGraphics.smallScreen ? -3 : 0, Configuration.app_width, Resources.getString( "MENU_CREATECHARACTER" ));
 #end
 
+#if !scouts
 		titleText.setFormat(null, HxlGraphics.smallScreen ? 56 : 72, 0xffffff, "center");
 		add(titleText);
-		
-		var btnStart:HxlButton = new HxlButton(490, 390 + paperShiftup - (HxlGraphics.smallScreen ? 10 : 0), 90, 28);
+#end
+
+		#if scouts
+		var btnStart:HxlButton = new HxlButton(500, 420, 90, 45);
+		#else
+		var btnStart:HxlButton = new HxlButton(500, 420 + paperShiftup - (HxlGraphics.smallScreen ? 10 : 0), 90, 28);
+		#end
 		btnStart.setEventUseCapture(true);
 		var btnStartBg:HxlSprite = new HxlSprite(btnStart.x, btnStart.y);
 		btnStartBg.loadGraphic(SpriteButtonBg, false, false, 90, 26);
+		
+		#if scouts
+		btnStart.loadGraphic(new ScoutsStartButtonSprite());
+		#else
 		var btnStartHigh = new StartButtonSprite();
 		btnStartHigh.setAlpha(0.6);
-		btnStart.loadGraphic(new StartButtonSprite(),btnStartHigh);
+		btnStart.loadGraphic(new StartButtonSprite(), btnStartHigh);
+		#end
+		
 #if japanese
 		btnStart.loadText(new HxlText(0, 4, 90, Resources.getString( "MENU_START" ), true, null).setFormat(null, 26, 0xffffff, "center", 0x010101));
-#else
+#elseif !scouts
 		btnStart.loadText(new HxlText(0, -2, 90, Resources.getString( "MENU_START" ), true, null).setFormat(null, 32, 0xffffff, "center", 0x010101));
 #end
     if (HxlGraphics.smallScreen) btnStart.x = 200;
@@ -178,17 +215,20 @@ class CreateCharState extends CqState {
 		createChoice(Resources.getString( "THIEF" ), "thief", 288, 245, pickThief);
 		createChoice(Resources.getString( "WIZARD" ), "wizard", 438, 395, pickWizard);
 		
+		#if !scouts
 		txtDesc = new HxlText(HxlGraphics.smallScreen ? 110 : 160, 280 + paperShiftup, HxlGraphics.smallScreen ? HxlGraphics.width - 120 : HxlGraphics.width - 220);
 		txtDesc.setFormat(FontAnonymousPro.instance.fontName, 16, 0x000000, "left", 0);
 		add(txtDesc);
 
 		// Initialise text.
 		txtDesc.text = Resources.getString( "FIGHTER", true );
-		
+
 		portrait = SpritePortraitPaper.getIcon("FIGHTER", 100 , 1.0);
 		portrait.x = HxlGraphics.smallScreen ? 20 : 60 ;
 		portrait.y = 290 + paperShiftup;
 		add(portrait);
+		#end
+		
 		add(btnStartBg);
 		add(btnStart);
 		
@@ -202,11 +242,18 @@ class CreateCharState extends CqState {
 		kongLogo.y = sponsored.y + sponsored.height+5;
 		add(kongLogo);
 */		
-		btnStartHigh = null;
+		
 		btnStartBg = null;
 		btnStart = null;
 		titleText = null;
+		#if scouts
+		/*warriorBg=null;
+		wizardBg=null;
+		rogueBg=null;*/
+		#else
 		bg = null;
+		btnStartHigh = null;
+		#end
 	}
 	/*
 	function removeScrollerAndFade() {
@@ -257,19 +304,24 @@ class CreateCharState extends CqState {
 		curClass = TargetClass;
 		
 		var targetX:Float = 0;
-		
+		warriorBg.visible = false;
+		rogueBg.visible = false;
+		wizardBg.visible = false;
 		if ( curClass == "FIGHTER" ) {
 			targetX = 105 + recenter;
+			warriorBg.visible = true;
 		} else if ( curClass == "THIEF" ) {
 			targetX = 255 + recenter;
+			rogueBg.visible = true;
 		} else if ( curClass == "WIZARD" ) {
 			targetX = 405 + recenter;
+			wizardBg.visible = true;
 		}
-
-		portrait.setFrame( classEntry.getField( "Portrait" ) );
-
-		txtDesc.text = Resources.getString( curClass, true );
 		
+		#if !scouts
+		portrait.setFrame( classEntry.getField( "Portrait" ) );
+		txtDesc.text = Resources.getString( curClass, true );
+		#end
 		Actuate.tween(selectBox, 0.25, { x: targetX }).ease(Cubic.easeOut);
 	}
 

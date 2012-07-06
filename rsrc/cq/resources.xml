@@ -93,6 +93,7 @@
 		<bitmap id="cq.ScoutsWizard" import="scouts/character_wizard.jpg"/>
 		<bitmap id="cq.ScoutsTitlepage" import="scouts/dd_titlepage.jpg"/>
 		<bitmap id="cq.ScoutsFinal" import="scouts/final_page.jpg"/>
+		<bitmap id="cq.ScoutsStartButton" import="scouts/start.png"/> 
 		
 	</library>
 </movie>

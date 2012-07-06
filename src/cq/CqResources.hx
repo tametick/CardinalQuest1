@@ -103,6 +103,7 @@ class ScoutsWarrior extends Bitmap { public function new() { super(); } }
 class ScoutsWizard extends Bitmap { public function new() { super(); } }
 class ScoutsTitlepage extends Bitmap { public function new() { super(); } }
 class ScoutsFinal extends Bitmap { public function new() { super(); } }
+class ScoutsStartButton  extends Bitmap { public function new() { super(); } }
 
 class SpriteCredits extends Bitmap { public function new() { super(); } }
 class SpriteHighScoresBg extends Bitmap { public function new() { super(); } }
@@ -136,6 +137,12 @@ class StartButtonSprite extends HxlSprite {
 	public function new(?X:Float=0, ?Y:Float=0) {
 		super(X,Y);
 		loadGraphic(SpriteStartButton, false, false, 90, 26);
+	}
+}
+class ScoutsStartButtonSprite extends HxlSprite {
+	public function new(?X:Float=0, ?Y:Float=0) {
+		super(X,Y);
+		loadGraphic(ScoutsStartButton, false, false, 90, 26);
 	}
 }
 class ButtonSprite extends HxlSprite {
