@@ -237,6 +237,7 @@ class MainMenuState extends CqState {
 
 
 		if ( stackId == 0 ) {
+			#if !scouts
 			var sFadeTime = .5;
 			var btnCredits:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, Resources.getString( "MENU_CREDITS" ), true, null);
 			btnCredits.setNormalFormat(null, 35, textColor, "center");
@@ -244,7 +245,8 @@ class MainMenuState extends CqState {
 			menu.addItem(btnCredits);
 			btnCredits.setCallback(gotoCreditState);
 			buttonY += spacing;
-
+			#end
+			
 /*			var btnHiscores:HxlMenuItem = new HxlMenuItem(0, buttonY, 240, "Highscores", true, null);
 			btnHiscores.setNormalFormat(null, 35, textColor, "center");
 			btnHiscores.setHoverFormat(null, 35, textHighlight, "center");
@@ -412,7 +414,11 @@ class MainMenuState extends CqState {
 
 		Mouse.hide();
 
+		#if scouts
+		var bg = new HxlSprite(0, 0, ScoutsTitlepage);
+		#else
 		var bg = new HxlSprite(0, 0, SpriteMainmenuBg);
+		#end
 		add(bg);
 		bg.scaleFullscreen();
 
@@ -457,7 +463,11 @@ class MainMenuState extends CqState {
 			Lib.current.stage.align = StageAlign.TOP;
 			Lib.current.stage.fullScreenSourceRect = new Rectangle(0, 0, Configuration.app_width, Configuration.app_height);
 
+			#if scouts
+			var bg = new HxlSprite(0, 0, ScoutsTitlepage);	
+			#else
 			var bg = new HxlSprite(0, 0, SpriteMainmenuBg);
+			#end
 			add(bg);
 			bg.scaleFullscreen();
 			bg.zIndex--;
