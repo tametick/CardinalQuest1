@@ -315,6 +315,10 @@ class MainMenuState extends CqState {
 		var textWidth = 123;
 		var textYOffset = 4;
 		
+		#if scouts
+		if(stackId!=0) {
+		#end
+		
 		btnToggleMusic = new HxlButton(Configuration.app_width-buttonsWidth, 0, buttonsWidth, 20, toggleMusic, 0, 0);
 		btnToggleMusic.add(tglMusicIcon);
 		musicText = new HxlText(btnToggleMusic.x, btnToggleMusic.y+textYOffset, textWidth, Resources.getString( "MENU_MUSIC" ), true, FontAnonymousPro.instance.fontName, 14, 0xffffff, "right" );
@@ -332,6 +336,10 @@ class MainMenuState extends CqState {
 		add(sfxText);
 		setSFX(HxlState.sfxOn);
 		add(btnToggleSFX);
+		
+		#if scouts
+		}
+		#end
 
 		if ( Configuration.standAlone  && !Configuration.mobile) {
 			tglFullscreenIcon = new HxlSprite(125,0);
@@ -356,8 +364,11 @@ class MainMenuState extends CqState {
 		var copyright = new HxlText(HxlGraphics.width - 265, 459 + (HxlGraphics.height - 480), 142, Resources.getString( "MENU_COPYRIGHT" ), true, FontAnonymousPro.instance.fontName, 18);
 	#end
 #end
+		
+		#if !scouts
 		add(copyright);
-
+		#end
+		
 		//Adding porter for ios, I guess android will want to do the same
 		//removing link for iOS, it wont work plus it does not seem to work in air either
 		if( Configuration.iOS ) {
@@ -379,7 +390,7 @@ class MainMenuState extends CqState {
 
 			var version = new HxlText(Configuration.app_width-250-10, copyright.y-copyright.height, 250, Resources.getString( "MENU_VERSION" ) + " " + Configuration.version, true, FontAnonymousPro.instance.fontName, 18, 0xffffff, "right" );
 			add(version);
-#else
+#elseif !scouts 
 			copyrightLink = new HxlText(copyright.x+copyright.width, 459, 123, "Ido Yehieli", true, FontAnonymousPro.instance.fontName, 18,0x77D2FF);
 			copyrightLink.setUnderlined();
 			add(copyrightLink);
@@ -389,12 +400,14 @@ class MainMenuState extends CqState {
 #end
 		}
 
-		if(!Configuration.standAlone && !Configuration.mobile){
+		if (!Configuration.standAlone && !Configuration.mobile) {
+			#if !scouts
 			var findOut = new HxlText(0, 0, 260 , Resources.getString( "MENU_STANDALONE" ) + " ", true, FontAnonymousPro.instance.fontName, 18);
 			add(findOut);
 			gamePageLink = new HxlText(findOut.x + findOut.width, 0, 172, "CardinalQuest.com", true, FontAnonymousPro.instance.fontName, 18, 0x77D2FF);
 			gamePageLink.setUnderlined();
 			add(gamePageLink);
+			#end
 		}
 
 		update();
@@ -623,6 +636,12 @@ class MainMenuState extends CqState {
 				
 				showingUpdate = true;
 			}
+		} else {
+			#if scouts
+			if(stackId == 0 && HxlGraphics.mouse.justPressed()) {
+				gotoCharState();
+			}
+			#end
 		}
 	}
 
