@@ -87,7 +87,12 @@ class Configuration {
 		return Std.int(tileSize * zoom);
 	}
 
+	#if scouts
+	public static var playerLives = 2;
+	#else
 	public static var playerLives = 1;
+	#end
+	
 	public static var spellsPerLevel = 2;
 
 	public static inline var startWithMusic:Bool = true;

@@ -1,10 +1,8 @@
 package cq;
 
-#if !web
-import flash.desktop.NativeApplication;
-#end
-import flash.events.MouseEvent;
 
+import flash.events.MouseEvent;
+import cq.states.WinState;
 import cq.states.GameOverState;
 import cq.states.GameState;
 import cq.states.MainMenuState;
@@ -29,6 +27,10 @@ import data.SaveSystem;
 import flash.Lib;
 
 import playtomic.Playtomic;
+
+#if !web
+import flash.desktop.NativeApplication;
+#end
 
 #if flash
 	import flash.system.Capabilities;
@@ -168,7 +170,7 @@ class Main extends HxlGame {
 		Playtomic.create();
 		
 		if (Configuration.debug)
-			super(Configuration.app_width, Configuration.app_height, GameState, 1, FontDungeon.instance.fontName);
+			super(Configuration.app_width, Configuration.app_height, WinState, 1, FontDungeon.instance.fontName);
 			//super(Configuration.app_width, Configuration.app_height, GameOverState, 1, FontDungeon.instance.fontName);
 		else
 			super(Configuration.app_width,Configuration.app_height, MainMenuState, 1, FontDungeon.instance.fontName);

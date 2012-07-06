@@ -38,13 +38,30 @@ class WinState extends CqState {
 #if japanese
 //		scroller.addColumn(60, 520, Resources.getString( "AsterionDefeated", true ), true, FontAnonymousPro.instance.fontName, 28);
 		scroller.addColumn(60, 520, Resources.getString( "AsterionDefeated", true ), true, FontTheatre16.instance.fontName, 28);
+#elseif scouts
+		scroller.addColumn(60, 520, " ", true, FontDungeon.instance.fontName, 32);
 #else
 		scroller.addColumn(60, 520, Resources.getString( "AsterionDefeated", true ), true, FontDungeon.instance.fontName, 32);
 #end
+
+
+#if scouts
+		var scoutsbg = new HxlSprite(0, 0, ScoutsFinal);
+		add(scoutsbg);
+		
+		var shiftX = 160;
+		scoutsbg.zIndex = -10;
+		Figurescale = new HxlPoint(1.0, 1.0);
+		figure = new HxlSprite(shiftX+50, 20, VortexFigure, Figurescale.x, Figurescale.y);
+		bg = new HxlSprite(shiftX+50, 30, VortexScreen,0.5,0.5);
+		lights = new HxlSprite(shiftX+0, -20, VortexLightsScreen,0.5,0.5);
+		
+#else
 		Figurescale = new HxlPoint(2.0, 2.0);
 		figure = new HxlSprite(85, 40, VortexFigure, Figurescale.x, Figurescale.y);
 		bg = new HxlSprite(50, 50, VortexScreen);
 		lights = new HxlSprite(0, 0, VortexLightsScreen);
+#end		
 		add(figure);
 		figure.zIndex = 10;
 		scroller.zIndex = 11;
