@@ -98,6 +98,12 @@ class VortexFigure extends Bitmap { public function new() { super(); } }
 class White extends Bitmap { public function new() { super(); } }
 class ArmorGames extends Bitmap { public function new() { super(); } }
 
+class ScoutsRogue extends Bitmap { public function new() { super(); } }
+class ScoutsWarrior extends Bitmap { public function new() { super(); } }
+class ScoutsWizard extends Bitmap { public function new() { super(); } }
+class ScoutsTitlepage extends Bitmap { public function new() { super(); } }
+class ScoutsFinal extends Bitmap { public function new() { super(); } }
+
 class SpriteCredits extends Bitmap { public function new() { super(); } }
 class SpriteHighScoresBg extends Bitmap { public function new() { super(); } }
 class SpriteMainmenuBg extends Bitmap { public function new() { super(); } }
