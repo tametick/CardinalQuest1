@@ -1,6 +1,8 @@
 package cq;
 
+#if !web
 import flash.desktop.NativeApplication;
+#end
 import flash.events.MouseEvent;
 
 import cq.states.GameOverState;
@@ -243,7 +245,9 @@ class Main extends HxlGame {
 		}
 		
 		// auto-close
+		#if !web
 		NativeApplication.nativeApplication.exit();
+		#end
 	}
 	
 	private function nothing(e:Event) : Void {
