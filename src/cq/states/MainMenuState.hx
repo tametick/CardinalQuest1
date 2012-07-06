@@ -420,9 +420,11 @@ class MainMenuState extends CqState {
 		var bg = new HxlSprite(0, 0, SpriteMainmenuBg);
 		#end
 		add(bg);
+		
 		bg.scaleFullscreen();
-
+		#if !scouts
 		SoundEffectsManager.play(FortressGate);
+		#end
 
 		fadeTimer = new HxlTimer();
 		var fadeTime = 1;
@@ -430,10 +432,12 @@ class MainMenuState extends CqState {
 
 		HxlGraphics.fade.start(false, 0xff000000, fadeTime);
 		
-		
+		#if !scouts
 		Actuate.tween(titleText, fadeTime, { y: titlePosition} ).ease(Cubic.easeOut);
-
 		Actuate.timer(.30).onComplete(finishSplashing);
+		#else
+		finishSplashing();
+		#end
 	}
 
 	public override function create() {
@@ -472,8 +476,10 @@ class MainMenuState extends CqState {
 			bg.scaleFullscreen();
 			bg.zIndex--;
 
+			#if !scouts
 			titleText = new LogoSprite((Configuration.app_width - 345) / 2, -55);
 			add(titleText);
+			#end
 
 			startSplashing();
 		} else {
