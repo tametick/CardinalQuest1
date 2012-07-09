@@ -56,7 +56,7 @@ class Main extends HxlGame {
 #end
 	
 	public static function main() {
-		Lib.current.addChild(new Main());
+		Lib.current.stage.addChild(new Main());
 	}
 
 	static var kongWidth = 88;
@@ -107,7 +107,9 @@ class Main extends HxlGame {
 		if ( Configuration.mobile ) {
 			Lib.current.stage.addEventListener(Event.DEACTIVATE, deactivate);			
 		} else {
+			#if !scouts
 			Lib.current.addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, nothing);
+			#end
 		}
 		
 		// Initialise sound/music.
