@@ -33,7 +33,7 @@ package
 			background = new bg();
 			addChild(background);
 			
-			var color = 0xc4ab55;
+			var color = 0xffdd68;
 			var x = 30;
 			var height = 20;
 			var y = 410;
@@ -42,14 +42,14 @@ package
 			var padding = 3;
 			
 			outline = new Sprite ();
-			outline.graphics.lineStyle (1, color, 0.15, true);
+			outline.graphics.lineStyle (1, color, 0.5, true);
 			outline.graphics.drawRoundRect (0, 0, width, height, padding * 2, padding * 2);
 			outline.x = x;
 			outline.y = y;
 			addChild (outline);
 			
 			progressBar = new Sprite ();
-			progressBar.graphics.beginFill (color, 0.35);
+			progressBar.graphics.beginFill (color, 0.75);
 			progressBar.graphics.drawRect (0, 0, width - padding * 2, height - padding * 2);
 			progressBar.x = x + padding;
 			progressBar.y = y + padding;
@@ -99,8 +99,9 @@ package
 			loaderInfo.removeEventListener(ProgressEvent.PROGRESS, progress);
 			loaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioError);
 			
-			// TODO hide loader
-			
+			removeChild(background);
+			removeChild(outline);
+			removeChild(progressBar);
 			startup();
 		}
 		

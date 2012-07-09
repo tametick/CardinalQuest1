@@ -1,40 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-	<meta charset="utf-8"/>
-	<title>Scouts</title>
-	<meta name="description" content="" />
-	
-	<script src="js/swfobject.js"></script>
-	<script>
-		var flashvars = {
-		};
-		var params = {
-			menu: "false",
-			scale: "noScale",
-			allowFullscreen: "true",
-			allowScriptAccess: "always",
-			bgcolor: "",
-			wmode: "direct" // can cause issues with FP settings & webcam
-		};
-		var attributes = {
-			id:"Scouts"
-		};
-		swfobject.embedSWF(
-			"Scouts.swf", 
-			"altContent", "100%", "100%", "10.0.0", 
-			"expressInstall.swf", 
-			flashvars, params, attributes);
-	</script>
-	<style>
-		html, body { height:100%; overflow:hidden; }
-		body { margin:0; }
+	<title>Dark Dungeons</title>
+
+	<style type="text/css">
+		body { 
+			min-width: 640px;
+			background-color:#202020;
+			font-family: Helvetica, sans-serif;
+			color:#dddddd;
+		}
+		#wrapper {
+			width: 640px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		h1 {
+			text-align:center;
+			font-family: Helvetica, sans-serif;
+		}
+		a:link {color:#0080C0;}      /* unvisited link */
+		a:visited {color:#8080FF;}  /* visited link */
+		a:hover {color:#FFFF00;}  /* mouse over link */
+		a:active {color:#C0C0C0;}  /* selected link */
 	</style>
 </head>
 <body>
-	<div id="altContent">
-		<h1>Scouts</h1>
-		<p><a href="http://www.adobe.com/go/getflashplayer">Get Adobe Flash player</a></p>
+	<div id="wrapper">
+		<h1>Dark Dungeons</h1>
+		<embed src="Scouts.swf" width="640" height="480">
 	</div>
+
+	<script type="text/javascript">
+
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-3582984-6']);
+	  _gaq.push(['_trackPageview']);
+
+	  (function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+
+	</script>
 </body>
 </html>
