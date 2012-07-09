@@ -70,13 +70,19 @@ class GameState extends CqState {
 	var endingAnim:Bool;
 	var mobileMoveAllowed:Bool;
 
-
+	var forceNoStory:Bool;
+	
 	public function clearGameUi() {
 		gameUI = null;
 	}
 
 	public function new() {
 		super();
+		#if scouts
+		forceNoStory = true;
+		#else
+		forceNoStory = false;
+		#end
 	}
 
 	public override function create()
@@ -323,7 +329,6 @@ class GameState extends CqState {
 	}
 
 	override function init() {
-
 		classEntry();
 		if(Configuration.debug){
 			//Configuration.chestsPerLevel = 100;
@@ -358,9 +363,7 @@ class GameState extends CqState {
 		}		
 		remove(cursor); // actually get rid of the cursor (hiding it doesn't seem to help)
 		scroller = new CqTextScroller(classBG, 1);
-//		scroller.addColumn(80, 480, introText, false, FontAnonymous.instance.fontName, 26);
 #if japanese
-//		scroller.addColumn(60, 520, introText, true, FontAnonymousPro.instance.fontName, 32);
 		scroller.addColumn(60, 520, introText, true, FontTheatre16.instance.fontName, 32);
 #else
 		scroller.addColumn(60, 520, introText, true, FontDungeon.instance.fontName, 32);
@@ -370,7 +373,7 @@ class GameState extends CqState {
 		// continue this in a timer so that we refresh with the image before starting playtomic and generating the level
 		Actuate.timer(.01).onComplete(startScroller);
 		
-		if ( GameState.loadingGame ) {
+		if ( GameState.loadingGame || forceNoStory ) {
 			scroller.visible = false;
 		}
 	}
@@ -381,7 +384,7 @@ class GameState extends CqState {
 		initRegistry();
 		Playtomic.play();
 		
-		if ( GameState.loadingGame ) {
+		if ( GameState.loadingGame || forceNoStory) {
 			initGameUI();
 
 			// Wipe the scroller!
