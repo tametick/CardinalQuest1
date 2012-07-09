@@ -265,6 +265,10 @@ class CreateCharState extends CqState {
 	}*/
 	
 	override function init() {
+		#if scouts
+			shownIntro = true;
+		#end
+		
 		if (!shownIntro) {
 			cursor.visible	= false;
 			scroller = new CqTextScroller(IntroScreen, 1);
@@ -276,6 +280,8 @@ class CreateCharState extends CqState {
 #else
 			scroller.addColumn(50, 540, introText, true, FontDungeon.instance.fontName, 30, 0xFFCD55, 0x2E170F);
 #end
+
+
 			add(scroller);
 			scroller.startScroll(8);
 			//scroller.onComplete(removeScrollerAndFade);
@@ -283,9 +289,8 @@ class CreateCharState extends CqState {
 			shownIntro = true;
 			cursor.visible = false;
 			remove(cursor);
-			
 			introText = null;
-		}else {
+		} else {
 			realInit();
 		}
 	}
@@ -331,11 +336,14 @@ class CreateCharState extends CqState {
 	}
 
 	override function onKeyUp(event:KeyboardEvent) { 
-		if ( storyScreen) return;
+		if ( storyScreen) 
+			return;
+			
 		if ( HxlGraphics.keys.justReleased("ESCAPE") ) {
 			gotoState(MainMenuState);
 		} else if (HxlGraphics.keys.justReleased("LEFT") || HxlGraphics.keys.justReleased("A")) {
-			if (curClass == null) return;
+			if (curClass == null) 
+				return;
 			switch(curClass) {
 				case "FIGHTER":
 					changeSelection("WIZARD");
@@ -345,7 +353,8 @@ class CreateCharState extends CqState {
 					changeSelection("THIEF");
 			}
 		} else if (HxlGraphics.keys.justReleased("RIGHT") || HxlGraphics.keys.justReleased("D")) {
-			if (curClass == null) return;
+			if (curClass == null) 
+				return;
 			switch(curClass) {
 				case "FIGHTER":
 					changeSelection("THIEF");
