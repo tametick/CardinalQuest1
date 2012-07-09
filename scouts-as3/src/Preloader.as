@@ -1,5 +1,6 @@
 package 
 {
+	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -12,6 +13,9 @@ package
 	
 	public class Preloader extends MovieClip 
 	{
+		[Embed(source = "loading.jpg")] var bg:Class;
+		
+		private var background:Bitmap;
 		private var outline:Sprite;
 		private var progressBar:Sprite;
 		
@@ -25,12 +29,14 @@ package
 			loaderInfo.addEventListener(ProgressEvent.PROGRESS, progress);
 			loaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioError);
 			
-			// TODO show loader
-			var color = 0xFF0000;
 			
+			background = new bg();
+			addChild(background);
+			
+			var color = 0xc4ab55;
 			var x = 30;
 			var height = 20;
-			var y = getHeight() * 4/5;
+			var y = 410;
 			var width = getWidth() - x * 2;
 			
 			var padding = 3;
