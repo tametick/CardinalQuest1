@@ -309,19 +309,28 @@ class CreateCharState extends CqState {
 		curClass = TargetClass;
 		
 		var targetX:Float = 0;
+		#if scouts
 		warriorBg.visible = false;
 		rogueBg.visible = false;
 		wizardBg.visible = false;
+		#end
 		if ( curClass == "FIGHTER" ) {
 			targetX = 105 + recenter;
+			#if scouts
 			warriorBg.visible = true;
+			#end
 		} else if ( curClass == "THIEF" ) {
 			targetX = 255 + recenter;
+			#if scouts
 			rogueBg.visible = true;
+			#end
 		} else if ( curClass == "WIZARD" ) {
 			targetX = 405 + recenter;
+			#if scouts
 			wizardBg.visible = true;
+			#end
 		}
+		
 		
 		#if !scouts
 		portrait.setFrame( classEntry.getField( "Portrait" ) );
