@@ -369,7 +369,7 @@ class MainMenuState extends CqState {
 	#end
 #end
 		
-		#if !scouts
+		#if (!scouts && !oopla)
 		add(copyright);
 		#end
 		
@@ -394,7 +394,7 @@ class MainMenuState extends CqState {
 
 			var version = new HxlText(Configuration.app_width-250-10, copyright.y-copyright.height, 250, Resources.getString( "MENU_VERSION" ) + " " + Configuration.version, true, FontAnonymousPro.instance.fontName, 18, 0xffffff, "right" );
 			add(version);
-#elseif !scouts 
+#elseif (!scouts && !oopla)
 			copyrightLink = new HxlText(copyright.x+copyright.width, 459, 123, "Ido Yehieli", true, FontAnonymousPro.instance.fontName, 18,0x77D2FF);
 			copyrightLink.setUnderlined();
 			add(copyrightLink);
@@ -405,7 +405,7 @@ class MainMenuState extends CqState {
 		}
 
 		if (!Configuration.standAlone && !Configuration.mobile) {
-			#if !scouts
+			#if (!scouts && !oopla)
 			var findOut = new HxlText(0, 0, 260 , Resources.getString( "MENU_STANDALONE" ) + " ", true, FontAnonymousPro.instance.fontName, 18);
 			add(findOut);
 			gamePageLink = new HxlText(findOut.x + findOut.width, 0, 172, "CardinalQuest.com", true, FontAnonymousPro.instance.fontName, 18, 0x77D2FF);
