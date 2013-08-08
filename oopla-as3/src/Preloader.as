@@ -1,116 +1,56 @@
-package 
+package
 {
-	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
-	import flash.display.Sprite;
-	import flash.display.StageAlign;
-	import flash.display.StageScaleMode;
 	import flash.events.Event;
-	import flash.events.IOErrorEvent;
-	import flash.events.ProgressEvent;
+	import flash.external.ExternalInterface;
 	import flash.utils.getDefinitionByName;
+	import flash.system.Security;
+	import flash.utils.setTimeout;
 	
-	public class Preloader extends MovieClip 
+	public class Preloader extends MovieClip
 	{
-		//[Embed(source = "loading.jpg")] var bg:Class;
-		
-		private var background:Bitmap;
-		private var outline:Sprite;
-		private var progressBar:Sprite;
-		
-		public function Preloader() 
+		public function Preloader()
 		{
-			if (stage) {
-				stage.scaleMode = StageScaleMode.NO_SCALE;
-				stage.align = StageAlign.TOP_LEFT;
-			}
-			addEventListener(Event.ENTER_FRAME, checkFrame);
-			loaderInfo.addEventListener(ProgressEvent.PROGRESS, progress);
-			loaderInfo.addEventListener(IOErrorEvent.IO_ERROR, ioError);
+			Security.allowDomain("*");
+			addEventListener(Event.ENTER_FRAME, updateProgress);
 			
-			
-			//background = new bg();
-			//addChild(background);
-			
-			var color = 0xffdd68;
-			var x = 30;
-			var height = 20;
-			var y = 410;
-			var width = getWidth() - x * 2;
-			
-			var padding = 3;
-			
-			outline = new Sprite ();
-			outline.graphics.lineStyle (1, color, 0.5, true);
-			outline.graphics.drawRoundRect (0, 0, width, height, padding * 2, padding * 2);
-			outline.x = x;
-			outline.y = y;
-			addChild (outline);
-			
-			progressBar = new Sprite ();
-			progressBar.graphics.beginFill (color, 0.75);
-			progressBar.graphics.drawRect (0, 0, width - padding * 2, height - padding * 2);
-			progressBar.x = x + padding;
-			progressBar.y = y + padding;
-			progressBar.scaleX = 0;
-			addChild (progressBar);
-			
+			if (ExternalInterface.available)
+				ExternalInterface.addCallback("startGame", startGame);
 		}
 		
-		private function getHeight():int
+		private function updateProgress(e:Event):void
 		{
-			return 480;
-		}
-		private function getWidth():int
-		{
-			return 640;
-		}
-		
-		private function ioError(e:IOErrorEvent):void 
-		{
-			trace(e.text);
-		}
-		
-		private function progress(e:ProgressEvent):void 
-		{
-			var percentLoaded = e.bytesLoaded / e.bytesTotal;
-		
-			if (percentLoaded > 1)
+			// update percents loaded
+			var total:Number = stage.loaderInfo.bytesTotal;
+			var loaded:Number = stage.loaderInfo.bytesLoaded;
+			var pct:int = loaded / total * 100;
+			
+			// Report to the Oopla preloader about the game file load progress
+			if (ExternalInterface.available)
 			{
-				percentLoaded == 1;
+				ExternalInterface.call("setPreloaderProgress", pct);
 			}
-			
-			progressBar.scaleX = percentLoaded;
-		}
-		
-		private function checkFrame(e:Event):void 
-		{
-			if (currentFrame == totalFrames) 
+			else
 			{
-				stop();
-				loadingFinished();
+				// No external interface is available (stand-alone mode?), so we need to launch
+				// the game ourselves
+				if (pct == 100)
+					setTimeout(startGame, 1000);
 			}
-		}
-		
-		private function loadingFinished():void 
-		{
-			removeEventListener(Event.ENTER_FRAME, checkFrame);
-			loaderInfo.removeEventListener(ProgressEvent.PROGRESS, progress);
-			loaderInfo.removeEventListener(IOErrorEvent.IO_ERROR, ioError);
 			
-			//removeChild(background);
-			removeChild(outline);
-			removeChild(progressBar);
-			startup();
+			// Everything is loaded, we can stop running this event
+			if (pct == 100)
+				removeEventListener(Event.ENTER_FRAME, updateProgress);
+		
 		}
 		
-		private function startup():void 
+		private function startGame():void
 		{
+			// hide loader
 			var mainClass:Class = getDefinitionByName("Main") as Class;
-			addChild(new mainClass() as DisplayObject);
+			addChildAt(new mainClass() as DisplayObject, 0);
 		}
-		
-	}
 	
+	}
 }
