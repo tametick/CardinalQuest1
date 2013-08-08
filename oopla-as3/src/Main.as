@@ -56,7 +56,7 @@ package
 			else
 			{
 				// Nothing's okay.  Go away.
-				addChild(cnt);
+				//addChild(cnt);
 			}
 		}
 		
@@ -64,34 +64,6 @@ package
 		{
 			// might need this?
 			var percent:Number = mProgress.bytesLoaded / mProgress.bytesTotal;
-		}
-		
-		// code from oopla
-		function loadOoplaLogo()
-		{
-			var mLoader:Loader = new Loader();
-			var logoUrl:String;
-			
-			if (ExternalInterface.available)
-				logoUrl = ExternalInterface.call("getLogoUrl") || "http://oopla.com/assets/ooplaLogo.swf";
-			else
-				logoUrl = "http://oopla.com/assets/ooplaLogo.swf";
-			
-			var mRequest:URLRequest = new URLRequest(logoUrl);
-			mLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, onCompleteHandlerOopla);
-			mLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError);
-			mLoader.load(mRequest);
-		
-		}
-		
-		function onCompleteHandlerOopla(loadEvent:Event)
-		{
-			addChild(loadEvent.currentTarget.content);
-		}
-		
-		function onError(errEvent:Event)
-		{
-			// Custom error handling code goes here, if needed
 		}
 	
 	}

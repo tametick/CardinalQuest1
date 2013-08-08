@@ -1,6 +1,8 @@
 package cq;
 
 
+import flash.display.Loader;
+import flash.events.IOErrorEvent;
 import flash.events.MouseEvent;
 import cq.states.WinState;
 import cq.states.GameOverState;
@@ -13,6 +15,7 @@ import data.StatsFile;
 import data.StatsFileEmbed;
 import flash.display.StageDisplayState;
 import flash.events.Event;
+import flash.external.ExternalInterface;
 import flash.ui.Mouse;
 import haxel.HxlGame;
 import haxel.HxlGraphics;
@@ -48,6 +51,10 @@ import flash.net.URLRequest;
 import flash.text.TextFieldAutoSize;
 
 class MoreNewgrounds extends Bitmap { public function new() { super(); } }
+#end
+
+#if oopla
+import flash.net.URLRequest;
 #end
 
 class Main extends HxlGame {
@@ -184,6 +191,10 @@ class Main extends HxlGame {
 			addEventListener(Event.ENTER_FRAME, checkOnLogoOrAd, false, 0, true);
 		}
 		
+#if oopla
+		loadOoplaLogo();
+#end
+		
 #if newgrounds
 		m_newgroundsSprite = new Sprite();
 		m_newgroundsSprite.buttonMode = true;
@@ -257,4 +268,42 @@ class Main extends HxlGame {
 	private function nothing(e:Event) : Void {
 		
 	}
+	
+#if oopla
+	// code from oopla
+	function loadOoplaLogo() {
+		var mLoader:Loader = new Loader();
+		var logoUrl:String;
+		
+		if (ExternalInterface.available) {
+			logoUrl = ExternalInterface.call("getLogoUrl");
+			if (logoUrl == null) {
+				logoUrl = "http://oopla.com/assets/ooplaLogo.swf";
+			}
+		} else {
+			logoUrl = "http://oopla.com/assets/ooplaLogo.swf";
+		}
+		
+		var mRequest:URLRequest = new URLRequest(logoUrl);
+		mLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, onCompleteHandlerOopla);
+		mLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError);
+		mLoader.load(mRequest);
+	
+	}
+	
+	function onCompleteHandlerOopla(loadEvent:Event) {
+		var oopla = loadEvent.currentTarget.content;
+		addChild(oopla);
+		oopla.width *= 1 / 3;
+		oopla.height *= 1 / 3;
+		oopla.x = 0;
+		oopla.y = 420;
+	}
+	
+	function onError(errEvent:Event) {
+		// Custom error handling code goes here, if needed
+	}
+#end
+	
+	
 }
