@@ -107,7 +107,7 @@ class Main extends HxlGame {
 		if ( Configuration.mobile ) {
 			Lib.current.stage.addEventListener(Event.DEACTIVATE, deactivate);			
 		} else {
-			#if !scouts
+			#if (!web)
 			Lib.current.addEventListener(MouseEvent.RIGHT_MOUSE_DOWN, nothing);
 			#end
 		}
