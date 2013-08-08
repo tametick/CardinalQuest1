@@ -45,7 +45,19 @@ package
 		private function onCompleteHandler(loadEvent:Event):void
 		{
 			var cnt:DisplayObject = loadEvent.currentTarget.content;
-			addChild(cnt);
+			
+			var allowed_site:String = "oopla.com";
+			var domain:String = this.root.loaderInfo.url.split("/")[2];
+			if (domain.indexOf(allowed_site) == (domain.length - allowed_site.length))
+			{
+				// Everything's okay.  Proceed.
+				addChild(cnt);
+			}
+			else
+			{
+				// Nothing's okay.  Go away.
+				addChild(cnt);
+			}
 		}
 		
 		private function onProgressHandler(mProgress:ProgressEvent):void
