@@ -22,6 +22,7 @@ class Configuration {
 	public static inline var allowKongregateAPI = false;
 	public static inline var isArmorSponsored = false;
 	public static inline var isAndKonAd = false;
+	public static inline var isOopla = false;
 #elseif scouts
 	public static inline var standAlone = false;
 	public static inline var useProductionPlaytomic = true;
@@ -31,6 +32,7 @@ class Configuration {
 	public static inline var allowKongregateAPI = false;
 	public static inline var isArmorSponsored = false;
 	public static inline var isAndKonAd = false;
+	public static inline var isOopla = false;
 #elseif japanese
 	public static inline var standAlone = true;
 	public static inline var useProductionPlaytomic = true;
@@ -40,6 +42,16 @@ class Configuration {
 	public static inline var allowKongregateAPI = false;
 	public static inline var isArmorSponsored = false;
 	public static inline var isAndKonAd = false;
+	public static inline var isOopla = false;
+#elseif oopla
+	public static inline var standAlone = false;
+	public static inline var useProductionPlaytomic = true;
+	public static inline var allowKongregateAds = false;
+	public static inline var allowNewgroundsAds = false;
+	public static inline var allowKongregateAPI = false;
+	public static inline var isArmorSponsored = false;
+	public static inline var isAndKonAd = false;
+	public static inline var isOopla = true;
 #else
 	public static inline var standAlone = true;
 	public static inline var useProductionPlaytomic = true;
@@ -49,6 +61,7 @@ class Configuration {
 	public static inline var allowKongregateAPI = false;
 	public static inline var isArmorSponsored = false;
 	public static inline var isAndKonAd = false;
+	public static inline var isOopla = false;
 #end
 	
 	//I am not going to go off air, we will assume air is Desktop air

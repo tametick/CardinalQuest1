@@ -42,7 +42,9 @@ import haxel.GraphicCache;
 
 #if flash
 	import flash.ui.MouseCursor;
+	#if !web
 	import flash.desktop.NativeApplication;
+	#end
 	import flash.system.Capabilities;
 	import flash.ui.ContextMenu;
 #end
@@ -162,7 +164,9 @@ class MainMenuState extends CqState {
 				// go to main menu
 				changeState(MainMenuState);
 			} else if (Configuration.air) {
+				#if !web
 				NativeApplication.nativeApplication.exit();
+				#end
 			} else {
 				Lib.fscommand("quit");
 			}
