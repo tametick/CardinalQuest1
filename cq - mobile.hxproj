@@ -12,6 +12,7 @@
     <movie minorVersion="2" />
     <movie platform="Flash Player" />
     <movie background="#000000" />
+    <movie preferredSDK="Haxe 2.10;2.10;" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
@@ -46,7 +47,7 @@
   </library>
   <!-- Paths to exclude from the Project Explorer tree -->
   <hiddenPaths>
-    <!-- example: <hidden path="..." /> -->
+    <hidden path="obj" />
   </hiddenPaths>
   <!-- Executed before build -->
   <preBuildCommand />
@@ -56,6 +57,7 @@
   <options>
     <option showHiddenPaths="False" />
     <option testMovie="Default" />
+    <option testMovieCommand="" />
   </options>
   <!-- Plugin storage -->
   <storage />
