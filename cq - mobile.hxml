@@ -1,0 +1,12 @@
+-cp src
+-lib air3
+-swf bin/cq.swf
+-swf-header 480:320:30:000000
+-swf-lib "obj\cq - mobileResources.swf"
+--flash-strict
+-swf-version 11.2
+-D ndemo
+-D flashmobile
+-main cq.Main
+-swf-lib lib/playtomic.swf
+-D flashmobile

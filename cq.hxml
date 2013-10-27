@@ -1,0 +1,10 @@
+-cp src
+-lib air3
+-swf bin/cq.swf
+-swf-header 640:480:30:000000
+-swf-lib obj\cqResources.swf
+--flash-strict
+-swf-version 11.2
+-D ndemo
+-main cq.Main
+-swf-lib lib/playtomic.swf
