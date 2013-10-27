@@ -28,6 +28,8 @@ import data.SoundEffectsManager;
 import data.SaveSystem;
 
 import flash.Lib;
+import flash.display.StageOrientation;
+import flash.events.StageOrientationEvent;
 
 import playtomic.Playtomic;
 
@@ -63,9 +65,29 @@ class Main extends HxlGame {
 #end
 	
 	public static function main() {
+#if flashmobile		
+		// ios orientation stuff
+		var stage = Lib.current.stage;
+		var startOrientation = stage.orientation;
+		if (startOrientation == StageOrientation.DEFAULT || startOrientation == StageOrientation.UPSIDE_DOWN){
+			stage.setOrientation(StageOrientation.ROTATED_RIGHT);
+		}
+		else{
+			stage.setOrientation(startOrientation);
+		}
+		stage.addEventListener(StageOrientationEvent.ORIENTATION_CHANGING, orientationChangeListener, false, 0, true);
+		//
+#end		
 		Lib.current.stage.addChild(new Main());
 	}
-
+#if flashmobile		
+	static function orientationChangeListener(e:StageOrientationEvent) {
+		if (e.afterOrientation == StageOrientation.DEFAULT || e.afterOrientation ==  StageOrientation.UPSIDE_DOWN) {
+			e.preventDefault();
+		}
+	}
+#end
+	
 	static var kongWidth = 88;
 	static var kongHeight = 31;
 	static var kongX = 0;
