@@ -25,7 +25,7 @@ goto done
 
 :distribute
 echo Preparing package for distribution
-call c:\AdobeAIRSDK\bin\adt -package -target ipa-app-store -provisioning-profile "bat\cq1_dev_oct_2013.mobileprovision" -storetype pkcs12 -keystore "bat\ios_distribution.p12" -storepass cqdev ./bin/CQ.ipa application.xml -C ./bin/package .
+call c:\AdobeAIRSDK\bin\adt -package -target ipa-app-store -provisioning-profile "bat\cq1_store_oct_2013.mobileprovision" -storetype pkcs12 -keystore "bat\ios_distribution.p12" -storepass cqdev ./bin/CQ.ipa application.xml -C ./bin/package .
 goto done
 
 :done

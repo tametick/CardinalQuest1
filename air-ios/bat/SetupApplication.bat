@@ -10,7 +10,7 @@
 set CERT_NAME="cq"
 set CERT_PASS=
 set CERT_FILE="bat\ios_development.p12"
-set SIGNING_OPTIONS=-storetype pkcs12 -keystore %CERT_FILE% -storepass %CERT_PASS% -provisioning-profile "bat\cq1_dev_oct_2013"
+set SIGNING_OPTIONS=-storetype pkcs12 -keystore %CERT_FILE% -storepass %CERT_PASS% -provisioning-profile "bat\cq1_store_oct_2013"
 
 :: Application descriptor
 set APP_XML=application.xml
