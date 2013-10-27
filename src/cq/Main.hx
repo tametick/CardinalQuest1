@@ -174,6 +174,9 @@ class Main extends HxlGame {
 		
 		Configuration.tileSize = 16;
 		Configuration.zoom = Lib.current.stage.stageHeight < 400 ? 2.0 : 4.0;
+		if (Lib.current.stage.stageHeight > 1400) {
+			Configuration.zoom = 8.0;
+		}
 		
 		var physical_display_width:Float = Capabilities.screenResolutionX / Capabilities.screenDPI;
 		var physical_display_height:Float = Capabilities.screenResolutionY / Capabilities.screenDPI;
