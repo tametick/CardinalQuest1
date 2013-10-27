@@ -20,7 +20,7 @@ set PACKAGE=cq3.swf icon128.png icon16.png icon32.png icon48.png icon57.png icon
 
 if "%1"=="DISTRO" goto distribute
 echo Preparing package for *testing* (DO NOT DISTRIBUTE)
-call c:\AdobeAIRSDK\bin\adt -package -target ipa-test -provisioning-profile "bat\cq1_dev_oct_2013.mobileprovision" -storetype pkcs12 -keystore "bat\iphone_dev_cert_jday.p12" -storepass cqdev ./bin/CQ.ipa application.xml -C ./bin/package .
+call c:\AdobeAIRSDK\bin\adt -package -target ipa-test -provisioning-profile "bat\cq1_dev_oct_2013.mobileprovision" -storetype pkcs12 -keystore "bat\ios_development.p12" -storepass cqdev ./bin/CQ.ipa application.xml -C ./bin/package .
 goto done
 
 :distribute
