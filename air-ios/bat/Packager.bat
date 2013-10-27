@@ -20,12 +20,13 @@ set PACKAGE=cq3.swf icon128.png icon16.png icon32.png icon48.png icon57.png icon
 
 if "%1"=="DISTRO" goto distribute
 echo Preparing package for *testing* (DO NOT DISTRIBUTE)
-call c:\AdobeAIRSDK\bin\adt -package -target ipa-test -provisioning-profile "bat\cq1_dev_oct_2013.mobileprovision" -storetype pkcs12 -keystore "bat\ios_development.p12" -storepass cqdev ./bin/CQ.ipa application.xml -C ./bin/package .
+call c:\AdobeAIRSDK\bin\adt -package -target ipa-test -provisioning-profile "bat\cq1_dev_oct_2013.mobileprovision" -storetype pkcs12 -keystore "bat\ios_development.p12" -storepass cqdev ./bin/CQ.ipa application.xml cq.swf Default-568h@2x.png icon128.png  icon32.png  icon512.png  icon72.png Default.png icon1024.png  icon16.png   icon48.png  icon57.png Default@2x.png Default-Portrait.png Default-Portrait@2x.png Default-PortraitUpsideDown.png Default-PortraitUpsideDown@2x.png Default-Landscape.png Default-LandscapeLeft@2x.png Default-LandscapeRight.png Default-LandscapeRight@2x.png
+
 goto done
 
 :distribute
 echo Preparing package for distribution
-call c:\AdobeAIRSDK\bin\adt -package -target ipa-app-store -provisioning-profile "bat\cq1_store_oct_2013.mobileprovision" -storetype pkcs12 -keystore "bat\ios_distribution.p12" -storepass cqdev ./bin/CQ.ipa application.xml -C ./bin/package .
+call c:\AdobeAIRSDK\bin\adt -package -target ipa-app-store -provisioning-profile "bat\cq1_store_oct_2013.mobileprovision" -storetype pkcs12 -keystore "bat\ios_distribution.p12" -storepass cqdev ./bin/CQ.ipa application.xml cq.swf Default-568h@2x.png icon128.png  icon32.png  icon512.png  icon72.png Default.png icon1024.png  icon16.png   icon48.png  icon57.png Default@2x.png Default-Portrait.png Default-Portrait@2x.png Default-PortraitUpsideDown.png Default-PortraitUpsideDown@2x.png Default-Landscape.png Default-LandscapeLeft@2x.png Default-LandscapeRight.png Default-LandscapeRight@2x.png
 goto done
 
 :done
