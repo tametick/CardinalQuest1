@@ -502,8 +502,10 @@ class MainMenuState extends CqState {
 		} else {
 			//blur gamestate
 			super.create();
+			#if !scouts
 			titleText = new LogoSprite((Configuration.app_width - 345) / 2, titlePosition);
 			add(titleText);
+			#end
 
 			stillSplashing = true;
 			finishSplashing();
