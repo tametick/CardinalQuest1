@@ -1,10 +1,8 @@
 :user_configuration
 
 :: Path to Flex SDK
-set ANDROID_SDK="C:\Program Files (x86)\Android\android-sdk"
-rem set FLEX_SDK=C:\Coding\Tools\AirSDK3.2
+set ANDROID_SDK="C:\Android\android-sdk"
 set FLEX_SDK=C:\AdobeAirSDK
-rem set FLEX_SDK=C:\flex
 
 :validation
 if not exist "%FLEX_SDK%" goto flexsdk

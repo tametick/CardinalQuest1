@@ -2,7 +2,7 @@
 <application xmlns="http://ns.adobe.com/air/application/3.2">
 	
 	<id>com.tametick.cardinalquest</id>
-    <versionNumber>1.3.1</versionNumber>
+    <versionNumber>1.3.2</versionNumber>
     <filename>cardinalquest</filename>
     <name>Cardinal Quest</name>
     <description>Hack and slash your way through a randomly generated dungeon: A new adventure awaits every time!</description>

@@ -22,6 +22,7 @@
   <build>
     <option directives="ndemo&#xA;flashmobile" />
     <option flashStrict="True" />
+    <option noInlineOnDebug="False" />
     <option mainClass="cq.Main" />
     <option enabledebug="True" />
     <option additional="-swf-lib lib/playtomic.swf&#xA;-D flashmobile" />
@@ -53,7 +54,8 @@
   <preBuildCommand />
   <!-- Executed after build -->
   <postBuildCommand alwaysRun="True">cp $(OutputDir)\cq.swf $(ProjectDir)\air-ios\
-cp $(OutputDir)\cq.swf $(ProjectDir)\air-ios\bin\package\</postBuildCommand>
+cp $(OutputDir)\cq.swf $(ProjectDir)\air-ios\bin\package\
+cp $(OutputDir)\cq.swf $(ProjectDir)\air-android\bin\package\</postBuildCommand>
   <!-- Other project options -->
   <options>
     <option showHiddenPaths="False" />
